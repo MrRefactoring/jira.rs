@@ -7,24 +7,9 @@
 //! Ranking is the other half. Rank is a field no ordinary write touches: it is manipulated only through `rank_issues`,
 //! relative to another issue, and it is what a board's ordering actually is.
 
-use jira::agile::{GetAllBoardsRequestType, IssueRankRequest};
+use jira::agile::IssueRankRequest;
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, agile, cloud, create_test_issue, test_name};
-
-/// The scrum board estimation is read against, where the site has one.
-async fn scrum_board() -> Option<i64> {
-    let boards = agile()
-        .board()
-        .get_all_boards()
-        .project_key_or_id(TEST_PROJECT_KEY)
-        .r#type(GetAllBoardsRequestType::Scrum)
-        .max_results(1)
-        .send()
-        .await
-        .expect("the board listing is accepted");
-
-    boards.values.first().and_then(|board| board.id)
-}
+use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, agile, cloud, create_test_issue, scrum_board, test_name};
 
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
@@ -127,11 +112,9 @@ async fn ranks_issues_relative_to_one_another() {
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_the_estimation_for_the_board_or_refuses_typed() {
-    let Some(board_id) = scrum_board().await else {
-        return;
-    };
-
     let mut tracker = ResourceTracker::new();
+    let board_id = scrum_board(&mut tracker).await;
+
     let issue = create_test_issue(&mut tracker, Some(&test_name("estimation"))).await;
 
     // A board that estimates by issue count has no estimation field to report, and says so with a 4xx rather than an

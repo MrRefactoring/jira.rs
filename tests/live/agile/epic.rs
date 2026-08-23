@@ -7,26 +7,13 @@
 //! The cycle is one test rather than six. Six tests each gated on the project offering an Epic type would report six
 //! passes while verifying nothing where it does not, which is the failure mode this suite exists to avoid.
 
-use jira::agile::{EpicUpdate, GetAllBoardsRequestType};
+use jira::agile::EpicUpdate;
 use jira::cloud::IssueUpdateDetails;
 use serde_json::json;
 
-use crate::harness::{ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, agile, cloud, create_test_issue, test_name};
-
-/// The scrum board the board-side listing is read through, where the site has one.
-async fn scrum_board() -> Option<i64> {
-    let boards = agile()
-        .board()
-        .get_all_boards()
-        .project_key_or_id(TEST_PROJECT_KEY)
-        .r#type(GetAllBoardsRequestType::Scrum)
-        .max_results(1)
-        .send()
-        .await
-        .expect("the board listing is accepted");
-
-    boards.values.first().and_then(|board| board.id)
-}
+use crate::harness::{
+    ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, agile, cloud, create_test_issue, scrum_board, test_name,
+};
 
 /// The id of the project's Epic issue type, where its issue type scheme carries one.
 async fn epic_type_id() -> Option<String> {
@@ -184,9 +171,8 @@ async fn runs_the_whole_epic_cycle_where_an_epic_type_is_available() {
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_the_issues_belonging_to_no_epic_for_the_board() {
-    let Some(board_id) = scrum_board().await else {
-        return;
-    };
+    let mut tracker = ResourceTracker::new();
+    let board_id = scrum_board(&mut tracker).await;
 
     let orphans = agile()
         .board()
@@ -202,6 +188,8 @@ async fn lists_the_issues_belonging_to_no_epic_for_the_board() {
         "every row is an issue, epic or not: {:?}",
         orphans.issues.iter().map(|issue| issue.key.as_str()).collect::<Vec<_>>(),
     );
+
+    tracker.cleanup().await;
 }
 
 #[tokio::test]

@@ -34,12 +34,8 @@ async fn first_directory(admin: &AdminClient, org: &str) -> String {
     let directories =
         admin.directory().get_directories_for_org(org).send().await.expect("the organization lists its directories");
 
-    let directory = directories
-        .data
-        .unwrap_or_default()
-        .into_iter()
-        .next()
-        .expect("the organization has a directory to address");
+    let directory =
+        directories.data.unwrap_or_default().into_iter().next().expect("the organization has a directory to address");
 
     directory.directory_id.expect("a directory is named by an id")
 }

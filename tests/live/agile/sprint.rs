@@ -8,31 +8,15 @@
 //! one-way, and the API expresses them as ordinary field updates — so nothing in the types stops a caller attempting
 //! a transition that cannot happen.
 
-use jira::agile::{GetAllBoardsRequestType, GetAllSprintsRequestState, SprintState};
+use jira::agile::{GetAllSprintsRequestState, SprintState};
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, agile, test_name};
-
-/// The scrum board sprints are created on, where the site has one.
-async fn scrum_board() -> Option<i64> {
-    let boards = agile()
-        .board()
-        .get_all_boards()
-        .project_key_or_id(TEST_PROJECT_KEY)
-        .r#type(GetAllBoardsRequestType::Scrum)
-        .max_results(1)
-        .send()
-        .await
-        .expect("the board listing is accepted");
-
-    boards.values.first().and_then(|board| board.id)
-}
+use crate::harness::{ResourceTracker, agile, scrum_board, test_name};
 
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_sprints_for_the_scrum_board() {
-    let Some(board_id) = scrum_board().await else {
-        return;
-    };
+    let mut tracker = ResourceTracker::new();
+    let board_id = scrum_board(&mut tracker).await;
 
     let sprints =
         agile().board().get_all_sprints(board_id).max_results(5).send().await.expect("the board lists its sprints");
@@ -49,6 +33,8 @@ async fn lists_sprints_for_the_scrum_board() {
             sprint.state,
         );
     }
+
+    tracker.cleanup().await;
 }
 
 /// The whole sprint lifecycle, as one sequence: every case below needs the sprint the one before it left behind, and
@@ -56,11 +42,9 @@ async fn lists_sprints_for_the_scrum_board() {
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_a_sprint_through_its_lifecycle() {
-    let Some(board_id) = scrum_board().await else {
-        return;
-    };
-
     let mut tracker = ResourceTracker::new();
+    let board_id = scrum_board(&mut tracker).await;
+
     // Jira truncates a sprint name past 30 characters, and a truncated name would not read back as the one written.
     let name: String = test_name("sprint").chars().take(30).collect();
 

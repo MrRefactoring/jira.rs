@@ -119,11 +119,7 @@ async fn renames_a_team_and_the_change_survives_a_re_read() {
 
     let updated = teams()
         .teams()
-        .update_team(
-            &org,
-            &team.team_id,
-            TeamUpdatePayload { description: None, display_name: Some(renamed.clone()) },
-        )
+        .update_team(&org, &team.team_id, TeamUpdatePayload { description: None, display_name: Some(renamed.clone()) })
         .send()
         .await
         .expect("the team can be renamed");

@@ -1,7 +1,7 @@
 use jira::cloud::{CreatedIssue, Document, IssueUpdateDetails};
 use serde_json::json;
 
-use super::client::cloud;
+use super::client::{agile, cloud};
 use super::naming::test_name;
 use super::resources::ResourceTracker;
 
@@ -63,4 +63,91 @@ pub async fn create_issue_with(tracker: &mut ResourceTracker, fields: serde_json
     });
 
     created
+}
+
+/// A scrum board over the test project, and the filter it is built on.
+#[derive(Debug, Clone, Copy)]
+pub struct TestBoard {
+    pub id: i64,
+    pub filter_id: i64,
+}
+
+/// Creates a scrum board over the test project and registers the removal of both it and its filter.
+///
+/// A board needs a filter, and Jira makes the filter visible to the board service a moment after it is created, so
+/// the creation is retried while it says the filter is not available yet. Without that the first attempt fails on a
+/// site that is otherwise perfectly configured.
+pub async fn create_test_board(tracker: &mut ResourceTracker) -> TestBoard {
+    let filter = cloud()
+        .filters()
+        .create_filter(jira::cloud::Filter {
+            name: test_name("board filter"),
+            jql: Some(format!("project = {TEST_PROJECT_KEY} ORDER BY Rank ASC")),
+            ..jira::cloud::Filter::default()
+        })
+        .send()
+        .await
+        .expect("the account may create a filter of its own");
+
+    let filter_id: i64 =
+        filter.id.as_deref().expect("a created filter has an id").parse().expect("a filter id is a number");
+
+    tracker.defer(move || async move { cloud().filters().delete_filter(filter_id).send().await });
+
+    let name: String = test_name("board").chars().take(40).collect();
+    let mut board = None;
+    let mut delay = std::time::Duration::from_millis(500);
+
+    for attempt in 0..6 {
+        let request = jira::agile::BoardCreate {
+            name: Some(name.clone()),
+            r#type: Some(jira::agile::BoardCreateType::Scrum),
+            filter_id: Some(filter_id),
+            location: Some(jira::agile::Location {
+                r#type: Some("project".into()),
+                project_key_or_id: Some(TEST_PROJECT_KEY.to_owned()),
+            }),
+        };
+
+        match agile().board().create_board(request).send().await {
+            Ok(created) => {
+                board = Some(created);
+                break;
+            }
+            Err(error) => {
+                let filter_not_visible_yet = error
+                    .body()
+                    .is_some_and(|body| body.to_string().to_lowercase().contains("filter is not available"));
+
+                assert!(filter_not_visible_yet && attempt < 5, "a scrum board could not be created: {error}");
+
+                tokio::time::sleep(delay).await;
+                delay = delay.mul_f64(1.8);
+            }
+        }
+    }
+
+    let id = board.and_then(|created| created.id).expect("a created board carries an id");
+
+    tracker.defer(move || async move { agile().board().delete_board(id).send().await });
+
+    TestBoard { id, filter_id }
+}
+
+/// The scrum board the Agile suites run against: an existing one where the site has it, a fresh one otherwise.
+pub async fn scrum_board(tracker: &mut ResourceTracker) -> i64 {
+    let boards = agile()
+        .board()
+        .get_all_boards()
+        .project_key_or_id(TEST_PROJECT_KEY)
+        .r#type("scrum")
+        .max_results(1)
+        .send()
+        .await
+        .expect("the board listing is accepted");
+
+    match boards.values.first().and_then(|board| board.id) {
+        Some(id) => id,
+        None => create_test_board(tracker).await.id,
+    }
 }

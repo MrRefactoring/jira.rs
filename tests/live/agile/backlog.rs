@@ -5,27 +5,7 @@
 //! the board-scoped one accepts `rankBeforeIssue`, the global one does not — and both answer 204, which is why what
 //! is asserted here is a read taken afterwards rather than anything the write hands back.
 
-use jira::agile::GetAllBoardsRequestType;
-
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, agile, create_test_issue, test_name};
-
-/// The scrum board the backlog is read through, where the site has one.
-///
-/// Found, never created: a board is a team's working view over a filter, and a site that offers none is a site this
-/// suite has nothing to say about rather than one it should reconfigure.
-async fn scrum_board() -> Option<i64> {
-    let boards = agile()
-        .board()
-        .get_all_boards()
-        .project_key_or_id(TEST_PROJECT_KEY)
-        .r#type(GetAllBoardsRequestType::Scrum)
-        .max_results(1)
-        .send()
-        .await
-        .expect("the board listing is accepted");
-
-    boards.values.first().and_then(|board| board.id)
-}
+use crate::harness::{ResourceTracker, agile, create_test_issue, scrum_board, test_name};
 
 /// The shape of every Jira issue key: a project key, a hyphen, a number.
 fn is_issue_key(key: &str) -> bool {
@@ -40,12 +20,9 @@ fn is_issue_key(key: &str) -> bool {
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn moves_an_issue_to_the_backlog_and_reads_the_board_back() {
-    let Some(board_id) = scrum_board().await else {
-        // Both endpoints are only observable through a board, and this site offers no scrum board over the project.
-        return;
-    };
-
     let mut tracker = ResourceTracker::new();
+    let board_id = scrum_board(&mut tracker).await;
+
     let issue = create_test_issue(&mut tracker, Some(&test_name("backlog candidate"))).await;
 
     let backlog =
