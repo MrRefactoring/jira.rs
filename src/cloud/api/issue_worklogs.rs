@@ -24,6 +24,8 @@ pub enum GetIssueWorklogRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetIssueWorklogRequestExpandVariant2),
     Variant3(Vec<GetIssueWorklogRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -62,6 +64,8 @@ pub enum AddWorklogRequestExpand {
     Variant1(Vec<String>),
     Variant2(AddWorklogRequestExpandVariant2),
     Variant3(Vec<AddWorklogRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -87,6 +91,8 @@ pub enum GetWorklogRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetWorklogRequestExpandVariant2),
     Variant3(Vec<GetWorklogRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -124,6 +130,8 @@ pub enum UpdateWorklogRequestExpand {
     Variant1(Vec<String>),
     Variant2(UpdateWorklogRequestExpandVariant2),
     Variant3(Vec<UpdateWorklogRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -162,6 +170,8 @@ pub enum GetWorklogsForIdsRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetWorklogsForIdsRequestExpandVariant2),
     Variant3(Vec<GetWorklogsForIdsRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -185,6 +195,8 @@ pub enum GetIdsOfWorklogsModifiedSinceRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetIdsOfWorklogsModifiedSinceRequestExpandVariant2),
     Variant3(Vec<GetIdsOfWorklogsModifiedSinceRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The IssueWorklogs operations.

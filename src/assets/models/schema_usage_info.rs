@@ -12,7 +12,7 @@ pub struct SchemaUsageInfo {
     #[serde(rename = "schemaName")]
     pub schema_name: String,
     /// The timestamp when the schema was created (ISO 8601).
-    #[serde(rename = "schemaCreatedAt")]
+    #[serde(rename = "schemaCreatedAt", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub schema_created_at: String,
     /// The number of objects in this schema.
     #[serde(rename = "objectCount")]

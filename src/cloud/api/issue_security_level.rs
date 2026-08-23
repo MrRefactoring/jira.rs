@@ -38,6 +38,8 @@ pub enum GetIssueSecurityLevelMembersRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetIssueSecurityLevelMembersRequestExpandVariant2),
     Variant3(Vec<GetIssueSecurityLevelMembersRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The IssueSecurityLevel operations.

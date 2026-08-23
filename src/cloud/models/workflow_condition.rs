@@ -10,4 +10,6 @@ use serde::{Deserialize, Serialize};
 pub enum WorkflowCondition {
     WorkflowSimpleCondition(WorkflowSimpleCondition),
     WorkflowCompoundCondition(Box<WorkflowCompoundCondition>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }

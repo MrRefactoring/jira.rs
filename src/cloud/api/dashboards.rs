@@ -98,6 +98,8 @@ pub enum GetDashboardsPaginatedRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetDashboardsPaginatedRequestExpandVariant2),
     Variant3(Vec<GetDashboardsPaginatedRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The Dashboards operations.

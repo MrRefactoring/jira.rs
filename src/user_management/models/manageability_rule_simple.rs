@@ -9,4 +9,6 @@ use serde::{Deserialize, Serialize};
 pub enum ManageabilityRuleSimple {
     ManageabilityAllowed(ManageabilityAllowed),
     ManageabilityUnallowed(ManageabilityUnallowed),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }

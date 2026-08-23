@@ -34,6 +34,8 @@ crate::open_enum! {
 pub enum PolicyModelAttributesRule {
     AllowIfContainedRule(AllowIfContainedRule),
     Variant1(Vec<serde_json::Value>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// Attributes of this object

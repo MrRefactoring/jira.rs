@@ -49,6 +49,8 @@ pub enum SearchAndReconsileIssuesUsingJqlRequestExpand {
     Variant1(Vec<String>),
     Variant2(SearchAndReconsileIssuesUsingJqlRequestExpandVariant2),
     Variant3(Vec<SearchAndReconsileIssuesUsingJqlRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The IssueSearch operations.

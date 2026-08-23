@@ -44,6 +44,8 @@ pub enum GetIssueRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetIssueRequestExpandVariant2),
     Variant3(Vec<GetIssueRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -75,6 +77,8 @@ pub enum GetTransitionsRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetTransitionsRequestExpandVariant2),
     Variant3(Vec<GetTransitionsRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The Issues operations.

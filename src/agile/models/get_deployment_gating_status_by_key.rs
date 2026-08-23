@@ -45,7 +45,12 @@ pub struct GetDeploymentGatingStatusByKey {
     #[serde(rename = "environmentId", default, skip_serializing_if = "Option::is_none")]
     pub environment_id: Option<String>,
     /// Time the deployment gating status was updated.
-    #[serde(rename = "updatedTimestamp", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "updatedTimestamp",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub updated_timestamp: Option<String>,
     /// The gating status
     #[serde(rename = "gatingStatus", default, skip_serializing_if = "Option::is_none")]

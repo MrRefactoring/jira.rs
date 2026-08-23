@@ -37,6 +37,8 @@ pub enum EvaluateJSISJiraExpressionRequestExpand {
     Variant1(Vec<String>),
     Variant2(EvaluateJSISJiraExpressionRequestExpandVariant2),
     Variant3(Vec<EvaluateJSISJiraExpressionRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The JiraExpressions operations.

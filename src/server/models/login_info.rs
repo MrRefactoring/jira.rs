@@ -6,10 +6,20 @@ use serde::{Deserialize, Serialize};
 pub struct LoginInfo {
     #[serde(rename = "failedLoginCount", default, skip_serializing_if = "Option::is_none")]
     pub failed_login_count: Option<i64>,
-    #[serde(rename = "lastFailedLoginTime", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "lastFailedLoginTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub last_failed_login_time: Option<String>,
     #[serde(rename = "loginCount", default, skip_serializing_if = "Option::is_none")]
     pub login_count: Option<i64>,
-    #[serde(rename = "previousLoginTime", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "previousLoginTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub previous_login_time: Option<String>,
 }

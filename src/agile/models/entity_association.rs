@@ -34,6 +34,8 @@ pub struct EntityAssociationValuesVariant1 {
 pub enum EntityAssociationValues {
     Variant0(EntityAssociationValuesVariant0),
     Variant1(EntityAssociationValuesVariant1),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// An association type referencing another entity

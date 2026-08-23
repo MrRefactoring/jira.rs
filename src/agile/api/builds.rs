@@ -147,7 +147,7 @@ pub struct SubmitBuildsRequestBuilds {
     /// * `unknown` - The build is in an unknown state.
     pub state: SubmitBuildsRequestBuildsState,
     /// The last-updated timestamp to present to the user as a summary of the state of the build.
-    #[serde(rename = "lastUpdated")]
+    #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// The Jira issue keys or IDs to associate the build with.
     #[serde(default, skip_serializing_if = "Option::is_none")]

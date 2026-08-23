@@ -41,6 +41,8 @@ pub enum GetAllPermissionSchemesRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetAllPermissionSchemesRequestExpandVariant2),
     Variant3(Vec<GetAllPermissionSchemesRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -81,6 +83,8 @@ pub enum CreatePermissionSchemeRequestExpand {
     Variant1(Vec<String>),
     Variant2(CreatePermissionSchemeRequestExpandVariant2),
     Variant3(Vec<CreatePermissionSchemeRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -121,6 +125,8 @@ pub enum GetPermissionSchemeRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetPermissionSchemeRequestExpandVariant2),
     Variant3(Vec<GetPermissionSchemeRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -161,6 +167,8 @@ pub enum UpdatePermissionSchemeRequestExpand {
     Variant1(Vec<String>),
     Variant2(UpdatePermissionSchemeRequestExpandVariant2),
     Variant3(Vec<UpdatePermissionSchemeRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -201,6 +209,8 @@ pub enum GetPermissionSchemeGrantsRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetPermissionSchemeGrantsRequestExpandVariant2),
     Variant3(Vec<GetPermissionSchemeGrantsRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -241,6 +251,8 @@ pub enum CreatePermissionGrantRequestExpand {
     Variant1(Vec<String>),
     Variant2(CreatePermissionGrantRequestExpandVariant2),
     Variant3(Vec<CreatePermissionGrantRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -281,6 +293,8 @@ pub enum GetPermissionSchemeGrantRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetPermissionSchemeGrantRequestExpandVariant2),
     Variant3(Vec<GetPermissionSchemeGrantRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The PermissionSchemes operations.

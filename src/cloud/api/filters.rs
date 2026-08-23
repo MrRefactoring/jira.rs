@@ -29,6 +29,8 @@ pub enum CreateFilterRequestExpand {
     Variant1(Vec<String>),
     Variant2(CreateFilterRequestExpandVariant2),
     Variant3(Vec<CreateFilterRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -57,6 +59,8 @@ pub enum GetFavouriteFiltersRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetFavouriteFiltersRequestExpandVariant2),
     Variant3(Vec<GetFavouriteFiltersRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -85,6 +89,8 @@ pub enum GetMyFiltersRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetMyFiltersRequestExpandVariant2),
     Variant3(Vec<GetMyFiltersRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -178,6 +184,8 @@ pub enum GetFiltersPaginatedRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetFiltersPaginatedRequestExpandVariant2),
     Variant3(Vec<GetFiltersPaginatedRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -206,6 +214,8 @@ pub enum GetFilterRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetFilterRequestExpandVariant2),
     Variant3(Vec<GetFilterRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -234,6 +244,8 @@ pub enum UpdateFilterRequestExpand {
     Variant1(Vec<String>),
     Variant2(UpdateFilterRequestExpandVariant2),
     Variant3(Vec<UpdateFilterRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -262,6 +274,8 @@ pub enum SetFavouriteForFilterRequestExpand {
     Variant1(Vec<String>),
     Variant2(SetFavouriteForFilterRequestExpandVariant2),
     Variant3(Vec<SetFavouriteForFilterRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -290,6 +304,8 @@ pub enum DeleteFavouriteForFilterRequestExpand {
     Variant1(Vec<String>),
     Variant2(DeleteFavouriteForFilterRequestExpandVariant2),
     Variant3(Vec<DeleteFavouriteForFilterRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The Filters operations.

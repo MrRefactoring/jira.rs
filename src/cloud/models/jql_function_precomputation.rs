@@ -9,7 +9,7 @@ pub struct JqlFunctionPrecomputation {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub arguments: Option<Vec<String>>,
     /// The timestamp of the precomputation creation.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
     /// The error message to be displayed to the user.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -30,10 +30,10 @@ pub struct JqlFunctionPrecomputation {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub operator: Option<String>,
     /// The timestamp of the precomputation last update.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub updated: Option<String>,
     /// The timestamp of the precomputation last usage.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub used: Option<String>,
     /// The JQL fragment stored as the precomputation.
     #[serde(default, skip_serializing_if = "Option::is_none")]

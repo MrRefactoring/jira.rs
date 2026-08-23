@@ -10,6 +10,8 @@ use serde::{Deserialize, Serialize};
 pub enum DeleteWorkspacesRequestWorkspaceIds {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -102,12 +104,12 @@ pub struct SubmitEntityRequestBodyVariant0Incidents {
     /// The timestamp to present to the user that shows when the Incident was raised.
     ///
     /// Expected format is an RFC3339 formatted string.
-    #[serde(rename = "createdDate")]
+    #[serde(rename = "createdDate", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub created_date: String,
     /// The last-updated timestamp to present to the user the last time the Incident was updated.
     ///
     /// Expected format is an RFC3339 formatted string.
-    #[serde(rename = "lastUpdated")]
+    #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// Severity information for a single Incident.
     ///
@@ -196,12 +198,12 @@ pub struct SubmitEntityRequestBodyVariant1Reviews {
     /// The timestamp to present to the user that shows when the Review was raised.
     ///
     /// Expected format is an RFC3339 formatted string.
-    #[serde(rename = "createdDate")]
+    #[serde(rename = "createdDate", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub created_date: String,
     /// The last-updated timestamp to present to the user the last time the Review was updated.
     ///
     /// Expected format is an RFC3339 formatted string.
-    #[serde(rename = "lastUpdated")]
+    #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// The current status of the Post-Incident Review.
     pub status: SubmitEntityRequestBodyVariant1ReviewsStatus,
@@ -222,6 +224,8 @@ pub struct SubmitEntityRequestBodyVariant1 {
 pub enum SubmitEntityRequestBody {
     Variant0(SubmitEntityRequestBodyVariant0),
     Variant1(SubmitEntityRequestBodyVariant1),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The Operations operations.

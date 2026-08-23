@@ -14,4 +14,6 @@ pub enum QueryVariants {
     SearchWorkspacesOperand(SearchWorkspacesOperand),
     FeatureFilter(FeatureFilter),
     PolicyFilter(PolicyFilter),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }

@@ -14,9 +14,10 @@ crate::open_enum! {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PollingEventModelAttributes {
     /// The date and time of the event.
+    #[serde(deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub time: String,
     /// The date and time the event was processed.
-    #[serde(rename = "processedAt")]
+    #[serde(rename = "processedAt", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub processed_at: String,
     /// The kind of event. Complete list see `event-actions` API.
     pub action: String,

@@ -169,7 +169,7 @@ pub struct Changelog {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub author: Option<ChangelogAuthor>,
     /// The date on which the change took place.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
     /// Details of issue history metadata.
     #[serde(rename = "historyMetadata", default, skip_serializing_if = "Option::is_none")]

@@ -6,6 +6,11 @@ use serde::{Deserialize, Serialize};
 pub struct ExternalPlatformIndexReplayEntry {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
-    #[serde(rename = "journalWriteTime", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "journalWriteTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub journal_write_time: Option<String>,
 }

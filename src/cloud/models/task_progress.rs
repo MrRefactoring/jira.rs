@@ -25,12 +25,12 @@ pub struct TaskProgress {
     #[serde(rename = "elapsedRuntime")]
     pub elapsed_runtime: i64,
     /// A timestamp recording when the task was finished.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub finished: Option<String>,
     /// The ID of the task.
     pub id: String,
     /// A timestamp recording when the task progress was last updated.
-    #[serde(rename = "lastUpdate")]
+    #[serde(rename = "lastUpdate", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_update: String,
     /// Information about the progress of the task.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -44,12 +44,12 @@ pub struct TaskProgress {
     #[serde(rename = "self")]
     pub self_: String,
     /// A timestamp recording when the task was started.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub started: Option<String>,
     /// The status of the task.
     pub status: TaskProgressStatus,
     /// A timestamp recording when the task was submitted.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub submitted: Option<String>,
     /// The ID of the user who submitted the task.
     #[serde(rename = "submittedBy")]

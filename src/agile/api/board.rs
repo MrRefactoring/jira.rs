@@ -44,6 +44,8 @@ pub enum GetAllBoardsRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetAllBoardsRequestExpandVariant2),
     Variant3(Vec<GetAllBoardsRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// A comma-separated list of the parameters to expand.
@@ -53,6 +55,8 @@ pub enum GetAllBoardsRequestExpand {
 pub enum GetIssuesForBacklogRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// A comma-separated list of the parameters to expand.
@@ -62,6 +66,8 @@ pub enum GetIssuesForBacklogRequestExpand {
 pub enum GetIssuesWithoutEpicForBoardRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// A comma-separated list of the parameters to expand.
@@ -71,6 +77,8 @@ pub enum GetIssuesWithoutEpicForBoardRequestExpand {
 pub enum GetBoardIssuesForEpicRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// A comma-separated list of the parameters to expand.
@@ -80,6 +88,8 @@ pub enum GetBoardIssuesForEpicRequestExpand {
 pub enum GetIssuesForBoardRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -98,6 +108,8 @@ crate::open_enum! {
 pub enum GetBoardIssuesForSprintRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The Board operations.

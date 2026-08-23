@@ -20,7 +20,12 @@ pub struct CustomField {
     pub issue_type_ids: Option<Vec<String>>,
     #[serde(rename = "issuesWithValue", default, skip_serializing_if = "Option::is_none")]
     pub issues_with_value: Option<i64>,
-    #[serde(rename = "lastValueUpdate", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "lastValueUpdate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub last_value_update: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,

@@ -37,12 +37,27 @@ pub struct Progress {
     /// The user key of the user that is running the process
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub actor: Option<String>,
-    #[serde(rename = "startDate", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "startDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub start_date: Option<String>,
-    #[serde(rename = "finishedDate", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "finishedDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub finished_date: Option<String>,
     /// If it is possible to estimate the comletion of the task this field will be populated
-    #[serde(rename = "estimatedFinishDate", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "estimatedFinishDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub estimated_finish_date: Option<String>,
     /// Unique identifier of the execution
     #[serde(rename = "executionUUID", default, skip_serializing_if = "Option::is_none")]

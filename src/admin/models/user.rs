@@ -40,7 +40,7 @@ pub struct User {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub access_billable: Option<bool>,
     /// Last active date for a user
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub last_active: Option<String>,
     /// Products which the User is using
     #[serde(default, skip_serializing_if = "Option::is_none")]

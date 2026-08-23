@@ -10,6 +10,11 @@ pub struct UpgradeResult {
     pub message: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub outcome: Option<String>,
-    #[serde(rename = "startTime", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "startTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub start_time: Option<String>,
 }

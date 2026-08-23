@@ -10,4 +10,6 @@ use serde::{Deserialize, Serialize};
 pub enum MandatoryFieldValues {
     MandatoryFieldValue(MandatoryFieldValue),
     MandatoryFieldValueForADF(MandatoryFieldValueForADF),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }

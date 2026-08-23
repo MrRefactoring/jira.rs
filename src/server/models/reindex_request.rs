@@ -21,13 +21,28 @@ crate::open_enum! {
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ReindexRequest {
-    #[serde(rename = "completionTime", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "completionTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub completion_time: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
-    #[serde(rename = "requestTime", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "requestTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub request_time: Option<String>,
-    #[serde(rename = "startTime", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "startTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub start_time: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub status: Option<ReindexRequestStatus>,

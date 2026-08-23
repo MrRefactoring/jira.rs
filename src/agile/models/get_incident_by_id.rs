@@ -92,12 +92,12 @@ pub struct GetIncidentById {
     /// The timestamp to present to the user that shows when the Incident was raised.
     ///
     /// Expected format is an RFC3339 formatted string.
-    #[serde(rename = "createdDate")]
+    #[serde(rename = "createdDate", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub created_date: String,
     /// The last-updated timestamp to present to the user the last time the Incident was updated.
     ///
     /// Expected format is an RFC3339 formatted string.
-    #[serde(rename = "lastUpdated")]
+    #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// Severity information for a single Incident.
     ///

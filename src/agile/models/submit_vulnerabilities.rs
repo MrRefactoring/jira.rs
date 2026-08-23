@@ -8,6 +8,8 @@ use serde::{Deserialize, Serialize};
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitVulnerabilitiesUnknownAssociations {
     IssueIdOrKeysAssociation(IssueIdOrKeysAssociation),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The result of a successful submitVulnerabilities request.

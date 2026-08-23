@@ -12,4 +12,6 @@ pub enum JqlQueryClause {
     FieldValueClause(FieldValueClause),
     FieldWasClause(FieldWasClause),
     FieldChangedClause(FieldChangedClause),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }

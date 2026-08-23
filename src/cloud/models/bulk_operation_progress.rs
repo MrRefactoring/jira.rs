@@ -19,7 +19,7 @@ crate::open_enum! {
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct BulkOperationProgress {
     /// A timestamp of when the task was submitted.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
     /// Map of issue IDs for which the operation failed and that the user has permission to view, to their one or more reasons for failure. These reasons are open-ended text descriptions of the error and are not selected from a predefined list of standard reasons.
     #[serde(rename = "failedAccessibleIssues", default, skip_serializing_if = "Option::is_none")]
@@ -34,7 +34,7 @@ pub struct BulkOperationProgress {
     #[serde(rename = "progressPercent", default, skip_serializing_if = "Option::is_none")]
     pub progress_percent: Option<i64>,
     /// A timestamp of when the task was started.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub started: Option<String>,
     /// The status of the task.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -48,6 +48,6 @@ pub struct BulkOperationProgress {
     #[serde(rename = "totalIssueCount", default, skip_serializing_if = "Option::is_none")]
     pub total_issue_count: Option<i64>,
     /// A timestamp of when the task progress was last updated.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub updated: Option<String>,
 }

@@ -34,4 +34,6 @@ pub enum CustomFieldContextDefaultValue {
     CustomFieldContextDefaultValueForgeNumberField(CustomFieldContextDefaultValueForgeNumberField),
     CustomFieldContextDefaultValueForgeUserField(CustomFieldContextDefaultValueForgeUserField),
     CustomFieldContextDefaultValueForgeMultiUserField(CustomFieldContextDefaultValueForgeMultiUserField),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }

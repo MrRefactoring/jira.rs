@@ -11,6 +11,6 @@ pub struct UserProductAccessModel {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub added_to_org: Option<String>,
     /// Date and timestamp the user was added to the organization in ISO 8601 format (UTC), with the format yyyy-MM-dd'T'HH:mm:ss'Z'.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub added_to_org_timestamp: Option<String>,
 }

@@ -10,6 +10,11 @@ pub struct JobRun {
     pub message: Option<String>,
     #[serde(rename = "runOutcome", default, skip_serializing_if = "Option::is_none")]
     pub run_outcome: Option<String>,
-    #[serde(rename = "startTime", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "startTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub start_time: Option<String>,
 }

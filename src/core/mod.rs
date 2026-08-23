@@ -18,6 +18,7 @@ mod product;
 mod query;
 mod retry;
 mod tenant_context;
+mod timestamp;
 
 pub use auth::{Auth, BoxFuture, OAuth2Config, OAuth2ServerConfig, TokenProvider, TokenRefreshHook};
 pub use body::Body;
@@ -32,5 +33,6 @@ pub use product::{GATEWAY_SLUG, PACKAGE_NAME, USER_AGENT, VERSION};
 pub use query::{QueryValue, build_url_with_search_params, header_value};
 pub use retry::{RetryConfig, RetryOptions, with_retry};
 pub use tenant_context::{TenantContext, get_tenant_context};
+pub use timestamp::{deserialize_required_timestamp, deserialize_timestamp};
 
 pub use reqwest::Method;

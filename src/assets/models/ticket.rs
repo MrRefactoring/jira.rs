@@ -13,7 +13,9 @@ pub struct Ticket {
     pub key: Option<String>,
     pub id: String,
     pub reporter: String,
+    #[serde(deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub created: String,
+    #[serde(deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub updated: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,

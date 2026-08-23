@@ -32,6 +32,8 @@ crate::open_enum! {
 #[allow(clippy::large_enum_variant)]
 pub enum PolicyUpdateModelAttributesRule {
     AllowIfContainedRule(AllowIfContainedRule),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// Attributes of this object

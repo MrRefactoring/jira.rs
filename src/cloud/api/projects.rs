@@ -116,6 +116,8 @@ crate::open_enum! {
 pub enum SearchProjectsRequestTypeKey {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -178,6 +180,8 @@ pub enum SearchProjectsRequestExpand {
     Variant1(Vec<String>),
     Variant2(SearchProjectsRequestExpandVariant2),
     Variant3(Vec<SearchProjectsRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -223,6 +227,8 @@ pub enum GetProjectRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetProjectRequestExpandVariant2),
     Variant3(Vec<GetProjectRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -257,6 +263,8 @@ pub enum UpdateProjectRequestExpand {
     Variant1(Vec<String>),
     Variant2(UpdateProjectRequestExpandVariant2),
     Variant3(Vec<UpdateProjectRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -297,6 +305,8 @@ pub enum GetNotificationSchemeForProjectRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetNotificationSchemeForProjectRequestExpandVariant2),
     Variant3(Vec<GetNotificationSchemeForProjectRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The Projects operations.

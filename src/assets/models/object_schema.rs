@@ -17,7 +17,9 @@ pub struct ObjectSchema {
     /// Always 'Ok'
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    #[serde(deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub created: String,
+    #[serde(deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub updated: String,
     #[serde(rename = "objectCount")]
     pub object_count: i64,

@@ -10,7 +10,12 @@ pub struct ServerInformation {
     #[serde(rename = "baseUrl", default, skip_serializing_if = "Option::is_none")]
     pub base_url: Option<String>,
     /// The timestamp when the Jira version was built.
-    #[serde(rename = "buildDate", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "buildDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub build_date: Option<String>,
     /// The build number of the Jira version.
     #[serde(rename = "buildNumber", default, skip_serializing_if = "Option::is_none")]
@@ -34,7 +39,12 @@ pub struct ServerInformation {
     #[serde(rename = "scmInfo", default, skip_serializing_if = "Option::is_none")]
     pub scm_info: Option<String>,
     /// The time in Jira when this request was responded to.
-    #[serde(rename = "serverTime", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "serverTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub server_time: Option<String>,
     /// The default timezone of the Jira server. In a format known as Olson Time Zones, IANA Time Zones or TZ Database Time Zones.
     #[serde(rename = "serverTimeZone", default, skip_serializing_if = "Option::is_none")]

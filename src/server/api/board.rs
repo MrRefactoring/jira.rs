@@ -10,6 +10,8 @@ use serde::{Deserialize, Serialize};
 pub enum GetAllBoardsRequestType {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
@@ -19,6 +21,8 @@ pub enum GetAllBoardsRequestType {
 pub enum GetIssuesForBacklogRequestFields {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// A comma-separated list of the parameters to expand.
@@ -28,6 +32,8 @@ pub enum GetIssuesForBacklogRequestFields {
 pub enum GetIssuesWithoutEpicForBoardRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
@@ -37,6 +43,8 @@ pub enum GetIssuesWithoutEpicForBoardRequestExpand {
 pub enum GetIssuesWithoutEpicForBoardRequestFields {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// A comma-separated list of the parameters to expand.
@@ -46,6 +54,8 @@ pub enum GetIssuesWithoutEpicForBoardRequestFields {
 pub enum GetIssuesForBoardEpicRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
@@ -55,6 +65,8 @@ pub enum GetIssuesForBoardEpicRequestExpand {
 pub enum GetIssuesForBoardEpicRequestFields {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
@@ -64,6 +76,8 @@ pub enum GetIssuesForBoardEpicRequestFields {
 pub enum GetIssuesForBoardRequestFields {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// Filters results to sprints in specified states. Valid values: future, active, closed. You can define multiple states separated by commas, e.g. state=active,closed
@@ -73,6 +87,8 @@ pub enum GetIssuesForBoardRequestFields {
 pub enum GetAllSprintsRequestState {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// A comma-separated list of the parameters to expand.
@@ -82,6 +98,8 @@ pub enum GetAllSprintsRequestState {
 pub enum GetIssuesForBoardSprintRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
@@ -91,6 +109,8 @@ pub enum GetIssuesForBoardSprintRequestExpand {
 pub enum GetIssuesForBoardSprintRequestFields {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The Board operations.

@@ -22,7 +22,12 @@ pub struct Version {
     pub project: Option<String>,
     #[serde(rename = "projectId", default, skip_serializing_if = "Option::is_none")]
     pub project_id: Option<i64>,
-    #[serde(rename = "releaseDate", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "releaseDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub release_date: Option<String>,
     #[serde(rename = "releaseDateSet", default, skip_serializing_if = "Option::is_none")]
     pub release_date_set: Option<bool>,
@@ -30,7 +35,12 @@ pub struct Version {
     pub released: Option<bool>,
     #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
     pub self_: Option<String>,
-    #[serde(rename = "startDate", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "startDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub start_date: Option<String>,
     #[serde(rename = "startDateSet", default, skip_serializing_if = "Option::is_none")]
     pub start_date_set: Option<bool>,

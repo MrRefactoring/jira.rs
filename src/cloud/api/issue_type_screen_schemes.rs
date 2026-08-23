@@ -39,6 +39,8 @@ pub enum GetIssueTypeScreenSchemesRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetIssueTypeScreenSchemesRequestExpandVariant2),
     Variant3(Vec<GetIssueTypeScreenSchemesRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The IssueTypeScreenSchemes operations.

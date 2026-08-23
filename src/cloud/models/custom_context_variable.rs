@@ -10,4 +10,6 @@ pub enum CustomContextVariable {
     UserContextVariable(UserContextVariable),
     IssueContextVariable(IssueContextVariable),
     JsonContextVariable(JsonContextVariable),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }

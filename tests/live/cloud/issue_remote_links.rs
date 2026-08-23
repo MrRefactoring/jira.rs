@@ -20,6 +20,9 @@ fn listed(links: GetRemoteIssueLinks) -> Vec<RemoteIssueLink> {
     match links {
         GetRemoteIssueLinks::Variant0(links) => links,
         GetRemoteIssueLinks::RemoteIssueLink(link) => vec![link],
+        // Every generated union carries a catch-all for a shape the specification does not describe. Reaching it
+        // here would mean Jira answered with neither of the two documented shapes, which is worth a failure.
+        other => panic!("the remote link listing answered with an undescribed shape: {other:?}"),
     }
 }
 

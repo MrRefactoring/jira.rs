@@ -77,7 +77,7 @@ pub struct SubmitComponentsRequestDevopsComponents {
     /// The last-updated timestamp to present to the user the last time the DevOps Component was updated.
     ///
     /// Expected format is an RFC3339 formatted string.
-    #[serde(rename = "lastUpdated")]
+    #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
 }
 

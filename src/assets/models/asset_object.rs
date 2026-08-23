@@ -25,7 +25,9 @@ pub struct AssetObject {
     pub avatar: Avatar,
     #[serde(rename = "objectType")]
     pub object_type: ObjectType,
+    #[serde(deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub created: String,
+    #[serde(deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub updated: String,
     #[serde(rename = "hasAvatar")]
     pub has_avatar: bool,

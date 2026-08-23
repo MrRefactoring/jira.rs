@@ -9,6 +9,8 @@ use serde::{Deserialize, Serialize};
 pub enum EventObjectModelLinks {
     LinkSelfAltModel(LinkSelfAltModel),
     LinkAltModel(LinkAltModel),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]

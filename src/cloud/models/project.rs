@@ -39,7 +39,12 @@ pub struct Project {
     #[serde(rename = "archivedBy", default, skip_serializing_if = "Option::is_none")]
     pub archived_by: Option<DashboardUser>,
     /// The date when the project was archived.
-    #[serde(rename = "archivedDate", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "archivedDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub archived_date: Option<String>,
     /// The default assignee when creating issues for this project.
     #[serde(rename = "assigneeType", default, skip_serializing_if = "Option::is_none")]
@@ -55,7 +60,12 @@ pub struct Project {
     #[serde(rename = "deletedBy", default, skip_serializing_if = "Option::is_none")]
     pub deleted_by: Option<DashboardUser>,
     /// The date when the project was marked as deleted.
-    #[serde(rename = "deletedDate", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "deletedDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub deleted_date: Option<String>,
     /// A brief description of the project.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -103,7 +113,12 @@ pub struct Project {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub properties: Option<std::collections::HashMap<String, serde_json::Value>>,
     /// The date when the project is deleted permanently.
-    #[serde(rename = "retentionTillDate", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "retentionTillDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub retention_till_date: Option<String>,
     /// The name and self URL for each role defined in the project. For more information, see [Create project role](#api-rest-api-3-role-post).
     #[serde(default, skip_serializing_if = "Option::is_none")]

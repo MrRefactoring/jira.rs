@@ -7,7 +7,12 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct FilterDetails {
     /// \[Experimental\] Approximate last used time. Returns the date and time when the filter was last used. Returns `null` if the filter hasn't been used after tracking was enabled. For performance reasons, timestamps aren't updated in real time and therefore may not be exactly accurate.
-    #[serde(rename = "approximateLastUsed", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "approximateLastUsed",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub approximate_last_used: Option<String>,
     /// The description of the filter.
     #[serde(default, skip_serializing_if = "Option::is_none")]

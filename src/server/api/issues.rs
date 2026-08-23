@@ -10,6 +10,8 @@ use serde::{Deserialize, Serialize};
 pub enum GetAgileIssueRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
@@ -19,6 +21,8 @@ pub enum GetAgileIssueRequestExpand {
 pub enum GetAgileIssueRequestFields {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The Issues operations.

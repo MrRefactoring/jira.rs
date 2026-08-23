@@ -17,6 +17,7 @@ pub struct ObjectHistory {
     #[serde(rename = "newValue", default, skip_serializing_if = "Option::is_none")]
     pub new_value: Option<String>,
     pub r#type: i64,
+    #[serde(deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub created: String,
     #[serde(rename = "objectId")]
     pub object_id: String,

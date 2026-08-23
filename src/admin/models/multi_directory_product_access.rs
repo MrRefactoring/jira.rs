@@ -12,6 +12,11 @@ pub struct MultiDirectoryProductAccess {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     /// ISO-8601 timestamp of the user's last activity in the given product and site.
-    #[serde(rename = "lastActiveTimestamp", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "lastActiveTimestamp",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub last_active_timestamp: Option<String>,
 }

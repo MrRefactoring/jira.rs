@@ -41,6 +41,8 @@ pub enum GetNotificationSchemesRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetNotificationSchemesRequestExpandVariant2),
     Variant3(Vec<GetNotificationSchemesRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -81,6 +83,8 @@ pub enum GetNotificationSchemeRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetNotificationSchemeRequestExpandVariant2),
     Variant3(Vec<GetNotificationSchemeRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The IssueNotificationSchemes operations.

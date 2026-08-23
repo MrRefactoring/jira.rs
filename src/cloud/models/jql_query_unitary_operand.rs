@@ -11,4 +11,6 @@ pub enum JqlQueryUnitaryOperand {
     ValueOperand(ValueOperand),
     FunctionOperand(FunctionOperand),
     KeywordOperand(KeywordOperand),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }

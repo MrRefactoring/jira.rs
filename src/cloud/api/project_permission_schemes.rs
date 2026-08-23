@@ -41,6 +41,8 @@ pub enum GetAssignedPermissionSchemeRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetAssignedPermissionSchemeRequestExpandVariant2),
     Variant3(Vec<GetAssignedPermissionSchemeRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -81,6 +83,8 @@ pub enum AssignPermissionSchemeRequestExpand {
     Variant1(Vec<String>),
     Variant2(AssignPermissionSchemeRequestExpandVariant2),
     Variant3(Vec<AssignPermissionSchemeRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The ProjectPermissionSchemes operations.

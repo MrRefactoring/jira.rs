@@ -24,6 +24,8 @@ pub enum GetScreenSchemesRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetScreenSchemesRequestExpandVariant2),
     Variant3(Vec<GetScreenSchemesRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {

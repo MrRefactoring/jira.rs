@@ -29,6 +29,8 @@ pub enum GetUserRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetUserRequestExpandVariant2),
     Variant3(Vec<GetUserRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The Users operations.

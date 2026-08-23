@@ -10,6 +10,8 @@ use serde::{Deserialize, Serialize};
 pub enum SearchRequest2Expand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// the list of fields to return for each issue
@@ -19,6 +21,8 @@ pub enum SearchRequest2Expand {
 pub enum SearchRequest2Fields {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The IssueSearch operations.

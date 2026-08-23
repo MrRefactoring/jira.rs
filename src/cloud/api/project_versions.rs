@@ -37,6 +37,8 @@ crate::open_enum! {
 pub enum GetProjectVersionsPaginatedRequestStatus {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -71,6 +73,8 @@ pub enum GetProjectVersionsPaginatedRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetProjectVersionsPaginatedRequestExpandVariant2),
     Variant3(Vec<GetProjectVersionsPaginatedRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -94,6 +98,8 @@ pub enum GetProjectVersionsRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetProjectVersionsRequestExpandVariant2),
     Variant3(Vec<GetProjectVersionsRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -128,6 +134,8 @@ pub enum GetVersionRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetVersionRequestExpandVariant2),
     Variant3(Vec<GetVersionRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The ProjectVersions operations.

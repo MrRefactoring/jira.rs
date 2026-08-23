@@ -12,7 +12,7 @@ pub struct Attachment {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
     /// The datetime the attachment was created.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
     /// The file name of the attachment.
     #[serde(default, skip_serializing_if = "Option::is_none")]

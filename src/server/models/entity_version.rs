@@ -16,6 +16,11 @@ pub struct EntityVersion {
     pub has_version: Option<bool>,
     #[serde(rename = "parentIssueId", default, skip_serializing_if = "Option::is_none")]
     pub parent_issue_id: Option<i64>,
-    #[serde(rename = "updateTime", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "updateTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub update_time: Option<String>,
 }

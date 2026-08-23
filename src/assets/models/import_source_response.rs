@@ -119,10 +119,10 @@ pub struct ImportSourceResponseImportSourceOTEntries {
     #[serde(rename = "importSourceId", default, skip_serializing_if = "Option::is_none")]
     pub import_source_id: Option<String>,
     /// Creation timestamp
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
     /// Last update timestamp
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub updated: Option<String>,
     /// Description
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -168,10 +168,10 @@ pub struct ImportSourceResponse {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// Timestamp when the import source was created
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
     /// Timestamp when the import source was last updated
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub updated: Option<String>,
     /// Import source description
     #[serde(default, skip_serializing_if = "Option::is_none")]

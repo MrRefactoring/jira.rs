@@ -12,7 +12,7 @@ pub struct Worklog {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub comment: Option<Document>,
     /// The datetime on which the worklog was created.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
     /// The ID of the worklog record.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -27,7 +27,7 @@ pub struct Worklog {
     #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
     pub self_: Option<String>,
     /// The datetime on which the worklog effort was started. Required when creating a worklog. Optional when updating a worklog.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub started: Option<String>,
     /// The time spent working on the issue as days (\#d), hours (\#h), or minutes (\#m or \#). Required when creating a worklog if `timeSpentSeconds` isn't provided. Optional when updating a worklog. Cannot be provided if `timeSpentSecond` is provided.
     #[serde(rename = "timeSpent", default, skip_serializing_if = "Option::is_none")]
@@ -38,7 +38,7 @@ pub struct Worklog {
     #[serde(rename = "updateAuthor", default, skip_serializing_if = "Option::is_none")]
     pub update_author: Option<UserDetails>,
     /// The datetime on which the worklog was last updated.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub updated: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub visibility: Option<Visibility>,

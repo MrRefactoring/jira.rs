@@ -26,6 +26,8 @@ pub enum ListWorkflowHistoryRequestExpand {
     Variant1(Vec<String>),
     Variant2(ListWorkflowHistoryRequestExpandVariant2),
     Variant3(Vec<ListWorkflowHistoryRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -51,6 +53,8 @@ pub enum SearchWorkflowsRequestExpand {
     Variant1(Vec<String>),
     Variant2(SearchWorkflowsRequestExpandVariant2),
     Variant3(Vec<SearchWorkflowsRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {

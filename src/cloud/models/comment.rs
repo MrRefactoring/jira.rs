@@ -12,7 +12,7 @@ pub struct Comment {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub body: Option<Document>,
     /// The date and time at which the comment was created.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
     /// The ID of the comment.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -35,7 +35,7 @@ pub struct Comment {
     #[serde(rename = "updateAuthor", default, skip_serializing_if = "Option::is_none")]
     pub update_author: Option<UserDetails>,
     /// The date and time at which the comment was updated last.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub updated: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub visibility: Option<Visibility>,

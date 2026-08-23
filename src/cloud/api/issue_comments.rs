@@ -29,6 +29,8 @@ pub enum GetCommentsByIdsRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetCommentsByIdsRequestExpandVariant2),
     Variant3(Vec<GetCommentsByIdsRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -61,6 +63,8 @@ pub enum GetCommentsRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetCommentsRequestExpandVariant2),
     Variant3(Vec<GetCommentsRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -84,6 +88,8 @@ pub enum AddCommentRequestExpand {
     Variant1(Vec<String>),
     Variant2(AddCommentRequestExpandVariant2),
     Variant3(Vec<AddCommentRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -107,6 +113,8 @@ pub enum GetCommentRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetCommentRequestExpandVariant2),
     Variant3(Vec<GetCommentRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -130,6 +138,8 @@ pub enum UpdateCommentRequestExpand {
     Variant1(Vec<String>),
     Variant2(UpdateCommentRequestExpandVariant2),
     Variant3(Vec<UpdateCommentRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The IssueComments operations.

@@ -10,6 +10,8 @@ use serde::{Deserialize, Serialize};
 pub enum CommentInputBody {
     Document(Document),
     Variant1(String),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// A comment.
@@ -21,7 +23,7 @@ pub struct CommentInput {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub body: Option<CommentInputBody>,
     /// The date and time at which the comment was created.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
     /// The ID of the comment.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -44,7 +46,7 @@ pub struct CommentInput {
     #[serde(rename = "updateAuthor", default, skip_serializing_if = "Option::is_none")]
     pub update_author: Option<UserDetails>,
     /// The date and time at which the comment was updated last.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub updated: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub visibility: Option<Visibility>,

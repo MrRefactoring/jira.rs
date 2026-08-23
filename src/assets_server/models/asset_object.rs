@@ -15,13 +15,18 @@ pub struct AssetObject {
     pub avatar: Option<Avatar>,
     #[serde(rename = "objectType", default, skip_serializing_if = "Option::is_none")]
     pub object_type: Option<ObjectType>,
-    #[serde(rename = "archivedDate", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "archivedDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub archived_date: Option<String>,
     #[serde(rename = "archivedBy", default, skip_serializing_if = "Option::is_none")]
     pub archived_by: Option<User>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub updated: Option<String>,
     #[serde(rename = "hasAvatar", default, skip_serializing_if = "Option::is_none")]
     pub has_avatar: Option<bool>,

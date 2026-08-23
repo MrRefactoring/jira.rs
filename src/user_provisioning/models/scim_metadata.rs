@@ -21,9 +21,14 @@ pub struct ScimMetadata {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
     /// The most recent DateTime that the details of this resource were updated. This  is a read-only field.
-    #[serde(rename = "lastModified", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "lastModified",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub last_modified: Option<String>,
     /// The DateTime that the resource was added to Atlassian SCIM service. This is a read-only field.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
 }

@@ -9,4 +9,6 @@ use serde::{Deserialize, Serialize};
 pub enum GetWorkflow {
     WorkflowMapping(WorkflowMapping),
     Variant1(Vec<WorkflowMapping>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }

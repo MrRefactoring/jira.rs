@@ -9,6 +9,6 @@ pub struct GetLinkedWorkspaceById {
     #[serde(rename = "workspaceId")]
     pub workspace_id: String,
     /// Latest date and time that the Security Workspace was updated in Jira.
-    #[serde(rename = "updatedAt")]
+    #[serde(rename = "updatedAt", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub updated_at: String,
 }

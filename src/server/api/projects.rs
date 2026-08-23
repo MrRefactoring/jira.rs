@@ -10,6 +10,8 @@ use serde::{Deserialize, Serialize};
 pub enum GetAssignedPermissionSchemeRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// Use expand to include additional information about permission schemes in the response. This parameter accepts a comma-separated list of expandable options. Expand options include: all and field.
@@ -19,6 +21,8 @@ pub enum GetAssignedPermissionSchemeRequestExpand {
 pub enum AssignPermissionSchemeRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The Projects operations.

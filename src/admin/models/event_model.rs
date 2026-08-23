@@ -14,6 +14,7 @@ crate::open_enum! {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EventModelAttributes {
     /// The date and time of the event
+    #[serde(deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub time: String,
     /// Kind of Event. Complete list see `event-actions` API.
     pub action: String,

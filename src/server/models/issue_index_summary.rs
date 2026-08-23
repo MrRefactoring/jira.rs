@@ -12,8 +12,18 @@ pub struct IssueIndexSummary {
     pub count_in_index: Option<i64>,
     #[serde(rename = "indexReadable", default, skip_serializing_if = "Option::is_none")]
     pub index_readable: Option<bool>,
-    #[serde(rename = "lastUpdatedInDatabase", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "lastUpdatedInDatabase",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub last_updated_in_database: Option<String>,
-    #[serde(rename = "lastUpdatedInIndex", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "lastUpdatedInIndex",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub last_updated_in_index: Option<String>,
 }

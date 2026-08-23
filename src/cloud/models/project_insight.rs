@@ -6,7 +6,12 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ProjectInsight {
     /// The last issue update time.
-    #[serde(rename = "lastIssueUpdateTime", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "lastIssueUpdateTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub last_issue_update_time: Option<String>,
     /// Total issue count.
     #[serde(rename = "totalIssueCount", default, skip_serializing_if = "Option::is_none")]

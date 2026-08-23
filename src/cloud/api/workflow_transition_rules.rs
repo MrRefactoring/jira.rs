@@ -32,6 +32,8 @@ pub enum GetWorkflowTransitionRuleConfigurationsRequestExpand {
     Variant1(Vec<String>),
     Variant2(GetWorkflowTransitionRuleConfigurationsRequestExpandVariant2),
     Variant3(Vec<GetWorkflowTransitionRuleConfigurationsRequestExpandUnion3>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The WorkflowTransitionRules operations.

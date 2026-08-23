@@ -26,6 +26,6 @@ pub struct FieldLastUsed {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub r#type: Option<FieldLastUsedType>,
     /// The date when the value of the field last changed.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub value: Option<String>,
 }

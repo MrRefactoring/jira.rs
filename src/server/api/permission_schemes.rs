@@ -10,6 +10,8 @@ use serde::{Deserialize, Serialize};
 pub enum GetPermissionSchemesRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
@@ -19,6 +21,8 @@ pub enum GetPermissionSchemesRequestExpand {
 pub enum CreatePermissionSchemeRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
@@ -28,6 +32,8 @@ pub enum CreatePermissionSchemeRequestExpand {
 pub enum GetPermissionSchemeRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
@@ -37,6 +43,8 @@ pub enum GetPermissionSchemeRequestExpand {
 pub enum UpdatePermissionSchemeRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
@@ -46,6 +54,8 @@ pub enum UpdatePermissionSchemeRequestExpand {
 pub enum GetPermissionSchemeGrantsRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
@@ -55,6 +65,8 @@ pub enum GetPermissionSchemeGrantsRequestExpand {
 pub enum CreatePermissionGrantRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
@@ -64,6 +76,8 @@ pub enum CreatePermissionGrantRequestExpand {
 pub enum GetPermissionSchemeGrantRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The PermissionSchemes operations.

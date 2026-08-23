@@ -10,6 +10,8 @@ pub enum GetDeploymentByKeyAssociations {
     IssueIdOrKeysAssociation(IssueIdOrKeysAssociation),
     ServiceIdOrKeysAssociation(ServiceIdOrKeysAssociation),
     EntityAssociation(EntityAssociation),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -101,7 +103,7 @@ pub struct GetDeploymentByKey {
     /// A short description of the deployment
     pub description: String,
     /// The last-updated timestamp to present to the user as a summary of the state of the deployment.
-    #[serde(rename = "lastUpdated")]
+    #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// An (optional) additional label that may be displayed with deployment information. Can be used to display version information etc. for the deployment.
     #[serde(default, skip_serializing_if = "Option::is_none")]

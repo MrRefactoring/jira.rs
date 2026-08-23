@@ -13,7 +13,12 @@ pub struct ExportArchivedIssuesTaskProgressResponse {
     pub progress: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    #[serde(rename = "submittedTime", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "submittedTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub submitted_time: Option<String>,
     #[serde(rename = "taskId", default, skip_serializing_if = "Option::is_none")]
     pub task_id: Option<String>,

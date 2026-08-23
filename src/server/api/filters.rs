@@ -9,6 +9,8 @@ use serde::{Deserialize, Serialize};
 pub enum CreateFilterRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -17,6 +19,8 @@ pub enum CreateFilterRequestExpand {
 pub enum GetFavouriteFiltersRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -25,6 +29,8 @@ pub enum GetFavouriteFiltersRequestExpand {
 pub enum GetFilterRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -33,6 +39,8 @@ pub enum GetFilterRequestExpand {
 pub enum EditFilterRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The Filters operations.

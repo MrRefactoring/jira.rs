@@ -10,6 +10,8 @@ use serde::{Deserialize, Serialize};
 pub enum FindBulkAssignableUsersRequestProjectKeys {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The UserSearch operations.

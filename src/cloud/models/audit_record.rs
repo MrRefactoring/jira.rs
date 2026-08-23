@@ -16,7 +16,7 @@ pub struct AuditRecord {
     #[serde(rename = "changedValues", default, skip_serializing_if = "Option::is_none")]
     pub changed_values: Option<Vec<ChangedValue>>,
     /// The date and time on which the audit record was created.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
     /// The description of the audit record.
     #[serde(default, skip_serializing_if = "Option::is_none")]

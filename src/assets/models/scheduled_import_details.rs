@@ -18,15 +18,30 @@ pub struct ScheduledImportDetails {
     #[serde(rename = "importScheduleId", default, skip_serializing_if = "Option::is_none")]
     pub import_schedule_id: Option<String>,
     /// When the schedule starts
-    #[serde(rename = "startTime", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "startTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub start_time: Option<String>,
     /// The frequency of the scheduled import. ONCE: runs only at startTime. DAILY: runs every day at the specified time. WEEKLY: runs every 7 days. MONTHLY: runs on the same day of each month.
     #[serde(rename = "runFrequency", default, skip_serializing_if = "Option::is_none")]
     pub run_frequency: Option<ScheduledImportDetailsRunFrequency>,
     /// Next scheduled execution time
-    #[serde(rename = "nextScheduledTime", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "nextScheduledTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub next_scheduled_time: Option<String>,
     /// When the schedule was created
-    #[serde(rename = "createdAt", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "createdAt",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub created_at: Option<String>,
 }

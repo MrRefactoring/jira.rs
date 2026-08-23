@@ -10,6 +10,8 @@ use serde::{Deserialize, Serialize};
 pub enum GetIssuesWithoutEpicRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// A comma-separated list of the parameters to expand.
@@ -19,6 +21,8 @@ pub enum GetIssuesWithoutEpicRequestExpand {
 pub enum GetIssuesForEpicRequestExpand {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The Epic operations.

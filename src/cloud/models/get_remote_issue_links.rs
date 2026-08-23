@@ -9,4 +9,6 @@ use serde::{Deserialize, Serialize};
 pub enum GetRemoteIssueLinks {
     Variant0(Vec<RemoteIssueLink>),
     RemoteIssueLink(RemoteIssueLink),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }

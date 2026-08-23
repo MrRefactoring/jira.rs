@@ -34,6 +34,8 @@ crate::open_enum! {
 pub enum SubmitRemoteLinksRequestRemoteLinksAssociations {
     IssueIdOrKeysAssociation(IssueIdOrKeysAssociation),
     ServiceIdOrKeysAssociation(ServiceIdOrKeysAssociation),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -100,7 +102,7 @@ pub struct SubmitRemoteLinksRequestRemoteLinks {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// The last-updated timestamp to present to the user as a summary of when Remote Link was last updated.
-    #[serde(rename = "lastUpdated")]
+    #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// The entities to associate the Remote Link information with.
     #[serde(default, skip_serializing_if = "Option::is_none")]

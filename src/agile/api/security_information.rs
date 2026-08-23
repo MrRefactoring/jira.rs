@@ -10,6 +10,8 @@ use serde::{Deserialize, Serialize};
 pub enum DeleteLinkedWorkspacesRequestWorkspaceIds {
     Variant0(String),
     Variant1(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 crate::open_enum! {
@@ -95,6 +97,8 @@ pub struct SubmitVulnerabilitiesRequestVulnerabilitiesAdditionalInfo {
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitVulnerabilitiesRequestVulnerabilitiesAddAssociations {
     IssueIdOrKeysAssociation(IssueIdOrKeysAssociation),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -102,6 +106,8 @@ pub enum SubmitVulnerabilitiesRequestVulnerabilitiesAddAssociations {
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitVulnerabilitiesRequestVulnerabilitiesRemoveAssociations {
     IssueIdOrKeysAssociation(IssueIdOrKeysAssociation),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// Data related to a specific vulnerability in a specific workspace that the vulnerability is present in. Must specify at least one association.
@@ -140,12 +146,12 @@ pub struct SubmitVulnerabilitiesRequestVulnerabilities {
     /// The timestamp to present to the user that shows when the Vulnerability was introduced.
     ///
     /// Expected format is an RFC3339 formatted string.
-    #[serde(rename = "introducedDate")]
+    #[serde(rename = "introducedDate", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub introduced_date: String,
     /// The last-updated timestamp to present to the user the last time the Vulnerability was updated.
     ///
     /// Expected format is an RFC3339 formatted string.
-    #[serde(rename = "lastUpdated")]
+    #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// Severity information for a single Vulnerability.
     ///
@@ -168,7 +174,12 @@ pub struct SubmitVulnerabilitiesRequestVulnerabilities {
     /// An ISO-8601 Date-time string representing the last time the provider updated associations on this entity.
     ///
     /// Expected format is an RFC3339 formatted string.
-    #[serde(rename = "associationsLastUpdated", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "associationsLastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub associations_last_updated: Option<String>,
     /// A sequence number to compare when writing entity associations to the database.
     ///

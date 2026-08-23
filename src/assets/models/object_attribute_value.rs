@@ -9,6 +9,8 @@ use serde::{Deserialize, Serialize};
 pub enum ObjectAttributeValueValue {
     Variant0(String),
     Variant1(String),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The actual value of an object attribute. The object attribute value body will have different properties populated based on the type of the object type attribute. The value will always be present.

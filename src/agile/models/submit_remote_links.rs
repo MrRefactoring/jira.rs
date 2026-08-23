@@ -9,6 +9,8 @@ use serde::{Deserialize, Serialize};
 pub enum SubmitRemoteLinksUnknownAssociations {
     IssueIdOrKeysAssociation(IssueIdOrKeysAssociation),
     ServiceIdOrKeysAssociation(ServiceIdOrKeysAssociation),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The result of a successful `submitRemoteLinks` request.

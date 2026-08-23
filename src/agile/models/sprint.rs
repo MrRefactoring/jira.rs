@@ -12,11 +12,26 @@ crate::open_enum! {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Sprint {
-    #[serde(rename = "completeDate", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "completeDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub complete_date: Option<String>,
-    #[serde(rename = "createdDate", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "createdDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub created_date: Option<String>,
-    #[serde(rename = "endDate", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "endDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub end_date: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub goal: Option<String>,
@@ -28,7 +43,12 @@ pub struct Sprint {
     pub origin_board_id: Option<i64>,
     #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
     pub self_: Option<String>,
-    #[serde(rename = "startDate", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "startDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub start_date: Option<String>,
     pub state: SprintState,
 }

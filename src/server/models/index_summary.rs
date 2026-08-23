@@ -13,6 +13,11 @@ pub struct IndexSummary {
     pub node_id: Option<String>,
     #[serde(rename = "replicationQueues", default, skip_serializing_if = "Option::is_none")]
     pub replication_queues: Option<std::collections::HashMap<String, serde_json::Value>>,
-    #[serde(rename = "reportTime", default, skip_serializing_if = "Option::is_none")]
+    #[serde(
+        rename = "reportTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
     pub report_time: Option<String>,
 }

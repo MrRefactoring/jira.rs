@@ -27,6 +27,8 @@ crate::open_enum! {
 pub enum GetCurrentUserRequestExpand {
     Variant0(GetCurrentUserRequestExpandVariant0),
     Variant1(Vec<GetCurrentUserRequestExpandUnion1>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The Myself operations.

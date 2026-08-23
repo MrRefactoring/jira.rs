@@ -59,6 +59,8 @@ pub enum SubmitDeploymentsUnknownAssociations {
     IssueIdOrKeysAssociation(IssueIdOrKeysAssociation),
     ServiceIdOrKeysAssociation(ServiceIdOrKeysAssociation),
     EntityAssociation(EntityAssociation),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
 
 /// The result of a successful submitDeployments request.

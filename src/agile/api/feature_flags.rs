@@ -70,7 +70,7 @@ pub struct SubmitFeatureFlagsRequestFlagsSummary {
     /// Providers may choose to supply the last-updated timestamp from a specific environment, or the 'most recent' last-updated timestamp across all environments - whatever makes sense in the Provider system.
     ///
     /// Expected format is an RFC3339 formatted string.
-    #[serde(rename = "lastUpdated")]
+    #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
 }
 
@@ -145,7 +145,7 @@ pub struct SubmitFeatureFlagsRequestFlagsDetails {
     /// The last-updated timestamp for this Feature Flag, in this environment.
     ///
     /// Expected format is an RFC3339 formatted string.
-    #[serde(rename = "lastUpdated")]
+    #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// Details of a single environment.
     ///
