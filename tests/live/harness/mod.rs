@@ -12,6 +12,7 @@ pub mod fixtures;
 pub mod naming;
 pub mod poll;
 pub mod resources;
+pub mod server_client;
 
 pub use client::{admin_key_client, admin_surface, agile, cloud, org_id, service_desk, teams, user_management};
 pub use entitlement::is_not_entitled;
@@ -20,3 +21,4 @@ pub use fixtures::{TEST_ISSUE_TYPE, TEST_PROJECT_KEY, create_issue_with, create_
 pub use naming::{RESOURCE_MARKER, project_key, run_id, test_name};
 pub use poll::poll_until;
 pub use resources::ResourceTracker;
+pub use server_client::{server, server_client};

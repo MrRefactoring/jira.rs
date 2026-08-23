@@ -7,10 +7,20 @@
 //! value outside a documented set is the same gap one level down: the field is described, its list of values is not
 //! complete.
 
+use std::io::Write;
 use std::sync::{Mutex, OnceLock};
 
+use serde::{Deserialize, Serialize};
+
+/// Where each finding is appended as it is made, when the audit run names a file.
+///
+/// Written through rather than reported at the end: a test binary has no teardown hook that runs after the last
+/// test, and a run that panics half way through still has findings worth keeping.
+pub const OUTPUT_VARIABLE: &str = "JIRA_AUDIT_OUTPUT";
+
 /// One gap between a generated type and the response it was deserialized from.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "camelCase")]
 pub enum SchemaDrift {
     /// Keys the API sends that the type does not describe.
     UndocumentedKeys {
@@ -37,10 +47,23 @@ fn store() -> &'static Mutex<Vec<SchemaDrift>> {
 }
 
 fn record(entry: SchemaDrift) {
-    if let Ok(mut collected) = store().lock()
-        && !collected.contains(&entry)
-    {
-        collected.push(entry);
+    let Ok(mut collected) = store().lock() else { return };
+
+    if collected.contains(&entry) {
+        return;
+    }
+
+    append_to_output(&entry);
+    collected.push(entry);
+}
+
+fn append_to_output(entry: &SchemaDrift) {
+    let Ok(path) = std::env::var(OUTPUT_VARIABLE) else { return };
+    let Ok(line) = serde_json::to_string(entry) else { return };
+    let opened = std::fs::OpenOptions::new().create(true).append(true).open(path);
+
+    if let Ok(mut file) = opened {
+        let _ = writeln!(file, "{line}");
     }
 }
 

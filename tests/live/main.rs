@@ -15,3 +15,4 @@
 mod harness;
 
 mod cloud;
+mod server;

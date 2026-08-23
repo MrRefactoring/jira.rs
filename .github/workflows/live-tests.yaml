@@ -1,0 +1,40 @@
+name: 🧩 Live tests
+
+on:
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+# One tenant, one run at a time: the suites create real issues in a shared project, and two runs would sweep up each
+# other's fixtures.
+concurrency:
+  group: live-tests
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  live:
+    name: 🧩 Live
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout sources
+        uses: actions/checkout@v5
+      - name: ⚙️ Install the toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: 💾 Cache the build
+        uses: Swatinem/rust-cache@v2
+      - name: 🚀 Run the live suite
+        run: cargo test --test live --all-features -- --ignored --test-threads=1
+        env:
+          JIRA_BASE_URL: ${{ secrets.HOST }}
+          JIRA_EMAIL: ${{ secrets.EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.API_TOKEN }}
+          JIRA_ORG_ID: ${{ secrets.JIRA_ORG_ID }}
+          JIRA_ADMIN_API_KEY: ${{ secrets.JIRA_ADMIN_API_KEY }}
