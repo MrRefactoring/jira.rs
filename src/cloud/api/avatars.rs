@@ -199,7 +199,7 @@ impl<'a> AvatarsService<'a> {
         r#type: impl Into<StoreAvatarRequestType>,
         entity_id: impl Into<String>,
         size: i64,
-        body: impl IntoIterator<Item = u8>,
+        body: impl Into<bytes::Bytes>,
     ) -> StoreAvatarRequest<'a> {
         StoreAvatarRequest::new(self.client, r#type, entity_id, size, body)
     }
@@ -385,7 +385,8 @@ pub struct StoreAvatarRequest<'a> {
     x: Option<i64>,
     y: Option<i64>,
     size: i64,
-    body: Vec<u8>,
+    body: bytes::Bytes,
+    content_type: Option<String>,
 }
 
 impl<'a> StoreAvatarRequest<'a> {
@@ -394,16 +395,17 @@ impl<'a> StoreAvatarRequest<'a> {
         r#type: impl Into<StoreAvatarRequestType>,
         entity_id: impl Into<String>,
         size: i64,
-        body: impl IntoIterator<Item = u8>,
+        body: impl Into<bytes::Bytes>,
     ) -> Self {
         Self {
             client,
             r#type: r#type.into(),
             entity_id: entity_id.into(),
             size,
-            body: body.into_iter().collect(),
+            body: body.into(),
             x: None,
             y: None,
+            content_type: None,
         }
     }
 
@@ -419,6 +421,14 @@ impl<'a> StoreAvatarRequest<'a> {
     #[must_use]
     pub fn y(mut self, value: i64) -> Self {
         self.y = Some(value);
+
+        self
+    }
+
+    /// The media type of the bytes being sent, e.g. `image/png`.
+    #[must_use]
+    pub fn content_type(mut self, value: impl Into<String>) -> Self {
+        self.content_type = Some(value.into());
 
         self
     }
@@ -442,7 +452,9 @@ impl<'a> StoreAvatarRequest<'a> {
 
         config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
 
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+        config.body = Some(crate::core::Body::Bytes(self.body.clone()));
+
+        config.content_type = self.content_type.clone().or(None);
 
         Ok(config)
     }

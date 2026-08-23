@@ -35,7 +35,7 @@ fn jsm_dc() -> Rig {
     Rig {
         product: "Jira Service Management Data Center",
         compose_dir: workspace_root().join("docker/jsm-dc"),
-        base_url: std::env::var("JSM_SERVER_BASE_URL").unwrap_or_else(|_| "http://localhost:8081".to_owned()),
+        base_url: std::env::var("JSM_SERVER_BASE_URL").unwrap_or_else(|_| "http://localhost:8082".to_owned()),
         admin_username: "admin",
         admin_password: "admin123",
         admin_email: "admin@example.invalid",

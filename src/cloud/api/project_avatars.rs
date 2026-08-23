@@ -66,7 +66,7 @@ impl<'a> ProjectAvatarsService<'a> {
     pub fn create_project_avatar(
         &self,
         project_id_or_key: impl Into<String>,
-        body: impl IntoIterator<Item = u8>,
+        body: impl Into<bytes::Bytes>,
     ) -> CreateProjectAvatarRequest<'a> {
         CreateProjectAvatarRequest::new(self.client, project_id_or_key, body)
     }
@@ -193,22 +193,24 @@ pub struct CreateProjectAvatarRequest<'a> {
     x: Option<i64>,
     y: Option<i64>,
     size: Option<i64>,
-    body: Vec<u8>,
+    body: bytes::Bytes,
+    content_type: Option<String>,
 }
 
 impl<'a> CreateProjectAvatarRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
         project_id_or_key: impl Into<String>,
-        body: impl IntoIterator<Item = u8>,
+        body: impl Into<bytes::Bytes>,
     ) -> Self {
         Self {
             client,
             project_id_or_key: project_id_or_key.into(),
-            body: body.into_iter().collect(),
+            body: body.into(),
             x: None,
             y: None,
             size: None,
+            content_type: None,
         }
     }
 
@@ -236,6 +238,14 @@ impl<'a> CreateProjectAvatarRequest<'a> {
         self
     }
 
+    /// The media type of the bytes being sent, e.g. `image/png`.
+    #[must_use]
+    pub fn content_type(mut self, value: impl Into<String>) -> Self {
+        self.content_type = Some(value.into());
+
+        self
+    }
+
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
@@ -257,7 +267,9 @@ impl<'a> CreateProjectAvatarRequest<'a> {
 
         config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
 
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+        config.body = Some(crate::core::Body::Bytes(self.body.clone()));
+
+        config.content_type = self.content_type.clone().or(None);
 
         Ok(config)
     }

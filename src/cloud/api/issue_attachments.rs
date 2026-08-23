@@ -366,6 +366,7 @@ pub struct AddAttachmentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
     attachments: Vec<crate::core::Attachment>,
+    content_type: Option<String>,
 }
 
 impl<'a> AddAttachmentRequest<'a> {
@@ -374,7 +375,20 @@ impl<'a> AddAttachmentRequest<'a> {
         issue_id_or_key: impl Into<String>,
         attachments: impl IntoIterator<Item = crate::core::Attachment>,
     ) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), attachments: attachments.into_iter().collect() }
+        Self {
+            client,
+            issue_id_or_key: issue_id_or_key.into(),
+            attachments: attachments.into_iter().collect(),
+            content_type: None,
+        }
+    }
+
+    /// The media type of the bytes being sent, e.g. `image/png`.
+    #[must_use]
+    pub fn content_type(mut self, value: impl Into<String>) -> Self {
+        self.content_type = Some(value.into());
+
+        self
     }
 
     /// The request as the transport will send it.
@@ -388,6 +402,8 @@ impl<'a> AddAttachmentRequest<'a> {
 
         config.body =
             Some(crate::core::Body::Multipart(crate::core::MultipartBody::new("file", self.attachments.clone())));
+
+        config.content_type = self.content_type.clone().or(None);
 
         Ok(config)
     }

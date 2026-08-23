@@ -14,5 +14,6 @@
 #[allow(dead_code, unused_imports)]
 mod harness;
 
+mod agile;
 mod cloud;
 mod server;

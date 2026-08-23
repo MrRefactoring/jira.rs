@@ -52,6 +52,7 @@ url = "2.5"
 tokio = { version = "1.53", features = ["macros", "rt-multi-thread"] }
 httpdate = "1.0"
 dotenvy = "0.15"
+reqwest = { version = "0.13", features = ["json"] }
 wiremock = "0.6"
 
 # The live suites are one binary rather than ninety-six, so the harness is compiled once instead of once per file.

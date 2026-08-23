@@ -469,6 +469,7 @@ pub struct StoreTemporaryIssueTypeAvatarUsingMultiPartRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
     avatar: Vec<crate::core::Attachment>,
+    content_type: Option<String>,
 }
 
 impl<'a> StoreTemporaryIssueTypeAvatarUsingMultiPartRequest<'a> {
@@ -477,7 +478,15 @@ impl<'a> StoreTemporaryIssueTypeAvatarUsingMultiPartRequest<'a> {
         id: impl Into<String>,
         avatar: impl IntoIterator<Item = crate::core::Attachment>,
     ) -> Self {
-        Self { client, id: id.into(), avatar: avatar.into_iter().collect() }
+        Self { client, id: id.into(), avatar: avatar.into_iter().collect(), content_type: None }
+    }
+
+    /// The media type of the bytes being sent, e.g. `image/png`.
+    #[must_use]
+    pub fn content_type(mut self, value: impl Into<String>) -> Self {
+        self.content_type = Some(value.into());
+
+        self
     }
 
     /// The request as the transport will send it.
@@ -491,6 +500,8 @@ impl<'a> StoreTemporaryIssueTypeAvatarUsingMultiPartRequest<'a> {
 
         config.body =
             Some(crate::core::Body::Multipart(crate::core::MultipartBody::new("avatar", self.avatar.clone())));
+
+        config.content_type = self.content_type.clone().or(None);
 
         Ok(config)
     }

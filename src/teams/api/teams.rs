@@ -435,6 +435,7 @@ pub struct UploadAndSetTeamCoverPhotoRequest<'a> {
     client: &'a crate::core::Client,
     team_id: String,
     file: Vec<crate::core::Attachment>,
+    content_type: Option<String>,
 }
 
 impl<'a> UploadAndSetTeamCoverPhotoRequest<'a> {
@@ -443,7 +444,15 @@ impl<'a> UploadAndSetTeamCoverPhotoRequest<'a> {
         team_id: impl Into<String>,
         file: impl IntoIterator<Item = crate::core::Attachment>,
     ) -> Self {
-        Self { client, team_id: team_id.into(), file: file.into_iter().collect() }
+        Self { client, team_id: team_id.into(), file: file.into_iter().collect(), content_type: None }
+    }
+
+    /// The media type of the bytes being sent, e.g. `image/png`.
+    #[must_use]
+    pub fn content_type(mut self, value: impl Into<String>) -> Self {
+        self.content_type = Some(value.into());
+
+        self
     }
 
     /// The request as the transport will send it.
@@ -454,6 +463,8 @@ impl<'a> UploadAndSetTeamCoverPhotoRequest<'a> {
         );
 
         config.body = Some(crate::core::Body::Multipart(crate::core::MultipartBody::new("file", self.file.clone())));
+
+        config.content_type = self.content_type.clone().or(None);
 
         Ok(config)
     }
