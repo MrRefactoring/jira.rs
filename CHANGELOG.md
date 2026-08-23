@@ -20,3 +20,13 @@ version.
 - `with_retry`, applying the client's own transient-failure policy around a call.
 - `get_tenant_context`, resolving a site's cloud id, organization id and host name.
 - The `audit` feature, which collects the fields the API sends that the generated types do not describe.
+- Wiki markup where v3 wants a document: a rich-text field written as a plain string goes to the v2 twin of the
+  endpoint, which converts it, and the result is read back through v3.
+
+### Fixed
+
+- A request body the specification types as binary is sent as bytes rather than as a JSON array of them, and carries
+  a `content_type` the caller declares — Jira reads the declared type rather than sniffing the bytes.
+- A `date-time` field reads a number as well as a string. Jira declares every timestamp a string and the bulk queue
+  answers epoch milliseconds.
+- A generated union ends in a catch-all, so a shape the specification does not list no longer fails the response.

@@ -1,0 +1,40 @@
+name: 🧱 Service Management Data Center tests
+
+on:
+  schedule:
+    - cron: '30 4 * * *'
+  workflow_dispatch:
+
+# Its own workflow rather than a job beside the Jira rig: a runner has memory for one Data Center instance, and
+# starting the second takes the first down with it — without an error, since the kernel takes the container rather
+# than the command.
+concurrency:
+  group: live-tests-jsm
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  live:
+    name: 🧱 Service Management Data Center
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout sources
+        uses: actions/checkout@v5
+      - name: ⚙️ Install the toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: 💾 Cache the build
+        uses: Swatinem/rust-cache@v2
+      - name: 🧱 Bring up Service Management Data Center
+        run: cargo xtask jsm-dc up
+      - name: 🚀 Run the Service Management suite
+        run: cargo test --test live --all-features -- --ignored --test-threads=1 jsm::
+        env:
+          JSM_SERVER_BASE_URL: http://localhost:8082
+      - name: 🧹 Tear it down
+        if: always()
+        run: cargo xtask jsm-dc down
