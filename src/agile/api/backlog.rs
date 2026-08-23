@@ -39,10 +39,7 @@ pub struct MoveIssuesToBacklogRequest<'a> {
 
 impl<'a> MoveIssuesToBacklogRequest<'a> {
     fn new(client: &'a crate::core::Client, issues: impl IntoIterator<Item = impl Into<String>>) -> Self {
-        Self {
-            client,
-            issues: issues.into_iter().map(Into::into).collect(),
-        }
+        Self { client, issues: issues.into_iter().map(Into::into).collect() }
     }
 
     /// The request as the transport will send it.

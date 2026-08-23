@@ -49,10 +49,7 @@ pub struct GetSchemasRequest<'a> {
 
 impl<'a> GetSchemasRequest<'a> {
     fn new(client: &'a crate::core::Client, directory_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            directory_id: directory_id.into(),
-        }
+        Self { client, directory_id: directory_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -86,20 +83,14 @@ pub struct GetUserSchemasRequest<'a> {
 
 impl<'a> GetUserSchemasRequest<'a> {
     fn new(client: &'a crate::core::Client, directory_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            directory_id: directory_id.into(),
-        }
+        Self { client, directory_id: directory_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/scim/directory/{}/Schemas/urn:ietf:params:scim:schemas:core:2.0:User",
-                self.directory_id
-            ),
+            format!("/scim/directory/{}/Schemas/urn:ietf:params:scim:schemas:core:2.0:User", self.directory_id),
         );
 
         Ok(config)
@@ -126,20 +117,14 @@ pub struct GetGroupSchemasRequest<'a> {
 
 impl<'a> GetGroupSchemasRequest<'a> {
     fn new(client: &'a crate::core::Client, directory_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            directory_id: directory_id.into(),
-        }
+        Self { client, directory_id: directory_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/scim/directory/{}/Schemas/urn:ietf:params:scim:schemas:core:2.0:Group",
-                self.directory_id
-            ),
+            format!("/scim/directory/{}/Schemas/urn:ietf:params:scim:schemas:core:2.0:Group", self.directory_id),
         );
 
         Ok(config)
@@ -166,10 +151,7 @@ pub struct GetExtensionUserSchemasRequest<'a> {
 
 impl<'a> GetExtensionUserSchemasRequest<'a> {
     fn new(client: &'a crate::core::Client, directory_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            directory_id: directory_id.into(),
-        }
+        Self { client, directory_id: directory_id.into() }
     }
 
     /// The request as the transport will send it.

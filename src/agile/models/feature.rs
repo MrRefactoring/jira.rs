@@ -64,11 +64,7 @@ pub struct Feature {
     pub localised_group: Option<String>,
     #[serde(rename = "localisedName", default, skip_serializing_if = "Option::is_none")]
     pub localised_name: Option<String>,
-    #[serde(
-        rename = "permissibleEstimationTypes",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "permissibleEstimationTypes", default, skip_serializing_if = "Option::is_none")]
     pub permissible_estimation_types: Option<Vec<EstimationConfiguration>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub state: Option<FeatureState>,

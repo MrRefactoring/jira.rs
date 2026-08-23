@@ -68,14 +68,7 @@ pub struct GetPaginatedStatusesRequest<'a> {
 
 impl<'a> GetPaginatedStatusesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            issue_type_ids: None,
-            max_results: None,
-            query: None,
-            project_ids: None,
-            start_at: None,
-        }
+        Self { client, issue_type_ids: None, max_results: None, query: None, project_ids: None, start_at: None }
     }
 
     /// The list of issue type ids to filter statuses.
@@ -124,35 +117,23 @@ impl<'a> GetPaginatedStatusesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/status/page".to_owned());
 
         if let Some(value) = &self.issue_type_ids {
-            config
-                .query
-                .push(("issueTypeIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("issueTypeIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_ids {
-            config.query.push((
-                "projectIds".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("projectIds".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -177,10 +158,7 @@ pub struct GetStatusRequest<'a> {
 
 impl<'a> GetStatusRequest<'a> {
     fn new(client: &'a crate::core::Client, id_or_name: impl Into<String>) -> Self {
-        Self {
-            client,
-            id_or_name: id_or_name.into(),
-        }
+        Self { client, id_or_name: id_or_name.into() }
     }
 
     /// The request as the transport will send it.

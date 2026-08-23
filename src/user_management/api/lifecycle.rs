@@ -70,11 +70,7 @@ pub struct DeactivateUserRequest<'a> {
 
 impl<'a> DeactivateUserRequest<'a> {
     fn new(client: &'a crate::core::Client, account_id: AccountId) -> Self {
-        Self {
-            client,
-            account_id,
-            message: None,
-        }
+        Self { client, account_id, message: None }
     }
 
     #[must_use]

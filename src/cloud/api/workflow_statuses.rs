@@ -79,10 +79,7 @@ pub struct GetStatusRequest<'a> {
 
 impl<'a> GetStatusRequest<'a> {
     fn new(client: &'a crate::core::Client, id_or_name: impl Into<String>) -> Self {
-        Self {
-            client,
-            id_or_name: id_or_name.into(),
-        }
+        Self { client, id_or_name: id_or_name.into() }
     }
 
     /// The request as the transport will send it.

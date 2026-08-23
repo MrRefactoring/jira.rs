@@ -112,10 +112,7 @@ pub struct CreateIssueLinkTypeRequest<'a> {
 
 impl<'a> CreateIssueLinkTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_link_type: IssueLinkType) -> Self {
-        Self {
-            client,
-            issue_link_type,
-        }
+        Self { client, issue_link_type }
     }
 
     /// The request as the transport will send it.
@@ -158,10 +155,7 @@ pub struct GetIssueLinkTypeRequest<'a> {
 
 impl<'a> GetIssueLinkTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_link_type_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_link_type_id: issue_link_type_id.into(),
-        }
+        Self { client, issue_link_type_id: issue_link_type_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -202,11 +196,7 @@ impl<'a> UpdateIssueLinkTypeRequest<'a> {
         issue_link_type_id: impl Into<String>,
         issue_link_type: IssueLinkType,
     ) -> Self {
-        Self {
-            client,
-            issue_link_type_id: issue_link_type_id.into(),
-            issue_link_type,
-        }
+        Self { client, issue_link_type_id: issue_link_type_id.into(), issue_link_type }
     }
 
     /// The request as the transport will send it.
@@ -249,10 +239,7 @@ pub struct DeleteIssueLinkTypeRequest<'a> {
 
 impl<'a> DeleteIssueLinkTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_link_type_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_link_type_id: issue_link_type_id.into(),
-        }
+        Self { client, issue_link_type_id: issue_link_type_id.into() }
     }
 
     /// The request as the transport will send it.

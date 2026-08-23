@@ -41,12 +41,7 @@ pub struct GetServiceDeskOrganizationsRequest<'a> {
 
 impl<'a> GetServiceDeskOrganizationsRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            start: None,
-            limit: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0.
@@ -73,15 +68,11 @@ impl<'a> GetServiceDeskOrganizationsRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -107,11 +98,7 @@ pub struct AddOrganizationRequest<'a> {
 
 impl<'a> AddOrganizationRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            organization_service_desk_update: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), organization_service_desk_update: None }
     }
 
     #[must_use]
@@ -158,11 +145,7 @@ pub struct RemoveOrganizationRequest<'a> {
 
 impl<'a> RemoveOrganizationRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            organization_service_desk_update: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), organization_service_desk_update: None }
     }
 
     #[must_use]

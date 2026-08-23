@@ -148,14 +148,7 @@ pub struct GetRequestCommentsRequest<'a> {
 
 impl<'a> GetRequestCommentsRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            internal: None,
-            public: None,
-            start: None,
-            limit: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), internal: None, public: None, start: None, limit: None }
     }
 
     /// Specifies whether to return internal comments or not. Default: true.
@@ -198,27 +191,19 @@ impl<'a> GetRequestCommentsRequest<'a> {
         );
 
         if let Some(value) = &self.internal {
-            config
-                .query
-                .push(("internal".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("internal".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.public {
-            config
-                .query
-                .push(("public".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("public".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -248,11 +233,7 @@ pub struct CreateRequestCommentRequest<'a> {
 
 impl<'a> CreateRequestCommentRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            comment_create: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), comment_create: None }
     }
 
     #[must_use]
@@ -303,21 +284,14 @@ pub struct GetRequestCommentByIdRequest<'a> {
 
 impl<'a> GetRequestCommentByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, comment_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            comment_id: comment_id.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), comment_id: comment_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/request/{}/comment/{}",
-                self.issue_id_or_key, self.comment_id
-            ),
+            format!("/rest/servicedeskapi/request/{}/comment/{}", self.issue_id_or_key, self.comment_id),
         );
 
         Ok(config)
@@ -449,55 +423,35 @@ impl<'a> GetMyCustomerRequestsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/servicedeskapi/request".to_owned());
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.search_term {
-            config
-                .query
-                .push(("searchTerm".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("searchTerm".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.service_desk_id {
-            config.query.push((
-                "serviceDeskId".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("serviceDeskId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.request_ownership {
-            config.query.push((
-                "requestOwnership".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("requestOwnership".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.request_type_id {
-            config.query.push((
-                "requestTypeId".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("requestTypeId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.request_status {
-            config.query.push((
-                "requestStatus".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("requestStatus".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -528,10 +482,7 @@ pub struct CreateCustomerRequestRequest<'a> {
 
 impl<'a> CreateCustomerRequestRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            request_create: None,
-        }
+        Self { client, request_create: None }
     }
 
     #[must_use]
@@ -576,11 +527,7 @@ pub struct GetCustomerRequestByIdOrKeyRequest<'a> {
 
 impl<'a> GetCustomerRequestByIdOrKeyRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            expand: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), expand: None }
     }
 
     /// This is a multi-value parameter indicating which properties of the customer request to expand:
@@ -604,9 +551,7 @@ impl<'a> GetCustomerRequestByIdOrKeyRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -633,12 +578,7 @@ pub struct GetRequestParticipantsRequest<'a> {
 
 impl<'a> GetRequestParticipantsRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            start: None,
-            limit: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0.
@@ -665,15 +605,11 @@ impl<'a> GetRequestParticipantsRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -747,15 +683,11 @@ impl<'a> AddRequestParticipantsRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.request_participant_update)? {
@@ -834,15 +766,11 @@ impl<'a> RemoveRequestParticipantsRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.request_participant_update)? {
@@ -880,12 +808,7 @@ pub struct GetSlaInformationRequest<'a> {
 
 impl<'a> GetSlaInformationRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            start: None,
-            limit: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0.
@@ -912,15 +835,11 @@ impl<'a> GetSlaInformationRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -954,21 +873,14 @@ impl<'a> GetSlaInformationByIdRequest<'a> {
         issue_id_or_key: impl Into<String>,
         sla_metric_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            sla_metric_id: sla_metric_id.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), sla_metric_id: sla_metric_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/request/{}/sla/{}",
-                self.issue_id_or_key, self.sla_metric_id
-            ),
+            format!("/rest/servicedeskapi/request/{}/sla/{}", self.issue_id_or_key, self.sla_metric_id),
         );
 
         Ok(config)
@@ -995,12 +907,7 @@ pub struct GetCustomerRequestStatusRequest<'a> {
 
 impl<'a> GetCustomerRequestStatusRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            start: None,
-            limit: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0.
@@ -1027,15 +934,11 @@ impl<'a> GetCustomerRequestStatusRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

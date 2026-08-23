@@ -466,12 +466,7 @@ pub struct CreateFilterRequest<'a> {
 
 impl<'a> CreateFilterRequest<'a> {
     fn new(client: &'a crate::core::Client, filter: Filter) -> Self {
-        Self {
-            client,
-            filter,
-            expand: None,
-            override_share_permissions: None,
-        }
+        Self { client, filter, expand: None, override_share_permissions: None }
     }
 
     /// Use [expand](#expansion) to include additional information about filter in the response. This parameter accepts a comma-separated list. Expand options include:
@@ -498,16 +493,13 @@ impl<'a> CreateFilterRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/filter".to_owned());
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.override_share_permissions {
-            config.query.push((
-                "overrideSharePermissions".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config
+                .query
+                .push(("overrideSharePermissions".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.filter)? {
@@ -571,9 +563,7 @@ impl<'a> GetFavouriteFiltersRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/filter/favourite".to_owned());
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -609,11 +599,7 @@ pub struct GetMyFiltersRequest<'a> {
 
 impl<'a> GetMyFiltersRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            expand: None,
-            include_favourites: None,
-        }
+        Self { client, expand: None, include_favourites: None }
     }
 
     /// Use [expand](#expansion) to include additional information about filter in the response. This parameter accepts a comma-separated list. Expand options include:
@@ -640,16 +626,11 @@ impl<'a> GetMyFiltersRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/filter/my".to_owned());
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.include_favourites {
-            config.query.push((
-                "includeFavourites".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("includeFavourites".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -838,79 +819,53 @@ impl<'a> GetFiltersPaginatedRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/filter/search".to_owned());
 
         if let Some(value) = &self.filter_name {
-            config
-                .query
-                .push(("filterName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("filterName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.groupname {
-            config
-                .query
-                .push(("groupname".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("groupname".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.group_id {
-            config
-                .query
-                .push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_id {
-            config.query.push((
-                "projectId".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.id {
-            config
-                .query
-                .push(("id".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("id".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.order_by {
-            config
-                .query
-                .push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.override_share_permissions {
-            config.query.push((
-                "overrideSharePermissions".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config
+                .query
+                .push(("overrideSharePermissions".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.is_substring_match {
-            config.query.push((
-                "isSubstringMatch".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("isSubstringMatch".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -947,12 +902,7 @@ pub struct GetFilterRequest<'a> {
 
 impl<'a> GetFilterRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self {
-            client,
-            id,
-            expand: None,
-            override_share_permissions: None,
-        }
+        Self { client, id, expand: None, override_share_permissions: None }
     }
 
     /// Use [expand](#expansion) to include additional information about filter in the response. This parameter accepts a comma-separated list. Expand options include:
@@ -980,16 +930,13 @@ impl<'a> GetFilterRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/3/filter/{}", self.id));
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.override_share_permissions {
-            config.query.push((
-                "overrideSharePermissions".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config
+                .query
+                .push(("overrideSharePermissions".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1019,13 +966,7 @@ pub struct UpdateFilterRequest<'a> {
 
 impl<'a> UpdateFilterRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, body: Filter) -> Self {
-        Self {
-            client,
-            id,
-            body,
-            expand: None,
-            override_share_permissions: None,
-        }
+        Self { client, id, body, expand: None, override_share_permissions: None }
     }
 
     /// Use [expand](#expansion) to include additional information about filter in the response. This parameter accepts a comma-separated list. Expand options include:
@@ -1053,16 +994,13 @@ impl<'a> UpdateFilterRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/rest/api/3/filter/{}", self.id));
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.override_share_permissions {
-            config.query.push((
-                "overrideSharePermissions".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config
+                .query
+                .push(("overrideSharePermissions".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -1176,11 +1114,7 @@ pub struct SetColumnsRequest<'a> {
 
 impl<'a> SetColumnsRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, column_request_body: ColumnRequestBody) -> Self {
-        Self {
-            client,
-            id,
-            column_request_body,
-        }
+        Self { client, id, column_request_body }
     }
 
     /// The request as the transport will send it.
@@ -1268,11 +1202,7 @@ pub struct SetFavouriteForFilterRequest<'a> {
 
 impl<'a> SetFavouriteForFilterRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self {
-            client,
-            id,
-            expand: None,
-        }
+        Self { client, id, expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information about filter in the response. This parameter accepts a comma-separated list. Expand options include:
@@ -1294,9 +1224,7 @@ impl<'a> SetFavouriteForFilterRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -1324,11 +1252,7 @@ pub struct DeleteFavouriteForFilterRequest<'a> {
 
 impl<'a> DeleteFavouriteForFilterRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self {
-            client,
-            id,
-            expand: None,
-        }
+        Self { client, id, expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information about filter in the response. This parameter accepts a comma-separated list. Expand options include:
@@ -1350,9 +1274,7 @@ impl<'a> DeleteFavouriteForFilterRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)

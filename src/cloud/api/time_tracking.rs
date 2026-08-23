@@ -97,10 +97,7 @@ pub struct SelectTimeTrackingImplementationRequest<'a> {
 
 impl<'a> SelectTimeTrackingImplementationRequest<'a> {
     fn new(client: &'a crate::core::Client, time_tracking_provider: TimeTrackingProvider) -> Self {
-        Self {
-            client,
-            time_tracking_provider,
-        }
+        Self { client, time_tracking_provider }
     }
 
     /// The request as the transport will send it.
@@ -207,10 +204,7 @@ pub struct SetSharedTimeTrackingConfigurationRequest<'a> {
 
 impl<'a> SetSharedTimeTrackingConfigurationRequest<'a> {
     fn new(client: &'a crate::core::Client, time_tracking_configuration: TimeTrackingConfiguration) -> Self {
-        Self {
-            client,
-            time_tracking_configuration,
-        }
+        Self { client, time_tracking_configuration }
     }
 
     /// The request as the transport will send it.

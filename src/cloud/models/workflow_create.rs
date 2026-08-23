@@ -9,11 +9,7 @@ pub struct WorkflowCreate {
     /// The description of the workflow to create.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[serde(
-        rename = "loopedTransitionContainerLayout",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "loopedTransitionContainerLayout", default, skip_serializing_if = "Option::is_none")]
     pub looped_transition_container_layout: Option<WorkflowLayout>,
     /// The name of the workflow to create.
     pub name: String,

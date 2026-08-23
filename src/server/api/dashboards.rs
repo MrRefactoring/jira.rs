@@ -73,12 +73,7 @@ pub struct ListRequest<'a> {
 
 impl<'a> ListRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            filter: None,
-            max_results: None,
-            start_at: None,
-        }
+        Self { client, filter: None, max_results: None, start_at: None }
     }
 
     /// An optional filter that is applied to the list of dashboards.
@@ -110,21 +105,15 @@ impl<'a> ListRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/dashboard".to_owned());
 
         if let Some(value) = &self.filter {
-            config
-                .query
-                .push(("filter".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("filter".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config
-                .query
-                .push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -150,21 +139,14 @@ pub struct GetDashboardItemPropertyKeysRequest<'a> {
 
 impl<'a> GetDashboardItemPropertyKeysRequest<'a> {
     fn new(client: &'a crate::core::Client, item_id: impl Into<String>, dashboard_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            item_id: item_id.into(),
-            dashboard_id: dashboard_id.into(),
-        }
+        Self { client, item_id: item_id.into(), dashboard_id: dashboard_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/2/dashboard/{}/items/{}/properties",
-                self.dashboard_id, self.item_id
-            ),
+            format!("/rest/api/2/dashboard/{}/items/{}/properties", self.dashboard_id, self.item_id),
         );
 
         Ok(config)
@@ -196,12 +178,7 @@ impl<'a> GetDashboardItemPropertyRequest<'a> {
         item_id: impl Into<String>,
         dashboard_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            item_id: item_id.into(),
-            dashboard_id: dashboard_id.into(),
-        }
+        Self { client, property_key: property_key.into(), item_id: item_id.into(), dashboard_id: dashboard_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -295,12 +272,7 @@ impl<'a> DeleteDashboardItemPropertyRequest<'a> {
         item_id: impl Into<String>,
         dashboard_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            item_id: item_id.into(),
-            dashboard_id: dashboard_id.into(),
-        }
+        Self { client, property_key: property_key.into(), item_id: item_id.into(), dashboard_id: dashboard_id.into() }
     }
 
     /// The request as the transport will send it.

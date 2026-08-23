@@ -9,11 +9,7 @@ pub struct SaveTemplateRequest {
     /// The description of the template
     #[serde(rename = "templateDescription", default, skip_serializing_if = "Option::is_none")]
     pub template_description: Option<String>,
-    #[serde(
-        rename = "templateFromProjectRequest",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "templateFromProjectRequest", default, skip_serializing_if = "Option::is_none")]
     pub template_from_project_request: Option<SaveProjectTemplateRequest>,
     /// The name of the template
     #[serde(rename = "templateName", default, skip_serializing_if = "Option::is_none")]

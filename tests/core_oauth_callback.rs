@@ -17,11 +17,9 @@ fn accepts_a_relative_url_as_frameworks_hand_it_over() {
 
 #[test]
 fn reports_a_declined_consent_as_access_denied() {
-    let error = parse_callback_url(
-        "https://app.example.com/cb?error=access_denied&error_description=User+said+no",
-        "xyz",
-    )
-    .unwrap_err();
+    let error =
+        parse_callback_url("https://app.example.com/cb?error=access_denied&error_description=User+said+no", "xyz")
+            .unwrap_err();
 
     assert!(error.is_oauth());
     assert_eq!(error.oauth_code(), Some("access_denied"));

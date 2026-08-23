@@ -99,11 +99,7 @@ pub struct UpdateObjectRequest<'a> {
 
 impl<'a> UpdateObjectRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, asset_object_in: AssetObjectIn) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            asset_object_in,
-        }
+        Self { client, id: id.into(), asset_object_in }
     }
 
     /// The request as the transport will send it.
@@ -199,11 +195,7 @@ pub struct FindObjectHistoryRequest<'a> {
 
 impl<'a> FindObjectHistoryRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            asc: None,
-        }
+        Self { client, id: id.into(), asc: None }
     }
 
     /// Should the history be retrieved in ascending order
@@ -220,9 +212,7 @@ impl<'a> FindObjectHistoryRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, format!("/object/{}/history", self.id));
 
         if let Some(value) = &self.asc {
-            config
-                .query
-                .push(("asc".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("asc".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -277,10 +267,7 @@ pub struct CreateObjectRequest<'a> {
 
 impl<'a> CreateObjectRequest<'a> {
     fn new(client: &'a crate::core::Client, asset_object_in: AssetObjectIn) -> Self {
-        Self {
-            client,
-            asset_object_in,
-        }
+        Self { client, asset_object_in }
     }
 
     /// The request as the transport will send it.
@@ -319,13 +306,7 @@ pub struct FindObjectsByAqlRequest<'a> {
 
 impl<'a> FindObjectsByAqlRequest<'a> {
     fn new(client: &'a crate::core::Client, object_aql_params: ObjectAQLParams) -> Self {
-        Self {
-            client,
-            object_aql_params,
-            start_at: None,
-            max_results: None,
-            include_attributes: None,
-        }
+        Self { client, object_aql_params, start_at: None, max_results: None, include_attributes: None }
     }
 
     /// The starting index for the next page of results
@@ -357,23 +338,15 @@ impl<'a> FindObjectsByAqlRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/object/aql".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.include_attributes {
-            config.query.push((
-                "includeAttributes".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("includeAttributes".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.object_aql_params)? {
@@ -405,10 +378,7 @@ pub struct CountObjectsByAqlRequest<'a> {
 
 impl<'a> CountObjectsByAqlRequest<'a> {
     fn new(client: &'a crate::core::Client, object_aql_total_count_params: ObjectAQLTotalCountParams) -> Self {
-        Self {
-            client,
-            object_aql_total_count_params,
-        }
+        Self { client, object_aql_total_count_params }
     }
 
     /// The request as the transport will send it.

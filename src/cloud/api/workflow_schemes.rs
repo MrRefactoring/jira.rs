@@ -207,11 +207,7 @@ pub struct GetAllWorkflowSchemesRequest<'a> {
 
 impl<'a> GetAllWorkflowSchemesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start_at: None,
-            max_results: None,
-        }
+        Self { client, start_at: None, max_results: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -236,16 +232,11 @@ impl<'a> GetAllWorkflowSchemesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/workflowscheme".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -272,10 +263,7 @@ pub struct CreateWorkflowSchemeRequest<'a> {
 
 impl<'a> CreateWorkflowSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_scheme: WorkflowScheme) -> Self {
-        Self {
-            client,
-            workflow_scheme,
-        }
+        Self { client, workflow_scheme }
     }
 
     /// The request as the transport will send it.
@@ -317,10 +305,7 @@ pub struct ReadWorkflowSchemesRequest<'a> {
 
 impl<'a> ReadWorkflowSchemesRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_scheme_read_request: WorkflowSchemeReadRequest) -> Self {
-        Self {
-            client,
-            workflow_scheme_read_request,
-        }
+        Self { client, workflow_scheme_read_request }
     }
 
     /// The request as the transport will send it.
@@ -362,18 +347,13 @@ pub struct UpdateSchemesRequest<'a> {
 
 impl<'a> UpdateSchemesRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_scheme_update_request: WorkflowSchemeUpdateRequest) -> Self {
-        Self {
-            client,
-            workflow_scheme_update_request,
-        }
+        Self { client, workflow_scheme_update_request }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            "/rest/api/3/workflowscheme/update".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/workflowscheme/update".to_owned());
 
         let body = match serde_json::to_value(&self.workflow_scheme_update_request)? {
             serde_json::Value::Object(object) => object,
@@ -412,10 +392,7 @@ impl<'a> GetRequiredWorkflowSchemeMappingsRequest<'a> {
         client: &'a crate::core::Client,
         workflow_scheme_update_required_mappings_request: WorkflowSchemeUpdateRequiredMappingsRequest,
     ) -> Self {
-        Self {
-            client,
-            workflow_scheme_update_required_mappings_request,
-        }
+        Self { client, workflow_scheme_update_required_mappings_request }
     }
 
     /// The request as the transport will send it.
@@ -457,11 +434,7 @@ pub struct GetWorkflowSchemeRequest<'a> {
 
 impl<'a> GetWorkflowSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self {
-            client,
-            id,
-            return_draft_if_exists: None,
-        }
+        Self { client, id, return_draft_if_exists: None }
     }
 
     /// Returns the workflow scheme's draft rather than scheme itself, if set to true. If the workflow scheme does not have a draft, then the workflow scheme is returned.
@@ -480,10 +453,7 @@ impl<'a> GetWorkflowSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.return_draft_if_exists {
-            config.query.push((
-                "returnDraftIfExists".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("returnDraftIfExists".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -582,11 +552,7 @@ pub struct GetDefaultWorkflowRequest<'a> {
 
 impl<'a> GetDefaultWorkflowRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self {
-            client,
-            id,
-            return_draft_if_exists: None,
-        }
+        Self { client, id, return_draft_if_exists: None }
     }
 
     /// Set to `true` to return the default workflow for the workflow scheme's draft rather than scheme itself. If the workflow scheme does not have a draft, then the default workflow for the workflow scheme is returned.
@@ -605,10 +571,7 @@ impl<'a> GetDefaultWorkflowRequest<'a> {
         );
 
         if let Some(value) = &self.return_draft_if_exists {
-            config.query.push((
-                "returnDraftIfExists".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("returnDraftIfExists".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -638,11 +601,7 @@ pub struct UpdateDefaultWorkflowRequest<'a> {
 
 impl<'a> UpdateDefaultWorkflowRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, default_workflow: DefaultWorkflow) -> Self {
-        Self {
-            client,
-            id,
-            default_workflow,
-        }
+        Self { client, id, default_workflow }
     }
 
     /// The request as the transport will send it.
@@ -686,11 +645,7 @@ pub struct DeleteDefaultWorkflowRequest<'a> {
 
 impl<'a> DeleteDefaultWorkflowRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self {
-            client,
-            id,
-            update_draft_if_needed: None,
-        }
+        Self { client, id, update_draft_if_needed: None }
     }
 
     /// Set to true to create or update the draft of a workflow scheme and delete the mapping from the draft, when the workflow scheme cannot be edited. Defaults to `false`.
@@ -709,10 +664,7 @@ impl<'a> DeleteDefaultWorkflowRequest<'a> {
         );
 
         if let Some(value) = &self.update_draft_if_needed {
-            config.query.push((
-                "updateDraftIfNeeded".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("updateDraftIfNeeded".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -741,12 +693,7 @@ pub struct GetWorkflowSchemeIssueTypeRequest<'a> {
 
 impl<'a> GetWorkflowSchemeIssueTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, issue_type: impl Into<String>) -> Self {
-        Self {
-            client,
-            id,
-            issue_type: issue_type.into(),
-            return_draft_if_exists: None,
-        }
+        Self { client, id, issue_type: issue_type.into(), return_draft_if_exists: None }
     }
 
     /// Returns the mapping from the workflow scheme's draft rather than the workflow scheme, if set to true. If no draft exists, the mapping from the workflow scheme is returned.
@@ -765,10 +712,7 @@ impl<'a> GetWorkflowSchemeIssueTypeRequest<'a> {
         );
 
         if let Some(value) = &self.return_draft_if_exists {
-            config.query.push((
-                "returnDraftIfExists".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("returnDraftIfExists".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -804,12 +748,7 @@ impl<'a> SetWorkflowSchemeIssueTypeRequest<'a> {
         issue_type: impl Into<String>,
         body: IssueTypeWorkflowMapping,
     ) -> Self {
-        Self {
-            client,
-            id,
-            issue_type: issue_type.into(),
-            body,
-        }
+        Self { client, id, issue_type: issue_type.into(), body }
     }
 
     /// The request as the transport will send it.
@@ -849,12 +788,7 @@ pub struct DeleteWorkflowSchemeIssueTypeRequest<'a> {
 
 impl<'a> DeleteWorkflowSchemeIssueTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, issue_type: impl Into<String>) -> Self {
-        Self {
-            client,
-            id,
-            issue_type: issue_type.into(),
-            update_draft_if_needed: None,
-        }
+        Self { client, id, issue_type: issue_type.into(), update_draft_if_needed: None }
     }
 
     /// Set to true to create or update the draft of a workflow scheme and update the mapping in the draft, when the workflow scheme cannot be edited. Defaults to `false`.
@@ -873,10 +807,7 @@ impl<'a> DeleteWorkflowSchemeIssueTypeRequest<'a> {
         );
 
         if let Some(value) = &self.update_draft_if_needed {
-            config.query.push((
-                "updateDraftIfNeeded".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("updateDraftIfNeeded".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -905,12 +836,7 @@ pub struct GetWorkflowRequest<'a> {
 
 impl<'a> GetWorkflowRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self {
-            client,
-            id,
-            workflow_name: None,
-            return_draft_if_exists: None,
-        }
+        Self { client, id, workflow_name: None, return_draft_if_exists: None }
     }
 
     /// The name of a workflow in the scheme. Limits the results to the workflow-issue type mapping for the specified workflow.
@@ -937,17 +863,11 @@ impl<'a> GetWorkflowRequest<'a> {
         );
 
         if let Some(value) = &self.workflow_name {
-            config.query.push((
-                "workflowName".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("workflowName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.return_draft_if_exists {
-            config.query.push((
-                "returnDraftIfExists".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("returnDraftIfExists".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -983,12 +903,7 @@ impl<'a> UpdateWorkflowMappingRequest<'a> {
         workflow_name: impl Into<String>,
         issue_types_workflow_mapping: IssueTypesWorkflowMapping,
     ) -> Self {
-        Self {
-            client,
-            id,
-            workflow_name: workflow_name.into(),
-            issue_types_workflow_mapping,
-        }
+        Self { client, id, workflow_name: workflow_name.into(), issue_types_workflow_mapping }
     }
 
     /// The request as the transport will send it.
@@ -998,10 +913,7 @@ impl<'a> UpdateWorkflowMappingRequest<'a> {
             format!("/rest/api/3/workflowscheme/{}/workflow", self.id),
         );
 
-        config.query.push((
-            "workflowName".to_owned(),
-            crate::core::QueryValue::Scalar(self.workflow_name.clone()),
-        ));
+        config.query.push(("workflowName".to_owned(), crate::core::QueryValue::Scalar(self.workflow_name.clone())));
 
         let body = match serde_json::to_value(&self.issue_types_workflow_mapping)? {
             serde_json::Value::Object(object) => object,
@@ -1038,12 +950,7 @@ pub struct DeleteWorkflowMappingRequest<'a> {
 
 impl<'a> DeleteWorkflowMappingRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, workflow_name: impl Into<String>) -> Self {
-        Self {
-            client,
-            id,
-            workflow_name: workflow_name.into(),
-            update_draft_if_needed: None,
-        }
+        Self { client, id, workflow_name: workflow_name.into(), update_draft_if_needed: None }
     }
 
     /// Set to true to create or update the draft of a workflow scheme and delete the mapping from the draft, when the workflow scheme cannot be edited. Defaults to `false`.
@@ -1061,16 +968,10 @@ impl<'a> DeleteWorkflowMappingRequest<'a> {
             format!("/rest/api/3/workflowscheme/{}/workflow", self.id),
         );
 
-        config.query.push((
-            "workflowName".to_owned(),
-            crate::core::QueryValue::Scalar(self.workflow_name.clone()),
-        ));
+        config.query.push(("workflowName".to_owned(), crate::core::QueryValue::Scalar(self.workflow_name.clone())));
 
         if let Some(value) = &self.update_draft_if_needed {
-            config.query.push((
-                "updateDraftIfNeeded".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("updateDraftIfNeeded".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1097,12 +998,7 @@ pub struct GetProjectUsagesForWorkflowSchemeRequest<'a> {
 
 impl<'a> GetProjectUsagesForWorkflowSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_scheme_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            workflow_scheme_id: workflow_scheme_id.into(),
-            next_page_token: None,
-            max_results: None,
-        }
+        Self { client, workflow_scheme_id: workflow_scheme_id.into(), next_page_token: None, max_results: None }
     }
 
     /// The cursor for pagination
@@ -1129,17 +1025,11 @@ impl<'a> GetProjectUsagesForWorkflowSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.next_page_token {
-            config.query.push((
-                "nextPageToken".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

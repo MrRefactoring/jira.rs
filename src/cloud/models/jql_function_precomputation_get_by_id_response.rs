@@ -7,11 +7,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct JqlFunctionPrecomputationGetByIdResponse {
     /// List of precomputations that were not found.
-    #[serde(
-        rename = "notFoundPrecomputationIDs",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "notFoundPrecomputationIDs", default, skip_serializing_if = "Option::is_none")]
     pub not_found_precomputation_i_ds: Option<Vec<String>>,
     /// The list of precomputations.
     #[serde(default, skip_serializing_if = "Option::is_none")]

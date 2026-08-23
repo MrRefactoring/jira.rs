@@ -122,10 +122,8 @@ impl<'a> ApplyEmailTemplatesRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            "/rest/api/2/email-templates/apply".to_owned(),
-        );
+        let config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/email-templates/apply".to_owned());
 
         Ok(config)
     }
@@ -153,10 +151,8 @@ impl<'a> RevertEmailTemplatesToDefaultRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            "/rest/api/2/email-templates/revert".to_owned(),
-        );
+        let config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/email-templates/revert".to_owned());
 
         Ok(config)
     }

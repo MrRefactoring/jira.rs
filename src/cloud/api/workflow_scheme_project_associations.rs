@@ -49,23 +49,15 @@ pub struct GetWorkflowSchemeProjectAssociationsRequest<'a> {
 
 impl<'a> GetWorkflowSchemeProjectAssociationsRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id: impl IntoIterator<Item = i64>) -> Self {
-        Self {
-            client,
-            project_id: project_id.into_iter().collect(),
-        }
+        Self { client, project_id: project_id.into_iter().collect() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            "/rest/api/3/workflowscheme/project".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/workflowscheme/project".to_owned());
 
-        config.query.push((
-            "projectId".to_owned(),
-            crate::core::QueryValue::from_serializable(&self.project_id)?,
-        ));
+        config.query.push(("projectId".to_owned(), crate::core::QueryValue::from_serializable(&self.project_id)?));
 
         Ok(config)
     }
@@ -96,18 +88,13 @@ impl<'a> AssignSchemeToProjectRequest<'a> {
         client: &'a crate::core::Client,
         workflow_scheme_project_association: WorkflowSchemeProjectAssociation,
     ) -> Self {
-        Self {
-            client,
-            workflow_scheme_project_association,
-        }
+        Self { client, workflow_scheme_project_association }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            "/rest/api/3/workflowscheme/project".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::PUT, "/rest/api/3/workflowscheme/project".to_owned());
 
         let body = match serde_json::to_value(&self.workflow_scheme_project_association)? {
             serde_json::Value::Object(object) => object,

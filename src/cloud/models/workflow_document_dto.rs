@@ -14,11 +14,7 @@ pub struct WorkflowDocumentDTO {
     pub id: Option<String>,
     #[serde(rename = "lastUpdateAuthorAAID", default, skip_serializing_if = "Option::is_none")]
     pub last_update_author_aaid: Option<String>,
-    #[serde(
-        rename = "loopedTransitionContainerLayout",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "loopedTransitionContainerLayout", default, skip_serializing_if = "Option::is_none")]
     pub looped_transition_container_layout: Option<WorkflowLayout>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,

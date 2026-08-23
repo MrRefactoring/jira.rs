@@ -76,21 +76,14 @@ impl<'a> FetchMigrationTaskRequest<'a> {
         connect_key: impl Into<String>,
         jira_issue_fields_key: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            connect_key: connect_key.into(),
-            jira_issue_fields_key: jira_issue_fields_key.into(),
-        }
+        Self { client, connect_key: connect_key.into(), jira_issue_fields_key: jira_issue_fields_key.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/atlassian-connect/1/migration/{}/{}/task",
-                self.connect_key, self.jira_issue_fields_key
-            ),
+            format!("/rest/atlassian-connect/1/migration/{}/{}/task", self.connect_key, self.jira_issue_fields_key),
         );
 
         Ok(config)
@@ -151,17 +144,13 @@ impl<'a> SubmitTaskRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/rest/atlassian-connect/1/migration/{}/{}/task",
-                self.connect_key, self.jira_issue_fields_key
-            ),
+            format!("/rest/atlassian-connect/1/migration/{}/{}/task", self.connect_key, self.jira_issue_fields_key),
         );
 
         if let Some(value) = &self.retrigger_completed_migration {
-            config.query.push((
-                "retriggerCompletedMigration".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config
+                .query
+                .push(("retriggerCompletedMigration".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

@@ -133,11 +133,7 @@ pub struct CreateFilterRequest<'a> {
 
 impl<'a> CreateFilterRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            expand: None,
-            filter: None,
-        }
+        Self { client, expand: None, filter: None }
     }
 
     #[must_use]
@@ -159,9 +155,7 @@ impl<'a> CreateFilterRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/filter".to_owned());
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         let body = match serde_json::to_value(&self.filter)? {
@@ -224,10 +218,7 @@ pub struct SetDefaultShareScopeRequest<'a> {
 
 impl<'a> SetDefaultShareScopeRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            default_share_scope: None,
-        }
+        Self { client, default_share_scope: None }
     }
 
     #[must_use]
@@ -289,9 +280,7 @@ impl<'a> GetFavouriteFiltersRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/filter/favourite".to_owned());
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -317,11 +306,7 @@ pub struct GetFilterRequest<'a> {
 
 impl<'a> GetFilterRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            expand: None,
-        }
+        Self { client, id: id.into(), expand: None }
     }
 
     #[must_use]
@@ -337,9 +322,7 @@ impl<'a> GetFilterRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/2/filter/{}", self.id));
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -366,12 +349,7 @@ pub struct EditFilterRequest<'a> {
 
 impl<'a> EditFilterRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            expand: None,
-            body: None,
-        }
+        Self { client, id: id.into(), expand: None, body: None }
     }
 
     #[must_use]
@@ -394,9 +372,7 @@ impl<'a> EditFilterRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/rest/api/2/filter/{}", self.id));
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -486,11 +462,7 @@ pub struct SetColumnsRequest<'a> {
 
 impl<'a> SetColumnsRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            columns: None,
-        }
+        Self { client, id: id.into(), columns: None }
     }
 
     #[must_use]
@@ -602,11 +574,7 @@ pub struct AddSharePermissionRequest<'a> {
 
 impl<'a> AddSharePermissionRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            share_permission_input: None,
-        }
+        Self { client, id: id.into(), share_permission_input: None }
     }
 
     #[must_use]
@@ -653,11 +621,7 @@ pub struct GetSharePermissionRequest<'a> {
 
 impl<'a> GetSharePermissionRequest<'a> {
     fn new(client: &'a crate::core::Client, permission_id: impl Into<String>, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            permission_id: permission_id.into(),
-            id: id.into(),
-        }
+        Self { client, permission_id: permission_id.into(), id: id.into() }
     }
 
     /// The request as the transport will send it.
@@ -690,11 +654,7 @@ pub struct DeleteSharePermissionRequest<'a> {
 
 impl<'a> DeleteSharePermissionRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, permission_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            permission_id: permission_id.into(),
-        }
+        Self { client, id: id.into(), permission_id: permission_id.into() }
     }
 
     /// The request as the transport will send it.

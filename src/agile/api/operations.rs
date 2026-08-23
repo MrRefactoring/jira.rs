@@ -351,10 +351,7 @@ pub struct SubmitOperationsWorkspacesRequest<'a> {
 
 impl<'a> SubmitOperationsWorkspacesRequest<'a> {
     fn new(client: &'a crate::core::Client, workspace_ids: impl IntoIterator<Item = impl Into<String>>) -> Self {
-        Self {
-            client,
-            workspace_ids: workspace_ids.into_iter().map(Into::into).collect(),
-        }
+        Self { client, workspace_ids: workspace_ids.into_iter().map(Into::into).collect() }
     }
 
     /// The request as the transport will send it.
@@ -407,10 +404,9 @@ impl<'a> DeleteWorkspacesRequest<'a> {
             "/rest/operations/1.0/linkedWorkspaces/bulk".to_owned(),
         );
 
-        config.query.push((
-            "workspaceIds".to_owned(),
-            crate::core::QueryValue::from_serializable(&self.workspace_ids)?,
-        ));
+        config
+            .query
+            .push(("workspaceIds".to_owned(), crate::core::QueryValue::from_serializable(&self.workspace_ids)?));
 
         Ok(config)
     }
@@ -441,10 +437,7 @@ pub struct GetWorkspacesRequest<'a> {
 
 impl<'a> GetWorkspacesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            workspace_id: None,
-        }
+        Self { client, workspace_id: None }
     }
 
     /// Optional Operations Workspace ID to retrieve a specific workspace. If omitted, all workspace IDs linked to the Jira site are returned. Example: workspaceId=111-222-333.
@@ -463,9 +456,7 @@ impl<'a> GetWorkspacesRequest<'a> {
         );
 
         if let Some(value) = &self.workspace_id {
-            config
-                .query
-                .push(("workspaceId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("workspaceId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -545,11 +536,7 @@ pub struct DeleteEntityByPropertyRequest<'a> {
 
 impl<'a> DeleteEntityByPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            account_id: account_id.into(),
-            created_by: None,
-        }
+        Self { client, account_id: account_id.into(), created_by: None }
     }
 
     /// Optional additional property filter combined with accountId (AND). Must match a key previously supplied in submitEntity `properties`. Example: createdBy=user-456.
@@ -567,15 +554,10 @@ impl<'a> DeleteEntityByPropertyRequest<'a> {
             "/rest/operations/1.0/bulkByProperties".to_owned(),
         );
 
-        config.query.push((
-            "accountId".to_owned(),
-            crate::core::QueryValue::Scalar(self.account_id.clone()),
-        ));
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
 
         if let Some(value) = &self.created_by {
-            config
-                .query
-                .push(("createdBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("createdBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -605,10 +587,7 @@ pub struct GetIncidentByIdRequest<'a> {
 
 impl<'a> GetIncidentByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, incident_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            incident_id: incident_id.into(),
-        }
+        Self { client, incident_id: incident_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -645,10 +624,7 @@ pub struct DeleteIncidentByIdRequest<'a> {
 
 impl<'a> DeleteIncidentByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, incident_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            incident_id: incident_id.into(),
-        }
+        Self { client, incident_id: incident_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -685,10 +661,7 @@ pub struct GetReviewByIdRequest<'a> {
 
 impl<'a> GetReviewByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, review_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            review_id: review_id.into(),
-        }
+        Self { client, review_id: review_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -725,10 +698,7 @@ pub struct DeleteReviewByIdRequest<'a> {
 
 impl<'a> DeleteReviewByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, review_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            review_id: review_id.into(),
-        }
+        Self { client, review_id: review_id.into() }
     }
 
     /// The request as the transport will send it.

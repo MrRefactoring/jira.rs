@@ -132,18 +132,12 @@ pub enum Auth {
 impl Auth {
     /// Cloud: an Atlassian account address and an API token minted for it.
     pub fn api_token(email: impl Into<String>, api_token: impl Into<String>) -> Self {
-        Auth::Basic {
-            username: email.into(),
-            password: api_token.into(),
-        }
+        Auth::Basic { username: email.into(), password: api_token.into() }
     }
 
     /// Data Center: a local account name and its password.
     pub fn password(username: impl Into<String>, password: impl Into<String>) -> Self {
-        Auth::Basic {
-            username: username.into(),
-            password: password.into(),
-        }
+        Auth::Basic { username: username.into(), password: password.into() }
     }
 
     /// A personal access token, or any other bearer credential.
@@ -165,9 +159,7 @@ impl Auth {
         match self {
             Auth::Basic { username, password } => {
                 if username.trim().is_empty() {
-                    return Err(Error::config(
-                        "Basic authentication needs an account address or username.",
-                    ));
+                    return Err(Error::config("Basic authentication needs an account address or username."));
                 }
 
                 if password.is_empty() {
@@ -211,10 +203,9 @@ impl Auth {
     /// Both OAuth strategies are absent: their header comes from a manager, which refreshes first.
     pub(crate) async fn authorization_header(&self) -> Result<Option<String>> {
         match self {
-            Auth::Basic { username, password } => Ok(Some(format!(
-                "Basic {}",
-                encode_base64(format!("{username}:{password}").as_bytes())
-            ))),
+            Auth::Basic { username, password } => {
+                Ok(Some(format!("Basic {}", encode_base64(format!("{username}:{password}").as_bytes()))))
+            }
             Auth::Bearer { token } => Ok(Some(format!("Bearer {token}"))),
             Auth::BearerProvider(provider) => Ok(Some(format!("Bearer {}", provider.token().await?))),
             Auth::OAuth2(config) => Ok(config.access_token.as_ref().map(|token| format!("Bearer {token}"))),
@@ -226,11 +217,9 @@ impl Auth {
 impl fmt::Debug for Auth {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Auth::Basic { username, .. } => formatter
-                .debug_struct("Basic")
-                .field("username", username)
-                .field("password", &"<redacted>")
-                .finish(),
+            Auth::Basic { username, .. } => {
+                formatter.debug_struct("Basic").field("username", username).field("password", &"<redacted>").finish()
+            }
             Auth::Bearer { .. } => formatter.debug_struct("Bearer").field("token", &"<redacted>").finish(),
             Auth::BearerProvider(_) => formatter.write_str("BearerProvider(<fn>)"),
             Auth::OAuth2(config) => fmt::Debug::fmt(config, formatter),
@@ -246,11 +235,7 @@ fn redacted(value: Option<&str>) -> &'static str {
 fn validate_oauth2(access_token: Option<&str>, refresh_set: &[(&str, Option<&str>)], label: &str) -> Result<()> {
     let present = refresh_set.iter().filter(|(_, value)| value.is_some()).count();
     let complete = present == refresh_set.len();
-    let names = refresh_set
-        .iter()
-        .map(|(name, _)| format!("`{name}`"))
-        .collect::<Vec<_>>()
-        .join(", ");
+    let names = refresh_set.iter().map(|(name, _)| format!("`{name}`")).collect::<Vec<_>>().join(", ");
 
     if access_token.is_none() && !complete {
         return Err(Error::config(format!(
@@ -259,9 +244,7 @@ fn validate_oauth2(access_token: Option<&str>, refresh_set: &[(&str, Option<&str
     }
 
     if present > 0 && !complete {
-        return Err(Error::config(format!(
-            "When using {label} token refresh, {names} must all be provided together."
-        )));
+        return Err(Error::config(format!("When using {label} token refresh, {names} must all be provided together.")));
     }
 
     Ok(())
@@ -277,11 +260,7 @@ pub(crate) fn encode_base64(input: &[u8]) -> String {
     let mut encoded = String::with_capacity(input.len().div_ceil(3) * 4);
 
     for chunk in input.chunks(3) {
-        let bytes = [
-            chunk[0],
-            chunk.get(1).copied().unwrap_or(0),
-            chunk.get(2).copied().unwrap_or(0),
-        ];
+        let bytes = [chunk[0], chunk.get(1).copied().unwrap_or(0), chunk.get(2).copied().unwrap_or(0)];
         let triple = (u32::from(bytes[0]) << 16) | (u32::from(bytes[1]) << 8) | u32::from(bytes[2]);
 
         for index in 0..4 {

@@ -261,10 +261,7 @@ impl<'a> SearchDirectoryGroupsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/admin/v2/orgs/{}/directories/{}/groups/search",
-                self.org_id, self.directory_id
-            ),
+            format!("/admin/v2/orgs/{}/directories/{}/groups/search", self.org_id, self.directory_id),
         );
 
         let body = match serde_json::to_value(&self.multi_directory_group_search_request)? {
@@ -399,40 +396,27 @@ impl<'a> GetGroupRoleAssignmentsRequest<'a> {
         );
 
         if let Some(value) = &self.cursor {
-            config
-                .query
-                .push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.directory_ids {
-            config
-                .query
-                .push(("directoryIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("directoryIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.resource_owners {
-            config.query.push((
-                "resourceOwners".to_owned(),
-                crate::core::QueryValue::List(value.clone()),
-            ));
+            config.query.push(("resourceOwners".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.resource_ids {
-            config
-                .query
-                .push(("resourceIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("resourceIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.role_ids {
-            config
-                .query
-                .push(("roleIds".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("roleIds".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -698,22 +682,14 @@ impl<'a> GetGroupRequest<'a> {
         directory_id: impl Into<String>,
         group_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            directory_id: directory_id.into(),
-            group_id: group_id.into(),
-        }
+        Self { client, org_id: org_id.into(), directory_id: directory_id.into(), group_id: group_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/admin/v2/orgs/{}/directories/{}/groups/{}",
-                self.org_id, self.directory_id, self.group_id
-            ),
+            format!("/admin/v2/orgs/{}/directories/{}/groups/{}", self.org_id, self.directory_id, self.group_id),
         );
 
         Ok(config)
@@ -745,22 +721,14 @@ impl<'a> DeleteGroupRequest<'a> {
         directory_id: impl Into<String>,
         group_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            directory_id: directory_id.into(),
-            group_id: group_id.into(),
-        }
+        Self { client, org_id: org_id.into(), directory_id: directory_id.into(), group_id: group_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/admin/v2/orgs/{}/directories/{}/groups/{}",
-                self.org_id, self.directory_id, self.group_id
-            ),
+            format!("/admin/v2/orgs/{}/directories/{}/groups/{}", self.org_id, self.directory_id, self.group_id),
         );
 
         Ok(config)
@@ -878,53 +846,35 @@ impl<'a> GetGroupsCountRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/admin/v2/orgs/{}/directories/{}/groups/count",
-                self.org_id, self.directory_id
-            ),
+            format!("/admin/v2/orgs/{}/directories/{}/groups/count", self.org_id, self.directory_id),
         );
 
         if let Some(value) = &self.directory_ids {
-            config
-                .query
-                .push(("directoryIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("directoryIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.account_ids {
-            config
-                .query
-                .push(("accountIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("accountIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.group_ids {
-            config
-                .query
-                .push(("groupIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("groupIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.resource_owners {
-            config.query.push((
-                "resourceOwners".to_owned(),
-                crate::core::QueryValue::List(value.clone()),
-            ));
+            config.query.push(("resourceOwners".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.resource_ids {
-            config
-                .query
-                .push(("resourceIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("resourceIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.search_term {
-            config
-                .query
-                .push(("searchTerm".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("searchTerm".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.role_ids {
-            config
-                .query
-                .push(("roleIds".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("roleIds".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -950,21 +900,14 @@ pub struct GetGroupsStatsRequest<'a> {
 
 impl<'a> GetGroupsStatsRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, directory_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            directory_id: directory_id.into(),
-        }
+        Self { client, org_id: org_id.into(), directory_id: directory_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/admin/v2/orgs/{}/directories/{}/groups/stats",
-                self.org_id, self.directory_id
-            ),
+            format!("/admin/v2/orgs/{}/directories/{}/groups/stats", self.org_id, self.directory_id),
         );
 
         Ok(config)
@@ -1127,77 +1070,51 @@ impl<'a> GetGroupsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/admin/v2/orgs/{}/directories/{}/groups",
-                self.org_id, self.directory_id
-            ),
+            format!("/admin/v2/orgs/{}/directories/{}/groups", self.org_id, self.directory_id),
         );
 
         if let Some(value) = &self.cursor {
-            config
-                .query
-                .push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.directory_ids {
-            config
-                .query
-                .push(("directoryIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("directoryIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.account_ids {
-            config
-                .query
-                .push(("accountIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("accountIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.group_ids {
-            config
-                .query
-                .push(("groupIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("groupIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.resource_owners {
-            config.query.push((
-                "resourceOwners".to_owned(),
-                crate::core::QueryValue::List(value.clone()),
-            ));
+            config.query.push(("resourceOwners".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.resource_ids {
-            config
-                .query
-                .push(("resourceIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("resourceIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.search_term {
-            config
-                .query
-                .push(("searchTerm".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("searchTerm".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.counts {
-            config
-                .query
-                .push(("counts".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("counts".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.sort_by {
-            config
-                .query
-                .push(("sortBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("sortBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.role_ids {
-            config
-                .query
-                .push(("roleIds".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("roleIds".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -1230,13 +1147,7 @@ impl<'a> CreateGroupRequest<'a> {
         directory_id: impl Into<String>,
         name: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            directory_id: directory_id.into(),
-            name: name.into(),
-            description: None,
-        }
+        Self { client, org_id: org_id.into(), directory_id: directory_id.into(), name: name.into(), description: None }
     }
 
     /// Describe what the group is or what it might be used for.
@@ -1251,10 +1162,7 @@ impl<'a> CreateGroupRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/admin/v2/orgs/{}/directories/{}/groups",
-                self.org_id, self.directory_id
-            ),
+            format!("/admin/v2/orgs/{}/directories/{}/groups", self.org_id, self.directory_id),
         );
 
         let mut body = serde_json::Map::new();

@@ -22,11 +22,7 @@ pub struct UserAnonymizationValidation {
     pub success: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<String>>,
-    #[serde(
-        rename = "businessLogicValidationFailed",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "businessLogicValidationFailed", default, skip_serializing_if = "Option::is_none")]
     pub business_logic_validation_failed: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub expand: Option<String>,

@@ -204,10 +204,7 @@ pub struct BulkSetIssuesPropertiesListRequest<'a> {
 
 impl<'a> BulkSetIssuesPropertiesListRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_entity_properties: IssueEntityProperties) -> Self {
-        Self {
-            client,
-            issue_entity_properties,
-        }
+        Self { client, issue_entity_properties }
     }
 
     /// The request as the transport will send it.
@@ -256,18 +253,13 @@ pub struct BulkSetIssuePropertiesByIssueRequest<'a> {
 
 impl<'a> BulkSetIssuePropertiesByIssueRequest<'a> {
     fn new(client: &'a crate::core::Client, multi_issue_entity_properties: MultiIssueEntityProperties) -> Self {
-        Self {
-            client,
-            multi_issue_entity_properties,
-        }
+        Self { client, multi_issue_entity_properties }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            "/rest/api/3/issue/properties/multi".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/issue/properties/multi".to_owned());
 
         let body = match serde_json::to_value(&self.multi_issue_entity_properties)? {
             serde_json::Value::Object(object) => object,
@@ -333,11 +325,7 @@ impl<'a> BulkSetIssuePropertyRequest<'a> {
         property_key: impl Into<String>,
         bulk_issue_property_update_request: BulkIssuePropertyUpdateRequest,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            bulk_issue_property_update_request,
-        }
+        Self { client, property_key: property_key.into(), bulk_issue_property_update_request }
     }
 
     /// The request as the transport will send it.
@@ -401,11 +389,7 @@ impl<'a> BulkDeleteIssuePropertyRequest<'a> {
         property_key: impl Into<String>,
         issue_filter_for_bulk_property_delete: IssueFilterForBulkPropertyDelete,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            issue_filter_for_bulk_property_delete,
-        }
+        Self { client, property_key: property_key.into(), issue_filter_for_bulk_property_delete }
     }
 
     /// The request as the transport will send it.
@@ -451,10 +435,7 @@ pub struct GetIssuePropertyKeysRequest<'a> {
 
 impl<'a> GetIssuePropertyKeysRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -498,21 +479,14 @@ impl<'a> GetIssuePropertyRequest<'a> {
         issue_id_or_key: impl Into<String>,
         property_key: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            property_key: property_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/3/issue/{}/properties/{}",
-                self.issue_id_or_key, self.property_key
-            ),
+            format!("/rest/api/3/issue/{}/properties/{}", self.issue_id_or_key, self.property_key),
         );
 
         Ok(config)
@@ -553,22 +527,14 @@ impl<'a> SetIssuePropertyRequest<'a> {
         property_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            property_key: property_key.into(),
-            body,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), property_key: property_key.into(), body }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/api/3/issue/{}/properties/{}",
-                self.issue_id_or_key, self.property_key
-            ),
+            format!("/rest/api/3/issue/{}/properties/{}", self.issue_id_or_key, self.property_key),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -607,21 +573,14 @@ impl<'a> DeleteIssuePropertyRequest<'a> {
         issue_id_or_key: impl Into<String>,
         property_key: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            property_key: property_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/api/3/issue/{}/properties/{}",
-                self.issue_id_or_key, self.property_key
-            ),
+            format!("/rest/api/3/issue/{}/properties/{}", self.issue_id_or_key, self.property_key),
         );
 
         Ok(config)

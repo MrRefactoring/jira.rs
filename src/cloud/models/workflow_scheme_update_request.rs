@@ -16,18 +16,10 @@ pub struct WorkflowSchemeUpdateRequest {
     /// The new name for this workflow scheme.
     pub name: String,
     /// Overrides, for the selected issue types, any status mappings provided in `statusMappingsByWorkflows`. Status mappings are required when the new workflow for an issue type doesn't contain all statuses that the old workflow has. Status mappings can be provided by a combination of `statusMappingsByWorkflows` and `statusMappingsByIssueTypeOverride`.
-    #[serde(
-        rename = "statusMappingsByIssueTypeOverride",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "statusMappingsByIssueTypeOverride", default, skip_serializing_if = "Option::is_none")]
     pub status_mappings_by_issue_type_override: Option<Vec<MappingsByIssueTypeOverride>>,
     /// The status mappings by workflows. Status mappings are required when the new workflow for an issue type doesn't contain all statuses that the old workflow has. Status mappings can be provided by a combination of `statusMappingsByWorkflows` and `statusMappingsByIssueTypeOverride`.
-    #[serde(
-        rename = "statusMappingsByWorkflows",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "statusMappingsByWorkflows", default, skip_serializing_if = "Option::is_none")]
     pub status_mappings_by_workflows: Option<Vec<MappingsByWorkflow>>,
     pub version: DocumentVersion,
     /// Mappings from workflows to issue types.

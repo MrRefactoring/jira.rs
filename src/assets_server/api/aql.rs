@@ -117,57 +117,35 @@ impl<'a> FindObjectsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/assets/1.0/aql/objects".to_owned());
 
         if let Some(value) = &self.include_attributes_deep {
-            config.query.push((
-                "includeAttributesDeep".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("includeAttributesDeep".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.xoauth_requestor_id {
-            config.query.push((
-                "xoauth_requestor_id".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("xoauth_requestor_id".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.include_type_attributes {
-            config.query.push((
-                "includeTypeAttributes".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("includeTypeAttributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.result_per_page {
-            config.query.push((
-                "resultPerPage".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("resultPerPage".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.include_attributes {
-            config.query.push((
-                "includeAttributes".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("includeAttributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.ql_query {
-            config
-                .query
-                .push(("qlQuery".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("qlQuery".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.page {
-            config
-                .query
-                .push(("page".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("page".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.include_extended_info {
-            config.query.push((
-                "includeExtendedInfo".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("includeExtendedInfo".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

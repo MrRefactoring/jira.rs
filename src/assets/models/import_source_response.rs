@@ -149,18 +149,10 @@ pub struct ImportSourceResponseImportSourceOTEntries {
     #[serde(rename = "importStatus", default, skip_serializing_if = "Option::is_none")]
     pub import_status: Option<ImportSourceResponseImportSourceOTEntriesImportStatus>,
     /// List of object type attribute mappings
-    #[serde(
-        rename = "importSourceOTAttrEntries",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "importSourceOTAttrEntries", default, skip_serializing_if = "Option::is_none")]
     pub import_source_ot_attr_entries: Option<Vec<ImportSourceResponseImportSourceOTEntriesImportSourceOTAttrEntries>>,
     /// Whether to ignore case when matching identifiers
-    #[serde(
-        rename = "matchIdentifierIgnoreCase",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "matchIdentifierIgnoreCase", default, skip_serializing_if = "Option::is_none")]
     pub match_identifier_ignore_case: Option<bool>,
 }
 
@@ -194,18 +186,10 @@ pub struct ImportSourceResponse {
     #[serde(rename = "defaultConcatenator", default, skip_serializing_if = "Option::is_none")]
     pub default_concatenator: Option<String>,
     /// How to handle empty values
-    #[serde(
-        rename = "defaultHandleEmptyValues",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "defaultHandleEmptyValues", default, skip_serializing_if = "Option::is_none")]
     pub default_handle_empty_values: Option<String>,
     /// How to handle unknown values
-    #[serde(
-        rename = "defaultHandleUnknownValues",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "defaultHandleUnknownValues", default, skip_serializing_if = "Option::is_none")]
     pub default_handle_unknown_values: Option<String>,
     /// Date format pattern
     #[serde(rename = "dateFormat", default, skip_serializing_if = "Option::is_none")]
@@ -217,11 +201,7 @@ pub struct ImportSourceResponse {
     #[serde(rename = "importStatus", default, skip_serializing_if = "Option::is_none")]
     pub import_status: Option<ImportSourceResponseImportStatus>,
     /// Import-specific configuration as JSON string
-    #[serde(
-        rename = "importSpecificConfiguration",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "importSpecificConfiguration", default, skip_serializing_if = "Option::is_none")]
     pub import_specific_configuration: Option<String>,
     /// List of object type mappings for this import source
     #[serde(rename = "importSourceOTEntries", default, skip_serializing_if = "Option::is_none")]
@@ -236,35 +216,19 @@ pub struct ImportSourceResponse {
     #[serde(rename = "integratedImportTypeId", default, skip_serializing_if = "Option::is_none")]
     pub integrated_import_type_id: Option<i64>,
     /// Integrated import type extension ID
-    #[serde(
-        rename = "integratedImportTypeExtensionId",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "integratedImportTypeExtensionId", default, skip_serializing_if = "Option::is_none")]
     pub integrated_import_type_extension_id: Option<String>,
     /// How to handle computed issue values (DataManager config)
-    #[serde(
-        rename = "defaultHandleComputeIssueValues",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "defaultHandleComputeIssueValues", default, skip_serializing_if = "Option::is_none")]
     pub default_handle_compute_issue_values: Option<String>,
     /// How to handle null values (DataManager config)
     #[serde(rename = "defaultHandleNullValues", default, skip_serializing_if = "Option::is_none")]
     pub default_handle_null_values: Option<String>,
     /// How to handle not mapped values (DataManager config)
-    #[serde(
-        rename = "defaultHandleNotMappedValues",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "defaultHandleNotMappedValues", default, skip_serializing_if = "Option::is_none")]
     pub default_handle_not_mapped_values: Option<String>,
     /// Whether scheduled import is enabled for this source
-    #[serde(
-        rename = "isImportSourceSchedulingEnabled",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "isImportSourceSchedulingEnabled", default, skip_serializing_if = "Option::is_none")]
     pub is_import_source_scheduling_enabled: Option<bool>,
     /// Type of import execution
     #[serde(rename = "importExecutionType", default, skip_serializing_if = "Option::is_none")]

@@ -114,11 +114,7 @@ pub struct GetAttachmentContentRequest<'a> {
 
 impl<'a> GetAttachmentContentRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            redirect: None,
-        }
+        Self { client, id: id.into(), redirect: None }
     }
 
     /// Whether a redirect is provided for the attachment download. Clients that do not automatically follow redirects can set this to `false` to avoid making multiple requests to download the attachment.
@@ -137,10 +133,7 @@ impl<'a> GetAttachmentContentRequest<'a> {
         );
 
         if let Some(value) = &self.redirect {
-            config.query.push((
-                "redirect".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("redirect".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -214,14 +207,7 @@ pub struct GetAttachmentThumbnailRequest<'a> {
 
 impl<'a> GetAttachmentThumbnailRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            redirect: None,
-            fallback_to_default: None,
-            width: None,
-            height: None,
-        }
+        Self { client, id: id.into(), redirect: None, fallback_to_default: None, width: None, height: None }
     }
 
     /// Whether a redirect is provided for the attachment download. Clients that do not automatically follow redirects can set this to `false` to avoid making multiple requests to download the attachment.
@@ -264,29 +250,19 @@ impl<'a> GetAttachmentThumbnailRequest<'a> {
         );
 
         if let Some(value) = &self.redirect {
-            config.query.push((
-                "redirect".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("redirect".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.fallback_to_default {
-            config.query.push((
-                "fallbackToDefault".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("fallbackToDefault".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.width {
-            config
-                .query
-                .push(("width".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("width".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.height {
-            config
-                .query
-                .push(("height".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("height".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -361,10 +337,8 @@ impl<'a> RemoveAttachmentRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!("/rest/api/3/attachment/{}", self.id),
-        );
+        let config =
+            crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/rest/api/3/attachment/{}", self.id));
 
         Ok(config)
     }
@@ -400,11 +374,7 @@ impl<'a> AddAttachmentRequest<'a> {
         issue_id_or_key: impl Into<String>,
         attachments: impl IntoIterator<Item = crate::core::Attachment>,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            attachments: attachments.into_iter().collect(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), attachments: attachments.into_iter().collect() }
     }
 
     /// The request as the transport will send it.
@@ -414,14 +384,10 @@ impl<'a> AddAttachmentRequest<'a> {
             format!("/rest/api/3/issue/{}/attachments", self.issue_id_or_key),
         );
 
-        config
-            .headers
-            .push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
+        config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
 
-        config.body = Some(crate::core::Body::Multipart(crate::core::MultipartBody::new(
-            "file",
-            self.attachments.clone(),
-        )));
+        config.body =
+            Some(crate::core::Body::Multipart(crate::core::MultipartBody::new("file", self.attachments.clone())));
 
         Ok(config)
     }

@@ -143,10 +143,7 @@ pub struct GetAutoCompletePostRequest<'a> {
 
 impl<'a> GetAutoCompletePostRequest<'a> {
     fn new(client: &'a crate::core::Client, search_auto_complete_filter: SearchAutoCompleteFilter) -> Self {
-        Self {
-            client,
-            search_auto_complete_filter,
-        }
+        Self { client, search_auto_complete_filter }
     }
 
     /// The request as the transport will send it.
@@ -197,13 +194,7 @@ pub struct GetFieldAutoCompleteForQueryStringRequest<'a> {
 
 impl<'a> GetFieldAutoCompleteForQueryStringRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            field_name: None,
-            field_value: None,
-            predicate_name: None,
-            predicate_value: None,
-        }
+        Self { client, field_name: None, field_value: None, predicate_name: None, predicate_value: None }
     }
 
     /// The name of the field.
@@ -246,29 +237,19 @@ impl<'a> GetFieldAutoCompleteForQueryStringRequest<'a> {
         );
 
         if let Some(value) = &self.field_name {
-            config
-                .query
-                .push(("fieldName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("fieldName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.field_value {
-            config
-                .query
-                .push(("fieldValue".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("fieldValue".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.predicate_name {
-            config.query.push((
-                "predicateName".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("predicateName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.predicate_value {
-            config.query.push((
-                "predicateValue".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("predicateValue".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -304,21 +285,14 @@ impl<'a> ParseJqlQueriesRequest<'a> {
         validation: impl Into<ParseJqlQueriesRequestValidation>,
         jql_queries_to_parse: JqlQueriesToParse,
     ) -> Self {
-        Self {
-            client,
-            validation: validation.into(),
-            jql_queries_to_parse,
-        }
+        Self { client, validation: validation.into(), jql_queries_to_parse }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/jql/parse".to_owned());
 
-        config.query.push((
-            "validation".to_owned(),
-            crate::core::QueryValue::from_serializable(&self.validation)?,
-        ));
+        config.query.push(("validation".to_owned(), crate::core::QueryValue::from_serializable(&self.validation)?));
 
         let body = match serde_json::to_value(&self.jql_queries_to_parse)? {
             serde_json::Value::Object(object) => object,
@@ -356,10 +330,7 @@ impl<'a> MigrateQueriesRequest<'a> {
         client: &'a crate::core::Client,
         jql_personal_data_migration_request: JQLPersonalDataMigrationRequest,
     ) -> Self {
-        Self {
-            client,
-            jql_personal_data_migration_request,
-        }
+        Self { client, jql_personal_data_migration_request }
     }
 
     /// The request as the transport will send it.

@@ -54,10 +54,7 @@ pub struct GetCommentPropertyKeysRequest<'a> {
 
 impl<'a> GetCommentPropertyKeysRequest<'a> {
     fn new(client: &'a crate::core::Client, comment_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            comment_id: comment_id.into(),
-        }
+        Self { client, comment_id: comment_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -90,21 +87,14 @@ pub struct GetCommentPropertyRequest<'a> {
 
 impl<'a> GetCommentPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, property_key: impl Into<String>, comment_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            comment_id: comment_id.into(),
-        }
+        Self { client, property_key: property_key.into(), comment_id: comment_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/2/comment/{}/properties/{}",
-                self.comment_id, self.property_key
-            ),
+            format!("/rest/api/2/comment/{}/properties/{}", self.comment_id, self.property_key),
         );
 
         Ok(config)
@@ -136,22 +126,14 @@ impl<'a> SetCommentPropertyRequest<'a> {
         comment_id: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            comment_id: comment_id.into(),
-            body,
-        }
+        Self { client, property_key: property_key.into(), comment_id: comment_id.into(), body }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/api/2/comment/{}/properties/{}",
-                self.comment_id, self.property_key
-            ),
+            format!("/rest/api/2/comment/{}/properties/{}", self.comment_id, self.property_key),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -179,21 +161,14 @@ pub struct DeleteCommentPropertyRequest<'a> {
 
 impl<'a> DeleteCommentPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, property_key: impl Into<String>, comment_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            comment_id: comment_id.into(),
-        }
+        Self { client, property_key: property_key.into(), comment_id: comment_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/api/2/comment/{}/properties/{}",
-                self.comment_id, self.property_key
-            ),
+            format!("/rest/api/2/comment/{}/properties/{}", self.comment_id, self.property_key),
         );
 
         Ok(config)

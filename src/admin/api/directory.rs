@@ -96,33 +96,23 @@ impl<'a> GetDirectoriesForOrgRequest<'a> {
         );
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.directory_ids {
-            config
-                .query
-                .push(("directoryIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("directoryIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.search_term {
-            config
-                .query
-                .push(("searchTerm".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("searchTerm".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.cursor {
-            config
-                .query
-                .push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

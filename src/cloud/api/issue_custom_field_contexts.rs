@@ -255,37 +255,23 @@ impl<'a> GetContextsForFieldRequest<'a> {
         );
 
         if let Some(value) = &self.is_any_issue_type {
-            config.query.push((
-                "isAnyIssueType".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("isAnyIssueType".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.is_global_context {
-            config.query.push((
-                "isGlobalContext".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("isGlobalContext".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.context_id {
-            config.query.push((
-                "contextId".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("contextId".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -319,11 +305,7 @@ impl<'a> CreateCustomFieldContextRequest<'a> {
         field_id: impl Into<String>,
         create_custom_field_context: CreateCustomFieldContext,
     ) -> Self {
-        Self {
-            client,
-            field_id: field_id.into(),
-            create_custom_field_context,
-        }
+        Self { client, field_id: field_id.into(), create_custom_field_context }
     }
 
     /// The request as the transport will send it.
@@ -424,29 +406,19 @@ impl<'a> GetContextDefaultValuesRequest<'a> {
         );
 
         if let Some(value) = &self.context_id {
-            config.query.push((
-                "contextId".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("contextId".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.issue_type_id {
-            config
-                .query
-                .push(("issueTypeId".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("issueTypeId".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -476,13 +448,7 @@ pub struct GetIssueTypeMappingsForContextsRequest<'a> {
 
 impl<'a> GetIssueTypeMappingsForContextsRequest<'a> {
     fn new(client: &'a crate::core::Client, field_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            field_id: field_id.into(),
-            context_id: None,
-            start_at: None,
-            max_results: None,
-        }
+        Self { client, field_id: field_id.into(), context_id: None, start_at: None, max_results: None }
     }
 
     /// The ID of the context. To include multiple contexts, provide an ampersand-separated list. For example, `contextId=10001&contextId=10002`.
@@ -517,23 +483,15 @@ impl<'a> GetIssueTypeMappingsForContextsRequest<'a> {
         );
 
         if let Some(value) = &self.context_id {
-            config.query.push((
-                "contextId".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("contextId".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -573,13 +531,7 @@ impl<'a> GetCustomFieldContextsForProjectsAndIssueTypesRequest<'a> {
         field_id: impl Into<String>,
         project_issue_type_mappings: ProjectIssueTypeMappings,
     ) -> Self {
-        Self {
-            client,
-            field_id: field_id.into(),
-            project_issue_type_mappings,
-            start_at: None,
-            max_results: None,
-        }
+        Self { client, field_id: field_id.into(), project_issue_type_mappings, start_at: None, max_results: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -606,16 +558,11 @@ impl<'a> GetCustomFieldContextsForProjectsAndIssueTypesRequest<'a> {
         );
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.project_issue_type_mappings)? {
@@ -654,13 +601,7 @@ pub struct GetProjectContextMappingRequest<'a> {
 
 impl<'a> GetProjectContextMappingRequest<'a> {
     fn new(client: &'a crate::core::Client, field_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            field_id: field_id.into(),
-            context_id: None,
-            start_at: None,
-            max_results: None,
-        }
+        Self { client, field_id: field_id.into(), context_id: None, start_at: None, max_results: None }
     }
 
     /// The list of context IDs. To include multiple context, separate IDs with ampersand: `contextId=10000&contextId=10001`.
@@ -695,23 +636,15 @@ impl<'a> GetProjectContextMappingRequest<'a> {
         );
 
         if let Some(value) = &self.context_id {
-            config.query.push((
-                "contextId".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("contextId".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -745,12 +678,7 @@ impl<'a> UpdateCustomFieldContextRequest<'a> {
         context_id: i64,
         custom_field_context_update_details: CustomFieldContextUpdateDetails,
     ) -> Self {
-        Self {
-            client,
-            field_id: field_id.into(),
-            context_id,
-            custom_field_context_update_details,
-        }
+        Self { client, field_id: field_id.into(), context_id, custom_field_context_update_details }
     }
 
     /// The request as the transport will send it.
@@ -794,11 +722,7 @@ pub struct DeleteCustomFieldContextRequest<'a> {
 
 impl<'a> DeleteCustomFieldContextRequest<'a> {
     fn new(client: &'a crate::core::Client, field_id: impl Into<String>, context_id: i64) -> Self {
-        Self {
-            client,
-            field_id: field_id.into(),
-            context_id,
-        }
+        Self { client, field_id: field_id.into(), context_id }
     }
 
     /// The request as the transport will send it.
@@ -845,22 +769,14 @@ impl<'a> AddIssueTypesToContextRequest<'a> {
         context_id: i64,
         issue_type_ids: IssueTypeIds,
     ) -> Self {
-        Self {
-            client,
-            field_id: field_id.into(),
-            context_id,
-            issue_type_ids,
-        }
+        Self { client, field_id: field_id.into(), context_id, issue_type_ids }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/api/3/field/{}/context/{}/issuetype",
-                self.field_id, self.context_id
-            ),
+            format!("/rest/api/3/field/{}/context/{}/issuetype", self.field_id, self.context_id),
         );
 
         let body = match serde_json::to_value(&self.issue_type_ids)? {
@@ -903,22 +819,14 @@ impl<'a> RemoveIssueTypesFromContextRequest<'a> {
         context_id: i64,
         issue_type_ids: IssueTypeIds,
     ) -> Self {
-        Self {
-            client,
-            field_id: field_id.into(),
-            context_id,
-            issue_type_ids,
-        }
+        Self { client, field_id: field_id.into(), context_id, issue_type_ids }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/rest/api/3/field/{}/context/{}/issuetype/remove",
-                self.field_id, self.context_id
-            ),
+            format!("/rest/api/3/field/{}/context/{}/issuetype/remove", self.field_id, self.context_id),
         );
 
         let body = match serde_json::to_value(&self.issue_type_ids)? {
@@ -963,22 +871,14 @@ impl<'a> AssignProjectsToCustomFieldContextRequest<'a> {
         context_id: i64,
         project_ids: ProjectIds,
     ) -> Self {
-        Self {
-            client,
-            field_id: field_id.into(),
-            context_id,
-            project_ids,
-        }
+        Self { client, field_id: field_id.into(), context_id, project_ids }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/api/3/field/{}/context/{}/project",
-                self.field_id, self.context_id
-            ),
+            format!("/rest/api/3/field/{}/context/{}/project", self.field_id, self.context_id),
         );
 
         let body = match serde_json::to_value(&self.project_ids)? {
@@ -1023,22 +923,14 @@ impl<'a> RemoveCustomFieldContextFromProjectsRequest<'a> {
         context_id: i64,
         project_ids: ProjectIds,
     ) -> Self {
-        Self {
-            client,
-            field_id: field_id.into(),
-            context_id,
-            project_ids,
-        }
+        Self { client, field_id: field_id.into(), context_id, project_ids }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/rest/api/3/field/{}/context/{}/project/remove",
-                self.field_id, self.context_id
-            ),
+            format!("/rest/api/3/field/{}/context/{}/project/remove", self.field_id, self.context_id),
         );
 
         let body = match serde_json::to_value(&self.project_ids)? {

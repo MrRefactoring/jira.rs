@@ -143,10 +143,7 @@ pub struct CreateIssueTypeRequest<'a> {
 
 impl<'a> CreateIssueTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_type_create: IssueTypeCreate) -> Self {
-        Self {
-            client,
-            issue_type_create,
-        }
+        Self { client, issue_type_create }
     }
 
     /// The request as the transport will send it.
@@ -219,11 +216,7 @@ pub struct UpdateIssueTypeRequest<'a> {
 
 impl<'a> UpdateIssueTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, issue_type_update: IssueTypeUpdate) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            issue_type_update,
-        }
+        Self { client, id: id.into(), issue_type_update }
     }
 
     /// The request as the transport will send it.
@@ -263,11 +256,7 @@ pub struct DeleteIssueTypeRequest<'a> {
 
 impl<'a> DeleteIssueTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            alternative_issue_type_id: None,
-        }
+        Self { client, id: id.into(), alternative_issue_type_id: None }
     }
 
     /// The ID of the replacement issue type.
@@ -280,16 +269,11 @@ impl<'a> DeleteIssueTypeRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!("/rest/api/3/issuetype/{}", self.id),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/rest/api/3/issuetype/{}", self.id));
 
         if let Some(value) = &self.alternative_issue_type_id {
-            config.query.push((
-                "alternativeIssueTypeId".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("alternativeIssueTypeId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -375,14 +359,7 @@ impl<'a> CreateIssueTypeAvatarRequest<'a> {
         size: i64,
         body: impl IntoIterator<Item = u8>,
     ) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            size,
-            body: body.into_iter().collect(),
-            x: None,
-            y: None,
-        }
+        Self { client, id: id.into(), size, body: body.into_iter().collect(), x: None, y: None }
     }
 
     /// The X coordinate of the top-left corner of the crop region.
@@ -409,25 +386,16 @@ impl<'a> CreateIssueTypeAvatarRequest<'a> {
         );
 
         if let Some(value) = &self.x {
-            config
-                .query
-                .push(("x".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("x".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.y {
-            config
-                .query
-                .push(("y".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("y".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
-        config.query.push((
-            "size".to_owned(),
-            crate::core::QueryValue::Scalar(self.size.to_string()),
-        ));
+        config.query.push(("size".to_owned(), crate::core::QueryValue::Scalar(self.size.to_string())));
 
-        config
-            .headers
-            .push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
+        config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
 

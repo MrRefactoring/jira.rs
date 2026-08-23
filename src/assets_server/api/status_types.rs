@@ -79,11 +79,7 @@ pub struct UpdateStatusTypeRequest<'a> {
 
 impl<'a> UpdateStatusTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            body: None,
-        }
+        Self { client, id: id.into(), body: None }
     }
 
     #[must_use]
@@ -156,10 +152,7 @@ pub struct FindStatusTypesRequest<'a> {
 
 impl<'a> FindStatusTypesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            object_schema_id: None,
-        }
+        Self { client, object_schema_id: None }
     }
 
     /// Include statuses for the object schema ID. If this parameter is supplied, statuses for the given object schema will be returned. Otherwise all global statuses will be returned.
@@ -172,16 +165,11 @@ impl<'a> FindStatusTypesRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            "/rest/assets/1.0/config/statustype".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/assets/1.0/config/statustype".to_owned());
 
         if let Some(value) = &self.object_schema_id {
-            config.query.push((
-                "objectSchemaId".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("objectSchemaId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -206,10 +194,7 @@ pub struct StoreStatusTypeRequest<'a> {
 
 impl<'a> StoreStatusTypeRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            status_type: None,
-        }
+        Self { client, status_type: None }
     }
 
     #[must_use]
@@ -221,10 +206,8 @@ impl<'a> StoreStatusTypeRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            "/rest/assets/1.0/config/statustype".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/assets/1.0/config/statustype".to_owned());
 
         let body = match serde_json::to_value(&self.status_type)? {
             serde_json::Value::Object(object) => object,

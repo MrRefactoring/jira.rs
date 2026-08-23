@@ -104,13 +104,7 @@ pub struct GetQueuesRequest<'a> {
 
 impl<'a> GetQueuesRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            include_count: None,
-            start: None,
-            limit: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), include_count: None, start: None, limit: None }
     }
 
     /// Specifies whether to include the issue count of each queue in the response. Valid values: true/false. Default: false.
@@ -145,22 +139,15 @@ impl<'a> GetQueuesRequest<'a> {
         );
 
         if let Some(value) = &self.include_count {
-            config.query.push((
-                "includeCount".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("includeCount".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -190,11 +177,7 @@ pub struct CreateQueueRequest<'a> {
 
 impl<'a> CreateQueueRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            queue_create: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), queue_create: None }
     }
 
     #[must_use]
@@ -246,12 +229,7 @@ pub struct GetQueueRequest<'a> {
 
 impl<'a> GetQueueRequest<'a> {
     fn new(client: &'a crate::core::Client, queue_id: impl Into<String>, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            queue_id: queue_id.into(),
-            service_desk_id: service_desk_id.into(),
-            include_count: None,
-        }
+        Self { client, queue_id: queue_id.into(), service_desk_id: service_desk_id.into(), include_count: None }
     }
 
     /// Specifies whether to include the issue count of queue in the response. Valid values: true/false. Default: false.
@@ -266,17 +244,11 @@ impl<'a> GetQueueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/servicedesk/{}/queue/{}",
-                self.service_desk_id, self.queue_id
-            ),
+            format!("/rest/servicedeskapi/servicedesk/{}/queue/{}", self.service_desk_id, self.queue_id),
         );
 
         if let Some(value) = &self.include_count {
-            config.query.push((
-                "includeCount".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("includeCount".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -307,12 +279,7 @@ pub struct UpdateQueueRequest<'a> {
 
 impl<'a> UpdateQueueRequest<'a> {
     fn new(client: &'a crate::core::Client, queue_id: impl Into<String>, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            queue_id: queue_id.into(),
-            service_desk_id: service_desk_id.into(),
-            queue_create: None,
-        }
+        Self { client, queue_id: queue_id.into(), service_desk_id: service_desk_id.into(), queue_create: None }
     }
 
     #[must_use]
@@ -326,10 +293,7 @@ impl<'a> UpdateQueueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/rest/servicedeskapi/servicedesk/{}/queue/{}",
-                self.service_desk_id, self.queue_id
-            ),
+            format!("/rest/servicedeskapi/servicedesk/{}/queue/{}", self.service_desk_id, self.queue_id),
         );
 
         let body = match serde_json::to_value(&self.queue_create)? {
@@ -366,21 +330,14 @@ pub struct DeleteQueueRequest<'a> {
 
 impl<'a> DeleteQueueRequest<'a> {
     fn new(client: &'a crate::core::Client, queue_id: impl Into<String>, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            queue_id: queue_id.into(),
-            service_desk_id: service_desk_id.into(),
-        }
+        Self { client, queue_id: queue_id.into(), service_desk_id: service_desk_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/servicedeskapi/servicedesk/{}/queue/{}",
-                self.service_desk_id, self.queue_id
-            ),
+            format!("/rest/servicedeskapi/servicedesk/{}/queue/{}", self.service_desk_id, self.queue_id),
         );
 
         Ok(config)
@@ -413,13 +370,7 @@ pub struct GetIssuesInQueueRequest<'a> {
 
 impl<'a> GetIssuesInQueueRequest<'a> {
     fn new(client: &'a crate::core::Client, queue_id: impl Into<String>, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            queue_id: queue_id.into(),
-            service_desk_id: service_desk_id.into(),
-            start: None,
-            limit: None,
-        }
+        Self { client, queue_id: queue_id.into(), service_desk_id: service_desk_id.into(), start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0.
@@ -442,22 +393,15 @@ impl<'a> GetIssuesInQueueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/servicedesk/{}/queue/{}/issue",
-                self.service_desk_id, self.queue_id
-            ),
+            format!("/rest/servicedeskapi/servicedesk/{}/queue/{}/issue", self.service_desk_id, self.queue_id),
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -487,11 +431,7 @@ pub struct ReorderQueuesRequest<'a> {
 
 impl<'a> ReorderQueuesRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            body: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), body: None }
     }
 
     #[must_use]
@@ -505,10 +445,7 @@ impl<'a> ReorderQueuesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/rest/servicedeskapi/servicedesk/{}/queue/reorder",
-                self.service_desk_id
-            ),
+            format!("/rest/servicedeskapi/servicedesk/{}/queue/reorder", self.service_desk_id),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));

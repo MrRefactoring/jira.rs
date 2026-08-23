@@ -46,10 +46,7 @@ pub struct FindStatusTypesRequest<'a> {
 
 impl<'a> FindStatusTypesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            object_schema_id: None,
-        }
+        Self { client, object_schema_id: None }
     }
 
     /// Include statuses for the object schema id. If supplied statuses for the object schema will be returned otherwise all global will be returned
@@ -65,10 +62,7 @@ impl<'a> FindStatusTypesRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/config/statustype".to_owned());
 
         if let Some(value) = &self.object_schema_id {
-            config.query.push((
-                "objectSchemaId".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("objectSchemaId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -160,11 +154,7 @@ pub struct UpdateStatusTypeRequest<'a> {
 
 impl<'a> UpdateStatusTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, status_in: StatusIn) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            status_in,
-        }
+        Self { client, id: id.into(), status_in }
     }
 
     /// The request as the transport will send it.

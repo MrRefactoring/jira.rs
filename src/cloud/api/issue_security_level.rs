@@ -142,36 +142,23 @@ impl<'a> GetIssueSecurityLevelMembersRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/3/issuesecurityschemes/{}/members",
-                self.issue_security_scheme_id
-            ),
+            format!("/rest/api/3/issuesecurityschemes/{}/members", self.issue_security_scheme_id),
         );
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.issue_security_level_id {
-            config.query.push((
-                "issueSecurityLevelId".to_owned(),
-                crate::core::QueryValue::List(value.clone()),
-            ));
+            config.query.push(("issueSecurityLevelId".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -207,10 +194,8 @@ impl<'a> GetIssueSecurityLevelRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/3/securitylevel/{}", self.id),
-        );
+        let config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/3/securitylevel/{}", self.id));
 
         Ok(config)
     }

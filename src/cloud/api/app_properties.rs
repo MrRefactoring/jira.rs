@@ -116,10 +116,7 @@ pub struct GetAddonPropertiesRequest<'a> {
 
 impl<'a> GetAddonPropertiesRequest<'a> {
     fn new(client: &'a crate::core::Client, addon_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            addon_key: addon_key.into(),
-        }
+        Self { client, addon_key: addon_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -157,21 +154,14 @@ pub struct GetAddonPropertyRequest<'a> {
 
 impl<'a> GetAddonPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, addon_key: impl Into<String>, property_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            addon_key: addon_key.into(),
-            property_key: property_key.into(),
-        }
+        Self { client, addon_key: addon_key.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/atlassian-connect/1/addons/{}/properties/{}",
-                self.addon_key, self.property_key
-            ),
+            format!("/rest/atlassian-connect/1/addons/{}/properties/{}", self.addon_key, self.property_key),
         );
 
         Ok(config)
@@ -208,22 +198,14 @@ impl<'a> PutAddonPropertyRequest<'a> {
         property_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self {
-            client,
-            addon_key: addon_key.into(),
-            property_key: property_key.into(),
-            body,
-        }
+        Self { client, addon_key: addon_key.into(), property_key: property_key.into(), body }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/atlassian-connect/1/addons/{}/properties/{}",
-                self.addon_key, self.property_key
-            ),
+            format!("/rest/atlassian-connect/1/addons/{}/properties/{}", self.addon_key, self.property_key),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -254,21 +236,14 @@ pub struct DeleteAddonPropertyRequest<'a> {
 
 impl<'a> DeleteAddonPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, addon_key: impl Into<String>, property_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            addon_key: addon_key.into(),
-            property_key: property_key.into(),
-        }
+        Self { client, addon_key: addon_key.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/atlassian-connect/1/addons/{}/properties/{}",
-                self.addon_key, self.property_key
-            ),
+            format!("/rest/atlassian-connect/1/addons/{}/properties/{}", self.addon_key, self.property_key),
         );
 
         Ok(config)
@@ -326,10 +301,7 @@ pub struct GetForgeAppPropertyRequest<'a> {
 
 impl<'a> GetForgeAppPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, property_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-        }
+        Self { client, property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -377,11 +349,7 @@ impl<'a> PutForgeAppPropertyRequest<'a> {
         property_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            body,
-        }
+        Self { client, property_key: property_key.into(), body }
     }
 
     /// The request as the transport will send it.
@@ -419,10 +387,7 @@ pub struct DeleteForgeAppPropertyRequest<'a> {
 
 impl<'a> DeleteForgeAppPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, property_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-        }
+        Self { client, property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.

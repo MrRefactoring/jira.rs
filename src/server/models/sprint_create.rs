@@ -10,11 +10,7 @@ pub struct SprintCreate {
     pub end_date: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub goal: Option<String>,
-    #[serde(
-        rename = "incompleteIssuesDestinationId",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "incompleteIssuesDestinationId", default, skip_serializing_if = "Option::is_none")]
     pub incomplete_issues_destination_id: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,

@@ -8,12 +8,7 @@ use wiremock::matchers::method;
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
 fn fast(retry_rate_limit: bool) -> RetryOptions {
-    RetryOptions {
-        max_attempts: 3,
-        initial_delay: Duration::from_millis(1),
-        backoff_factor: 2.0,
-        retry_rate_limit,
-    }
+    RetryOptions { max_attempts: 3, initial_delay: Duration::from_millis(1), backoff_factor: 2.0, retry_rate_limit }
 }
 
 async fn server_answering(status: u16, headers: &[(&str, &str)]) -> MockServer {
@@ -34,12 +29,8 @@ async fn retries_a_503() {
     let server = server_answering(503, &[]).await;
     let client = Client::builder().host(server.uri()).build().unwrap();
 
-    let error = with_retry(
-        || client.get("/rest/api/3/myself").send::<serde_json::Value>(),
-        fast(false),
-    )
-    .await
-    .unwrap_err();
+    let error =
+        with_retry(|| client.get("/rest/api/3/myself").send::<serde_json::Value>(), fast(false)).await.unwrap_err();
 
     assert!(error.is_server());
     assert_eq!(server.received_requests().await.unwrap().len(), 3);
@@ -86,12 +77,8 @@ async fn does_not_retry_a_429_by_default() {
     let server = server_answering(429, &[("retry-after", "1")]).await;
     let client = Client::builder().host(server.uri()).build().unwrap();
 
-    let error = with_retry(
-        || client.get("/rest/api/3/myself").send::<serde_json::Value>(),
-        fast(false),
-    )
-    .await
-    .unwrap_err();
+    let error =
+        with_retry(|| client.get("/rest/api/3/myself").send::<serde_json::Value>(), fast(false)).await.unwrap_err();
 
     assert!(error.is_rate_limit());
     assert_eq!(server.received_requests().await.unwrap().len(), 1);
@@ -102,12 +89,8 @@ async fn retries_a_429_when_asked_honouring_retry_after() {
     let server = server_answering(429, &[("retry-after", "0")]).await;
     let client = Client::builder().host(server.uri()).build().unwrap();
 
-    let error = with_retry(
-        || client.get("/rest/api/3/myself").send::<serde_json::Value>(),
-        fast(true),
-    )
-    .await
-    .unwrap_err();
+    let error =
+        with_retry(|| client.get("/rest/api/3/myself").send::<serde_json::Value>(), fast(true)).await.unwrap_err();
 
     assert!(error.is_rate_limit());
     assert_eq!(server.received_requests().await.unwrap().len(), 3);
@@ -118,12 +101,8 @@ async fn never_retries_a_404() {
     let server = server_answering(404, &[]).await;
     let client = Client::builder().host(server.uri()).build().unwrap();
 
-    let error = with_retry(
-        || client.get("/rest/api/3/myself").send::<serde_json::Value>(),
-        fast(false),
-    )
-    .await
-    .unwrap_err();
+    let error =
+        with_retry(|| client.get("/rest/api/3/myself").send::<serde_json::Value>(), fast(false)).await.unwrap_err();
 
     assert!(error.is_not_found());
     assert_eq!(server.received_requests().await.unwrap().len(), 1);

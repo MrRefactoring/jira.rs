@@ -147,20 +147,14 @@ pub struct GetProjectIssueSecuritySchemeRequest<'a> {
 
 impl<'a> GetProjectIssueSecuritySchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_key_or_id: project_key_or_id.into(),
-        }
+        Self { client, project_key_or_id: project_key_or_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/3/project/{}/issuesecuritylevelscheme",
-                self.project_key_or_id
-            ),
+            format!("/rest/api/3/project/{}/issuesecuritylevelscheme", self.project_key_or_id),
         );
 
         Ok(config)
@@ -188,11 +182,7 @@ pub struct GetAssignedPermissionSchemeRequest<'a> {
 
 impl<'a> GetAssignedPermissionSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_key_or_id: project_key_or_id.into(),
-            expand: None,
-        }
+        Self { client, project_key_or_id: project_key_or_id.into(), expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
@@ -218,9 +208,7 @@ impl<'a> GetAssignedPermissionSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -249,12 +237,7 @@ pub struct AssignPermissionSchemeRequest<'a> {
 
 impl<'a> AssignPermissionSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>, id: Id) -> Self {
-        Self {
-            client,
-            project_key_or_id: project_key_or_id.into(),
-            id,
-            expand: None,
-        }
+        Self { client, project_key_or_id: project_key_or_id.into(), id, expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
@@ -280,9 +263,7 @@ impl<'a> AssignPermissionSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         let body = match serde_json::to_value(&self.id)? {
@@ -318,10 +299,7 @@ pub struct GetSecurityLevelsForProjectRequest<'a> {
 
 impl<'a> GetSecurityLevelsForProjectRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_key_or_id: project_key_or_id.into(),
-        }
+        Self { client, project_key_or_id: project_key_or_id.into() }
     }
 
     /// The request as the transport will send it.

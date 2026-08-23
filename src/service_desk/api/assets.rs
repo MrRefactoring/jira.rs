@@ -36,11 +36,7 @@ pub struct GetAssetsWorkspacesRequest<'a> {
 
 impl<'a> GetAssetsWorkspacesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start: None,
-            limit: None,
-        }
+        Self { client, start: None, limit: None }
     }
 
     /// The starting index of the returned workspace IDs. Base index: 0 See the [Pagination](#pagination) section for more details.
@@ -67,15 +63,11 @@ impl<'a> GetAssetsWorkspacesRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -101,11 +93,7 @@ pub struct GetInsightWorkspacesRequest<'a> {
 
 impl<'a> GetInsightWorkspacesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start: None,
-            limit: None,
-        }
+        Self { client, start: None, limit: None }
     }
 
     #[must_use]
@@ -130,15 +118,11 @@ impl<'a> GetInsightWorkspacesRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

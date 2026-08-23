@@ -6,11 +6,8 @@ use jira::{Auth, Client, RetryConfig};
 
 use super::env::require_server_env;
 
-const RETRY: RetryConfig = RetryConfig {
-    max_attempts: 3,
-    initial_delay: Duration::from_millis(300),
-    backoff_factor: 2.0,
-};
+const RETRY: RetryConfig =
+    RetryConfig { max_attempts: 3, initial_delay: Duration::from_millis(300), backoff_factor: 2.0 };
 
 /// The transport the Data Center suites use.
 ///

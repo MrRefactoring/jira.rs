@@ -97,10 +97,7 @@ pub struct CreatePriorityRequest<'a> {
 
 impl<'a> CreatePriorityRequest<'a> {
     fn new(client: &'a crate::core::Client, create_priority_details: CreatePriorityDetails) -> Self {
-        Self {
-            client,
-            create_priority_details,
-        }
+        Self { client, create_priority_details }
     }
 
     /// The request as the transport will send it.
@@ -138,10 +135,7 @@ pub struct SetDefaultPriorityRequest2<'a> {
 
 impl<'a> SetDefaultPriorityRequest2<'a> {
     fn new(client: &'a crate::core::Client, set_default_priority_request: SetDefaultPriorityRequest) -> Self {
-        Self {
-            client,
-            set_default_priority_request,
-        }
+        Self { client, set_default_priority_request }
     }
 
     /// The request as the transport will send it.
@@ -180,10 +174,7 @@ pub struct MovePrioritiesRequest<'a> {
 
 impl<'a> MovePrioritiesRequest<'a> {
     fn new(client: &'a crate::core::Client, reorder_issue_priorities: ReorderIssuePriorities) -> Self {
-        Self {
-            client,
-            reorder_issue_priorities,
-        }
+        Self { client, reorder_issue_priorities }
     }
 
     /// The request as the transport will send it.
@@ -310,47 +301,31 @@ impl<'a> SearchPrioritiesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/priority/search".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config
-                .query
-                .push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.id {
-            config
-                .query
-                .push(("id".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("id".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.project_id {
-            config
-                .query
-                .push(("projectId".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.priority_name {
-            config.query.push((
-                "priorityName".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("priorityName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.only_default {
-            config.query.push((
-                "onlyDefault".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("onlyDefault".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -418,11 +393,7 @@ impl<'a> UpdatePriorityRequest<'a> {
         id: impl Into<String>,
         update_priority_details: UpdatePriorityDetails,
     ) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            update_priority_details,
-        }
+        Self { client, id: id.into(), update_priority_details }
     }
 
     /// The request as the transport will send it.

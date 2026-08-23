@@ -31,11 +31,7 @@ pub struct Version {
     /// The ID of the version.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[serde(
-        rename = "issuesStatusForFixVersion",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "issuesStatusForFixVersion", default, skip_serializing_if = "Option::is_none")]
     pub issues_status_for_fix_version: Option<VersionIssuesStatus>,
     /// The URL of the self link to the version to which all unfixed issues are moved when a version is released. Not applicable when creating a version. Optional when updating a version.
     #[serde(rename = "moveUnfixedIssuesTo", default, skip_serializing_if = "Option::is_none")]

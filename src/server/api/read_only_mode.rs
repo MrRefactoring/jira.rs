@@ -67,10 +67,7 @@ pub struct UpdateReadOnlyModeRequest<'a> {
 
 impl<'a> UpdateReadOnlyModeRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            read_only_mode_update_request: None,
-        }
+        Self { client, read_only_mode_update_request: None }
     }
 
     #[must_use]

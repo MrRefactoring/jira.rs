@@ -71,12 +71,7 @@ pub struct GetUsersInOrganizationRequest<'a> {
 
 impl<'a> GetUsersInOrganizationRequest<'a> {
     fn new(client: &'a crate::core::Client, organization_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            organization_id: organization_id.into(),
-            start: None,
-            limit: None,
-        }
+        Self { client, organization_id: organization_id.into(), start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0.
@@ -103,15 +98,11 @@ impl<'a> GetUsersInOrganizationRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -137,11 +128,7 @@ pub struct AddUsersToOrganizationRequest<'a> {
 
 impl<'a> AddUsersToOrganizationRequest<'a> {
     fn new(client: &'a crate::core::Client, organization_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            organization_id: organization_id.into(),
-            users_organization_update: None,
-        }
+        Self { client, organization_id: organization_id.into(), users_organization_update: None }
     }
 
     #[must_use]
@@ -188,11 +175,7 @@ pub struct RemoveUsersFromOrganizationRequest<'a> {
 
 impl<'a> RemoveUsersFromOrganizationRequest<'a> {
     fn new(client: &'a crate::core::Client, organization_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            organization_id: organization_id.into(),
-            users_organization_update: None,
-        }
+        Self { client, organization_id: organization_id.into(), users_organization_update: None }
     }
 
     #[must_use]
@@ -239,11 +222,7 @@ pub struct PreviewCleanUpOrganizationsRequest<'a> {
 
 impl<'a> PreviewCleanUpOrganizationsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            delete_detached_organizations: None,
-            delete_organizations_with_inactive_users: None,
-        }
+        Self { client, delete_detached_organizations: None, delete_organizations_with_inactive_users: None }
     }
 
     /// If true, in addition, preview the deletion of organizations that are not attached to any projects.
@@ -272,10 +251,9 @@ impl<'a> PreviewCleanUpOrganizationsRequest<'a> {
         );
 
         if let Some(value) = &self.delete_detached_organizations {
-            config.query.push((
-                "deleteDetachedOrganizations".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config
+                .query
+                .push(("deleteDetachedOrganizations".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.delete_organizations_with_inactive_users {
@@ -308,11 +286,7 @@ pub struct CleanUpOrganizationsRequest<'a> {
 
 impl<'a> CleanUpOrganizationsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            delete_detached_organizations: None,
-            delete_organizations_with_inactive_users: None,
-        }
+        Self { client, delete_detached_organizations: None, delete_organizations_with_inactive_users: None }
     }
 
     /// If true, in addition, delete organizations that are not attached to any projects.
@@ -339,10 +313,9 @@ impl<'a> CleanUpOrganizationsRequest<'a> {
         );
 
         if let Some(value) = &self.delete_detached_organizations {
-            config.query.push((
-                "deleteDetachedOrganizations".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config
+                .query
+                .push(("deleteDetachedOrganizations".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.delete_organizations_with_inactive_users {
@@ -375,11 +348,7 @@ pub struct GetOrganizationsRequest<'a> {
 
 impl<'a> GetOrganizationsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start: None,
-            limit: None,
-        }
+        Self { client, start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0.
@@ -404,15 +373,11 @@ impl<'a> GetOrganizationsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/servicedeskapi/organization".to_owned());
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -437,10 +402,7 @@ pub struct CreateOrganizationRequest<'a> {
 
 impl<'a> CreateOrganizationRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            organization_create: None,
-        }
+        Self { client, organization_create: None }
     }
 
     #[must_use]
@@ -452,10 +414,8 @@ impl<'a> CreateOrganizationRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            "/rest/servicedeskapi/organization".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/servicedeskapi/organization".to_owned());
 
         let body = match serde_json::to_value(&self.organization_create)? {
             serde_json::Value::Object(object) => object,
@@ -486,10 +446,7 @@ pub struct GetOrganizationRequest<'a> {
 
 impl<'a> GetOrganizationRequest<'a> {
     fn new(client: &'a crate::core::Client, organization_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            organization_id: organization_id.into(),
-        }
+        Self { client, organization_id: organization_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -521,10 +478,7 @@ pub struct DeleteOrganizationRequest<'a> {
 
 impl<'a> DeleteOrganizationRequest<'a> {
     fn new(client: &'a crate::core::Client, organization_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            organization_id: organization_id.into(),
-        }
+        Self { client, organization_id: organization_id.into() }
     }
 
     /// The request as the transport will send it.

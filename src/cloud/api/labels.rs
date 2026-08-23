@@ -27,11 +27,7 @@ pub struct GetAllLabelsRequest<'a> {
 
 impl<'a> GetAllLabelsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start_at: None,
-            max_results: None,
-        }
+        Self { client, start_at: None, max_results: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -55,16 +51,11 @@ impl<'a> GetAllLabelsRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/label".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

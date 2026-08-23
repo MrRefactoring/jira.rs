@@ -72,11 +72,7 @@ impl<'a> UpdateProfileRequest<'a> {
         account_id: AccountId,
         atlassian_account_user: AtlassianAccountUser,
     ) -> Self {
-        Self {
-            client,
-            account_id,
-            atlassian_account_user,
-        }
+        Self { client, account_id, atlassian_account_user }
     }
 
     /// The request as the transport will send it.

@@ -175,11 +175,7 @@ pub struct GetServiceDesksRequest<'a> {
 
 impl<'a> GetServiceDesksRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start: None,
-            limit: None,
-        }
+        Self { client, start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
@@ -204,15 +200,11 @@ impl<'a> GetServiceDesksRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/servicedeskapi/servicedesk".to_owned());
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -239,10 +231,7 @@ pub struct GetServiceDeskByIdRequest<'a> {
 
 impl<'a> GetServiceDeskByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-        }
+        Self { client, service_desk_id: service_desk_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -293,21 +282,14 @@ impl<'a> AttachTemporaryFileRequest<'a> {
         service_desk_id: impl Into<String>,
         body: impl IntoIterator<Item = MultipartFile>,
     ) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            body: body.into_iter().collect(),
-        }
+        Self { client, service_desk_id: service_desk_id.into(), body: body.into_iter().collect() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/rest/servicedeskapi/servicedesk/{}/attachTemporaryFile",
-                self.service_desk_id
-            ),
+            format!("/rest/servicedeskapi/servicedesk/{}/attachTemporaryFile", self.service_desk_id),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -341,11 +323,7 @@ impl<'a> AddCustomersRequest<'a> {
         service_desk_id: impl Into<String>,
         service_desk_customer: ServiceDeskCustomer,
     ) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            service_desk_customer,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), service_desk_customer }
     }
 
     /// The request as the transport will send it.
@@ -395,21 +373,14 @@ impl<'a> AddCustomersSkippingPermissionCheckRequest<'a> {
         service_desk_id: impl Into<String>,
         service_desk_customer: ServiceDeskCustomer,
     ) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            service_desk_customer,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), service_desk_customer }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/rest/servicedeskapi/servicedesk/{}/customer/skip-permission-check",
-                self.service_desk_id
-            ),
+            format!("/rest/servicedeskapi/servicedesk/{}/customer/skip-permission-check", self.service_desk_id),
         );
 
         let body = match serde_json::to_value(&self.service_desk_customer)? {
@@ -505,45 +476,29 @@ impl<'a> GetServiceDeskArticlesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/servicedesk/{}/knowledgebase/article",
-                self.service_desk_id
-            ),
+            format!("/rest/servicedeskapi/servicedesk/{}/knowledgebase/article", self.service_desk_id),
         );
 
-        config
-            .query
-            .push(("query".to_owned(), crate::core::QueryValue::Scalar(self.query.clone())));
+        config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(self.query.clone())));
 
         if let Some(value) = &self.highlight {
-            config.query.push((
-                "highlight".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("highlight".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.cursor {
-            config
-                .query
-                .push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.prev {
-            config
-                .query
-                .push(("prev".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("prev".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -573,13 +528,7 @@ pub struct GetQueuesRequest<'a> {
 
 impl<'a> GetQueuesRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            include_count: None,
-            start: None,
-            limit: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), include_count: None, start: None, limit: None }
     }
 
     /// Specifies whether to include each queue's customer request (issue) count in the response.
@@ -614,22 +563,15 @@ impl<'a> GetQueuesRequest<'a> {
         );
 
         if let Some(value) = &self.include_count {
-            config.query.push((
-                "includeCount".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("includeCount".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -658,12 +600,7 @@ pub struct GetQueueRequest<'a> {
 
 impl<'a> GetQueueRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>, queue_id: i64) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            queue_id,
-            include_count: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), queue_id, include_count: None }
     }
 
     /// Specifies whether to include each queue's customer request (issue) count in the response.
@@ -678,17 +615,11 @@ impl<'a> GetQueueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/servicedesk/{}/queue/{}",
-                self.service_desk_id, self.queue_id
-            ),
+            format!("/rest/servicedeskapi/servicedesk/{}/queue/{}", self.service_desk_id, self.queue_id),
         );
 
         if let Some(value) = &self.include_count {
-            config.query.push((
-                "includeCount".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("includeCount".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -718,13 +649,7 @@ pub struct GetIssuesInQueueRequest<'a> {
 
 impl<'a> GetIssuesInQueueRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>, queue_id: i64) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            queue_id,
-            start: None,
-            limit: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), queue_id, start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
@@ -747,22 +672,15 @@ impl<'a> GetIssuesInQueueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/servicedesk/{}/queue/{}/issue",
-                self.service_desk_id, self.queue_id
-            ),
+            format!("/rest/servicedeskapi/servicedesk/{}/queue/{}/issue", self.service_desk_id, self.queue_id),
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -877,33 +795,23 @@ impl<'a> GetRequestTypesRequest<'a> {
         );
 
         if let Some(value) = &self.group_id {
-            config
-                .query
-                .push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.search_query {
-            config
-                .query
-                .push(("searchQuery".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("searchQuery".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.include_hidden_request_types_in_search {
@@ -914,10 +822,7 @@ impl<'a> GetRequestTypesRequest<'a> {
         }
 
         if let Some(value) = &self.restriction_status {
-            config.query.push((
-                "restrictionStatus".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("restrictionStatus".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -952,12 +857,7 @@ impl<'a> GetRequestTypeByIdRequest<'a> {
         service_desk_id: impl Into<String>,
         request_type_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            request_type_id: request_type_id.into(),
-            expand: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), request_type_id: request_type_id.into(), expand: None }
     }
 
     #[must_use]
@@ -971,16 +871,11 @@ impl<'a> GetRequestTypeByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/servicedesk/{}/requesttype/{}",
-                self.service_desk_id, self.request_type_id
-            ),
+            format!("/rest/servicedeskapi/servicedesk/{}/requesttype/{}", self.service_desk_id, self.request_type_id),
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         Ok(config)
@@ -1014,12 +909,7 @@ pub struct GetRequestTypeFieldsRequest<'a> {
 
 impl<'a> GetRequestTypeFieldsRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>, request_type_id: i64) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            request_type_id,
-            expand: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), request_type_id, expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information in the response. This parameter accepts `hiddenFields` that returns hidden fields associated with the request type.
@@ -1041,9 +931,7 @@ impl<'a> GetRequestTypeFieldsRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         Ok(config)
@@ -1072,12 +960,7 @@ pub struct GetRequestTypeGroupsRequest<'a> {
 
 impl<'a> GetRequestTypeGroupsRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            start: None,
-            limit: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
@@ -1100,22 +983,15 @@ impl<'a> GetRequestTypeGroupsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/servicedesk/{}/requesttypegroup",
-                self.service_desk_id
-            ),
+            format!("/rest/servicedeskapi/servicedesk/{}/requesttypegroup", self.service_desk_id),
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

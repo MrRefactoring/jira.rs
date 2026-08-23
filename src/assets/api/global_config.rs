@@ -35,11 +35,7 @@ impl<'a> UpdateGlobalConfigurationRequest<'a> {
         id: impl Into<String>,
         global_configuration_in: GlobalConfigurationIn,
     ) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            global_configuration_in,
-        }
+        Self { client, id: id.into(), global_configuration_in }
     }
 
     /// The request as the transport will send it.

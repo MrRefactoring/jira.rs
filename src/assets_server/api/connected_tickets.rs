@@ -29,13 +29,7 @@ pub struct FindObjectTicketsRequest<'a> {
 
 impl<'a> FindObjectTicketsRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            filter_id: None,
-            xoauth_requestor_id: None,
-            limit: None,
-        }
+        Self { client, id: id.into(), filter_id: None, xoauth_requestor_id: None, limit: None }
     }
 
     /// Filter the tickets based on the filter ID. If filterId is not specified then no filter will be used. In the context of Jira the filterId will be the ID on an existing JQL filter.
@@ -69,22 +63,15 @@ impl<'a> FindObjectTicketsRequest<'a> {
         );
 
         if let Some(value) = &self.filter_id {
-            config
-                .query
-                .push(("filterId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("filterId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.xoauth_requestor_id {
-            config.query.push((
-                "xoauth_requestor_id".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("xoauth_requestor_id".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

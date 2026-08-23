@@ -32,11 +32,7 @@ pub struct GetStatusCategoriesRequest<'a> {
 
 impl<'a> GetStatusCategoriesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            request: None,
-            uri_info: None,
-        }
+        Self { client, request: None, uri_info: None }
     }
 
     /// a Request
@@ -61,15 +57,11 @@ impl<'a> GetStatusCategoriesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/statuscategory".to_owned());
 
         if let Some(value) = &self.request {
-            config
-                .query
-                .push(("request".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("request".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.uri_info {
-            config
-                .query
-                .push(("uriInfo".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("uriInfo".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -94,10 +86,7 @@ pub struct GetStatusCategoryRequest<'a> {
 
 impl<'a> GetStatusCategoryRequest<'a> {
     fn new(client: &'a crate::core::Client, id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            id_or_key: id_or_key.into(),
-        }
+        Self { client, id_or_key: id_or_key.into() }
     }
 
     /// The request as the transport will send it.

@@ -10,11 +10,7 @@ pub struct VersionIssueCounts {
     #[serde(rename = "customFieldUsage", default, skip_serializing_if = "Option::is_none")]
     pub custom_field_usage: Option<Vec<VersionUsageInCustomField>>,
     /// Count of issues where a version custom field is set to the version.
-    #[serde(
-        rename = "issueCountWithCustomFieldsShowingVersion",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "issueCountWithCustomFieldsShowingVersion", default, skip_serializing_if = "Option::is_none")]
     pub issue_count_with_custom_fields_showing_version: Option<i64>,
     /// Count of issues where the `affectedVersion` is set to the version.
     #[serde(rename = "issuesAffectedCount", default, skip_serializing_if = "Option::is_none")]

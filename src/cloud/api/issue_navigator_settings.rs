@@ -87,10 +87,7 @@ pub struct SetIssueNavigatorDefaultColumnsRequest<'a> {
 
 impl<'a> SetIssueNavigatorDefaultColumnsRequest<'a> {
     fn new(client: &'a crate::core::Client, column_request_body: ColumnRequestBody) -> Self {
-        Self {
-            client,
-            column_request_body,
-        }
+        Self { client, column_request_body }
     }
 
     /// The request as the transport will send it.

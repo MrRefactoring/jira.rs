@@ -377,10 +377,7 @@ pub struct GetBulkChangelogsRequest<'a> {
 
 impl<'a> GetBulkChangelogsRequest<'a> {
     fn new(client: &'a crate::core::Client, bulk_changelog_request: BulkChangelogRequest) -> Self {
-        Self {
-            client,
-            bulk_changelog_request,
-        }
+        Self { client, bulk_changelog_request }
     }
 
     /// The request as the transport will send it.
@@ -429,11 +426,7 @@ pub struct CreateIssueRequest<'a> {
 
 impl<'a> CreateIssueRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_update_details: IssueUpdateDetails) -> Self {
-        Self {
-            client,
-            issue_update_details,
-            update_history: None,
-        }
+        Self { client, issue_update_details, update_history: None }
     }
 
     /// Whether the project in which the issue is created is added to the user's **Recently viewed** project list, as shown under **Projects** in Jira. When provided, the issue type and request type are added to the user's history for a project. These values are then used to provide defaults on the issue create screen.
@@ -449,10 +442,7 @@ impl<'a> CreateIssueRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/issue".to_owned());
 
         if let Some(value) = &self.update_history {
-            config.query.push((
-                "updateHistory".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("updateHistory".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.issue_update_details)? {
@@ -550,10 +540,7 @@ pub struct BulkFetchIssuesRequest<'a> {
 
 impl<'a> BulkFetchIssuesRequest<'a> {
     fn new(client: &'a crate::core::Client, bulk_fetch_issue_request: BulkFetchIssueRequest) -> Self {
-        Self {
-            client,
-            bulk_fetch_issue_request,
-        }
+        Self { client, bulk_fetch_issue_request }
     }
 
     /// The request as the transport will send it.
@@ -596,12 +583,7 @@ pub struct GetCreateIssueMetaIssueTypesRequest<'a> {
 
 impl<'a> GetCreateIssueMetaIssueTypesRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            start_at: None,
-            max_results: None,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), start_at: None, max_results: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -628,16 +610,11 @@ impl<'a> GetCreateIssueMetaIssueTypesRequest<'a> {
         );
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -702,23 +679,15 @@ impl<'a> GetCreateIssueMetaIssueTypeIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/3/issue/createmeta/{}/issuetypes/{}",
-                self.project_id_or_key, self.issue_type_id
-            ),
+            format!("/rest/api/3/issue/createmeta/{}/issuetypes/{}", self.project_id_or_key, self.issue_type_id),
         );
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -859,42 +828,27 @@ impl<'a> GetIssueRequest<'a> {
         );
 
         if let Some(value) = &self.fields {
-            config
-                .query
-                .push(("fields".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.fields_by_keys {
-            config.query.push((
-                "fieldsByKeys".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("fieldsByKeys".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.properties {
-            config
-                .query
-                .push(("properties".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("properties".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.update_history {
-            config.query.push((
-                "updateHistory".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("updateHistory".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.fail_fast {
-            config.query.push((
-                "failFast".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("failFast".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1004,37 +958,25 @@ impl<'a> EditIssueRequest<'a> {
         );
 
         if let Some(value) = &self.notify_users {
-            config.query.push((
-                "notifyUsers".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.override_screen_security {
-            config.query.push((
-                "overrideScreenSecurity".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config
+                .query
+                .push(("overrideScreenSecurity".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.override_editable_flag {
-            config.query.push((
-                "overrideEditableFlag".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("overrideEditableFlag".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.return_issue {
-            config.query.push((
-                "returnIssue".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("returnIssue".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         let body = match serde_json::to_value(&self.issue_update_details)? {
@@ -1076,11 +1018,7 @@ pub struct DeleteIssueRequest<'a> {
 
 impl<'a> DeleteIssueRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            delete_subtasks: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), delete_subtasks: None }
     }
 
     /// Whether the issue's subtasks are deleted when the issue is deleted.
@@ -1099,10 +1037,7 @@ impl<'a> DeleteIssueRequest<'a> {
         );
 
         if let Some(value) = &self.delete_subtasks {
-            config.query.push((
-                "deleteSubtasks".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("deleteSubtasks".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -1140,11 +1075,7 @@ pub struct AssignIssueRequest<'a> {
 
 impl<'a> AssignIssueRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, dashboard_user: DashboardUser) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            dashboard_user,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), dashboard_user }
     }
 
     /// The request as the transport will send it.
@@ -1192,12 +1123,7 @@ pub struct GetChangeLogsRequest<'a> {
 
 impl<'a> GetChangeLogsRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            start_at: None,
-            max_results: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), start_at: None, max_results: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -1224,16 +1150,11 @@ impl<'a> GetChangeLogsRequest<'a> {
         );
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1270,11 +1191,7 @@ impl<'a> GetChangeLogsByIdsRequest<'a> {
         issue_id_or_key: impl Into<String>,
         issue_changelog_ids: IssueChangelogIds,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            issue_changelog_ids,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), issue_changelog_ids }
     }
 
     /// The request as the transport will send it.
@@ -1375,17 +1292,13 @@ impl<'a> GetEditIssueMetaRequest<'a> {
         );
 
         if let Some(value) = &self.override_screen_security {
-            config.query.push((
-                "overrideScreenSecurity".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config
+                .query
+                .push(("overrideScreenSecurity".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.override_editable_flag {
-            config.query.push((
-                "overrideEditableFlag".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("overrideEditableFlag".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1416,11 +1329,7 @@ pub struct NotifyRequest<'a> {
 
 impl<'a> NotifyRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, notification: Notification) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            notification,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), notification }
     }
 
     /// The request as the transport will send it.
@@ -1534,37 +1443,27 @@ impl<'a> GetTransitionsRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.transition_id {
-            config.query.push((
-                "transitionId".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("transitionId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.skip_remote_only_condition {
-            config.query.push((
-                "skipRemoteOnlyCondition".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config
+                .query
+                .push(("skipRemoteOnlyCondition".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.include_unavailable_transitions {
-            config.query.push((
-                "includeUnavailableTransitions".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config
+                .query
+                .push(("includeUnavailableTransitions".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.sort_by_ops_bar_and_status {
-            config.query.push((
-                "sortByOpsBarAndStatus".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("sortByOpsBarAndStatus".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1603,11 +1502,7 @@ impl<'a> DoTransitionRequest<'a> {
         issue_id_or_key: impl Into<String>,
         issue_update_details: IssueUpdateDetails,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            issue_update_details,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), issue_update_details }
     }
 
     /// The request as the transport will send it.

@@ -146,48 +146,31 @@ impl<'a> GetCustomFieldConfigurationRequest<'a> {
         );
 
         if let Some(value) = &self.id {
-            config
-                .query
-                .push(("id".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("id".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.field_context_id {
-            config.query.push((
-                "fieldContextId".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("fieldContextId".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.issue_id {
-            config
-                .query
-                .push(("issueId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("issueId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.project_key_or_id {
-            config.query.push((
-                "projectKeyOrId".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("projectKeyOrId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.issue_type_id {
-            config
-                .query
-                .push(("issueTypeId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("issueTypeId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -219,11 +202,7 @@ impl<'a> UpdateCustomFieldConfigurationRequest<'a> {
         field_id_or_key: impl Into<String>,
         custom_field_configurations: CustomFieldConfigurations,
     ) -> Self {
-        Self {
-            client,
-            field_id_or_key: field_id_or_key.into(),
-            custom_field_configurations,
-        }
+        Self { client, field_id_or_key: field_id_or_key.into(), custom_field_configurations }
     }
 
     /// The request as the transport will send it.

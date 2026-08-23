@@ -531,10 +531,7 @@ pub struct GetRepositoryRequest<'a> {
 
 impl<'a> GetRepositoryRequest<'a> {
     fn new(client: &'a crate::core::Client, repository_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            repository_id: repository_id.into(),
-        }
+        Self { client, repository_id: repository_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -567,11 +564,7 @@ pub struct DeleteRepositoryRequest<'a> {
 
 impl<'a> DeleteRepositoryRequest<'a> {
     fn new(client: &'a crate::core::Client, repository_id: impl Into<String>, update_sequence_id: i64) -> Self {
-        Self {
-            client,
-            repository_id: repository_id.into(),
-            update_sequence_id,
-        }
+        Self { client, repository_id: repository_id.into(), update_sequence_id }
     }
 
     /// The request as the transport will send it.
@@ -608,10 +601,7 @@ pub struct DeleteByPropertiesRequest<'a> {
 
 impl<'a> DeleteByPropertiesRequest<'a> {
     fn new(client: &'a crate::core::Client, update_sequence_id: i64) -> Self {
-        Self {
-            client,
-            update_sequence_id,
-        }
+        Self { client, update_sequence_id }
     }
 
     /// The request as the transport will send it.
@@ -648,10 +638,7 @@ pub struct ExistsByPropertiesRequest<'a> {
 
 impl<'a> ExistsByPropertiesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            update_sequence_id: None,
-        }
+        Self { client, update_sequence_id: None }
     }
 
     /// An optional property. Filters out entities and repositories which have updateSequenceId greater than specified.
@@ -670,10 +657,7 @@ impl<'a> ExistsByPropertiesRequest<'a> {
         );
 
         if let Some(value) = &self.update_sequence_id {
-            config.query.push((
-                "_updateSequenceId".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("_updateSequenceId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -720,10 +704,7 @@ impl<'a> DeleteEntityRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/devinfo/0.10/repository/{}/{}/{}",
-                self.repository_id, self.entity_type, self.entity_id
-            ),
+            format!("/rest/devinfo/0.10/repository/{}/{}/{}", self.repository_id, self.entity_type, self.entity_id),
         );
 
         config.query.push((

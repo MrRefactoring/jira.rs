@@ -51,10 +51,7 @@ pub struct CreateSchemaRequest<'a> {
 
 impl<'a> CreateSchemaRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            object_schema_in: None,
-        }
+        Self { client, object_schema_in: None }
     }
 
     #[must_use]
@@ -133,11 +130,7 @@ pub struct UpdateSchemaRequest<'a> {
 
 impl<'a> UpdateSchemaRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            body: None,
-        }
+        Self { client, id: id.into(), body: None }
     }
 
     #[must_use]
@@ -211,11 +204,7 @@ pub struct FindSchemasRequest<'a> {
 
 impl<'a> FindSchemasRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            xoauth_requestor_id: None,
-            query: None,
-        }
+        Self { client, xoauth_requestor_id: None, query: None }
     }
 
     #[must_use]
@@ -235,22 +224,15 @@ impl<'a> FindSchemasRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            "/rest/assets/1.0/objectschema/list".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/assets/1.0/objectschema/list".to_owned());
 
         if let Some(value) = &self.xoauth_requestor_id {
-            config.query.push((
-                "xoauth_requestor_id".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("xoauth_requestor_id".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -278,13 +260,7 @@ pub struct FindObjectTypeFlatListRequest<'a> {
 
 impl<'a> FindObjectTypeFlatListRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            role: None,
-            query: None,
-            exclude: None,
-        }
+        Self { client, id: id.into(), role: None, query: None, exclude: None }
     }
 
     /// The Object Type role to filter the list of object types. Valid values: `OBJECT_TYPE_USER`, `OBJECT_TYPE_DEVELOPER`, `OBJECT_TYPE_MANAGER`
@@ -319,21 +295,15 @@ impl<'a> FindObjectTypeFlatListRequest<'a> {
         );
 
         if let Some(value) = &self.role {
-            config
-                .query
-                .push(("role".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("role".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.exclude {
-            config
-                .query
-                .push(("exclude".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("exclude".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

@@ -8,21 +8,13 @@ pub struct JspPropertyGroupDescriptor {
     pub buffer: Option<String>,
     #[serde(rename = "defaultContentType", default, skip_serializing_if = "Option::is_none")]
     pub default_content_type: Option<String>,
-    #[serde(
-        rename = "deferredSyntaxAllowedAsLiteral",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "deferredSyntaxAllowedAsLiteral", default, skip_serializing_if = "Option::is_none")]
     pub deferred_syntax_allowed_as_literal: Option<String>,
     #[serde(rename = "elIgnored", default, skip_serializing_if = "Option::is_none")]
     pub el_ignored: Option<String>,
     #[serde(rename = "errorOnELNotFound", default, skip_serializing_if = "Option::is_none")]
     pub error_on_el_not_found: Option<String>,
-    #[serde(
-        rename = "errorOnUndeclaredNamespace",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "errorOnUndeclaredNamespace", default, skip_serializing_if = "Option::is_none")]
     pub error_on_undeclared_namespace: Option<String>,
     #[serde(rename = "includeCodas", default, skip_serializing_if = "Option::is_none")]
     pub include_codas: Option<Vec<String>>,
@@ -34,11 +26,7 @@ pub struct JspPropertyGroupDescriptor {
     pub page_encoding: Option<String>,
     #[serde(rename = "scriptingInvalid", default, skip_serializing_if = "Option::is_none")]
     pub scripting_invalid: Option<String>,
-    #[serde(
-        rename = "trimDirectiveWhitespaces",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "trimDirectiveWhitespaces", default, skip_serializing_if = "Option::is_none")]
     pub trim_directive_whitespaces: Option<String>,
     #[serde(rename = "urlPatterns", default, skip_serializing_if = "Option::is_none")]
     pub url_patterns: Option<Vec<String>>,

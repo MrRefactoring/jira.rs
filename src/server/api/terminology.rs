@@ -77,10 +77,7 @@ pub struct SetTerminologyEntriesRequest<'a> {
 
 impl<'a> SetTerminologyEntriesRequest<'a> {
     fn new(client: &'a crate::core::Client, terminology_request: TerminologyRequest) -> Self {
-        Self {
-            client,
-            terminology_request,
-        }
+        Self { client, terminology_request }
     }
 
     /// The request as the transport will send it.
@@ -117,10 +114,7 @@ pub struct GetTerminologyEntryRequest<'a> {
 
 impl<'a> GetTerminologyEntryRequest<'a> {
     fn new(client: &'a crate::core::Client, original_name: impl Into<String>) -> Self {
-        Self {
-            client,
-            original_name: original_name.into(),
-        }
+        Self { client, original_name: original_name.into() }
     }
 
     /// The request as the transport will send it.

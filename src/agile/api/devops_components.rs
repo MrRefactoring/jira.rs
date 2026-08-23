@@ -225,10 +225,7 @@ impl<'a> SubmitComponentsRequest<'a> {
             body.insert("properties".to_owned(), serde_json::to_value(value)?);
         }
 
-        body.insert(
-            "devopsComponents".to_owned(),
-            serde_json::to_value(&self.devops_components)?,
-        );
+        body.insert("devopsComponents".to_owned(), serde_json::to_value(&self.devops_components)?);
 
         if let Some(value) = &self.provider_metadata {
             body.insert("providerMetadata".to_owned(), serde_json::to_value(value)?);
@@ -270,11 +267,7 @@ pub struct DeleteComponentsByPropertyRequest<'a> {
 
 impl<'a> DeleteComponentsByPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            account_id: account_id.into(),
-            created_by: None,
-        }
+        Self { client, account_id: account_id.into(), created_by: None }
     }
 
     /// Optional additional property filter combined with accountId (AND). Must match a key previously supplied in submitComponents `properties`. Example: createdBy=user-456.
@@ -292,15 +285,10 @@ impl<'a> DeleteComponentsByPropertyRequest<'a> {
             "/rest/devopscomponents/1.0/bulkByProperties".to_owned(),
         );
 
-        config.query.push((
-            "accountId".to_owned(),
-            crate::core::QueryValue::Scalar(self.account_id.clone()),
-        ));
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
 
         if let Some(value) = &self.created_by {
-            config
-                .query
-                .push(("createdBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("createdBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -330,10 +318,7 @@ pub struct GetComponentByIdRequest<'a> {
 
 impl<'a> GetComponentByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, component_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            component_id: component_id.into(),
-        }
+        Self { client, component_id: component_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -370,10 +355,7 @@ pub struct DeleteComponentByIdRequest<'a> {
 
 impl<'a> DeleteComponentByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, component_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            component_id: component_id.into(),
-        }
+        Self { client, component_id: component_id.into() }
     }
 
     /// The request as the transport will send it.

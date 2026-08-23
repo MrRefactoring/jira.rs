@@ -67,13 +67,7 @@ pub struct GetPrioritiesPaginatedRequest<'a> {
 
 impl<'a> GetPrioritiesPaginatedRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            max_results: None,
-            query: None,
-            project_ids: None,
-            start_at: None,
-        }
+        Self { client, max_results: None, query: None, project_ids: None, start_at: None }
     }
 
     /// how many results on the page should be included. Defaults to 100
@@ -114,29 +108,19 @@ impl<'a> GetPrioritiesPaginatedRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/priority/page".to_owned());
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_ids {
-            config.query.push((
-                "projectIds".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("projectIds".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

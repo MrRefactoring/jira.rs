@@ -209,53 +209,35 @@ impl<'a> GetMyPermissionsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/mypermissions".to_owned());
 
         if let Some(value) = &self.project_key {
-            config
-                .query
-                .push(("projectKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_id {
-            config
-                .query
-                .push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.issue_key {
-            config
-                .query
-                .push(("issueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("issueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.issue_id {
-            config
-                .query
-                .push(("issueId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("issueId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.permissions {
-            config.query.push((
-                "permissions".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("permissions".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.project_uuid {
-            config
-                .query
-                .push(("projectUuid".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectUuid".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_configuration_uuid {
-            config.query.push((
-                "projectConfigurationUuid".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("projectConfigurationUuid".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.comment_id {
-            config
-                .query
-                .push(("commentId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("commentId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -337,10 +319,7 @@ pub struct GetBulkPermissionsRequest<'a> {
 
 impl<'a> GetBulkPermissionsRequest<'a> {
     fn new(client: &'a crate::core::Client, bulk_permissions_request: BulkPermissionsRequest) -> Self {
-        Self {
-            client,
-            bulk_permissions_request,
-        }
+        Self { client, bulk_permissions_request }
     }
 
     /// The request as the transport will send it.
@@ -381,10 +360,7 @@ pub struct GetPermittedProjectsRequest<'a> {
 
 impl<'a> GetPermittedProjectsRequest<'a> {
     fn new(client: &'a crate::core::Client, permissions_keys: PermissionsKeys) -> Self {
-        Self {
-            client,
-            permissions_keys,
-        }
+        Self { client, permissions_keys }
     }
 
     /// The request as the transport will send it.

@@ -12,11 +12,7 @@ pub struct CreateNotificationSchemeDetails {
     /// The name of the notification scheme. Must be unique (case-insensitive).
     pub name: String,
     /// The list of notifications which should be added to the notification scheme.
-    #[serde(
-        rename = "notificationSchemeEvents",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "notificationSchemeEvents", default, skip_serializing_if = "Option::is_none")]
     pub notification_scheme_events: Option<Vec<NotificationSchemeEventDetails>>,
     /// Keys the specification does not describe, kept rather than dropped.
     #[serde(flatten)]

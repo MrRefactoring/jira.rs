@@ -23,10 +23,7 @@ struct Project {
 async fn answering(body: serde_json::Value) -> MockServer {
     let server = MockServer::start().await;
 
-    Mock::given(method("GET"))
-        .respond_with(ResponseTemplate::new(200).set_body_json(body))
-        .mount(&server)
-        .await;
+    Mock::given(method("GET")).respond_with(ResponseTemplate::new(200).set_body_json(body)).mount(&server).await;
 
     server
 }

@@ -108,16 +108,11 @@ impl<'a> GetUserRequest<'a> {
         );
 
         if let Some(value) = &self.attributes {
-            config
-                .query
-                .push(("attributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("attributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.excluded_attributes {
-            config.query.push((
-                "excludedAttributes".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("excludedAttributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -185,16 +180,11 @@ impl<'a> ReplaceUserRequest<'a> {
         );
 
         if let Some(value) = &self.attributes {
-            config
-                .query
-                .push(("attributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("attributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.excluded_attributes {
-            config.query.push((
-                "excludedAttributes".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("excludedAttributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         let body = match serde_json::to_value(&self.scim_user)? {
@@ -231,11 +221,7 @@ pub struct DeleteUserRequest<'a> {
 
 impl<'a> DeleteUserRequest<'a> {
     fn new(client: &'a crate::core::Client, directory_id: impl Into<String>, user_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            directory_id: directory_id.into(),
-            user_id: user_id.into(),
-        }
+        Self { client, directory_id: directory_id.into(), user_id: user_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -310,16 +296,11 @@ impl<'a> PatchUserRequest<'a> {
         );
 
         if let Some(value) = &self.attributes {
-            config
-                .query
-                .push(("attributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("attributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.excluded_attributes {
-            config.query.push((
-                "excludedAttributes".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("excludedAttributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         let body = match serde_json::to_value(&self.request_payload_to_patch)? {
@@ -417,35 +398,23 @@ impl<'a> GetUsersRequest<'a> {
         );
 
         if let Some(value) = &self.attributes {
-            config
-                .query
-                .push(("attributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("attributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.excluded_attributes {
-            config.query.push((
-                "excludedAttributes".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("excludedAttributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.filter {
-            config
-                .query
-                .push(("filter".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("filter".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_index {
-            config.query.push((
-                "startIndex".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("startIndex".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.count {
-            config
-                .query
-                .push(("count".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("count".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -478,13 +447,7 @@ pub struct CreateUserRequest<'a> {
 
 impl<'a> CreateUserRequest<'a> {
     fn new(client: &'a crate::core::Client, directory_id: impl Into<String>, scim_user: ScimUser) -> Self {
-        Self {
-            client,
-            directory_id: directory_id.into(),
-            scim_user,
-            attributes: None,
-            excluded_attributes: None,
-        }
+        Self { client, directory_id: directory_id.into(), scim_user, attributes: None, excluded_attributes: None }
     }
 
     /// Resource attributes to be included in response. Mutually exclusive from `excludedAttributes`.  Example: `userName,emails.value`
@@ -511,16 +474,11 @@ impl<'a> CreateUserRequest<'a> {
         );
 
         if let Some(value) = &self.attributes {
-            config
-                .query
-                .push(("attributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("attributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.excluded_attributes {
-            config.query.push((
-                "excludedAttributes".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("excludedAttributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         let body = match serde_json::to_value(&self.scim_user)? {

@@ -8,11 +8,7 @@ pub struct IndexIntegrityOut {
     pub object_jira_issue_index_ok: Option<bool>,
     #[serde(rename = "objectSchemaIndexOk", default, skip_serializing_if = "Option::is_none")]
     pub object_schema_index_ok: Option<bool>,
-    #[serde(
-        rename = "objectTypeAttributeIndexOk",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "objectTypeAttributeIndexOk", default, skip_serializing_if = "Option::is_none")]
     pub object_type_attribute_index_ok: Option<bool>,
     #[serde(rename = "objectTypeIndexOk", default, skip_serializing_if = "Option::is_none")]
     pub object_type_index_ok: Option<bool>,

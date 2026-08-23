@@ -89,11 +89,7 @@ pub struct UpdateObjectTypeRequest<'a> {
 
 impl<'a> UpdateObjectTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, object_type_update: ObjectTypeUpdate) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            object_type_update,
-        }
+        Self { client, id: id.into(), object_type_update }
     }
 
     /// The request as the transport will send it.
@@ -233,51 +229,33 @@ impl<'a> FindObjectTypeAttributesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, format!("/objecttype/{}/attributes", self.id));
 
         if let Some(value) = &self.only_value_editable {
-            config.query.push((
-                "onlyValueEditable".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("onlyValueEditable".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.order_by_name {
-            config.query.push((
-                "orderByName".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("orderByName".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.include_values_exist {
-            config.query.push((
-                "includeValuesExist".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("includeValuesExist".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.exclude_parent_attributes {
-            config.query.push((
-                "excludeParentAttributes".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config
+                .query
+                .push(("excludeParentAttributes".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.include_children {
-            config.query.push((
-                "includeChildren".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("includeChildren".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.order_by_required {
-            config.query.push((
-                "orderByRequired".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("orderByRequired".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -303,11 +281,7 @@ pub struct ChangeObjectTypePositionRequest<'a> {
 
 impl<'a> ChangeObjectTypePositionRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, object_type_position: ObjectTypePosition) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            object_type_position,
-        }
+        Self { client, id: id.into(), object_type_position }
     }
 
     /// The request as the transport will send it.

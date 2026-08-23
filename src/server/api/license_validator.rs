@@ -26,10 +26,7 @@ pub struct ValidateRequest<'a> {
 
 impl<'a> ValidateRequest<'a> {
     fn new(client: &'a crate::core::Client, body: impl Into<String>) -> Self {
-        Self {
-            client,
-            body: body.into(),
-        }
+        Self { client, body: body.into() }
     }
 
     /// The request as the transport will send it.

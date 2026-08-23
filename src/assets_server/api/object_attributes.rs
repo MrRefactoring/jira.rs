@@ -27,11 +27,7 @@ pub struct CreateObjectAttributeRequest<'a> {
 
 impl<'a> CreateObjectAttributeRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            include_type_attribute: None,
-            object_attribute_in: None,
-        }
+        Self { client, include_type_attribute: None, object_attribute_in: None }
     }
 
     /// Should the response include the object type attribute definition
@@ -57,10 +53,7 @@ impl<'a> CreateObjectAttributeRequest<'a> {
         );
 
         if let Some(value) = &self.include_type_attribute {
-            config.query.push((
-                "includeTypeAttribute".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("includeTypeAttribute".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         let body = match serde_json::to_value(&self.object_attribute_in)? {

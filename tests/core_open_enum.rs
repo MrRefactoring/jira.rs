@@ -64,10 +64,7 @@ fn survives_the_wrappers_the_generated_types_put_around_it() {
     let list: Vec<ProjectTypeKey> = serde_json::from_str("[\"software\", \"grown\"]").unwrap();
 
     assert!(optional.is_none());
-    assert_eq!(
-        list,
-        vec![ProjectTypeKey::Software, ProjectTypeKey::Other("grown".to_owned())]
-    );
+    assert_eq!(list, vec![ProjectTypeKey::Software, ProjectTypeKey::Other("grown".to_owned())]);
 }
 
 #[test]

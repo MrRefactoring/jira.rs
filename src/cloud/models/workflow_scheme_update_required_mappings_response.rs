@@ -6,18 +6,10 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct WorkflowSchemeUpdateRequiredMappingsResponse {
     /// The list of required status mappings by issue type.
-    #[serde(
-        rename = "statusMappingsByIssueTypes",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "statusMappingsByIssueTypes", default, skip_serializing_if = "Option::is_none")]
     pub status_mappings_by_issue_types: Option<Vec<RequiredMappingByIssueType>>,
     /// The list of required status mappings by workflow.
-    #[serde(
-        rename = "statusMappingsByWorkflows",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "statusMappingsByWorkflows", default, skip_serializing_if = "Option::is_none")]
     pub status_mappings_by_workflows: Option<Vec<RequiredMappingByWorkflows>>,
     /// The details of the statuses in the associated workflows.
     #[serde(default, skip_serializing_if = "Option::is_none")]

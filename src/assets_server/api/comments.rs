@@ -76,11 +76,7 @@ pub struct GetCommentsRequest<'a> {
 
 impl<'a> GetCommentsRequest<'a> {
     fn new(client: &'a crate::core::Client, object_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            object_id: object_id.into(),
-            asc: None,
-        }
+        Self { client, object_id: object_id.into(), asc: None }
     }
 
     /// Whether to sort ascending
@@ -99,9 +95,7 @@ impl<'a> GetCommentsRequest<'a> {
         );
 
         if let Some(value) = &self.asc {
-            config
-                .query
-                .push(("asc".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("asc".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

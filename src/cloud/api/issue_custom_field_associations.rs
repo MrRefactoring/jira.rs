@@ -65,10 +65,7 @@ pub struct CreateAssociationsRequest<'a> {
 
 impl<'a> CreateAssociationsRequest<'a> {
     fn new(client: &'a crate::core::Client, field_associations_request: FieldAssociationsRequest) -> Self {
-        Self {
-            client,
-            field_associations_request,
-        }
+        Self { client, field_associations_request }
     }
 
     /// The request as the transport will send it.
@@ -113,10 +110,7 @@ pub struct RemoveAssociationsRequest<'a> {
 
 impl<'a> RemoveAssociationsRequest<'a> {
     fn new(client: &'a crate::core::Client, field_associations_request: FieldAssociationsRequest) -> Self {
-        Self {
-            client,
-            field_associations_request,
-        }
+        Self { client, field_associations_request }
     }
 
     /// The request as the transport will send it.

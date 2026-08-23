@@ -8,14 +8,8 @@ use crate::core::product::SCOPE_HINT;
 pub type Result<T> = std::result::Result<T, Error>;
 
 /// Node/undici error codes that signal a recoverable transport-layer failure.
-const TRANSIENT_NETWORK_MARKERS: &[&str] = &[
-    "ECONNRESET",
-    "ECONNREFUSED",
-    "ETIMEDOUT",
-    "ENOTFOUND",
-    "EAI_AGAIN",
-    "EPIPE",
-];
+const TRANSIENT_NETWORK_MARKERS: &[&str] =
+    &["ECONNRESET", "ECONNREFUSED", "ETIMEDOUT", "ENOTFOUND", "EAI_AGAIN", "EPIPE"];
 
 /// HTTP statuses that signal a recoverable upstream failure. The single source of truth for both retry paths.
 pub const TRANSIENT_HTTP_STATUSES: &[u16] = &[502, 503, 504];
@@ -97,17 +91,10 @@ impl fmt::Display for SchemaMismatchReport {
         write!(f, "{}", self.endpoint)?;
 
         for issue in &self.issues {
-            let where_ = if issue.path.is_empty() {
-                "the response root".to_owned()
-            } else {
-                format!("`{}`", issue.path)
-            };
+            let where_ =
+                if issue.path.is_empty() { "the response root".to_owned() } else { format!("`{}`", issue.path) };
 
-            write!(
-                f,
-                "\n  at {}, expected {}, got {}",
-                where_, issue.expected, issue.received
-            )?;
+            write!(f, "\n  at {}, expected {}, got {}", where_, issue.expected, issue.received)?;
         }
 
         Ok(())
@@ -123,10 +110,7 @@ impl fmt::Display for SchemaMismatchReport {
 pub enum Error {
     /// The API returned a non-2xx HTTP response.
     #[error("{message}")]
-    Api {
-        message: String,
-        details: Box<ApiErrorDetails>,
-    },
+    Api { message: String, details: Box<ApiErrorDetails> },
 
     /// The request never produced an HTTP response — DNS, TLS, a reset socket, a timeout, an unreachable host.
     #[error("{message}")]
@@ -143,10 +127,7 @@ pub enum Error {
     /// Deliberately not an [`Error::Api`]: it does not come from the product API, and a caller retrying product calls
     /// should not treat "your refresh token is dead" as the same class of problem as "that page is missing".
     #[error("{message}")]
-    OAuth {
-        message: String,
-        details: Box<OAuthErrorDetails>,
-    },
+    OAuth { message: String, details: Box<OAuthErrorDetails> },
 
     /// The client was configured in a way that cannot work — contradictory options, or a required one missing.
     #[error("{0}")]
@@ -181,10 +162,7 @@ impl Error {
     }
 
     pub fn oauth(message: impl Into<String>, details: OAuthErrorDetails) -> Self {
-        Error::OAuth {
-            message: message.into(),
-            details: Box::new(details),
-        }
+        Error::OAuth { message: message.into(), details: Box::new(details) }
     }
 
     /// Any non-2xx response from the API, whatever the status.
@@ -355,11 +333,7 @@ pub fn is_transient_transport_failure(err: &reqwest::Error) -> bool {
 pub fn to_network_error(err: reqwest::Error, url: &str) -> Error {
     let transient = is_transient_transport_failure(&err);
 
-    Error::Network {
-        message: format!("Request to {url} failed: {err}"),
-        transient,
-        source: err,
-    }
+    Error::Network { message: format!("Request to {url} failed: {err}"), transient, source: err }
 }
 
 /// `Retry-After` as a duration. The header is either delta-seconds or an HTTP date; both are accepted, and anything
@@ -416,14 +390,5 @@ the scope in the developer console and have the user authorize again. {SCOPE_HIN
         _ => (ApiErrorKind::Other, message),
     };
 
-    Error::Api {
-        message,
-        details: Box::new(ApiErrorDetails {
-            kind,
-            status,
-            status_text,
-            body,
-            retry_after,
-        }),
-    }
+    Error::Api { message, details: Box::new(ApiErrorDetails { kind, status, status_text, body, retry_after }) }
 }

@@ -12,11 +12,8 @@ use jira::{Auth, Client, RetryConfig};
 use super::env::require_live_env;
 
 /// Rides out the occasional transient reset or gateway error Jira Cloud throws, without masking a real 4xx.
-const RETRY: RetryConfig = RetryConfig {
-    max_attempts: 3,
-    initial_delay: Duration::from_millis(300),
-    backoff_factor: 2.0,
-};
+const RETRY: RetryConfig =
+    RetryConfig { max_attempts: 3, initial_delay: Duration::from_millis(300), backoff_factor: 2.0 };
 
 /// The one transport every surface is built from.
 ///
@@ -86,10 +83,7 @@ pub async fn org_id() -> String {
                 return pinned;
             }
 
-            jira::core::get_tenant_context(client())
-                .await
-                .expect("the site answers with its tenant context")
-                .org_id
+            jira::core::get_tenant_context(client()).await.expect("the site answers with its tenant context").org_id
         })
         .await
         .clone()

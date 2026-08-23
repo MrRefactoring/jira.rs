@@ -9,10 +9,6 @@ pub struct CustomerRequestCreateMeta {
     pub request_type_fields: Option<Vec<RequestTypeField>>,
     #[serde(rename = "canRaiseOnBehalfOf", default, skip_serializing_if = "Option::is_none")]
     pub can_raise_on_behalf_of: Option<bool>,
-    #[serde(
-        rename = "canAddRequestParticipants",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "canAddRequestParticipants", default, skip_serializing_if = "Option::is_none")]
     pub can_add_request_participants: Option<bool>,
 }

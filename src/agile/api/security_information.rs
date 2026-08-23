@@ -177,11 +177,7 @@ pub struct SubmitVulnerabilitiesRequestVulnerabilities {
     /// This is an optional field. If it is not provided it will default to being equal to the corresponding entity's `updateSequenceNumber`.
     ///
     /// Associations are written following a LastWriteWins strategy, association that are received with an associationsUpdateSequenceNumber lower than what is currently stored will be ignored.
-    #[serde(
-        rename = "associationsUpdateSequenceNumber",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "associationsUpdateSequenceNumber", default, skip_serializing_if = "Option::is_none")]
     pub associations_update_sequence_number: Option<i64>,
 }
 
@@ -294,10 +290,7 @@ pub struct SubmitWorkspacesRequest<'a> {
 
 impl<'a> SubmitWorkspacesRequest<'a> {
     fn new(client: &'a crate::core::Client, workspace_ids: impl IntoIterator<Item = impl Into<String>>) -> Self {
-        Self {
-            client,
-            workspace_ids: workspace_ids.into_iter().map(Into::into).collect(),
-        }
+        Self { client, workspace_ids: workspace_ids.into_iter().map(Into::into).collect() }
     }
 
     /// The request as the transport will send it.
@@ -347,10 +340,9 @@ impl<'a> DeleteLinkedWorkspacesRequest<'a> {
             "/rest/security/1.0/linkedWorkspaces/bulk".to_owned(),
         );
 
-        config.query.push((
-            "workspaceIds".to_owned(),
-            crate::core::QueryValue::from_serializable(&self.workspace_ids)?,
-        ));
+        config
+            .query
+            .push(("workspaceIds".to_owned(), crate::core::QueryValue::from_serializable(&self.workspace_ids)?));
 
         Ok(config)
     }
@@ -380,10 +372,8 @@ impl<'a> GetLinkedWorkspacesRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            "/rest/security/1.0/linkedWorkspaces".to_owned(),
-        );
+        let config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/security/1.0/linkedWorkspaces".to_owned());
 
         Ok(config)
     }
@@ -409,10 +399,7 @@ pub struct GetLinkedWorkspaceByIdRequest<'a> {
 
 impl<'a> GetLinkedWorkspaceByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, workspace_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            workspace_id: workspace_id.into(),
-        }
+        Self { client, workspace_id: workspace_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -511,10 +498,7 @@ impl<'a> SubmitVulnerabilitiesRequest<'a> {
             body.insert("properties".to_owned(), serde_json::to_value(value)?);
         }
 
-        body.insert(
-            "vulnerabilities".to_owned(),
-            serde_json::to_value(&self.vulnerabilities)?,
-        );
+        body.insert("vulnerabilities".to_owned(), serde_json::to_value(&self.vulnerabilities)?);
 
         if let Some(value) = &self.provider_metadata {
             body.insert("providerMetadata".to_owned(), serde_json::to_value(value)?);
@@ -553,11 +537,7 @@ pub struct DeleteVulnerabilitiesByPropertyRequest<'a> {
 
 impl<'a> DeleteVulnerabilitiesByPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            account_id: account_id.into(),
-            created_by: None,
-        }
+        Self { client, account_id: account_id.into(), created_by: None }
     }
 
     /// Optional additional property filter combined with accountId (AND). Must match a key previously supplied in submitVulnerabilities `properties`. Example: createdBy=user-456.
@@ -575,15 +555,10 @@ impl<'a> DeleteVulnerabilitiesByPropertyRequest<'a> {
             "/rest/security/1.0/bulkByProperties".to_owned(),
         );
 
-        config.query.push((
-            "accountId".to_owned(),
-            crate::core::QueryValue::Scalar(self.account_id.clone()),
-        ));
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
 
         if let Some(value) = &self.created_by {
-            config
-                .query
-                .push(("createdBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("createdBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -610,10 +585,7 @@ pub struct GetVulnerabilityByIdRequest<'a> {
 
 impl<'a> GetVulnerabilityByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, vulnerability_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            vulnerability_id: vulnerability_id.into(),
-        }
+        Self { client, vulnerability_id: vulnerability_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -647,10 +619,7 @@ pub struct DeleteVulnerabilityByIdRequest<'a> {
 
 impl<'a> DeleteVulnerabilityByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, vulnerability_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            vulnerability_id: vulnerability_id.into(),
-        }
+        Self { client, vulnerability_id: vulnerability_id.into() }
     }
 
     /// The request as the transport will send it.

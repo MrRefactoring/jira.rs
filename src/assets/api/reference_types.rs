@@ -32,11 +32,7 @@ pub struct FindReferenceTypesRequest<'a> {
 
 impl<'a> FindReferenceTypesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            object_schema_id: None,
-            include_all: None,
-        }
+        Self { client, object_schema_id: None, include_all: None }
     }
 
     /// Include reference types for the object schema id. If supplied reference types for the object schema will be returned otherwise all global will be returned
@@ -60,17 +56,11 @@ impl<'a> FindReferenceTypesRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/config/referencetype".to_owned());
 
         if let Some(value) = &self.object_schema_id {
-            config.query.push((
-                "objectSchemaId".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("objectSchemaId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.include_all {
-            config.query.push((
-                "includeAll".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("includeAll".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -95,10 +85,7 @@ pub struct CreateReferenceTypeRequest<'a> {
 
 impl<'a> CreateReferenceTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, reference_type_in: ReferenceTypeIn) -> Self {
-        Self {
-            client,
-            reference_type_in,
-        }
+        Self { client, reference_type_in }
     }
 
     /// The request as the transport will send it.

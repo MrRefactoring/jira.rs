@@ -71,11 +71,7 @@ pub struct PutBulkRequest<'a> {
 
 impl<'a> PutBulkRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            if_match: None,
-            application_role: None,
-        }
+        Self { client, if_match: None, application_role: None }
     }
 
     #[must_use]
@@ -130,10 +126,7 @@ pub struct GetApplicationRoleRequest<'a> {
 
 impl<'a> GetApplicationRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, key: impl Into<String>) -> Self {
-        Self {
-            client,
-            key: key.into(),
-        }
+        Self { client, key: key.into() }
     }
 
     /// The request as the transport will send it.
@@ -168,13 +161,7 @@ pub struct UpdateApplicationRoleRequest<'a> {
 
 impl<'a> UpdateApplicationRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, key: impl Into<String>) -> Self {
-        Self {
-            client,
-            key: key.into(),
-            if_match: None,
-            version_hash: None,
-            body: None,
-        }
+        Self { client, key: key.into(), if_match: None, version_hash: None, body: None }
     }
 
     #[must_use]

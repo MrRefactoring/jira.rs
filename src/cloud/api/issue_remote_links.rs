@@ -140,11 +140,7 @@ pub struct GetRemoteIssueLinksRequest<'a> {
 
 impl<'a> GetRemoteIssueLinksRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            global_id: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), global_id: None }
     }
 
     /// The global ID of the remote issue link.
@@ -163,9 +159,7 @@ impl<'a> GetRemoteIssueLinksRequest<'a> {
         );
 
         if let Some(value) = &self.global_id {
-            config
-                .query
-                .push(("globalId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("globalId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -206,11 +200,7 @@ impl<'a> CreateOrUpdateRemoteIssueLinkRequest<'a> {
         issue_id_or_key: impl Into<String>,
         remote_issue_link_request: RemoteIssueLinkRequest,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            remote_issue_link_request,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), remote_issue_link_request }
     }
 
     /// The request as the transport will send it.
@@ -259,11 +249,7 @@ pub struct DeleteRemoteIssueLinkByGlobalIdRequest<'a> {
 
 impl<'a> DeleteRemoteIssueLinkByGlobalIdRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, global_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            global_id: global_id.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), global_id: global_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -273,10 +259,7 @@ impl<'a> DeleteRemoteIssueLinkByGlobalIdRequest<'a> {
             format!("/rest/api/3/issue/{}/remotelink", self.issue_id_or_key),
         );
 
-        config.query.push((
-            "globalId".to_owned(),
-            crate::core::QueryValue::Scalar(self.global_id.clone()),
-        ));
+        config.query.push(("globalId".to_owned(), crate::core::QueryValue::Scalar(self.global_id.clone())));
 
         Ok(config)
     }
@@ -310,11 +293,7 @@ pub struct GetRemoteIssueLinkByIdRequest<'a> {
 
 impl<'a> GetRemoteIssueLinkByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, link_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            link_id: link_id.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), link_id: link_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -364,12 +343,7 @@ impl<'a> UpdateRemoteIssueLinkRequest<'a> {
         link_id: impl Into<String>,
         remote_issue_link_request: RemoteIssueLinkRequest,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            link_id: link_id.into(),
-            remote_issue_link_request,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), link_id: link_id.into(), remote_issue_link_request }
     }
 
     /// The request as the transport will send it.
@@ -418,11 +392,7 @@ pub struct DeleteRemoteIssueLinkByIdRequest<'a> {
 
 impl<'a> DeleteRemoteIssueLinkByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, link_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            link_id: link_id.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), link_id: link_id.into() }
     }
 
     /// The request as the transport will send it.

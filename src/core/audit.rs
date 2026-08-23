@@ -70,10 +70,7 @@ fn append_to_output(entry: &SchemaDrift) {
 }
 
 pub fn record_undocumented_key(endpoint: &str, path: &str) {
-    record(SchemaDrift::UndocumentedKeys {
-        endpoint: endpoint.to_owned(),
-        path: path.to_owned(),
-    });
+    record(SchemaDrift::UndocumentedKeys { endpoint: endpoint.to_owned(), path: path.to_owned() });
 }
 
 pub fn record_undocumented_value(type_name: &str, value: &str, documented: &[&str]) {

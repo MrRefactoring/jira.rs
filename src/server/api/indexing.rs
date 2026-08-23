@@ -266,9 +266,7 @@ impl<'a> GetReindexInfoRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/reindex".to_owned());
 
         if let Some(value) = &self.task_id {
-            config
-                .query
-                .push(("taskId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("taskId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -296,13 +294,7 @@ pub struct ReindexRequest2<'a> {
 
 impl<'a> ReindexRequest2<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            index_change_history: None,
-            r#type: None,
-            index_worklogs: None,
-            index_comments: None,
-        }
+        Self { client, index_change_history: None, r#type: None, index_worklogs: None, index_comments: None }
     }
 
     /// Indicates that changeHistory should also be reindexed. Not relevant for foreground reindex, where changeHistory is always reindexed.
@@ -342,30 +334,19 @@ impl<'a> ReindexRequest2<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/reindex".to_owned());
 
         if let Some(value) = &self.index_change_history {
-            config.query.push((
-                "indexChangeHistory".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("indexChangeHistory".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.r#type {
-            config
-                .query
-                .push(("type".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("type".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.index_worklogs {
-            config.query.push((
-                "indexWorklogs".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("indexWorklogs".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.index_comments {
-            config.query.push((
-                "indexComments".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("indexComments".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -393,13 +374,7 @@ pub struct ReindexIssuesRequest<'a> {
 
 impl<'a> ReindexIssuesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            issue_id: None,
-            index_change_history: None,
-            index_worklogs: None,
-            index_comments: None,
-        }
+        Self { client, issue_id: None, index_change_history: None, index_worklogs: None, index_comments: None }
     }
 
     /// The IDs or keys of one or more issues to reindex.
@@ -440,30 +415,19 @@ impl<'a> ReindexIssuesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/reindex/issue".to_owned());
 
         if let Some(value) = &self.issue_id {
-            config
-                .query
-                .push(("issueId".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("issueId".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.index_change_history {
-            config.query.push((
-                "indexChangeHistory".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("indexChangeHistory".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.index_worklogs {
-            config.query.push((
-                "indexWorklogs".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("indexWorklogs".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.index_comments {
-            config.query.push((
-                "indexComments".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("indexComments".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -505,9 +469,7 @@ impl<'a> GetReindexProgressRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/reindex/progress".to_owned());
 
         if let Some(value) = &self.task_id {
-            config
-                .query
-                .push(("taskId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("taskId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -561,10 +523,7 @@ pub struct GetProgressBulkRequest<'a> {
 
 impl<'a> GetProgressBulkRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            request_id: None,
-        }
+        Self { client, request_id: None }
     }
 
     /// The reindex request IDs.
@@ -581,10 +540,7 @@ impl<'a> GetProgressBulkRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/reindex/request/bulk".to_owned());
 
         if let Some(value) = &self.request_id {
-            config.query.push((
-                "requestId".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("requestId".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)

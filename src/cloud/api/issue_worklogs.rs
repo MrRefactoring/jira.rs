@@ -406,36 +406,23 @@ impl<'a> GetIssueWorklogRequest<'a> {
         );
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.started_after {
-            config.query.push((
-                "startedAfter".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("startedAfter".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.started_before {
-            config.query.push((
-                "startedBefore".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("startedBefore".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -550,42 +537,27 @@ impl<'a> AddWorklogRequest<'a> {
         );
 
         if let Some(value) = &self.notify_users {
-            config.query.push((
-                "notifyUsers".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.adjust_estimate {
-            config.query.push((
-                "adjustEstimate".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.new_estimate {
-            config
-                .query
-                .push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.reduce_by {
-            config
-                .query
-                .push(("reduceBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("reduceBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.override_editable_flag {
-            config.query.push((
-                "overrideEditableFlag".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("overrideEditableFlag".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.worklog_input)? {
@@ -629,12 +601,7 @@ pub struct GetWorklogRequest<'a> {
 
 impl<'a> GetWorklogRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            id: id.into(),
-            expand: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into(), expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information about work logs in the response. This parameter accepts
@@ -655,9 +622,7 @@ impl<'a> GetWorklogRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -770,36 +735,23 @@ impl<'a> UpdateWorklogRequest<'a> {
         );
 
         if let Some(value) = &self.notify_users {
-            config.query.push((
-                "notifyUsers".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.adjust_estimate {
-            config.query.push((
-                "adjustEstimate".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.new_estimate {
-            config
-                .query
-                .push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.override_editable_flag {
-            config.query.push((
-                "overrideEditableFlag".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("overrideEditableFlag".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -908,36 +860,23 @@ impl<'a> DeleteWorklogRequest<'a> {
         );
 
         if let Some(value) = &self.notify_users {
-            config.query.push((
-                "notifyUsers".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.adjust_estimate {
-            config.query.push((
-                "adjustEstimate".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.new_estimate {
-            config
-                .query
-                .push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.increase_by {
-            config
-                .query
-                .push(("increaseBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("increaseBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.override_editable_flag {
-            config.query.push((
-                "overrideEditableFlag".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("overrideEditableFlag".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -985,9 +924,7 @@ impl<'a> GetIdsOfWorklogsDeletedSinceRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/worklog/deleted".to_owned());
 
         if let Some(value) = &self.since {
-            config
-                .query
-                .push(("since".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("since".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1020,11 +957,7 @@ pub struct GetWorklogsForIdsRequest<'a> {
 
 impl<'a> GetWorklogsForIdsRequest<'a> {
     fn new(client: &'a crate::core::Client, worklog_ids_request: WorklogIdsRequest) -> Self {
-        Self {
-            client,
-            worklog_ids_request,
-            expand: None,
-        }
+        Self { client, worklog_ids_request, expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
@@ -1041,9 +974,7 @@ impl<'a> GetWorklogsForIdsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/worklog/list".to_owned());
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         let body = match serde_json::to_value(&self.worklog_ids_request)? {
@@ -1085,11 +1016,7 @@ pub struct GetIdsOfWorklogsModifiedSinceRequest<'a> {
 
 impl<'a> GetIdsOfWorklogsModifiedSinceRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            since: None,
-            expand: None,
-        }
+        Self { client, since: None, expand: None }
     }
 
     /// The date and time, as a UNIX timestamp in milliseconds, after which updated worklogs are returned.
@@ -1114,15 +1041,11 @@ impl<'a> GetIdsOfWorklogsModifiedSinceRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/worklog/updated".to_owned());
 
         if let Some(value) = &self.since {
-            config
-                .query
-                .push(("since".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("since".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)

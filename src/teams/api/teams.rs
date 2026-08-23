@@ -85,13 +85,7 @@ pub struct QueryTeamsRequest<'a> {
 
 impl<'a> QueryTeamsRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            site_id: None,
-            size: None,
-            cursor: None,
-        }
+        Self { client, org_id: org_id.into(), site_id: None, size: None, cursor: None }
     }
 
     /// [Optional] The ID of the site to retrieve teams which are site scoped. Please note that if the org is site-scoped, teams will not be included in response if siteId is not provided. [Deprecated] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
@@ -126,21 +120,15 @@ impl<'a> QueryTeamsRequest<'a> {
         );
 
         if let Some(value) = &self.site_id {
-            config
-                .query
-                .push(("siteId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("siteId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.size {
-            config
-                .query
-                .push(("size".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("size".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.cursor {
-            config
-                .query
-                .push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -170,11 +158,7 @@ impl<'a> CreateTeamRequest<'a> {
         org_id: impl Into<String>,
         team_creation_payload: TeamCreationPayload,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            team_creation_payload,
-        }
+        Self { client, org_id: org_id.into(), team_creation_payload }
     }
 
     /// The request as the transport will send it.
@@ -217,11 +201,7 @@ impl<'a> ArchiveTeamsRequest<'a> {
         org_id: impl Into<String>,
         bulk_operation_request: BulkOperationRequest,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            bulk_operation_request,
-        }
+        Self { client, org_id: org_id.into(), bulk_operation_request }
     }
 
     /// The request as the transport will send it.
@@ -264,11 +244,7 @@ impl<'a> UnarchiveTeamsRequest<'a> {
         org_id: impl Into<String>,
         bulk_operation_request: BulkOperationRequest,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            bulk_operation_request,
-        }
+        Self { client, org_id: org_id.into(), bulk_operation_request }
     }
 
     /// The request as the transport will send it.
@@ -308,12 +284,7 @@ pub struct GetTeamRequest<'a> {
 
 impl<'a> GetTeamRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, team_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            team_id: team_id.into(),
-            site_id: None,
-        }
+        Self { client, org_id: org_id.into(), team_id: team_id.into(), site_id: None }
     }
 
     /// [Optional] The ID of the site to retrieve teams which are site scoped. Please note that if the org is site-scoped, teams will not be included in response if siteId is not provided. [Deprecated] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
@@ -328,16 +299,11 @@ impl<'a> GetTeamRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/gateway/api/public/teams/v1/org/{}/teams/{}",
-                self.org_id, self.team_id
-            ),
+            format!("/gateway/api/public/teams/v1/org/{}/teams/{}", self.org_id, self.team_id),
         );
 
         if let Some(value) = &self.site_id {
-            config
-                .query
-                .push(("siteId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("siteId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -362,21 +328,14 @@ pub struct DeleteTeamRequest<'a> {
 
 impl<'a> DeleteTeamRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, team_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            team_id: team_id.into(),
-        }
+        Self { client, org_id: org_id.into(), team_id: team_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/gateway/api/public/teams/v1/org/{}/teams/{}",
-                self.org_id, self.team_id
-            ),
+            format!("/gateway/api/public/teams/v1/org/{}/teams/{}", self.org_id, self.team_id),
         );
 
         Ok(config)
@@ -408,22 +367,14 @@ impl<'a> UpdateTeamRequest<'a> {
         team_id: impl Into<String>,
         team_update_payload: TeamUpdatePayload,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            team_id: team_id.into(),
-            team_update_payload,
-        }
+        Self { client, org_id: org_id.into(), team_id: team_id.into(), team_update_payload }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PATCH,
-            format!(
-                "/gateway/api/public/teams/v1/org/{}/teams/{}",
-                self.org_id, self.team_id
-            ),
+            format!("/gateway/api/public/teams/v1/org/{}/teams/{}", self.org_id, self.team_id),
         );
 
         let body = match serde_json::to_value(&self.team_update_payload)? {
@@ -455,21 +406,14 @@ pub struct RestoreTeamRequest<'a> {
 
 impl<'a> RestoreTeamRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, team_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            team_id: team_id.into(),
-        }
+        Self { client, org_id: org_id.into(), team_id: team_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/gateway/api/public/teams/v1/org/{}/teams/{}/restore",
-                self.org_id, self.team_id
-            ),
+            format!("/gateway/api/public/teams/v1/org/{}/teams/{}/restore", self.org_id, self.team_id),
         );
 
         Ok(config)
@@ -499,11 +443,7 @@ impl<'a> UploadAndSetTeamCoverPhotoRequest<'a> {
         team_id: impl Into<String>,
         file: impl IntoIterator<Item = crate::core::Attachment>,
     ) -> Self {
-        Self {
-            client,
-            team_id: team_id.into(),
-            file: file.into_iter().collect(),
-        }
+        Self { client, team_id: team_id.into(), file: file.into_iter().collect() }
     }
 
     /// The request as the transport will send it.
@@ -513,10 +453,7 @@ impl<'a> UploadAndSetTeamCoverPhotoRequest<'a> {
             format!("/gateway/api/public/teams/v1/{}/cover-photo", self.team_id),
         );
 
-        config.body = Some(crate::core::Body::Multipart(crate::core::MultipartBody::new(
-            "file",
-            self.file.clone(),
-        )));
+        config.body = Some(crate::core::Body::Multipart(crate::core::MultipartBody::new("file", self.file.clone())));
 
         Ok(config)
     }

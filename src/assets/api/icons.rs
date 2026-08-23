@@ -66,11 +66,7 @@ pub struct GetIconImageRequest<'a> {
 
 impl<'a> GetIconImageRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            size: None,
-        }
+        Self { client, id: id.into(), size: None }
     }
 
     #[must_use]
@@ -86,9 +82,7 @@ impl<'a> GetIconImageRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, format!("/icon/{}/icon.png", self.id));
 
         if let Some(value) = &self.size {
-            config
-                .query
-                .push(("size".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("size".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         config.headers.push(("Accept".to_owned(), "image/png".to_owned()));

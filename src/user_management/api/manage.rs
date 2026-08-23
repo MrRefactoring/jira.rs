@@ -40,11 +40,7 @@ pub struct GetManagementPermissionsRequest<'a> {
 
 impl<'a> GetManagementPermissionsRequest<'a> {
     fn new(client: &'a crate::core::Client, account_id: AccountId) -> Self {
-        Self {
-            client,
-            account_id,
-            privileges: None,
-        }
+        Self { client, account_id, privileges: None }
     }
 
     #[must_use]
@@ -63,10 +59,7 @@ impl<'a> GetManagementPermissionsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, format!("/users/{}/manage", self.account_id));
 
         if let Some(value) = &self.privileges {
-            config.query.push((
-                "privileges".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("privileges".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)

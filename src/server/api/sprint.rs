@@ -292,11 +292,7 @@ pub struct PartiallyUpdateSprintRequest<'a> {
 
 impl<'a> PartiallyUpdateSprintRequest<'a> {
     fn new(client: &'a crate::core::Client, sprint_id: i64, sprint: Sprint) -> Self {
-        Self {
-            client,
-            sprint_id,
-            sprint,
-        }
+        Self { client, sprint_id, sprint }
     }
 
     /// The request as the transport will send it.
@@ -347,11 +343,7 @@ pub struct UpdateSprintRequest<'a> {
 
 impl<'a> UpdateSprintRequest<'a> {
     fn new(client: &'a crate::core::Client, sprint_id: i64, sprint: Sprint) -> Self {
-        Self {
-            client,
-            sprint_id,
-            sprint,
-        }
+        Self { client, sprint_id, sprint }
     }
 
     /// The request as the transport will send it.
@@ -496,41 +488,27 @@ impl<'a> GetIssuesForSprintRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.jql {
-            config
-                .query
-                .push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.validate_query {
-            config.query.push((
-                "validateQuery".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("validateQuery".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.fields {
-            config
-                .query
-                .push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -556,11 +534,7 @@ pub struct MoveIssuesToSprintRequest<'a> {
 
 impl<'a> MoveIssuesToSprintRequest<'a> {
     fn new(client: &'a crate::core::Client, sprint_id: i64, issue_assign_request: IssueAssignRequest) -> Self {
-        Self {
-            client,
-            sprint_id,
-            issue_assign_request,
-        }
+        Self { client, sprint_id, issue_assign_request }
     }
 
     /// The request as the transport will send it.
@@ -632,21 +606,14 @@ pub struct GetSprintPropertyRequest<'a> {
 
 impl<'a> GetSprintPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, property_key: impl Into<String>, sprint_id: i64) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            sprint_id,
-        }
+        Self { client, property_key: property_key.into(), sprint_id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/agile/1.0/sprint/{}/properties/{}",
-                self.sprint_id, self.property_key
-            ),
+            format!("/rest/agile/1.0/sprint/{}/properties/{}", self.sprint_id, self.property_key),
         );
 
         Ok(config)
@@ -678,22 +645,14 @@ impl<'a> SetSprintPropertyRequest<'a> {
         sprint_id: i64,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            sprint_id,
-            body,
-        }
+        Self { client, property_key: property_key.into(), sprint_id, body }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/agile/1.0/sprint/{}/properties/{}",
-                self.sprint_id, self.property_key
-            ),
+            format!("/rest/agile/1.0/sprint/{}/properties/{}", self.sprint_id, self.property_key),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -721,21 +680,14 @@ pub struct DeleteSprintPropertyRequest<'a> {
 
 impl<'a> DeleteSprintPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, property_key: impl Into<String>, sprint_id: i64) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            sprint_id,
-        }
+        Self { client, property_key: property_key.into(), sprint_id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/agile/1.0/sprint/{}/properties/{}",
-                self.sprint_id, self.property_key
-            ),
+            format!("/rest/agile/1.0/sprint/{}/properties/{}", self.sprint_id, self.property_key),
         );
 
         Ok(config)
@@ -761,11 +713,7 @@ pub struct SwapSprintRequest<'a> {
 
 impl<'a> SwapSprintRequest<'a> {
     fn new(client: &'a crate::core::Client, sprint_id: i64, sprint_swap: SprintSwap) -> Self {
-        Self {
-            client,
-            sprint_id,
-            sprint_swap,
-        }
+        Self { client, sprint_id, sprint_swap }
     }
 
     /// The request as the transport will send it.

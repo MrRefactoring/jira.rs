@@ -230,12 +230,7 @@ pub struct GetAllDashboardsRequest<'a> {
 
 impl<'a> GetAllDashboardsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            filter: None,
-            start_at: None,
-            max_results: None,
-        }
+        Self { client, filter: None, start_at: None, max_results: None }
     }
 
     /// The filter applied to the list of dashboards. Valid values are:
@@ -270,22 +265,15 @@ impl<'a> GetAllDashboardsRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/dashboard".to_owned());
 
         if let Some(value) = &self.filter {
-            config
-                .query
-                .push(("filter".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("filter".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -446,66 +434,43 @@ impl<'a> GetDashboardsPaginatedRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/dashboard/search".to_owned());
 
         if let Some(value) = &self.dashboard_name {
-            config.query.push((
-                "dashboardName".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("dashboardName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.groupname {
-            config
-                .query
-                .push(("groupname".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("groupname".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.group_id {
-            config
-                .query
-                .push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_id {
-            config.query.push((
-                "projectId".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.order_by {
-            config
-                .query
-                .push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.status {
-            config
-                .query
-                .push(("status".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("status".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -535,21 +500,14 @@ pub struct GetDashboardItemPropertyKeysRequest<'a> {
 
 impl<'a> GetDashboardItemPropertyKeysRequest<'a> {
     fn new(client: &'a crate::core::Client, dashboard_id: impl Into<String>, item_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            dashboard_id: dashboard_id.into(),
-            item_id: item_id.into(),
-        }
+        Self { client, dashboard_id: dashboard_id.into(), item_id: item_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/3/dashboard/{}/items/{}/properties",
-                self.dashboard_id, self.item_id
-            ),
+            format!("/rest/api/3/dashboard/{}/items/{}/properties", self.dashboard_id, self.item_id),
         );
 
         Ok(config)
@@ -591,12 +549,7 @@ impl<'a> GetDashboardItemPropertyRequest<'a> {
         item_id: impl Into<String>,
         property_key: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            dashboard_id: dashboard_id.into(),
-            item_id: item_id.into(),
-            property_key: property_key.into(),
-        }
+        Self { client, dashboard_id: dashboard_id.into(), item_id: item_id.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -706,12 +659,7 @@ impl<'a> DeleteDashboardItemPropertyRequest<'a> {
         item_id: impl Into<String>,
         property_key: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            dashboard_id: dashboard_id.into(),
-            item_id: item_id.into(),
-            property_key: property_key.into(),
-        }
+        Self { client, dashboard_id: dashboard_id.into(), item_id: item_id.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.

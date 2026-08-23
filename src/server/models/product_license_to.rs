@@ -36,11 +36,7 @@ pub struct ProductLicenseTOLocale {
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ProductLicenseTO {
-    #[serde(
-        rename = "isUnlimitedNumberOfUsers",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "isUnlimitedNumberOfUsers", default, skip_serializing_if = "Option::is_none")]
     pub is_unlimited_number_of_users: Option<bool>,
     #[serde(rename = "licenseKey", default, skip_serializing_if = "Option::is_none")]
     pub license_key: Option<String>,

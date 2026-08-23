@@ -50,11 +50,7 @@ impl<'a> CreateObjectTypeAttributeRequest<'a> {
         object_type_id: impl Into<String>,
         object_type_attribute_create: ObjectTypeAttributeCreate,
     ) -> Self {
-        Self {
-            client,
-            object_type_id: object_type_id.into(),
-            object_type_attribute_create,
-        }
+        Self { client, object_type_id: object_type_id.into(), object_type_attribute_create }
     }
 
     /// The request as the transport will send it.
@@ -100,12 +96,7 @@ impl<'a> UpdateObjectTypeAttributeRequest<'a> {
         object_type_id: impl Into<String>,
         object_type_attribute_update: ObjectTypeAttributeUpdate,
     ) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            object_type_id: object_type_id.into(),
-            object_type_attribute_update,
-        }
+        Self { client, id: id.into(), object_type_id: object_type_id.into(), object_type_attribute_update }
     }
 
     /// The request as the transport will send it.

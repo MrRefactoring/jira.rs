@@ -67,10 +67,7 @@ pub struct GetStatusCategoryRequest<'a> {
 
 impl<'a> GetStatusCategoryRequest<'a> {
     fn new(client: &'a crate::core::Client, id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            id_or_key: id_or_key.into(),
-        }
+        Self { client, id_or_key: id_or_key.into() }
     }
 
     /// The request as the transport will send it.

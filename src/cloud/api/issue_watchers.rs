@@ -128,10 +128,7 @@ pub struct GetIssueWatchersRequest<'a> {
 
 impl<'a> GetIssueWatchersRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -172,11 +169,7 @@ pub struct AddWatcherRequest<'a> {
 
 impl<'a> AddWatcherRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, body: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            body: body.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), body: body.into() }
     }
 
     /// The request as the transport will send it.
@@ -219,11 +212,7 @@ pub struct RemoveWatcherRequest<'a> {
 
 impl<'a> RemoveWatcherRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            account_id: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), account_id: None }
     }
 
     /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*. Required.
@@ -242,9 +231,7 @@ impl<'a> RemoveWatcherRequest<'a> {
         );
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

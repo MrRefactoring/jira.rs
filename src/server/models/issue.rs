@@ -33,10 +33,6 @@ pub struct Issue {
     pub transition_beans: Option<Vec<Transition>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub transitions: Option<Vec<Transition>>,
-    #[serde(
-        rename = "versionedRepresentations",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "versionedRepresentations", default, skip_serializing_if = "Option::is_none")]
     pub versioned_representations: Option<std::collections::HashMap<String, serde_json::Value>>,
 }

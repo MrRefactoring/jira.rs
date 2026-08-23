@@ -53,10 +53,7 @@ pub struct GetQueueSettingsOnProjectRequest<'a> {
 
 impl<'a> GetQueueSettingsOnProjectRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_key: project_key.into(),
-        }
+        Self { client, project_key: project_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -130,11 +127,7 @@ pub struct SetShouldQueuesIncludeCountOnProjectRequest<'a> {
 
 impl<'a> SetShouldQueuesIncludeCountOnProjectRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_key: project_key.into(),
-            body: None,
-        }
+        Self { client, project_key: project_key.into(), body: None }
     }
 
     #[must_use]
@@ -217,11 +210,7 @@ pub struct SetShouldQueuesUseCountCacheOnProjectRequest<'a> {
 
 impl<'a> SetShouldQueuesUseCountCacheOnProjectRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_key: project_key.into(),
-            body: None,
-        }
+        Self { client, project_key: project_key.into(), body: None }
     }
 
     #[must_use]

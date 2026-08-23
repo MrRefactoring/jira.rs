@@ -85,10 +85,8 @@ explicit `host` instead.",
         .send()
         .await?;
 
-    if let Some(context) = response
-        .data
-        .and_then(|data| data.tenant_contexts)
-        .and_then(|contexts| contexts.into_iter().next())
+    if let Some(context) =
+        response.data.and_then(|data| data.tenant_contexts).and_then(|contexts| contexts.into_iter().next())
     {
         return Ok(context);
     }
@@ -96,13 +94,8 @@ explicit `host` instead.",
     // The gateway answers 200 and reports the failure in the body, so the transport has already let this through as a
     // success. The real status rides in `extensions`.
     if let Some(failure) = response.errors.and_then(|errors| errors.into_iter().next()) {
-        let message = failure
-            .message
-            .unwrap_or_else(|| "the GraphQL gateway reported an error".to_owned());
-        let status = failure
-            .extensions
-            .and_then(|extensions| extensions.status_code)
-            .unwrap_or(502);
+        let message = failure.message.unwrap_or_else(|| "the GraphQL gateway reported an error".to_owned());
+        let status = failure.extensions.and_then(|extensions| extensions.status_code).unwrap_or(502);
 
         return Err(create_api_error(
             format!("Could not resolve the tenant context: {message}"),

@@ -104,12 +104,7 @@ impl<'a> AddActorUsersRequest<'a> {
         id: i64,
         actors_map: ActorsMap,
     ) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            id,
-            actors_map,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), id, actors_map }
     }
 
     /// The request as the transport will send it.
@@ -159,12 +154,7 @@ impl<'a> SetActorsRequest<'a> {
         id: i64,
         body: ProjectRoleActorsUpdate,
     ) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            id,
-            body,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), id, body }
     }
 
     /// The request as the transport will send it.
@@ -208,14 +198,7 @@ pub struct DeleteActorRequest<'a> {
 
 impl<'a> DeleteActorRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>, id: i64) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            id,
-            user: None,
-            group: None,
-            group_id: None,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), id, user: None, group: None, group_id: None }
     }
 
     /// The user account ID of the user to remove from the project role.
@@ -250,21 +233,15 @@ impl<'a> DeleteActorRequest<'a> {
         );
 
         if let Some(value) = &self.user {
-            config
-                .query
-                .push(("user".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("user".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.group {
-            config
-                .query
-                .push(("group".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("group".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.group_id {
-            config
-                .query
-                .push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -326,19 +303,13 @@ pub struct AddProjectRoleActorsToRoleRequest<'a> {
 
 impl<'a> AddProjectRoleActorsToRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, actor_input: ActorInput) -> Self {
-        Self {
-            client,
-            id,
-            actor_input,
-        }
+        Self { client, id, actor_input }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            format!("/rest/api/3/role/{}/actors", self.id),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, format!("/rest/api/3/role/{}/actors", self.id));
 
         let body = match serde_json::to_value(&self.actor_input)? {
             serde_json::Value::Object(object) => object,
@@ -376,13 +347,7 @@ pub struct DeleteProjectRoleActorsFromRoleRequest<'a> {
 
 impl<'a> DeleteProjectRoleActorsFromRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self {
-            client,
-            id,
-            user: None,
-            group_id: None,
-            group: None,
-        }
+        Self { client, id, user: None, group_id: None, group: None }
     }
 
     /// The user account ID of the user to remove as a default actor.
@@ -417,21 +382,15 @@ impl<'a> DeleteProjectRoleActorsFromRoleRequest<'a> {
         );
 
         if let Some(value) = &self.user {
-            config
-                .query
-                .push(("user".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("user".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.group_id {
-            config
-                .query
-                .push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.group {
-            config
-                .query
-                .push(("group".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("group".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

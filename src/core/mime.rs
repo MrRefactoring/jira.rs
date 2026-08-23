@@ -21,20 +21,11 @@ const MIME_TYPES: &[(&str, &str)] = &[
     ("heic", "image/heic"),
     ("pdf", "application/pdf"),
     ("doc", "application/msword"),
-    (
-        "docx",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ),
+    ("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
     ("xls", "application/vnd.ms-excel"),
-    (
-        "xlsx",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    ),
+    ("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
     ("ppt", "application/vnd.ms-powerpoint"),
-    (
-        "pptx",
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    ),
+    ("pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
     ("odt", "application/vnd.oasis.opendocument.text"),
     ("ods", "application/vnd.oasis.opendocument.spreadsheet"),
     ("rtf", "application/rtf"),
@@ -86,8 +77,5 @@ pub fn mime_type_for(filename: &str) -> &'static str {
 
     let extension = filename[dot + 1..].to_lowercase();
 
-    MIME_TYPES
-        .iter()
-        .find(|(name, _)| *name == extension)
-        .map_or(DEFAULT_MIME_TYPE, |(_, mime)| *mime)
+    MIME_TYPES.iter().find(|(name, _)| *name == extension).map_or(DEFAULT_MIME_TYPE, |(_, mime)| *mime)
 }

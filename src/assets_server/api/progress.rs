@@ -35,21 +35,14 @@ pub struct GetProgressForCategoryAndResourceIdRequest<'a> {
 
 impl<'a> GetProgressForCategoryAndResourceIdRequest<'a> {
     fn new(client: &'a crate::core::Client, resourceid: impl Into<String>, category: impl Into<String>) -> Self {
-        Self {
-            client,
-            resourceid: resourceid.into(),
-            category: category.into(),
-        }
+        Self { client, resourceid: resourceid.into(), category: category.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/assets/1.0/progress/category/{}/{}",
-                self.category, self.resourceid
-            ),
+            format!("/rest/assets/1.0/progress/category/{}/{}", self.category, self.resourceid),
         );
 
         Ok(config)

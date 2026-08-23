@@ -48,10 +48,7 @@ pub struct GetTaskRequest<'a> {
 
 impl<'a> GetTaskRequest<'a> {
     fn new(client: &'a crate::core::Client, task_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            task_id: task_id.into(),
-        }
+        Self { client, task_id: task_id.into() }
     }
 
     /// The request as the transport will send it.

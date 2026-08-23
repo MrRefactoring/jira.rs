@@ -31,10 +31,7 @@ pub struct GetServiceDeskByIdRequest<'a> {
 
 impl<'a> GetServiceDeskByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-        }
+        Self { client, service_desk_id: service_desk_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -68,12 +65,7 @@ pub struct GetServiceDesksRequest<'a> {
 
 impl<'a> GetServiceDesksRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            include_archived: None,
-            start: None,
-            limit: None,
-        }
+        Self { client, include_archived: None, start: None, limit: None }
     }
 
     /// The option to include archived service project. False by default.
@@ -106,22 +98,15 @@ impl<'a> GetServiceDesksRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/servicedeskapi/servicedesk".to_owned());
 
         if let Some(value) = &self.include_archived {
-            config.query.push((
-                "includeArchived".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("includeArchived".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

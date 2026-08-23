@@ -15,21 +15,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let email = std::env::var("JIRA_EMAIL")?;
     let api_token = std::env::var("JIRA_API_TOKEN")?;
 
-    let client = Client::builder()
-        .host(host)
-        .auth(Auth::api_token(email, api_token))
-        .build()?;
+    let client = Client::builder().host(host).auth(Auth::api_token(email, api_token)).build()?;
 
     let myself: serde_json::Value = client.get("/rest/api/3/myself").send().await?;
 
     println!("{} <{}>", myself["displayName"], myself["emailAddress"]);
 
-    let projects: serde_json::Value = client
-        .get("/rest/api/3/project/search")
-        .query("maxResults", 5)
-        .query("orderBy", "name")
-        .send()
-        .await?;
+    let projects: serde_json::Value =
+        client.get("/rest/api/3/project/search").query("maxResults", 5).query("orderBy", "name").send().await?;
 
     for project in projects["values"].as_array().into_iter().flatten() {
         println!("{} — {}", project["key"], project["name"]);

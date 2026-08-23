@@ -64,12 +64,7 @@ pub struct GetNotificationSchemesRequest<'a> {
 
 impl<'a> GetNotificationSchemesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            expand: None,
-            max_results: None,
-            start_at: None,
-        }
+        Self { client, expand: None, max_results: None, start_at: None }
     }
 
     /// Optional information to be expanded in the response: group, user, projectRole or field.
@@ -102,22 +97,15 @@ impl<'a> GetNotificationSchemesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/notificationscheme".to_owned());
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -166,11 +154,7 @@ pub struct GetNotificationSchemeRequest<'a> {
 
 impl<'a> GetNotificationSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self {
-            client,
-            id,
-            expand: None,
-        }
+        Self { client, id, expand: None }
     }
 
     /// Optional information to be expanded in the response: group, user, projectRole or field.
@@ -189,9 +173,7 @@ impl<'a> GetNotificationSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

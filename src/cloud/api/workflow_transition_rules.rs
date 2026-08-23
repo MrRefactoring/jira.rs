@@ -207,51 +207,33 @@ impl<'a> GetWorkflowTransitionRuleConfigurationsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/workflow/rule/config".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
-        config.query.push((
-            "types".to_owned(),
-            crate::core::QueryValue::from_serializable(&self.types)?,
-        ));
+        config.query.push(("types".to_owned(), crate::core::QueryValue::from_serializable(&self.types)?));
 
         if let Some(value) = &self.keys {
-            config
-                .query
-                .push(("keys".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("keys".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.workflow_names {
-            config
-                .query
-                .push(("workflowNames".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("workflowNames".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.with_tags {
-            config
-                .query
-                .push(("withTags".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("withTags".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.draft {
-            config
-                .query
-                .push(("draft".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("draft".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -293,10 +275,7 @@ pub struct UpdateWorkflowTransitionRuleConfigurationsRequest<'a> {
 
 impl<'a> UpdateWorkflowTransitionRuleConfigurationsRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_transition_rules_update: WorkflowTransitionRulesUpdate) -> Self {
-        Self {
-            client,
-            workflow_transition_rules_update,
-        }
+        Self { client, workflow_transition_rules_update }
     }
 
     /// The request as the transport will send it.
@@ -346,10 +325,7 @@ impl<'a> DeleteWorkflowTransitionRuleConfigurationsRequest<'a> {
         client: &'a crate::core::Client,
         workflows_with_transition_rules_details: WorkflowsWithTransitionRulesDetails,
     ) -> Self {
-        Self {
-            client,
-            workflows_with_transition_rules_details,
-        }
+        Self { client, workflows_with_transition_rules_details }
     }
 
     /// The request as the transport will send it.

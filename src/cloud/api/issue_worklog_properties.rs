@@ -105,21 +105,14 @@ pub struct GetWorklogPropertyKeysRequest<'a> {
 
 impl<'a> GetWorklogPropertyKeysRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, worklog_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            worklog_id: worklog_id.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), worklog_id: worklog_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/3/issue/{}/worklog/{}/properties",
-                self.issue_id_or_key, self.worklog_id
-            ),
+            format!("/rest/api/3/issue/{}/worklog/{}/properties", self.issue_id_or_key, self.worklog_id),
         );
 
         Ok(config)

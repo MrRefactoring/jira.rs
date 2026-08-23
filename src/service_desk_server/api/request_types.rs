@@ -109,11 +109,7 @@ impl<'a> GetRequestTypeFieldsRequest<'a> {
         service_desk_id: impl Into<String>,
         request_type_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            request_type_id: request_type_id.into(),
-        }
+        Self { client, service_desk_id: service_desk_id.into(), request_type_id: request_type_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -150,12 +146,7 @@ pub struct GetRequestTypeGroupsRequest<'a> {
 
 impl<'a> GetRequestTypeGroupsRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            start: None,
-            limit: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0.
@@ -178,22 +169,15 @@ impl<'a> GetRequestTypeGroupsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/servicedesk/{}/requesttypegroup",
-                self.service_desk_id
-            ),
+            format!("/rest/servicedeskapi/servicedesk/{}/requesttypegroup", self.service_desk_id),
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -272,28 +256,19 @@ impl<'a> GetRequestTypesRequest<'a> {
         );
 
         if let Some(value) = &self.group_id {
-            config
-                .query
-                .push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.restriction_status {
-            config.query.push((
-                "restrictionStatus".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("restrictionStatus".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -335,11 +310,7 @@ pub struct CreateRequestTypeRequest<'a> {
 
 impl<'a> CreateRequestTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            request_type_create: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), request_type_create: None }
     }
 
     #[must_use]
@@ -392,11 +363,7 @@ pub struct UpdateRequestTypeRequest<'a> {
 
 impl<'a> UpdateRequestTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            request_type_update: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), request_type_update: None }
     }
 
     #[must_use]
@@ -468,17 +435,11 @@ impl<'a> GetRequestTypeByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/servicedesk/{}/requesttype/{}",
-                self.service_desk_id, self.request_type_id
-            ),
+            format!("/rest/servicedeskapi/servicedesk/{}/requesttype/{}", self.service_desk_id, self.request_type_id),
         );
 
         if let Some(value) = &self.restriction_status {
-            config.query.push((
-                "restrictionStatus".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("restrictionStatus".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -514,21 +475,14 @@ impl<'a> DeleteRequestTypeRequest<'a> {
         service_desk_id: impl Into<String>,
         request_type_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            request_type_id: request_type_id.into(),
-        }
+        Self { client, service_desk_id: service_desk_id.into(), request_type_id: request_type_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/servicedeskapi/servicedesk/{}/requesttype/{}",
-                self.service_desk_id, self.request_type_id
-            ),
+            format!("/rest/servicedeskapi/servicedesk/{}/requesttype/{}", self.service_desk_id, self.request_type_id),
         );
 
         Ok(config)

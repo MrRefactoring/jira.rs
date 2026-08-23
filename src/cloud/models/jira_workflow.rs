@@ -18,11 +18,7 @@ pub struct JiraWorkflow {
     /// Indicates if the workflow can be edited.
     #[serde(rename = "isEditable", default, skip_serializing_if = "Option::is_none")]
     pub is_editable: Option<bool>,
-    #[serde(
-        rename = "loopedTransitionContainerLayout",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "loopedTransitionContainerLayout", default, skip_serializing_if = "Option::is_none")]
     pub looped_transition_container_layout: Option<WorkflowLayout>,
     /// The name of the workflow.
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -70,11 +70,7 @@ pub struct GetAllScreenTabsRequest<'a> {
 
 impl<'a> GetAllScreenTabsRequest<'a> {
     fn new(client: &'a crate::core::Client, screen_id: i64) -> Self {
-        Self {
-            client,
-            screen_id,
-            project_key: None,
-        }
+        Self { client, screen_id, project_key: None }
     }
 
     /// The key of the project.
@@ -93,9 +89,7 @@ impl<'a> GetAllScreenTabsRequest<'a> {
         );
 
         if let Some(value) = &self.project_key {
-            config
-                .query
-                .push(("projectKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -123,11 +117,7 @@ pub struct AddScreenTabRequest<'a> {
 
 impl<'a> AddScreenTabRequest<'a> {
     fn new(client: &'a crate::core::Client, screen_id: i64, screenable_tab: ScreenableTab) -> Self {
-        Self {
-            client,
-            screen_id,
-            screenable_tab,
-        }
+        Self { client, screen_id, screenable_tab }
     }
 
     /// The request as the transport will send it.
@@ -170,12 +160,7 @@ pub struct RenameScreenTabRequest<'a> {
 
 impl<'a> RenameScreenTabRequest<'a> {
     fn new(client: &'a crate::core::Client, screen_id: i64, tab_id: i64, screenable_tab: ScreenableTab) -> Self {
-        Self {
-            client,
-            screen_id,
-            tab_id,
-            screenable_tab,
-        }
+        Self { client, screen_id, tab_id, screenable_tab }
     }
 
     /// The request as the transport will send it.
@@ -217,11 +202,7 @@ pub struct DeleteScreenTabRequest<'a> {
 
 impl<'a> DeleteScreenTabRequest<'a> {
     fn new(client: &'a crate::core::Client, screen_id: i64, tab_id: i64) -> Self {
-        Self {
-            client,
-            screen_id,
-            tab_id,
-        }
+        Self { client, screen_id, tab_id }
     }
 
     /// The request as the transport will send it.
@@ -257,22 +238,14 @@ pub struct MoveScreenTabRequest<'a> {
 
 impl<'a> MoveScreenTabRequest<'a> {
     fn new(client: &'a crate::core::Client, screen_id: i64, tab_id: i64, pos: i64) -> Self {
-        Self {
-            client,
-            screen_id,
-            tab_id,
-            pos,
-        }
+        Self { client, screen_id, tab_id, pos }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/rest/api/3/screens/{}/tabs/{}/move/{}",
-                self.screen_id, self.tab_id, self.pos
-            ),
+            format!("/rest/api/3/screens/{}/tabs/{}/move/{}", self.screen_id, self.tab_id, self.pos),
         );
 
         Ok(config)

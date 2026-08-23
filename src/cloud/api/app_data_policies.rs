@@ -86,9 +86,7 @@ impl<'a> GetPoliciesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/data-policy/project".to_owned());
 
         if let Some(value) = &self.ids {
-            config
-                .query
-                .push(("ids".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("ids".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)

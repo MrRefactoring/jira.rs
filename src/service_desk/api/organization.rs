@@ -179,12 +179,7 @@ pub struct GetOrganizationsRequest<'a> {
 
 impl<'a> GetOrganizationsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start: None,
-            limit: None,
-            account_id: None,
-        }
+        Self { client, start: None, limit: None, account_id: None }
     }
 
     /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
@@ -217,21 +212,15 @@ impl<'a> GetOrganizationsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/servicedeskapi/organization".to_owned());
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -258,18 +247,13 @@ pub struct CreateOrganizationRequest<'a> {
 
 impl<'a> CreateOrganizationRequest<'a> {
     fn new(client: &'a crate::core::Client, organization_create: OrganizationCreate) -> Self {
-        Self {
-            client,
-            organization_create,
-        }
+        Self { client, organization_create }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            "/rest/servicedeskapi/organization".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/servicedeskapi/organization".to_owned());
 
         let body = match serde_json::to_value(&self.organization_create)? {
             serde_json::Value::Object(object) => object,
@@ -306,10 +290,7 @@ pub struct GetOrganizationRequest<'a> {
 
 impl<'a> GetOrganizationRequest<'a> {
     fn new(client: &'a crate::core::Client, organization_id: i64) -> Self {
-        Self {
-            client,
-            organization_id,
-        }
+        Self { client, organization_id }
     }
 
     /// The request as the transport will send it.
@@ -343,10 +324,7 @@ pub struct DeleteOrganizationRequest<'a> {
 
 impl<'a> DeleteOrganizationRequest<'a> {
     fn new(client: &'a crate::core::Client, organization_id: i64) -> Self {
-        Self {
-            client,
-            organization_id,
-        }
+        Self { client, organization_id }
     }
 
     /// The request as the transport will send it.
@@ -384,10 +362,7 @@ pub struct GetPropertiesKeysRequest<'a> {
 
 impl<'a> GetPropertiesKeysRequest<'a> {
     fn new(client: &'a crate::core::Client, organization_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            organization_id: organization_id.into(),
-        }
+        Self { client, organization_id: organization_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -430,21 +405,14 @@ impl<'a> GetPropertyRequest<'a> {
         organization_id: impl Into<String>,
         property_key: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            organization_id: organization_id.into(),
-            property_key: property_key.into(),
-        }
+        Self { client, organization_id: organization_id.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/organization/{}/property/{}",
-                self.organization_id, self.property_key
-            ),
+            format!("/rest/servicedeskapi/organization/{}/property/{}", self.organization_id, self.property_key),
         );
 
         Ok(config)
@@ -482,22 +450,14 @@ impl<'a> SetPropertyRequest<'a> {
         property_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self {
-            client,
-            organization_id: organization_id.into(),
-            property_key: property_key.into(),
-            body,
-        }
+        Self { client, organization_id: organization_id.into(), property_key: property_key.into(), body }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/servicedeskapi/organization/{}/property/{}",
-                self.organization_id, self.property_key
-            ),
+            format!("/rest/servicedeskapi/organization/{}/property/{}", self.organization_id, self.property_key),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -535,21 +495,14 @@ impl<'a> DeletePropertyRequest<'a> {
         organization_id: impl Into<String>,
         property_key: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            organization_id: organization_id.into(),
-            property_key: property_key.into(),
-        }
+        Self { client, organization_id: organization_id.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/servicedeskapi/organization/{}/property/{}",
-                self.organization_id, self.property_key
-            ),
+            format!("/rest/servicedeskapi/organization/{}/property/{}", self.organization_id, self.property_key),
         );
 
         Ok(config)
@@ -578,12 +531,7 @@ pub struct GetUsersInOrganizationRequest<'a> {
 
 impl<'a> GetUsersInOrganizationRequest<'a> {
     fn new(client: &'a crate::core::Client, organization_id: i64) -> Self {
-        Self {
-            client,
-            organization_id,
-            start: None,
-            limit: None,
-        }
+        Self { client, organization_id, start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
@@ -610,15 +558,11 @@ impl<'a> GetUsersInOrganizationRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -646,11 +590,7 @@ pub struct AddUsersToOrganizationRequest<'a> {
 
 impl<'a> AddUsersToOrganizationRequest<'a> {
     fn new(client: &'a crate::core::Client, organization_id: i64, body: UsersOrganizationUpdate) -> Self {
-        Self {
-            client,
-            organization_id,
-            body,
-        }
+        Self { client, organization_id, body }
     }
 
     /// The request as the transport will send it.
@@ -687,11 +627,7 @@ pub struct RemoveUsersFromOrganizationRequest<'a> {
 
 impl<'a> RemoveUsersFromOrganizationRequest<'a> {
     fn new(client: &'a crate::core::Client, organization_id: i64, body: UsersOrganizationUpdate) -> Self {
-        Self {
-            client,
-            organization_id,
-            body,
-        }
+        Self { client, organization_id, body }
     }
 
     /// The request as the transport will send it.
@@ -730,13 +666,7 @@ pub struct GetServiceDeskOrganizationsRequest<'a> {
 
 impl<'a> GetServiceDeskOrganizationsRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            start: None,
-            limit: None,
-            account_id: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), start: None, limit: None, account_id: None }
     }
 
     /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
@@ -771,21 +701,15 @@ impl<'a> GetServiceDeskOrganizationsRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -817,11 +741,7 @@ impl<'a> AddOrganizationRequest<'a> {
         service_desk_id: impl Into<String>,
         body: OrganizationServiceDeskUpdate,
     ) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            body,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), body }
     }
 
     /// The request as the transport will send it.
@@ -862,11 +782,7 @@ impl<'a> RemoveOrganizationRequest<'a> {
         service_desk_id: impl Into<String>,
         body: OrganizationServiceDeskUpdate,
     ) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            body,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), body }
     }
 
     /// The request as the transport will send it.

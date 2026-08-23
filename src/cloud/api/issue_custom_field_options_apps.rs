@@ -132,12 +132,7 @@ pub struct GetAllIssueFieldOptionsRequest<'a> {
 
 impl<'a> GetAllIssueFieldOptionsRequest<'a> {
     fn new(client: &'a crate::core::Client, field_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            field_key: field_key.into(),
-            start_at: None,
-            max_results: None,
-        }
+        Self { client, field_key: field_key.into(), start_at: None, max_results: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -164,16 +159,11 @@ impl<'a> GetAllIssueFieldOptionsRequest<'a> {
         );
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -209,11 +199,7 @@ impl<'a> CreateIssueFieldOptionRequest<'a> {
         field_key: impl Into<String>,
         issue_field_option_create: IssueFieldOptionCreate,
     ) -> Self {
-        Self {
-            client,
-            field_key: field_key.into(),
-            issue_field_option_create,
-        }
+        Self { client, field_key: field_key.into(), issue_field_option_create }
     }
 
     /// The request as the transport will send it.
@@ -259,13 +245,7 @@ pub struct GetSelectableIssueFieldOptionsRequest<'a> {
 
 impl<'a> GetSelectableIssueFieldOptionsRequest<'a> {
     fn new(client: &'a crate::core::Client, field_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            field_key: field_key.into(),
-            start_at: None,
-            max_results: None,
-            project_id: None,
-        }
+        Self { client, field_key: field_key.into(), start_at: None, max_results: None, project_id: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -300,23 +280,15 @@ impl<'a> GetSelectableIssueFieldOptionsRequest<'a> {
         );
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.project_id {
-            config.query.push((
-                "projectId".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -348,13 +320,7 @@ pub struct GetVisibleIssueFieldOptionsRequest<'a> {
 
 impl<'a> GetVisibleIssueFieldOptionsRequest<'a> {
     fn new(client: &'a crate::core::Client, field_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            field_key: field_key.into(),
-            start_at: None,
-            max_results: None,
-            project_id: None,
-        }
+        Self { client, field_key: field_key.into(), start_at: None, max_results: None, project_id: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -389,23 +355,15 @@ impl<'a> GetVisibleIssueFieldOptionsRequest<'a> {
         );
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.project_id {
-            config.query.push((
-                "projectId".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -435,11 +393,7 @@ pub struct GetIssueFieldOptionRequest<'a> {
 
 impl<'a> GetIssueFieldOptionRequest<'a> {
     fn new(client: &'a crate::core::Client, field_key: impl Into<String>, option_id: i64) -> Self {
-        Self {
-            client,
-            field_key: field_key.into(),
-            option_id,
-        }
+        Self { client, field_key: field_key.into(), option_id }
     }
 
     /// The request as the transport will send it.
@@ -482,12 +436,7 @@ impl<'a> UpdateIssueFieldOptionRequest<'a> {
         option_id: i64,
         issue_field_option: IssueFieldOption,
     ) -> Self {
-        Self {
-            client,
-            field_key: field_key.into(),
-            option_id,
-            issue_field_option,
-        }
+        Self { client, field_key: field_key.into(), option_id, issue_field_option }
     }
 
     /// The request as the transport will send it.
@@ -531,11 +480,7 @@ pub struct DeleteIssueFieldOptionRequest<'a> {
 
 impl<'a> DeleteIssueFieldOptionRequest<'a> {
     fn new(client: &'a crate::core::Client, field_key: impl Into<String>, option_id: i64) -> Self {
-        Self {
-            client,
-            field_key: field_key.into(),
-            option_id,
-        }
+        Self { client, field_key: field_key.into(), option_id }
     }
 
     /// The request as the transport will send it.
@@ -631,30 +576,21 @@ impl<'a> ReplaceIssueFieldOptionRequest<'a> {
         );
 
         if let Some(value) = &self.replace_with {
-            config.query.push((
-                "replaceWith".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("replaceWith".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.jql {
-            config
-                .query
-                .push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.override_screen_security {
-            config.query.push((
-                "overrideScreenSecurity".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config
+                .query
+                .push(("overrideScreenSecurity".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.override_editable_flag {
-            config.query.push((
-                "overrideEditableFlag".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("overrideEditableFlag".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

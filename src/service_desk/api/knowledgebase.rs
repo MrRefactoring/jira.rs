@@ -39,15 +39,7 @@ pub struct GetArticlesRequest<'a> {
 
 impl<'a> GetArticlesRequest<'a> {
     fn new(client: &'a crate::core::Client, query: impl Into<String>, highlight: bool) -> Self {
-        Self {
-            client,
-            query: query.into(),
-            highlight,
-            start: None,
-            limit: None,
-            cursor: None,
-            prev: None,
-        }
+        Self { client, query: query.into(), highlight, start: None, limit: None, cursor: None, prev: None }
     }
 
     /// (Deprecated) The starting index of the returned objects. Base index: 0.
@@ -89,37 +81,24 @@ impl<'a> GetArticlesRequest<'a> {
             "/rest/servicedeskapi/knowledgebase/article".to_owned(),
         );
 
-        config
-            .query
-            .push(("query".to_owned(), crate::core::QueryValue::Scalar(self.query.clone())));
+        config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(self.query.clone())));
 
-        config.query.push((
-            "highlight".to_owned(),
-            crate::core::QueryValue::Scalar(self.highlight.to_string()),
-        ));
+        config.query.push(("highlight".to_owned(), crate::core::QueryValue::Scalar(self.highlight.to_string())));
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.cursor {
-            config
-                .query
-                .push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.prev {
-            config
-                .query
-                .push(("prev".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("prev".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

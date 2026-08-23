@@ -151,10 +151,7 @@ pub struct CreateIssueTypeRequest<'a> {
 
 impl<'a> CreateIssueTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_type_create: IssueTypeCreate) -> Self {
-        Self {
-            client,
-            issue_type_create,
-        }
+        Self { client, issue_type_create }
     }
 
     /// The request as the transport will send it.
@@ -194,14 +191,7 @@ pub struct GetPaginatedIssueTypesRequest<'a> {
 
 impl<'a> GetPaginatedIssueTypesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            x_requested_with: None,
-            max_results: None,
-            query: None,
-            project_ids: None,
-            start_at: None,
-        }
+        Self { client, x_requested_with: None, max_results: None, query: None, project_ids: None, start_at: None }
     }
 
     #[must_use]
@@ -249,29 +239,19 @@ impl<'a> GetPaginatedIssueTypesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/issuetype/page".to_owned());
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_ids {
-            config.query.push((
-                "projectIds".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("projectIds".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.x_requested_with {
@@ -331,11 +311,7 @@ pub struct UpdateIssueTypeRequest<'a> {
 
 impl<'a> UpdateIssueTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, issue_type_update: IssueTypeUpdate) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            issue_type_update,
-        }
+        Self { client, id: id.into(), issue_type_update }
     }
 
     /// The request as the transport will send it.
@@ -373,11 +349,7 @@ pub struct DeleteIssueTypeRequest<'a> {
 
 impl<'a> DeleteIssueTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            alternative_issue_type_id: None,
-        }
+        Self { client, id: id.into(), alternative_issue_type_id: None }
     }
 
     /// The id of an issue type to which issues associated with the removed issue type will be migrated.
@@ -390,16 +362,11 @@ impl<'a> DeleteIssueTypeRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!("/rest/api/2/issuetype/{}", self.id),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/rest/api/2/issuetype/{}", self.id));
 
         if let Some(value) = &self.alternative_issue_type_id {
-            config.query.push((
-                "alternativeIssueTypeId".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("alternativeIssueTypeId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -457,11 +424,7 @@ pub struct CreateIssueTypeAvatarFromTemporaryRequest<'a> {
 
 impl<'a> CreateIssueTypeAvatarFromTemporaryRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, avatar_cropping: AvatarCropping) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            avatar_cropping,
-        }
+        Self { client, id: id.into(), avatar_cropping }
     }
 
     /// The request as the transport will send it.
@@ -514,11 +477,7 @@ impl<'a> StoreTemporaryIssueTypeAvatarUsingMultiPartRequest<'a> {
         id: impl Into<String>,
         avatar: impl IntoIterator<Item = crate::core::Attachment>,
     ) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            avatar: avatar.into_iter().collect(),
-        }
+        Self { client, id: id.into(), avatar: avatar.into_iter().collect() }
     }
 
     /// The request as the transport will send it.
@@ -528,14 +487,10 @@ impl<'a> StoreTemporaryIssueTypeAvatarUsingMultiPartRequest<'a> {
             format!("/rest/api/2/issuetype/{}/avatar/temporary", self.id),
         );
 
-        config
-            .headers
-            .push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
+        config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
 
-        config.body = Some(crate::core::Body::Multipart(crate::core::MultipartBody::new(
-            "avatar",
-            self.avatar.clone(),
-        )));
+        config.body =
+            Some(crate::core::Body::Multipart(crate::core::MultipartBody::new("avatar", self.avatar.clone())));
 
         Ok(config)
     }
@@ -559,10 +514,7 @@ pub struct GetIssueTypePropertyKeysRequest<'a> {
 
 impl<'a> GetIssueTypePropertyKeysRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_type_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_type_id: issue_type_id.into(),
-        }
+        Self { client, issue_type_id: issue_type_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -595,21 +547,14 @@ pub struct GetIssueTypePropertyRequest<'a> {
 
 impl<'a> GetIssueTypePropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, property_key: impl Into<String>, issue_type_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            issue_type_id: issue_type_id.into(),
-        }
+        Self { client, property_key: property_key.into(), issue_type_id: issue_type_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/2/issuetype/{}/properties/{}",
-                self.issue_type_id, self.property_key
-            ),
+            format!("/rest/api/2/issuetype/{}/properties/{}", self.issue_type_id, self.property_key),
         );
 
         Ok(config)
@@ -641,22 +586,14 @@ impl<'a> SetIssueTypePropertyRequest<'a> {
         issue_type_id: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            issue_type_id: issue_type_id.into(),
-            body,
-        }
+        Self { client, property_key: property_key.into(), issue_type_id: issue_type_id.into(), body }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/api/2/issuetype/{}/properties/{}",
-                self.issue_type_id, self.property_key
-            ),
+            format!("/rest/api/2/issuetype/{}/properties/{}", self.issue_type_id, self.property_key),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -684,21 +621,14 @@ pub struct DeleteIssueTypePropertyRequest<'a> {
 
 impl<'a> DeleteIssueTypePropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, property_key: impl Into<String>, issue_type_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            issue_type_id: issue_type_id.into(),
-        }
+        Self { client, property_key: property_key.into(), issue_type_id: issue_type_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/api/2/issuetype/{}/properties/{}",
-                self.issue_type_id, self.property_key
-            ),
+            format!("/rest/api/2/issuetype/{}/properties/{}", self.issue_type_id, self.property_key),
         );
 
         Ok(config)

@@ -391,40 +391,27 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
         );
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.order_by {
-            config
-                .query
-                .push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.status {
-            config
-                .query
-                .push(("status".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("status".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -454,11 +441,7 @@ pub struct GetProjectVersionsRequest<'a> {
 
 impl<'a> GetProjectVersionsRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            expand: None,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information in the response. This parameter accepts `operations`, which returns actions that can be performed on the version.
@@ -477,9 +460,7 @@ impl<'a> GetProjectVersionsRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -549,11 +530,7 @@ pub struct GetVersionRequest<'a> {
 
 impl<'a> GetVersionRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            expand: None,
-        }
+        Self { client, id: id.into(), expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information about version in the response. This parameter accepts a comma-separated list. Expand options include:
@@ -575,9 +552,7 @@ impl<'a> GetVersionRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/3/version/{}", self.id));
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -607,11 +582,7 @@ pub struct UpdateVersionRequest<'a> {
 
 impl<'a> UpdateVersionRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, body: Version) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            body,
-        }
+        Self { client, id: id.into(), body }
     }
 
     /// The request as the transport will send it.
@@ -650,11 +621,7 @@ pub struct MergeVersionsRequest<'a> {
 
 impl<'a> MergeVersionsRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, move_issues_to: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            move_issues_to: move_issues_to.into(),
-        }
+        Self { client, id: id.into(), move_issues_to: move_issues_to.into() }
     }
 
     /// The request as the transport will send it.
@@ -691,19 +658,13 @@ pub struct MoveVersionRequest<'a> {
 
 impl<'a> MoveVersionRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, version_move: VersionMove) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            version_move,
-        }
+        Self { client, id: id.into(), version_move }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            format!("/rest/api/3/version/{}/move", self.id),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, format!("/rest/api/3/version/{}/move", self.id));
 
         let body = match serde_json::to_value(&self.version_move)? {
             serde_json::Value::Object(object) => object,
@@ -815,11 +776,7 @@ pub struct CreateRelatedWorkRequest<'a> {
 
 impl<'a> CreateRelatedWorkRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, version_related_work: VersionRelatedWork) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            version_related_work,
-        }
+        Self { client, id: id.into(), version_related_work }
     }
 
     /// The request as the transport will send it.
@@ -863,11 +820,7 @@ pub struct UpdateRelatedWorkRequest<'a> {
 
 impl<'a> UpdateRelatedWorkRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, version_related_work: VersionRelatedWork) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            version_related_work,
-        }
+        Self { client, id: id.into(), version_related_work }
     }
 
     /// The request as the transport will send it.
@@ -917,11 +870,7 @@ impl<'a> DeleteAndReplaceVersionRequest<'a> {
         id: impl Into<String>,
         delete_and_replace_version: DeleteAndReplaceVersion,
     ) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            delete_and_replace_version,
-        }
+        Self { client, id: id.into(), delete_and_replace_version }
     }
 
     /// The request as the transport will send it.
@@ -1001,21 +950,14 @@ pub struct DeleteRelatedWorkRequest<'a> {
 
 impl<'a> DeleteRelatedWorkRequest<'a> {
     fn new(client: &'a crate::core::Client, version_id: impl Into<String>, related_work_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            version_id: version_id.into(),
-            related_work_id: related_work_id.into(),
-        }
+        Self { client, version_id: version_id.into(), related_work_id: related_work_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/api/3/version/{}/relatedwork/{}",
-                self.version_id, self.related_work_id
-            ),
+            format!("/rest/api/3/version/{}/relatedwork/{}", self.version_id, self.related_work_id),
         );
 
         Ok(config)

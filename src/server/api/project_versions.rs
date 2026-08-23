@@ -139,13 +139,7 @@ pub struct GetPaginatedVersionsRequest<'a> {
 
 impl<'a> GetPaginatedVersionsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            max_results: None,
-            query: None,
-            project_ids: None,
-            start_at: None,
-        }
+        Self { client, max_results: None, query: None, project_ids: None, start_at: None }
     }
 
     /// maximum number of versions to return
@@ -185,29 +179,19 @@ impl<'a> GetPaginatedVersionsRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/version".to_owned());
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_ids {
-            config.query.push((
-                "projectIds".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("projectIds".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -268,10 +252,7 @@ pub struct GetRemoteVersionLinksRequest<'a> {
 
 impl<'a> GetRemoteVersionLinksRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            global_id: None,
-        }
+        Self { client, global_id: None }
     }
 
     /// The id of the remote issue link to be returned.
@@ -288,9 +269,7 @@ impl<'a> GetRemoteVersionLinksRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/version/remotelink".to_owned());
 
         if let Some(value) = &self.global_id {
-            config
-                .query
-                .push(("globalId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("globalId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -316,11 +295,7 @@ pub struct GetVersionRequest<'a> {
 
 impl<'a> GetVersionRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            expand: None,
-        }
+        Self { client, id: id.into(), expand: None }
     }
 
     #[must_use]
@@ -336,9 +311,7 @@ impl<'a> GetVersionRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/2/version/{}", self.id));
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -364,11 +337,7 @@ pub struct UpdateVersionRequest<'a> {
 
 impl<'a> UpdateVersionRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, body: Version) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            body,
-        }
+        Self { client, id: id.into(), body }
     }
 
     /// The request as the transport will send it.
@@ -401,11 +370,7 @@ pub struct MergeRequest<'a> {
 
 impl<'a> MergeRequest<'a> {
     fn new(client: &'a crate::core::Client, move_issues_to: impl Into<String>, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            move_issues_to: move_issues_to.into(),
-            id: id.into(),
-        }
+        Self { client, move_issues_to: move_issues_to.into(), id: id.into() }
     }
 
     /// The request as the transport will send it.
@@ -441,19 +406,13 @@ pub struct MoveVersionRequest<'a> {
 
 impl<'a> MoveVersionRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, version_move: VersionMove) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            version_move,
-        }
+        Self { client, id: id.into(), version_move }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            format!("/rest/api/2/version/{}/move", self.id),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, format!("/rest/api/2/version/{}/move", self.id));
 
         let body = match serde_json::to_value(&self.version_move)? {
             serde_json::Value::Object(object) => object,
@@ -521,11 +480,7 @@ impl<'a> DeleteVersionAndSwapRequest<'a> {
         id: impl Into<String>,
         delete_and_replace_version: DeleteAndReplaceVersion,
     ) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            delete_and_replace_version,
-        }
+        Self { client, id: id.into(), delete_and_replace_version }
     }
 
     /// The request as the transport will send it.
@@ -596,10 +551,7 @@ pub struct GetRemoteVersionLinksByVersionIdRequest<'a> {
 
 impl<'a> GetRemoteVersionLinksByVersionIdRequest<'a> {
     fn new(client: &'a crate::core::Client, version_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            version_id: version_id.into(),
-        }
+        Self { client, version_id: version_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -636,11 +588,7 @@ impl<'a> CreateOrUpdateRemoteVersionLinkRequest<'a> {
         version_id: impl Into<String>,
         remote_entity_link_json: RemoteEntityLinkJson,
     ) -> Self {
-        Self {
-            client,
-            version_id: version_id.into(),
-            remote_entity_link_json,
-        }
+        Self { client, version_id: version_id.into(), remote_entity_link_json }
     }
 
     /// The request as the transport will send it.
@@ -679,10 +627,7 @@ pub struct DeleteRemoteVersionLinksByVersionIdRequest<'a> {
 
 impl<'a> DeleteRemoteVersionLinksByVersionIdRequest<'a> {
     fn new(client: &'a crate::core::Client, version_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            version_id: version_id.into(),
-        }
+        Self { client, version_id: version_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -715,11 +660,7 @@ pub struct GetRemoteVersionLinkRequest<'a> {
 
 impl<'a> GetRemoteVersionLinkRequest<'a> {
     fn new(client: &'a crate::core::Client, version_id: impl Into<String>, global_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            version_id: version_id.into(),
-            global_id: global_id.into(),
-        }
+        Self { client, version_id: version_id.into(), global_id: global_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -758,12 +699,7 @@ impl<'a> CreateOrUpdateRemoteVersionLinkByGlobalIdRequest<'a> {
         global_id: impl Into<String>,
         remote_entity_link_json: RemoteEntityLinkJson,
     ) -> Self {
-        Self {
-            client,
-            version_id: version_id.into(),
-            global_id: global_id.into(),
-            remote_entity_link_json,
-        }
+        Self { client, version_id: version_id.into(), global_id: global_id.into(), remote_entity_link_json }
     }
 
     /// The request as the transport will send it.
@@ -803,11 +739,7 @@ pub struct DeleteRemoteVersionLinkRequest<'a> {
 
 impl<'a> DeleteRemoteVersionLinkRequest<'a> {
     fn new(client: &'a crate::core::Client, version_id: impl Into<String>, global_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            version_id: version_id.into(),
-            global_id: global_id.into(),
-        }
+        Self { client, version_id: version_id.into(), global_id: global_id.into() }
     }
 
     /// The request as the transport will send it.

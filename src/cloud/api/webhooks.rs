@@ -62,11 +62,7 @@ pub struct GetDynamicWebhooksForAppRequest<'a> {
 
 impl<'a> GetDynamicWebhooksForAppRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start_at: None,
-            max_results: None,
-        }
+        Self { client, start_at: None, max_results: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -90,16 +86,11 @@ impl<'a> GetDynamicWebhooksForAppRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/webhook".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -128,10 +119,7 @@ pub struct RegisterDynamicWebhooksRequest<'a> {
 
 impl<'a> RegisterDynamicWebhooksRequest<'a> {
     fn new(client: &'a crate::core::Client, webhook_registration_details: WebhookRegistrationDetails) -> Self {
-        Self {
-            client,
-            webhook_registration_details,
-        }
+        Self { client, webhook_registration_details }
     }
 
     /// The request as the transport will send it.
@@ -169,10 +157,7 @@ pub struct DeleteWebhookByIdRequest<'a> {
 
 impl<'a> DeleteWebhookByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, container_for_webhook_i_ds: ContainerForWebhookIDs) -> Self {
-        Self {
-            client,
-            container_for_webhook_i_ds,
-        }
+        Self { client, container_for_webhook_i_ds }
     }
 
     /// The request as the transport will send it.
@@ -212,10 +197,7 @@ pub struct RefreshWebhooksRequest<'a> {
 
 impl<'a> RefreshWebhooksRequest<'a> {
     fn new(client: &'a crate::core::Client, container_for_webhook_i_ds: ContainerForWebhookIDs) -> Self {
-        Self {
-            client,
-            container_for_webhook_i_ds,
-        }
+        Self { client, container_for_webhook_i_ds }
     }
 
     /// The request as the transport will send it.

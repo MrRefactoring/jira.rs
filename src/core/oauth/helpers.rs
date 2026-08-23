@@ -230,10 +230,7 @@ was not initiated by this session — discard it.",
     let code = code.filter(|code| !code.is_empty()).ok_or_else(|| {
         Error::oauth(
             "The callback URL carries neither an authorization code nor an error.",
-            OAuthErrorDetails {
-                error: Some("invalid_request".to_owned()),
-                ..OAuthErrorDetails::default()
-            },
+            OAuthErrorDetails { error: Some("invalid_request".to_owned()), ..OAuthErrorDetails::default() },
         )
     })?;
 
@@ -317,10 +314,7 @@ pub(crate) async fn post_form(
 }
 
 fn oauth_transport_error(url: &str, error: &reqwest::Error) -> Error {
-    Error::oauth(
-        format!("Request to {url} failed before a response arrived: {error}"),
-        OAuthErrorDetails::default(),
-    )
+    Error::oauth(format!("Request to {url} failed before a response arrived: {error}"), OAuthErrorDetails::default())
 }
 
 /// The transport does not fail on a non-2xx status, so the status is checked here and turned into an OAuth error.
@@ -331,16 +325,9 @@ async fn read_json<T: serde::de::DeserializeOwned>(url: &str, response: reqwest:
 
     if !status.is_success() {
         let error = body.get("error").and_then(Value::as_str).map(ToOwned::to_owned);
-        let error_description = body
-            .get("error_description")
-            .and_then(Value::as_str)
-            .map(ToOwned::to_owned);
+        let error_description = body.get("error_description").and_then(Value::as_str).map(ToOwned::to_owned);
         let reauthorization_required = matches!(error.as_deref(), Some("invalid_grant" | "unauthorized_client"));
-        let suffix = if text.is_empty() {
-            String::new()
-        } else {
-            format!(": {text}")
-        };
+        let suffix = if text.is_empty() { String::new() } else { format!(": {text}") };
 
         return Err(Error::oauth(
             format!(
@@ -361,10 +348,7 @@ async fn read_json<T: serde::de::DeserializeOwned>(url: &str, response: reqwest:
     serde_json::from_value(body).map_err(|error| {
         Error::oauth(
             format!("The answer from {url} was not the shape an OAuth 2.0 response has: {error}"),
-            OAuthErrorDetails {
-                status: Some(status.as_u16()),
-                ..OAuthErrorDetails::default()
-            },
+            OAuthErrorDetails { status: Some(status.as_u16()), ..OAuthErrorDetails::default() },
         )
     })
 }

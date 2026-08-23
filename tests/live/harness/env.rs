@@ -38,10 +38,7 @@ fn load_dotenv() {
 fn first_set(names: &[&str]) -> Option<String> {
     load_dotenv();
 
-    names
-        .iter()
-        .filter_map(|name| std::env::var(name).ok())
-        .find(|value| !value.trim().is_empty())
+    names.iter().filter_map(|name| std::env::var(name).ok()).find(|value| !value.trim().is_empty())
 }
 
 /// Whether the credentials the Cloud suites need are present.

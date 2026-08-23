@@ -337,11 +337,7 @@ pub struct UpdateDraftDefaultWorkflowRequest<'a> {
 
 impl<'a> UpdateDraftDefaultWorkflowRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, default_workflow: DefaultWorkflow) -> Self {
-        Self {
-            client,
-            id,
-            default_workflow,
-        }
+        Self { client, id, default_workflow }
     }
 
     /// The request as the transport will send it.
@@ -417,21 +413,14 @@ pub struct GetWorkflowSchemeDraftIssueTypeRequest<'a> {
 
 impl<'a> GetWorkflowSchemeDraftIssueTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, issue_type: impl Into<String>) -> Self {
-        Self {
-            client,
-            id,
-            issue_type: issue_type.into(),
-        }
+        Self { client, id, issue_type: issue_type.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/3/workflowscheme/{}/draft/issuetype/{}",
-                self.id, self.issue_type
-            ),
+            format!("/rest/api/3/workflowscheme/{}/draft/issuetype/{}", self.id, self.issue_type),
         );
 
         Ok(config)
@@ -465,22 +454,14 @@ impl<'a> SetWorkflowSchemeDraftIssueTypeRequest<'a> {
         issue_type: impl Into<String>,
         body: IssueTypeWorkflowMapping,
     ) -> Self {
-        Self {
-            client,
-            id,
-            issue_type: issue_type.into(),
-            body,
-        }
+        Self { client, id, issue_type: issue_type.into(), body }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/api/3/workflowscheme/{}/draft/issuetype/{}",
-                self.id, self.issue_type
-            ),
+            format!("/rest/api/3/workflowscheme/{}/draft/issuetype/{}", self.id, self.issue_type),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -510,21 +491,14 @@ pub struct DeleteWorkflowSchemeDraftIssueTypeRequest<'a> {
 
 impl<'a> DeleteWorkflowSchemeDraftIssueTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, issue_type: impl Into<String>) -> Self {
-        Self {
-            client,
-            id,
-            issue_type: issue_type.into(),
-        }
+        Self { client, id, issue_type: issue_type.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/api/3/workflowscheme/{}/draft/issuetype/{}",
-                self.id, self.issue_type
-            ),
+            format!("/rest/api/3/workflowscheme/{}/draft/issuetype/{}", self.id, self.issue_type),
         );
 
         Ok(config)
@@ -561,12 +535,7 @@ impl<'a> PublishDraftWorkflowSchemeRequest<'a> {
         id: i64,
         publish_draft_workflow_scheme: PublishDraftWorkflowScheme,
     ) -> Self {
-        Self {
-            client,
-            id,
-            publish_draft_workflow_scheme,
-            validate_only: None,
-        }
+        Self { client, id, publish_draft_workflow_scheme, validate_only: None }
     }
 
     /// Whether the request only performs a validation.
@@ -585,10 +554,7 @@ impl<'a> PublishDraftWorkflowSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.validate_only {
-            config.query.push((
-                "validateOnly".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("validateOnly".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.publish_draft_workflow_scheme)? {
@@ -623,11 +589,7 @@ pub struct GetDraftWorkflowRequest<'a> {
 
 impl<'a> GetDraftWorkflowRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self {
-            client,
-            id,
-            workflow_name: None,
-        }
+        Self { client, id, workflow_name: None }
     }
 
     /// The name of a workflow in the scheme. Limits the results to the workflow-issue type mapping for the specified workflow.
@@ -646,10 +608,7 @@ impl<'a> GetDraftWorkflowRequest<'a> {
         );
 
         if let Some(value) = &self.workflow_name {
-            config.query.push((
-                "workflowName".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("workflowName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -683,12 +642,7 @@ impl<'a> UpdateDraftWorkflowMappingRequest<'a> {
         workflow_name: impl Into<String>,
         issue_types_workflow_mapping: IssueTypesWorkflowMapping,
     ) -> Self {
-        Self {
-            client,
-            id,
-            workflow_name: workflow_name.into(),
-            issue_types_workflow_mapping,
-        }
+        Self { client, id, workflow_name: workflow_name.into(), issue_types_workflow_mapping }
     }
 
     /// The request as the transport will send it.
@@ -698,10 +652,7 @@ impl<'a> UpdateDraftWorkflowMappingRequest<'a> {
             format!("/rest/api/3/workflowscheme/{}/draft/workflow", self.id),
         );
 
-        config.query.push((
-            "workflowName".to_owned(),
-            crate::core::QueryValue::Scalar(self.workflow_name.clone()),
-        ));
+        config.query.push(("workflowName".to_owned(), crate::core::QueryValue::Scalar(self.workflow_name.clone())));
 
         let body = match serde_json::to_value(&self.issue_types_workflow_mapping)? {
             serde_json::Value::Object(object) => object,
@@ -735,11 +686,7 @@ pub struct DeleteDraftWorkflowMappingRequest<'a> {
 
 impl<'a> DeleteDraftWorkflowMappingRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, workflow_name: impl Into<String>) -> Self {
-        Self {
-            client,
-            id,
-            workflow_name: workflow_name.into(),
-        }
+        Self { client, id, workflow_name: workflow_name.into() }
     }
 
     /// The request as the transport will send it.
@@ -749,10 +696,7 @@ impl<'a> DeleteDraftWorkflowMappingRequest<'a> {
             format!("/rest/api/3/workflowscheme/{}/draft/workflow", self.id),
         );
 
-        config.query.push((
-            "workflowName".to_owned(),
-            crate::core::QueryValue::Scalar(self.workflow_name.clone()),
-        ));
+        config.query.push(("workflowName".to_owned(), crate::core::QueryValue::Scalar(self.workflow_name.clone())));
 
         Ok(config)
     }

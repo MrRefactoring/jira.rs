@@ -55,10 +55,7 @@ pub struct CreateGroupRequest<'a> {
 
 impl<'a> CreateGroupRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            add_group: None,
-        }
+        Self { client, add_group: None }
     }
 
     #[must_use]
@@ -102,11 +99,7 @@ pub struct RemoveGroupRequest<'a> {
 
 impl<'a> RemoveGroupRequest<'a> {
     fn new(client: &'a crate::core::Client, groupname: impl Into<String>) -> Self {
-        Self {
-            client,
-            groupname: groupname.into(),
-            swap_group: None,
-        }
+        Self { client, groupname: groupname.into(), swap_group: None }
     }
 
     /// A different group to transfer the restrictions to.
@@ -121,15 +114,10 @@ impl<'a> RemoveGroupRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::DELETE, "/rest/api/2/group".to_owned());
 
-        config.query.push((
-            "groupname".to_owned(),
-            crate::core::QueryValue::Scalar(self.groupname.clone()),
-        ));
+        config.query.push(("groupname".to_owned(), crate::core::QueryValue::Scalar(self.groupname.clone())));
 
         if let Some(value) = &self.swap_group {
-            config
-                .query
-                .push(("swapGroup".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("swapGroup".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -157,13 +145,7 @@ pub struct GetUsersFromGroupRequest<'a> {
 
 impl<'a> GetUsersFromGroupRequest<'a> {
     fn new(client: &'a crate::core::Client, groupname: impl Into<String>) -> Self {
-        Self {
-            client,
-            groupname: groupname.into(),
-            include_inactive_users: None,
-            max_results: None,
-            start_at: None,
-        }
+        Self { client, groupname: groupname.into(), include_inactive_users: None, max_results: None, start_at: None }
     }
 
     /// Include inactive users.
@@ -196,27 +178,17 @@ impl<'a> GetUsersFromGroupRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/group/member".to_owned());
 
         if let Some(value) = &self.include_inactive_users {
-            config.query.push((
-                "includeInactiveUsers".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("includeInactiveUsers".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config
-                .query
-                .push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
-        config.query.push((
-            "groupname".to_owned(),
-            crate::core::QueryValue::Scalar(self.groupname.clone()),
-        ));
+        config.query.push(("groupname".to_owned(), crate::core::QueryValue::Scalar(self.groupname.clone())));
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -242,11 +214,7 @@ pub struct AddUserToGroupRequest<'a> {
 
 impl<'a> AddUserToGroupRequest<'a> {
     fn new(client: &'a crate::core::Client, groupname: impl Into<String>) -> Self {
-        Self {
-            client,
-            groupname: groupname.into(),
-            update_user_to_group: None,
-        }
+        Self { client, groupname: groupname.into(), update_user_to_group: None }
     }
 
     #[must_use]
@@ -261,10 +229,7 @@ impl<'a> AddUserToGroupRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/group/user".to_owned());
 
-        config.query.push((
-            "groupname".to_owned(),
-            crate::core::QueryValue::Scalar(self.groupname.clone()),
-        ));
+        config.query.push(("groupname".to_owned(), crate::core::QueryValue::Scalar(self.groupname.clone())));
 
         let body = match serde_json::to_value(&self.update_user_to_group)? {
             serde_json::Value::Object(object) => object,
@@ -296,11 +261,7 @@ pub struct RemoveUserFromGroupRequest<'a> {
 
 impl<'a> RemoveUserFromGroupRequest<'a> {
     fn new(client: &'a crate::core::Client, groupname: impl Into<String>, username: impl Into<String>) -> Self {
-        Self {
-            client,
-            groupname: groupname.into(),
-            username: username.into(),
-        }
+        Self { client, groupname: groupname.into(), username: username.into() }
     }
 
     /// The request as the transport will send it.
@@ -308,15 +269,9 @@ impl<'a> RemoveUserFromGroupRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::DELETE, "/rest/api/2/group/user".to_owned());
 
-        config.query.push((
-            "groupname".to_owned(),
-            crate::core::QueryValue::Scalar(self.groupname.clone()),
-        ));
+        config.query.push(("groupname".to_owned(), crate::core::QueryValue::Scalar(self.groupname.clone())));
 
-        config.query.push((
-            "username".to_owned(),
-            crate::core::QueryValue::Scalar(self.username.clone()),
-        ));
+        config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(self.username.clone())));
 
         Ok(config)
     }
@@ -343,13 +298,7 @@ pub struct FindGroupsRequest<'a> {
 
 impl<'a> FindGroupsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            max_results: None,
-            query: None,
-            exclude: None,
-            user_name: None,
-        }
+        Self { client, max_results: None, query: None, exclude: None, user_name: None }
     }
 
     /// Maximum number of results to return
@@ -390,27 +339,19 @@ impl<'a> FindGroupsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/groups/picker".to_owned());
 
         if let Some(value) = &self.max_results {
-            config
-                .query
-                .push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.exclude {
-            config
-                .query
-                .push(("exclude".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("exclude".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.user_name {
-            config
-                .query
-                .push(("userName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("userName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

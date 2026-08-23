@@ -74,10 +74,7 @@ impl<'a> SetBannerRequest<'a> {
         client: &'a crate::core::Client,
         announcement_banner_configuration_update: AnnouncementBannerConfigurationUpdate,
     ) -> Self {
-        Self {
-            client,
-            announcement_banner_configuration_update,
-        }
+        Self { client, announcement_banner_configuration_update }
     }
 
     /// The request as the transport will send it.

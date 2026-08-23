@@ -26,10 +26,7 @@ pub struct GetAllWorkflowsRequest<'a> {
 
 impl<'a> GetAllWorkflowsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            workflow_name: None,
-        }
+        Self { client, workflow_name: None }
     }
 
     /// an optional String containing workflow name. If not passed then all workflows are returned
@@ -45,10 +42,7 @@ impl<'a> GetAllWorkflowsRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/workflow".to_owned());
 
         if let Some(value) = &self.workflow_name {
-            config.query.push((
-                "workflowName".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("workflowName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

@@ -75,12 +75,7 @@ pub struct ServerRefreshTokenParams {
 
 /// Build the URL to send the user to so they can grant access to a Data Center instance.
 pub fn generate_server_authorization_url(params: &ServerAuthorizationUrlParams) -> String {
-    let scopes = params
-        .scopes
-        .iter()
-        .map(|scope| scope.as_str())
-        .collect::<Vec<_>>()
-        .join(" ");
+    let scopes = params.scopes.iter().map(|scope| scope.as_str()).collect::<Vec<_>>().join(" ");
     let query = form_urlencoded::Serializer::new(String::new())
         .append_pair("client_id", &params.client_id)
         .append_pair("scope", &scopes)

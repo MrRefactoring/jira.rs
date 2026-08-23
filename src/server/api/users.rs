@@ -254,12 +254,7 @@ pub struct GetUserRequest<'a> {
 
 impl<'a> GetUserRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            include_deleted: None,
-            key: None,
-            username: None,
-        }
+        Self { client, include_deleted: None, key: None, username: None }
     }
 
     /// whether deleted users should be returned (flag available to users with global ADMIN rights)
@@ -291,22 +286,15 @@ impl<'a> GetUserRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/user".to_owned());
 
         if let Some(value) = &self.include_deleted {
-            config.query.push((
-                "includeDeleted".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("includeDeleted".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.key {
-            config
-                .query
-                .push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -369,12 +357,7 @@ pub struct UpdateUserRequest<'a> {
 
 impl<'a> UpdateUserRequest<'a> {
     fn new(client: &'a crate::core::Client, body: UserWrite) -> Self {
-        Self {
-            client,
-            body,
-            key: None,
-            username: None,
-        }
+        Self { client, body, key: None, username: None }
     }
 
     /// user key
@@ -398,15 +381,11 @@ impl<'a> UpdateUserRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::PUT, "/rest/api/2/user".to_owned());
 
         if let Some(value) = &self.key {
-            config
-                .query
-                .push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -434,11 +413,7 @@ pub struct RemoveUserRequest<'a> {
 
 impl<'a> RemoveUserRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            key: None,
-            username: None,
-        }
+        Self { client, key: None, username: None }
     }
 
     /// user key
@@ -462,15 +437,11 @@ impl<'a> RemoveUserRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::DELETE, "/rest/api/2/user".to_owned());
 
         if let Some(value) = &self.key {
-            config
-                .query
-                .push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -527,11 +498,7 @@ pub struct ValidateUserAnonymizationRequest<'a> {
 
 impl<'a> ValidateUserAnonymizationRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            expand: None,
-            user_key: None,
-        }
+        Self { client, expand: None, user_key: None }
     }
 
     /// Parameter used to include parts of the response.
@@ -556,15 +523,11 @@ impl<'a> ValidateUserAnonymizationRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/user/anonymization".to_owned());
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.user_key {
-            config
-                .query
-                .push(("userKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("userKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -589,10 +552,7 @@ pub struct ScheduleUserAnonymizationRequest<'a> {
 
 impl<'a> ScheduleUserAnonymizationRequest<'a> {
     fn new(client: &'a crate::core::Client, user_anonymization_request: UserAnonymizationRequest) -> Self {
-        Self {
-            client,
-            user_anonymization_request,
-        }
+        Self { client, user_anonymization_request }
     }
 
     /// The request as the transport will send it.
@@ -648,9 +608,7 @@ impl<'a> GetUserAnonymizationProgressRequest<'a> {
         );
 
         if let Some(value) = &self.task_id {
-            config
-                .query
-                .push(("taskId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("taskId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -678,13 +636,7 @@ pub struct ValidateUserAnonymizationRerunRequest<'a> {
 
 impl<'a> ValidateUserAnonymizationRerunRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            expand: None,
-            old_user_key: None,
-            old_user_name: None,
-            user_key: None,
-        }
+        Self { client, expand: None, old_user_key: None, old_user_name: None, user_key: None }
     }
 
     /// Parameter used to include parts of the response.
@@ -727,27 +679,19 @@ impl<'a> ValidateUserAnonymizationRerunRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.old_user_key {
-            config
-                .query
-                .push(("oldUserKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("oldUserKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.old_user_name {
-            config
-                .query
-                .push(("oldUserName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("oldUserName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.user_key {
-            config
-                .query
-                .push(("userKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("userKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -772,10 +716,7 @@ pub struct ScheduleUserAnonymizationRerunRequest<'a> {
 
 impl<'a> ScheduleUserAnonymizationRerunRequest<'a> {
     fn new(client: &'a crate::core::Client, user_anonymization_rerun_request: UserAnonymizationRerunRequest) -> Self {
-        Self {
-            client,
-            user_anonymization_rerun_request,
-        }
+        Self { client, user_anonymization_rerun_request }
     }
 
     /// The request as the transport will send it.
@@ -846,11 +787,7 @@ pub struct AddUserToApplicationRequest<'a> {
 
 impl<'a> AddUserToApplicationRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            application_key: None,
-            username: None,
-        }
+        Self { client, application_key: None, username: None }
     }
 
     /// application key
@@ -875,16 +812,11 @@ impl<'a> AddUserToApplicationRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/user/application".to_owned());
 
         if let Some(value) = &self.application_key {
-            config.query.push((
-                "applicationKey".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("applicationKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -910,11 +842,7 @@ pub struct RemoveUserFromApplicationRequest<'a> {
 
 impl<'a> RemoveUserFromApplicationRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            application_key: None,
-            username: None,
-        }
+        Self { client, application_key: None, username: None }
     }
 
     /// application key
@@ -939,16 +867,11 @@ impl<'a> RemoveUserFromApplicationRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::DELETE, "/rest/api/2/user/application".to_owned());
 
         if let Some(value) = &self.application_key {
-            config.query.push((
-                "applicationKey".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("applicationKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -975,12 +898,7 @@ pub struct FindBulkAssignableUsersRequest<'a> {
 
 impl<'a> FindBulkAssignableUsersRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            max_results: None,
-            project_keys: None,
-            username: None,
-        }
+        Self { client, max_results: None, project_keys: None, username: None }
     }
 
     /// The maximum number of users to return (defaults to 50). The maximum allowed value is 100 (The combination of maxResults and startAt is limited to the first 100 results). If you specify a value that is higher than this number, your search results will be truncated. If you send a request with startAt=98 and maxResults=20, it will only return 2 users.
@@ -1015,23 +933,15 @@ impl<'a> FindBulkAssignableUsersRequest<'a> {
         );
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.project_keys {
-            config.query.push((
-                "projectKeys".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("projectKeys".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1060,14 +970,7 @@ pub struct FindAssignableUsersRequest<'a> {
 
 impl<'a> FindAssignableUsersRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            issue_key: None,
-            max_results: None,
-            project: None,
-            action_descriptor_id: None,
-            username: None,
-        }
+        Self { client, issue_key: None, max_results: None, project: None, action_descriptor_id: None, username: None }
     }
 
     /// the issue key for the issue being edited we need to find assignable users for.
@@ -1110,41 +1013,27 @@ impl<'a> FindAssignableUsersRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            "/rest/api/2/user/assignable/search".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/user/assignable/search".to_owned());
 
         if let Some(value) = &self.issue_key {
-            config
-                .query
-                .push(("issueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("issueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.project {
-            config
-                .query
-                .push(("project".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("project".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.action_descriptor_id {
-            config.query.push((
-                "actionDescriptorId".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("actionDescriptorId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1170,11 +1059,7 @@ pub struct CreateUserAvatarFromTemporaryRequest<'a> {
 
 impl<'a> CreateUserAvatarFromTemporaryRequest<'a> {
     fn new(client: &'a crate::core::Client, avatar_cropping: AvatarCropping) -> Self {
-        Self {
-            client,
-            avatar_cropping,
-            username: None,
-        }
+        Self { client, avatar_cropping, username: None }
     }
 
     /// username
@@ -1191,9 +1076,7 @@ impl<'a> CreateUserAvatarFromTemporaryRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/user/avatar".to_owned());
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         let body = match serde_json::to_value(&self.avatar_cropping)? {
@@ -1226,11 +1109,7 @@ pub struct UpdateUserAvatarRequest<'a> {
 
 impl<'a> UpdateUserAvatarRequest<'a> {
     fn new(client: &'a crate::core::Client, avatar: Avatar) -> Self {
-        Self {
-            client,
-            avatar,
-            username: None,
-        }
+        Self { client, avatar, username: None }
     }
 
     /// username
@@ -1247,9 +1126,7 @@ impl<'a> UpdateUserAvatarRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::PUT, "/rest/api/2/user/avatar".to_owned());
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         let body = match serde_json::to_value(&self.avatar)? {
@@ -1287,11 +1164,7 @@ pub struct StoreTemporaryUserAvatarUsingMultiPartRequest<'a> {
 
 impl<'a> StoreTemporaryUserAvatarUsingMultiPartRequest<'a> {
     fn new(client: &'a crate::core::Client, avatar: impl IntoIterator<Item = crate::core::Attachment>) -> Self {
-        Self {
-            client,
-            avatar: avatar.into_iter().collect(),
-            username: None,
-        }
+        Self { client, avatar: avatar.into_iter().collect(), username: None }
     }
 
     /// username
@@ -1304,25 +1177,17 @@ impl<'a> StoreTemporaryUserAvatarUsingMultiPartRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            "/rest/api/2/user/avatar/temporary".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/user/avatar/temporary".to_owned());
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
-        config
-            .headers
-            .push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
+        config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
 
-        config.body = Some(crate::core::Body::Multipart(crate::core::MultipartBody::new(
-            "avatar",
-            self.avatar.clone(),
-        )));
+        config.body =
+            Some(crate::core::Body::Multipart(crate::core::MultipartBody::new("avatar", self.avatar.clone())));
 
         Ok(config)
     }
@@ -1347,11 +1212,7 @@ pub struct DeleteUserAvatarRequest<'a> {
 
 impl<'a> DeleteUserAvatarRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self {
-            client,
-            id,
-            username: None,
-        }
+        Self { client, id, username: None }
     }
 
     /// username
@@ -1370,9 +1231,7 @@ impl<'a> DeleteUserAvatarRequest<'a> {
         );
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1414,9 +1273,7 @@ impl<'a> GetAllUserAvatarsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/user/avatars".to_owned());
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1458,9 +1315,7 @@ impl<'a> DefaultColumnsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/user/columns".to_owned());
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1486,11 +1341,7 @@ pub struct SetColumnsUrlEncodedRequest<'a> {
 
 impl<'a> SetColumnsUrlEncodedRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            username: None,
-            columns: None,
-        }
+        Self { client, username: None, columns: None }
     }
 
     #[must_use]
@@ -1565,9 +1416,7 @@ impl<'a> ResetUserColumnsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::DELETE, "/rest/api/2/user/columns".to_owned());
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1616,9 +1465,7 @@ impl<'a> GetDuplicatedUsersCountRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/user/duplicated/count".to_owned());
 
         if let Some(value) = &self.flush {
-            config
-                .query
-                .push(("flush".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("flush".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1666,9 +1513,7 @@ impl<'a> GetDuplicatedUsersMappingRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/user/duplicated/list".to_owned());
 
         if let Some(value) = &self.flush {
-            config
-                .query
-                .push(("flush".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("flush".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1704,11 +1549,7 @@ pub struct GetUserListRequest<'a> {
 
 impl<'a> GetUserListRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            cursor: None,
-            max_results: None,
-        }
+        Self { client, cursor: None, max_results: None }
     }
 
     /// The position in the stream to continue iterating over all users.
@@ -1732,16 +1573,11 @@ impl<'a> GetUserListRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/user/list".to_owned());
 
         if let Some(value) = &self.cursor {
-            config
-                .query
-                .push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1768,12 +1604,7 @@ pub struct ChangeUserPasswordRequest<'a> {
 
 impl<'a> ChangeUserPasswordRequest<'a> {
     fn new(client: &'a crate::core::Client, password: Password) -> Self {
-        Self {
-            client,
-            password,
-            key: None,
-            username: None,
-        }
+        Self { client, password, key: None, username: None }
     }
 
     /// user key
@@ -1798,15 +1629,11 @@ impl<'a> ChangeUserPasswordRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::PUT, "/rest/api/2/user/password".to_owned());
 
         if let Some(value) = &self.key {
-            config
-                .query
-                .push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         let body = match serde_json::to_value(&self.password)? {
@@ -1841,13 +1668,7 @@ pub struct FindUsersForPickerRequest<'a> {
 
 impl<'a> FindUsersForPickerRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            max_results: None,
-            query: None,
-            exclude: None,
-            show_avatar: None,
-        }
+        Self { client, max_results: None, query: None, exclude: None, show_avatar: None }
     }
 
     /// The maximum number of users to return (defaults to 50). The maximum allowed value is 100 (The combination of maxResults and startAt is limited to the first 100 results). If you specify a value that is higher than this number, your search results will be truncated. If you send a request with startAt=98 and maxResults=20, it will only return 2 users.
@@ -1888,29 +1709,19 @@ impl<'a> FindUsersForPickerRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/user/picker".to_owned());
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.exclude {
-            config
-                .query
-                .push(("exclude".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("exclude".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.show_avatar {
-            config.query.push((
-                "showAvatar".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("showAvatar".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1936,11 +1747,7 @@ pub struct GetUserPropertyKeysRequest<'a> {
 
 impl<'a> GetUserPropertyKeysRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            user_key: None,
-            username: None,
-        }
+        Self { client, user_key: None, username: None }
     }
 
     /// Key of the user whose properties are to be returned
@@ -1965,15 +1772,11 @@ impl<'a> GetUserPropertyKeysRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/user/properties".to_owned());
 
         if let Some(value) = &self.user_key {
-            config
-                .query
-                .push(("userKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("userKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -2000,12 +1803,7 @@ pub struct GetUserPropertyRequest<'a> {
 
 impl<'a> GetUserPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, property_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            user_key: None,
-            username: None,
-        }
+        Self { client, property_key: property_key.into(), user_key: None, username: None }
     }
 
     /// Key of the user whose property is to be returned
@@ -2032,15 +1830,11 @@ impl<'a> GetUserPropertyRequest<'a> {
         );
 
         if let Some(value) = &self.user_key {
-            config
-                .query
-                .push(("userKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("userKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -2074,13 +1868,7 @@ impl<'a> SetUserPropertyRequest<'a> {
         property_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            body,
-            user_key: None,
-            username: None,
-        }
+        Self { client, property_key: property_key.into(), body, user_key: None, username: None }
     }
 
     /// Key of the user whose property is to be set
@@ -2107,15 +1895,11 @@ impl<'a> SetUserPropertyRequest<'a> {
         );
 
         if let Some(value) = &self.user_key {
-            config
-                .query
-                .push(("userKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("userKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -2144,12 +1928,7 @@ pub struct DeleteUserPropertyRequest<'a> {
 
 impl<'a> DeleteUserPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, property_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            user_key: None,
-            username: None,
-        }
+        Self { client, property_key: property_key.into(), user_key: None, username: None }
     }
 
     /// Key of the user whose property is to be removed
@@ -2176,15 +1955,11 @@ impl<'a> DeleteUserPropertyRequest<'a> {
         );
 
         if let Some(value) = &self.user_key {
-            config
-                .query
-                .push(("userKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("userKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -2213,14 +1988,7 @@ pub struct FindUsersRequest<'a> {
 
 impl<'a> FindUsersRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            include_inactive: None,
-            max_results: None,
-            include_active: None,
-            start_at: None,
-            username: None,
-        }
+        Self { client, include_inactive: None, max_results: None, include_active: None, start_at: None, username: None }
     }
 
     /// If true, then inactive users are included in the results (default false)
@@ -2269,36 +2037,23 @@ impl<'a> FindUsersRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/user/search".to_owned());
 
         if let Some(value) = &self.include_inactive {
-            config.query.push((
-                "includeInactive".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("includeInactive".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.include_active {
-            config.query.push((
-                "includeActive".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("includeActive".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -2323,10 +2078,7 @@ pub struct DeleteSessionRequest<'a> {
 
 impl<'a> DeleteSessionRequest<'a> {
     fn new(client: &'a crate::core::Client, username: impl Into<String>) -> Self {
-        Self {
-            client,
-            username: username.into(),
-        }
+        Self { client, username: username.into() }
     }
 
     /// The request as the transport will send it.
@@ -2361,13 +2113,7 @@ pub struct FindUsersWithBrowsePermissionRequest<'a> {
 
 impl<'a> FindUsersWithBrowsePermissionRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            project_key: None,
-            issue_key: None,
-            max_results: None,
-            username: None,
-        }
+        Self { client, project_key: None, issue_key: None, max_results: None, username: None }
     }
 
     /// the optional project key to search for users with if no issueKey is supplied.
@@ -2408,28 +2154,19 @@ impl<'a> FindUsersWithBrowsePermissionRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/user/viewissue/search".to_owned());
 
         if let Some(value) = &self.project_key {
-            config
-                .query
-                .push(("projectKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.issue_key {
-            config
-                .query
-                .push(("issueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("issueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

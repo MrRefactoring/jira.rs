@@ -115,19 +115,14 @@ pub struct GetStatusesByIdRequest<'a> {
 
 impl<'a> GetStatusesByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl IntoIterator<Item = impl Into<String>>) -> Self {
-        Self {
-            client,
-            id: id.into_iter().map(Into::into).collect(),
-        }
+        Self { client, id: id.into_iter().map(Into::into).collect() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/statuses".to_owned());
 
-        config
-            .query
-            .push(("id".to_owned(), crate::core::QueryValue::List(self.id.clone())));
+        config.query.push(("id".to_owned(), crate::core::QueryValue::List(self.id.clone())));
 
         Ok(config)
     }
@@ -156,10 +151,7 @@ pub struct CreateStatusesRequest<'a> {
 
 impl<'a> CreateStatusesRequest<'a> {
     fn new(client: &'a crate::core::Client, status_create_request: StatusCreateRequest) -> Self {
-        Self {
-            client,
-            status_create_request,
-        }
+        Self { client, status_create_request }
     }
 
     /// The request as the transport will send it.
@@ -200,10 +192,7 @@ pub struct UpdateStatusesRequest<'a> {
 
 impl<'a> UpdateStatusesRequest<'a> {
     fn new(client: &'a crate::core::Client, status_update_request: StatusUpdateRequest) -> Self {
-        Self {
-            client,
-            status_update_request,
-        }
+        Self { client, status_update_request }
     }
 
     /// The request as the transport will send it.
@@ -244,10 +233,7 @@ pub struct DeleteStatusesByIdRequest<'a> {
 
 impl<'a> DeleteStatusesByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl IntoIterator<Item = impl Into<String>>) -> Self {
-        Self {
-            client,
-            id: id.into_iter().map(Into::into).collect(),
-        }
+        Self { client, id: id.into_iter().map(Into::into).collect() }
     }
 
     /// The request as the transport will send it.
@@ -255,9 +241,7 @@ impl<'a> DeleteStatusesByIdRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::DELETE, "/rest/api/3/statuses".to_owned());
 
-        config
-            .query
-            .push(("id".to_owned(), crate::core::QueryValue::List(self.id.clone())));
+        config.query.push(("id".to_owned(), crate::core::QueryValue::List(self.id.clone())));
 
         Ok(config)
     }
@@ -288,11 +272,7 @@ pub struct GetStatusesByNameRequest<'a> {
 
 impl<'a> GetStatusesByNameRequest<'a> {
     fn new(client: &'a crate::core::Client, name: impl IntoIterator<Item = impl Into<String>>) -> Self {
-        Self {
-            client,
-            name: name.into_iter().map(Into::into).collect(),
-            project_id: None,
-        }
+        Self { client, name: name.into_iter().map(Into::into).collect(), project_id: None }
     }
 
     /// The project the status is part of or null for global statuses.
@@ -308,14 +288,10 @@ impl<'a> GetStatusesByNameRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/statuses/byNames".to_owned());
 
-        config
-            .query
-            .push(("name".to_owned(), crate::core::QueryValue::List(self.name.clone())));
+        config.query.push(("name".to_owned(), crate::core::QueryValue::List(self.name.clone())));
 
         if let Some(value) = &self.project_id {
-            config
-                .query
-                .push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -415,43 +391,27 @@ impl<'a> SearchRequest2<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/statuses/search".to_owned());
 
         if let Some(value) = &self.project_id {
-            config
-                .query
-                .push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.search_string {
-            config.query.push((
-                "searchString".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("searchString".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.status_category {
-            config.query.push((
-                "statusCategory".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("statusCategory".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.include_global_statuses {
-            config.query.push((
-                "includeGlobalStatuses".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("includeGlobalStatuses".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -508,24 +468,15 @@ impl<'a> GetProjectIssueTypeUsagesForStatusRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/3/statuses/{}/project/{}/issueTypeUsages",
-                self.status_id, self.project_id
-            ),
+            format!("/rest/api/3/statuses/{}/project/{}/issueTypeUsages", self.status_id, self.project_id),
         );
 
         if let Some(value) = &self.next_page_token {
-            config.query.push((
-                "nextPageToken".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -552,12 +503,7 @@ pub struct GetProjectUsagesForStatusRequest<'a> {
 
 impl<'a> GetProjectUsagesForStatusRequest<'a> {
     fn new(client: &'a crate::core::Client, status_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            status_id: status_id.into(),
-            next_page_token: None,
-            max_results: None,
-        }
+        Self { client, status_id: status_id.into(), next_page_token: None, max_results: None }
     }
 
     /// The cursor for pagination
@@ -584,17 +530,11 @@ impl<'a> GetProjectUsagesForStatusRequest<'a> {
         );
 
         if let Some(value) = &self.next_page_token {
-            config.query.push((
-                "nextPageToken".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -621,12 +561,7 @@ pub struct GetWorkflowUsagesForStatusRequest<'a> {
 
 impl<'a> GetWorkflowUsagesForStatusRequest<'a> {
     fn new(client: &'a crate::core::Client, status_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            status_id: status_id.into(),
-            next_page_token: None,
-            max_results: None,
-        }
+        Self { client, status_id: status_id.into(), next_page_token: None, max_results: None }
     }
 
     /// The cursor for pagination
@@ -653,17 +588,11 @@ impl<'a> GetWorkflowUsagesForStatusRequest<'a> {
         );
 
         if let Some(value) = &self.next_page_token {
-            config.query.push((
-                "nextPageToken".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

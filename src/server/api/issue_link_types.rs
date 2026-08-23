@@ -99,10 +99,7 @@ pub struct CreateIssueLinkTypeRequest<'a> {
 
 impl<'a> CreateIssueLinkTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_link_type_json: IssueLinkTypeJson) -> Self {
-        Self {
-            client,
-            issue_link_type_json,
-        }
+        Self { client, issue_link_type_json }
     }
 
     /// The request as the transport will send it.
@@ -144,10 +141,7 @@ impl<'a> ResetOrderRequest<'a> {
         client: &'a crate::core::Client,
         issue_link_type_reset_order_request: IssueLinkTypeResetOrderRequest,
     ) -> Self {
-        Self {
-            client,
-            issue_link_type_reset_order_request,
-        }
+        Self { client, issue_link_type_reset_order_request }
     }
 
     /// The request as the transport will send it.
@@ -184,10 +178,7 @@ pub struct GetIssueLinkTypeRequest<'a> {
 
 impl<'a> GetIssueLinkTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_link_type_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_link_type_id: issue_link_type_id.into(),
-        }
+        Self { client, issue_link_type_id: issue_link_type_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -224,11 +215,7 @@ impl<'a> UpdateIssueLinkTypeRequest<'a> {
         issue_link_type_id: impl Into<String>,
         issue_link_type_json: IssueLinkTypeJson,
     ) -> Self {
-        Self {
-            client,
-            issue_link_type_id: issue_link_type_id.into(),
-            issue_link_type_json,
-        }
+        Self { client, issue_link_type_id: issue_link_type_id.into(), issue_link_type_json }
     }
 
     /// The request as the transport will send it.
@@ -267,10 +254,7 @@ pub struct DeleteIssueLinkTypeRequest<'a> {
 
 impl<'a> DeleteIssueLinkTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_link_type_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_link_type_id: issue_link_type_id.into(),
-        }
+        Self { client, issue_link_type_id: issue_link_type_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -309,11 +293,7 @@ impl<'a> MoveIssueLinkTypeRequest<'a> {
         issue_link_type_id: impl Into<String>,
         issue_link_type_order_update_request: IssueLinkTypeOrderUpdateRequest,
     ) -> Self {
-        Self {
-            client,
-            issue_link_type_id: issue_link_type_id.into(),
-            issue_link_type_order_update_request,
-        }
+        Self { client, issue_link_type_id: issue_link_type_id.into(), issue_link_type_order_update_request }
     }
 
     /// The request as the transport will send it.

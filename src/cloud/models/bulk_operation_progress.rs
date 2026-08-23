@@ -25,18 +25,10 @@ pub struct BulkOperationProgress {
     #[serde(rename = "failedAccessibleIssues", default, skip_serializing_if = "Option::is_none")]
     pub failed_accessible_issues: Option<std::collections::HashMap<String, serde_json::Value>>,
     /// The number of issues that are either invalid or issues that the user doesn't have permission to view, regardless of the success or failure of the operation.
-    #[serde(
-        rename = "invalidOrInaccessibleIssueCount",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "invalidOrInaccessibleIssueCount", default, skip_serializing_if = "Option::is_none")]
     pub invalid_or_inaccessible_issue_count: Option<i64>,
     /// List of issue IDs for which the operation was successful and that the user has permission to view.
-    #[serde(
-        rename = "processedAccessibleIssues",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "processedAccessibleIssues", default, skip_serializing_if = "Option::is_none")]
     pub processed_accessible_issues: Option<Vec<i64>>,
     /// Progress of the task as a percentage.
     #[serde(rename = "progressPercent", default, skip_serializing_if = "Option::is_none")]

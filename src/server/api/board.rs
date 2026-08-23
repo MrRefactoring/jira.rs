@@ -251,14 +251,7 @@ pub struct GetAllBoardsRequest<'a> {
 
 impl<'a> GetAllBoardsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            max_results: None,
-            name: None,
-            project_key_or_id: None,
-            r#type: None,
-            start_at: None,
-        }
+        Self { client, max_results: None, name: None, project_key_or_id: None, r#type: None, start_at: None }
     }
 
     /// The maximum number of boards to return per page. Default: 50.
@@ -306,35 +299,23 @@ impl<'a> GetAllBoardsRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/agile/1.0/board".to_owned());
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.name {
-            config
-                .query
-                .push(("name".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("name".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_key_or_id {
-            config.query.push((
-                "projectKeyOrId".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("projectKeyOrId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.r#type {
-            config
-                .query
-                .push(("type".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("type".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -540,41 +521,27 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.jql {
-            config
-                .query
-                .push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.validate_query {
-            config.query.push((
-                "validateQuery".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("validateQuery".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.fields {
-            config
-                .query
-                .push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -649,13 +616,7 @@ pub struct GetEpicsRequest<'a> {
 
 impl<'a> GetEpicsRequest<'a> {
     fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
-        Self {
-            client,
-            board_id,
-            max_results: None,
-            done: None,
-            start_at: None,
-        }
+        Self { client, board_id, max_results: None, done: None, start_at: None }
     }
 
     /// The maximum number of epics to return per page. Default: 50. See the 'Pagination' section at the top of this page for more details.
@@ -690,22 +651,15 @@ impl<'a> GetEpicsRequest<'a> {
         );
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.done {
-            config
-                .query
-                .push(("done".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("done".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -804,41 +758,27 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.jql {
-            config
-                .query
-                .push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.validate_query {
-            config.query.push((
-                "validateQuery".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("validateQuery".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.fields {
-            config
-                .query
-                .push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -939,41 +879,27 @@ impl<'a> GetIssuesForBoardEpicRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.jql {
-            config
-                .query
-                .push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.validate_query {
-            config.query.push((
-                "validateQuery".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("validateQuery".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.fields {
-            config
-                .query
-                .push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1072,41 +998,27 @@ impl<'a> GetIssuesForBoardRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.jql {
-            config
-                .query
-                .push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.validate_query {
-            config.query.push((
-                "validateQuery".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("validateQuery".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.fields {
-            config
-                .query
-                .push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1133,12 +1045,7 @@ pub struct GetProjectsRequest<'a> {
 
 impl<'a> GetProjectsRequest<'a> {
     fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
-        Self {
-            client,
-            board_id,
-            max_results: None,
-            start_at: None,
-        }
+        Self { client, board_id, max_results: None, start_at: None }
     }
 
     /// The maximum number of projects to return per page. Default: 50. See the 'Pagination' section at the top of this page for more details.
@@ -1165,16 +1072,11 @@ impl<'a> GetProjectsRequest<'a> {
         );
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1232,21 +1134,14 @@ pub struct GetBoardPropertyRequest<'a> {
 
 impl<'a> GetBoardPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, property_key: impl Into<String>, board_id: i64) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            board_id,
-        }
+        Self { client, property_key: property_key.into(), board_id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/agile/1.0/board/{}/properties/{}",
-                self.board_id, self.property_key
-            ),
+            format!("/rest/agile/1.0/board/{}/properties/{}", self.board_id, self.property_key),
         );
 
         Ok(config)
@@ -1278,22 +1173,14 @@ impl<'a> SetBoardPropertyRequest<'a> {
         board_id: i64,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            board_id,
-            body,
-        }
+        Self { client, property_key: property_key.into(), board_id, body }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/agile/1.0/board/{}/properties/{}",
-                self.board_id, self.property_key
-            ),
+            format!("/rest/agile/1.0/board/{}/properties/{}", self.board_id, self.property_key),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -1321,21 +1208,14 @@ pub struct DeleteBoardPropertyRequest<'a> {
 
 impl<'a> DeleteBoardPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, property_key: impl Into<String>, board_id: i64) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            board_id,
-        }
+        Self { client, property_key: property_key.into(), board_id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/agile/1.0/board/{}/properties/{}",
-                self.board_id, self.property_key
-            ),
+            format!("/rest/agile/1.0/board/{}/properties/{}", self.board_id, self.property_key),
         );
 
         Ok(config)
@@ -1393,11 +1273,7 @@ pub struct SetRefinedVelocityRequest<'a> {
 
 impl<'a> SetRefinedVelocityRequest<'a> {
     fn new(client: &'a crate::core::Client, board_id: i64, boolean_setting: BooleanSetting) -> Self {
-        Self {
-            client,
-            board_id,
-            boolean_setting,
-        }
+        Self { client, board_id, boolean_setting }
     }
 
     /// The request as the transport will send it.
@@ -1439,13 +1315,7 @@ pub struct GetAllSprintsRequest<'a> {
 
 impl<'a> GetAllSprintsRequest<'a> {
     fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
-        Self {
-            client,
-            board_id,
-            max_results: None,
-            state: None,
-            start_at: None,
-        }
+        Self { client, board_id, max_results: None, state: None, start_at: None }
     }
 
     /// The maximum number of sprints to return per page. Default: 50.
@@ -1480,22 +1350,15 @@ impl<'a> GetAllSprintsRequest<'a> {
         );
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.state {
-            config
-                .query
-                .push(("state".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("state".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1592,48 +1455,31 @@ impl<'a> GetIssuesForBoardSprintRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/agile/1.0/board/{}/sprint/{}/issue",
-                self.board_id, self.sprint_id
-            ),
+            format!("/rest/agile/1.0/board/{}/sprint/{}/issue", self.board_id, self.sprint_id),
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.jql {
-            config
-                .query
-                .push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.validate_query {
-            config.query.push((
-                "validateQuery".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("validateQuery".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.fields {
-            config
-                .query
-                .push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1661,13 +1507,7 @@ pub struct GetAllVersionsRequest<'a> {
 
 impl<'a> GetAllVersionsRequest<'a> {
     fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
-        Self {
-            client,
-            board_id,
-            max_results: None,
-            released: None,
-            start_at: None,
-        }
+        Self { client, board_id, max_results: None, released: None, start_at: None }
     }
 
     /// The maximum number of versions to return per page. Default: 50.
@@ -1702,22 +1542,15 @@ impl<'a> GetAllVersionsRequest<'a> {
         );
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.released {
-            config
-                .query
-                .push(("released".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("released".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

@@ -54,11 +54,7 @@ impl<'a> CreateExternalLinkedTeamRequest<'a> {
         org_id: impl Into<String>,
         external_team_creation_payload: ExternalTeamCreationPayload,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            external_team_creation_payload,
-        }
+        Self { client, org_id: org_id.into(), external_team_creation_payload }
     }
 
     /// The request as the transport will send it.
@@ -102,21 +98,14 @@ impl<'a> UnlinkTeamsFromExternalSourceRequest<'a> {
         org_id: impl Into<String>,
         bulk_operation_request: BulkOperationRequest,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            bulk_operation_request,
-        }
+        Self { client, org_id: org_id.into(), bulk_operation_request }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/gateway/api/public/teams/v1/org/{}/teams/external/bulk/unlink",
-                self.org_id
-            ),
+            format!("/gateway/api/public/teams/v1/org/{}/teams/external/bulk/unlink", self.org_id),
         );
 
         let body = match serde_json::to_value(&self.bulk_operation_request)? {
@@ -155,22 +144,14 @@ impl<'a> LinkTeamToExternalSourceRequest<'a> {
         team_id: impl Into<String>,
         link_team_to_external_source_payload: LinkTeamToExternalSourcePayload,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            team_id: team_id.into(),
-            link_team_to_external_source_payload,
-        }
+        Self { client, org_id: org_id.into(), team_id: team_id.into(), link_team_to_external_source_payload }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/gateway/api/public/teams/v1/org/{}/teams/{}/external/link",
-                self.org_id, self.team_id
-            ),
+            format!("/gateway/api/public/teams/v1/org/{}/teams/{}/external/link", self.org_id, self.team_id),
         );
 
         let body = match serde_json::to_value(&self.link_team_to_external_source_payload)? {

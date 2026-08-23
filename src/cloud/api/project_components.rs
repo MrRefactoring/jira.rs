@@ -169,14 +169,7 @@ pub struct FindComponentsForProjectsRequest<'a> {
 
 impl<'a> FindComponentsForProjectsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            project_ids_or_keys: None,
-            start_at: None,
-            max_results: None,
-            order_by: None,
-            query: None,
-        }
+        Self { client, project_ids_or_keys: None, start_at: None, max_results: None, order_by: None, query: None }
     }
 
     /// The project IDs and/or project keys (case sensitive).
@@ -227,35 +220,23 @@ impl<'a> FindComponentsForProjectsRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/component".to_owned());
 
         if let Some(value) = &self.project_ids_or_keys {
-            config.query.push((
-                "projectIdsOrKeys".to_owned(),
-                crate::core::QueryValue::List(value.clone()),
-            ));
+            config.query.push(("projectIdsOrKeys".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.order_by {
-            config
-                .query
-                .push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -284,10 +265,7 @@ pub struct CreateComponentRequest<'a> {
 
 impl<'a> CreateComponentRequest<'a> {
     fn new(client: &'a crate::core::Client, project_component: ProjectComponent) -> Self {
-        Self {
-            client,
-            project_component,
-        }
+        Self { client, project_component }
     }
 
     /// The request as the transport will send it.
@@ -362,11 +340,7 @@ pub struct UpdateComponentRequest<'a> {
 
 impl<'a> UpdateComponentRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, body: ProjectComponent) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            body,
-        }
+        Self { client, id: id.into(), body }
     }
 
     /// The request as the transport will send it.
@@ -403,11 +377,7 @@ pub struct DeleteComponentRequest<'a> {
 
 impl<'a> DeleteComponentRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            move_issues_to: None,
-        }
+        Self { client, id: id.into(), move_issues_to: None }
     }
 
     /// The ID of the component to replace the deleted component. If this value is null no replacement is made.
@@ -420,16 +390,11 @@ impl<'a> DeleteComponentRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!("/rest/api/3/component/{}", self.id),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/rest/api/3/component/{}", self.id));
 
         if let Some(value) = &self.move_issues_to {
-            config.query.push((
-                "moveIssuesTo".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("moveIssuesTo".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -570,35 +535,23 @@ impl<'a> GetProjectComponentsPaginatedRequest<'a> {
         );
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.order_by {
-            config
-                .query
-                .push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.component_source {
-            config.query.push((
-                "componentSource".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("componentSource".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -630,11 +583,7 @@ pub struct GetProjectComponentsRequest<'a> {
 
 impl<'a> GetProjectComponentsRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            component_source: None,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), component_source: None }
     }
 
     /// The source of the components to return. Can be `jira` (default), `compass` or `auto`. When `auto` is specified, the API will return connected Compass components if the project is opted into Compass, otherwise it will return Jira components. Defaults to `jira`.
@@ -653,10 +602,7 @@ impl<'a> GetProjectComponentsRequest<'a> {
         );
 
         if let Some(value) = &self.component_source {
-            config.query.push((
-                "componentSource".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("componentSource".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)

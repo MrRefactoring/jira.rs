@@ -52,12 +52,7 @@ impl<'a> IssueCustomFieldOptionsService<'a> {
         context_id: i64,
         bulk_custom_field_option_create_request: BulkCustomFieldOptionCreateRequest,
     ) -> CreateCustomFieldOptionRequest<'a> {
-        CreateCustomFieldOptionRequest::new(
-            self.client,
-            field_id,
-            context_id,
-            bulk_custom_field_option_create_request,
-        )
+        CreateCustomFieldOptionRequest::new(self.client, field_id, context_id, bulk_custom_field_option_create_request)
     }
 
     /// Updates the options of a custom field.
@@ -73,12 +68,7 @@ impl<'a> IssueCustomFieldOptionsService<'a> {
         context_id: i64,
         bulk_custom_field_option_update_request: BulkCustomFieldOptionUpdateRequest,
     ) -> UpdateCustomFieldOptionRequest<'a> {
-        UpdateCustomFieldOptionRequest::new(
-            self.client,
-            field_id,
-            context_id,
-            bulk_custom_field_option_update_request,
-        )
+        UpdateCustomFieldOptionRequest::new(self.client, field_id, context_id, bulk_custom_field_option_update_request)
     }
 
     /// Changes the order of custom field options or cascading options in a context.
@@ -235,30 +225,19 @@ impl<'a> GetOptionsForContextRequest<'a> {
         );
 
         if let Some(value) = &self.option_id {
-            config.query.push((
-                "optionId".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("optionId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.only_options {
-            config.query.push((
-                "onlyOptions".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("onlyOptions".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -296,12 +275,7 @@ impl<'a> CreateCustomFieldOptionRequest<'a> {
         context_id: i64,
         bulk_custom_field_option_create_request: BulkCustomFieldOptionCreateRequest,
     ) -> Self {
-        Self {
-            client,
-            field_id: field_id.into(),
-            context_id,
-            bulk_custom_field_option_create_request,
-        }
+        Self { client, field_id: field_id.into(), context_id, bulk_custom_field_option_create_request }
     }
 
     /// The request as the transport will send it.
@@ -353,12 +327,7 @@ impl<'a> UpdateCustomFieldOptionRequest<'a> {
         context_id: i64,
         bulk_custom_field_option_update_request: BulkCustomFieldOptionUpdateRequest,
     ) -> Self {
-        Self {
-            client,
-            field_id: field_id.into(),
-            context_id,
-            bulk_custom_field_option_update_request,
-        }
+        Self { client, field_id: field_id.into(), context_id, bulk_custom_field_option_update_request }
     }
 
     /// The request as the transport will send it.
@@ -408,22 +377,14 @@ impl<'a> ReorderCustomFieldOptionsRequest<'a> {
         context_id: i64,
         order_of_custom_field_options: OrderOfCustomFieldOptions,
     ) -> Self {
-        Self {
-            client,
-            field_id: field_id.into(),
-            context_id,
-            order_of_custom_field_options,
-        }
+        Self { client, field_id: field_id.into(), context_id, order_of_custom_field_options }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/api/3/field/{}/context/{}/option/move",
-                self.field_id, self.context_id
-            ),
+            format!("/rest/api/3/field/{}/context/{}/option/move", self.field_id, self.context_id),
         );
 
         let body = match serde_json::to_value(&self.order_of_custom_field_options)? {
@@ -463,22 +424,14 @@ pub struct DeleteCustomFieldOptionRequest<'a> {
 
 impl<'a> DeleteCustomFieldOptionRequest<'a> {
     fn new(client: &'a crate::core::Client, field_id: impl Into<String>, context_id: i64, option_id: i64) -> Self {
-        Self {
-            client,
-            field_id: field_id.into(),
-            context_id,
-            option_id,
-        }
+        Self { client, field_id: field_id.into(), context_id, option_id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/api/3/field/{}/context/{}/option/{}",
-                self.field_id, self.context_id, self.option_id
-            ),
+            format!("/rest/api/3/field/{}/context/{}/option/{}", self.field_id, self.context_id, self.option_id),
         );
 
         Ok(config)
@@ -511,14 +464,7 @@ pub struct ReplaceCustomFieldOptionRequest<'a> {
 
 impl<'a> ReplaceCustomFieldOptionRequest<'a> {
     fn new(client: &'a crate::core::Client, field_id: impl Into<String>, option_id: i64, context_id: i64) -> Self {
-        Self {
-            client,
-            field_id: field_id.into(),
-            option_id,
-            context_id,
-            replace_with: None,
-            jql: None,
-        }
+        Self { client, field_id: field_id.into(), option_id, context_id, replace_with: None, jql: None }
     }
 
     /// The ID of the option that will replace the currently selected option.
@@ -541,23 +487,15 @@ impl<'a> ReplaceCustomFieldOptionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/api/3/field/{}/context/{}/option/{}/issue",
-                self.field_id, self.context_id, self.option_id
-            ),
+            format!("/rest/api/3/field/{}/context/{}/option/{}/issue", self.field_id, self.context_id, self.option_id),
         );
 
         if let Some(value) = &self.replace_with {
-            config.query.push((
-                "replaceWith".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("replaceWith".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.jql {
-            config
-                .query
-                .push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

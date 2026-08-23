@@ -198,68 +198,42 @@ impl<'a> FindUsersAndGroupsRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/groupuserpicker".to_owned());
 
-        config
-            .query
-            .push(("query".to_owned(), crate::core::QueryValue::Scalar(self.query.clone())));
+        config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(self.query.clone())));
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.show_avatar {
-            config.query.push((
-                "showAvatar".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("showAvatar".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.field_id {
-            config
-                .query
-                .push(("fieldId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("fieldId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_id {
-            config
-                .query
-                .push(("projectId".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.issue_type_id {
-            config
-                .query
-                .push(("issueTypeId".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("issueTypeId".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.avatar_size {
-            config.query.push((
-                "avatarSize".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("avatarSize".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.case_insensitive {
-            config.query.push((
-                "caseInsensitive".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("caseInsensitive".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.exclude_connect_addons {
-            config.query.push((
-                "excludeConnectAddons".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("excludeConnectAddons".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.include_ai_agents {
-            config.query.push((
-                "includeAiAgents".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("includeAiAgents".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

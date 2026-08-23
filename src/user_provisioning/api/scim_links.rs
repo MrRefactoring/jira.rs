@@ -59,21 +59,14 @@ pub struct GetScimLinksRequest<'a> {
 
 impl<'a> GetScimLinksRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, aa_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            aa_id: aa_id.into(),
-        }
+        Self { client, org_id: org_id.into(), aa_id: aa_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/admin/user-provisioning/v1/org/{}/user/{}/get-scim-links",
-                self.org_id, self.aa_id
-            ),
+            format!("/admin/user-provisioning/v1/org/{}/user/{}/get-scim-links", self.org_id, self.aa_id),
         );
 
         Ok(config)
@@ -103,21 +96,14 @@ impl<'a> GetScimLinksByEmailRequest<'a> {
         org_id: impl Into<String>,
         get_scim_links_for_email_request: GetScimLinksForEmailRequest,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            get_scim_links_for_email_request,
-        }
+        Self { client, org_id: org_id.into(), get_scim_links_for_email_request }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/admin/user-provisioning/v1/org/{}/get-scim-links-for-email",
-                self.org_id
-            ),
+            format!("/admin/user-provisioning/v1/org/{}/get-scim-links-for-email", self.org_id),
         );
 
         let body = match serde_json::to_value(&self.get_scim_links_for_email_request)? {
@@ -201,21 +187,14 @@ pub struct DeleteProvisioningRecordRequest<'a> {
 
 impl<'a> DeleteProvisioningRecordRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, aa_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            aa_id: aa_id.into(),
-        }
+        Self { client, org_id: org_id.into(), aa_id: aa_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/admin/user-provisioning/v1/org/{}/user/{}/onlyDeleteUserInDB",
-                self.org_id, self.aa_id
-            ),
+            format!("/admin/user-provisioning/v1/org/{}/user/{}/onlyDeleteUserInDB", self.org_id, self.aa_id),
         );
 
         Ok(config)

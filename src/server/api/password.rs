@@ -55,10 +55,7 @@ pub struct GetPasswordPolicyRequest<'a> {
 
 impl<'a> GetPasswordPolicyRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            has_old_password: None,
-        }
+        Self { client, has_old_password: None }
     }
 
     /// Whether or not the user will be required to enter their current password.  Use false (the default) if this is a new user or if an administrator is forcibly changing another user's password.
@@ -75,10 +72,7 @@ impl<'a> GetPasswordPolicyRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/password/policy".to_owned());
 
         if let Some(value) = &self.has_old_password {
-            config.query.push((
-                "hasOldPassword".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("hasOldPassword".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -110,10 +104,7 @@ pub struct PolicyCheckCreateUserRequest<'a> {
 
 impl<'a> PolicyCheckCreateUserRequest<'a> {
     fn new(client: &'a crate::core::Client, password_policy_create_user: PasswordPolicyCreateUser) -> Self {
-        Self {
-            client,
-            password_policy_create_user,
-        }
+        Self { client, password_policy_create_user }
     }
 
     /// The request as the transport will send it.
@@ -158,10 +149,7 @@ pub struct PolicyCheckUpdateUserRequest<'a> {
 
 impl<'a> PolicyCheckUpdateUserRequest<'a> {
     fn new(client: &'a crate::core::Client, password_policy_update_user: PasswordPolicyUpdateUser) -> Self {
-        Self {
-            client,
-            password_policy_update_user,
-        }
+        Self { client, password_policy_update_user }
     }
 
     /// The request as the transport will send it.

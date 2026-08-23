@@ -37,18 +37,11 @@ fn client_for(server: &MockServer, auth: Option<Auth>) -> Client {
 }
 
 async fn first_request(server: &MockServer) -> Request {
-    server
-        .received_requests()
-        .await
-        .expect("the server recorded its requests")
-        .remove(0)
+    server.received_requests().await.expect("the server recorded its requests").remove(0)
 }
 
 fn header_of(request: &Request, name: &str) -> Option<String> {
-    request
-        .headers
-        .get(name)
-        .map(|value| value.to_str().unwrap_or_default().to_owned())
+    request.headers.get(name).map(|value| value.to_str().unwrap_or_default().to_owned())
 }
 
 // ---------------------------------------------------------------- auth headers
@@ -74,10 +67,7 @@ async fn base64_encodes_username_and_password_for_data_center_basic_auth() {
 
     let _: Myself = client.get("/rest/api/3/myself").send().await.unwrap();
 
-    assert_eq!(
-        header_of(&first_request(&server).await, "authorization").as_deref(),
-        Some("Basic YWRhOmh1bnRlcjI="),
-    );
+    assert_eq!(header_of(&first_request(&server).await, "authorization").as_deref(), Some("Basic YWRhOmh1bnRlcjI="),);
 }
 
 #[tokio::test]
@@ -95,19 +85,11 @@ async fn encodes_a_credential_that_is_not_ascii() {
         let input = "ada:пароль".as_bytes();
         const ALPHABET: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
         for chunk in input.chunks(3) {
-            let bytes = [
-                chunk[0],
-                chunk.get(1).copied().unwrap_or(0),
-                chunk.get(2).copied().unwrap_or(0),
-            ];
+            let bytes = [chunk[0], chunk.get(1).copied().unwrap_or(0), chunk.get(2).copied().unwrap_or(0)];
             let triple = (u32::from(bytes[0]) << 16) | (u32::from(bytes[1]) << 8) | u32::from(bytes[2]);
             for index in 0..4 {
                 if index <= chunk.len() {
-                    let _ = write!(
-                        encoded,
-                        "{}",
-                        char::from(ALPHABET[((triple >> (18 - index * 6)) & 0x3F) as usize])
-                    );
+                    let _ = write!(encoded, "{}", char::from(ALPHABET[((triple >> (18 - index * 6)) & 0x3F) as usize]));
                 } else {
                     encoded.push('=');
                 }
@@ -116,10 +98,7 @@ async fn encodes_a_credential_that_is_not_ascii() {
         encoded
     });
 
-    assert_eq!(
-        header_of(&first_request(&server).await, "authorization"),
-        Some(expected)
-    );
+    assert_eq!(header_of(&first_request(&server).await, "authorization"), Some(expected));
 }
 
 #[tokio::test]
@@ -129,10 +108,7 @@ async fn sends_a_static_bearer_token() {
 
     let _: Myself = client.get("/rest/api/3/myself").send().await.unwrap();
 
-    assert_eq!(
-        header_of(&first_request(&server).await, "authorization").as_deref(),
-        Some("Bearer PAT")
-    );
+    assert_eq!(header_of(&first_request(&server).await, "authorization").as_deref(), Some("Bearer PAT"));
 }
 
 #[tokio::test]
@@ -155,14 +131,8 @@ async fn resolves_a_bearer_token_provider_per_request() {
 
     let requests = server.received_requests().await.unwrap();
 
-    assert_eq!(
-        header_of(&requests[0], "authorization").as_deref(),
-        Some("Bearer minted-0")
-    );
-    assert_eq!(
-        header_of(&requests[1], "authorization").as_deref(),
-        Some("Bearer minted-1")
-    );
+    assert_eq!(header_of(&requests[0], "authorization").as_deref(), Some("Bearer minted-0"));
+    assert_eq!(header_of(&requests[1], "authorization").as_deref(), Some("Bearer minted-1"));
 }
 
 #[tokio::test]
@@ -263,11 +233,7 @@ async fn does_not_loop_when_the_fresh_credentials_are_refused_as_well() {
     let error = client.get("/rest/api/3/myself").send::<Myself>().await.unwrap_err();
 
     assert!(error.is_auth());
-    assert_eq!(
-        attempts.load(Ordering::SeqCst),
-        1,
-        "the hook is given one attempt, not a loop"
-    );
+    assert_eq!(attempts.load(Ordering::SeqCst), 1, "the hook is given one attempt, not a loop");
     assert_eq!(server.received_requests().await.unwrap().len(), 2);
 }
 
@@ -284,11 +250,7 @@ async fn reports_a_failure_carrying_status_and_parsed_body() {
         .mount(&server)
         .await;
 
-    let error = client_for(&server, None)
-        .get("/rest/api/3/issue/X")
-        .send::<Myself>()
-        .await
-        .unwrap_err();
+    let error = client_for(&server, None).get("/rest/api/3/issue/X").send::<Myself>().await.unwrap_err();
 
     assert_eq!(error.status(), Some(400));
     assert_eq!(error.body().unwrap()["errorMessages"][0], "Field 'foo' cannot be set");
@@ -303,11 +265,7 @@ async fn keeps_a_non_json_error_body_as_raw_text() {
         .mount(&server)
         .await;
 
-    let error = client_for(&server, None)
-        .get("/rest/api/3/myself")
-        .send::<Myself>()
-        .await
-        .unwrap_err();
+    let error = client_for(&server, None).get("/rest/api/3/myself").send::<Myself>().await.unwrap_err();
 
     assert!(error.is_server());
     assert_eq!(error.body().unwrap(), &json!("upstream is down"));
@@ -319,27 +277,16 @@ async fn keeps_a_non_json_error_body_as_raw_text() {
 async fn returns_nothing_for_a_204() {
     let server = MockServer::start().await;
 
-    Mock::given(method("DELETE"))
-        .respond_with(ResponseTemplate::new(204))
-        .mount(&server)
-        .await;
+    Mock::given(method("DELETE")).respond_with(ResponseTemplate::new(204)).mount(&server).await;
 
-    client_for(&server, None)
-        .delete("/rest/api/3/issue/X")
-        .send_empty()
-        .await
-        .unwrap();
+    client_for(&server, None).delete("/rest/api/3/issue/X").send_empty().await.unwrap();
 }
 
 #[tokio::test]
 async fn deserializes_the_body_into_the_declared_type() {
     let server = server_answering(json!({ "displayName": "Ada", "accountId": "5b10" })).await;
 
-    let myself: Myself = client_for(&server, None)
-        .get("/rest/api/3/myself")
-        .send()
-        .await
-        .unwrap();
+    let myself: Myself = client_for(&server, None).get("/rest/api/3/myself").send().await.unwrap();
 
     assert_eq!(myself.display_name, "Ada");
 }
@@ -348,11 +295,7 @@ async fn deserializes_the_body_into_the_declared_type() {
 async fn ignores_a_field_atlassian_added_since() {
     let server = server_answering(json!({ "displayName": "Ada", "somethingNew": { "nested": true } })).await;
 
-    let myself: Myself = client_for(&server, None)
-        .get("/rest/api/3/myself")
-        .send()
-        .await
-        .unwrap();
+    let myself: Myself = client_for(&server, None).get("/rest/api/3/myself").send().await.unwrap();
 
     assert_eq!(myself.display_name, "Ada");
 }
@@ -361,11 +304,7 @@ async fn ignores_a_field_atlassian_added_since() {
 async fn reports_drift_by_field_rather_than_by_offset() {
     let server = server_answering(json!({ "displayName": 42 })).await;
 
-    let error = client_for(&server, None)
-        .get("/rest/api/3/myself")
-        .send::<Myself>()
-        .await
-        .unwrap_err();
+    let error = client_for(&server, None).get("/rest/api/3/myself").send::<Myself>().await.unwrap_err();
     let report = error.schema_report().expect("a schema mismatch carries a report");
 
     assert!(error.is_schema_mismatch());
@@ -378,18 +317,10 @@ async fn reports_drift_by_field_rather_than_by_offset() {
 async fn names_the_missing_field_when_the_response_leaves_one_out() {
     let server = server_answering(json!({ "accountId": "5b10" })).await;
 
-    let error = client_for(&server, None)
-        .get("/rest/api/3/myself")
-        .send::<Myself>()
-        .await
-        .unwrap_err();
+    let error = client_for(&server, None).get("/rest/api/3/myself").send::<Myself>().await.unwrap_err();
     let report = error.schema_report().unwrap();
 
-    assert!(
-        report.issues[0].expected.contains("displayName"),
-        "{:?}",
-        report.issues[0]
-    );
+    assert!(report.issues[0].expected.contains("displayName"), "{:?}", report.issues[0]);
 }
 
 #[tokio::test]
@@ -401,11 +332,7 @@ async fn rejects_a_non_json_response_where_a_type_was_expected() {
         .mount(&server)
         .await;
 
-    let error = client_for(&server, None)
-        .get("/rest/api/3/myself")
-        .send::<Myself>()
-        .await
-        .unwrap_err();
+    let error = client_for(&server, None).get("/rest/api/3/myself").send::<Myself>().await.unwrap_err();
     let report = error.schema_report().unwrap();
 
     assert_eq!(report.issues[0].expected, "application/json");
@@ -435,11 +362,7 @@ async fn returns_the_raw_bytes_of_a_download() {
         .mount(&server)
         .await;
 
-    let bytes = client_for(&server, None)
-        .get("/rest/api/3/attachment/1")
-        .send_bytes()
-        .await
-        .unwrap();
+    let bytes = client_for(&server, None).get("/rest/api/3/attachment/1").send_bytes().await.unwrap();
 
     assert_eq!(bytes.as_ref(), &[0x89, 0x50, 0x4E, 0x47]);
 }
@@ -448,11 +371,7 @@ async fn returns_the_raw_bytes_of_a_download() {
 async fn hands_back_the_json_body_unmodelled() {
     let server = server_answering(json!({ "displayName": "Ada" })).await;
 
-    let value = client_for(&server, None)
-        .get("/rest/api/3/myself")
-        .send_raw()
-        .await
-        .unwrap();
+    let value = client_for(&server, None).get("/rest/api/3/myself").send_raw().await.unwrap();
 
     assert_eq!(value["displayName"], "Ada");
 }
@@ -463,16 +382,9 @@ async fn hands_back_the_json_body_unmodelled() {
 async fn retry_is_off_by_default() {
     let server = MockServer::start().await;
 
-    Mock::given(method("GET"))
-        .respond_with(ResponseTemplate::new(503))
-        .mount(&server)
-        .await;
+    Mock::given(method("GET")).respond_with(ResponseTemplate::new(503)).mount(&server).await;
 
-    let error = client_for(&server, None)
-        .get("/rest/api/3/myself")
-        .send::<Myself>()
-        .await
-        .unwrap_err();
+    let error = client_for(&server, None).get("/rest/api/3/myself").send::<Myself>().await.unwrap_err();
 
     assert!(error.is_server());
     assert_eq!(server.received_requests().await.unwrap().len(), 1);
@@ -482,18 +394,11 @@ async fn retry_is_off_by_default() {
 async fn retries_a_503_up_to_max_attempts() {
     let server = MockServer::start().await;
 
-    Mock::given(method("GET"))
-        .respond_with(ResponseTemplate::new(503))
-        .mount(&server)
-        .await;
+    Mock::given(method("GET")).respond_with(ResponseTemplate::new(503)).mount(&server).await;
 
     let client = Client::builder()
         .host(server.uri())
-        .retry(RetryConfig {
-            max_attempts: 3,
-            initial_delay: Duration::from_millis(1),
-            backoff_factor: 2.0,
-        })
+        .retry(RetryConfig { max_attempts: 3, initial_delay: Duration::from_millis(1), backoff_factor: 2.0 })
         .build()
         .unwrap();
 
@@ -522,11 +427,7 @@ async fn stops_retrying_as_soon_as_a_call_succeeds() {
 
     let client = Client::builder()
         .host(server.uri())
-        .retry(RetryConfig {
-            max_attempts: 5,
-            initial_delay: Duration::from_millis(1),
-            backoff_factor: 2.0,
-        })
+        .retry(RetryConfig { max_attempts: 5, initial_delay: Duration::from_millis(1), backoff_factor: 2.0 })
         .build()
         .unwrap();
 
@@ -547,11 +448,7 @@ async fn never_retries_a_429_because_rate_limiting_is_not_a_transport_failure_to
 
     let client = Client::builder()
         .host(server.uri())
-        .retry(RetryConfig {
-            max_attempts: 3,
-            initial_delay: Duration::from_millis(1),
-            backoff_factor: 2.0,
-        })
+        .retry(RetryConfig { max_attempts: 3, initial_delay: Duration::from_millis(1), backoff_factor: 2.0 })
         .build()
         .unwrap();
 
@@ -566,18 +463,11 @@ async fn never_retries_a_429_because_rate_limiting_is_not_a_transport_failure_to
 async fn never_retries_a_4xx() {
     let server = MockServer::start().await;
 
-    Mock::given(method("GET"))
-        .respond_with(ResponseTemplate::new(404))
-        .mount(&server)
-        .await;
+    Mock::given(method("GET")).respond_with(ResponseTemplate::new(404)).mount(&server).await;
 
     let client = Client::builder()
         .host(server.uri())
-        .retry(RetryConfig {
-            max_attempts: 3,
-            initial_delay: Duration::from_millis(1),
-            backoff_factor: 2.0,
-        })
+        .retry(RetryConfig { max_attempts: 3, initial_delay: Duration::from_millis(1), backoff_factor: 2.0 })
         .build()
         .unwrap();
 
@@ -609,42 +499,25 @@ async fn sets_json_content_type_for_a_body() {
     let request = first_request(&server).await;
 
     assert_eq!(header_of(&request, "content-type").as_deref(), Some("application/json"));
-    assert_eq!(
-        String::from_utf8_lossy(&request.body),
-        r#"{"fields":{"summary":"Hello"}}"#
-    );
+    assert_eq!(String::from_utf8_lossy(&request.body), r#"{"fields":{"summary":"Hello"}}"#);
 }
 
 #[tokio::test]
 async fn declares_json_on_a_bodyless_delete_because_jira_answers_415_without_it() {
     let server = MockServer::start().await;
 
-    Mock::given(method("DELETE"))
-        .respond_with(ResponseTemplate::new(204))
-        .mount(&server)
-        .await;
+    Mock::given(method("DELETE")).respond_with(ResponseTemplate::new(204)).mount(&server).await;
 
-    client_for(&server, None)
-        .delete("/rest/api/3/issue/X/remotelink")
-        .send_empty()
-        .await
-        .unwrap();
+    client_for(&server, None).delete("/rest/api/3/issue/X/remotelink").send_empty().await.unwrap();
 
-    assert_eq!(
-        header_of(&first_request(&server).await, "content-type").as_deref(),
-        Some("application/json")
-    );
+    assert_eq!(header_of(&first_request(&server).await, "content-type").as_deref(), Some("application/json"));
 }
 
 #[tokio::test]
 async fn declares_nothing_on_a_bodyless_get() {
     let server = server_answering(json!({ "displayName": "Ada" })).await;
 
-    let _: Myself = client_for(&server, None)
-        .get("/rest/api/3/myself")
-        .send()
-        .await
-        .unwrap();
+    let _: Myself = client_for(&server, None).get("/rest/api/3/myself").send().await.unwrap();
 
     assert_eq!(header_of(&first_request(&server).await, "content-type"), None);
 }
@@ -652,50 +525,28 @@ async fn declares_nothing_on_a_bodyless_get() {
 #[tokio::test]
 async fn lets_a_per_request_header_win_over_a_client_wide_one() {
     let server = server_answering(json!({ "displayName": "Ada" })).await;
-    let client = Client::builder()
-        .host(server.uri())
-        .header("x-trace", "client")
-        .build()
-        .unwrap();
+    let client = Client::builder().host(server.uri()).header("x-trace", "client").build().unwrap();
 
-    let _: Myself = client
-        .get("/rest/api/3/myself")
-        .header("x-trace", "request")
-        .send()
-        .await
-        .unwrap();
+    let _: Myself = client.get("/rest/api/3/myself").header("x-trace", "request").send().await.unwrap();
 
-    assert_eq!(
-        header_of(&first_request(&server).await, "x-trace").as_deref(),
-        Some("request")
-    );
+    assert_eq!(header_of(&first_request(&server).await, "x-trace").as_deref(), Some("request"));
 }
 
 #[tokio::test]
 async fn sends_a_client_wide_header_when_the_request_names_none() {
     let server = server_answering(json!({ "displayName": "Ada" })).await;
-    let client = Client::builder()
-        .host(server.uri())
-        .header("x-trace", "client")
-        .build()
-        .unwrap();
+    let client = Client::builder().host(server.uri()).header("x-trace", "client").build().unwrap();
 
     let _: Myself = client.get("/rest/api/3/myself").send().await.unwrap();
 
-    assert_eq!(
-        header_of(&first_request(&server).await, "x-trace").as_deref(),
-        Some("client")
-    );
+    assert_eq!(header_of(&first_request(&server).await, "x-trace").as_deref(), Some("client"));
 }
 
 #[tokio::test]
 async fn sends_a_text_body_untouched_under_a_declared_content_type() {
     let server = MockServer::start().await;
 
-    Mock::given(method("PUT"))
-        .respond_with(ResponseTemplate::new(204))
-        .mount(&server)
-        .await;
+    Mock::given(method("PUT")).respond_with(ResponseTemplate::new(204)).mount(&server).await;
 
     client_for(&server, None)
         .put("/rest/api/3/issue/X/comment")
@@ -715,10 +566,7 @@ async fn sends_a_text_body_untouched_under_a_declared_content_type() {
 async fn sends_a_form_body_as_form_urlencoded() {
     let server = MockServer::start().await;
 
-    Mock::given(method("PUT"))
-        .respond_with(ResponseTemplate::new(204))
-        .mount(&server)
-        .await;
+    Mock::given(method("PUT")).respond_with(ResponseTemplate::new(204)).mount(&server).await;
 
     client_for(&server, None)
         .put("/rest/api/3/filter/1/columns")
@@ -732,10 +580,7 @@ async fn sends_a_form_body_as_form_urlencoded() {
 
     let request = first_request(&server).await;
 
-    assert_eq!(
-        header_of(&request, "content-type").as_deref(),
-        Some("application/x-www-form-urlencoded"),
-    );
+    assert_eq!(header_of(&request, "content-type").as_deref(), Some("application/x-www-form-urlencoded"),);
     assert_eq!(String::from_utf8_lossy(&request.body), "columns=summary&columns=status");
 }
 
@@ -743,18 +588,12 @@ async fn sends_a_form_body_as_form_urlencoded() {
 async fn sends_an_attachment_as_multipart_with_the_field_the_endpoint_reads() {
     let server = MockServer::start().await;
 
-    Mock::given(method("POST"))
-        .respond_with(ResponseTemplate::new(200).set_body_json(json!([])))
-        .mount(&server)
-        .await;
+    Mock::given(method("POST")).respond_with(ResponseTemplate::new(200).set_body_json(json!([]))).mount(&server).await;
 
     let _: serde_json::Value = client_for(&server, None)
         .post("/rest/api/3/issue/X/attachments")
         .header("X-Atlassian-Token", "no-check")
-        .body(Body::Multipart(MultipartBody::file(Attachment::new(
-            "screenshot.png",
-            vec![1u8, 2, 3],
-        ))))
+        .body(Body::Multipart(MultipartBody::file(Attachment::new("screenshot.png", vec![1u8, 2, 3]))))
         .send()
         .await
         .unwrap();
@@ -763,10 +602,7 @@ async fn sends_an_attachment_as_multipart_with_the_field_the_endpoint_reads() {
     let content_type = header_of(&request, "content-type").unwrap_or_default();
     let body = String::from_utf8_lossy(&request.body);
 
-    assert!(
-        content_type.starts_with("multipart/form-data; boundary="),
-        "{content_type}"
-    );
+    assert!(content_type.starts_with("multipart/form-data; boundary="), "{content_type}");
     assert!(body.contains(r#"name="file""#), "{body}");
     assert!(body.contains(r#"filename="screenshot.png""#), "{body}");
     assert!(body.contains("image/png"), "{body}");
@@ -803,11 +639,7 @@ async fn seraph_server(status: u16, reason: &str, body: serde_json::Value) -> Mo
     let server = MockServer::start().await;
 
     Mock::given(method("GET"))
-        .respond_with(
-            ResponseTemplate::new(status)
-                .set_body_json(body)
-                .insert_header("x-seraph-loginreason", reason),
-        )
+        .respond_with(ResponseTemplate::new(status).set_body_json(body).insert_header("x-seraph-loginreason", reason))
         .mount(&server)
         .await;
 
@@ -856,10 +688,7 @@ async fn counts_a_login_the_instance_refused_outright() {
             ResponseTemplate::new(403)
                 .set_body_json(json!({}))
                 .insert_header("x-seraph-loginreason", "AUTHENTICATION_DENIED")
-                .insert_header(
-                    "x-authentication-denied-reason",
-                    "CAPTCHA_CHALLENGE; login-url=https://jira/login",
-                ),
+                .insert_header("x-authentication-denied-reason", "CAPTCHA_CHALLENGE; login-url=https://jira/login"),
         )
         .mount(&server)
         .await;
@@ -876,23 +705,14 @@ async fn counts_a_login_the_instance_refused_outright() {
 async fn leaves_a_client_with_no_credentials_alone() {
     let server = seraph_server(200, "AUTHENTICATED_FAILED", json!({ "displayName": "Anonymous" })).await;
 
-    let myself: Myself = client_for(&server, None)
-        .get("/rest/api/3/myself")
-        .send()
-        .await
-        .unwrap();
+    let myself: Myself = client_for(&server, None).get("/rest/api/3/myself").send().await.unwrap();
 
     assert_eq!(myself.display_name, "Anonymous");
 }
 
 #[tokio::test]
 async fn does_not_reclassify_a_permission_denial_that_carries_the_header() {
-    let server = seraph_server(
-        403,
-        "AUTHORISATION_FAILED",
-        json!({ "errorMessages": ["no permission"] }),
-    )
-    .await;
+    let server = seraph_server(403, "AUTHORISATION_FAILED", json!({ "errorMessages": ["no permission"] })).await;
     let client = client_for(&server, Some(Auth::api_token("you@example.com", "TOKEN")));
 
     let error = client.get("/rest/api/3/myself").send::<Myself>().await.unwrap_err();

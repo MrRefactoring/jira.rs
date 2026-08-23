@@ -68,10 +68,6 @@ pub struct Issue {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub transitions: Option<Vec<IssueTransition>>,
     /// The versions of each field on the issue.
-    #[serde(
-        rename = "versionedRepresentations",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "versionedRepresentations", default, skip_serializing_if = "Option::is_none")]
     pub versioned_representations: Option<std::collections::HashMap<String, serde_json::Value>>,
 }

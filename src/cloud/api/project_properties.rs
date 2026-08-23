@@ -76,10 +76,7 @@ pub struct GetProjectPropertyKeysRequest<'a> {
 
 impl<'a> GetProjectPropertyKeysRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -120,21 +117,14 @@ impl<'a> GetProjectPropertyRequest<'a> {
         project_id_or_key: impl Into<String>,
         property_key: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            property_key: property_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/3/project/{}/properties/{}",
-                self.project_id_or_key, self.property_key
-            ),
+            format!("/rest/api/3/project/{}/properties/{}", self.project_id_or_key, self.property_key),
         );
 
         Ok(config)
@@ -172,22 +162,14 @@ impl<'a> SetProjectPropertyRequest<'a> {
         property_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            property_key: property_key.into(),
-            body,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), property_key: property_key.into(), body }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/api/3/project/{}/properties/{}",
-                self.project_id_or_key, self.property_key
-            ),
+            format!("/rest/api/3/project/{}/properties/{}", self.project_id_or_key, self.property_key),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -223,21 +205,14 @@ impl<'a> DeleteProjectPropertyRequest<'a> {
         project_id_or_key: impl Into<String>,
         property_key: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            property_key: property_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/api/3/project/{}/properties/{}",
-                self.project_id_or_key, self.property_key
-            ),
+            format!("/rest/api/3/project/{}/properties/{}", self.project_id_or_key, self.property_key),
         );
 
         Ok(config)

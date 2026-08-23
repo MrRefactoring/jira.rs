@@ -90,12 +90,7 @@ pub struct GetPoliciesRequest<'a> {
 
 impl<'a> GetPoliciesRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            cursor: None,
-            r#type: None,
-        }
+        Self { client, org_id: org_id.into(), cursor: None, r#type: None }
     }
 
     /// Sets the starting point for the page of results to return.
@@ -122,15 +117,11 @@ impl<'a> GetPoliciesRequest<'a> {
         );
 
         if let Some(value) = &self.cursor {
-            config
-                .query
-                .push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.r#type {
-            config
-                .query
-                .push(("type".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("type".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -156,11 +147,7 @@ pub struct CreatePolicyRequest<'a> {
 
 impl<'a> CreatePolicyRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            policy_create_input: None,
-        }
+        Self { client, org_id: org_id.into(), policy_create_input: None }
     }
 
     #[must_use]
@@ -207,11 +194,7 @@ pub struct GetPolicyByIdRequest<'a> {
 
 impl<'a> GetPolicyByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, policy_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            policy_id: policy_id.into(),
-        }
+        Self { client, org_id: org_id.into(), policy_id: policy_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -245,12 +228,7 @@ pub struct UpdatePolicyRequest<'a> {
 
 impl<'a> UpdatePolicyRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, policy_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            policy_id: policy_id.into(),
-            policy_update_input: None,
-        }
+        Self { client, org_id: org_id.into(), policy_id: policy_id.into(), policy_update_input: None }
     }
 
     #[must_use]
@@ -297,11 +275,7 @@ pub struct DeletePolicyRequest<'a> {
 
 impl<'a> DeletePolicyRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, policy_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            policy_id: policy_id.into(),
-        }
+        Self { client, org_id: org_id.into(), policy_id: policy_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -335,12 +309,7 @@ pub struct AddResourceToPolicyRequest<'a> {
 
 impl<'a> AddResourceToPolicyRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, policy_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            policy_id: policy_id.into(),
-            resource_input: None,
-        }
+        Self { client, org_id: org_id.into(), policy_id: policy_id.into(), resource_input: None }
     }
 
     #[must_use]
@@ -414,10 +383,7 @@ impl<'a> UpdatePolicyResourceRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/admin/v1/orgs/{}/policies/{}/resources/{}",
-                self.org_id, self.policy_id, self.resource_id
-            ),
+            format!("/admin/v1/orgs/{}/policies/{}/resources/{}", self.org_id, self.policy_id, self.resource_id),
         );
 
         let body = match serde_json::to_value(&self.resource_update_input)? {
@@ -456,22 +422,14 @@ impl<'a> DeletePolicyResourceRequest<'a> {
         policy_id: impl Into<String>,
         resource_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            policy_id: policy_id.into(),
-            resource_id: resource_id.into(),
-        }
+        Self { client, org_id: org_id.into(), policy_id: policy_id.into(), resource_id: resource_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/admin/v1/orgs/{}/policies/{}/resources/{}",
-                self.org_id, self.policy_id, self.resource_id
-            ),
+            format!("/admin/v1/orgs/{}/policies/{}/resources/{}", self.org_id, self.policy_id, self.resource_id),
         );
 
         Ok(config)
@@ -497,11 +455,7 @@ pub struct ValidatePolicyRequest<'a> {
 
 impl<'a> ValidatePolicyRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, policy_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            policy_id: policy_id.into(),
-        }
+        Self { client, org_id: org_id.into(), policy_id: policy_id.into() }
     }
 
     /// The request as the transport will send it.

@@ -45,10 +45,7 @@ pub struct CreateCustomerRequest<'a> {
 
 impl<'a> CreateCustomerRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            customer_create: None,
-        }
+        Self { client, customer_create: None }
     }
 
     #[must_use]
@@ -95,11 +92,7 @@ pub struct AddCustomersRequest<'a> {
 
 impl<'a> AddCustomersRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            service_desk_customer_add: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), service_desk_customer_add: None }
     }
 
     #[must_use]

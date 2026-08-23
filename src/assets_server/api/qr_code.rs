@@ -25,11 +25,7 @@ pub struct GetObjectQrCodeRequest<'a> {
 
 impl<'a> GetObjectQrCodeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            size: None,
-        }
+        Self { client, id: id.into(), size: None }
     }
 
     /// The size of the QR code.
@@ -48,9 +44,7 @@ impl<'a> GetObjectQrCodeRequest<'a> {
         );
 
         if let Some(value) = &self.size {
-            config
-                .query
-                .push(("size".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("size".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         config.headers.push(("Accept".to_owned(), "image/png".to_owned()));

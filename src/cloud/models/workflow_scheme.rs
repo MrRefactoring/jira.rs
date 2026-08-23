@@ -36,11 +36,7 @@ pub struct WorkflowScheme {
     #[serde(rename = "originalDefaultWorkflow", default, skip_serializing_if = "Option::is_none")]
     pub original_default_workflow: Option<String>,
     /// For draft workflow schemes, this property is the issue type to workflow mappings for the original workflow scheme, where each mapping is an issue type ID and workflow name pair. Note that an issue type can only be mapped to one workflow in a workflow scheme.
-    #[serde(
-        rename = "originalIssueTypeMappings",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "originalIssueTypeMappings", default, skip_serializing_if = "Option::is_none")]
     pub original_issue_type_mappings: Option<std::collections::HashMap<String, serde_json::Value>>,
     #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
     pub self_: Option<String>,

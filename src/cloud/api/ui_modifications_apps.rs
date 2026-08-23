@@ -141,12 +141,7 @@ pub struct GetUiModificationsRequest<'a> {
 
 impl<'a> GetUiModificationsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start_at: None,
-            max_results: None,
-            expand: None,
-        }
+        Self { client, start_at: None, max_results: None, expand: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -182,22 +177,15 @@ impl<'a> GetUiModificationsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/uiModifications".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -247,10 +235,7 @@ pub struct CreateUiModificationRequest<'a> {
 
 impl<'a> CreateUiModificationRequest<'a> {
     fn new(client: &'a crate::core::Client, create_ui_modification_details: CreateUiModificationDetails) -> Self {
-        Self {
-            client,
-            create_ui_modification_details,
-        }
+        Self { client, create_ui_modification_details }
     }
 
     /// The request as the transport will send it.
@@ -317,11 +302,7 @@ impl<'a> UpdateUiModificationRequest<'a> {
         ui_modification_id: impl Into<String>,
         update_ui_modification_details: UpdateUiModificationDetails,
     ) -> Self {
-        Self {
-            client,
-            ui_modification_id: ui_modification_id.into(),
-            update_ui_modification_details,
-        }
+        Self { client, ui_modification_id: ui_modification_id.into(), update_ui_modification_details }
     }
 
     /// The request as the transport will send it.
@@ -364,10 +345,7 @@ pub struct DeleteUiModificationRequest<'a> {
 
 impl<'a> DeleteUiModificationRequest<'a> {
     fn new(client: &'a crate::core::Client, ui_modification_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            ui_modification_id: ui_modification_id.into(),
-        }
+        Self { client, ui_modification_id: ui_modification_id.into() }
     }
 
     /// The request as the transport will send it.

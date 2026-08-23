@@ -36,11 +36,7 @@ pub struct GetDeploymentGatingStatusByKeyDetails {
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct GetDeploymentGatingStatusByKey {
     /// This is the identifier for the Deployment.
-    #[serde(
-        rename = "deploymentSequenceNumber",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "deploymentSequenceNumber", default, skip_serializing_if = "Option::is_none")]
     pub deployment_sequence_number: Option<i64>,
     /// The ID of the Deployment's pipeline.
     #[serde(rename = "pipelineId", default, skip_serializing_if = "Option::is_none")]

@@ -120,10 +120,7 @@ pub struct SetDefaultShareScopeRequest<'a> {
 
 impl<'a> SetDefaultShareScopeRequest<'a> {
     fn new(client: &'a crate::core::Client, default_share_scope: DefaultShareScope) -> Self {
-        Self {
-            client,
-            default_share_scope,
-        }
+        Self { client, default_share_scope }
     }
 
     /// The request as the transport will send it.
@@ -209,11 +206,7 @@ pub struct AddSharePermissionRequest<'a> {
 
 impl<'a> AddSharePermissionRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, share_permission_input: SharePermissionInput) -> Self {
-        Self {
-            client,
-            id,
-            share_permission_input,
-        }
+        Self { client, id, share_permission_input }
     }
 
     /// The request as the transport will send it.
@@ -263,11 +256,7 @@ pub struct GetSharePermissionRequest<'a> {
 
 impl<'a> GetSharePermissionRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, permission_id: i64) -> Self {
-        Self {
-            client,
-            id,
-            permission_id,
-        }
+        Self { client, id, permission_id }
     }
 
     /// The request as the transport will send it.
@@ -302,11 +291,7 @@ pub struct DeleteSharePermissionRequest<'a> {
 
 impl<'a> DeleteSharePermissionRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, permission_id: i64) -> Self {
-        Self {
-            client,
-            id,
-            permission_id,
-        }
+        Self { client, id, permission_id }
     }
 
     /// The request as the transport will send it.

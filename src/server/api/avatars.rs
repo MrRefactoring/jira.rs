@@ -60,10 +60,7 @@ pub struct GetAllSystemAvatarsRequest<'a> {
 
 impl<'a> GetAllSystemAvatarsRequest<'a> {
     fn new(client: &'a crate::core::Client, r#type: impl Into<String>) -> Self {
-        Self {
-            client,
-            r#type: r#type.into(),
-        }
+        Self { client, r#type: r#type.into() }
     }
 
     /// The request as the transport will send it.
@@ -96,21 +93,14 @@ pub struct GetAvatarsRequest<'a> {
 
 impl<'a> GetAvatarsRequest<'a> {
     fn new(client: &'a crate::core::Client, r#type: impl Into<String>, owning_object_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            r#type: r#type.into(),
-            owning_object_id: owning_object_id.into(),
-        }
+        Self { client, r#type: r#type.into(), owning_object_id: owning_object_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/2/universal_avatar/type/{}/owner/{}",
-                self.r#type, self.owning_object_id
-            ),
+            format!("/rest/api/2/universal_avatar/type/{}/owner/{}", self.r#type, self.owning_object_id),
         );
 
         Ok(config)
@@ -137,12 +127,7 @@ pub struct CreateAvatarFromTemporaryRequest<'a> {
 
 impl<'a> CreateAvatarFromTemporaryRequest<'a> {
     fn new(client: &'a crate::core::Client, r#type: impl Into<String>, owning_object_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            r#type: r#type.into(),
-            owning_object_id: owning_object_id.into(),
-            avatar_cropping: None,
-        }
+        Self { client, r#type: r#type.into(), owning_object_id: owning_object_id.into(), avatar_cropping: None }
     }
 
     #[must_use]
@@ -156,10 +141,7 @@ impl<'a> CreateAvatarFromTemporaryRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/rest/api/2/universal_avatar/type/{}/owner/{}/avatar",
-                self.r#type, self.owning_object_id
-            ),
+            format!("/rest/api/2/universal_avatar/type/{}/owner/{}/avatar", self.r#type, self.owning_object_id),
         );
 
         let body = match serde_json::to_value(&self.avatar_cropping)? {
@@ -198,12 +180,7 @@ impl<'a> DeleteAvatarRequest<'a> {
         r#type: impl Into<String>,
         owning_object_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            id,
-            r#type: r#type.into(),
-            owning_object_id: owning_object_id.into(),
-        }
+        Self { client, id, r#type: r#type.into(), owning_object_id: owning_object_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -257,20 +234,13 @@ impl<'a> StoreTemporaryAvatarUsingMultiPartRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/rest/api/2/universal_avatar/type/{}/owner/{}/temp",
-                self.r#type, self.owning_object_id
-            ),
+            format!("/rest/api/2/universal_avatar/type/{}/owner/{}/temp", self.r#type, self.owning_object_id),
         );
 
-        config
-            .headers
-            .push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
+        config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
 
-        config.body = Some(crate::core::Body::Multipart(crate::core::MultipartBody::new(
-            "avatar",
-            self.avatar.clone(),
-        )));
+        config.body =
+            Some(crate::core::Body::Multipart(crate::core::MultipartBody::new("avatar", self.avatar.clone())));
 
         Ok(config)
     }

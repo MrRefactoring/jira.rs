@@ -58,21 +58,14 @@ impl<'a> GetApprovalByIdRequest<'a> {
         issue_id_or_key: impl Into<String>,
         approval_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            approval_id: approval_id.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), approval_id: approval_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/request/{}/approval/{}",
-                self.issue_id_or_key, self.approval_id
-            ),
+            format!("/rest/servicedeskapi/request/{}/approval/{}", self.issue_id_or_key, self.approval_id),
         );
 
         Ok(config)
@@ -122,10 +115,7 @@ impl<'a> AnswerApprovalRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/rest/servicedeskapi/request/{}/approval/{}",
-                self.issue_id_or_key, self.approval_id
-            ),
+            format!("/rest/servicedeskapi/request/{}/approval/{}", self.issue_id_or_key, self.approval_id),
         );
 
         let body = match serde_json::to_value(&self.approval_decision_request)? {
@@ -162,21 +152,14 @@ impl<'a> GetApprovalCommentConfigRequest<'a> {
         issue_id_or_key: impl Into<String>,
         approval_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            approval_id: approval_id.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), approval_id: approval_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/request/{}/approval/{}/config",
-                self.issue_id_or_key, self.approval_id
-            ),
+            format!("/rest/servicedeskapi/request/{}/approval/{}/config", self.issue_id_or_key, self.approval_id),
         );
 
         Ok(config)
@@ -203,12 +186,7 @@ pub struct GetApprovalsRequest<'a> {
 
 impl<'a> GetApprovalsRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            start: None,
-            limit: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0.
@@ -235,15 +213,11 @@ impl<'a> GetApprovalsRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

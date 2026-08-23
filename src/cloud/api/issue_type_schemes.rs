@@ -199,15 +199,7 @@ pub struct GetAllIssueTypeSchemesRequest<'a> {
 
 impl<'a> GetAllIssueTypeSchemesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start_at: None,
-            max_results: None,
-            id: None,
-            order_by: None,
-            expand: None,
-            query_string: None,
-        }
+        Self { client, start_at: None, max_results: None, id: None, order_by: None, expand: None, query_string: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -270,40 +262,27 @@ impl<'a> GetAllIssueTypeSchemesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/issuetypescheme".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.id {
-            config
-                .query
-                .push(("id".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("id".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.order_by {
-            config
-                .query
-                .push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.query_string {
-            config
-                .query
-                .push(("queryString".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("queryString".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -330,10 +309,7 @@ pub struct CreateIssueTypeSchemeRequest<'a> {
 
 impl<'a> CreateIssueTypeSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_type_scheme_details: IssueTypeSchemeDetails) -> Self {
-        Self {
-            client,
-            issue_type_scheme_details,
-        }
+        Self { client, issue_type_scheme_details }
     }
 
     /// The request as the transport will send it.
@@ -376,12 +352,7 @@ pub struct GetIssueTypeSchemesMappingRequest<'a> {
 
 impl<'a> GetIssueTypeSchemesMappingRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start_at: None,
-            max_results: None,
-            issue_type_scheme_id: None,
-        }
+        Self { client, start_at: None, max_results: None, issue_type_scheme_id: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -410,29 +381,19 @@ impl<'a> GetIssueTypeSchemesMappingRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            "/rest/api/3/issuetypescheme/mapping".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/issuetypescheme/mapping".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.issue_type_scheme_id {
-            config.query.push((
-                "issueTypeSchemeId".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("issueTypeSchemeId".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -463,12 +424,7 @@ pub struct GetIssueTypeSchemeForProjectsRequest<'a> {
 
 impl<'a> GetIssueTypeSchemeForProjectsRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id: impl IntoIterator<Item = i64>) -> Self {
-        Self {
-            client,
-            project_id: project_id.into_iter().collect(),
-            start_at: None,
-            max_results: None,
-        }
+        Self { client, project_id: project_id.into_iter().collect(), start_at: None, max_results: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -489,28 +445,18 @@ impl<'a> GetIssueTypeSchemeForProjectsRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            "/rest/api/3/issuetypescheme/project".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/issuetypescheme/project".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
-        config.query.push((
-            "projectId".to_owned(),
-            crate::core::QueryValue::from_serializable(&self.project_id)?,
-        ));
+        config.query.push(("projectId".to_owned(), crate::core::QueryValue::from_serializable(&self.project_id)?));
 
         Ok(config)
     }
@@ -543,18 +489,13 @@ impl<'a> AssignIssueTypeSchemeToProjectRequest<'a> {
         client: &'a crate::core::Client,
         issue_type_scheme_project_association: IssueTypeSchemeProjectAssociation,
     ) -> Self {
-        Self {
-            client,
-            issue_type_scheme_project_association,
-        }
+        Self { client, issue_type_scheme_project_association }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            "/rest/api/3/issuetypescheme/project".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::PUT, "/rest/api/3/issuetypescheme/project".to_owned());
 
         let body = match serde_json::to_value(&self.issue_type_scheme_project_association)? {
             serde_json::Value::Object(object) => object,
@@ -592,11 +533,7 @@ impl<'a> UpdateIssueTypeSchemeRequest<'a> {
         issue_type_scheme_id: i64,
         issue_type_scheme_update_details: IssueTypeSchemeUpdateDetails,
     ) -> Self {
-        Self {
-            client,
-            issue_type_scheme_id,
-            issue_type_scheme_update_details,
-        }
+        Self { client, issue_type_scheme_id, issue_type_scheme_update_details }
     }
 
     /// The request as the transport will send it.
@@ -641,10 +578,7 @@ pub struct DeleteIssueTypeSchemeRequest<'a> {
 
 impl<'a> DeleteIssueTypeSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_type_scheme_id: i64) -> Self {
-        Self {
-            client,
-            issue_type_scheme_id,
-        }
+        Self { client, issue_type_scheme_id }
     }
 
     /// The request as the transport will send it.
@@ -683,11 +617,7 @@ pub struct AddIssueTypesToIssueTypeSchemeRequest<'a> {
 
 impl<'a> AddIssueTypesToIssueTypeSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_type_scheme_id: i64, issue_type_ids: IssueTypeIds) -> Self {
-        Self {
-            client,
-            issue_type_scheme_id,
-            issue_type_ids,
-        }
+        Self { client, issue_type_scheme_id, issue_type_ids }
     }
 
     /// The request as the transport will send it.
@@ -739,21 +669,14 @@ impl<'a> ReorderIssueTypesInIssueTypeSchemeRequest<'a> {
         issue_type_scheme_id: i64,
         order_of_issue_types: OrderOfIssueTypes,
     ) -> Self {
-        Self {
-            client,
-            issue_type_scheme_id,
-            order_of_issue_types,
-        }
+        Self { client, issue_type_scheme_id, order_of_issue_types }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/api/3/issuetypescheme/{}/issuetype/move",
-                self.issue_type_scheme_id
-            ),
+            format!("/rest/api/3/issuetypescheme/{}/issuetype/move", self.issue_type_scheme_id),
         );
 
         let body = match serde_json::to_value(&self.order_of_issue_types)? {
@@ -794,21 +717,14 @@ pub struct RemoveIssueTypeFromIssueTypeSchemeRequest<'a> {
 
 impl<'a> RemoveIssueTypeFromIssueTypeSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_type_scheme_id: i64, issue_type_id: i64) -> Self {
-        Self {
-            client,
-            issue_type_scheme_id,
-            issue_type_id,
-        }
+        Self { client, issue_type_scheme_id, issue_type_id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/api/3/issuetypescheme/{}/issuetype/{}",
-                self.issue_type_scheme_id, self.issue_type_id
-            ),
+            format!("/rest/api/3/issuetypescheme/{}/issuetype/{}", self.issue_type_scheme_id, self.issue_type_id),
         );
 
         Ok(config)

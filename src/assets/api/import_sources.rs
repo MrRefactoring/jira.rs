@@ -149,12 +149,7 @@ impl<'a> ImportSourcesService<'a> {
         import_schedule_id: impl Into<String>,
         import_schedule_request: ImportScheduleRequest,
     ) -> UpdateImportScheduleRequest<'a> {
-        UpdateImportScheduleRequest::new(
-            self.client,
-            import_source_id,
-            import_schedule_id,
-            import_schedule_request,
-        )
+        UpdateImportScheduleRequest::new(self.client, import_source_id, import_schedule_id, import_schedule_request)
     }
 
     /// Deletes a scheduled import configuration. The import source will remain, but will no longer execute on a schedule.
@@ -210,12 +205,7 @@ impl<'a> SubmitSchemaAndMappingRequest<'a> {
         import_source_id: impl Into<String>,
         import_schema_and_mapping: ImportSchemaAndMapping,
     ) -> Self {
-        Self {
-            client,
-            import_source_id: import_source_id.into(),
-            import_schema_and_mapping,
-            r#async: None,
-        }
+        Self { client, import_source_id: import_source_id.into(), import_schema_and_mapping, r#async: None }
     }
 
     /// Execute the operation asynchronously
@@ -234,9 +224,7 @@ impl<'a> SubmitSchemaAndMappingRequest<'a> {
         );
 
         if let Some(value) = &self.r#async {
-            config
-                .query
-                .push(("async".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("async".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.import_schema_and_mapping)? {
@@ -270,12 +258,7 @@ pub struct UpdateSchemaAndMappingRequest<'a> {
 
 impl<'a> UpdateSchemaAndMappingRequest<'a> {
     fn new(client: &'a crate::core::Client, import_source_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            import_source_id: import_source_id.into(),
-            r#async: None,
-            import_schema_and_mapping: None,
-        }
+        Self { client, import_source_id: import_source_id.into(), r#async: None, import_schema_and_mapping: None }
     }
 
     /// Execute the operation asynchronously
@@ -301,9 +284,7 @@ impl<'a> UpdateSchemaAndMappingRequest<'a> {
         );
 
         if let Some(value) = &self.r#async {
-            config
-                .query
-                .push(("async".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("async".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.import_schema_and_mapping)? {
@@ -340,21 +321,14 @@ impl<'a> GetSchemaAndMappingProgressRequest<'a> {
         import_source_id: impl Into<String>,
         resource_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            import_source_id: import_source_id.into(),
-            resource_id: resource_id.into(),
-        }
+        Self { client, import_source_id: import_source_id.into(), resource_id: resource_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/importsource/{}/mapping/progress/{}",
-                self.import_source_id, self.resource_id
-            ),
+            format!("/importsource/{}/mapping/progress/{}", self.import_source_id, self.resource_id),
         );
 
         Ok(config)
@@ -379,10 +353,7 @@ pub struct GetImportConfigurationStatusRequest<'a> {
 
 impl<'a> GetImportConfigurationStatusRequest<'a> {
     fn new(client: &'a crate::core::Client, import_source_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            import_source_id: import_source_id.into(),
-        }
+        Self { client, import_source_id: import_source_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -414,10 +385,7 @@ pub struct GetSchemaAndMappingRequest<'a> {
 
 impl<'a> GetSchemaAndMappingRequest<'a> {
     fn new(client: &'a crate::core::Client, import_source_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            import_source_id: import_source_id.into(),
-        }
+        Self { client, import_source_id: import_source_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -449,10 +417,7 @@ pub struct StartImportExecutionRequest<'a> {
 
 impl<'a> StartImportExecutionRequest<'a> {
     fn new(client: &'a crate::core::Client, import_source_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            import_source_id: import_source_id.into(),
-        }
+        Self { client, import_source_id: import_source_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -489,21 +454,14 @@ impl<'a> CancelImportExecutionRequest<'a> {
         import_execution_id: impl Into<String>,
         import_source_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            import_execution_id: import_execution_id.into(),
-            import_source_id: import_source_id.into(),
-        }
+        Self { client, import_execution_id: import_execution_id.into(), import_source_id: import_source_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/importsource/{}/executions/{}",
-                self.import_source_id, self.import_execution_id
-            ),
+            format!("/importsource/{}/executions/{}", self.import_source_id, self.import_execution_id),
         );
 
         Ok(config)
@@ -553,10 +511,7 @@ impl<'a> SubmitImportExecutionProgressRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/importsource/{}/executions/{}/progress",
-                self.import_source_id, self.import_execution_id
-            ),
+            format!("/importsource/{}/executions/{}/progress", self.import_source_id, self.import_execution_id),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -608,10 +563,7 @@ impl<'a> SubmitImportExecutionDataRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/importsource/{}/executions/{}/data",
-                self.import_source_id, self.import_execution_id
-            ),
+            format!("/importsource/{}/executions/{}/data", self.import_source_id, self.import_execution_id),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -643,21 +595,14 @@ impl<'a> GetImportExecutionStatusRequest<'a> {
         import_execution_id: impl Into<String>,
         import_source_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            import_execution_id: import_execution_id.into(),
-            import_source_id: import_source_id.into(),
-        }
+        Self { client, import_execution_id: import_execution_id.into(), import_source_id: import_source_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/importsource/{}/executions/{}/status",
-                self.import_source_id, self.import_execution_id
-            ),
+            format!("/importsource/{}/executions/{}/status", self.import_source_id, self.import_execution_id),
         );
 
         Ok(config)
@@ -682,10 +627,7 @@ pub struct GetLatestImportExecutionStatusRequest<'a> {
 
 impl<'a> GetLatestImportExecutionStatusRequest<'a> {
     fn new(client: &'a crate::core::Client, import_source_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            import_source_id: import_source_id.into(),
-        }
+        Self { client, import_source_id: import_source_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -723,12 +665,7 @@ impl<'a> CreateFailedImportHistoryRequest<'a> {
         import_source_id: impl Into<String>,
         execution_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            import_source_id: import_source_id.into(),
-            execution_id: execution_id.into(),
-            body: None,
-        }
+        Self { client, import_source_id: import_source_id.into(), execution_id: execution_id.into(), body: None }
     }
 
     #[must_use]
@@ -742,10 +679,7 @@ impl<'a> CreateFailedImportHistoryRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/importsource/{}/executions/{}/history/failed",
-                self.import_source_id, self.execution_id
-            ),
+            format!("/importsource/{}/executions/{}/history/failed", self.import_source_id, self.execution_id),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -772,10 +706,7 @@ pub struct GenerateImportSourceTokenRequest<'a> {
 
 impl<'a> GenerateImportSourceTokenRequest<'a> {
     fn new(client: &'a crate::core::Client, import_source_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            import_source_id: import_source_id.into(),
-        }
+        Self { client, import_source_id: import_source_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -807,10 +738,7 @@ pub struct GetImportScheduleLinksRequest<'a> {
 
 impl<'a> GetImportScheduleLinksRequest<'a> {
     fn new(client: &'a crate::core::Client, import_source_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            import_source_id: import_source_id.into(),
-        }
+        Self { client, import_source_id: import_source_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -847,11 +775,7 @@ impl<'a> CreateImportScheduleRequest<'a> {
         import_source_id: impl Into<String>,
         import_schedule_request: ImportScheduleRequest,
     ) -> Self {
-        Self {
-            client,
-            import_source_id: import_source_id.into(),
-            import_schedule_request,
-        }
+        Self { client, import_source_id: import_source_id.into(), import_schedule_request }
     }
 
     /// The request as the transport will send it.
@@ -895,21 +819,14 @@ impl<'a> GetImportScheduleRequest<'a> {
         import_source_id: impl Into<String>,
         import_schedule_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            import_source_id: import_source_id.into(),
-            import_schedule_id: import_schedule_id.into(),
-        }
+        Self { client, import_source_id: import_source_id.into(), import_schedule_id: import_schedule_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/importsource/{}/importschedule/{}",
-                self.import_source_id, self.import_schedule_id
-            ),
+            format!("/importsource/{}/importschedule/{}", self.import_source_id, self.import_schedule_id),
         );
 
         Ok(config)
@@ -953,10 +870,7 @@ impl<'a> UpdateImportScheduleRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/importsource/{}/importschedule/{}",
-                self.import_source_id, self.import_schedule_id
-            ),
+            format!("/importsource/{}/importschedule/{}", self.import_source_id, self.import_schedule_id),
         );
 
         let body = match serde_json::to_value(&self.import_schedule_request)? {
@@ -993,21 +907,14 @@ impl<'a> DeleteImportScheduleRequest<'a> {
         import_source_id: impl Into<String>,
         import_schedule_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            import_source_id: import_source_id.into(),
-            import_schedule_id: import_schedule_id.into(),
-        }
+        Self { client, import_source_id: import_source_id.into(), import_schedule_id: import_schedule_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/importsource/{}/importschedule/{}",
-                self.import_source_id, self.import_schedule_id
-            ),
+            format!("/importsource/{}/importschedule/{}", self.import_source_id, self.import_schedule_id),
         );
 
         Ok(config)

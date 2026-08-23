@@ -45,12 +45,7 @@ pub struct GetCustomerTransitionsRequest<'a> {
 
 impl<'a> GetCustomerTransitionsRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            start: None,
-            limit: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0.
@@ -77,15 +72,11 @@ impl<'a> GetCustomerTransitionsRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -112,11 +103,7 @@ pub struct PerformCustomerTransitionRequest<'a> {
 
 impl<'a> PerformCustomerTransitionRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            customer_transition_execution: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), customer_transition_execution: None }
     }
 
     #[must_use]

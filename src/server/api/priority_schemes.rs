@@ -54,11 +54,7 @@ pub struct GetPrioritySchemesRequest<'a> {
 
 impl<'a> GetPrioritySchemesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            max_results: None,
-            start_at: None,
-        }
+        Self { client, max_results: None, start_at: None }
     }
 
     /// how many results on the page should be included. Defaults to 100, maximum is 1000.
@@ -83,16 +79,11 @@ impl<'a> GetPrioritySchemesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/priorityschemes".to_owned());
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -117,10 +108,7 @@ pub struct CreatePrioritySchemeRequest<'a> {
 
 impl<'a> CreatePrioritySchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, priority_scheme_update: PrioritySchemeUpdate) -> Self {
-        Self {
-            client,
-            priority_scheme_update,
-        }
+        Self { client, priority_scheme_update }
     }
 
     /// The request as the transport will send it.
@@ -190,11 +178,7 @@ pub struct UpdatePrioritySchemeRequest<'a> {
 
 impl<'a> UpdatePrioritySchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, scheme_id: i64, priority_scheme_update: PrioritySchemeUpdate) -> Self {
-        Self {
-            client,
-            scheme_id,
-            priority_scheme_update,
-        }
+        Self { client, scheme_id, priority_scheme_update }
     }
 
     /// The request as the transport will send it.

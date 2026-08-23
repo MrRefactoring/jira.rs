@@ -80,11 +80,7 @@ pub struct UpdateProjectEmailRequest<'a> {
 
 impl<'a> UpdateProjectEmailRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id: i64, project_email_address: ProjectEmailAddress) -> Self {
-        Self {
-            client,
-            project_id,
-            project_email_address,
-        }
+        Self { client, project_id, project_email_address }
     }
 
     /// The request as the transport will send it.

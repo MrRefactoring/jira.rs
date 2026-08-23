@@ -144,10 +144,7 @@ pub struct GetPreferenceRequest<'a> {
 
 impl<'a> GetPreferenceRequest<'a> {
     fn new(client: &'a crate::core::Client, key: impl Into<String>) -> Self {
-        Self {
-            client,
-            key: key.into(),
-        }
+        Self { client, key: key.into() }
     }
 
     /// The request as the transport will send it.
@@ -155,9 +152,7 @@ impl<'a> GetPreferenceRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/mypreferences".to_owned());
 
-        config
-            .query
-            .push(("key".to_owned(), crate::core::QueryValue::Scalar(self.key.clone())));
+        config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(self.key.clone())));
 
         Ok(config)
     }
@@ -204,11 +199,7 @@ pub struct SetPreferenceRequest<'a> {
 
 impl<'a> SetPreferenceRequest<'a> {
     fn new(client: &'a crate::core::Client, key: impl Into<String>, body: impl Into<String>) -> Self {
-        Self {
-            client,
-            key: key.into(),
-            body: body.into(),
-        }
+        Self { client, key: key.into(), body: body.into() }
     }
 
     /// The request as the transport will send it.
@@ -216,9 +207,7 @@ impl<'a> SetPreferenceRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::PUT, "/rest/api/3/mypreferences".to_owned());
 
-        config
-            .query
-            .push(("key".to_owned(), crate::core::QueryValue::Scalar(self.key.clone())));
+        config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(self.key.clone())));
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
 
@@ -253,10 +242,7 @@ pub struct RemovePreferenceRequest<'a> {
 
 impl<'a> RemovePreferenceRequest<'a> {
     fn new(client: &'a crate::core::Client, key: impl Into<String>) -> Self {
-        Self {
-            client,
-            key: key.into(),
-        }
+        Self { client, key: key.into() }
     }
 
     /// The request as the transport will send it.
@@ -264,9 +250,7 @@ impl<'a> RemovePreferenceRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::DELETE, "/rest/api/3/mypreferences".to_owned());
 
-        config
-            .query
-            .push(("key".to_owned(), crate::core::QueryValue::Scalar(self.key.clone())));
+        config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(self.key.clone())));
 
         Ok(config)
     }
@@ -346,9 +330,7 @@ impl<'a> GetCurrentUserRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/myself".to_owned());
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)

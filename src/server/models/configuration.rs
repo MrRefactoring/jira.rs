@@ -11,11 +11,7 @@ pub struct Configuration {
     pub issue_linking_enabled: Option<bool>,
     #[serde(rename = "subTasksEnabled", default, skip_serializing_if = "Option::is_none")]
     pub sub_tasks_enabled: Option<bool>,
-    #[serde(
-        rename = "timeTrackingConfiguration",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "timeTrackingConfiguration", default, skip_serializing_if = "Option::is_none")]
     pub time_tracking_configuration: Option<TimeTrackingConfiguration>,
     #[serde(rename = "timeTrackingEnabled", default, skip_serializing_if = "Option::is_none")]
     pub time_tracking_enabled: Option<bool>,

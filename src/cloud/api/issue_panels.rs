@@ -37,10 +37,7 @@ pub struct BulkPinUnpinProjectsAsyncRequest<'a> {
 
 impl<'a> BulkPinUnpinProjectsAsyncRequest<'a> {
     fn new(client: &'a crate::core::Client, forge_panel_project_pin_request: ForgePanelProjectPinRequest) -> Self {
-        Self {
-            client,
-            forge_panel_project_pin_request,
-        }
+        Self { client, forge_panel_project_pin_request }
     }
 
     /// The request as the transport will send it.

@@ -137,17 +137,9 @@ pub struct HttpServletRequest {
     pub request_url: Option<HttpServletRequestRequestURL>,
     #[serde(rename = "requestedSessionId", default, skip_serializing_if = "Option::is_none")]
     pub requested_session_id: Option<String>,
-    #[serde(
-        rename = "requestedSessionIdFromCookie",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "requestedSessionIdFromCookie", default, skip_serializing_if = "Option::is_none")]
     pub requested_session_id_from_cookie: Option<bool>,
-    #[serde(
-        rename = "requestedSessionIdFromURL",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "requestedSessionIdFromURL", default, skip_serializing_if = "Option::is_none")]
     pub requested_session_id_from_url: Option<bool>,
     #[serde(rename = "requestedSessionIdValid", default, skip_serializing_if = "Option::is_none")]
     pub requested_session_id_valid: Option<bool>,

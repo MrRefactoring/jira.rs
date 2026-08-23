@@ -15,11 +15,7 @@ pub struct TimeTrackingDetails {
     #[serde(rename = "remainingEstimate", default, skip_serializing_if = "Option::is_none")]
     pub remaining_estimate: Option<String>,
     /// The remaining estimate of time needed for this issue in seconds.
-    #[serde(
-        rename = "remainingEstimateSeconds",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "remainingEstimateSeconds", default, skip_serializing_if = "Option::is_none")]
     pub remaining_estimate_seconds: Option<i64>,
     /// Time worked on this issue in readable format.
     #[serde(rename = "timeSpent", default, skip_serializing_if = "Option::is_none")]

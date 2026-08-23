@@ -279,12 +279,7 @@ pub struct SubmitFeatureFlagsRequest<'a> {
 
 impl<'a> SubmitFeatureFlagsRequest<'a> {
     fn new(client: &'a crate::core::Client, flags: impl IntoIterator<Item = SubmitFeatureFlagsRequestFlags>) -> Self {
-        Self {
-            client,
-            flags: flags.into_iter().collect(),
-            properties: None,
-            provider_metadata: None,
-        }
+        Self { client, flags: flags.into_iter().collect(), properties: None, provider_metadata: None }
     }
 
     /// Properties assigned to Feature Flag data that can then be used for delete / query operations.
@@ -361,11 +356,7 @@ pub struct DeleteFeatureFlagsByPropertyRequest<'a> {
 
 impl<'a> DeleteFeatureFlagsByPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            account_id: account_id.into(),
-            created_by: None,
-        }
+        Self { client, account_id: account_id.into(), created_by: None }
     }
 
     /// Optional additional property filter combined with accountId (AND). Must match a key previously supplied in submitFeatureFlags `properties`. Example: createdBy=user-456.
@@ -383,15 +374,10 @@ impl<'a> DeleteFeatureFlagsByPropertyRequest<'a> {
             "/rest/featureflags/0.1/bulkByProperties".to_owned(),
         );
 
-        config.query.push((
-            "accountId".to_owned(),
-            crate::core::QueryValue::Scalar(self.account_id.clone()),
-        ));
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
 
         if let Some(value) = &self.created_by {
-            config
-                .query
-                .push(("createdBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("createdBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -418,10 +404,7 @@ pub struct GetFeatureFlagByIdRequest<'a> {
 
 impl<'a> GetFeatureFlagByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, feature_flag_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            feature_flag_id: feature_flag_id.into(),
-        }
+        Self { client, feature_flag_id: feature_flag_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -455,10 +438,7 @@ pub struct DeleteFeatureFlagByIdRequest<'a> {
 
 impl<'a> DeleteFeatureFlagByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, feature_flag_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            feature_flag_id: feature_flag_id.into(),
-        }
+        Self { client, feature_flag_id: feature_flag_id.into() }
     }
 
     /// The request as the transport will send it.

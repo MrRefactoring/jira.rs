@@ -210,43 +210,27 @@ impl<'a> GetIssuePickerResourceRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/issue/picker".to_owned());
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.current_jql {
-            config
-                .query
-                .push(("currentJQL".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("currentJQL".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.current_issue_key {
-            config.query.push((
-                "currentIssueKey".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("currentIssueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.current_project_id {
-            config.query.push((
-                "currentProjectId".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("currentProjectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.show_sub_tasks {
-            config.query.push((
-                "showSubTasks".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("showSubTasks".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.show_sub_task_parent {
-            config.query.push((
-                "showSubTaskParent".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("showSubTaskParent".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -276,10 +260,7 @@ pub struct MatchIssuesRequest<'a> {
 
 impl<'a> MatchIssuesRequest<'a> {
     fn new(client: &'a crate::core::Client, issues_and_jql_queries: IssuesAndJQLQueries) -> Self {
-        Self {
-            client,
-            issues_and_jql_queries,
-        }
+        Self { client, issues_and_jql_queries }
     }
 
     /// The request as the transport will send it.
@@ -322,10 +303,7 @@ pub struct CountIssuesRequest<'a> {
 
 impl<'a> CountIssuesRequest<'a> {
     fn new(client: &'a crate::core::Client, jql_count_request: JQLCountRequest) -> Self {
-        Self {
-            client,
-            jql_count_request,
-        }
+        Self { client, jql_count_request }
     }
 
     /// The request as the transport will send it.
@@ -505,62 +483,39 @@ impl<'a> SearchAndReconsileIssuesUsingJqlRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/search/jql".to_owned());
 
         if let Some(value) = &self.jql {
-            config
-                .query
-                .push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.next_page_token {
-            config.query.push((
-                "nextPageToken".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.fields {
-            config
-                .query
-                .push(("fields".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.properties {
-            config
-                .query
-                .push(("properties".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("properties".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.fields_by_keys {
-            config.query.push((
-                "fieldsByKeys".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("fieldsByKeys".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.fail_fast {
-            config.query.push((
-                "failFast".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("failFast".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.reconcile_issues {
-            config.query.push((
-                "reconcileIssues".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("reconcileIssues".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -590,10 +545,7 @@ pub struct SearchAndReconsileIssuesUsingJqlPostRequest<'a> {
 
 impl<'a> SearchAndReconsileIssuesUsingJqlPostRequest<'a> {
     fn new(client: &'a crate::core::Client, search_and_reconcile_request: SearchAndReconcileRequest) -> Self {
-        Self {
-            client,
-            search_and_reconcile_request,
-        }
+        Self { client, search_and_reconcile_request }
     }
 
     /// The request as the transport will send it.

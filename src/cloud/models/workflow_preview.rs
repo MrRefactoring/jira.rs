@@ -12,11 +12,7 @@ pub struct WorkflowPreview {
     /// The ID of the workflow.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    #[serde(
-        rename = "loopedTransitionContainerLayout",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "loopedTransitionContainerLayout", default, skip_serializing_if = "Option::is_none")]
     pub looped_transition_container_layout: Option<WorkflowPreviewLayout>,
     /// The name of the workflow.
     #[serde(default, skip_serializing_if = "Option::is_none")]

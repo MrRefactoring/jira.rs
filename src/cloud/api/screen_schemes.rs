@@ -105,15 +105,7 @@ pub struct GetScreenSchemesRequest<'a> {
 
 impl<'a> GetScreenSchemesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start_at: None,
-            max_results: None,
-            id: None,
-            expand: None,
-            query_string: None,
-            order_by: None,
-        }
+        Self { client, start_at: None, max_results: None, id: None, expand: None, query_string: None, order_by: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -173,40 +165,27 @@ impl<'a> GetScreenSchemesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/screenscheme".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.id {
-            config
-                .query
-                .push(("id".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("id".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.query_string {
-            config
-                .query
-                .push(("queryString".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("queryString".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.order_by {
-            config
-                .query
-                .push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -233,10 +212,7 @@ pub struct CreateScreenSchemeRequest<'a> {
 
 impl<'a> CreateScreenSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, screen_scheme_details: ScreenSchemeDetails) -> Self {
-        Self {
-            client,
-            screen_scheme_details,
-        }
+        Self { client, screen_scheme_details }
     }
 
     /// The request as the transport will send it.
@@ -280,11 +256,7 @@ impl<'a> UpdateScreenSchemeRequest<'a> {
         screen_scheme_id: impl Into<String>,
         update_screen_scheme_details: UpdateScreenSchemeDetails,
     ) -> Self {
-        Self {
-            client,
-            screen_scheme_id: screen_scheme_id.into(),
-            update_screen_scheme_details,
-        }
+        Self { client, screen_scheme_id: screen_scheme_id.into(), update_screen_scheme_details }
     }
 
     /// The request as the transport will send it.
@@ -327,10 +299,7 @@ pub struct DeleteScreenSchemeRequest<'a> {
 
 impl<'a> DeleteScreenSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, screen_scheme_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            screen_scheme_id: screen_scheme_id.into(),
-        }
+        Self { client, screen_scheme_id: screen_scheme_id.into() }
     }
 
     /// The request as the transport will send it.

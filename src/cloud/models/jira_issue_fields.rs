@@ -48,21 +48,13 @@ pub struct JiraIssueFields {
     ///
     ///  *  To add groups, provide an array of groups with `groupName`s.
     ///  *  To clear all groups, use an empty `groups` array.
-    #[serde(
-        rename = "multipleGroupPickerFields",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "multipleGroupPickerFields", default, skip_serializing_if = "Option::is_none")]
     pub multiple_group_picker_fields: Option<Vec<JiraMultipleGroupPickerField>>,
     /// Assign or unassign multiple users to/from a field:
     ///
     ///  *  To assign, provide an array of user `accountId`s.
     ///  *  To clear, set `users` to `null`.
-    #[serde(
-        rename = "multipleSelectClearableUserPickerFields",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "multipleSelectClearableUserPickerFields", default, skip_serializing_if = "Option::is_none")]
     pub multiple_select_clearable_user_picker_fields: Option<Vec<JiraMultipleSelectUserPickerField>>,
     /// Add or clear a multi-select field:
     ///
@@ -74,11 +66,7 @@ pub struct JiraIssueFields {
     ///
     ///  *  Options include `ADD`, `REPLACE`, `REMOVE`, or `REMOVE_ALL` for bulk edits.
     ///  *  To clear the field, use the `REMOVE_ALL` option with an empty `versions` array.
-    #[serde(
-        rename = "multipleVersionPickerFields",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "multipleVersionPickerFields", default, skip_serializing_if = "Option::is_none")]
     pub multiple_version_picker_fields: Option<Vec<JiraMultipleVersionPickerField>>,
     #[serde(rename = "multiselectComponents", default, skip_serializing_if = "Option::is_none")]
     pub multiselect_components: Option<JiraMultiSelectComponentField>,
@@ -111,11 +99,7 @@ pub struct JiraIssueFields {
     ///  *  To assign an issue, specify the user's `accountId`.
     ///  *  To unassign an issue, set `user` to `null`.
     ///  *  For automatic assignment, set `accountId` to `-1`.
-    #[serde(
-        rename = "singleSelectClearableUserPickerFields",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "singleSelectClearableUserPickerFields", default, skip_serializing_if = "Option::is_none")]
     pub single_select_clearable_user_picker_fields: Option<Vec<JiraSingleSelectUserPickerField>>,
     /// Add or clear a single select field:
     ///
@@ -127,11 +111,7 @@ pub struct JiraIssueFields {
     ///
     ///  *  To add, specify the version with a `versionId`.
     ///  *  To clear, set `versionId` to `-1`.
-    #[serde(
-        rename = "singleVersionPickerFields",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "singleVersionPickerFields", default, skip_serializing_if = "Option::is_none")]
     pub single_version_picker_fields: Option<Vec<JiraSingleVersionPickerField>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub status: Option<JiraStatusInput>,

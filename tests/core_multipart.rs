@@ -36,10 +36,7 @@ fn a_declared_content_type_wins_over_the_guess() {
 
 #[test]
 fn a_body_holds_several_attachments_under_one_field() {
-    let body = MultipartBody::files(vec![
-        Attachment::new("one.txt", "one"),
-        Attachment::new("two.txt", "two"),
-    ]);
+    let body = MultipartBody::files(vec![Attachment::new("one.txt", "one"), Attachment::new("two.txt", "two")]);
 
     assert_eq!(body.field_name, "file");
     assert_eq!(body.attachments.len(), 2);

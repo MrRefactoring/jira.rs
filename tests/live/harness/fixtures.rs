@@ -49,10 +49,7 @@ pub async fn create_issue_with(tracker: &mut ResourceTracker, fields: serde_json
 
     let created = cloud()
         .issues()
-        .create_issue(IssueUpdateDetails {
-            fields: Some(fields),
-            ..IssueUpdateDetails::default()
-        })
+        .create_issue(IssueUpdateDetails { fields: Some(fields), ..IssueUpdateDetails::default() })
         .send()
         .await
         .expect("the test project accepts a new issue");

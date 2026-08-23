@@ -15,11 +15,7 @@ pub struct Configuration {
     /// Whether the ability to create subtasks for issues is enabled.
     #[serde(rename = "subTasksEnabled", default, skip_serializing_if = "Option::is_none")]
     pub sub_tasks_enabled: Option<bool>,
-    #[serde(
-        rename = "timeTrackingConfiguration",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "timeTrackingConfiguration", default, skip_serializing_if = "Option::is_none")]
     pub time_tracking_configuration: Option<TimeTrackingConfiguration>,
     /// Whether the ability to create unassigned issues is enabled. See [Configuring Jira application options](https://confluence.atlassian.com/x/uYXKM) for details.
     #[serde(rename = "unassignedIssuesAllowed", default, skip_serializing_if = "Option::is_none")]

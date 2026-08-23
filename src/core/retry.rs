@@ -19,21 +19,14 @@ pub struct RetryConfig {
 
 impl Default for RetryConfig {
     fn default() -> Self {
-        RetryConfig {
-            max_attempts: 1,
-            initial_delay: Duration::from_millis(500),
-            backoff_factor: 2.0,
-        }
+        RetryConfig { max_attempts: 1, initial_delay: Duration::from_millis(500), backoff_factor: 2.0 }
     }
 }
 
 impl RetryConfig {
     /// `attempts` tries in total, with the default back-off.
     pub fn attempts(max_attempts: u32) -> Self {
-        RetryConfig {
-            max_attempts: max_attempts.max(1),
-            ..RetryConfig::default()
-        }
+        RetryConfig { max_attempts: max_attempts.max(1), ..RetryConfig::default() }
     }
 
     pub(crate) fn next_delay(&self, current: Duration) -> Duration {
@@ -112,7 +105,5 @@ where
         }
     }
 
-    Err(Error::config(
-        "with_retry exhausted every attempt without producing a result",
-    ))
+    Err(Error::config("with_retry exhausted every attempt without producing a result"))
 }

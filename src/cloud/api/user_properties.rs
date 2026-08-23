@@ -80,10 +80,7 @@ pub struct GetUserPropertyKeysRequest<'a> {
 
 impl<'a> GetUserPropertyKeysRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            account_id: None,
-        }
+        Self { client, account_id: None }
     }
 
     /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
@@ -100,9 +97,7 @@ impl<'a> GetUserPropertyKeysRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user/properties".to_owned());
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -135,11 +130,7 @@ pub struct GetUserPropertyRequest<'a> {
 
 impl<'a> GetUserPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, property_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            account_id: None,
-        }
+        Self { client, property_key: property_key.into(), account_id: None }
     }
 
     /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
@@ -158,9 +149,7 @@ impl<'a> GetUserPropertyRequest<'a> {
         );
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -198,12 +187,7 @@ impl<'a> SetUserPropertyRequest<'a> {
         property_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            body,
-            account_id: None,
-        }
+        Self { client, property_key: property_key.into(), body, account_id: None }
     }
 
     /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
@@ -222,9 +206,7 @@ impl<'a> SetUserPropertyRequest<'a> {
         );
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -259,11 +241,7 @@ pub struct DeleteUserPropertyRequest<'a> {
 
 impl<'a> DeleteUserPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, property_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            account_id: None,
-        }
+        Self { client, property_key: property_key.into(), account_id: None }
     }
 
     /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
@@ -282,9 +260,7 @@ impl<'a> DeleteUserPropertyRequest<'a> {
         );
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

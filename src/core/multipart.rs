@@ -17,11 +17,7 @@ pub struct Attachment {
 
 impl Attachment {
     pub fn new(filename: impl Into<String>, content: impl Into<Bytes>) -> Self {
-        Attachment {
-            filename: filename.into(),
-            content: content.into(),
-            content_type: None,
-        }
+        Attachment { filename: filename.into(), content: content.into(), content_type: None }
     }
 
     /// Declares a content type instead of guessing one from the filename.
@@ -34,18 +30,15 @@ impl Attachment {
     /// Reads the file at `path` and names the attachment after it.
     pub async fn from_path(path: impl AsRef<std::path::Path>) -> std::io::Result<Self> {
         let path = path.as_ref();
-        let filename = path
-            .file_name()
-            .map_or_else(|| "attachment".to_owned(), |name| name.to_string_lossy().into_owned());
+        let filename =
+            path.file_name().map_or_else(|| "attachment".to_owned(), |name| name.to_string_lossy().into_owned());
         let content = tokio::fs::read(path).await?;
 
         Ok(Attachment::new(filename, content))
     }
 
     pub(crate) fn resolved_content_type(&self) -> String {
-        self.content_type
-            .clone()
-            .unwrap_or_else(|| mime_type_for(&self.filename).to_owned())
+        self.content_type.clone().unwrap_or_else(|| mime_type_for(&self.filename).to_owned())
     }
 }
 
@@ -59,10 +52,7 @@ pub struct MultipartBody {
 
 impl MultipartBody {
     pub fn new(field_name: impl Into<String>, attachments: Vec<Attachment>) -> Self {
-        MultipartBody {
-            field_name: field_name.into(),
-            attachments,
-        }
+        MultipartBody { field_name: field_name.into(), attachments }
     }
 
     /// A single file under the usual `file` field.

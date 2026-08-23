@@ -95,10 +95,7 @@ pub struct SetAppMonitoringEnabledRequest<'a> {
 
 impl<'a> SetAppMonitoringEnabledRequest<'a> {
     fn new(client: &'a crate::core::Client, app_monitoring_rest_entity: AppMonitoringRestEntity) -> Self {
-        Self {
-            client,
-            app_monitoring_rest_entity,
-        }
+        Self { client, app_monitoring_rest_entity }
     }
 
     /// The request as the transport will send it.
@@ -163,10 +160,7 @@ pub struct SetIpdMonitoringEnabledRequest<'a> {
 
 impl<'a> SetIpdMonitoringEnabledRequest<'a> {
     fn new(client: &'a crate::core::Client, ipd_monitoring_rest_entity: IpdMonitoringRestEntity) -> Self {
-        Self {
-            client,
-            ipd_monitoring_rest_entity,
-        }
+        Self { client, ipd_monitoring_rest_entity }
     }
 
     /// The request as the transport will send it.

@@ -41,10 +41,7 @@ pub struct GetWorklogsByIssueIdAndWorklogIdRequest<'a> {
 
 impl<'a> GetWorklogsByIssueIdAndWorklogIdRequest<'a> {
     fn new(client: &'a crate::core::Client, bulk_worklog_key_request: BulkWorklogKeyRequest) -> Self {
-        Self {
-            client,
-            bulk_worklog_key_request,
-        }
+        Self { client, bulk_worklog_key_request }
     }
 
     /// The request as the transport will send it.

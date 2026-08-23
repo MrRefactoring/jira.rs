@@ -77,12 +77,7 @@ pub struct GetAllScreenTabFieldsRequest<'a> {
 
 impl<'a> GetAllScreenTabFieldsRequest<'a> {
     fn new(client: &'a crate::core::Client, screen_id: i64, tab_id: i64) -> Self {
-        Self {
-            client,
-            screen_id,
-            tab_id,
-            project_key: None,
-        }
+        Self { client, screen_id, tab_id, project_key: None }
     }
 
     /// The key of the project.
@@ -101,9 +96,7 @@ impl<'a> GetAllScreenTabFieldsRequest<'a> {
         );
 
         if let Some(value) = &self.project_key {
-            config
-                .query
-                .push(("projectKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -133,13 +126,7 @@ pub struct AddScreenTabFieldRequest<'a> {
 
 impl<'a> AddScreenTabFieldRequest<'a> {
     fn new(client: &'a crate::core::Client, screen_id: i64, tab_id: i64, add_field: AddField) -> Self {
-        Self {
-            client,
-            screen_id,
-            tab_id,
-            add_field,
-            skip_field_association: None,
-        }
+        Self { client, screen_id, tab_id, add_field, skip_field_association: None }
     }
 
     #[must_use]
@@ -157,10 +144,7 @@ impl<'a> AddScreenTabFieldRequest<'a> {
         );
 
         if let Some(value) = &self.skip_field_association {
-            config.query.push((
-                "skipFieldAssociation".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("skipFieldAssociation".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.add_field)? {
@@ -196,22 +180,14 @@ pub struct RemoveScreenTabFieldRequest<'a> {
 
 impl<'a> RemoveScreenTabFieldRequest<'a> {
     fn new(client: &'a crate::core::Client, screen_id: i64, tab_id: i64, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            screen_id,
-            tab_id,
-            id: id.into(),
-        }
+        Self { client, screen_id, tab_id, id: id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/api/3/screens/{}/tabs/{}/fields/{}",
-                self.screen_id, self.tab_id, self.id
-            ),
+            format!("/rest/api/3/screens/{}/tabs/{}/fields/{}", self.screen_id, self.tab_id, self.id),
         );
 
         Ok(config)
@@ -249,23 +225,14 @@ impl<'a> MoveScreenTabFieldRequest<'a> {
         id: impl Into<String>,
         move_field: MoveField,
     ) -> Self {
-        Self {
-            client,
-            screen_id,
-            tab_id,
-            id: id.into(),
-            move_field,
-        }
+        Self { client, screen_id, tab_id, id: id.into(), move_field }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/rest/api/3/screens/{}/tabs/{}/fields/{}/move",
-                self.screen_id, self.tab_id, self.id
-            ),
+            format!("/rest/api/3/screens/{}/tabs/{}/fields/{}/move", self.screen_id, self.tab_id, self.id),
         );
 
         let body = match serde_json::to_value(&self.move_field)? {

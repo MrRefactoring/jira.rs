@@ -31,10 +31,6 @@ pub struct ObjectType {
     pub inherited: Option<bool>,
     #[serde(rename = "abstractObjectType", default, skip_serializing_if = "Option::is_none")]
     pub abstract_object_type: Option<bool>,
-    #[serde(
-        rename = "parentObjectTypeInherited",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "parentObjectTypeInherited", default, skip_serializing_if = "Option::is_none")]
     pub parent_object_type_inherited: Option<bool>,
 }

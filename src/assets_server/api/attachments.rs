@@ -40,10 +40,7 @@ pub struct GetAttachmentsRequest<'a> {
 
 impl<'a> GetAttachmentsRequest<'a> {
     fn new(client: &'a crate::core::Client, object_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            object_id: object_id.into(),
-        }
+        Self { client, object_id: object_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -80,11 +77,7 @@ impl<'a> AddAttachmentsRequest<'a> {
         object_id: impl Into<String>,
         attachments: impl IntoIterator<Item = crate::core::Attachment>,
     ) -> Self {
-        Self {
-            client,
-            object_id: object_id.into(),
-            attachments: attachments.into_iter().collect(),
-        }
+        Self { client, object_id: object_id.into(), attachments: attachments.into_iter().collect() }
     }
 
     /// The request as the transport will send it.
@@ -94,14 +87,10 @@ impl<'a> AddAttachmentsRequest<'a> {
             format!("/rest/assets/1.0/attachments/object/{}", self.object_id),
         );
 
-        config
-            .headers
-            .push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
+        config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
 
-        config.body = Some(crate::core::Body::Multipart(crate::core::MultipartBody::new(
-            "file",
-            self.attachments.clone(),
-        )));
+        config.body =
+            Some(crate::core::Body::Multipart(crate::core::MultipartBody::new("file", self.attachments.clone())));
 
         Ok(config)
     }
@@ -125,10 +114,7 @@ pub struct DeleteAttachmentRequest<'a> {
 
 impl<'a> DeleteAttachmentRequest<'a> {
     fn new(client: &'a crate::core::Client, attachment_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            attachment_id: attachment_id.into(),
-        }
+        Self { client, attachment_id: attachment_id.into() }
     }
 
     /// The request as the transport will send it.

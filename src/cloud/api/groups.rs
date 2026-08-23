@@ -119,13 +119,7 @@ pub struct RemoveGroupRequest<'a> {
 
 impl<'a> RemoveGroupRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            groupname: None,
-            group_id: None,
-            swap_group: None,
-            swap_group_id: None,
-        }
+        Self { client, groupname: None, group_id: None, swap_group: None, swap_group_id: None }
     }
 
     #[must_use]
@@ -165,27 +159,19 @@ impl<'a> RemoveGroupRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::DELETE, "/rest/api/3/group".to_owned());
 
         if let Some(value) = &self.groupname {
-            config
-                .query
-                .push(("groupname".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("groupname".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.group_id {
-            config
-                .query
-                .push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.swap_group {
-            config
-                .query
-                .push(("swapGroup".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("swapGroup".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.swap_group_id {
-            config
-                .query
-                .push(("swapGroupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("swapGroupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -278,35 +264,23 @@ impl<'a> GetUsersFromGroupRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/group/member".to_owned());
 
         if let Some(value) = &self.groupname {
-            config
-                .query
-                .push(("groupname".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("groupname".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.group_id {
-            config
-                .query
-                .push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.include_inactive_users {
-            config.query.push((
-                "includeInactiveUsers".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("includeInactiveUsers".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -335,12 +309,7 @@ pub struct AddUserToGroupRequest<'a> {
 
 impl<'a> AddUserToGroupRequest<'a> {
     fn new(client: &'a crate::core::Client, update_user_to_group: UpdateUserToGroup) -> Self {
-        Self {
-            client,
-            update_user_to_group,
-            groupname: None,
-            group_id: None,
-        }
+        Self { client, update_user_to_group, groupname: None, group_id: None }
     }
 
     /// As a group's name can change, use of `groupId` is recommended to identify a group.
@@ -366,15 +335,11 @@ impl<'a> AddUserToGroupRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/group/user".to_owned());
 
         if let Some(value) = &self.groupname {
-            config
-                .query
-                .push(("groupname".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("groupname".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.group_id {
-            config
-                .query
-                .push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         let body = match serde_json::to_value(&self.update_user_to_group)? {
@@ -410,12 +375,7 @@ pub struct RemoveUserFromGroupRequest<'a> {
 
 impl<'a> RemoveUserFromGroupRequest<'a> {
     fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            account_id: account_id.into(),
-            groupname: None,
-            group_id: None,
-        }
+        Self { client, account_id: account_id.into(), groupname: None, group_id: None }
     }
 
     /// As a group's name can change, use of `groupId` is recommended to identify a group.
@@ -441,21 +401,14 @@ impl<'a> RemoveUserFromGroupRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::DELETE, "/rest/api/3/group/user".to_owned());
 
         if let Some(value) = &self.groupname {
-            config
-                .query
-                .push(("groupname".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("groupname".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.group_id {
-            config
-                .query
-                .push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
-        config.query.push((
-            "accountId".to_owned(),
-            crate::core::QueryValue::Scalar(self.account_id.clone()),
-        ));
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
 
         Ok(config)
     }
@@ -493,14 +446,7 @@ pub struct FindGroupsRequest<'a> {
 
 impl<'a> FindGroupsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            query: None,
-            exclude: None,
-            exclude_id: None,
-            max_results: None,
-            case_insensitive: None,
-        }
+        Self { client, query: None, exclude: None, exclude_id: None, max_results: None, case_insensitive: None }
     }
 
     /// The string to find in group names.
@@ -550,35 +496,23 @@ impl<'a> FindGroupsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/groups/picker".to_owned());
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.exclude {
-            config
-                .query
-                .push(("exclude".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("exclude".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.exclude_id {
-            config
-                .query
-                .push(("excludeId".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("excludeId".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.case_insensitive {
-            config.query.push((
-                "caseInsensitive".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("caseInsensitive".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

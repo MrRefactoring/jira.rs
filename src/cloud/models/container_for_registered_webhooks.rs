@@ -7,10 +7,6 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ContainerForRegisteredWebhooks {
     /// A list of registered webhooks.
-    #[serde(
-        rename = "webhookRegistrationResult",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "webhookRegistrationResult", default, skip_serializing_if = "Option::is_none")]
     pub webhook_registration_result: Option<Vec<RegisteredWebhook>>,
 }

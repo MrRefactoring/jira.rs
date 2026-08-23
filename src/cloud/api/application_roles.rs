@@ -68,10 +68,7 @@ pub struct GetApplicationRoleRequest<'a> {
 
 impl<'a> GetApplicationRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, key: impl Into<String>) -> Self {
-        Self {
-            client,
-            key: key.into(),
-        }
+        Self { client, key: key.into() }
     }
 
     /// The request as the transport will send it.

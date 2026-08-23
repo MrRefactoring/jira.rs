@@ -180,10 +180,7 @@ pub struct SubmitBulkDeleteRequest<'a> {
 
 impl<'a> SubmitBulkDeleteRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_bulk_delete_payload: IssueBulkDeletePayload) -> Self {
-        Self {
-            client,
-            issue_bulk_delete_payload,
-        }
+        Self { client, issue_bulk_delete_payload }
     }
 
     /// The request as the transport will send it.
@@ -268,29 +265,20 @@ impl<'a> GetBulkEditableFieldsRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/bulk/issues/fields".to_owned());
 
-        config.query.push((
-            "issueIdsOrKeys".to_owned(),
-            crate::core::QueryValue::Scalar(self.issue_ids_or_keys.clone()),
-        ));
+        config
+            .query
+            .push(("issueIdsOrKeys".to_owned(), crate::core::QueryValue::Scalar(self.issue_ids_or_keys.clone())));
 
         if let Some(value) = &self.search_text {
-            config
-                .query
-                .push(("searchText".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("searchText".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.ending_before {
-            config.query.push((
-                "endingBefore".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("endingBefore".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.starting_after {
-            config.query.push((
-                "startingAfter".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("startingAfter".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -322,10 +310,7 @@ pub struct SubmitBulkEditRequest<'a> {
 
 impl<'a> SubmitBulkEditRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_bulk_edit_payload: IssueBulkEditPayload) -> Self {
-        Self {
-            client,
-            issue_bulk_edit_payload,
-        }
+        Self { client, issue_bulk_edit_payload }
     }
 
     /// The request as the transport will send it.
@@ -392,10 +377,7 @@ pub struct SubmitBulkMoveRequest<'a> {
 
 impl<'a> SubmitBulkMoveRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_bulk_move_payload: IssueBulkMovePayload) -> Self {
-        Self {
-            client,
-            issue_bulk_move_payload,
-        }
+        Self { client, issue_bulk_move_payload }
     }
 
     /// The request as the transport will send it.
@@ -445,12 +427,7 @@ pub struct GetAvailableTransitionsRequest<'a> {
 
 impl<'a> GetAvailableTransitionsRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_ids_or_keys: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_ids_or_keys: issue_ids_or_keys.into(),
-            ending_before: None,
-            starting_after: None,
-        }
+        Self { client, issue_ids_or_keys: issue_ids_or_keys.into(), ending_before: None, starting_after: None }
     }
 
     /// (Optional)The end cursor for use in pagination.
@@ -471,28 +448,19 @@ impl<'a> GetAvailableTransitionsRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            "/rest/api/3/bulk/issues/transition".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/bulk/issues/transition".to_owned());
 
-        config.query.push((
-            "issueIdsOrKeys".to_owned(),
-            crate::core::QueryValue::Scalar(self.issue_ids_or_keys.clone()),
-        ));
+        config
+            .query
+            .push(("issueIdsOrKeys".to_owned(), crate::core::QueryValue::Scalar(self.issue_ids_or_keys.clone())));
 
         if let Some(value) = &self.ending_before {
-            config.query.push((
-                "endingBefore".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("endingBefore".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.starting_after {
-            config.query.push((
-                "startingAfter".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("startingAfter".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -524,18 +492,13 @@ pub struct SubmitBulkTransitionRequest<'a> {
 
 impl<'a> SubmitBulkTransitionRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_bulk_transition_payload: IssueBulkTransitionPayload) -> Self {
-        Self {
-            client,
-            issue_bulk_transition_payload,
-        }
+        Self { client, issue_bulk_transition_payload }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            "/rest/api/3/bulk/issues/transition".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/bulk/issues/transition".to_owned());
 
         let body = match serde_json::to_value(&self.issue_bulk_transition_payload)? {
             serde_json::Value::Object(object) => object,
@@ -575,10 +538,7 @@ impl<'a> SubmitBulkUnwatchRequest<'a> {
         client: &'a crate::core::Client,
         issue_bulk_watch_or_unwatch_payload: IssueBulkWatchOrUnwatchPayload,
     ) -> Self {
-        Self {
-            client,
-            issue_bulk_watch_or_unwatch_payload,
-        }
+        Self { client, issue_bulk_watch_or_unwatch_payload }
     }
 
     /// The request as the transport will send it.
@@ -624,10 +584,7 @@ impl<'a> SubmitBulkWatchRequest<'a> {
         client: &'a crate::core::Client,
         issue_bulk_watch_or_unwatch_payload: IssueBulkWatchOrUnwatchPayload,
     ) -> Self {
-        Self {
-            client,
-            issue_bulk_watch_or_unwatch_payload,
-        }
+        Self { client, issue_bulk_watch_or_unwatch_payload }
     }
 
     /// The request as the transport will send it.
@@ -678,10 +635,7 @@ pub struct GetBulkOperationProgressRequest<'a> {
 
 impl<'a> GetBulkOperationProgressRequest<'a> {
     fn new(client: &'a crate::core::Client, task_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            task_id: task_id.into(),
-        }
+        Self { client, task_id: task_id.into() }
     }
 
     /// The request as the transport will send it.

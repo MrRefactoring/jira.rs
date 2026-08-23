@@ -75,11 +75,7 @@ impl<'a> UpdateIssueFieldsRequest<'a> {
         atlassian_transfer_id: impl Into<String>,
         connect_custom_field_values: ConnectCustomFieldValues,
     ) -> Self {
-        Self {
-            client,
-            atlassian_transfer_id: atlassian_transfer_id.into(),
-            connect_custom_field_values,
-        }
+        Self { client, atlassian_transfer_id: atlassian_transfer_id.into(), connect_custom_field_values }
     }
 
     /// The request as the transport will send it.
@@ -89,9 +85,7 @@ impl<'a> UpdateIssueFieldsRequest<'a> {
             "/rest/atlassian-connect/1/migration/field".to_owned(),
         );
 
-        config
-            .headers
-            .push(("Atlassian-Transfer-Id".to_owned(), self.atlassian_transfer_id.clone()));
+        config.headers.push(("Atlassian-Transfer-Id".to_owned(), self.atlassian_transfer_id.clone()));
 
         let body = match serde_json::to_value(&self.connect_custom_field_values)? {
             serde_json::Value::Object(object) => object,
@@ -144,9 +138,7 @@ impl<'a> UpdateEntityPropertiesValueRequest<'a> {
             format!("/rest/atlassian-connect/1/migration/properties/{}", self.entity_type),
         );
 
-        config
-            .headers
-            .push(("Atlassian-Transfer-Id".to_owned(), self.atlassian_transfer_id.clone()));
+        config.headers.push(("Atlassian-Transfer-Id".to_owned(), self.atlassian_transfer_id.clone()));
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
 
@@ -177,11 +169,7 @@ impl<'a> WorkflowRuleSearchRequest<'a> {
         atlassian_transfer_id: impl Into<String>,
         workflow_rules_search: WorkflowRulesSearch,
     ) -> Self {
-        Self {
-            client,
-            atlassian_transfer_id: atlassian_transfer_id.into(),
-            workflow_rules_search,
-        }
+        Self { client, atlassian_transfer_id: atlassian_transfer_id.into(), workflow_rules_search }
     }
 
     /// The request as the transport will send it.
@@ -191,9 +179,7 @@ impl<'a> WorkflowRuleSearchRequest<'a> {
             "/rest/atlassian-connect/1/migration/workflow/rule/search".to_owned(),
         );
 
-        config
-            .headers
-            .push(("Atlassian-Transfer-Id".to_owned(), self.atlassian_transfer_id.clone()));
+        config.headers.push(("Atlassian-Transfer-Id".to_owned(), self.atlassian_transfer_id.clone()));
 
         let body = match serde_json::to_value(&self.workflow_rules_search)? {
             serde_json::Value::Object(object) => object,

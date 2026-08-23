@@ -11,21 +11,13 @@ pub struct UserIssueRelevance {
     pub display_name: Option<String>,
     #[serde(rename = "emailAddress", default, skip_serializing_if = "Option::is_none")]
     pub email_address: Option<String>,
-    #[serde(
-        rename = "highestIssueInvolvementRank",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "highestIssueInvolvementRank", default, skip_serializing_if = "Option::is_none")]
     pub highest_issue_involvement_rank: Option<i64>,
     #[serde(rename = "issueInvolvements", default, skip_serializing_if = "Option::is_none")]
     pub issue_involvements: Option<Vec<IssueInvolvement>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    #[serde(
-        rename = "latestCommentCreationTime",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "latestCommentCreationTime", default, skip_serializing_if = "Option::is_none")]
     pub latest_comment_creation_time: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,

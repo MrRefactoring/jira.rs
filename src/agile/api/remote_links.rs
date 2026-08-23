@@ -212,12 +212,7 @@ impl<'a> SubmitRemoteLinksRequest<'a> {
         client: &'a crate::core::Client,
         remote_links: impl IntoIterator<Item = SubmitRemoteLinksRequestRemoteLinks>,
     ) -> Self {
-        Self {
-            client,
-            remote_links: remote_links.into_iter().collect(),
-            properties: None,
-            provider_metadata: None,
-        }
+        Self { client, remote_links: remote_links.into_iter().collect(), properties: None, provider_metadata: None }
     }
 
     /// Properties assigned to Remote Link data that can then be used for delete / query operations.
@@ -323,9 +318,7 @@ impl<'a> DeleteRemoteLinksByPropertyRequest<'a> {
         );
 
         if let Some(value) = &self.params {
-            config
-                .query
-                .push(("params".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("params".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -352,10 +345,7 @@ pub struct GetRemoteLinkByIdRequest<'a> {
 
 impl<'a> GetRemoteLinkByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, remote_link_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            remote_link_id: remote_link_id.into(),
-        }
+        Self { client, remote_link_id: remote_link_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -390,10 +380,7 @@ pub struct DeleteRemoteLinkByIdRequest<'a> {
 
 impl<'a> DeleteRemoteLinkByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, remote_link_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            remote_link_id: remote_link_id.into(),
-        }
+        Self { client, remote_link_id: remote_link_id.into() }
     }
 
     /// The request as the transport will send it.

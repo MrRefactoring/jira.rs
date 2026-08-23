@@ -9,11 +9,7 @@ pub struct EditTemplateRequest {
     /// The description of the template
     #[serde(rename = "templateDescription", default, skip_serializing_if = "Option::is_none")]
     pub template_description: Option<String>,
-    #[serde(
-        rename = "templateGenerationOptions",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "templateGenerationOptions", default, skip_serializing_if = "Option::is_none")]
     pub template_generation_options: Option<CustomTemplateOptions>,
     /// The unique identifier of the template
     #[serde(rename = "templateKey", default, skip_serializing_if = "Option::is_none")]

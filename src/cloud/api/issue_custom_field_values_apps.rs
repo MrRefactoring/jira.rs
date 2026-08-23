@@ -91,17 +91,11 @@ impl<'a> UpdateMultipleCustomFieldValuesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/app/field/value".to_owned());
 
         if let Some(value) = &self.generate_changelog {
-            config.query.push((
-                "generateChangelog".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("generateChangelog".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.generate_app_events {
-            config.query.push((
-                "generateAppEvents".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("generateAppEvents".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.multiple_custom_field_values_update_details)? {
@@ -179,17 +173,11 @@ impl<'a> UpdateCustomFieldValueRequest<'a> {
         );
 
         if let Some(value) = &self.generate_changelog {
-            config.query.push((
-                "generateChangelog".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("generateChangelog".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.generate_app_events {
-            config.query.push((
-                "generateAppEvents".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("generateAppEvents".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.custom_field_value_update_details)? {

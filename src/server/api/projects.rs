@@ -332,13 +332,7 @@ pub struct GetAllProjectsRequest<'a> {
 
 impl<'a> GetAllProjectsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            include_archived: None,
-            expand: None,
-            recent: None,
-            browse_archive: None,
-        }
+        Self { client, include_archived: None, expand: None, recent: None, browse_archive: None }
     }
 
     /// Whether to include archived projects in response, default: false
@@ -378,29 +372,19 @@ impl<'a> GetAllProjectsRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/project".to_owned());
 
         if let Some(value) = &self.include_archived {
-            config.query.push((
-                "includeArchived".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("includeArchived".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.recent {
-            config
-                .query
-                .push(("recent".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("recent".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.browse_archive {
-            config.query.push((
-                "browseArchive".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("browseArchive".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -489,10 +473,7 @@ pub struct GetProjectTypeByKeyRequest<'a> {
 
 impl<'a> GetProjectTypeByKeyRequest<'a> {
     fn new(client: &'a crate::core::Client, project_type_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_type_key: project_type_key.into(),
-        }
+        Self { client, project_type_key: project_type_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -524,10 +505,7 @@ pub struct GetAccessibleProjectTypeByKeyRequest<'a> {
 
 impl<'a> GetAccessibleProjectTypeByKeyRequest<'a> {
     fn new(client: &'a crate::core::Client, project_type_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_type_key: project_type_key.into(),
-        }
+        Self { client, project_type_key: project_type_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -560,11 +538,7 @@ pub struct GetProjectRequest<'a> {
 
 impl<'a> GetProjectRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            expand: None,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), expand: None }
     }
 
     /// Parameters to expand
@@ -583,9 +557,7 @@ impl<'a> GetProjectRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -616,12 +588,7 @@ impl<'a> UpdateProjectRequest<'a> {
         project_id_or_key: impl Into<String>,
         project_update: ProjectUpdate,
     ) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            project_update,
-            expand: None,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), project_update, expand: None }
     }
 
     /// Parameters to expand
@@ -640,9 +607,7 @@ impl<'a> UpdateProjectRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         let body = match serde_json::to_value(&self.project_update)? {
@@ -674,10 +639,7 @@ pub struct DeleteProjectRequest<'a> {
 
 impl<'a> DeleteProjectRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -709,10 +671,7 @@ pub struct ArchiveProjectRequest<'a> {
 
 impl<'a> ArchiveProjectRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -752,11 +711,7 @@ impl<'a> CreateProjectAvatarFromTemporaryRequest<'a> {
         project_id_or_key: impl Into<String>,
         avatar_cropping: AvatarCropping,
     ) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            avatar_cropping,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), avatar_cropping }
     }
 
     /// The request as the transport will send it.
@@ -796,11 +751,7 @@ pub struct UpdateProjectAvatarRequest<'a> {
 
 impl<'a> UpdateProjectAvatarRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>, avatar: Avatar) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            avatar,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), avatar }
     }
 
     /// The request as the transport will send it.
@@ -846,11 +797,7 @@ impl<'a> StoreTemporaryProjectAvatarUsingMultiPartRequest<'a> {
         project_id_or_key: impl Into<String>,
         avatar: impl IntoIterator<Item = crate::core::Attachment>,
     ) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            avatar: avatar.into_iter().collect(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), avatar: avatar.into_iter().collect() }
     }
 
     /// The request as the transport will send it.
@@ -860,14 +807,10 @@ impl<'a> StoreTemporaryProjectAvatarUsingMultiPartRequest<'a> {
             format!("/rest/api/2/project/{}/avatar/temporary", self.project_id_or_key),
         );
 
-        config
-            .headers
-            .push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
+        config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
 
-        config.body = Some(crate::core::Body::Multipart(crate::core::MultipartBody::new(
-            "avatar",
-            self.avatar.clone(),
-        )));
+        config.body =
+            Some(crate::core::Body::Multipart(crate::core::MultipartBody::new("avatar", self.avatar.clone())));
 
         Ok(config)
     }
@@ -892,11 +835,7 @@ pub struct DeleteProjectAvatarRequest<'a> {
 
 impl<'a> DeleteProjectAvatarRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>, id: i64) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            id,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), id }
     }
 
     /// The request as the transport will send it.
@@ -928,10 +867,7 @@ pub struct GetAllProjectAvatarsRequest<'a> {
 
 impl<'a> GetAllProjectAvatarsRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -963,10 +899,7 @@ pub struct GetProjectComponentsRequest<'a> {
 
 impl<'a> GetProjectComponentsRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -998,10 +931,7 @@ pub struct GetProjectPropertyKeysRequest<'a> {
 
 impl<'a> GetProjectPropertyKeysRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -1038,21 +968,14 @@ impl<'a> GetProjectPropertyRequest<'a> {
         property_key: impl Into<String>,
         project_id_or_key: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            project_id_or_key: project_id_or_key.into(),
-        }
+        Self { client, property_key: property_key.into(), project_id_or_key: project_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/2/project/{}/properties/{}",
-                self.project_id_or_key, self.property_key
-            ),
+            format!("/rest/api/2/project/{}/properties/{}", self.project_id_or_key, self.property_key),
         );
 
         Ok(config)
@@ -1084,22 +1007,14 @@ impl<'a> SetProjectPropertyRequest<'a> {
         project_id_or_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            project_id_or_key: project_id_or_key.into(),
-            body,
-        }
+        Self { client, property_key: property_key.into(), project_id_or_key: project_id_or_key.into(), body }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/api/2/project/{}/properties/{}",
-                self.project_id_or_key, self.property_key
-            ),
+            format!("/rest/api/2/project/{}/properties/{}", self.project_id_or_key, self.property_key),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -1131,21 +1046,14 @@ impl<'a> DeleteProjectPropertyRequest<'a> {
         property_key: impl Into<String>,
         project_id_or_key: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            project_id_or_key: project_id_or_key.into(),
-        }
+        Self { client, property_key: property_key.into(), project_id_or_key: project_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/api/2/project/{}/properties/{}",
-                self.project_id_or_key, self.property_key
-            ),
+            format!("/rest/api/2/project/{}/properties/{}", self.project_id_or_key, self.property_key),
         );
 
         Ok(config)
@@ -1170,10 +1078,7 @@ pub struct RestoreProjectRequest<'a> {
 
 impl<'a> RestoreProjectRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -1205,10 +1110,7 @@ pub struct GetProjectRolesRequest<'a> {
 
 impl<'a> GetProjectRolesRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -1241,11 +1143,7 @@ pub struct GetProjectRoleRequest<'a> {
 
 impl<'a> GetProjectRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>, id: i64) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            id,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), id }
     }
 
     /// The request as the transport will send it.
@@ -1284,12 +1182,7 @@ impl<'a> AddActorUsersRequest<'a> {
         id: i64,
         actors_map: ActorsMap,
     ) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            id,
-            actors_map,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), id, actors_map }
     }
 
     /// The request as the transport will send it.
@@ -1335,12 +1228,7 @@ impl<'a> SetActorsRequest<'a> {
         id: i64,
         body: ProjectRoleActorsUpdate,
     ) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            id,
-            body,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), id, body }
     }
 
     /// The request as the transport will send it.
@@ -1377,13 +1265,7 @@ pub struct DeleteActorRequest<'a> {
 
 impl<'a> DeleteActorRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>, id: i64) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            id,
-            user: None,
-            group: None,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), id, user: None, group: None }
     }
 
     /// The user name of the user to remove from the project role. Use either user or group, but not both
@@ -1410,15 +1292,11 @@ impl<'a> DeleteActorRequest<'a> {
         );
 
         if let Some(value) = &self.user {
-            config
-                .query
-                .push(("user".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("user".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.group {
-            config
-                .query
-                .push(("group".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("group".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1443,10 +1321,7 @@ pub struct GetAllStatusesRequest<'a> {
 
 impl<'a> GetAllStatusesRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -1483,21 +1358,14 @@ impl<'a> UpdateProjectTypeRequest<'a> {
         project_id_or_key: impl Into<String>,
         new_project_type_key: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            new_project_type_key: new_project_type_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), new_project_type_key: new_project_type_key.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/api/2/project/{}/type/{}",
-                self.project_id_or_key, self.new_project_type_key
-            ),
+            format!("/rest/api/2/project/{}/type/{}", self.project_id_or_key, self.new_project_type_key),
         );
 
         Ok(config)
@@ -1576,28 +1444,19 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.order_by {
-            config
-                .query
-                .push(("orderBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1623,11 +1482,7 @@ pub struct GetProjectVersionsRequest<'a> {
 
 impl<'a> GetProjectVersionsRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            expand: None,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), expand: None }
     }
 
     /// Parameters to expand
@@ -1646,9 +1501,7 @@ impl<'a> GetProjectVersionsRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1673,20 +1526,14 @@ pub struct GetProjectIssueSecuritySchemeRequest<'a> {
 
 impl<'a> GetProjectIssueSecuritySchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_key_or_id: project_key_or_id.into(),
-        }
+        Self { client, project_key_or_id: project_key_or_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/2/project/{}/issuesecuritylevelscheme",
-                self.project_key_or_id
-            ),
+            format!("/rest/api/2/project/{}/issuesecuritylevelscheme", self.project_key_or_id),
         );
 
         Ok(config)
@@ -1712,11 +1559,7 @@ pub struct GetProjectNotificationSchemeRequest<'a> {
 
 impl<'a> GetProjectNotificationSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_key_or_id: project_key_or_id.into(),
-            expand: None,
-        }
+        Self { client, project_key_or_id: project_key_or_id.into(), expand: None }
     }
 
     /// Optional information to be expanded in the response: group, user, projectRole or field.
@@ -1735,9 +1578,7 @@ impl<'a> GetProjectNotificationSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1763,11 +1604,7 @@ pub struct GetAssignedPermissionSchemeRequest<'a> {
 
 impl<'a> GetAssignedPermissionSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_key_or_id: project_key_or_id.into(),
-            expand: None,
-        }
+        Self { client, project_key_or_id: project_key_or_id.into(), expand: None }
     }
 
     /// Use expand to include additional information about permission schemes in the response. This parameter accepts a comma-separated list of expandable options. Expand options include: all and field.
@@ -1786,9 +1623,7 @@ impl<'a> GetAssignedPermissionSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -1815,12 +1650,7 @@ pub struct AssignPermissionSchemeRequest<'a> {
 
 impl<'a> AssignPermissionSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>, id: Id) -> Self {
-        Self {
-            client,
-            project_key_or_id: project_key_or_id.into(),
-            id,
-            expand: None,
-        }
+        Self { client, project_key_or_id: project_key_or_id.into(), id, expand: None }
     }
 
     /// Use expand to include additional information about permission schemes in the response. This parameter accepts a comma-separated list of expandable options. Expand options include: all and field.
@@ -1839,9 +1669,7 @@ impl<'a> AssignPermissionSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         let body = match serde_json::to_value(&self.id)? {
@@ -1873,10 +1701,7 @@ pub struct GetAssignedPrioritySchemeRequest<'a> {
 
 impl<'a> GetAssignedPrioritySchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_key_or_id: project_key_or_id.into(),
-        }
+        Self { client, project_key_or_id: project_key_or_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -1909,11 +1734,7 @@ pub struct AssignPrioritySchemeRequest<'a> {
 
 impl<'a> AssignPrioritySchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>, id: Id) -> Self {
-        Self {
-            client,
-            project_key_or_id: project_key_or_id.into(),
-            id,
-        }
+        Self { client, project_key_or_id: project_key_or_id.into(), id }
     }
 
     /// The request as the transport will send it.
@@ -1953,21 +1774,14 @@ pub struct UnassignPrioritySchemeRequest<'a> {
 
 impl<'a> UnassignPrioritySchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, scheme_id: i64, project_key_or_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            scheme_id,
-            project_key_or_id: project_key_or_id.into(),
-        }
+        Self { client, scheme_id, project_key_or_id: project_key_or_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/api/2/project/{}/priorityscheme/{}",
-                self.project_key_or_id, self.scheme_id
-            ),
+            format!("/rest/api/2/project/{}/priorityscheme/{}", self.project_key_or_id, self.scheme_id),
         );
 
         Ok(config)
@@ -1992,10 +1806,7 @@ pub struct GetSecurityLevelsForProjectRequest<'a> {
 
 impl<'a> GetSecurityLevelsForProjectRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_key_or_id: project_key_or_id.into(),
-        }
+        Self { client, project_key_or_id: project_key_or_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -2027,10 +1838,7 @@ pub struct GetWorkflowSchemeForProjectRequest<'a> {
 
 impl<'a> GetWorkflowSchemeForProjectRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_key_or_id: project_key_or_id.into(),
-        }
+        Self { client, project_key_or_id: project_key_or_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -2070,12 +1878,7 @@ pub struct SearchForProjectsRequest<'a> {
 
 impl<'a> SearchForProjectsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            max_results: None,
-            query: None,
-            allow_empty_query: None,
-        }
+        Self { client, max_results: None, query: None, allow_empty_query: None }
     }
 
     /// Maximum number of matches to return. Zero means a default limit of 100 and negative numbers return no results.
@@ -2108,23 +1911,15 @@ impl<'a> SearchForProjectsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/projects/picker".to_owned());
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.allow_empty_query {
-            config.query.push((
-                "allowEmptyQuery".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("allowEmptyQuery".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

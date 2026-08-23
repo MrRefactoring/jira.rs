@@ -45,15 +45,9 @@ fn builds_the_data_center_authorization_url_on_the_instance_itself() {
         state: "state-1".to_owned(),
     });
 
-    assert!(
-        url.starts_with("https://jira.acme.internal/rest/oauth2/latest/authorize?"),
-        "{url}"
-    );
+    assert!(url.starts_with("https://jira.acme.internal/rest/oauth2/latest/authorize?"), "{url}");
     assert!(url.contains("scope=READ+WRITE"), "{url}");
-    assert!(
-        !url.contains("audience"),
-        "a self-hosted instance has no gateway audience: {url}"
-    );
+    assert!(!url.contains("audience"), "a self-hosted instance has no gateway audience: {url}");
 }
 
 #[tokio::test]
@@ -119,10 +113,7 @@ async fn sends_the_redirect_uri_on_the_refresh_grant_too() {
 
     let body = String::from_utf8_lossy(&server.received_requests().await.unwrap()[0].body).into_owned();
 
-    assert!(
-        body.contains("redirect_uri="),
-        "the provider validates it on refresh as well: {body}"
-    );
+    assert!(body.contains("redirect_uri="), "the provider validates it on refresh as well: {body}");
 }
 
 #[tokio::test]
@@ -279,10 +270,7 @@ async fn a_data_center_client_does_not_loop_when_the_refreshed_token_is_refused_
     assert!(error.is_auth());
 
     let calls = server.received_requests().await.unwrap();
-    let api_calls = calls
-        .iter()
-        .filter(|request| request.url.path() == "/rest/api/2/myself")
-        .count();
+    let api_calls = calls.iter().filter(|request| request.url.path() == "/rest/api/2/myself").count();
 
     assert_eq!(api_calls, 2, "one attempt, one retry after the refresh, and no more");
 }
@@ -290,10 +278,7 @@ async fn a_data_center_client_does_not_loop_when_the_refreshed_token_is_refused_
 #[test]
 fn cloud_oauth_may_leave_the_host_out_because_it_routes_through_the_gateway() {
     let client = Client::builder()
-        .auth(Auth::oauth2(OAuth2Config {
-            access_token: Some("token".to_owned()),
-            ..OAuth2Config::default()
-        }))
+        .auth(Auth::oauth2(OAuth2Config { access_token: Some("token".to_owned()), ..OAuth2Config::default() }))
         .build()
         .unwrap();
 
@@ -348,10 +333,7 @@ fn rejects_a_refresh_set_that_cannot_authenticate_now_either() {
 
 #[test]
 fn rejects_credentials_that_can_neither_authenticate_nor_refresh() {
-    let error = Client::builder()
-        .auth(Auth::oauth2(OAuth2Config::default()))
-        .build()
-        .unwrap_err();
+    let error = Client::builder().auth(Auth::oauth2(OAuth2Config::default())).build().unwrap_err();
 
     assert!(error.is_config());
     assert!(error.to_string().contains("either an `accessToken`"), "{error}");

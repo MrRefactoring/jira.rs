@@ -18,11 +18,7 @@ pub struct ProjectTemplateModel {
     pub default_board_view: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    #[serde(
-        rename = "liveTemplateProjectIdReference",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "liveTemplateProjectIdReference", default, skip_serializing_if = "Option::is_none")]
     pub live_template_project_id_reference: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -30,11 +26,7 @@ pub struct ProjectTemplateModel {
     pub project_template_key: Option<ProjectTemplateKey>,
     #[serde(rename = "snapshotTemplate", default, skip_serializing_if = "Option::is_none")]
     pub snapshot_template: Option<std::collections::HashMap<String, serde_json::Value>>,
-    #[serde(
-        rename = "templateGenerationOptions",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "templateGenerationOptions", default, skip_serializing_if = "Option::is_none")]
     pub template_generation_options: Option<CustomTemplateOptions>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub r#type: Option<ProjectTemplateModelType>,

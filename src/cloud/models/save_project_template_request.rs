@@ -17,11 +17,7 @@ pub struct SaveProjectTemplateRequest {
     /// The ID of the target project
     #[serde(rename = "projectId", default, skip_serializing_if = "Option::is_none")]
     pub project_id: Option<i64>,
-    #[serde(
-        rename = "templateGenerationOptions",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "templateGenerationOptions", default, skip_serializing_if = "Option::is_none")]
     pub template_generation_options: Option<CustomTemplateOptions>,
     /// The type of the template: LIVE | SNAPSHOT
     #[serde(rename = "templateType", default, skip_serializing_if = "Option::is_none")]

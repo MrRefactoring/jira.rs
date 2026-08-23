@@ -113,10 +113,8 @@ impl<'a> GetAllAccessibleProjectTypesRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            "/rest/api/3/project/type/accessible".to_owned(),
-        );
+        let config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/project/type/accessible".to_owned());
 
         Ok(config)
     }
@@ -147,10 +145,7 @@ impl<'a> GetProjectTypeByKeyRequest<'a> {
         client: &'a crate::core::Client,
         project_type_key: impl Into<GetProjectTypeByKeyRequestProjectTypeKey>,
     ) -> Self {
-        Self {
-            client,
-            project_type_key: project_type_key.into(),
-        }
+        Self { client, project_type_key: project_type_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -187,10 +182,7 @@ impl<'a> GetAccessibleProjectTypeByKeyRequest<'a> {
         client: &'a crate::core::Client,
         project_type_key: impl Into<GetAccessibleProjectTypeByKeyRequestProjectTypeKey>,
     ) -> Self {
-        Self {
-            client,
-            project_type_key: project_type_key.into(),
-        }
+        Self { client, project_type_key: project_type_key.into() }
     }
 
     /// The request as the transport will send it.

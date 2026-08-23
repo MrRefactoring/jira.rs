@@ -277,10 +277,7 @@ pub struct GetAllSystemAvatarsRequest<'a> {
 
 impl<'a> GetAllSystemAvatarsRequest<'a> {
     fn new(client: &'a crate::core::Client, r#type: impl Into<GetAllSystemAvatarsRequestType>) -> Self {
-        Self {
-            client,
-            r#type: r#type.into(),
-        }
+        Self { client, r#type: r#type.into() }
     }
 
     /// The request as the transport will send it.
@@ -326,21 +323,14 @@ impl<'a> GetAvatarsRequest<'a> {
         r#type: impl Into<GetAvatarsRequestType>,
         entity_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            r#type: r#type.into(),
-            entity_id: entity_id.into(),
-        }
+        Self { client, r#type: r#type.into(), entity_id: entity_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/3/universal_avatar/type/{}/owner/{}",
-                self.r#type, self.entity_id
-            ),
+            format!("/rest/api/3/universal_avatar/type/{}/owner/{}", self.r#type, self.entity_id),
         );
 
         Ok(config)
@@ -437,32 +427,20 @@ impl<'a> StoreAvatarRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/rest/api/3/universal_avatar/type/{}/owner/{}",
-                self.r#type, self.entity_id
-            ),
+            format!("/rest/api/3/universal_avatar/type/{}/owner/{}", self.r#type, self.entity_id),
         );
 
         if let Some(value) = &self.x {
-            config
-                .query
-                .push(("x".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("x".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.y {
-            config
-                .query
-                .push(("y".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("y".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
-        config.query.push((
-            "size".to_owned(),
-            crate::core::QueryValue::Scalar(self.size.to_string()),
-        ));
+        config.query.push(("size".to_owned(), crate::core::QueryValue::Scalar(self.size.to_string())));
 
-        config
-            .headers
-            .push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
+        config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
 
@@ -497,12 +475,7 @@ impl<'a> DeleteAvatarRequest<'a> {
         owning_object_id: impl Into<String>,
         id: i64,
     ) -> Self {
-        Self {
-            client,
-            r#type: r#type.into(),
-            owning_object_id: owning_object_id.into(),
-            id,
-        }
+        Self { client, r#type: r#type.into(), owning_object_id: owning_object_id.into(), id }
     }
 
     /// The request as the transport will send it.
@@ -543,12 +516,7 @@ pub struct GetAvatarImageByTypeRequest<'a> {
 
 impl<'a> GetAvatarImageByTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, r#type: impl Into<GetAvatarImageByTypeRequestType>) -> Self {
-        Self {
-            client,
-            r#type: r#type.into(),
-            size: None,
-            format: None,
-        }
+        Self { client, r#type: r#type.into(), size: None, format: None }
     }
 
     /// The size of the avatar image. If not provided the default size is returned.
@@ -575,15 +543,11 @@ impl<'a> GetAvatarImageByTypeRequest<'a> {
         );
 
         if let Some(value) = &self.size {
-            config
-                .query
-                .push(("size".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("size".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.format {
-            config
-                .query
-                .push(("format".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("format".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -620,13 +584,7 @@ pub struct GetAvatarImageByIDRequest<'a> {
 
 impl<'a> GetAvatarImageByIDRequest<'a> {
     fn new(client: &'a crate::core::Client, r#type: impl Into<GetAvatarImageByIDRequestType>, id: i64) -> Self {
-        Self {
-            client,
-            r#type: r#type.into(),
-            id,
-            size: None,
-            format: None,
-        }
+        Self { client, r#type: r#type.into(), id, size: None, format: None }
     }
 
     /// The size of the avatar image. If not provided the default size is returned.
@@ -649,22 +607,15 @@ impl<'a> GetAvatarImageByIDRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/3/universal_avatar/view/type/{}/avatar/{}",
-                self.r#type, self.id
-            ),
+            format!("/rest/api/3/universal_avatar/view/type/{}/avatar/{}", self.r#type, self.id),
         );
 
         if let Some(value) = &self.size {
-            config
-                .query
-                .push(("size".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("size".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.format {
-            config
-                .query
-                .push(("format".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("format".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -705,13 +656,7 @@ impl<'a> GetAvatarImageByOwnerRequest<'a> {
         r#type: impl Into<GetAvatarImageByOwnerRequestType>,
         entity_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            r#type: r#type.into(),
-            entity_id: entity_id.into(),
-            size: None,
-            format: None,
-        }
+        Self { client, r#type: r#type.into(), entity_id: entity_id.into(), size: None, format: None }
     }
 
     /// The size of the avatar image. If not provided the default size is returned.
@@ -734,22 +679,15 @@ impl<'a> GetAvatarImageByOwnerRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/3/universal_avatar/view/type/{}/owner/{}",
-                self.r#type, self.entity_id
-            ),
+            format!("/rest/api/3/universal_avatar/view/type/{}/owner/{}", self.r#type, self.entity_id),
         );
 
         if let Some(value) = &self.size {
-            config
-                .query
-                .push(("size".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("size".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.format {
-            config
-                .query
-                .push(("format".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("format".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)

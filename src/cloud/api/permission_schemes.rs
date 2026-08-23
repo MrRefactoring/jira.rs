@@ -593,9 +593,7 @@ impl<'a> GetAllPermissionSchemesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/permissionscheme".to_owned());
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -623,11 +621,7 @@ pub struct CreatePermissionSchemeRequest<'a> {
 
 impl<'a> CreatePermissionSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, body: PermissionScheme) -> Self {
-        Self {
-            client,
-            body,
-            expand: None,
-        }
+        Self { client, body, expand: None }
     }
 
     /// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
@@ -651,9 +645,7 @@ impl<'a> CreatePermissionSchemeRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/permissionscheme".to_owned());
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -683,11 +675,7 @@ pub struct GetPermissionSchemeRequest<'a> {
 
 impl<'a> GetPermissionSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, scheme_id: i64) -> Self {
-        Self {
-            client,
-            scheme_id,
-            expand: None,
-        }
+        Self { client, scheme_id, expand: None }
     }
 
     /// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
@@ -713,9 +701,7 @@ impl<'a> GetPermissionSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -752,12 +738,7 @@ pub struct UpdatePermissionSchemeRequest<'a> {
 
 impl<'a> UpdatePermissionSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, scheme_id: i64, body: PermissionScheme) -> Self {
-        Self {
-            client,
-            scheme_id,
-            body,
-            expand: None,
-        }
+        Self { client, scheme_id, body, expand: None }
     }
 
     /// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
@@ -783,9 +764,7 @@ impl<'a> UpdatePermissionSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -849,11 +828,7 @@ pub struct GetPermissionSchemeGrantsRequest<'a> {
 
 impl<'a> GetPermissionSchemeGrantsRequest<'a> {
     fn new(client: &'a crate::core::Client, scheme_id: i64) -> Self {
-        Self {
-            client,
-            scheme_id,
-            expand: None,
-        }
+        Self { client, scheme_id, expand: None }
     }
 
     /// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
@@ -879,9 +854,7 @@ impl<'a> GetPermissionSchemeGrantsRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -910,12 +883,7 @@ pub struct CreatePermissionGrantRequest<'a> {
 
 impl<'a> CreatePermissionGrantRequest<'a> {
     fn new(client: &'a crate::core::Client, scheme_id: i64, permission_grant: PermissionGrant) -> Self {
-        Self {
-            client,
-            scheme_id,
-            permission_grant,
-            expand: None,
-        }
+        Self { client, scheme_id, permission_grant, expand: None }
     }
 
     /// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
@@ -941,9 +909,7 @@ impl<'a> CreatePermissionGrantRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         let body = match serde_json::to_value(&self.permission_grant)? {
@@ -979,12 +945,7 @@ pub struct GetPermissionSchemeGrantRequest<'a> {
 
 impl<'a> GetPermissionSchemeGrantRequest<'a> {
     fn new(client: &'a crate::core::Client, scheme_id: i64, permission_id: i64) -> Self {
-        Self {
-            client,
-            scheme_id,
-            permission_id,
-            expand: None,
-        }
+        Self { client, scheme_id, permission_id, expand: None }
     }
 
     /// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
@@ -1006,16 +967,11 @@ impl<'a> GetPermissionSchemeGrantRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/3/permissionscheme/{}/permission/{}",
-                self.scheme_id, self.permission_id
-            ),
+            format!("/rest/api/3/permissionscheme/{}/permission/{}", self.scheme_id, self.permission_id),
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -1043,21 +999,14 @@ pub struct DeletePermissionSchemeEntityRequest<'a> {
 
 impl<'a> DeletePermissionSchemeEntityRequest<'a> {
     fn new(client: &'a crate::core::Client, scheme_id: i64, permission_id: i64) -> Self {
-        Self {
-            client,
-            scheme_id,
-            permission_id,
-        }
+        Self { client, scheme_id, permission_id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/api/3/permissionscheme/{}/permission/{}",
-                self.scheme_id, self.permission_id
-            ),
+            format!("/rest/api/3/permissionscheme/{}/permission/{}", self.scheme_id, self.permission_id),
         );
 
         Ok(config)

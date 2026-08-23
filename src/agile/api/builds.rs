@@ -257,12 +257,7 @@ pub struct SubmitBuildsRequest<'a> {
 
 impl<'a> SubmitBuildsRequest<'a> {
     fn new(client: &'a crate::core::Client, builds: impl IntoIterator<Item = SubmitBuildsRequestBuilds>) -> Self {
-        Self {
-            client,
-            builds: builds.into_iter().collect(),
-            properties: None,
-            provider_metadata: None,
-        }
+        Self { client, builds: builds.into_iter().collect(), properties: None, provider_metadata: None }
     }
 
     /// Properties assigned to build data that can then be used for delete / query operations.
@@ -346,11 +341,7 @@ pub struct DeleteBuildsByPropertyRequest<'a> {
 
 impl<'a> DeleteBuildsByPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            account_id: account_id.into(),
-            repo_id: None,
-        }
+        Self { client, account_id: account_id.into(), repo_id: None }
     }
 
     /// Optional additional property filter combined with accountId (AND). Official example: repoId=repo-345 alongside accountId. Must match a key previously supplied in submitBuilds `properties`.
@@ -368,15 +359,10 @@ impl<'a> DeleteBuildsByPropertyRequest<'a> {
             "/rest/builds/0.1/bulkByProperties".to_owned(),
         );
 
-        config.query.push((
-            "accountId".to_owned(),
-            crate::core::QueryValue::Scalar(self.account_id.clone()),
-        ));
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
 
         if let Some(value) = &self.repo_id {
-            config
-                .query
-                .push(("repoId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("repoId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -404,21 +390,14 @@ pub struct GetBuildByKeyRequest<'a> {
 
 impl<'a> GetBuildByKeyRequest<'a> {
     fn new(client: &'a crate::core::Client, pipeline_id: impl Into<String>, build_number: i64) -> Self {
-        Self {
-            client,
-            pipeline_id: pipeline_id.into(),
-            build_number,
-        }
+        Self { client, pipeline_id: pipeline_id.into(), build_number }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/builds/0.1/pipelines/{}/builds/{}",
-                self.pipeline_id, self.build_number
-            ),
+            format!("/rest/builds/0.1/pipelines/{}/builds/{}", self.pipeline_id, self.build_number),
         );
 
         Ok(config)
@@ -447,21 +426,14 @@ pub struct DeleteBuildByKeyRequest<'a> {
 
 impl<'a> DeleteBuildByKeyRequest<'a> {
     fn new(client: &'a crate::core::Client, pipeline_id: impl Into<String>, build_number: i64) -> Self {
-        Self {
-            client,
-            pipeline_id: pipeline_id.into(),
-            build_number,
-        }
+        Self { client, pipeline_id: pipeline_id.into(), build_number }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/builds/0.1/pipelines/{}/builds/{}",
-                self.pipeline_id, self.build_number
-            ),
+            format!("/rest/builds/0.1/pipelines/{}/builds/{}", self.pipeline_id, self.build_number),
         );
 
         Ok(config)

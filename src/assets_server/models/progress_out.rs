@@ -22,11 +22,7 @@ pub struct ProgressOut {
     pub current_work_units: Option<i64>,
     #[serde(rename = "currentWorkDescription", default, skip_serializing_if = "Option::is_none")]
     pub current_work_description: Option<String>,
-    #[serde(
-        rename = "currentStepTotalWorkUnits",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "currentStepTotalWorkUnits", default, skip_serializing_if = "Option::is_none")]
     pub current_step_total_work_units: Option<i64>,
     #[serde(rename = "totalWorkUnits", default, skip_serializing_if = "Option::is_none")]
     pub total_work_units: Option<i64>,

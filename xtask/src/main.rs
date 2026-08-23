@@ -16,10 +16,7 @@ use std::path::PathBuf;
 use dc_rig::Rig;
 
 fn workspace_root() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .parent()
-        .expect("xtask sits inside the workspace")
-        .to_owned()
+    PathBuf::from(env!("CARGO_MANIFEST_DIR")).parent().expect("xtask sits inside the workspace").to_owned()
 }
 
 fn jira_dc() -> Rig {

@@ -51,9 +51,7 @@ impl<'a> GetPreferenceRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/mypreferences".to_owned());
 
         if let Some(value) = &self.key {
-            config
-                .query
-                .push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -79,11 +77,7 @@ pub struct SetPreferenceRequest<'a> {
 
 impl<'a> SetPreferenceRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            key: None,
-            body: None,
-        }
+        Self { client, key: None, body: None }
     }
 
     /// Key of the preference to be set.
@@ -107,9 +101,7 @@ impl<'a> SetPreferenceRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::PUT, "/rest/api/2/mypreferences".to_owned());
 
         if let Some(value) = &self.key {
-            config
-                .query
-                .push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -153,9 +145,7 @@ impl<'a> RemovePreferenceRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::DELETE, "/rest/api/2/mypreferences".to_owned());
 
         if let Some(value) = &self.key {
-            config
-                .query
-                .push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

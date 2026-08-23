@@ -870,85 +870,55 @@ impl<'a> SearchProjectsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/project/search".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.order_by {
-            config
-                .query
-                .push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.id {
-            config
-                .query
-                .push(("id".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("id".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.keys {
-            config
-                .query
-                .push(("keys".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("keys".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.type_key {
-            config
-                .query
-                .push(("typeKey".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("typeKey".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.category_id {
-            config.query.push((
-                "categoryId".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("categoryId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.action {
-            config
-                .query
-                .push(("action".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("action".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.status {
-            config
-                .query
-                .push(("status".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("status".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.properties {
-            config.query.push((
-                "properties".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("properties".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.property_query {
-            config.query.push((
-                "propertyQuery".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("propertyQuery".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -979,12 +949,7 @@ pub struct GetProjectRequest<'a> {
 
 impl<'a> GetProjectRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            expand: None,
-            properties: None,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), expand: None, properties: None }
     }
 
     /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that the project description, issue types, and project lead are included in all responses by default. Expand options include:
@@ -1017,15 +982,11 @@ impl<'a> GetProjectRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.properties {
-            config
-                .query
-                .push(("properties".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("properties".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         Ok(config)
@@ -1060,12 +1021,7 @@ impl<'a> UpdateProjectRequest<'a> {
         project_id_or_key: impl Into<String>,
         update_project_details: UpdateProjectDetails,
     ) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            update_project_details,
-            expand: None,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), update_project_details, expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that the project description, issue types, and project lead are included in all responses by default. Expand options include:
@@ -1089,9 +1045,7 @@ impl<'a> UpdateProjectRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         let body = match serde_json::to_value(&self.update_project_details)? {
@@ -1128,11 +1082,7 @@ pub struct DeleteProjectRequest<'a> {
 
 impl<'a> DeleteProjectRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            enable_undo: None,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), enable_undo: None }
     }
 
     /// Whether this project is placed in the Jira recycle bin where it will be available for restoration.
@@ -1151,10 +1101,7 @@ impl<'a> DeleteProjectRequest<'a> {
         );
 
         if let Some(value) = &self.enable_undo {
-            config.query.push((
-                "enableUndo".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("enableUndo".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1181,10 +1128,7 @@ pub struct ArchiveProjectRequest<'a> {
 
 impl<'a> ArchiveProjectRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -1220,10 +1164,7 @@ pub struct GetAllStatusesRequest<'a> {
 
 impl<'a> GetAllStatusesRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -1298,11 +1239,7 @@ pub struct GetNotificationSchemeForProjectRequest<'a> {
 
 impl<'a> GetNotificationSchemeForProjectRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_key_or_id: project_key_or_id.into(),
-            expand: None,
-        }
+        Self { client, project_key_or_id: project_key_or_id.into(), expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
@@ -1328,9 +1265,7 @@ impl<'a> GetNotificationSchemeForProjectRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)

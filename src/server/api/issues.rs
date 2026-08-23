@@ -459,10 +459,7 @@ pub struct RankIssuesRequest<'a> {
 
 impl<'a> RankIssuesRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_rank_request: IssueRankRequest) -> Self {
-        Self {
-            client,
-            issue_rank_request,
-        }
+        Self { client, issue_rank_request }
     }
 
     /// The request as the transport will send it.
@@ -502,13 +499,7 @@ pub struct GetAgileIssueRequest<'a> {
 
 impl<'a> GetAgileIssueRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            expand: None,
-            fields: None,
-            update_history: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), expand: None, fields: None, update_history: None }
     }
 
     /// A comma-separated list of the parameters to expand.
@@ -543,22 +534,15 @@ impl<'a> GetAgileIssueRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.fields {
-            config
-                .query
-                .push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.update_history {
-            config.query.push((
-                "updateHistory".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("updateHistory".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -587,11 +571,7 @@ pub struct GetIssueEstimationForBoardRequest<'a> {
 
 impl<'a> GetIssueEstimationForBoardRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            board_id: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), board_id: None }
     }
 
     /// The id of the board required to determine which field is used for estimation.
@@ -610,9 +590,7 @@ impl<'a> GetIssueEstimationForBoardRequest<'a> {
         );
 
         if let Some(value) = &self.board_id {
-            config
-                .query
-                .push(("boardId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("boardId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -644,12 +622,7 @@ pub struct EstimateIssueForBoardRequest<'a> {
 
 impl<'a> EstimateIssueForBoardRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, field_edit: FieldEdit) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            field_edit,
-            board_id: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), field_edit, board_id: None }
     }
 
     /// The id of the board required to determine which field is used for estimation.
@@ -668,9 +641,7 @@ impl<'a> EstimateIssueForBoardRequest<'a> {
         );
 
         if let Some(value) = &self.board_id {
-            config
-                .query
-                .push(("boardId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("boardId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.field_edit)? {
@@ -711,11 +682,7 @@ pub struct CreateIssueRequest<'a> {
 
 impl<'a> CreateIssueRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            update_history: None,
-            issue_update: None,
-        }
+        Self { client, update_history: None, issue_update: None }
     }
 
     #[must_use]
@@ -737,10 +704,7 @@ impl<'a> CreateIssueRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/issue".to_owned());
 
         if let Some(value) = &self.update_history {
-            config.query.push((
-                "updateHistory".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("updateHistory".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.issue_update)? {
@@ -773,11 +737,7 @@ pub struct ArchiveIssuesRequest<'a> {
 
 impl<'a> ArchiveIssuesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            notify_users: None,
-            body: None,
-        }
+        Self { client, notify_users: None, body: None }
     }
 
     /// Send the email with notification that the issue was updated to users that watch it. Admin or project admin permissions are required to disable the notification.
@@ -801,9 +761,7 @@ impl<'a> ArchiveIssuesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/issue/archive".to_owned());
 
         if let Some(value) = &self.notify_users {
-            config
-                .query
-                .push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -833,10 +791,7 @@ pub struct CreateIssuesRequest<'a> {
 
 impl<'a> CreateIssuesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            issues_update: None,
-        }
+        Self { client, issues_update: None }
     }
 
     #[must_use]
@@ -882,12 +837,7 @@ pub struct GetCreateIssueMetaProjectIssueTypesRequest<'a> {
 
 impl<'a> GetCreateIssueMetaProjectIssueTypesRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            max_results: None,
-            start_at: None,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), max_results: None, start_at: None }
     }
 
     /// How many results on the page should be included
@@ -914,15 +864,11 @@ impl<'a> GetCreateIssueMetaProjectIssueTypesRequest<'a> {
         );
 
         if let Some(value) = &self.max_results {
-            config
-                .query
-                .push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -983,22 +929,15 @@ impl<'a> GetCreateIssueMetaFieldsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/2/issue/createmeta/{}/issuetypes/{}",
-                self.project_id_or_key, self.issue_type_id
-            ),
+            format!("/rest/api/2/issue/createmeta/{}/issuetypes/{}", self.project_id_or_key, self.issue_type_id),
         );
 
         if let Some(value) = &self.max_results {
-            config
-                .query
-                .push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1093,43 +1032,27 @@ impl<'a> GetIssuePickerResourceRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/issue/picker".to_owned());
 
         if let Some(value) = &self.current_project_id {
-            config.query.push((
-                "currentProjectId".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("currentProjectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.current_issue_key {
-            config.query.push((
-                "currentIssueKey".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("currentIssueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.show_sub_tasks {
-            config.query.push((
-                "showSubTasks".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("showSubTasks".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.current_jql {
-            config
-                .query
-                .push(("currentJQL".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("currentJQL".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.show_sub_task_parent {
-            config.query.push((
-                "showSubTaskParent".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("showSubTaskParent".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1156,10 +1079,7 @@ pub struct CreateReciprocalRemoteIssueLinkRequest<'a> {
 
 impl<'a> CreateReciprocalRemoteIssueLinkRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            remote_reciprocal_issue_link_create_request: None,
-        }
+        Self { client, remote_reciprocal_issue_link_create_request: None }
     }
 
     #[must_use]
@@ -1304,28 +1224,19 @@ impl<'a> GetIssueRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.fields {
-            config
-                .query
-                .push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.update_history {
-            config.query.push((
-                "updateHistory".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("updateHistory".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.properties {
-            config
-                .query
-                .push(("properties".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("properties".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1352,12 +1263,7 @@ pub struct EditIssueRequest<'a> {
 
 impl<'a> EditIssueRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            notify_users: None,
-            issue_update: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), notify_users: None, issue_update: None }
     }
 
     /// Send the email with notification that the issue was updated to users that watch it. Admin or project admin permissions are required to disable the notification.
@@ -1383,9 +1289,7 @@ impl<'a> EditIssueRequest<'a> {
         );
 
         if let Some(value) = &self.notify_users {
-            config
-                .query
-                .push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         let body = match serde_json::to_value(&self.issue_update)? {
@@ -1418,11 +1322,7 @@ pub struct DeleteIssueRequest<'a> {
 
 impl<'a> DeleteIssueRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            delete_subtasks: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), delete_subtasks: None }
     }
 
     /// A String of true or false indicating that any subtasks should also be deleted. If the issue has no subtasks this parameter is ignored. If the issue has subtasks and this parameter is missing or false, then the issue will not be deleted and an error will be returned.
@@ -1441,10 +1341,7 @@ impl<'a> DeleteIssueRequest<'a> {
         );
 
         if let Some(value) = &self.delete_subtasks {
-            config.query.push((
-                "deleteSubtasks".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("deleteSubtasks".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1470,11 +1367,7 @@ pub struct ArchiveIssueRequest<'a> {
 
 impl<'a> ArchiveIssueRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            notify_users: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), notify_users: None }
     }
 
     /// Send the email with notification that the issue was updated to users that watch it. Admin or project admin permissions are required to disable the notification.
@@ -1493,9 +1386,7 @@ impl<'a> ArchiveIssueRequest<'a> {
         );
 
         if let Some(value) = &self.notify_users {
-            config
-                .query
-                .push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1521,11 +1412,7 @@ pub struct AssignRequest<'a> {
 
 impl<'a> AssignRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            user: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), user: None }
     }
 
     #[must_use]
@@ -1582,11 +1469,7 @@ impl<'a> AddAttachmentRequest<'a> {
         issue_id_or_key: impl Into<String>,
         attachments: impl IntoIterator<Item = crate::core::Attachment>,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            attachments: attachments.into_iter().collect(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), attachments: attachments.into_iter().collect() }
     }
 
     /// The request as the transport will send it.
@@ -1596,14 +1479,10 @@ impl<'a> AddAttachmentRequest<'a> {
             format!("/rest/api/2/issue/{}/attachments", self.issue_id_or_key),
         );
 
-        config
-            .headers
-            .push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
+        config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
 
-        config.body = Some(crate::core::Body::Multipart(crate::core::MultipartBody::new(
-            "file",
-            self.attachments.clone(),
-        )));
+        config.body =
+            Some(crate::core::Body::Multipart(crate::core::MultipartBody::new("file", self.attachments.clone())));
 
         Ok(config)
     }
@@ -1681,27 +1560,19 @@ impl<'a> GetCommentsRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config
-                .query
-                .push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.order_by {
-            config
-                .query
-                .push(("orderBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1728,12 +1599,7 @@ pub struct AddCommentRequest<'a> {
 
 impl<'a> AddCommentRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            expand: None,
-            comment_json: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), expand: None, comment_json: None }
     }
 
     /// Optional flags: renderedBody (provides body rendered in HTML)
@@ -1759,9 +1625,7 @@ impl<'a> AddCommentRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         let body = match serde_json::to_value(&self.comment_json)? {
@@ -1795,12 +1659,7 @@ pub struct GetCommentRequest<'a> {
 
 impl<'a> GetCommentRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            id: id.into(),
-            expand: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into(), expand: None }
     }
 
     /// Optional flags: renderedBody (provides body rendered in HTML)
@@ -1819,9 +1678,7 @@ impl<'a> GetCommentRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1849,13 +1706,7 @@ pub struct UpdateCommentRequest<'a> {
 
 impl<'a> UpdateCommentRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            id: id.into(),
-            expand: None,
-            body: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into(), expand: None, body: None }
     }
 
     /// Optional flags: renderedBody (provides body rendered in HTML)
@@ -1881,9 +1732,7 @@ impl<'a> UpdateCommentRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -1911,11 +1760,7 @@ pub struct DeleteCommentRequest<'a> {
 
 impl<'a> DeleteCommentRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            id: id.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into() }
     }
 
     /// The request as the transport will send it.
@@ -1954,12 +1799,7 @@ impl<'a> SetPinCommentRequest<'a> {
         id: impl Into<String>,
         body: bool,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            id: id.into(),
-            body,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into(), body }
     }
 
     /// The request as the transport will send it.
@@ -1993,10 +1833,7 @@ pub struct GetEditIssueMetaRequest<'a> {
 
 impl<'a> GetEditIssueMetaRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -2029,11 +1866,7 @@ pub struct NotifyRequest<'a> {
 
 impl<'a> NotifyRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            notification_json: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), notification_json: None }
     }
 
     #[must_use]
@@ -2079,10 +1912,7 @@ pub struct GetPinnedCommentsRequest<'a> {
 
 impl<'a> GetPinnedCommentsRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -2114,10 +1944,7 @@ pub struct GetIssuePropertyKeysRequest<'a> {
 
 impl<'a> GetIssuePropertyKeysRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -2154,21 +1981,14 @@ impl<'a> GetIssuePropertyRequest<'a> {
         property_key: impl Into<String>,
         issue_id_or_key: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, property_key: property_key.into(), issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/2/issue/{}/properties/{}",
-                self.issue_id_or_key, self.property_key
-            ),
+            format!("/rest/api/2/issue/{}/properties/{}", self.issue_id_or_key, self.property_key),
         );
 
         Ok(config)
@@ -2200,22 +2020,14 @@ impl<'a> SetIssuePropertyRequest<'a> {
         issue_id_or_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            issue_id_or_key: issue_id_or_key.into(),
-            body,
-        }
+        Self { client, property_key: property_key.into(), issue_id_or_key: issue_id_or_key.into(), body }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/api/2/issue/{}/properties/{}",
-                self.issue_id_or_key, self.property_key
-            ),
+            format!("/rest/api/2/issue/{}/properties/{}", self.issue_id_or_key, self.property_key),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -2247,21 +2059,14 @@ impl<'a> DeleteIssuePropertyRequest<'a> {
         property_key: impl Into<String>,
         issue_id_or_key: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            property_key: property_key.into(),
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, property_key: property_key.into(), issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/api/2/issue/{}/properties/{}",
-                self.issue_id_or_key, self.property_key
-            ),
+            format!("/rest/api/2/issue/{}/properties/{}", self.issue_id_or_key, self.property_key),
         );
 
         Ok(config)
@@ -2287,11 +2092,7 @@ pub struct GetRemoteIssueLinksRequest<'a> {
 
 impl<'a> GetRemoteIssueLinksRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            global_id: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), global_id: None }
     }
 
     /// Global id of the remote issue link
@@ -2310,9 +2111,7 @@ impl<'a> GetRemoteIssueLinksRequest<'a> {
         );
 
         if let Some(value) = &self.global_id {
-            config
-                .query
-                .push(("globalId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("globalId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -2338,11 +2137,7 @@ pub struct CreateOrUpdateRemoteIssueLinkRequest<'a> {
 
 impl<'a> CreateOrUpdateRemoteIssueLinkRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            remote_issue_link_create_or_update_request: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), remote_issue_link_create_or_update_request: None }
     }
 
     #[must_use]
@@ -2389,11 +2184,7 @@ pub struct DeleteRemoteIssueLinkByGlobalIdRequest<'a> {
 
 impl<'a> DeleteRemoteIssueLinkByGlobalIdRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, global_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            global_id: global_id.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), global_id: global_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -2403,10 +2194,7 @@ impl<'a> DeleteRemoteIssueLinkByGlobalIdRequest<'a> {
             format!("/rest/api/2/issue/{}/remotelink", self.issue_id_or_key),
         );
 
-        config.query.push((
-            "globalId".to_owned(),
-            crate::core::QueryValue::Scalar(self.global_id.clone()),
-        ));
+        config.query.push(("globalId".to_owned(), crate::core::QueryValue::Scalar(self.global_id.clone())));
 
         Ok(config)
     }
@@ -2431,11 +2219,7 @@ pub struct GetRemoteIssueLinkByIdRequest<'a> {
 
 impl<'a> GetRemoteIssueLinkByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, link_id: impl Into<String>, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            link_id: link_id.into(),
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, link_id: link_id.into(), issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -2521,11 +2305,7 @@ pub struct DeleteRemoteIssueLinkByIdRequest<'a> {
 
 impl<'a> DeleteRemoteIssueLinkByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, link_id: impl Into<String>, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            link_id: link_id.into(),
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, link_id: link_id.into(), issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -2558,11 +2338,7 @@ pub struct RestoreIssueRequest<'a> {
 
 impl<'a> RestoreIssueRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            notify_users: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), notify_users: None }
     }
 
     /// Send the email with notification that the issue was updated to users that watch it. Admin or project admin permissions are required to disable the notification.
@@ -2581,9 +2357,7 @@ impl<'a> RestoreIssueRequest<'a> {
         );
 
         if let Some(value) = &self.notify_users {
-            config
-                .query
-                .push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -2608,10 +2382,7 @@ pub struct GetSubTasksRequest<'a> {
 
 impl<'a> GetSubTasksRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -2643,10 +2414,7 @@ pub struct CanMoveSubTaskRequest<'a> {
 
 impl<'a> CanMoveSubTaskRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -2683,11 +2451,7 @@ impl<'a> MoveSubTasksRequest<'a> {
         issue_id_or_key: impl Into<String>,
         issue_sub_task_move_position: IssueSubTaskMovePosition,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            issue_sub_task_move_position,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), issue_sub_task_move_position }
     }
 
     /// The request as the transport will send it.
@@ -2730,11 +2494,7 @@ pub struct GetTransitionsRequest<'a> {
 
 impl<'a> GetTransitionsRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            transition_id: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), transition_id: None }
     }
 
     /// Transition id
@@ -2753,10 +2513,7 @@ impl<'a> GetTransitionsRequest<'a> {
         );
 
         if let Some(value) = &self.transition_id {
-            config.query.push((
-                "transitionId".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("transitionId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -2787,11 +2544,7 @@ pub struct DoTransitionRequest<'a> {
 
 impl<'a> DoTransitionRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            issue_update: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), issue_update: None }
     }
 
     #[must_use]
@@ -2837,10 +2590,7 @@ pub struct GetVotesRequest<'a> {
 
 impl<'a> GetVotesRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -2872,10 +2622,7 @@ pub struct AddVoteRequest<'a> {
 
 impl<'a> AddVoteRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -2907,10 +2654,7 @@ pub struct RemoveVoteRequest<'a> {
 
 impl<'a> RemoveVoteRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -2942,10 +2686,7 @@ pub struct GetIssueWatchersRequest<'a> {
 
 impl<'a> GetIssueWatchersRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -2979,12 +2720,7 @@ pub struct AddWatcherRequest<'a> {
 
 impl<'a> AddWatcherRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            user_name: None,
-            body: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), user_name: None, body: None }
     }
 
     /// The name of the user to add to the watcher list. If no name is specified, the current user is added.
@@ -3010,9 +2746,7 @@ impl<'a> AddWatcherRequest<'a> {
         );
 
         if let Some(value) = &self.user_name {
-            config
-                .query
-                .push(("userName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("userName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -3041,12 +2775,7 @@ pub struct RemoveWatcherRequest<'a> {
 
 impl<'a> RemoveWatcherRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            user_name: None,
-            username: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), user_name: None, username: None }
     }
 
     /// The name of the user to remove from the watcher list.
@@ -3072,15 +2801,11 @@ impl<'a> RemoveWatcherRequest<'a> {
         );
 
         if let Some(value) = &self.user_name {
-            config
-                .query
-                .push(("userName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("userName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -3105,10 +2830,7 @@ pub struct GetIssueWorklogRequest<'a> {
 
 impl<'a> GetIssueWorklogRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -3193,22 +2915,15 @@ impl<'a> AddWorklogRequest<'a> {
         );
 
         if let Some(value) = &self.new_estimate {
-            config
-                .query
-                .push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.adjust_estimate {
-            config.query.push((
-                "adjustEstimate".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.reduce_by {
-            config
-                .query
-                .push(("reduceBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("reduceBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         let body = match serde_json::to_value(&self.worklog)? {
@@ -3241,11 +2956,7 @@ pub struct GetWorklogRequest<'a> {
 
 impl<'a> GetWorklogRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            id: id.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into() }
     }
 
     /// The request as the transport will send it.
@@ -3326,16 +3037,11 @@ impl<'a> UpdateWorklogRequest<'a> {
         );
 
         if let Some(value) = &self.new_estimate {
-            config
-                .query
-                .push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.adjust_estimate {
-            config.query.push((
-                "adjustEstimate".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -3408,22 +3114,15 @@ impl<'a> DeleteWorklogRequest<'a> {
         );
 
         if let Some(value) = &self.new_estimate {
-            config
-                .query
-                .push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.adjust_estimate {
-            config.query.push((
-                "adjustEstimate".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.increase_by {
-            config
-                .query
-                .push(("increaseBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("increaseBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

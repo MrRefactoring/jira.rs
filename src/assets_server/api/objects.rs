@@ -196,49 +196,31 @@ impl<'a> GetArchivedObjectsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/assets/1.0/object/archived".to_owned());
 
         if let Some(value) = &self.object_schema_id {
-            config.query.push((
-                "objectSchemaId".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("objectSchemaId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.archived_from_date {
-            config.query.push((
-                "archivedFromDate".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("archivedFromDate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.offset {
-            config
-                .query
-                .push(("offset".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("offset".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.object_type_ids {
-            config.query.push((
-                "objectTypeIds".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("objectTypeIds".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.archived_to_date {
-            config.query.push((
-                "archivedToDate".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("archivedToDate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.archived_by {
-            config
-                .query
-                .push(("archivedBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("archivedBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -263,10 +245,7 @@ pub struct ArchiveObjectRequest<'a> {
 
 impl<'a> ArchiveObjectRequest<'a> {
     fn new(client: &'a crate::core::Client, object_identifier: impl Into<String>) -> Self {
-        Self {
-            client,
-            object_identifier: object_identifier.into(),
-        }
+        Self { client, object_identifier: object_identifier.into() }
     }
 
     /// The request as the transport will send it.
@@ -299,11 +278,7 @@ pub struct ArchiveObjectsByFilterRequest<'a> {
 
 impl<'a> ArchiveObjectsByFilterRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            type_id: None,
-            object_filters: None,
-        }
+        Self { client, type_id: None, object_filters: None }
     }
 
     /// The object type id to archive.
@@ -329,9 +304,7 @@ impl<'a> ArchiveObjectsByFilterRequest<'a> {
         );
 
         if let Some(value) = &self.type_id {
-            config
-                .query
-                .push(("typeId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("typeId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         let body = match serde_json::to_value(&self.object_filters)? {
@@ -405,10 +378,7 @@ pub struct RestoreObjectRequest<'a> {
 
 impl<'a> RestoreObjectRequest<'a> {
     fn new(client: &'a crate::core::Client, object_identifier: impl Into<String>) -> Self {
-        Self {
-            client,
-            object_identifier: object_identifier.into(),
-        }
+        Self { client, object_identifier: object_identifier.into() }
     }
 
     /// The request as the transport will send it.
@@ -502,37 +472,23 @@ impl<'a> RestoreObjectsByFilterRequest<'a> {
         );
 
         if let Some(value) = &self.object_schema_id {
-            config.query.push((
-                "objectSchemaId".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("objectSchemaId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.archived_from_date {
-            config.query.push((
-                "archivedFromDate".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("archivedFromDate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.object_type_ids {
-            config.query.push((
-                "objectTypeIds".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("objectTypeIds".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.archived_to_date {
-            config.query.push((
-                "archivedToDate".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("archivedToDate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.archived_by {
-            config
-                .query
-                .push(("archivedBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("archivedBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -713,11 +669,7 @@ pub struct ClearObjectImportSourceRequest<'a> {
 
 impl<'a> ClearObjectImportSourceRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            previous_name: None,
-        }
+        Self { client, id: id.into(), previous_name: None }
     }
 
     #[must_use]
@@ -735,10 +687,7 @@ impl<'a> ClearObjectImportSourceRequest<'a> {
         );
 
         if let Some(value) = &self.previous_name {
-            config.query.push((
-                "previousName".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("previousName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -763,10 +712,7 @@ pub struct CreateObjectRequest<'a> {
 
 impl<'a> CreateObjectRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            asset_object_in: None,
-        }
+        Self { client, asset_object_in: None }
     }
 
     #[must_use]
@@ -813,13 +759,7 @@ pub struct LoadObjectRequest<'a> {
 
 impl<'a> LoadObjectRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            xoauth_requestor_id: None,
-            include_attributes: None,
-            include_extended_info: None,
-        }
+        Self { client, id: id.into(), xoauth_requestor_id: None, include_attributes: None, include_extended_info: None }
     }
 
     #[must_use]
@@ -851,24 +791,15 @@ impl<'a> LoadObjectRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/assets/1.0/object/{}", self.id));
 
         if let Some(value) = &self.xoauth_requestor_id {
-            config.query.push((
-                "xoauth_requestor_id".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("xoauth_requestor_id".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.include_attributes {
-            config.query.push((
-                "includeAttributes".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("includeAttributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.include_extended_info {
-            config.query.push((
-                "includeExtendedInfo".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("includeExtendedInfo".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -894,11 +825,7 @@ pub struct UpdateObjectRequest<'a> {
 
 impl<'a> UpdateObjectRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            asset_object_in: None,
-        }
+        Self { client, id: id.into(), asset_object_in: None }
     }
 
     #[must_use]
@@ -974,10 +901,7 @@ pub struct FindObjectRequest<'a> {
 
 impl<'a> FindObjectRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            object_iql_filter_param: None,
-        }
+        Self { client, object_iql_filter_param: None }
     }
 
     #[must_use]
@@ -1058,13 +982,7 @@ pub struct FindObjectHistoryRequest<'a> {
 
 impl<'a> FindObjectHistoryRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            asc: None,
-            abbreviate: None,
-            order_asc: None,
-        }
+        Self { client, id: id.into(), asc: None, abbreviate: None, order_asc: None }
     }
 
     #[must_use]
@@ -1098,21 +1016,15 @@ impl<'a> FindObjectHistoryRequest<'a> {
         );
 
         if let Some(value) = &self.asc {
-            config
-                .query
-                .push(("asc".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("asc".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.abbreviate {
-            config
-                .query
-                .push(("abbreviate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("abbreviate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.order_asc {
-            config
-                .query
-                .push(("orderAsc".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("orderAsc".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

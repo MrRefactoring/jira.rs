@@ -17,17 +17,8 @@ async fn walks_a_version_through_its_lifecycle() {
     let mut tracker = ResourceTracker::new();
     let name = test_name("version").replace(['[', ']'], "");
 
-    let project = cloud()
-        .projects()
-        .get_project(TEST_PROJECT_KEY)
-        .send()
-        .await
-        .expect("the test project reads back");
-    let project_id: i64 = project
-        .id
-        .expect("a project carries an id")
-        .parse()
-        .expect("a project id is a number");
+    let project = cloud().projects().get_project(TEST_PROJECT_KEY).send().await.expect("the test project reads back");
+    let project_id: i64 = project.id.expect("a project carries an id").parse().expect("a project id is a number");
 
     let created = cloud()
         .project_versions()
@@ -60,27 +51,16 @@ async fn walks_a_version_through_its_lifecycle() {
         });
     }
 
-    assert!(
-        version_id.chars().all(|c| c.is_ascii_digit()),
-        "an id is digits: {version_id}"
-    );
+    assert!(version_id.chars().all(|c| c.is_ascii_digit()), "an id is digits: {version_id}");
     assert_eq!(created.name.as_deref(), Some(name.as_str()));
     assert_eq!(created.released, Some(false));
     assert_eq!(created.archived, Some(false));
 
-    let read = cloud()
-        .project_versions()
-        .get_version(&version_id)
-        .send()
-        .await
-        .expect("the version reads back by id");
+    let read = cloud().project_versions().get_version(&version_id).send().await.expect("the version reads back by id");
 
     assert_eq!(read.id.as_deref(), Some(version_id.as_str()));
     assert_eq!(read.project_id, Some(project_id));
-    assert!(
-        read.issues_status_for_fix_version.is_none(),
-        "issue counts are not returned unless asked for"
-    );
+    assert!(read.issues_status_for_fix_version.is_none(), "issue counts are not returned unless asked for");
 
     let expanded = cloud()
         .project_versions()
@@ -90,9 +70,7 @@ async fn walks_a_version_through_its_lifecycle() {
         .await
         .expect("the expand parameter is accepted");
 
-    let counts = expanded
-        .issues_status_for_fix_version
-        .expect("expanding issuesstatus returns the counts");
+    let counts = expanded.issues_status_for_fix_version.expect("expanding issuesstatus returns the counts");
 
     assert!(counts.unmapped.is_some(), "the counts carry an unmapped bucket");
 
@@ -100,25 +78,14 @@ async fn walks_a_version_through_its_lifecycle() {
         .project_versions()
         .update_version(
             &version_id,
-            Version {
-                released: Some(true),
-                release_date: Some("2026-01-15".to_owned()),
-                ..Version::default()
-            },
+            Version { released: Some(true), release_date: Some("2026-01-15".to_owned()), ..Version::default() },
         )
         .send()
         .await
         .expect("the version can be released");
 
-    assert_eq!(
-        updated.released,
-        Some(true),
-        "the release is observable in the response"
-    );
-    assert!(
-        updated.release_date.is_some_and(|date| !date.is_empty()),
-        "a released version carries a release date"
-    );
+    assert_eq!(updated.released, Some(true), "the release is observable in the response");
+    assert!(updated.release_date.is_some_and(|date| !date.is_empty()), "a released version carries a release date");
 
     let second = cloud()
         .project_versions()
@@ -160,13 +127,7 @@ async fn walks_a_version_through_its_lifecycle() {
 
     cloud()
         .project_versions()
-        .move_version(
-            &second_id,
-            VersionMove {
-                position: Some(VersionMovePosition::First),
-                ..VersionMove::default()
-            },
-        )
+        .move_version(&second_id, VersionMove { position: Some(VersionMovePosition::First), ..VersionMove::default() })
         .send()
         .await
         .expect("a version can be moved to the front");
@@ -179,14 +140,8 @@ async fn walks_a_version_through_its_lifecycle() {
         .expect("the reordered project lists its versions");
     let order_after: Vec<Option<String>> = after.iter().map(|version| version.id.clone()).collect();
 
-    assert_eq!(
-        order_after.first().and_then(Clone::clone).as_deref(),
-        Some(second_id.as_str())
-    );
-    assert_ne!(
-        order_after, order_before,
-        "moving a version changes the order the project reports"
-    );
+    assert_eq!(order_after.first().and_then(Clone::clone).as_deref(), Some(second_id.as_str()));
+    assert_ne!(order_after, order_before, "moving a version changes the order the project reports");
 
     let issue = create_test_issue(&mut tracker, Some(&test_name("version holder"))).await;
 
@@ -195,11 +150,7 @@ async fn walks_a_version_through_its_lifecycle() {
         .edit_issue(
             &issue.key,
             IssueUpdateDetails {
-                fields: Some(
-                    [("fixVersions".to_owned(), json!([{ "id": version_id }]))]
-                        .into_iter()
-                        .collect(),
-                ),
+                fields: Some([("fixVersions".to_owned(), json!([{ "id": version_id }]))].into_iter().collect()),
                 ..IssueUpdateDetails::default()
             },
         )
@@ -269,11 +220,7 @@ async fn walks_a_version_through_its_lifecycle() {
         .map(|version| version.get("id").and_then(serde_json::Value::as_str))
         .collect();
 
-    assert_eq!(
-        fix_versions,
-        vec![Some(second_id.as_str())],
-        "the merge moves the issue onto the surviving version"
-    );
+    assert_eq!(fix_versions, vec![Some(second_id.as_str())], "the merge moves the issue onto the surviving version");
 
     tracker.cleanup().await;
 }
@@ -290,16 +237,9 @@ async fn pages_the_paginated_version_listing() {
         .await
         .expect("the paginated version listing is accepted");
 
-    assert!(
-        page.values.len() <= 1,
-        "one result was asked for, {} arrived",
-        page.values.len()
-    );
+    assert!(page.values.len() <= 1, "one result was asked for, {} arrived", page.values.len());
     assert_eq!(page.max_results, 1);
-    assert!(
-        page.total >= page.values.len() as i64,
-        "a page never reports fewer results than it carries"
-    );
+    assert!(page.total >= page.values.len() as i64, "a page never reports fewer results than it carries");
 }
 
 #[tokio::test]

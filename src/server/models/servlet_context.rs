@@ -87,11 +87,7 @@ pub struct ServletContextClassLoaderParent {
     pub defined_packages: Option<Vec<ServletContextClassLoaderParentDefinedPackages>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    #[serde(
-        rename = "registeredAsParallelCapable",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "registeredAsParallelCapable", default, skip_serializing_if = "Option::is_none")]
     pub registered_as_parallel_capable: Option<bool>,
     #[serde(rename = "unnamedModule", default, skip_serializing_if = "Option::is_none")]
     pub unnamed_module: Option<ServletContextClassLoaderParentUnnamedModule>,
@@ -135,11 +131,7 @@ pub struct ServletContextClassLoader {
     pub name: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub parent: Option<ServletContextClassLoaderParent>,
-    #[serde(
-        rename = "registeredAsParallelCapable",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "registeredAsParallelCapable", default, skip_serializing_if = "Option::is_none")]
     pub registered_as_parallel_capable: Option<bool>,
     #[serde(rename = "unnamedModule", default, skip_serializing_if = "Option::is_none")]
     pub unnamed_module: Option<ServletContextClassLoaderUnnamedModule>,
@@ -177,21 +169,13 @@ pub struct ServletContext {
     pub class_loader: Option<ServletContextClassLoader>,
     #[serde(rename = "contextPath", default, skip_serializing_if = "Option::is_none")]
     pub context_path: Option<String>,
-    #[serde(
-        rename = "defaultSessionTrackingModes",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "defaultSessionTrackingModes", default, skip_serializing_if = "Option::is_none")]
     pub default_session_tracking_modes: Option<Vec<ServletContextDefaultSessionTrackingModes>>,
     #[serde(rename = "effectiveMajorVersion", default, skip_serializing_if = "Option::is_none")]
     pub effective_major_version: Option<i64>,
     #[serde(rename = "effectiveMinorVersion", default, skip_serializing_if = "Option::is_none")]
     pub effective_minor_version: Option<i64>,
-    #[serde(
-        rename = "effectiveSessionTrackingModes",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "effectiveSessionTrackingModes", default, skip_serializing_if = "Option::is_none")]
     pub effective_session_tracking_modes: Option<Vec<ServletContextEffectiveSessionTrackingModes>>,
     #[serde(rename = "filterRegistrations", default, skip_serializing_if = "Option::is_none")]
     pub filter_registrations: Option<std::collections::HashMap<String, serde_json::Value>>,
@@ -203,17 +187,9 @@ pub struct ServletContext {
     pub major_version: Option<i64>,
     #[serde(rename = "minorVersion", default, skip_serializing_if = "Option::is_none")]
     pub minor_version: Option<i64>,
-    #[serde(
-        rename = "requestCharacterEncoding",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "requestCharacterEncoding", default, skip_serializing_if = "Option::is_none")]
     pub request_character_encoding: Option<String>,
-    #[serde(
-        rename = "responseCharacterEncoding",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "responseCharacterEncoding", default, skip_serializing_if = "Option::is_none")]
     pub response_character_encoding: Option<String>,
     #[serde(rename = "serverInfo", default, skip_serializing_if = "Option::is_none")]
     pub server_info: Option<String>,

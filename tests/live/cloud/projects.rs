@@ -10,60 +10,29 @@ use crate::harness::{TEST_PROJECT_KEY, cloud};
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn describes_the_test_project_the_whole_live_suite_runs_in() {
-    let project = cloud()
-        .projects()
-        .get_project(TEST_PROJECT_KEY)
-        .send()
-        .await
-        .expect("the test project reads back");
+    let project = cloud().projects().get_project(TEST_PROJECT_KEY).send().await.expect("the test project reads back");
 
     assert_eq!(project.key.as_deref(), Some(TEST_PROJECT_KEY));
     assert!(
-        project
-            .id
-            .as_ref()
-            .is_some_and(|id| !id.is_empty() && id.chars().all(|c| c.is_ascii_digit())),
+        project.id.as_ref().is_some_and(|id| !id.is_empty() && id.chars().all(|c| c.is_ascii_digit())),
         "an id is digits: {:?}",
         project.id,
     );
-    assert!(
-        project.name.is_some_and(|name| !name.is_empty()),
-        "a project carries a name"
-    );
-    assert!(
-        project.self_.is_some_and(|link| link.starts_with("https://")),
-        "a project carries an absolute self link"
-    );
+    assert!(project.name.is_some_and(|name| !name.is_empty()), "a project carries a name");
+    assert!(project.self_.is_some_and(|link| link.starts_with("https://")), "a project carries an absolute self link");
 
-    let issue_types: Vec<String> = project
-        .issue_types
-        .unwrap_or_default()
-        .into_iter()
-        .filter_map(|issue_type| issue_type.name)
-        .collect();
+    let issue_types: Vec<String> =
+        project.issue_types.unwrap_or_default().into_iter().filter_map(|issue_type| issue_type.name).collect();
 
-    assert!(
-        issue_types.iter().any(|name| name == "Task"),
-        "the test project offers Task: {issue_types:?}"
-    );
+    assert!(issue_types.iter().any(|name| name == "Task"), "the test project offers Task: {issue_types:?}");
 }
 
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn resolves_the_project_by_id_as_well_as_by_key() {
-    let by_key = cloud()
-        .projects()
-        .get_project(TEST_PROJECT_KEY)
-        .send()
-        .await
-        .expect("the project reads back by key");
+    let by_key = cloud().projects().get_project(TEST_PROJECT_KEY).send().await.expect("the project reads back by key");
     let id = by_key.id.expect("a project carries an id");
-    let by_id = cloud()
-        .projects()
-        .get_project(&id)
-        .send()
-        .await
-        .expect("the project reads back by id");
+    let by_id = cloud().projects().get_project(&id).send().await.expect("the project reads back by id");
 
     assert_eq!(by_id.key.as_deref(), Some(TEST_PROJECT_KEY));
     assert_eq!(by_id.id.as_deref(), Some(id.as_str()));
@@ -73,29 +42,17 @@ async fn resolves_the_project_by_id_as_well_as_by_key() {
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn already_returns_lead_and_description_without_being_asked() {
-    let plain = cloud()
-        .projects()
-        .get_project(TEST_PROJECT_KEY)
-        .send()
-        .await
-        .expect("the project reads back plain");
+    let plain = cloud().projects().get_project(TEST_PROJECT_KEY).send().await.expect("the project reads back plain");
     let expanded = cloud()
         .projects()
         .get_project(TEST_PROJECT_KEY)
-        .expand(GetProjectRequestExpand::Variant1(vec![
-            "description".to_owned(),
-            "lead".to_owned(),
-        ]))
+        .expand(GetProjectRequestExpand::Variant1(vec!["description".to_owned(), "lead".to_owned()]))
         .send()
         .await
         .expect("the expand parameter is accepted");
 
     assert!(
-        plain
-            .lead
-            .as_ref()
-            .and_then(|lead| lead.account_id.as_ref())
-            .is_some_and(|id| !id.is_empty()),
+        plain.lead.as_ref().and_then(|lead| lead.account_id.as_ref()).is_some_and(|id| !id.is_empty()),
         "the lead arrives without being asked for",
     );
     assert_eq!(
@@ -103,10 +60,7 @@ async fn already_returns_lead_and_description_without_being_asked() {
         plain.lead.and_then(|lead| lead.account_id),
         "expanding the lead returns the same lead",
     );
-    assert_eq!(
-        expanded.description, plain.description,
-        "the description arrives without being asked for"
-    );
+    assert_eq!(expanded.description, plain.description, "the description arrives without being asked for");
 }
 
 #[tokio::test]
@@ -122,33 +76,18 @@ async fn finds_the_project_through_the_paginated_search() {
 
     let keys: Vec<String> = page.values.iter().filter_map(|project| project.key.clone()).collect();
 
-    assert!(
-        keys.iter().any(|key| key == TEST_PROJECT_KEY),
-        "the search finds the test project: {keys:?}"
-    );
+    assert!(keys.iter().any(|key| key == TEST_PROJECT_KEY), "the search finds the test project: {keys:?}");
     assert!(page.total >= 1, "a page that found something reports a total");
-    assert!(
-        page.values.len() as i64 <= page.max_results,
-        "a page never exceeds the size it declares"
-    );
+    assert!(page.values.len() as i64 <= page.max_results, "a page never exceeds the size it declares");
 }
 
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn pages_and_orders_the_project_search() {
-    let limited = cloud()
-        .projects()
-        .search_projects()
-        .max_results(1)
-        .send()
-        .await
-        .expect("a page size of one is accepted");
+    let limited =
+        cloud().projects().search_projects().max_results(1).send().await.expect("a page size of one is accepted");
 
-    assert!(
-        limited.values.len() <= 1,
-        "one result was asked for, {} arrived",
-        limited.values.len()
-    );
+    assert!(limited.values.len() <= 1, "one result was asked for, {} arrived", limited.values.len());
     assert_eq!(limited.max_results, 1);
 
     let ascending = cloud()
@@ -172,33 +111,21 @@ async fn pages_and_orders_the_project_search() {
     let down: Vec<Option<String>> = descending.values.iter().map(|project| project.key.clone()).collect();
 
     if up.len() > 1 {
-        assert_eq!(
-            down,
-            up.iter().rev().cloned().collect::<Vec<_>>(),
-            "the sort direction reverses the page"
-        );
+        assert_eq!(down, up.iter().rev().cloned().collect::<Vec<_>>(), "the sort direction reverses the page");
     }
 }
 
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_the_statuses_available_per_issue_type() {
-    let statuses = cloud()
-        .projects()
-        .get_all_statuses(TEST_PROJECT_KEY)
-        .send()
-        .await
-        .expect("the project reports its statuses");
+    let statuses =
+        cloud().projects().get_all_statuses(TEST_PROJECT_KEY).send().await.expect("the project reports its statuses");
 
     assert!(!statuses.is_empty(), "a project has at least one issue type");
 
     for issue_type in &statuses {
         assert!(!issue_type.name.is_empty(), "an issue type carries a name");
-        assert!(
-            !issue_type.statuses.is_empty(),
-            "{} has at least one status",
-            issue_type.name
-        );
+        assert!(!issue_type.statuses.is_empty(), "{} has at least one status", issue_type.name);
 
         for status in &issue_type.statuses {
             assert!(
@@ -218,17 +145,8 @@ async fn lists_the_statuses_available_per_issue_type() {
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn describes_the_issue_type_hierarchy_or_refuses_for_a_company_managed_project() {
-    let project = cloud()
-        .projects()
-        .get_project(TEST_PROJECT_KEY)
-        .send()
-        .await
-        .expect("the test project reads back");
-    let id: i64 = project
-        .id
-        .expect("a project carries an id")
-        .parse()
-        .expect("a project id is a number");
+    let project = cloud().projects().get_project(TEST_PROJECT_KEY).send().await.expect("the test project reads back");
+    let id: i64 = project.id.expect("a project carries an id").parse().expect("a project id is a number");
 
     match cloud().projects().get_hierarchy(id).send().await {
         Ok(hierarchy) => {
@@ -241,9 +159,7 @@ async fn describes_the_issue_type_hierarchy_or_refuses_for_a_company_managed_pro
         Err(error) => {
             assert!(error.is_not_found(), "{error}");
             assert!(
-                error
-                    .body()
-                    .is_some_and(|body| body.to_string().contains("not simplified")),
+                error.body().is_some_and(|body| body.to_string().contains("not simplified")),
                 "a company-managed project says why: {error}",
             );
         }
@@ -253,25 +169,15 @@ async fn describes_the_issue_type_hierarchy_or_refuses_for_a_company_managed_pro
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_the_notification_scheme_or_a_typed_404_when_none_is_attached() {
-    match cloud()
-        .projects()
-        .get_notification_scheme_for_project(TEST_PROJECT_KEY)
-        .send()
-        .await
-    {
+    match cloud().projects().get_notification_scheme_for_project(TEST_PROJECT_KEY).send().await {
         Ok(scheme) => {
             assert!(scheme.id.is_some(), "a notification scheme carries an id");
-            assert!(
-                scheme.name.is_some_and(|name| !name.is_empty()),
-                "a notification scheme carries a name"
-            );
+            assert!(scheme.name.is_some_and(|name| !name.is_empty()), "a notification scheme carries a name");
         }
         Err(error) => {
             assert!(error.is_not_found(), "{error}");
             assert!(
-                error
-                    .body()
-                    .is_some_and(|body| body.to_string().contains("notification scheme")),
+                error.body().is_some_and(|body| body.to_string().contains("notification scheme")),
                 "the refusal names what is missing: {error}",
             );
         }

@@ -4,11 +4,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct EntityType {
-    #[serde(
-        rename = "applicationTypeClassName",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "applicationTypeClassName", default, skip_serializing_if = "Option::is_none")]
     pub application_type_class_name: Option<String>,
     #[serde(rename = "i18nKey", default, skip_serializing_if = "Option::is_none")]
     pub i18n_key: Option<String>,

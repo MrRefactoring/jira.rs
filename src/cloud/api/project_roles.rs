@@ -130,10 +130,7 @@ pub struct GetProjectRolesRequest<'a> {
 
 impl<'a> GetProjectRolesRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -173,12 +170,7 @@ pub struct GetProjectRoleRequest<'a> {
 
 impl<'a> GetProjectRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>, id: i64) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            id,
-            exclude_inactive_users: None,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), id, exclude_inactive_users: None }
     }
 
     /// Exclude inactive users.
@@ -197,10 +189,7 @@ impl<'a> GetProjectRoleRequest<'a> {
         );
 
         if let Some(value) = &self.exclude_inactive_users {
-            config.query.push((
-                "excludeInactiveUsers".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("excludeInactiveUsers".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -272,24 +261,17 @@ impl<'a> GetProjectRoleDetailsRequest<'a> {
         );
 
         if let Some(value) = &self.current_member {
-            config.query.push((
-                "currentMember".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("currentMember".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.exclude_connect_addons {
-            config.query.push((
-                "excludeConnectAddons".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("excludeConnectAddons".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.exclude_other_service_roles {
-            config.query.push((
-                "excludeOtherServiceRoles".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config
+                .query
+                .push(("excludeOtherServiceRoles".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -363,10 +345,7 @@ pub struct CreateProjectRoleRequest<'a> {
 
 impl<'a> CreateProjectRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, create_update_role_request: CreateUpdateRoleRequest) -> Self {
-        Self {
-            client,
-            create_update_role_request,
-        }
+        Self { client, create_update_role_request }
     }
 
     /// The request as the transport will send it.
@@ -438,11 +417,7 @@ pub struct PartialUpdateProjectRoleRequest<'a> {
 
 impl<'a> PartialUpdateProjectRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, create_update_role_request: CreateUpdateRoleRequest) -> Self {
-        Self {
-            client,
-            id,
-            create_update_role_request,
-        }
+        Self { client, id, create_update_role_request }
     }
 
     /// The request as the transport will send it.
@@ -482,11 +457,7 @@ pub struct FullyUpdateProjectRoleRequest<'a> {
 
 impl<'a> FullyUpdateProjectRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, create_update_role_request: CreateUpdateRoleRequest) -> Self {
-        Self {
-            client,
-            id,
-            create_update_role_request,
-        }
+        Self { client, id, create_update_role_request }
     }
 
     /// The request as the transport will send it.
@@ -543,9 +514,7 @@ impl<'a> DeleteProjectRoleRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/rest/api/3/role/{}", self.id));
 
         if let Some(value) = &self.swap {
-            config
-                .query
-                .push(("swap".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("swap".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

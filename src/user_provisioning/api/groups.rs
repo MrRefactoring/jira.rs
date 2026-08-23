@@ -149,11 +149,7 @@ pub struct GetGroupRequest<'a> {
 
 impl<'a> GetGroupRequest<'a> {
     fn new(client: &'a crate::core::Client, directory_id: impl Into<String>, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            directory_id: directory_id.into(),
-            id: id.into(),
-        }
+        Self { client, directory_id: directory_id.into(), id: id.into() }
     }
 
     /// The request as the transport will send it.
@@ -187,12 +183,7 @@ pub struct ReplaceGroupRequest<'a> {
 
 impl<'a> ReplaceGroupRequest<'a> {
     fn new(client: &'a crate::core::Client, directory_id: impl Into<String>, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            directory_id: directory_id.into(),
-            id: id.into(),
-            body: None,
-        }
+        Self { client, directory_id: directory_id.into(), id: id.into(), body: None }
     }
 
     #[must_use]
@@ -240,11 +231,7 @@ pub struct DeleteGroupRequest<'a> {
 
 impl<'a> DeleteGroupRequest<'a> {
     fn new(client: &'a crate::core::Client, directory_id: impl Into<String>, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            directory_id: directory_id.into(),
-            id: id.into(),
-        }
+        Self { client, directory_id: directory_id.into(), id: id.into() }
     }
 
     /// The request as the transport will send it.
@@ -365,12 +352,7 @@ impl<'a> PatchGroupRequest<'a> {
         id: impl Into<String>,
         request_payload_to_patch: RequestPayloadToPatch,
     ) -> Self {
-        Self {
-            client,
-            directory_id: directory_id.into(),
-            id: id.into(),
-            request_payload_to_patch,
-        }
+        Self { client, directory_id: directory_id.into(), id: id.into(), request_payload_to_patch }
     }
 
     /// The request as the transport will send it.
@@ -414,13 +396,7 @@ pub struct GetGroupsRequest<'a> {
 
 impl<'a> GetGroupsRequest<'a> {
     fn new(client: &'a crate::core::Client, directory_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            directory_id: directory_id.into(),
-            filter: None,
-            start_index: None,
-            count: None,
-        }
+        Self { client, directory_id: directory_id.into(), filter: None, start_index: None, count: None }
     }
 
     /// Filter for `displayName`. Example: `displayName eq "SCIM_GROUP"`
@@ -455,22 +431,15 @@ impl<'a> GetGroupsRequest<'a> {
         );
 
         if let Some(value) = &self.filter {
-            config
-                .query
-                .push(("filter".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("filter".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_index {
-            config.query.push((
-                "startIndex".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("startIndex".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.count {
-            config
-                .query
-                .push(("count".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("count".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -498,11 +467,7 @@ pub struct CreateGroupRequest<'a> {
 
 impl<'a> CreateGroupRequest<'a> {
     fn new(client: &'a crate::core::Client, directory_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            directory_id: directory_id.into(),
-            body: None,
-        }
+        Self { client, directory_id: directory_id.into(), body: None }
     }
 
     #[must_use]

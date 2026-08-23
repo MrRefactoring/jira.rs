@@ -61,9 +61,7 @@ impl<'a> ValidateProjectKeyRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/projectvalidate/key".to_owned());
 
         if let Some(value) = &self.key {
-            config
-                .query
-                .push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -109,9 +107,7 @@ impl<'a> GetValidProjectKeyRequest<'a> {
         );
 
         if let Some(value) = &self.key {
-            config
-                .query
-                .push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -138,10 +134,7 @@ pub struct GetValidProjectNameRequest<'a> {
 
 impl<'a> GetValidProjectNameRequest<'a> {
     fn new(client: &'a crate::core::Client, name: impl Into<String>) -> Self {
-        Self {
-            client,
-            name: name.into(),
-        }
+        Self { client, name: name.into() }
     }
 
     /// The request as the transport will send it.
@@ -151,9 +144,7 @@ impl<'a> GetValidProjectNameRequest<'a> {
             "/rest/api/3/projectvalidate/validProjectName".to_owned(),
         );
 
-        config
-            .query
-            .push(("name".to_owned(), crate::core::QueryValue::Scalar(self.name.clone())));
+        config.query.push(("name".to_owned(), crate::core::QueryValue::Scalar(self.name.clone())));
 
         Ok(config)
     }

@@ -43,9 +43,7 @@ impl<'a> ValidateProjectKeyRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/projectvalidate/key".to_owned());
 
         if let Some(value) = &self.key {
-            config
-                .query
-                .push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

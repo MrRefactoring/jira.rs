@@ -22,11 +22,7 @@ pub struct NotificationSchemePayload {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// The events and notifications for the notification scheme
-    #[serde(
-        rename = "notificationSchemeEvents",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "notificationSchemeEvents", default, skip_serializing_if = "Option::is_none")]
     pub notification_scheme_events: Option<Vec<NotificationSchemeEventPayload>>,
     /// The strategy to use when there is a conflict with an existing entity
     #[serde(rename = "onConflict", default, skip_serializing_if = "Option::is_none")]

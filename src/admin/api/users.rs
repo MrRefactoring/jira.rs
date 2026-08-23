@@ -368,10 +368,7 @@ impl<'a> SearchDirectoryUsersRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/admin/v2/orgs/{}/directories/{}/users/search",
-                self.org_id, self.directory_id
-            ),
+            format!("/admin/v2/orgs/{}/directories/{}/users/search", self.org_id, self.directory_id),
         );
 
         let body = match serde_json::to_value(&self.multi_directory_user_search_request)? {
@@ -407,11 +404,7 @@ pub struct GetUsersRequest<'a> {
 
 impl<'a> GetUsersRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            cursor: None,
-        }
+        Self { client, org_id: org_id.into(), cursor: None }
     }
 
     /// Sets the starting point for the page of results to return.
@@ -424,15 +417,11 @@ impl<'a> GetUsersRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/admin/v1/orgs/{}/users", self.org_id),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/admin/v1/orgs/{}/users", self.org_id));
 
         if let Some(value) = &self.cursor {
-            config
-                .query
-                .push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -464,11 +453,7 @@ pub struct InviteUsersRequest<'a> {
 
 impl<'a> InviteUsersRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            multidirectory_invite_api_request: None,
-        }
+        Self { client, org_id: org_id.into(), multidirectory_invite_api_request: None }
     }
 
     #[must_use]
@@ -617,40 +602,27 @@ impl<'a> GetUserRoleAssignmentsRequest<'a> {
         );
 
         if let Some(value) = &self.cursor {
-            config
-                .query
-                .push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.directory_ids {
-            config
-                .query
-                .push(("directoryIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("directoryIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.resource_owners {
-            config.query.push((
-                "resourceOwners".to_owned(),
-                crate::core::QueryValue::List(value.clone()),
-            ));
+            config.query.push(("resourceOwners".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.resource_ids {
-            config
-                .query
-                .push(("resourceIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("resourceIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.role_ids {
-            config
-                .query
-                .push(("roleIds".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("roleIds".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -677,12 +649,7 @@ pub struct GrantUserAccessRequest<'a> {
 
 impl<'a> GrantUserAccessRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, user_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            user_id: user_id.into(),
-            role_api_request: None,
-        }
+        Self { client, org_id: org_id.into(), user_id: user_id.into(), role_api_request: None }
     }
 
     #[must_use]
@@ -730,12 +697,7 @@ pub struct RevokeUserAccessRequest<'a> {
 
 impl<'a> RevokeUserAccessRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, user_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            user_id: user_id.into(),
-            role_api_request: None,
-        }
+        Self { client, org_id: org_id.into(), user_id: user_id.into(), role_api_request: None }
     }
 
     #[must_use]
@@ -788,12 +750,7 @@ impl<'a> SuspendDirectoryUserRequest<'a> {
         directory_id: impl Into<String>,
         account_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            directory_id: directory_id.into(),
-            account_id: account_id.into(),
-        }
+        Self { client, org_id: org_id.into(), directory_id: directory_id.into(), account_id: account_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -835,12 +792,7 @@ impl<'a> RestoreDirectoryUserRequest<'a> {
         directory_id: impl Into<String>,
         account_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            directory_id: directory_id.into(),
-            account_id: account_id.into(),
-        }
+        Self { client, org_id: org_id.into(), directory_id: directory_id.into(), account_id: account_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -882,22 +834,14 @@ impl<'a> GetDirectoryUserDetailsRequest<'a> {
         directory_id: impl Into<String>,
         account_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            directory_id: directory_id.into(),
-            account_id: account_id.into(),
-        }
+        Self { client, org_id: org_id.into(), directory_id: directory_id.into(), account_id: account_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/admin/v2/orgs/{}/directories/{}/users/{}",
-                self.org_id, self.directory_id, self.account_id
-            ),
+            format!("/admin/v2/orgs/{}/directories/{}/users/{}", self.org_id, self.directory_id, self.account_id),
         );
 
         Ok(config)
@@ -930,22 +874,14 @@ impl<'a> RemoveDirectoryUserRequest<'a> {
         directory_id: impl Into<String>,
         account_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            directory_id: directory_id.into(),
-            account_id: account_id.into(),
-        }
+        Self { client, org_id: org_id.into(), directory_id: directory_id.into(), account_id: account_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/admin/v2/orgs/{}/directories/{}/users/{}",
-                self.org_id, self.directory_id, self.account_id
-            ),
+            format!("/admin/v2/orgs/{}/directories/{}/users/{}", self.org_id, self.directory_id, self.account_id),
         );
 
         Ok(config)
@@ -974,12 +910,7 @@ pub struct AssignOrganizationRoleRequest<'a> {
 
 impl<'a> AssignOrganizationRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, user_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            user_id: user_id.into(),
-            organization_level_role_api_request: None,
-        }
+        Self { client, org_id: org_id.into(), user_id: user_id.into(), organization_level_role_api_request: None }
     }
 
     #[must_use]
@@ -993,10 +924,7 @@ impl<'a> AssignOrganizationRoleRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/admin/v1/orgs/{}/users/{}/role-assignments/assign",
-                self.org_id, self.user_id
-            ),
+            format!("/admin/v1/orgs/{}/users/{}/role-assignments/assign", self.org_id, self.user_id),
         );
 
         let body = match serde_json::to_value(&self.organization_level_role_api_request)? {
@@ -1032,12 +960,7 @@ pub struct RevokeOrganizationRoleRequest<'a> {
 
 impl<'a> RevokeOrganizationRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, user_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            user_id: user_id.into(),
-            organization_level_role_api_request: None,
-        }
+        Self { client, org_id: org_id.into(), user_id: user_id.into(), organization_level_role_api_request: None }
     }
 
     #[must_use]
@@ -1051,10 +974,7 @@ impl<'a> RevokeOrganizationRoleRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/admin/v1/orgs/{}/users/{}/role-assignments/revoke",
-                self.org_id, self.user_id
-            ),
+            format!("/admin/v1/orgs/{}/users/{}/role-assignments/revoke", self.org_id, self.user_id),
         );
 
         let body = match serde_json::to_value(&self.organization_level_role_api_request)? {
@@ -1254,86 +1174,55 @@ impl<'a> GetDirectoryUsersCountRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/admin/v2/orgs/{}/directories/{}/users/count",
-                self.org_id, self.directory_id
-            ),
+            format!("/admin/v2/orgs/{}/directories/{}/users/count", self.org_id, self.directory_id),
         );
 
         if let Some(value) = &self.account_ids {
-            config
-                .query
-                .push(("accountIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("accountIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.directory_ids {
-            config
-                .query
-                .push(("directoryIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("directoryIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.resource_ids {
-            config
-                .query
-                .push(("resourceIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("resourceIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.group_ids {
-            config
-                .query
-                .push(("groupIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("groupIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.mfa_enabled {
-            config.query.push((
-                "mfaEnabled".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("mfaEnabled".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.claim_status {
-            config.query.push((
-                "claimStatus".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("claimStatus".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.status {
-            config
-                .query
-                .push(("status".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("status".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.account_status {
-            config.query.push((
-                "accountStatus".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("accountStatus".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.membership_status {
-            config.query.push((
-                "membershipStatus".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("membershipStatus".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.role_ids {
-            config
-                .query
-                .push(("roleIds".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("roleIds".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.search_term {
-            config
-                .query
-                .push(("searchTerm".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("searchTerm".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.email_domains {
-            config
-                .query
-                .push(("emailDomains".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("emailDomains".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         Ok(config)
@@ -1362,21 +1251,14 @@ pub struct GetUserStatsRequest<'a> {
 
 impl<'a> GetUserStatsRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, directory_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            directory_id: directory_id.into(),
-        }
+        Self { client, org_id: org_id.into(), directory_id: directory_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/admin/v2/orgs/{}/directories/{}/users/stats",
-                self.org_id, self.directory_id
-            ),
+            format!("/admin/v2/orgs/{}/directories/{}/users/stats", self.org_id, self.directory_id),
         );
 
         Ok(config)
@@ -1411,12 +1293,7 @@ pub struct GetUserLastActiveDatesRequest<'a> {
 
 impl<'a> GetUserLastActiveDatesRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, account_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            account_id: account_id.into(),
-            cursor: None,
-        }
+        Self { client, org_id: org_id.into(), account_id: account_id.into(), cursor: None }
     }
 
     /// Cursor to fetch the next page
@@ -1431,16 +1308,11 @@ impl<'a> GetUserLastActiveDatesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/admin/v1/orgs/{}/directory/users/{}/last-active-dates",
-                self.org_id, self.account_id
-            ),
+            format!("/admin/v1/orgs/{}/directory/users/{}/last-active-dates", self.org_id, self.account_id),
         );
 
         if let Some(value) = &self.cursor {
-            config
-                .query
-                .push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1669,97 +1541,63 @@ impl<'a> GetDirectoryUsersRequest<'a> {
         );
 
         if let Some(value) = &self.cursor {
-            config
-                .query
-                .push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.account_ids {
-            config
-                .query
-                .push(("accountIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("accountIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.directory_ids {
-            config
-                .query
-                .push(("directoryIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("directoryIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.resource_ids {
-            config
-                .query
-                .push(("resourceIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("resourceIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.group_ids {
-            config
-                .query
-                .push(("groupIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("groupIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.mfa_enabled {
-            config.query.push((
-                "mfaEnabled".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("mfaEnabled".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.claim_status {
-            config.query.push((
-                "claimStatus".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("claimStatus".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.status {
-            config
-                .query
-                .push(("status".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("status".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.account_status {
-            config.query.push((
-                "accountStatus".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("accountStatus".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.membership_status {
-            config.query.push((
-                "membershipStatus".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("membershipStatus".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.role_ids {
-            config
-                .query
-                .push(("roleIds".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("roleIds".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.email_domains {
-            config
-                .query
-                .push(("emailDomains".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("emailDomains".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.search_term {
-            config
-                .query
-                .push(("searchTerm".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("searchTerm".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.sort_by {
-            config
-                .query
-                .push(("sortBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("sortBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)

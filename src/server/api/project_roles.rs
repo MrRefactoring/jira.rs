@@ -97,10 +97,7 @@ pub struct CreateProjectRoleRequest<'a> {
 
 impl<'a> CreateProjectRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, create_update_role_request: CreateUpdateRoleRequest) -> Self {
-        Self {
-            client,
-            create_update_role_request,
-        }
+        Self { client, create_update_role_request }
     }
 
     /// The request as the transport will send it.
@@ -166,11 +163,7 @@ pub struct PartialUpdateProjectRoleRequest<'a> {
 
 impl<'a> PartialUpdateProjectRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self {
-            client,
-            id,
-            create_update_role_request: None,
-        }
+        Self { client, id, create_update_role_request: None }
     }
 
     #[must_use]
@@ -215,11 +208,7 @@ pub struct FullyUpdateProjectRoleRequest<'a> {
 
 impl<'a> FullyUpdateProjectRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self {
-            client,
-            id,
-            create_update_role_request: None,
-        }
+        Self { client, id, create_update_role_request: None }
     }
 
     #[must_use]
@@ -281,9 +270,7 @@ impl<'a> DeleteProjectRoleRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/rest/api/2/role/{}", self.id));
 
         if let Some(value) = &self.swap {
-            config
-                .query
-                .push(("swap".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("swap".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -339,11 +326,7 @@ pub struct AddProjectRoleActorsToRoleRequest<'a> {
 
 impl<'a> AddProjectRoleActorsToRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self {
-            client,
-            id,
-            actor_input: None,
-        }
+        Self { client, id, actor_input: None }
     }
 
     #[must_use]
@@ -355,10 +338,8 @@ impl<'a> AddProjectRoleActorsToRoleRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            format!("/rest/api/2/role/{}/actors", self.id),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, format!("/rest/api/2/role/{}/actors", self.id));
 
         let body = match serde_json::to_value(&self.actor_input)? {
             serde_json::Value::Object(object) => object,
@@ -391,12 +372,7 @@ pub struct DeleteProjectRoleActorsFromRoleRequest<'a> {
 
 impl<'a> DeleteProjectRoleActorsFromRoleRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self {
-            client,
-            id,
-            user: None,
-            group: None,
-        }
+        Self { client, id, user: None, group: None }
     }
 
     /// If given, removes an actor from given role
@@ -423,15 +399,11 @@ impl<'a> DeleteProjectRoleActorsFromRoleRequest<'a> {
         );
 
         if let Some(value) = &self.user {
-            config
-                .query
-                .push(("user".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("user".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.group {
-            config
-                .query
-                .push(("group".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("group".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

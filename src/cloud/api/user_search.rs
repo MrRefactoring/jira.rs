@@ -195,14 +195,7 @@ pub struct FindBulkAssignableUsersRequest<'a> {
 
 impl<'a> FindBulkAssignableUsersRequest<'a> {
     fn new(client: &'a crate::core::Client, project_keys: FindBulkAssignableUsersRequestProjectKeys) -> Self {
-        Self {
-            client,
-            project_keys,
-            query: None,
-            account_id: None,
-            start_at: None,
-            max_results: None,
-        }
+        Self { client, project_keys, query: None, account_id: None, start_at: None, max_results: None }
     }
 
     /// A query string that is matched against user attributes, such as `displayName` and `emailAddress`, to find relevant users. The string can match the prefix of the attribute's value. For example, *query=john* matches a user with a `displayName` of *John Smith* and a user with an `emailAddress` of *johnson@example.com*. Required, unless `accountId` is specified.
@@ -245,33 +238,21 @@ impl<'a> FindBulkAssignableUsersRequest<'a> {
         );
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
-        config.query.push((
-            "projectKeys".to_owned(),
-            crate::core::QueryValue::from_serializable(&self.project_keys)?,
-        ));
+        config.query.push(("projectKeys".to_owned(), crate::core::QueryValue::from_serializable(&self.project_keys)?));
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -431,84 +412,55 @@ impl<'a> FindAssignableUsersRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            "/rest/api/3/user/assignable/search".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user/assignable/search".to_owned());
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.session_id {
-            config
-                .query
-                .push(("sessionId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("sessionId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project {
-            config
-                .query
-                .push(("project".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("project".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.issue_key {
-            config
-                .query
-                .push(("issueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("issueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.issue_id {
-            config
-                .query
-                .push(("issueId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("issueId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.action_descriptor_id {
-            config.query.push((
-                "actionDescriptorId".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("actionDescriptorId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.recommend {
-            config.query.push((
-                "recommend".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("recommend".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.account_type {
-            config
-                .query
-                .push(("accountType".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("accountType".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.app_type {
-            config
-                .query
-                .push(("appType".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("appType".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         Ok(config)
@@ -617,51 +569,33 @@ impl<'a> FindUsersWithAllPermissionsRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            "/rest/api/3/user/permission/search".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user/permission/search".to_owned());
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
-        config.query.push((
-            "permissions".to_owned(),
-            crate::core::QueryValue::Scalar(self.permissions.clone()),
-        ));
+        config.query.push(("permissions".to_owned(), crate::core::QueryValue::Scalar(self.permissions.clone())));
 
         if let Some(value) = &self.issue_key {
-            config
-                .query
-                .push(("issueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("issueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_key {
-            config
-                .query
-                .push(("projectKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -753,42 +687,26 @@ impl<'a> FindUsersForPickerRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user/picker".to_owned());
 
-        config
-            .query
-            .push(("query".to_owned(), crate::core::QueryValue::Scalar(self.query.clone())));
+        config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(self.query.clone())));
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.show_avatar {
-            config.query.push((
-                "showAvatar".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("showAvatar".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.exclude_account_ids {
-            config.query.push((
-                "excludeAccountIds".to_owned(),
-                crate::core::QueryValue::List(value.clone()),
-            ));
+            config.query.push(("excludeAccountIds".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.avatar_size {
-            config
-                .query
-                .push(("avatarSize".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("avatarSize".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.exclude_connect_users {
-            config.query.push((
-                "excludeConnectUsers".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("excludeConnectUsers".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -890,40 +808,27 @@ impl<'a> FindUsersRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user/search".to_owned());
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.username {
-            config
-                .query
-                .push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.property {
-            config
-                .query
-                .push(("property".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("property".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -969,12 +874,7 @@ pub struct FindUsersByQueryRequest<'a> {
 
 impl<'a> FindUsersByQueryRequest<'a> {
     fn new(client: &'a crate::core::Client, query: impl Into<String>) -> Self {
-        Self {
-            client,
-            query: query.into(),
-            start_at: None,
-            max_results: None,
-        }
+        Self { client, query: query.into(), start_at: None, max_results: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -998,21 +898,14 @@ impl<'a> FindUsersByQueryRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user/search/query".to_owned());
 
-        config
-            .query
-            .push(("query".to_owned(), crate::core::QueryValue::Scalar(self.query.clone())));
+        config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(self.query.clone())));
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1058,12 +951,7 @@ pub struct FindUserKeysByQueryRequest<'a> {
 
 impl<'a> FindUserKeysByQueryRequest<'a> {
     fn new(client: &'a crate::core::Client, query: impl Into<String>) -> Self {
-        Self {
-            client,
-            query: query.into(),
-            start_at: None,
-            max_result: None,
-        }
+        Self { client, query: query.into(), start_at: None, max_result: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -1087,21 +975,14 @@ impl<'a> FindUserKeysByQueryRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user/search/query/key".to_owned());
 
-        config
-            .query
-            .push(("query".to_owned(), crate::core::QueryValue::Scalar(self.query.clone())));
+        config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(self.query.clone())));
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_result {
-            config.query.push((
-                "maxResult".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResult".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1212,40 +1093,27 @@ impl<'a> FindUsersWithBrowsePermissionRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user/viewissue/search".to_owned());
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.issue_key {
-            config
-                .query
-                .push(("issueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("issueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_key {
-            config
-                .query
-                .push(("projectKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

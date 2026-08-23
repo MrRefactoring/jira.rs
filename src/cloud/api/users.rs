@@ -154,11 +154,7 @@ pub struct GetUserRequest<'a> {
 
 impl<'a> GetUserRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            account_id: None,
-            expand: None,
-        }
+        Self { client, account_id: None, expand: None }
     }
 
     /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*. Required.
@@ -185,15 +181,11 @@ impl<'a> GetUserRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user".to_owned());
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -224,10 +216,7 @@ pub struct CreateUserRequest<'a> {
 
 impl<'a> CreateUserRequest<'a> {
     fn new(client: &'a crate::core::Client, new_user_details: NewUserDetails) -> Self {
-        Self {
-            client,
-            new_user_details,
-        }
+        Self { client, new_user_details }
     }
 
     /// The request as the transport will send it.
@@ -265,20 +254,14 @@ pub struct RemoveUserRequest<'a> {
 
 impl<'a> RemoveUserRequest<'a> {
     fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            account_id: account_id.into(),
-        }
+        Self { client, account_id: account_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::DELETE, "/rest/api/3/user".to_owned());
 
-        config.query.push((
-            "accountId".to_owned(),
-            crate::core::QueryValue::Scalar(self.account_id.clone()),
-        ));
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
 
         Ok(config)
     }
@@ -307,10 +290,7 @@ pub struct GetUserDefaultColumnsRequest<'a> {
 
 impl<'a> GetUserDefaultColumnsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            account_id: None,
-        }
+        Self { client, account_id: None }
     }
 
     /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
@@ -327,9 +307,7 @@ impl<'a> GetUserDefaultColumnsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user/columns".to_owned());
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -364,11 +342,7 @@ pub struct SetUserColumnsRequest<'a> {
 
 impl<'a> SetUserColumnsRequest<'a> {
     fn new(client: &'a crate::core::Client, user_column_request_body: UserColumnRequestBody) -> Self {
-        Self {
-            client,
-            user_column_request_body,
-            account_id: None,
-        }
+        Self { client, user_column_request_body, account_id: None }
     }
 
     /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
@@ -385,9 +359,7 @@ impl<'a> SetUserColumnsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::PUT, "/rest/api/3/user/columns".to_owned());
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         let body = match serde_json::to_value(&self.user_column_request_body)? {
@@ -424,10 +396,7 @@ pub struct ResetUserColumnsRequest<'a> {
 
 impl<'a> ResetUserColumnsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            account_id: None,
-        }
+        Self { client, account_id: None }
     }
 
     /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
@@ -444,9 +413,7 @@ impl<'a> ResetUserColumnsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::DELETE, "/rest/api/3/user/columns".to_owned());
 
         if let Some(value) = &self.account_id {
-            config
-                .query
-                .push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -471,20 +438,14 @@ pub struct GetUserEmailRequest<'a> {
 
 impl<'a> GetUserEmailRequest<'a> {
     fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            account_id: account_id.into(),
-        }
+        Self { client, account_id: account_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user/email".to_owned());
 
-        config.query.push((
-            "accountId".to_owned(),
-            crate::core::QueryValue::Scalar(self.account_id.clone()),
-        ));
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
 
         Ok(config)
     }
@@ -508,10 +469,7 @@ pub struct GetUserEmailBulkRequest<'a> {
 
 impl<'a> GetUserEmailBulkRequest<'a> {
     fn new(client: &'a crate::core::Client, account_id: impl IntoIterator<Item = impl Into<String>>) -> Self {
-        Self {
-            client,
-            account_id: account_id.into_iter().map(Into::into).collect(),
-        }
+        Self { client, account_id: account_id.into_iter().map(Into::into).collect() }
     }
 
     /// The request as the transport will send it.
@@ -519,10 +477,7 @@ impl<'a> GetUserEmailBulkRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user/email/bulk".to_owned());
 
-        config.query.push((
-            "accountId".to_owned(),
-            crate::core::QueryValue::List(self.account_id.clone()),
-        ));
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::List(self.account_id.clone())));
 
         Ok(config)
     }
@@ -548,10 +503,7 @@ pub struct GetUserGroupsRequest<'a> {
 
 impl<'a> GetUserGroupsRequest<'a> {
     fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            account_id: account_id.into(),
-        }
+        Self { client, account_id: account_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -559,10 +511,7 @@ impl<'a> GetUserGroupsRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user/groups".to_owned());
 
-        config.query.push((
-            "accountId".to_owned(),
-            crate::core::QueryValue::Scalar(self.account_id.clone()),
-        ));
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
 
         Ok(config)
     }
@@ -592,12 +541,7 @@ pub struct GetAllUsersDefaultRequest<'a> {
 
 impl<'a> GetAllUsersDefaultRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start_at: None,
-            max_results: None,
-            expand: None,
-        }
+        Self { client, start_at: None, max_results: None, expand: None }
     }
 
     /// The index of the first item to return.
@@ -628,22 +572,15 @@ impl<'a> GetAllUsersDefaultRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/users".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -674,12 +611,7 @@ pub struct GetAllUsersRequest<'a> {
 
 impl<'a> GetAllUsersRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start_at: None,
-            max_results: None,
-            expand: None,
-        }
+        Self { client, start_at: None, max_results: None, expand: None }
     }
 
     /// The index of the first item to return.
@@ -711,22 +643,15 @@ impl<'a> GetAllUsersRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/users/search".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

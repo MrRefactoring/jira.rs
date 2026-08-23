@@ -47,10 +47,7 @@ pub struct GetResourceTypesRequest<'a> {
 
 impl<'a> GetResourceTypesRequest<'a> {
     fn new(client: &'a crate::core::Client, directory_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            directory_id: directory_id.into(),
-        }
+        Self { client, directory_id: directory_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -84,10 +81,7 @@ pub struct GetUserResourceTypeRequest<'a> {
 
 impl<'a> GetUserResourceTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, directory_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            directory_id: directory_id.into(),
-        }
+        Self { client, directory_id: directory_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -121,10 +115,7 @@ pub struct GetGroupResourceTypeRequest<'a> {
 
 impl<'a> GetGroupResourceTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, directory_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            directory_id: directory_id.into(),
-        }
+        Self { client, directory_id: directory_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -158,10 +149,7 @@ pub struct GetServiceProviderConfigRequest<'a> {
 
 impl<'a> GetServiceProviderConfigRequest<'a> {
     fn new(client: &'a crate::core::Client, directory_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            directory_id: directory_id.into(),
-        }
+        Self { client, directory_id: directory_id.into() }
     }
 
     /// The request as the transport will send it.

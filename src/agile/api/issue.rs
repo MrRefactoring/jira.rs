@@ -72,10 +72,7 @@ pub struct RankIssuesRequest<'a> {
 
 impl<'a> RankIssuesRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_rank_request: IssueRankRequest) -> Self {
-        Self {
-            client,
-            issue_rank_request,
-        }
+        Self { client, issue_rank_request }
     }
 
     /// The request as the transport will send it.
@@ -115,13 +112,7 @@ pub struct GetIssueRequest<'a> {
 
 impl<'a> GetIssueRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            fields: None,
-            expand: None,
-            update_history: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), fields: None, expand: None, update_history: None }
     }
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
@@ -159,22 +150,15 @@ impl<'a> GetIssueRequest<'a> {
         );
 
         if let Some(value) = &self.fields {
-            config
-                .query
-                .push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.update_history {
-            config.query.push((
-                "updateHistory".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("updateHistory".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -204,11 +188,7 @@ pub struct GetIssueEstimationForBoardRequest<'a> {
 
 impl<'a> GetIssueEstimationForBoardRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            board_id: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), board_id: None }
     }
 
     /// The ID of the board required to determine which field is used for estimation.
@@ -227,9 +207,7 @@ impl<'a> GetIssueEstimationForBoardRequest<'a> {
         );
 
         if let Some(value) = &self.board_id {
-            config
-                .query
-                .push(("boardId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("boardId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -262,12 +240,7 @@ pub struct EstimateIssueForBoardRequest<'a> {
 
 impl<'a> EstimateIssueForBoardRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            board_id: None,
-            value: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), board_id: None, value: None }
     }
 
     /// The ID of the board required to determine which field is used for estimation.
@@ -293,9 +266,7 @@ impl<'a> EstimateIssueForBoardRequest<'a> {
         );
 
         if let Some(value) = &self.board_id {
-            config
-                .query
-                .push(("boardId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("boardId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let mut body = serde_json::Map::new();

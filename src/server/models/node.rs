@@ -20,11 +20,7 @@ pub struct Node {
     pub cache_listener_port: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub ip: Option<String>,
-    #[serde(
-        rename = "lastStateChangeTimestamp",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "lastStateChangeTimestamp", default, skip_serializing_if = "Option::is_none")]
     pub last_state_change_timestamp: Option<i64>,
     #[serde(rename = "nodeBuildNumber", default, skip_serializing_if = "Option::is_none")]
     pub node_build_number: Option<i64>,

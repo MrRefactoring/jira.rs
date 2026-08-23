@@ -25,11 +25,7 @@ pub struct ServerInformation {
     #[serde(rename = "displayUrlConfluence", default, skip_serializing_if = "Option::is_none")]
     pub display_url_confluence: Option<String>,
     /// The display URL of the Servicedesk Help Center.
-    #[serde(
-        rename = "displayUrlServicedeskHelpCenter",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "displayUrlServicedeskHelpCenter", default, skip_serializing_if = "Option::is_none")]
     pub display_url_servicedesk_help_center: Option<String>,
     /// Jira instance health check results. Deprecated and no longer returned.
     #[serde(rename = "healthChecks", default, skip_serializing_if = "Option::is_none")]

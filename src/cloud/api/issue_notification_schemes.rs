@@ -158,15 +158,7 @@ pub struct GetNotificationSchemesRequest<'a> {
 
 impl<'a> GetNotificationSchemesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start_at: None,
-            max_results: None,
-            id: None,
-            project_id: None,
-            only_default: None,
-            expand: None,
-        }
+        Self { client, start_at: None, max_results: None, id: None, project_id: None, only_default: None, expand: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -230,40 +222,27 @@ impl<'a> GetNotificationSchemesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/notificationscheme".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config
-                .query
-                .push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.id {
-            config
-                .query
-                .push(("id".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("id".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.project_id {
-            config
-                .query
-                .push(("projectId".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.only_default {
-            config.query.push((
-                "onlyDefault".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("onlyDefault".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -293,13 +272,7 @@ pub struct GetNotificationSchemeToProjectMappingsRequest<'a> {
 
 impl<'a> GetNotificationSchemeToProjectMappingsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start_at: None,
-            max_results: None,
-            notification_scheme_id: None,
-            project_id: None,
-        }
+        Self { client, start_at: None, max_results: None, notification_scheme_id: None, project_id: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -342,28 +315,19 @@ impl<'a> GetNotificationSchemeToProjectMappingsRequest<'a> {
         );
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config
-                .query
-                .push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.notification_scheme_id {
-            config.query.push((
-                "notificationSchemeId".to_owned(),
-                crate::core::QueryValue::List(value.clone()),
-            ));
+            config.query.push(("notificationSchemeId".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.project_id {
-            config
-                .query
-                .push(("projectId".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         Ok(config)
@@ -391,11 +355,7 @@ pub struct GetNotificationSchemeRequest<'a> {
 
 impl<'a> GetNotificationSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self {
-            client,
-            id,
-            expand: None,
-        }
+        Self { client, id, expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
@@ -421,9 +381,7 @@ impl<'a> GetNotificationSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -457,11 +415,7 @@ impl<'a> AddNotificationsRequest<'a> {
         id: impl Into<String>,
         add_notifications_details: AddNotificationsDetails,
     ) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            add_notifications_details,
-        }
+        Self { client, id: id.into(), add_notifications_details }
     }
 
     /// The request as the transport will send it.
@@ -507,11 +461,7 @@ impl<'a> RemoveNotificationFromNotificationSchemeRequest<'a> {
         notification_scheme_id: impl Into<String>,
         notification_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            notification_scheme_id: notification_scheme_id.into(),
-            notification_id: notification_id.into(),
-        }
+        Self { client, notification_scheme_id: notification_scheme_id.into(), notification_id: notification_id.into() }
     }
 
     /// The request as the transport will send it.

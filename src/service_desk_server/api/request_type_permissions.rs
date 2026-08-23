@@ -52,11 +52,7 @@ impl<'a> GetPermissionsByRequestTypeIdRequest<'a> {
         service_desk_id: impl Into<String>,
         request_type_id: impl Into<String>,
     ) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            request_type_id: request_type_id.into(),
-        }
+        Self { client, service_desk_id: service_desk_id.into(), request_type_id: request_type_id.into() }
     }
 
     /// The request as the transport will send it.

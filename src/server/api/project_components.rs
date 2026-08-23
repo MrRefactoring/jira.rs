@@ -51,10 +51,7 @@ pub struct CreateComponentRequest<'a> {
 
 impl<'a> CreateComponentRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            component: None,
-        }
+        Self { client, component: None }
     }
 
     #[must_use]
@@ -100,13 +97,7 @@ pub struct GetPaginatedComponentsRequest<'a> {
 
 impl<'a> GetPaginatedComponentsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            max_results: None,
-            query: None,
-            project_ids: None,
-            start_at: None,
-        }
+        Self { client, max_results: None, query: None, project_ids: None, start_at: None }
     }
 
     /// the maximum number of components to return
@@ -147,27 +138,19 @@ impl<'a> GetPaginatedComponentsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/component/page".to_owned());
 
         if let Some(value) = &self.max_results {
-            config
-                .query
-                .push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_ids {
-            config
-                .query
-                .push(("projectIds".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectIds".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -223,11 +206,7 @@ pub struct UpdateComponentRequest<'a> {
 
 impl<'a> UpdateComponentRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            body: None,
-        }
+        Self { client, id: id.into(), body: None }
     }
 
     #[must_use]
@@ -267,11 +246,7 @@ pub struct DeleteComponentRequest<'a> {
 
 impl<'a> DeleteComponentRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            move_issues_to: None,
-        }
+        Self { client, id: id.into(), move_issues_to: None }
     }
 
     /// The new component applied to issues whose 'id' component will be deleted. If this value is null, then the 'id' component is simply removed from the related isues.
@@ -284,16 +259,11 @@ impl<'a> DeleteComponentRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!("/rest/api/2/component/{}", self.id),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/rest/api/2/component/{}", self.id));
 
         if let Some(value) = &self.move_issues_to {
-            config.query.push((
-                "moveIssuesTo".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("moveIssuesTo".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

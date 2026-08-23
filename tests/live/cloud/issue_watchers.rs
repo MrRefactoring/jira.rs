@@ -45,16 +45,10 @@ async fn walks_a_watcher_through_its_lifecycle() {
         "the watcher list carries its own URL: {:?}",
         fresh.self_,
     );
-    assert!(
-        fresh.is_watching.is_some(),
-        "the watcher list says whether the caller is watching"
-    );
+    assert!(fresh.is_watching.is_some(), "the watcher list says whether the caller is watching");
     assert_eq!(
         fresh.watch_count,
-        fresh
-            .watchers
-            .as_ref()
-            .map(|watchers| i64::try_from(watchers.len()).unwrap_or(i64::MAX)),
+        fresh.watchers.as_ref().map(|watchers| i64::try_from(watchers.len()).unwrap_or(i64::MAX)),
         "the count matches the list it counts",
     );
 
@@ -71,61 +65,27 @@ async fn walks_a_watcher_through_its_lifecycle() {
     tracker.defer(move || {
         let (key, watcher) = (key.clone(), watcher.clone());
 
-        async move {
-            cloud()
-                .issue_watchers()
-                .remove_watcher(key)
-                .account_id(watcher)
-                .send()
-                .await
-        }
+        async move { cloud().issue_watchers().remove_watcher(key).account_id(watcher).send().await }
     });
 
-    let watching = cloud()
-        .issue_watchers()
-        .get_issue_watchers(&issue.key)
-        .send()
-        .await
-        .expect("the watchers read back");
+    let watching =
+        cloud().issue_watchers().get_issue_watchers(&issue.key).send().await.expect("the watchers read back");
 
-    assert_eq!(
-        watching.is_watching,
-        Some(true),
-        "the add is observable on the next read"
-    );
+    assert_eq!(watching.is_watching, Some(true), "the add is observable on the next read");
     assert!(
-        watching
-            .watchers
-            .iter()
-            .flatten()
-            .any(|watcher| watcher.account_id.as_deref() == Some(account_id.as_str())),
+        watching.watchers.iter().flatten().any(|watcher| watcher.account_id.as_deref() == Some(account_id.as_str())),
         "the calling account is in the watcher list",
     );
 
-    cloud()
-        .issue_watchers()
-        .add_watcher(&issue.key, &account_id)
-        .send()
-        .await
-        .expect("a repeated add is accepted");
+    cloud().issue_watchers().add_watcher(&issue.key, &account_id).send().await.expect("a repeated add is accepted");
 
-    let again = cloud()
-        .issue_watchers()
-        .get_issue_watchers(&issue.key)
-        .send()
-        .await
-        .expect("the watchers read back");
+    let again = cloud().issue_watchers().get_issue_watchers(&issue.key).send().await.expect("the watchers read back");
 
-    assert_eq!(
-        again.watch_count, watching.watch_count,
-        "a repeated add is idempotent rather than cumulative"
-    );
+    assert_eq!(again.watch_count, watching.watch_count, "a repeated add is idempotent rather than cumulative");
 
     let bulk = cloud()
         .issue_watchers()
-        .get_is_watching_issue_bulk(IssueList {
-            issue_ids: vec![issue.id.clone()],
-        })
+        .get_is_watching_issue_bulk(IssueList { issue_ids: vec![issue.id.clone()] })
         .send()
         .await
         .expect("the bulk watching query answers");
@@ -147,20 +107,11 @@ async fn walks_a_watcher_through_its_lifecycle() {
         .await
         .expect("the watcher can be removed through the query parameter");
 
-    let removed = cloud()
-        .issue_watchers()
-        .get_issue_watchers(&issue.key)
-        .send()
-        .await
-        .expect("the watchers read back");
+    let removed = cloud().issue_watchers().get_issue_watchers(&issue.key).send().await.expect("the watchers read back");
 
     assert_eq!(removed.is_watching, Some(false));
     assert!(
-        !removed
-            .watchers
-            .iter()
-            .flatten()
-            .any(|watcher| watcher.account_id.as_deref() == Some(account_id.as_str())),
+        !removed.watchers.iter().flatten().any(|watcher| watcher.account_id.as_deref() == Some(account_id.as_str())),
         "the removed account is gone from the watcher list",
     );
 

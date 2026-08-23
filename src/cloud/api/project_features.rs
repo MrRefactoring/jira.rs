@@ -36,10 +36,7 @@ pub struct GetFeaturesForProjectRequest<'a> {
 
 impl<'a> GetFeaturesForProjectRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -90,10 +87,7 @@ impl<'a> ToggleFeatureForProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/api/3/project/{}/features/{}",
-                self.project_id_or_key, self.feature_key
-            ),
+            format!("/rest/api/3/project/{}/features/{}", self.project_id_or_key, self.feature_key),
         );
 
         let body = match serde_json::to_value(&self.project_feature_state)? {

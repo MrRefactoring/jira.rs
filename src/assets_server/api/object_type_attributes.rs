@@ -76,11 +76,7 @@ pub struct StoreObjectTypeAttributeRequest<'a> {
 
 impl<'a> StoreObjectTypeAttributeRequest<'a> {
     fn new(client: &'a crate::core::Client, object_type_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            object_type_id: object_type_id.into(),
-            object_type_attribute_in: None,
-        }
+        Self { client, object_type_id: object_type_id.into(), object_type_attribute_in: None }
     }
 
     #[must_use]
@@ -128,12 +124,7 @@ pub struct UpdateObjectTypeAttributeRequest<'a> {
 
 impl<'a> UpdateObjectTypeAttributeRequest<'a> {
     fn new(client: &'a crate::core::Client, object_type_id: impl Into<String>, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            object_type_id: object_type_id.into(),
-            id: id.into(),
-            body: None,
-        }
+        Self { client, object_type_id: object_type_id.into(), id: id.into(), body: None }
     }
 
     #[must_use]
@@ -147,10 +138,7 @@ impl<'a> UpdateObjectTypeAttributeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/assets/1.0/objecttypeattribute/{}/{}",
-                self.object_type_id, self.id
-            ),
+            format!("/rest/assets/1.0/objecttypeattribute/{}/{}", self.object_type_id, self.id),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));

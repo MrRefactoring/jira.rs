@@ -26,11 +26,7 @@ pub struct SwimlanesPayload {
     #[serde(rename = "customSwimlanes", default, skip_serializing_if = "Option::is_none")]
     pub custom_swimlanes: Option<Vec<SwimlanePayload>>,
     /// The name of the custom swimlane to use for work items that don't match any other swimlanes.
-    #[serde(
-        rename = "defaultCustomSwimlaneName",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "defaultCustomSwimlaneName", default, skip_serializing_if = "Option::is_none")]
     pub default_custom_swimlane_name: Option<String>,
     /// The swimlane strategy for the board.
     #[serde(rename = "swimlaneStrategy", default, skip_serializing_if = "Option::is_none")]

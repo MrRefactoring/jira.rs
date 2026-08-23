@@ -94,11 +94,7 @@ pub struct UpdateProjectAvatarRequest<'a> {
 
 impl<'a> UpdateProjectAvatarRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>, avatar: Avatar) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            avatar,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), avatar }
     }
 
     /// The request as the transport will send it.
@@ -140,11 +136,7 @@ pub struct DeleteProjectAvatarRequest<'a> {
 
 impl<'a> DeleteProjectAvatarRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>, id: i64) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            id,
-        }
+        Self { client, project_id_or_key: project_id_or_key.into(), id }
     }
 
     /// The request as the transport will send it.
@@ -252,26 +244,18 @@ impl<'a> CreateProjectAvatarRequest<'a> {
         );
 
         if let Some(value) = &self.x {
-            config
-                .query
-                .push(("x".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("x".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.y {
-            config
-                .query
-                .push(("y".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("y".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.size {
-            config
-                .query
-                .push(("size".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("size".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
-        config
-            .headers
-            .push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
+        config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
 
@@ -301,10 +285,7 @@ pub struct GetAllProjectAvatarsRequest<'a> {
 
 impl<'a> GetAllProjectAvatarsRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-        }
+        Self { client, project_id_or_key: project_id_or_key.into() }
     }
 
     /// The request as the transport will send it.

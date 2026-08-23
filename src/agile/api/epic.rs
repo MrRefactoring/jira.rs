@@ -90,10 +90,7 @@ pub struct RemoveIssuesFromEpicRequest<'a> {
 
 impl<'a> RemoveIssuesFromEpicRequest<'a> {
     fn new(client: &'a crate::core::Client, issues: impl IntoIterator<Item = impl Into<String>>) -> Self {
-        Self {
-            client,
-            issues: issues.into_iter().map(Into::into).collect(),
-        }
+        Self { client, issues: issues.into_iter().map(Into::into).collect() }
     }
 
     /// The request as the transport will send it.
@@ -211,55 +208,35 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            "/rest/software/1.0/epic/none/issue".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/software/1.0/epic/none/issue".to_owned());
 
         if let Some(value) = &self.next_page_token {
-            config.query.push((
-                "nextPageToken".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.reconcile_issues {
-            config.query.push((
-                "reconcileIssues".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("reconcileIssues".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.jql {
-            config
-                .query
-                .push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.validate_query {
-            config.query.push((
-                "validateQuery".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("validateQuery".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.fields {
-            config
-                .query
-                .push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -284,10 +261,7 @@ pub struct GetEpicRequest<'a> {
 
 impl<'a> GetEpicRequest<'a> {
     fn new(client: &'a crate::core::Client, epic_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            epic_id_or_key: epic_id_or_key.into(),
-        }
+        Self { client, epic_id_or_key: epic_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -320,11 +294,7 @@ pub struct PartiallyUpdateEpicRequest<'a> {
 
 impl<'a> PartiallyUpdateEpicRequest<'a> {
     fn new(client: &'a crate::core::Client, epic_id_or_key: impl Into<String>, epic_update: EpicUpdate) -> Self {
-        Self {
-            client,
-            epic_id_or_key: epic_id_or_key.into(),
-            epic_update,
-        }
+        Self { client, epic_id_or_key: epic_id_or_key.into(), epic_update }
     }
 
     /// The request as the transport will send it.
@@ -364,11 +334,7 @@ pub struct MoveIssuesToEpicRequest<'a> {
 
 impl<'a> MoveIssuesToEpicRequest<'a> {
     fn new(client: &'a crate::core::Client, epic_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            epic_id_or_key: epic_id_or_key.into(),
-            issues: None,
-        }
+        Self { client, epic_id_or_key: epic_id_or_key.into(), issues: None }
     }
 
     #[must_use]
@@ -505,49 +471,31 @@ impl<'a> GetIssuesForEpicRequest<'a> {
         );
 
         if let Some(value) = &self.next_page_token {
-            config.query.push((
-                "nextPageToken".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.reconcile_issues {
-            config.query.push((
-                "reconcileIssues".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("reconcileIssues".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.jql {
-            config
-                .query
-                .push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.validate_query {
-            config.query.push((
-                "validateQuery".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("validateQuery".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.fields {
-            config
-                .query
-                .push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -581,11 +529,7 @@ impl<'a> RankEpicsRequest<'a> {
         epic_id_or_key: impl Into<String>,
         epic_rank_request: EpicRankRequest,
     ) -> Self {
-        Self {
-            client,
-            epic_id_or_key: epic_id_or_key.into(),
-            epic_rank_request,
-        }
+        Self { client, epic_id_or_key: epic_id_or_key.into(), epic_rank_request }
     }
 
     /// The request as the transport will send it.

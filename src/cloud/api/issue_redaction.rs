@@ -41,10 +41,7 @@ pub struct RedactRequest<'a> {
 
 impl<'a> RedactRequest<'a> {
     fn new(client: &'a crate::core::Client, bulk_redaction_request: BulkRedactionRequest) -> Self {
-        Self {
-            client,
-            bulk_redaction_request,
-        }
+        Self { client, bulk_redaction_request }
     }
 
     /// The request as the transport will send it.
@@ -86,10 +83,7 @@ pub struct GetRedactionStatusRequest<'a> {
 
 impl<'a> GetRedactionStatusRequest<'a> {
     fn new(client: &'a crate::core::Client, job_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            job_id: job_id.into(),
-        }
+        Self { client, job_id: job_id.into() }
     }
 
     /// The request as the transport will send it.

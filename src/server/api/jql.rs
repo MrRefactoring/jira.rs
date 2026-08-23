@@ -63,13 +63,7 @@ pub struct GetFieldAutoCompleteForQueryStringRequest<'a> {
 
 impl<'a> GetFieldAutoCompleteForQueryStringRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            predicate_value: None,
-            predicate_name: None,
-            field_name: None,
-            field_value: None,
-        }
+        Self { client, predicate_value: None, predicate_name: None, field_name: None, field_value: None }
     }
 
     /// The portion of the predicate value that has already been provided by the user.
@@ -112,29 +106,19 @@ impl<'a> GetFieldAutoCompleteForQueryStringRequest<'a> {
         );
 
         if let Some(value) = &self.predicate_value {
-            config.query.push((
-                "predicateValue".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("predicateValue".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.predicate_name {
-            config.query.push((
-                "predicateName".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("predicateName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.field_name {
-            config
-                .query
-                .push(("fieldName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("fieldName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.field_value {
-            config
-                .query
-                .push(("fieldValue".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("fieldValue".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

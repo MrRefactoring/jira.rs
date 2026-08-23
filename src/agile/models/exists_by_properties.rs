@@ -6,10 +6,6 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ExistsByProperties {
     /// Whether there is data matching the query
-    #[serde(
-        rename = "hasDataMatchingProperties",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "hasDataMatchingProperties", default, skip_serializing_if = "Option::is_none")]
     pub has_data_matching_properties: Option<bool>,
 }

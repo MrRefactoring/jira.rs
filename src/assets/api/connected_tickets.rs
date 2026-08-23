@@ -26,10 +26,7 @@ pub struct FindObjectTicketsRequest<'a> {
 
 impl<'a> FindObjectTicketsRequest<'a> {
     fn new(client: &'a crate::core::Client, object_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            object_id: object_id.into(),
-        }
+        Self { client, object_id: object_id.into() }
     }
 
     /// The request as the transport will send it.

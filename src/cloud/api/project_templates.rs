@@ -62,10 +62,7 @@ impl<'a> CreateProjectWithCustomTemplateRequest<'a> {
         client: &'a crate::core::Client,
         project_custom_template_create_request_dto: ProjectCustomTemplateCreateRequestDTO,
     ) -> Self {
-        Self {
-            client,
-            project_custom_template_create_request_dto,
-        }
+        Self { client, project_custom_template_create_request_dto }
     }
 
     /// The request as the transport will send it.

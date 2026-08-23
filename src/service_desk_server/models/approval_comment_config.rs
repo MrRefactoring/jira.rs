@@ -4,16 +4,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ApprovalCommentConfig {
-    #[serde(
-        rename = "commentsRequiredWhenDecline",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "commentsRequiredWhenDecline", default, skip_serializing_if = "Option::is_none")]
     pub comments_required_when_decline: Option<bool>,
-    #[serde(
-        rename = "commentsRequiredWhenApprove",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "commentsRequiredWhenApprove", default, skip_serializing_if = "Option::is_none")]
     pub comments_required_when_approve: Option<bool>,
 }

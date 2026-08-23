@@ -5,11 +5,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct IndexSummary {
-    #[serde(
-        rename = "externalPlatformIndexReplay",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "externalPlatformIndexReplay", default, skip_serializing_if = "Option::is_none")]
     pub external_platform_index_replay: Option<std::collections::HashMap<String, serde_json::Value>>,
     #[serde(rename = "issueIndex", default, skip_serializing_if = "Option::is_none")]
     pub issue_index: Option<IssueIndexSummary>,

@@ -115,11 +115,7 @@ pub struct AnalyseExpressionRequest<'a> {
 
 impl<'a> AnalyseExpressionRequest<'a> {
     fn new(client: &'a crate::core::Client, jira_expression_for_analysis: JiraExpressionForAnalysis) -> Self {
-        Self {
-            client,
-            jira_expression_for_analysis,
-            check: None,
-        }
+        Self { client, jira_expression_for_analysis, check: None }
     }
 
     /// The check to perform:
@@ -140,9 +136,7 @@ impl<'a> AnalyseExpressionRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/expression/analyse".to_owned());
 
         if let Some(value) = &self.check {
-            config
-                .query
-                .push(("check".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("check".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         let body = match serde_json::to_value(&self.jira_expression_for_analysis)? {
@@ -203,11 +197,7 @@ pub struct EvaluateJSISJiraExpressionRequest<'a> {
 
 impl<'a> EvaluateJSISJiraExpressionRequest<'a> {
     fn new(client: &'a crate::core::Client, jira_expression_evaluate_request: JiraExpressionEvaluateRequest) -> Self {
-        Self {
-            client,
-            jira_expression_evaluate_request,
-            expand: None,
-        }
+        Self { client, jira_expression_evaluate_request, expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information in the response. This parameter accepts `meta.complexity` that returns information about the expression complexity. For example, the number of expensive operations used by the expression and how close the expression is to reaching the [complexity limit](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#restrictions). Useful when designing and debugging your expressions.
@@ -224,9 +214,7 @@ impl<'a> EvaluateJSISJiraExpressionRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/expression/evaluate".to_owned());
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         let body = match serde_json::to_value(&self.jira_expression_evaluate_request)? {

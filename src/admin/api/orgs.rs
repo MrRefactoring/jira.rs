@@ -50,9 +50,7 @@ impl<'a> GetOrgsRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/admin/v1/orgs".to_owned());
 
         if let Some(value) = &self.cursor {
-            config
-                .query
-                .push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -80,10 +78,7 @@ pub struct GetOrgByIdRequest<'a> {
 
 impl<'a> GetOrgByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-        }
+        Self { client, org_id: org_id.into() }
     }
 
     /// The request as the transport will send it.

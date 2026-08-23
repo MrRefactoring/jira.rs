@@ -77,10 +77,7 @@ pub struct RegisterModulesRequest<'a> {
 
 impl<'a> RegisterModulesRequest<'a> {
     fn new(client: &'a crate::core::Client, connect_modules: ConnectModules) -> Self {
-        Self {
-            client,
-            connect_modules,
-        }
+        Self { client, connect_modules }
     }
 
     /// The request as the transport will send it.
@@ -121,10 +118,7 @@ pub struct RemoveModulesRequest<'a> {
 
 impl<'a> RemoveModulesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            module_key: None,
-        }
+        Self { client, module_key: None }
     }
 
     /// The key of the module to remove. To include multiple module keys, provide multiple copies of this parameter.
@@ -145,9 +139,7 @@ impl<'a> RemoveModulesRequest<'a> {
         );
 
         if let Some(value) = &self.module_key {
-            config
-                .query
-                .push(("moduleKey".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("moduleKey".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         Ok(config)

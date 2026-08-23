@@ -42,12 +42,7 @@ pub struct GetApplicationPropertiesRequest<'a> {
 
 impl<'a> GetApplicationPropertiesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            permission_level: None,
-            key_filter: None,
-            key: None,
-        }
+        Self { client, permission_level: None, key_filter: None, key: None }
     }
 
     /// when fetching a list specifies the permission level of all items in the list
@@ -79,28 +74,19 @@ impl<'a> GetApplicationPropertiesRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            "/rest/api/2/application-properties".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/application-properties".to_owned());
 
         if let Some(value) = &self.permission_level {
-            config.query.push((
-                "permissionLevel".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("permissionLevel".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.key_filter {
-            config
-                .query
-                .push(("keyFilter".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("keyFilter".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.key {
-            config
-                .query
-                .push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -157,11 +143,7 @@ pub struct SetPropertyViaRestfulTableRequest<'a> {
 
 impl<'a> SetPropertyViaRestfulTableRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, body: ApplicationPropertyValue) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            body,
-        }
+        Self { client, id: id.into(), body }
     }
 
     /// The request as the transport will send it.

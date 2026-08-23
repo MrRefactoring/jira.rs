@@ -26,10 +26,7 @@ pub struct MoveIssuesToBacklogRequest<'a> {
 
 impl<'a> MoveIssuesToBacklogRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_assign_request: IssueAssignRequest) -> Self {
-        Self {
-            client,
-            issue_assign_request,
-        }
+        Self { client, issue_assign_request }
     }
 
     /// The request as the transport will send it.

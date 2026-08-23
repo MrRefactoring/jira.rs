@@ -31,11 +31,7 @@ pub struct SetEmailRequest<'a> {
 
 impl<'a> SetEmailRequest<'a> {
     fn new(client: &'a crate::core::Client, account_id: AccountId, email: Email) -> Self {
-        Self {
-            client,
-            account_id,
-            email,
-        }
+        Self { client, account_id, email }
     }
 
     /// The request as the transport will send it.

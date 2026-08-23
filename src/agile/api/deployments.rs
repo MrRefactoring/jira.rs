@@ -232,12 +232,7 @@ impl<'a> SubmitDeploymentsRequest<'a> {
         client: &'a crate::core::Client,
         deployments: impl IntoIterator<Item = SubmitDeploymentsRequestDeployments>,
     ) -> Self {
-        Self {
-            client,
-            deployments: deployments.into_iter().collect(),
-            properties: None,
-            provider_metadata: None,
-        }
+        Self { client, deployments: deployments.into_iter().collect(), properties: None, provider_metadata: None }
     }
 
     /// Properties assigned to deployment data that can then be used for delete / query operations.
@@ -312,11 +307,7 @@ pub struct DeleteDeploymentsByPropertyRequest<'a> {
 
 impl<'a> DeleteDeploymentsByPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            account_id: account_id.into(),
-            created_by: None,
-        }
+        Self { client, account_id: account_id.into(), created_by: None }
     }
 
     /// Optional additional property filter combined with accountId (AND). Must match a key previously supplied in submitDeployments `properties`. Example: createdBy=user-456.
@@ -334,15 +325,10 @@ impl<'a> DeleteDeploymentsByPropertyRequest<'a> {
             "/rest/deployments/0.1/bulkByProperties".to_owned(),
         );
 
-        config.query.push((
-            "accountId".to_owned(),
-            crate::core::QueryValue::Scalar(self.account_id.clone()),
-        ));
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
 
         if let Some(value) = &self.created_by {
-            config
-                .query
-                .push(("createdBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("createdBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

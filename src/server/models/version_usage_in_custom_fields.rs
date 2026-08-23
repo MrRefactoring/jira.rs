@@ -8,10 +8,6 @@ pub struct VersionUsageInCustomFields {
     pub custom_field_id: Option<i64>,
     #[serde(rename = "fieldName", default, skip_serializing_if = "Option::is_none")]
     pub field_name: Option<String>,
-    #[serde(
-        rename = "issueCountWithVersionInCustomField",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "issueCountWithVersionInCustomField", default, skip_serializing_if = "Option::is_none")]
     pub issue_count_with_version_in_custom_field: Option<i64>,
 }

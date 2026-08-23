@@ -19,11 +19,7 @@ pub struct NotificationScheme {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// The notification events and associated recipients.
-    #[serde(
-        rename = "notificationSchemeEvents",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "notificationSchemeEvents", default, skip_serializing_if = "Option::is_none")]
     pub notification_scheme_events: Option<Vec<NotificationSchemeEvent>>,
     /// The list of project IDs associated with the notification scheme.
     #[serde(default, skip_serializing_if = "Option::is_none")]

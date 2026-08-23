@@ -36,10 +36,7 @@ pub struct GetPortalRequest<'a> {
 
 impl<'a> GetPortalRequest<'a> {
     fn new(client: &'a crate::core::Client, portal_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            portal_id: portal_id.into(),
-        }
+        Self { client, portal_id: portal_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -71,10 +68,7 @@ pub struct GetPortalByProjectKeyRequest<'a> {
 
 impl<'a> GetPortalByProjectKeyRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_key: project_key.into(),
-        }
+        Self { client, project_key: project_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -107,11 +101,7 @@ pub struct GetPortalsRequest<'a> {
 
 impl<'a> GetPortalsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start: None,
-            limit: None,
-        }
+        Self { client, start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0.
@@ -136,15 +126,11 @@ impl<'a> GetPortalsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/servicedeskapi/portals".to_owned());
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

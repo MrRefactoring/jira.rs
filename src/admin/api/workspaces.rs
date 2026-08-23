@@ -41,11 +41,7 @@ pub struct QueryWorkspacesRequest<'a> {
 
 impl<'a> QueryWorkspacesRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            search_workspaces_request_v2: None,
-        }
+        Self { client, org_id: org_id.into(), search_workspaces_request_v2: None }
     }
 
     #[must_use]

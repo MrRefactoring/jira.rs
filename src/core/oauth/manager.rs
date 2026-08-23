@@ -82,9 +82,7 @@ impl OAuth2Manager {
     pub(crate) fn cloud_at(config: &OAuth2Config, http: reqwest::Client, endpoints: OAuthEndpoints) -> Self {
         OAuth2Manager {
             inner: Arc::new(Inner {
-                deployment: Deployment::Cloud {
-                    site_url: config.site_url.clone(),
-                },
+                deployment: Deployment::Cloud { site_url: config.site_url.clone() },
                 endpoints,
                 http,
                 client_id: config.client_id.clone(),
@@ -326,24 +324,19 @@ the user has access to at least one site.",
             Deployment::Server { .. } => None,
         };
 
-        let available = resources
-            .iter()
-            .map(|resource| resource.url.clone())
-            .collect::<Vec<_>>()
-            .join(", ");
+        let available = resources.iter().map(|resource| resource.url.clone()).collect::<Vec<_>>().join(", ");
 
         if let Some(site_url) = site_url {
             let target = normalize_site_url(&site_url);
 
-            return resources
-                .into_iter()
-                .find(|resource| normalize_site_url(&resource.url) == target)
-                .ok_or_else(|| {
+            return resources.into_iter().find(|resource| normalize_site_url(&resource.url) == target).ok_or_else(
+                || {
                     Error::oauth(
                         format!("No accessible resource matches siteUrl \"{site_url}\". Available: {available}."),
                         OAuthErrorDetails::default(),
                     )
-                });
+                },
+            );
         }
 
         if resources.len() > 1 {
@@ -421,11 +414,7 @@ mod tests {
     #[tokio::test]
     async fn refreshes_when_the_token_is_within_the_skew_window() {
         let server = MockServer::start().await;
-        token_endpoint(
-            &server,
-            json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" }),
-        )
-        .await;
+        token_endpoint(&server, json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" })).await;
 
         // Thirty seconds of life left, which is inside the minute of skew the manager keeps.
         let config = refreshable(Some("stale"), Some(SystemTime::now() + Duration::from_secs(30)));
@@ -439,16 +428,9 @@ mod tests {
     #[tokio::test]
     async fn refreshes_when_there_is_no_access_token_at_all() {
         let server = MockServer::start().await;
-        token_endpoint(
-            &server,
-            json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" }),
-        )
-        .await;
+        token_endpoint(&server, json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" })).await;
 
-        let (header, _) = manager(&refreshable(None, None), &server)
-            .authorization_header()
-            .await
-            .unwrap();
+        let (header, _) = manager(&refreshable(None, None), &server).authorization_header().await.unwrap();
 
         assert_eq!(header, "Bearer minted");
     }
@@ -503,11 +485,7 @@ mod tests {
     #[tokio::test]
     async fn keeps_the_refresh_token_it_has_when_the_answer_does_not_rotate_one() {
         let server = MockServer::start().await;
-        token_endpoint(
-            &server,
-            json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" }),
-        )
-        .await;
+        token_endpoint(&server, json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" })).await;
 
         let seen = Arc::new(StdMutex::new(Vec::<String>::new()));
         let recorder = Arc::clone(&seen);
@@ -530,11 +508,7 @@ mod tests {
     #[tokio::test]
     async fn single_flights_concurrent_refreshes_into_one_token_call() {
         let server = MockServer::start().await;
-        token_endpoint(
-            &server,
-            json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" }),
-        )
-        .await;
+        token_endpoint(&server, json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" })).await;
 
         let manager = manager(&refreshable(None, None), &server);
         let waiting = (0..8).map(|_| {
@@ -547,21 +521,13 @@ mod tests {
             assert_eq!(handle.await.unwrap().unwrap().0, "Bearer minted");
         }
 
-        assert_eq!(
-            server.received_requests().await.unwrap().len(),
-            1,
-            "eight callers, one token call"
-        );
+        assert_eq!(server.received_requests().await.unwrap().len(), 1, "eight callers, one token call");
     }
 
     #[tokio::test]
     async fn force_refresh_does_nothing_when_someone_already_refreshed() {
         let server = MockServer::start().await;
-        token_endpoint(
-            &server,
-            json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" }),
-        )
-        .await;
+        token_endpoint(&server, json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" })).await;
 
         let manager = manager(&refreshable(Some("stale"), None), &server);
 
@@ -575,11 +541,7 @@ mod tests {
     #[tokio::test]
     async fn force_refresh_refreshes_again_for_a_caller_that_saw_the_newer_token() {
         let server = MockServer::start().await;
-        token_endpoint(
-            &server,
-            json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" }),
-        )
-        .await;
+        token_endpoint(&server, json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" })).await;
 
         let manager = manager(&refreshable(Some("stale"), None), &server);
 
@@ -592,10 +554,7 @@ mod tests {
     #[tokio::test]
     async fn builds_the_gateway_base_url_from_the_cloud_id() {
         let server = MockServer::start().await;
-        let base = manager(&refreshable(Some("fresh"), None), &server)
-            .base_url()
-            .await
-            .unwrap();
+        let base = manager(&refreshable(Some("fresh"), None), &server).base_url().await.unwrap();
 
         assert_eq!(base, "https://api.atlassian.com/ex/jira/cloud-1");
     }
@@ -617,20 +576,11 @@ mod tests {
             .mount(&server)
             .await;
 
-        let config = OAuth2Config {
-            cloud_id: None,
-            ..refreshable(Some("fresh"), None)
-        };
+        let config = OAuth2Config { cloud_id: None, ..refreshable(Some("fresh"), None) };
         let manager = manager(&config, &server);
 
-        assert_eq!(
-            manager.base_url().await.unwrap(),
-            "https://api.atlassian.com/ex/jira/cloud-9"
-        );
-        assert_eq!(
-            manager.base_url().await.unwrap(),
-            "https://api.atlassian.com/ex/jira/cloud-9"
-        );
+        assert_eq!(manager.base_url().await.unwrap(), "https://api.atlassian.com/ex/jira/cloud-9");
+        assert_eq!(manager.base_url().await.unwrap(), "https://api.atlassian.com/ex/jira/cloud-9");
         assert_eq!(calls.load(Ordering::SeqCst), 1);
     }
 
@@ -653,10 +603,7 @@ mod tests {
             ..refreshable(Some("fresh"), None)
         };
 
-        assert_eq!(
-            manager(&config, &server).base_url().await.unwrap(),
-            "https://api.atlassian.com/ex/jira/cloud-b"
-        );
+        assert_eq!(manager(&config, &server).base_url().await.unwrap(), "https://api.atlassian.com/ex/jira/cloud-b");
     }
 
     #[tokio::test]
@@ -672,10 +619,7 @@ mod tests {
             .mount(&server)
             .await;
 
-        let config = OAuth2Config {
-            cloud_id: None,
-            ..refreshable(Some("fresh"), None)
-        };
+        let config = OAuth2Config { cloud_id: None, ..refreshable(Some("fresh"), None) };
         let error = manager(&config, &server).base_url().await.unwrap_err();
 
         assert!(error.is_oauth());
@@ -714,10 +658,7 @@ mod tests {
             .mount(&server)
             .await;
 
-        let config = OAuth2Config {
-            cloud_id: None,
-            ..refreshable(Some("fresh"), None)
-        };
+        let config = OAuth2Config { cloud_id: None, ..refreshable(Some("fresh"), None) };
         let error = manager(&config, &server).base_url().await.unwrap_err();
 
         assert!(error.to_string().contains("No accessible resources"), "{error}");
@@ -726,11 +667,7 @@ mod tests {
     #[tokio::test]
     async fn refreshes_once_when_the_cloud_id_lookup_answers_401() {
         let server = MockServer::start().await;
-        token_endpoint(
-            &server,
-            json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" }),
-        )
-        .await;
+        token_endpoint(&server, json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" })).await;
 
         Mock::given(method("GET"))
             .and(path("/oauth/token/accessible-resources"))
@@ -751,15 +688,9 @@ mod tests {
             .await;
 
         // No expiry, so nothing says the token is stale until the lookup refuses it.
-        let config = OAuth2Config {
-            cloud_id: None,
-            ..refreshable(Some("stale"), None)
-        };
+        let config = OAuth2Config { cloud_id: None, ..refreshable(Some("stale"), None) };
 
-        assert_eq!(
-            manager(&config, &server).base_url().await.unwrap(),
-            "https://api.atlassian.com/ex/jira/cloud-9"
-        );
+        assert_eq!(manager(&config, &server).base_url().await.unwrap(), "https://api.atlassian.com/ex/jira/cloud-9");
     }
 
     #[tokio::test]
@@ -772,11 +703,7 @@ mod tests {
             .mount(&server)
             .await;
 
-        let config = OAuth2Config {
-            access_token: Some("stale".to_owned()),
-            cloud_id: None,
-            ..OAuth2Config::default()
-        };
+        let config = OAuth2Config { access_token: Some("stale".to_owned()), cloud_id: None, ..OAuth2Config::default() };
         let error = manager(&config, &server).base_url().await.unwrap_err();
 
         assert_eq!(error.status(), Some(401));
@@ -786,11 +713,7 @@ mod tests {
     #[tokio::test]
     async fn does_not_loop_when_the_refreshed_token_is_rejected_too() {
         let server = MockServer::start().await;
-        token_endpoint(
-            &server,
-            json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" }),
-        )
-        .await;
+        token_endpoint(&server, json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" })).await;
 
         Mock::given(method("GET"))
             .and(path("/oauth/token/accessible-resources"))
@@ -798,10 +721,7 @@ mod tests {
             .mount(&server)
             .await;
 
-        let config = OAuth2Config {
-            cloud_id: None,
-            ..refreshable(Some("stale"), None)
-        };
+        let config = OAuth2Config { cloud_id: None, ..refreshable(Some("stale"), None) };
         let error = manager(&config, &server).base_url().await.unwrap_err();
 
         assert_eq!(error.status(), Some(401));
@@ -828,10 +748,7 @@ mod tests {
                 .mount(&server)
                 .await;
 
-            let error = manager(&refreshable(None, None), &server)
-                .authorization_header()
-                .await
-                .unwrap_err();
+            let error = manager(&refreshable(None, None), &server).authorization_header().await.unwrap_err();
 
             assert!(error.is_reauthorization_required(), "{code}");
             assert_eq!(error.oauth_code(), Some(code));
@@ -848,10 +765,7 @@ mod tests {
             .mount(&server)
             .await;
 
-        let error = manager(&refreshable(None, None), &server)
-            .authorization_header()
-            .await
-            .unwrap_err();
+        let error = manager(&refreshable(None, None), &server).authorization_header().await.unwrap_err();
 
         assert!(error.is_oauth());
         assert!(!error.is_reauthorization_required());
@@ -867,10 +781,7 @@ mod tests {
             .mount(&server)
             .await;
 
-        let error = manager(&refreshable(None, None), &server)
-            .authorization_header()
-            .await
-            .unwrap_err();
+        let error = manager(&refreshable(None, None), &server).authorization_header().await.unwrap_err();
 
         assert!(error.is_oauth());
         assert_eq!(error.status(), Some(502));

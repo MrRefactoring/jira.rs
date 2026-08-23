@@ -67,12 +67,7 @@ pub struct FindSchemasRequest<'a> {
 
 impl<'a> FindSchemasRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start_at: None,
-            max_results: None,
-            include_counts: None,
-        }
+        Self { client, start_at: None, max_results: None, include_counts: None }
     }
 
     /// The starting index for the next page of results
@@ -104,23 +99,15 @@ impl<'a> FindSchemasRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/objectschema/list".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.include_counts {
-            config.query.push((
-                "includeCounts".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("includeCounts".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -145,10 +132,7 @@ pub struct CreateSchemaRequest<'a> {
 
 impl<'a> CreateSchemaRequest<'a> {
     fn new(client: &'a crate::core::Client, object_schema_in: ObjectSchemaIn) -> Self {
-        Self {
-            client,
-            object_schema_in,
-        }
+        Self { client, object_schema_in }
     }
 
     /// The request as the transport will send it.
@@ -214,11 +198,7 @@ pub struct UpdateSchemaRequest<'a> {
 
 impl<'a> UpdateSchemaRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, object_schema_update: ObjectSchemaUpdate) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            object_schema_update,
-        }
+        Self { client, id: id.into(), object_schema_update }
     }
 
     /// The request as the transport will send it.
@@ -287,13 +267,7 @@ pub struct FindSchemaAttributesRequest<'a> {
 
 impl<'a> FindSchemaAttributesRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            only_value_editable: None,
-            extended: None,
-            query: None,
-        }
+        Self { client, id: id.into(), only_value_editable: None, extended: None, query: None }
     }
 
     /// Return only values that are associated with values that can be edited
@@ -322,29 +296,19 @@ impl<'a> FindSchemaAttributesRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/objectschema/{}/attributes", self.id),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/objectschema/{}/attributes", self.id));
 
         if let Some(value) = &self.only_value_editable {
-            config.query.push((
-                "onlyValueEditable".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("onlyValueEditable".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.extended {
-            config.query.push((
-                "extended".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("extended".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -370,11 +334,7 @@ pub struct FindSchemaObjectTypesRequest<'a> {
 
 impl<'a> FindSchemaObjectTypesRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            exclude_abstract: None,
-        }
+        Self { client, id: id.into(), exclude_abstract: None }
     }
 
     /// If true, filters out Abstract Object Types from the results
@@ -387,16 +347,11 @@ impl<'a> FindSchemaObjectTypesRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/objectschema/{}/objecttypes", self.id),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/objectschema/{}/objecttypes", self.id));
 
         if let Some(value) = &self.exclude_abstract {
-            config.query.push((
-                "excludeAbstract".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("excludeAbstract".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -424,13 +379,7 @@ pub struct FindSchemaObjectTypesFlatRequest<'a> {
 
 impl<'a> FindSchemaObjectTypesFlatRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            query: None,
-            exclude: None,
-            include_object_counts: None,
-        }
+        Self { client, id: id.into(), query: None, exclude: None, include_object_counts: None }
     }
 
     /// Object Type Names to search for
@@ -465,22 +414,15 @@ impl<'a> FindSchemaObjectTypesFlatRequest<'a> {
         );
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.exclude {
-            config
-                .query
-                .push(("exclude".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("exclude".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.include_object_counts {
-            config.query.push((
-                "includeObjectCounts".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("includeObjectCounts".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

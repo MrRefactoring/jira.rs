@@ -36,10 +36,7 @@ pub struct LinkIssuesRequest<'a> {
 
 impl<'a> LinkIssuesRequest<'a> {
     fn new(client: &'a crate::core::Client, link_issue_request_json: LinkIssueRequestJson) -> Self {
-        Self {
-            client,
-            link_issue_request_json,
-        }
+        Self { client, link_issue_request_json }
     }
 
     /// The request as the transport will send it.
@@ -75,10 +72,7 @@ pub struct GetIssueLinkRequest<'a> {
 
 impl<'a> GetIssueLinkRequest<'a> {
     fn new(client: &'a crate::core::Client, link_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            link_id: link_id.into(),
-        }
+        Self { client, link_id: link_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -110,10 +104,7 @@ pub struct DeleteIssueLinkRequest<'a> {
 
 impl<'a> DeleteIssueLinkRequest<'a> {
     fn new(client: &'a crate::core::Client, link_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            link_id: link_id.into(),
-        }
+        Self { client, link_id: link_id.into() }
     }
 
     /// The request as the transport will send it.

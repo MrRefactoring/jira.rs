@@ -11,11 +11,7 @@ pub struct CreateExclusionRulesRequest {
     #[serde(rename = "issueTypeIds", default, skip_serializing_if = "Option::is_none")]
     pub issue_type_ids: Option<Vec<i64>>,
     /// Issues completed this number of days ago will be excluded from the plan.
-    #[serde(
-        rename = "numberOfDaysToShowCompletedIssues",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "numberOfDaysToShowCompletedIssues", default, skip_serializing_if = "Option::is_none")]
     pub number_of_days_to_show_completed_issues: Option<i64>,
     /// The IDs of the releases to exclude from the plan.
     #[serde(rename = "releaseIds", default, skip_serializing_if = "Option::is_none")]

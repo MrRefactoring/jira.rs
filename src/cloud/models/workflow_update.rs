@@ -14,11 +14,7 @@ pub struct WorkflowUpdate {
     pub description: Option<String>,
     /// The ID of this workflow.
     pub id: String,
-    #[serde(
-        rename = "loopedTransitionContainerLayout",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "loopedTransitionContainerLayout", default, skip_serializing_if = "Option::is_none")]
     pub looped_transition_container_layout: Option<WorkflowLayout>,
     #[serde(rename = "startPointLayout", default, skip_serializing_if = "Option::is_none")]
     pub start_point_layout: Option<WorkflowLayout>,

@@ -34,13 +34,7 @@ pub struct GetPermissionsRequest<'a> {
 
 impl<'a> GetPermissionsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            issue_id: None,
-            project_key: None,
-            issue_key: None,
-            project_id: None,
-        }
+        Self { client, issue_id: None, project_key: None, issue_key: None, project_id: None }
     }
 
     /// id of the issue to scope returned permissions for.
@@ -81,27 +75,19 @@ impl<'a> GetPermissionsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/mypermissions".to_owned());
 
         if let Some(value) = &self.issue_id {
-            config
-                .query
-                .push(("issueId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("issueId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_key {
-            config
-                .query
-                .push(("projectKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.issue_key {
-            config
-                .query
-                .push(("issueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("issueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_id {
-            config
-                .query
-                .push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

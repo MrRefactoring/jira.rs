@@ -96,39 +96,27 @@ impl<'a> FindUsersAndGroupsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/groupuserpicker".to_owned());
 
         if let Some(value) = &self.issue_type_id {
-            config
-                .query
-                .push(("issueTypeId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("issueTypeId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config
-                .query
-                .push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.show_avatar {
-            config
-                .query
-                .push(("showAvatar".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("showAvatar".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_id {
-            config
-                .query
-                .push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.field_id {
-            config
-                .query
-                .push(("fieldId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("fieldId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

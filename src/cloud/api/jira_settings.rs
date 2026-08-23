@@ -110,12 +110,7 @@ pub struct GetApplicationPropertyRequest<'a> {
 
 impl<'a> GetApplicationPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            key: None,
-            permission_level: None,
-            key_filter: None,
-        }
+        Self { client, key: None, permission_level: None, key_filter: None }
     }
 
     /// The key of the application property.
@@ -144,28 +139,19 @@ impl<'a> GetApplicationPropertyRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            "/rest/api/3/application-properties".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/application-properties".to_owned());
 
         if let Some(value) = &self.key {
-            config
-                .query
-                .push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.permission_level {
-            config.query.push((
-                "permissionLevel".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("permissionLevel".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.key_filter {
-            config
-                .query
-                .push(("keyFilter".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("keyFilter".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -275,11 +261,7 @@ pub struct SetApplicationPropertyRequest<'a> {
 
 impl<'a> SetApplicationPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>, body: SimpleApplicationProperty) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            body,
-        }
+        Self { client, id: id.into(), body }
     }
 
     /// The request as the transport will send it.

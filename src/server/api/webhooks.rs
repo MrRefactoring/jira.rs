@@ -69,13 +69,7 @@ pub struct GetWebhooksRequest<'a> {
 
 impl<'a> GetWebhooksRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            event: None,
-            statistics: None,
-            start: None,
-            limit: None,
-        }
+        Self { client, event: None, statistics: None, start: None, limit: None }
     }
 
     /// Only webhooks delivering this event.
@@ -114,28 +108,19 @@ impl<'a> GetWebhooksRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/jira-webhook/1.0/webhooks".to_owned());
 
         if let Some(value) = &self.event {
-            config
-                .query
-                .push(("event".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("event".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.statistics {
-            config.query.push((
-                "statistics".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("statistics".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -230,11 +215,7 @@ pub struct UpdateWebhookRequest<'a> {
 
 impl<'a> UpdateWebhookRequest<'a> {
     fn new(client: &'a crate::core::Client, webhook_id: i64, webhook_input: WebhookInput) -> Self {
-        Self {
-            client,
-            webhook_id,
-            webhook_input,
-        }
+        Self { client, webhook_id, webhook_input }
     }
 
     /// The request as the transport will send it.

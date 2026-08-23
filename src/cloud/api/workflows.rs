@@ -806,10 +806,7 @@ pub struct ReadWorkflowFromHistoryRequest<'a> {
 
 impl<'a> ReadWorkflowFromHistoryRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_history_read_request: WorkflowHistoryReadRequest) -> Self {
-        Self {
-            client,
-            workflow_history_read_request,
-        }
+        Self { client, workflow_history_read_request }
     }
 
     /// The request as the transport will send it.
@@ -854,11 +851,7 @@ pub struct ListWorkflowHistoryRequest<'a> {
 
 impl<'a> ListWorkflowHistoryRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_history_list_request: WorkflowHistoryListRequest) -> Self {
-        Self {
-            client,
-            workflow_history_list_request,
-            expand: None,
-        }
+        Self { client, workflow_history_list_request, expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
@@ -873,15 +866,11 @@ impl<'a> ListWorkflowHistoryRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            "/rest/api/3/workflow/history/list".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/workflow/history/list".to_owned());
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         let body = match serde_json::to_value(&self.workflow_history_list_request)? {
@@ -922,10 +911,7 @@ pub struct DeleteInactiveWorkflowRequest<'a> {
 
 impl<'a> DeleteInactiveWorkflowRequest<'a> {
     fn new(client: &'a crate::core::Client, entity_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            entity_id: entity_id.into(),
-        }
+        Self { client, entity_id: entity_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -960,13 +946,7 @@ pub struct GetWorkflowProjectIssueTypeUsagesRequest<'a> {
 
 impl<'a> GetWorkflowProjectIssueTypeUsagesRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_id: impl Into<String>, project_id: i64) -> Self {
-        Self {
-            client,
-            workflow_id: workflow_id.into(),
-            project_id,
-            next_page_token: None,
-            max_results: None,
-        }
+        Self { client, workflow_id: workflow_id.into(), project_id, next_page_token: None, max_results: None }
     }
 
     /// The cursor for pagination
@@ -989,24 +969,15 @@ impl<'a> GetWorkflowProjectIssueTypeUsagesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/3/workflow/{}/project/{}/issueTypeUsages",
-                self.workflow_id, self.project_id
-            ),
+            format!("/rest/api/3/workflow/{}/project/{}/issueTypeUsages", self.workflow_id, self.project_id),
         );
 
         if let Some(value) = &self.next_page_token {
-            config.query.push((
-                "nextPageToken".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1033,12 +1004,7 @@ pub struct GetProjectUsagesForWorkflowRequest<'a> {
 
 impl<'a> GetProjectUsagesForWorkflowRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            workflow_id: workflow_id.into(),
-            next_page_token: None,
-            max_results: None,
-        }
+        Self { client, workflow_id: workflow_id.into(), next_page_token: None, max_results: None }
     }
 
     /// The cursor for pagination
@@ -1065,17 +1031,11 @@ impl<'a> GetProjectUsagesForWorkflowRequest<'a> {
         );
 
         if let Some(value) = &self.next_page_token {
-            config.query.push((
-                "nextPageToken".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1102,12 +1062,7 @@ pub struct GetWorkflowSchemeUsagesForWorkflowRequest<'a> {
 
 impl<'a> GetWorkflowSchemeUsagesForWorkflowRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            workflow_id: workflow_id.into(),
-            next_page_token: None,
-            max_results: None,
-        }
+        Self { client, workflow_id: workflow_id.into(), next_page_token: None, max_results: None }
     }
 
     /// The cursor for pagination
@@ -1134,17 +1089,11 @@ impl<'a> GetWorkflowSchemeUsagesForWorkflowRequest<'a> {
         );
 
         if let Some(value) = &self.next_page_token {
-            config.query.push((
-                "nextPageToken".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1174,10 +1123,7 @@ pub struct ReadWorkflowsRequest<'a> {
 
 impl<'a> ReadWorkflowsRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_read_request: WorkflowReadRequest) -> Self {
-        Self {
-            client,
-            workflow_read_request,
-        }
+        Self { client, workflow_read_request }
     }
 
     /// The request as the transport will send it.
@@ -1766,12 +1712,7 @@ pub struct WorkflowCapabilitiesRequest<'a> {
 
 impl<'a> WorkflowCapabilitiesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            workflow_id: None,
-            project_id: None,
-            issue_type_id: None,
-        }
+        Self { client, workflow_id: None, project_id: None, issue_type_id: None }
     }
 
     #[must_use]
@@ -1797,27 +1738,19 @@ impl<'a> WorkflowCapabilitiesRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            "/rest/api/3/workflows/capabilities".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/workflows/capabilities".to_owned());
 
         if let Some(value) = &self.workflow_id {
-            config
-                .query
-                .push(("workflowId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("workflowId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_id {
-            config
-                .query
-                .push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.issue_type_id {
-            config
-                .query
-                .push(("issueTypeId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("issueTypeId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1847,10 +1780,7 @@ pub struct CreateWorkflowsRequest<'a> {
 
 impl<'a> CreateWorkflowsRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_create_request: WorkflowCreateRequest) -> Self {
-        Self {
-            client,
-            workflow_create_request,
-        }
+        Self { client, workflow_create_request }
     }
 
     /// The request as the transport will send it.
@@ -1892,10 +1822,7 @@ pub struct ValidateCreateWorkflowsRequest<'a> {
 
 impl<'a> ValidateCreateWorkflowsRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_create_validate_request: WorkflowCreateValidateRequest) -> Self {
-        Self {
-            client,
-            workflow_create_validate_request,
-        }
+        Self { client, workflow_create_validate_request }
     }
 
     /// The request as the transport will send it.
@@ -1938,10 +1865,8 @@ impl<'a> GetDefaultEditorRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            "/rest/api/3/workflows/defaultEditor".to_owned(),
-        );
+        let config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/workflows/defaultEditor".to_owned());
 
         Ok(config)
     }
@@ -1969,10 +1894,7 @@ pub struct ReadWorkflowPreviewsRequest<'a> {
 
 impl<'a> ReadWorkflowPreviewsRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_preview_request: WorkflowPreviewRequest) -> Self {
-        Self {
-            client,
-            workflow_preview_request,
-        }
+        Self { client, workflow_preview_request }
     }
 
     /// The request as the transport will send it.
@@ -2110,54 +2032,35 @@ impl<'a> SearchWorkflowsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/workflows/search".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.query_string {
-            config
-                .query
-                .push(("queryString".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("queryString".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.order_by {
-            config
-                .query
-                .push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.scope {
-            config
-                .query
-                .push(("scope".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("scope".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.is_active {
-            config.query.push((
-                "isActive".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("isActive".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.project_id {
-            config.query.push((
-                "projectId".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -2187,10 +2090,7 @@ pub struct UpdateWorkflowsRequest<'a> {
 
 impl<'a> UpdateWorkflowsRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_update_request: WorkflowUpdateRequest) -> Self {
-        Self {
-            client,
-            workflow_update_request,
-        }
+        Self { client, workflow_update_request }
     }
 
     /// The request as the transport will send it.
@@ -2232,10 +2132,7 @@ pub struct ValidateUpdateWorkflowsRequest<'a> {
 
 impl<'a> ValidateUpdateWorkflowsRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_update_validate_request: WorkflowUpdateValidateRequest) -> Self {
-        Self {
-            client,
-            workflow_update_validate_request,
-        }
+        Self { client, workflow_update_validate_request }
     }
 
     /// The request as the transport will send it.

@@ -202,69 +202,47 @@ impl<'a> GetEventsRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/admin/v1/orgs/{}/events", self.org_id),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/admin/v1/orgs/{}/events", self.org_id));
 
         if let Some(value) = &self.cursor {
-            config
-                .query
-                .push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.q {
-            config
-                .query
-                .push(("q".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("q".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.from {
-            config
-                .query
-                .push(("from".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("from".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.to {
-            config
-                .query
-                .push(("to".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("to".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.action {
-            config
-                .query
-                .push(("action".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("action".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.actor {
-            config
-                .query
-                .push(("actor".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("actor".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.ip {
-            config
-                .query
-                .push(("ip".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("ip".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.product {
-            config
-                .query
-                .push(("product".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("product".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.location {
-            config
-                .query
-                .push(("location".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("location".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -299,15 +277,7 @@ pub struct PollEventsRequest<'a> {
 
 impl<'a> PollEventsRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            cursor: None,
-            from: None,
-            to: None,
-            limit: None,
-            sort_order: None,
-        }
+        Self { client, org_id: org_id.into(), cursor: None, from: None, to: None, limit: None, sort_order: None }
     }
 
     /// Sets the starting point for the page of results to return. Can be used when last page is reached to poll for new events. The sort order is maintained in the cursor across requests.
@@ -358,34 +328,23 @@ impl<'a> PollEventsRequest<'a> {
         );
 
         if let Some(value) = &self.cursor {
-            config
-                .query
-                .push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.from {
-            config
-                .query
-                .push(("from".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("from".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.to {
-            config
-                .query
-                .push(("to".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("to".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.sort_order {
-            config.query.push((
-                "sortOrder".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config.query.push(("sortOrder".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -414,11 +373,7 @@ pub struct GetEventByIdRequest<'a> {
 
 impl<'a> GetEventByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, event_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            event_id: event_id.into(),
-        }
+        Self { client, org_id: org_id.into(), event_id: event_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -453,10 +408,7 @@ pub struct GetEventActionsRequest<'a> {
 
 impl<'a> GetEventActionsRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-        }
+        Self { client, org_id: org_id.into() }
     }
 
     /// The request as the transport will send it.

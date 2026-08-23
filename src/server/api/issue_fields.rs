@@ -146,58 +146,39 @@ impl<'a> GetCustomFieldsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/customFields".to_owned());
 
         if let Some(value) = &self.sort_column {
-            config
-                .query
-                .push(("sortColumn".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("sortColumn".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.types {
-            config
-                .query
-                .push(("types".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("types".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.search {
-            config
-                .query
-                .push(("search".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("search".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
-            config
-                .query
-                .push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.sort_order {
-            config
-                .query
-                .push(("sortOrder".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("sortOrder".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.screen_ids {
-            config
-                .query
-                .push(("screenIds".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("screenIds".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.last_value_update {
-            config.query.push((
-                "lastValueUpdate".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("lastValueUpdate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_ids {
-            config
-                .query
-                .push(("projectIds".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectIds".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -222,10 +203,7 @@ pub struct BulkDeleteCustomFieldsRequest<'a> {
 
 impl<'a> BulkDeleteCustomFieldsRequest<'a> {
     fn new(client: &'a crate::core::Client, ids: impl Into<String>) -> Self {
-        Self {
-            client,
-            ids: ids.into(),
-        }
+        Self { client, ids: ids.into() }
     }
 
     /// The request as the transport will send it.
@@ -233,9 +211,7 @@ impl<'a> BulkDeleteCustomFieldsRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::DELETE, "/rest/api/2/customFields".to_owned());
 
-        config
-            .query
-            .push(("ids".to_owned(), crate::core::QueryValue::Scalar(self.ids.clone())));
+        config.query.push(("ids".to_owned(), crate::core::QueryValue::Scalar(self.ids.clone())));
 
         Ok(config)
     }
@@ -343,48 +319,31 @@ impl<'a> GetCustomFieldOptionsRequest<'a> {
         );
 
         if let Some(value) = &self.max_results {
-            config
-                .query
-                .push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.issue_type_ids {
-            config.query.push((
-                "issueTypeIds".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("issueTypeIds".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.sort_by_option_name {
-            config.query.push((
-                "sortByOptionName".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("sortByOptionName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.use_all_contexts {
-            config.query.push((
-                "useAllContexts".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("useAllContexts".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.page {
-            config
-                .query
-                .push(("page".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("page".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.project_ids {
-            config
-                .query
-                .push(("projectIds".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("projectIds".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -437,10 +396,7 @@ pub struct CreateCustomFieldRequest<'a> {
 
 impl<'a> CreateCustomFieldRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            custom_field_definition_json: None,
-        }
+        Self { client, custom_field_definition_json: None }
     }
 
     #[must_use]

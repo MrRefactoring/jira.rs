@@ -50,11 +50,7 @@ pub struct RequestConfig {
 
 impl RequestConfig {
     pub fn new(method: Method, url: impl Into<String>) -> Self {
-        RequestConfig {
-            method,
-            url: url.into(),
-            ..RequestConfig::default()
-        }
+        RequestConfig { method, url: url.into(), ..RequestConfig::default() }
     }
 
     /// Method and path, without the query string — what an error names the endpoint by.
@@ -114,10 +110,7 @@ impl Client {
     }
 
     pub fn request(&self, method: Method, url: impl Into<String>) -> RequestBuilder {
-        RequestBuilder {
-            client: self.clone(),
-            config: RequestConfig::new(method, url),
-        }
+        RequestBuilder { client: self.clone(), config: RequestConfig::new(method, url) }
     }
 
     pub fn get(&self, url: impl Into<String>) -> RequestBuilder {
@@ -203,11 +196,8 @@ impl Client {
         };
 
         let absolute = config.url.starts_with("http://") || config.url.starts_with("https://");
-        let path = if config.url.starts_with('/') || absolute {
-            config.url.clone()
-        } else {
-            format!("/{}", config.url)
-        };
+        let path =
+            if config.url.starts_with('/') || absolute { config.url.clone() } else { format!("/{}", config.url) };
 
         let url = match base {
             Some(base) if !absolute => format!("{}{path}", base.trim_end_matches('/')),
@@ -280,11 +270,7 @@ impl Client {
         if !(200..300).contains(&response.status) {
             let text = response.text();
             let body = response.json_body();
-            let suffix = if text.is_empty() {
-                String::new()
-            } else {
-                format!(" - {text}")
-            };
+            let suffix = if text.is_empty() { String::new() } else { format!(" - {text}") };
 
             return Err(create_api_error(
                 format!("Request failed: {} {}{suffix}", response.status, response.status_text),
@@ -367,10 +353,7 @@ impl Client {
         if let Some(manager) = &self.inner.oauth {
             let (header, generation) = manager.authorization_header().await?;
 
-            return Ok(Credential {
-                header: Some(header),
-                generation,
-            });
+            return Ok(Credential { header: Some(header), generation });
         }
 
         let header = match &self.inner.auth {
@@ -404,8 +387,7 @@ impl RawResponse {
     }
 
     fn is_json(&self) -> bool {
-        self.content_type()
-            .is_some_and(|value| value.contains("application/json"))
+        self.content_type().is_some_and(|value| value.contains("application/json"))
     }
 
     fn text(&self) -> String {
@@ -448,16 +430,8 @@ fn rejected_credentials_error(response: &RawResponse) -> Error {
         },
     );
     let text = response.text();
-    let anonymously = if (200..300).contains(&response.status) {
-        " and answered as an anonymous user"
-    } else {
-        ""
-    };
-    let suffix = if text.is_empty() {
-        String::new()
-    } else {
-        format!(" - {text}")
-    };
+    let anonymously = if (200..300).contains(&response.status) { " and answered as an anonymous user" } else { "" };
+    let suffix = if text.is_empty() { String::new() } else { format!(" - {text}") };
 
     // The status is the one that crossed the wire, not 401: an endpoint permitting anonymous access reports the
     // refusal on a `200`, and recording 401 there would name a status that never happened. The kind stays `Auth`
@@ -479,9 +453,7 @@ fn rejected_credentials_error(response: &RawResponse) -> Error {
 
 /// Whether this 401 means "missing scope" rather than "stale token". Refreshing cannot fix the former.
 fn is_scope_mismatch_body(body: &Bytes) -> bool {
-    String::from_utf8_lossy(body)
-        .to_lowercase()
-        .contains("scope does not match")
+    String::from_utf8_lossy(body).to_lowercase().contains("scope does not match")
 }
 
 fn deserialize_at<T: DeserializeOwned>(endpoint: &str, value: &Value) -> Result<T> {
@@ -495,11 +467,7 @@ fn deserialize_at<T: DeserializeOwned>(endpoint: &str, value: &Value) -> Result<
             Err(Error::SchemaMismatch {
                 report: Box::new(SchemaMismatchReport {
                     endpoint: endpoint.to_owned(),
-                    issues: vec![SchemaMismatchIssue {
-                        path,
-                        expected: error.inner().to_string(),
-                        received,
-                    }],
+                    issues: vec![SchemaMismatchIssue { path, expected: error.inner().to_string(), received }],
                 }),
                 source: None,
             })
@@ -646,9 +614,7 @@ gateway.",
         };
 
         if matches!(self.auth, Some(Auth::OAuth2Server(_))) && host.is_none() {
-            return Err(Error::config(
-                "Data Center OAuth 2.0 needs the instance it is talking to: pass `host`.",
-            ));
+            return Err(Error::config("Data Center OAuth 2.0 needs the instance it is talking to: pass `host`."));
         }
 
         let http = match self.http {
@@ -668,11 +634,9 @@ gateway.",
 
         let oauth = match &self.auth {
             Some(Auth::OAuth2(config)) => Some(OAuth2Manager::cloud(config, http.clone())),
-            Some(Auth::OAuth2Server(config)) => Some(OAuth2Manager::server(
-                config,
-                host.clone().unwrap_or_default(),
-                http.clone(),
-            )),
+            Some(Auth::OAuth2Server(config)) => {
+                Some(OAuth2Manager::server(config, host.clone().unwrap_or_default(), http.clone()))
+            }
             _ => None,
         };
 

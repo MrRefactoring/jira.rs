@@ -53,9 +53,7 @@ impl<'a> GetIdsOfWorklogsDeletedSinceRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/worklog/deleted".to_owned());
 
         if let Some(value) = &self.since {
-            config
-                .query
-                .push(("since".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("since".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -80,10 +78,7 @@ pub struct GetWorklogsForIdsRequest<'a> {
 
 impl<'a> GetWorklogsForIdsRequest<'a> {
     fn new(client: &'a crate::core::Client, worklog_ids_request: WorklogIdsRequest) -> Self {
-        Self {
-            client,
-            worklog_ids_request,
-        }
+        Self { client, worklog_ids_request }
     }
 
     /// The request as the transport will send it.
@@ -137,9 +132,7 @@ impl<'a> GetIdsOfWorklogsModifiedSinceRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/worklog/updated".to_owned());
 
         if let Some(value) = &self.since {
-            config
-                .query
-                .push(("since".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("since".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

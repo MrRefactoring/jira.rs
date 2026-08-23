@@ -255,11 +255,7 @@ pub struct GetCommentsByIdsRequest<'a> {
 
 impl<'a> GetCommentsByIdsRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_comment_list_request: IssueCommentListRequest) -> Self {
-        Self {
-            client,
-            issue_comment_list_request,
-            expand: None,
-        }
+        Self { client, issue_comment_list_request, expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information about comments in the response. This parameter accepts a comma-separated list. Expand options include:
@@ -279,9 +275,7 @@ impl<'a> GetCommentsByIdsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/comment/list".to_owned());
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         let body = match serde_json::to_value(&self.issue_comment_list_request)? {
@@ -375,28 +369,19 @@ impl<'a> GetCommentsRequest<'a> {
         );
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.order_by {
-            config
-                .query
-                .push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -430,12 +415,7 @@ pub struct AddCommentRequest<'a> {
 
 impl<'a> AddCommentRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, comment_input: CommentInput) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            comment_input,
-            expand: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), comment_input, expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
@@ -454,9 +434,7 @@ impl<'a> AddCommentRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         let body = match serde_json::to_value(&self.comment_input)? {
@@ -498,12 +476,7 @@ pub struct GetCommentRequest<'a> {
 
 impl<'a> GetCommentRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            id: id.into(),
-            expand: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into(), expand: None }
     }
 
     /// Use [expand](#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
@@ -522,9 +495,7 @@ impl<'a> GetCommentRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -613,23 +584,15 @@ impl<'a> UpdateCommentRequest<'a> {
         );
 
         if let Some(value) = &self.notify_users {
-            config.query.push((
-                "notifyUsers".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.override_editable_flag {
-            config.query.push((
-                "overrideEditableFlag".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("overrideEditableFlag".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -664,11 +627,7 @@ pub struct DeleteCommentRequest<'a> {
 
 impl<'a> DeleteCommentRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            id: id.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into() }
     }
 
     /// The request as the transport will send it.

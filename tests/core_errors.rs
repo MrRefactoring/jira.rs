@@ -4,13 +4,7 @@ use jira::core::{ApiErrorKind, Error, create_api_error, parse_retry_after};
 use serde_json::json;
 
 fn api_error(status: u16, body: serde_json::Value) -> Error {
-    create_api_error(
-        format!("Request failed: {status}"),
-        status,
-        "Error".to_owned(),
-        body,
-        None,
-    )
+    create_api_error(format!("Request failed: {status}"), status, "Error".to_owned(), body, None)
 }
 
 #[test]
@@ -60,10 +54,7 @@ fn carries_the_parsed_body() {
 
 #[test]
 fn classifies_the_scope_401_as_its_own_kind() {
-    let error = api_error(
-        401,
-        json!({ "code": 401, "message": "Unauthorized; scope does not match" }),
-    );
+    let error = api_error(401, json!({ "code": 401, "message": "Unauthorized; scope does not match" }));
 
     assert!(error.is_scope());
     // Still a 401, so anything catching an auth failure keeps catching this one.
@@ -89,10 +80,7 @@ fn does_not_mistake_an_ordinary_401_for_a_scope_failure() {
 
 #[test]
 fn reads_retry_after_given_in_seconds() {
-    assert_eq!(
-        parse_retry_after(Some("30"), SystemTime::now()),
-        Some(Duration::from_secs(30))
-    );
+    assert_eq!(parse_retry_after(Some("30"), SystemTime::now()), Some(Duration::from_secs(30)));
 }
 
 #[test]

@@ -449,69 +449,43 @@ impl<'a> GetCustomerRequestsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/servicedeskapi/request".to_owned());
 
         if let Some(value) = &self.search_term {
-            config
-                .query
-                .push(("searchTerm".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("searchTerm".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.request_ownership {
-            config.query.push((
-                "requestOwnership".to_owned(),
-                crate::core::QueryValue::List(value.clone()),
-            ));
+            config.query.push(("requestOwnership".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.request_status {
-            config.query.push((
-                "requestStatus".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("requestStatus".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.approval_status {
-            config.query.push((
-                "approvalStatus".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("approvalStatus".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.organization_id {
-            config.query.push((
-                "organizationId".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("organizationId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.service_desk_id {
-            config.query.push((
-                "serviceDeskId".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("serviceDeskId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.request_type_id {
-            config.query.push((
-                "requestTypeId".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("requestTypeId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -636,11 +610,7 @@ pub struct GetCustomerRequestByIdOrKeyRequest<'a> {
 
 impl<'a> GetCustomerRequestByIdOrKeyRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            expand: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), expand: None }
     }
 
     /// A multi-value parameter indicating which properties of the customer request to expand, where:
@@ -670,9 +640,7 @@ impl<'a> GetCustomerRequestByIdOrKeyRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         Ok(config)
@@ -701,12 +669,7 @@ pub struct GetApprovalsRequest<'a> {
 
 impl<'a> GetApprovalsRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            start: None,
-            limit: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
@@ -733,15 +696,11 @@ impl<'a> GetApprovalsRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -769,21 +728,14 @@ pub struct GetApprovalByIdRequest<'a> {
 
 impl<'a> GetApprovalByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, approval_id: i64) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            approval_id,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), approval_id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/request/{}/approval/{}",
-                self.issue_id_or_key, self.approval_id
-            ),
+            format!("/rest/servicedeskapi/request/{}/approval/{}", self.issue_id_or_key, self.approval_id),
         );
 
         Ok(config)
@@ -817,22 +769,14 @@ impl<'a> AnswerApprovalRequest<'a> {
         approval_id: i64,
         approval_decision_request: ApprovalDecisionRequest,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            approval_id,
-            approval_decision_request,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), approval_id, approval_decision_request }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/rest/servicedeskapi/request/{}/approval/{}",
-                self.issue_id_or_key, self.approval_id
-            ),
+            format!("/rest/servicedeskapi/request/{}/approval/{}", self.issue_id_or_key, self.approval_id),
         );
 
         let body = match serde_json::to_value(&self.approval_decision_request)? {
@@ -870,12 +814,7 @@ pub struct GetAttachmentsForRequestRequest<'a> {
 
 impl<'a> GetAttachmentsForRequestRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, start: i64, limit: i64) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            start,
-            limit,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), start, limit }
     }
 
     /// The request as the transport will send it.
@@ -885,15 +824,9 @@ impl<'a> GetAttachmentsForRequestRequest<'a> {
             format!("/rest/servicedeskapi/request/{}/attachment", self.issue_id_or_key),
         );
 
-        config.query.push((
-            "start".to_owned(),
-            crate::core::QueryValue::Scalar(self.start.to_string()),
-        ));
+        config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(self.start.to_string())));
 
-        config.query.push((
-            "limit".to_owned(),
-            crate::core::QueryValue::Scalar(self.limit.to_string()),
-        ));
+        config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(self.limit.to_string())));
 
         Ok(config)
     }
@@ -929,11 +862,7 @@ impl<'a> CreateCommentWithAttachmentRequest<'a> {
         issue_id_or_key: impl Into<String>,
         attachment_create: AttachmentCreate,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            attachment_create,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), attachment_create }
     }
 
     /// The request as the transport will send it.
@@ -980,21 +909,14 @@ pub struct GetAttachmentContentRequest<'a> {
 
 impl<'a> GetAttachmentContentRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, attachment_id: i64) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            attachment_id,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), attachment_id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/request/{}/attachment/{}",
-                self.issue_id_or_key, self.attachment_id
-            ),
+            format!("/rest/servicedeskapi/request/{}/attachment/{}", self.issue_id_or_key, self.attachment_id),
         );
 
         Ok(config)
@@ -1027,11 +949,7 @@ pub struct GetAttachmentThumbnailRequest<'a> {
 
 impl<'a> GetAttachmentThumbnailRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, attachment_id: i64) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            attachment_id,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), attachment_id }
     }
 
     /// The request as the transport will send it.
@@ -1137,34 +1055,23 @@ impl<'a> GetRequestCommentsRequest<'a> {
         );
 
         if let Some(value) = &self.public {
-            config
-                .query
-                .push(("public".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("public".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.internal {
-            config.query.push((
-                "internal".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("internal".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1194,11 +1101,7 @@ pub struct CreateRequestCommentRequest<'a> {
 
 impl<'a> CreateRequestCommentRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, comment_create: CommentCreate) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            comment_create,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), comment_create }
     }
 
     /// The request as the transport will send it.
@@ -1243,12 +1146,7 @@ pub struct GetRequestCommentByIdRequest<'a> {
 
 impl<'a> GetRequestCommentByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, comment_id: i64) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            comment_id,
-            expand: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), comment_id, expand: None }
     }
 
     /// A multi-value parameter indicating which properties of the comment to expand:
@@ -1266,16 +1164,11 @@ impl<'a> GetRequestCommentByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/request/{}/comment/{}",
-                self.issue_id_or_key, self.comment_id
-            ),
+            format!("/rest/servicedeskapi/request/{}/comment/{}", self.issue_id_or_key, self.comment_id),
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         Ok(config)
@@ -1302,10 +1195,7 @@ pub struct GetSubscriptionStatusRequest<'a> {
 
 impl<'a> GetSubscriptionStatusRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -1339,10 +1229,7 @@ pub struct SubscribeRequest<'a> {
 
 impl<'a> SubscribeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -1376,10 +1263,7 @@ pub struct UnsubscribeRequest<'a> {
 
 impl<'a> UnsubscribeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -1415,12 +1299,7 @@ pub struct GetRequestParticipantsRequest<'a> {
 
 impl<'a> GetRequestParticipantsRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            start: None,
-            limit: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
@@ -1447,15 +1326,11 @@ impl<'a> GetRequestParticipantsRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1489,11 +1364,7 @@ impl<'a> AddRequestParticipantsRequest<'a> {
         issue_id_or_key: impl Into<String>,
         request_participant_update: RequestParticipantUpdate,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            request_participant_update,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), request_participant_update }
     }
 
     /// The request as the transport will send it.
@@ -1539,11 +1410,7 @@ impl<'a> RemoveRequestParticipantsRequest<'a> {
         issue_id_or_key: impl Into<String>,
         request_participant_update: RequestParticipantUpdate,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            request_participant_update,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), request_participant_update }
     }
 
     /// The request as the transport will send it.
@@ -1589,12 +1456,7 @@ pub struct GetSlaInformationRequest<'a> {
 
 impl<'a> GetSlaInformationRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            start: None,
-            limit: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
@@ -1621,15 +1483,11 @@ impl<'a> GetSlaInformationRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1660,21 +1518,14 @@ pub struct GetSlaInformationByIdRequest<'a> {
 
 impl<'a> GetSlaInformationByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, sla_metric_id: i64) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            sla_metric_id,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), sla_metric_id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/servicedeskapi/request/{}/sla/{}",
-                self.issue_id_or_key, self.sla_metric_id
-            ),
+            format!("/rest/servicedeskapi/request/{}/sla/{}", self.issue_id_or_key, self.sla_metric_id),
         );
 
         Ok(config)
@@ -1703,12 +1554,7 @@ pub struct GetCustomerRequestStatusRequest<'a> {
 
 impl<'a> GetCustomerRequestStatusRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            start: None,
-            limit: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
@@ -1735,15 +1581,11 @@ impl<'a> GetCustomerRequestStatusRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1772,12 +1614,7 @@ pub struct GetCustomerTransitionsRequest<'a> {
 
 impl<'a> GetCustomerTransitionsRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            start: None,
-            limit: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), start: None, limit: None }
     }
 
     /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
@@ -1804,15 +1641,11 @@ impl<'a> GetCustomerTransitionsRequest<'a> {
         );
 
         if let Some(value) = &self.start {
-            config
-                .query
-                .push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -1844,11 +1677,7 @@ impl<'a> PerformCustomerTransitionRequest<'a> {
         issue_id_or_key: impl Into<String>,
         customer_transition_execution: CustomerTransitionExecution,
     ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            customer_transition_execution,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), customer_transition_execution }
     }
 
     /// The request as the transport will send it.

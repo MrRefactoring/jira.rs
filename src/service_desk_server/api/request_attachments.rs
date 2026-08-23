@@ -56,11 +56,7 @@ pub struct CreateAttachmentRequest<'a> {
 
 impl<'a> CreateAttachmentRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            attachment_create: None,
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), attachment_create: None }
     }
 
     #[must_use]
@@ -119,11 +115,7 @@ pub struct AttachTemporaryFileRequest<'a> {
 
 impl<'a> AttachTemporaryFileRequest<'a> {
     fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            service_desk_id: service_desk_id.into(),
-            body: None,
-        }
+        Self { client, service_desk_id: service_desk_id.into(), body: None }
     }
 
     #[must_use]
@@ -137,10 +129,7 @@ impl<'a> AttachTemporaryFileRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/rest/servicedeskapi/servicedesk/{}/attachTemporaryFile",
-                self.service_desk_id
-            ),
+            format!("/rest/servicedeskapi/servicedesk/{}/attachTemporaryFile", self.service_desk_id),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));

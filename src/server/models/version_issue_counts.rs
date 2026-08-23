@@ -7,11 +7,7 @@ use serde::{Deserialize, Serialize};
 pub struct VersionIssueCounts {
     #[serde(rename = "customFieldNames", default, skip_serializing_if = "Option::is_none")]
     pub custom_field_names: Option<Vec<VersionUsageInCustomFields>>,
-    #[serde(
-        rename = "issueCountWithCustomFieldsShowingVersion",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "issueCountWithCustomFieldsShowingVersion", default, skip_serializing_if = "Option::is_none")]
     pub issue_count_with_custom_fields_showing_version: Option<i64>,
     #[serde(rename = "issuesAffectedCount", default, skip_serializing_if = "Option::is_none")]
     pub issues_affected_count: Option<i64>,

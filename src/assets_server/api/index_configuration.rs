@@ -185,9 +185,7 @@ impl<'a> StartReindexInsightRequest<'a> {
         );
 
         if let Some(value) = &self.clean {
-            config
-                .query
-                .push(("clean".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("clean".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

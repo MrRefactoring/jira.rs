@@ -49,13 +49,7 @@ pub struct FetchMembersRequest<'a> {
 
 impl<'a> FetchMembersRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, team_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            team_id: team_id.into(),
-            site_id: None,
-            membership_fetch_payload: None,
-        }
+        Self { client, org_id: org_id.into(), team_id: team_id.into(), site_id: None, membership_fetch_payload: None }
     }
 
     /// [Optional] The ID of the site you are fetching members for. [Deprecated] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
@@ -77,16 +71,11 @@ impl<'a> FetchMembersRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/gateway/api/public/teams/v1/org/{}/teams/{}/members",
-                self.org_id, self.team_id
-            ),
+            format!("/gateway/api/public/teams/v1/org/{}/teams/{}/members", self.org_id, self.team_id),
         );
 
         if let Some(value) = &self.site_id {
-            config
-                .query
-                .push(("siteId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("siteId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         let body = match serde_json::to_value(&self.membership_fetch_payload)? {
@@ -125,22 +114,14 @@ impl<'a> AddMembersRequest<'a> {
         team_id: impl Into<String>,
         membership_add_payload: MembershipAddPayload,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            team_id: team_id.into(),
-            membership_add_payload,
-        }
+        Self { client, org_id: org_id.into(), team_id: team_id.into(), membership_add_payload }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/gateway/api/public/teams/v1/org/{}/teams/{}/members/add",
-                self.org_id, self.team_id
-            ),
+            format!("/gateway/api/public/teams/v1/org/{}/teams/{}/members/add", self.org_id, self.team_id),
         );
 
         let body = match serde_json::to_value(&self.membership_add_payload)? {
@@ -179,22 +160,14 @@ impl<'a> RemoveMembersRequest<'a> {
         team_id: impl Into<String>,
         membership_remove_payload: MembershipRemovePayload,
     ) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            team_id: team_id.into(),
-            membership_remove_payload,
-        }
+        Self { client, org_id: org_id.into(), team_id: team_id.into(), membership_remove_payload }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/gateway/api/public/teams/v1/org/{}/teams/{}/members/remove",
-                self.org_id, self.team_id
-            ),
+            format!("/gateway/api/public/teams/v1/org/{}/teams/{}/members/remove", self.org_id, self.team_id),
         );
 
         let body = match serde_json::to_value(&self.membership_remove_payload)? {

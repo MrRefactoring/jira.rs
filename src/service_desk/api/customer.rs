@@ -53,11 +53,7 @@ pub struct CreateCustomerRequest<'a> {
 
 impl<'a> CreateCustomerRequest<'a> {
     fn new(client: &'a crate::core::Client, customer_create: CustomerCreate) -> Self {
-        Self {
-            client,
-            customer_create,
-            strict_conflict_status_code: None,
-        }
+        Self { client, customer_create, strict_conflict_status_code: None }
     }
 
     /// Optional boolean flag to return 409 Conflict status code for duplicate customer creation request
@@ -74,10 +70,9 @@ impl<'a> CreateCustomerRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/servicedeskapi/customer".to_owned());
 
         if let Some(value) = &self.strict_conflict_status_code {
-            config.query.push((
-                "strictConflictStatusCode".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config
+                .query
+                .push(("strictConflictStatusCode".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.customer_create)? {
@@ -114,11 +109,7 @@ pub struct CreateCustomerSkippingPermissionCheckRequest<'a> {
 
 impl<'a> CreateCustomerSkippingPermissionCheckRequest<'a> {
     fn new(client: &'a crate::core::Client, customer_create: CustomerCreate) -> Self {
-        Self {
-            client,
-            customer_create,
-            strict_conflict_status_code: None,
-        }
+        Self { client, customer_create, strict_conflict_status_code: None }
     }
 
     /// Optional boolean flag; when \{@code true\}, returns 409 Conflict for duplicate email instead of the default 400.
@@ -137,10 +128,9 @@ impl<'a> CreateCustomerSkippingPermissionCheckRequest<'a> {
         );
 
         if let Some(value) = &self.strict_conflict_status_code {
-            config.query.push((
-                "strictConflictStatusCode".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config
+                .query
+                .push(("strictConflictStatusCode".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.customer_create)? {
@@ -174,20 +164,14 @@ pub struct RevokePortalOnlyAccessForUserRequest<'a> {
 
 impl<'a> RevokePortalOnlyAccessForUserRequest<'a> {
     fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            account_id: account_id.into(),
-        }
+        Self { client, account_id: account_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/servicedeskapi/customer/user/{}/revoke-portal-only-access",
-                self.account_id
-            ),
+            format!("/rest/servicedeskapi/customer/user/{}/revoke-portal-only-access", self.account_id),
         );
 
         Ok(config)

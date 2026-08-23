@@ -72,10 +72,7 @@ pub struct GetVotesRequest<'a> {
 
 impl<'a> GetVotesRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -114,10 +111,7 @@ pub struct AddVoteRequest<'a> {
 
 impl<'a> AddVoteRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -156,10 +150,7 @@ pub struct RemoveVoteRequest<'a> {
 
 impl<'a> RemoveVoteRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-        }
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
     }
 
     /// The request as the transport will send it.

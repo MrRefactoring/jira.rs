@@ -122,10 +122,7 @@ pub struct CreateIssueTypeSchemeRequest<'a> {
 
 impl<'a> CreateIssueTypeSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_type_scheme_create_update: IssueTypeSchemeCreateUpdate) -> Self {
-        Self {
-            client,
-            issue_type_scheme_create_update,
-        }
+        Self { client, issue_type_scheme_create_update }
     }
 
     /// The request as the transport will send it.
@@ -162,10 +159,7 @@ pub struct GetIssueTypeSchemeRequest<'a> {
 
 impl<'a> GetIssueTypeSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, scheme_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            scheme_id: scheme_id.into(),
-        }
+        Self { client, scheme_id: scheme_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -202,11 +196,7 @@ impl<'a> UpdateIssueTypeSchemeRequest<'a> {
         scheme_id: impl Into<String>,
         issue_type_scheme_create_update: IssueTypeSchemeCreateUpdate,
     ) -> Self {
-        Self {
-            client,
-            scheme_id: scheme_id.into(),
-            issue_type_scheme_create_update,
-        }
+        Self { client, scheme_id: scheme_id.into(), issue_type_scheme_create_update }
     }
 
     /// The request as the transport will send it.
@@ -245,10 +235,7 @@ pub struct DeleteIssueTypeSchemeRequest<'a> {
 
 impl<'a> DeleteIssueTypeSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, scheme_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            scheme_id: scheme_id.into(),
-        }
+        Self { client, scheme_id: scheme_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -281,11 +268,7 @@ pub struct GetAssociatedProjectsRequest<'a> {
 
 impl<'a> GetAssociatedProjectsRequest<'a> {
     fn new(client: &'a crate::core::Client, scheme_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            scheme_id: scheme_id.into(),
-            expand: None,
-        }
+        Self { client, scheme_id: scheme_id.into(), expand: None }
     }
 
     #[must_use]
@@ -303,9 +286,7 @@ impl<'a> GetAssociatedProjectsRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -335,11 +316,7 @@ impl<'a> AddProjectAssociationsToSchemeRequest<'a> {
         scheme_id: impl Into<String>,
         associate_projects: AssociateProjects,
     ) -> Self {
-        Self {
-            client,
-            scheme_id: scheme_id.into(),
-            associate_projects,
-        }
+        Self { client, scheme_id: scheme_id.into(), associate_projects }
     }
 
     /// The request as the transport will send it.
@@ -383,11 +360,7 @@ impl<'a> SetProjectAssociationsForSchemeRequest<'a> {
         scheme_id: impl Into<String>,
         associate_projects: AssociateProjects,
     ) -> Self {
-        Self {
-            client,
-            scheme_id: scheme_id.into(),
-            associate_projects,
-        }
+        Self { client, scheme_id: scheme_id.into(), associate_projects }
     }
 
     /// The request as the transport will send it.
@@ -426,10 +399,7 @@ pub struct RemoveAllProjectAssociationsRequest<'a> {
 
 impl<'a> RemoveAllProjectAssociationsRequest<'a> {
     fn new(client: &'a crate::core::Client, scheme_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            scheme_id: scheme_id.into(),
-        }
+        Self { client, scheme_id: scheme_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -462,21 +432,14 @@ pub struct RemoveProjectAssociationRequest<'a> {
 
 impl<'a> RemoveProjectAssociationRequest<'a> {
     fn new(client: &'a crate::core::Client, proj_id_or_key: impl Into<String>, scheme_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            proj_id_or_key: proj_id_or_key.into(),
-            scheme_id: scheme_id.into(),
-        }
+        Self { client, proj_id_or_key: proj_id_or_key.into(), scheme_id: scheme_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/api/2/issuetypescheme/{}/associations/{}",
-                self.scheme_id, self.proj_id_or_key
-            ),
+            format!("/rest/api/2/issuetypescheme/{}/associations/{}", self.scheme_id, self.proj_id_or_key),
         );
 
         Ok(config)

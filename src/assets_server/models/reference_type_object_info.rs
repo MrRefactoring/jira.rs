@@ -9,11 +9,7 @@ pub struct ReferenceTypeObjectInfo {
     pub reference_types: Option<Vec<ReferenceType>>,
     #[serde(rename = "objectType", default, skip_serializing_if = "Option::is_none")]
     pub object_type: Option<ObjectType>,
-    #[serde(
-        rename = "numberOfReferencedObjects",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "numberOfReferencedObjects", default, skip_serializing_if = "Option::is_none")]
     pub number_of_referenced_objects: Option<i64>,
     #[serde(rename = "openIssuesExists", default, skip_serializing_if = "Option::is_none")]
     pub open_issues_exists: Option<bool>,

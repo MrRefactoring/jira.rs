@@ -66,14 +66,7 @@ pub struct GetAuditRecordsRequest<'a> {
 
 impl<'a> GetAuditRecordsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            offset: None,
-            limit: None,
-            filter: None,
-            from: None,
-            to: None,
-        }
+        Self { client, offset: None, limit: None, filter: None, from: None, to: None }
     }
 
     /// The number of records to skip before returning the first result.
@@ -122,33 +115,23 @@ impl<'a> GetAuditRecordsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/auditing/record".to_owned());
 
         if let Some(value) = &self.offset {
-            config
-                .query
-                .push(("offset".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("offset".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.limit {
-            config
-                .query
-                .push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.filter {
-            config
-                .query
-                .push(("filter".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("filter".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.from {
-            config
-                .query
-                .push(("from".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("from".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.to {
-            config
-                .query
-                .push(("to".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("to".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

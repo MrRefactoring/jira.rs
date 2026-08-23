@@ -64,11 +64,7 @@ pub struct DeleteApiTokenRequest<'a> {
 
 impl<'a> DeleteApiTokenRequest<'a> {
     fn new(client: &'a crate::core::Client, account_id: AccountId, token_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            account_id,
-            token_id: token_id.into(),
-        }
+        Self { client, account_id, token_id: token_id.into() }
     }
 
     /// The request as the transport will send it.

@@ -61,10 +61,7 @@ pub struct DeleteNodeRequest<'a> {
 
 impl<'a> DeleteNodeRequest<'a> {
     fn new(client: &'a crate::core::Client, node_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            node_id: node_id.into(),
-        }
+        Self { client, node_id: node_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -96,10 +93,7 @@ pub struct ChangeNodeStateToOfflineRequest<'a> {
 
 impl<'a> ChangeNodeStateToOfflineRequest<'a> {
     fn new(client: &'a crate::core::Client, node_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            node_id: node_id.into(),
-        }
+        Self { client, node_id: node_id.into() }
     }
 
     /// The request as the transport will send it.

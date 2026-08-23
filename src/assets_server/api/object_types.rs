@@ -52,11 +52,7 @@ pub struct ChangeOrderObjectTypeRequest<'a> {
 
 impl<'a> ChangeOrderObjectTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, affected_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            affected_id: affected_id.into(),
-            js_tree_position: None,
-        }
+        Self { client, affected_id: affected_id.into(), js_tree_position: None }
     }
 
     #[must_use]
@@ -102,10 +98,7 @@ pub struct CreateObjectTypeRequest<'a> {
 
 impl<'a> CreateObjectTypeRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            object_type_in: None,
-        }
+        Self { client, object_type_in: None }
     }
 
     #[must_use]
@@ -117,10 +110,8 @@ impl<'a> CreateObjectTypeRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            "/rest/assets/1.0/objecttype/create".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/assets/1.0/objecttype/create".to_owned());
 
         let body = match serde_json::to_value(&self.object_type_in)? {
             serde_json::Value::Object(object) => object,
@@ -184,11 +175,7 @@ pub struct UpdateObjectTypeRequest<'a> {
 
 impl<'a> UpdateObjectTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            id: id.into(),
-            body: None,
-        }
+        Self { client, id: id.into(), body: None }
     }
 
     #[must_use]
@@ -345,50 +332,31 @@ impl<'a> FindObjectTypeAttributesRequest<'a> {
         );
 
         if let Some(value) = &self.order_by_required {
-            config.query.push((
-                "orderByRequired".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("orderByRequired".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.order_by_name {
-            config
-                .query
-                .push(("orderByName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("orderByName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.include_children {
-            config.query.push((
-                "includeChildren".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("includeChildren".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.exclude_parent_attributes {
-            config.query.push((
-                "excludeParentAttributes".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("excludeParentAttributes".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.include_value_exist {
-            config.query.push((
-                "includeValueExist".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("includeValueExist".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.only_value_editable {
-            config.query.push((
-                "onlyValueEditable".to_owned(),
-                crate::core::QueryValue::Scalar(value.clone()),
-            ));
+            config.query.push(("onlyValueEditable".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

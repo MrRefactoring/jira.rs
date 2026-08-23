@@ -11,10 +11,6 @@ pub struct AttachmentArchive {
     pub more_available: Option<bool>,
     #[serde(rename = "totalEntryCount", default, skip_serializing_if = "Option::is_none")]
     pub total_entry_count: Option<i64>,
-    #[serde(
-        rename = "totalNumberOfEntriesAvailable",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "totalNumberOfEntriesAvailable", default, skip_serializing_if = "Option::is_none")]
     pub total_number_of_entries_available: Option<i64>,
 }

@@ -28,11 +28,7 @@ pub struct FunctionReferenceData {
     #[serde(rename = "isList", default, skip_serializing_if = "Option::is_none")]
     pub is_list: Option<FunctionReferenceDataIsList>,
     /// Whether the function supports both single and list value operators.
-    #[serde(
-        rename = "supportsListAndSingleValueOperators",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
+    #[serde(rename = "supportsListAndSingleValueOperators", default, skip_serializing_if = "Option::is_none")]
     pub supports_list_and_single_value_operators: Option<FunctionReferenceDataSupportsListAndSingleValueOperators>,
     /// The data types returned by the function.
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -31,10 +31,8 @@ impl<'a> GetIssuesecuritylevelRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/securitylevel/{}", self.id),
-        );
+        let config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/2/securitylevel/{}", self.id));
 
         Ok(config)
     }

@@ -107,13 +107,7 @@ pub struct GetPrecomputationsRequest<'a> {
 
 impl<'a> GetPrecomputationsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            function_key: None,
-            start_at: None,
-            max_results: None,
-            order_by: None,
-        }
+        Self { client, function_key: None, start_at: None, max_results: None, order_by: None }
     }
 
     /// The function key in format:
@@ -164,28 +158,19 @@ impl<'a> GetPrecomputationsRequest<'a> {
         );
 
         if let Some(value) = &self.function_key {
-            config
-                .query
-                .push(("functionKey".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("functionKey".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.order_by {
-            config
-                .query
-                .push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -218,11 +203,7 @@ impl<'a> UpdatePrecomputationsRequest<'a> {
         client: &'a crate::core::Client,
         jql_function_precomputation_update_request: JqlFunctionPrecomputationUpdateRequest,
     ) -> Self {
-        Self {
-            client,
-            jql_function_precomputation_update_request,
-            skip_not_found_precomputations: None,
-        }
+        Self { client, jql_function_precomputation_update_request, skip_not_found_precomputations: None }
     }
 
     #[must_use]
@@ -240,10 +221,9 @@ impl<'a> UpdatePrecomputationsRequest<'a> {
         );
 
         if let Some(value) = &self.skip_not_found_precomputations {
-            config.query.push((
-                "skipNotFoundPrecomputations".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config
+                .query
+                .push(("skipNotFoundPrecomputations".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         let body = match serde_json::to_value(&self.jql_function_precomputation_update_request)? {
@@ -283,11 +263,7 @@ impl<'a> GetPrecomputationsByIDRequest<'a> {
         client: &'a crate::core::Client,
         jql_function_precomputation_get_by_id_request: JqlFunctionPrecomputationGetByIdRequest,
     ) -> Self {
-        Self {
-            client,
-            jql_function_precomputation_get_by_id_request,
-            order_by: None,
-        }
+        Self { client, jql_function_precomputation_get_by_id_request, order_by: None }
     }
 
     /// [Order](#ordering) the results by a field:
@@ -311,9 +287,7 @@ impl<'a> GetPrecomputationsByIDRequest<'a> {
         );
 
         if let Some(value) = &self.order_by {
-            config
-                .query
-                .push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         let body = match serde_json::to_value(&self.jql_function_precomputation_get_by_id_request)? {

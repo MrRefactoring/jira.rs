@@ -195,15 +195,7 @@ pub struct GetIssueTypeScreenSchemesRequest<'a> {
 
 impl<'a> GetIssueTypeScreenSchemesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start_at: None,
-            max_results: None,
-            id: None,
-            query_string: None,
-            order_by: None,
-            expand: None,
-        }
+        Self { client, start_at: None, max_results: None, id: None, query_string: None, order_by: None, expand: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -263,40 +255,27 @@ impl<'a> GetIssueTypeScreenSchemesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/issuetypescreenscheme".to_owned());
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.id {
-            config
-                .query
-                .push(("id".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("id".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.query_string {
-            config
-                .query
-                .push(("queryString".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("queryString".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.order_by {
-            config
-                .query
-                .push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.expand {
-            config
-                .query
-                .push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -323,18 +302,13 @@ pub struct CreateIssueTypeScreenSchemeRequest<'a> {
 
 impl<'a> CreateIssueTypeScreenSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_type_screen_scheme_details: IssueTypeScreenSchemeDetails) -> Self {
-        Self {
-            client,
-            issue_type_screen_scheme_details,
-        }
+        Self { client, issue_type_screen_scheme_details }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            "/rest/api/3/issuetypescreenscheme".to_owned(),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/issuetypescreenscheme".to_owned());
 
         let body = match serde_json::to_value(&self.issue_type_screen_scheme_details)? {
             serde_json::Value::Object(object) => object,
@@ -371,12 +345,7 @@ pub struct GetIssueTypeScreenSchemeMappingsRequest<'a> {
 
 impl<'a> GetIssueTypeScreenSchemeMappingsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            start_at: None,
-            max_results: None,
-            issue_type_screen_scheme_id: None,
-        }
+        Self { client, start_at: None, max_results: None, issue_type_screen_scheme_id: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -411,23 +380,17 @@ impl<'a> GetIssueTypeScreenSchemeMappingsRequest<'a> {
         );
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.issue_type_screen_scheme_id {
-            config.query.push((
-                "issueTypeScreenSchemeId".to_owned(),
-                crate::core::QueryValue::from_serializable(value)?,
-            ));
+            config
+                .query
+                .push(("issueTypeScreenSchemeId".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -458,12 +421,7 @@ pub struct GetIssueTypeScreenSchemeProjectAssociationsRequest<'a> {
 
 impl<'a> GetIssueTypeScreenSchemeProjectAssociationsRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id: impl IntoIterator<Item = i64>) -> Self {
-        Self {
-            client,
-            project_id: project_id.into_iter().collect(),
-            start_at: None,
-            max_results: None,
-        }
+        Self { client, project_id: project_id.into_iter().collect(), start_at: None, max_results: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -490,22 +448,14 @@ impl<'a> GetIssueTypeScreenSchemeProjectAssociationsRequest<'a> {
         );
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
-        config.query.push((
-            "projectId".to_owned(),
-            crate::core::QueryValue::from_serializable(&self.project_id)?,
-        ));
+        config.query.push(("projectId".to_owned(), crate::core::QueryValue::from_serializable(&self.project_id)?));
 
         Ok(config)
     }
@@ -536,10 +486,7 @@ impl<'a> AssignIssueTypeScreenSchemeToProjectRequest<'a> {
         client: &'a crate::core::Client,
         issue_type_screen_scheme_project_association: IssueTypeScreenSchemeProjectAssociation,
     ) -> Self {
-        Self {
-            client,
-            issue_type_screen_scheme_project_association,
-        }
+        Self { client, issue_type_screen_scheme_project_association }
     }
 
     /// The request as the transport will send it.
@@ -630,10 +577,7 @@ pub struct DeleteIssueTypeScreenSchemeRequest<'a> {
 
 impl<'a> DeleteIssueTypeScreenSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_type_screen_scheme_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_type_screen_scheme_id: issue_type_screen_scheme_id.into(),
-        }
+        Self { client, issue_type_screen_scheme_id: issue_type_screen_scheme_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -683,10 +627,7 @@ impl<'a> AppendMappingsForIssueTypeScreenSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/api/3/issuetypescreenscheme/{}/mapping",
-                self.issue_type_screen_scheme_id
-            ),
+            format!("/rest/api/3/issuetypescreenscheme/{}/mapping", self.issue_type_screen_scheme_id),
         );
 
         let body = match serde_json::to_value(&self.issue_type_screen_scheme_mapping_details)? {
@@ -725,21 +666,14 @@ impl<'a> UpdateDefaultScreenSchemeRequest<'a> {
         issue_type_screen_scheme_id: impl Into<String>,
         update_default_screen_scheme: UpdateDefaultScreenScheme,
     ) -> Self {
-        Self {
-            client,
-            issue_type_screen_scheme_id: issue_type_screen_scheme_id.into(),
-            update_default_screen_scheme,
-        }
+        Self { client, issue_type_screen_scheme_id: issue_type_screen_scheme_id.into(), update_default_screen_scheme }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!(
-                "/rest/api/3/issuetypescreenscheme/{}/mapping/default",
-                self.issue_type_screen_scheme_id
-            ),
+            format!("/rest/api/3/issuetypescreenscheme/{}/mapping/default", self.issue_type_screen_scheme_id),
         );
 
         let body = match serde_json::to_value(&self.update_default_screen_scheme)? {
@@ -778,21 +712,14 @@ impl<'a> RemoveMappingsFromIssueTypeScreenSchemeRequest<'a> {
         issue_type_screen_scheme_id: impl Into<String>,
         issue_type_ids: IssueTypeIds,
     ) -> Self {
-        Self {
-            client,
-            issue_type_screen_scheme_id: issue_type_screen_scheme_id.into(),
-            issue_type_ids,
-        }
+        Self { client, issue_type_screen_scheme_id: issue_type_screen_scheme_id.into(), issue_type_ids }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!(
-                "/rest/api/3/issuetypescreenscheme/{}/mapping/remove",
-                self.issue_type_screen_scheme_id
-            ),
+            format!("/rest/api/3/issuetypescreenscheme/{}/mapping/remove", self.issue_type_screen_scheme_id),
         );
 
         let body = match serde_json::to_value(&self.issue_type_ids)? {
@@ -831,13 +758,7 @@ pub struct GetProjectsForIssueTypeScreenSchemeRequest<'a> {
 
 impl<'a> GetProjectsForIssueTypeScreenSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_type_screen_scheme_id: i64) -> Self {
-        Self {
-            client,
-            issue_type_screen_scheme_id,
-            start_at: None,
-            max_results: None,
-            query: None,
-        }
+        Self { client, issue_type_screen_scheme_id, start_at: None, max_results: None, query: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -867,29 +788,19 @@ impl<'a> GetProjectsForIssueTypeScreenSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/3/issuetypescreenscheme/{}/project",
-                self.issue_type_screen_scheme_id
-            ),
+            format!("/rest/api/3/issuetypescreenscheme/{}/project", self.issue_type_screen_scheme_id),
         );
 
         if let Some(value) = &self.start_at {
-            config
-                .query
-                .push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push((
-                "maxResults".to_owned(),
-                crate::core::QueryValue::Scalar(value.to_string()),
-            ));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.query {
-            config
-                .query
-                .push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

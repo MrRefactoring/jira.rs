@@ -89,10 +89,7 @@ pub struct CreateProjectCategoryRequest<'a> {
 
 impl<'a> CreateProjectCategoryRequest<'a> {
     fn new(client: &'a crate::core::Client, project_category: ProjectCategory) -> Self {
-        Self {
-            client,
-            project_category,
-        }
+        Self { client, project_category }
     }
 
     /// The request as the transport will send it.

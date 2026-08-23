@@ -45,11 +45,7 @@ pub struct GetDomainsRequest<'a> {
 
 impl<'a> GetDomainsRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            cursor: None,
-        }
+        Self { client, org_id: org_id.into(), cursor: None }
     }
 
     /// Sets the starting point for the page of results to return.
@@ -68,9 +64,7 @@ impl<'a> GetDomainsRequest<'a> {
         );
 
         if let Some(value) = &self.cursor {
-            config
-                .query
-                .push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -99,11 +93,7 @@ pub struct GetDomainByIdRequest<'a> {
 
 impl<'a> GetDomainByIdRequest<'a> {
     fn new(client: &'a crate::core::Client, org_id: impl Into<String>, domain_id: impl Into<String>) -> Self {
-        Self {
-            client,
-            org_id: org_id.into(),
-            domain_id: domain_id.into(),
-        }
+        Self { client, org_id: org_id.into(), domain_id: domain_id.into() }
     }
 
     /// The request as the transport will send it.
