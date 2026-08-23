@@ -449,6 +449,34 @@ impl<'a> AddCommentRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<Comment> {
+        // A plain string is wiki markup, which v3 cannot read. v2 takes it, converts it, and the re-read
+        // below hands the caller the document v3 made of it.
+        if let Some(CommentInputBody::Variant1(markup)) = &self.comment_input.body {
+            let mut write = crate::core::RequestConfig::new(
+                crate::core::Method::POST,
+                format!("/rest/api/2/issue/{}/comment", self.issue_id_or_key),
+            );
+
+            write.body = Some(crate::core::Body::Json(serde_json::json!({
+                "body": markup,
+                "visibility": self.comment_input.visibility,
+            })));
+
+            let created: serde_json::Value = self.client.send(&write).await?;
+            let id = created["id"].as_str().unwrap_or_default().to_owned();
+
+            let mut read = crate::core::RequestConfig::new(
+                crate::core::Method::GET,
+                format!("/rest/api/3/issue/{}/comment/{}", self.issue_id_or_key, id),
+            );
+
+            if let Some(expand) = &self.expand {
+                read.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(expand)?));
+            }
+
+            return self.client.send(&read).await;
+        }
+
         self.client.send(&self.config()?).await
     }
 
@@ -602,6 +630,31 @@ impl<'a> UpdateCommentRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<Comment> {
+        if let Some(CommentInputBody::Variant1(markup)) = &self.body.body {
+            let mut write = crate::core::RequestConfig::new(
+                crate::core::Method::PUT,
+                format!("/rest/api/2/issue/{}/comment/{}", self.issue_id_or_key, self.id),
+            );
+
+            write.body = Some(crate::core::Body::Json(serde_json::json!({
+                "body": markup,
+                "visibility": self.body.visibility,
+            })));
+
+            self.client.send_empty(&write).await?;
+
+            let mut read = crate::core::RequestConfig::new(
+                crate::core::Method::GET,
+                format!("/rest/api/3/issue/{}/comment/{}", self.issue_id_or_key, self.id),
+            );
+
+            if let Some(expand) = &self.expand {
+                read.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(expand)?));
+            }
+
+            return self.client.send(&read).await;
+        }
+
         self.client.send(&self.config()?).await
     }
 

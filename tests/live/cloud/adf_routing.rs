@@ -203,3 +203,41 @@ async fn accepts_a_document_as_a_description_at_issue_creation() {
 
     tracker.cleanup().await;
 }
+
+/// Wiki markup, written as a plain string, comes back as the document Jira made of it.
+///
+/// Jira v3 accepts only Atlassian Document Format in rich-text fields, and answers a string with a 400. Rather than
+/// parse `h2.` and `*bold*` here — a markup parser inside an API client is a liability — a string body is sent to the
+/// v2 twin of the endpoint, which converts it server-side, and the result is read back through v3. What this proves
+/// is that the conversion happens at all and that the caller still receives ADF.
+#[tokio::test]
+#[ignore = "live: needs a Jira site"]
+async fn converts_wiki_markup_written_as_a_string_into_a_document() {
+    let mut tracker = ResourceTracker::new();
+    let issue = create_test_issue(&mut tracker, Some(&test_name("markup"))).await;
+
+    let comment = cloud()
+        .issue_comments()
+        .add_comment(
+            &issue.key,
+            CommentInput {
+                body: Some(CommentInputBody::Variant1("h2. Heading\n\n*bold* and _italic_".to_owned())),
+                ..CommentInput::default()
+            },
+        )
+        .send()
+        .await
+        .expect("a comment written as wiki markup is accepted");
+
+    // The declared return type is already a document: what the re-read buys is that it holds one at all rather
+    // than the string that was written.
+    let document = comment.body.expect("a comment written through v2 reads back as a document");
+
+    let rendered = serde_json::to_string(&document).expect("a document serializes");
+
+    assert!(rendered.contains("\"heading\""), "`h2.` became a heading: {rendered}");
+    assert!(rendered.contains("\"strong\""), "`*bold*` became a strong mark: {rendered}");
+    assert!(rendered.contains("\"em\""), "`_italic_` became an emphasis mark: {rendered}");
+
+    tracker.cleanup().await;
+}

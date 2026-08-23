@@ -572,6 +572,35 @@ impl<'a> AddWorklogRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<Worklog> {
+        if let Some(WorklogInputComment::Variant1(markup)) = &self.worklog_input.comment {
+            let mut write = crate::core::RequestConfig::new(
+                crate::core::Method::POST,
+                format!("/rest/api/2/issue/{}/worklog", self.issue_id_or_key),
+            );
+
+            write.body = Some(crate::core::Body::Json(serde_json::json!({
+                "comment": markup,
+                "started": self.worklog_input.started,
+                "timeSpent": self.worklog_input.time_spent,
+                "timeSpentSeconds": self.worklog_input.time_spent_seconds,
+                "visibility": self.worklog_input.visibility,
+            })));
+
+            let created: serde_json::Value = self.client.send(&write).await?;
+            let id = created["id"].as_str().unwrap_or_default().to_owned();
+
+            let mut read = crate::core::RequestConfig::new(
+                crate::core::Method::GET,
+                format!("/rest/api/3/issue/{}/worklog/{}", self.issue_id_or_key, id),
+            );
+
+            if let Some(expand) = &self.expand {
+                read.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(expand)?));
+            }
+
+            return self.client.send(&read).await;
+        }
+
         self.client.send(&self.config()?).await
     }
 
@@ -761,6 +790,34 @@ impl<'a> UpdateWorklogRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<Worklog> {
+        if let Some(WorklogInputComment::Variant1(markup)) = &self.body.comment {
+            let mut write = crate::core::RequestConfig::new(
+                crate::core::Method::PUT,
+                format!("/rest/api/2/issue/{}/worklog/{}", self.issue_id_or_key, self.id),
+            );
+
+            write.body = Some(crate::core::Body::Json(serde_json::json!({
+                "comment": markup,
+                "started": self.body.started,
+                "timeSpent": self.body.time_spent,
+                "timeSpentSeconds": self.body.time_spent_seconds,
+                "visibility": self.body.visibility,
+            })));
+
+            self.client.send_empty(&write).await?;
+
+            let mut read = crate::core::RequestConfig::new(
+                crate::core::Method::GET,
+                format!("/rest/api/3/issue/{}/worklog/{}", self.issue_id_or_key, self.id),
+            );
+
+            if let Some(expand) = &self.expand {
+                read.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(expand)?));
+            }
+
+            return self.client.send(&read).await;
+        }
+
         self.client.send(&self.config()?).await
     }
 

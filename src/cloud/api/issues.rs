@@ -457,6 +457,19 @@ impl<'a> CreateIssueRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<CreatedIssue> {
+        let described_in_markup = self.issue_update_details.fields.as_ref().is_some_and(|fields| {
+            matches!(fields.get("description"), Some(serde_json::Value::String(_)))
+                || matches!(fields.get("environment"), Some(serde_json::Value::String(_)))
+        });
+
+        if described_in_markup {
+            let mut write = self.config()?;
+
+            write.url = "/rest/api/2/issue".to_owned();
+
+            return self.client.send(&write).await;
+        }
+
         self.client.send(&self.config()?).await
     }
 
