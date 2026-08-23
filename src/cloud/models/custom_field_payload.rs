@@ -6,18 +6,18 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The strategy to use when there is a conflict with an existing custom field. FAIL - Fail execution, this always needs to be unique; USE - Use the existing entity and ignore new entity parameters
     pub enum CustomFieldPayloadOnConflict {
-        FAIL => "FAIL",
-        USE => "USE",
-        NEW => "NEW",
+        Fail => "FAIL",
+        Use => "USE",
+        New => "NEW",
     }
 }
 
 crate::open_enum! {
     /// Allows an overwrite to declare the new Custom Field to be created as a GLOBAL-scoped field. Leave this as empty or null to use the project's default scope.
     pub enum CustomFieldPayloadScope {
-        GLOBAL => "GLOBAL",
-        TEMPLATE => "TEMPLATE",
-        PROJECT => "PROJECT",
+        Global => "GLOBAL",
+        Template => "TEMPLATE",
+        Project => "PROJECT",
     }
 }
 

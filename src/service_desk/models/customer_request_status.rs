@@ -6,10 +6,10 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// Status category the status belongs to.
     pub enum CustomerRequestStatusStatusCategory {
-        UNDEFINED => "UNDEFINED",
-        NEW => "NEW",
-        INDETERMINATE => "INDETERMINATE",
-        DONE => "DONE",
+        Undefined => "UNDEFINED",
+        New => "NEW",
+        Indeterminate => "INDETERMINATE",
+        Done => "DONE",
     }
 }
 

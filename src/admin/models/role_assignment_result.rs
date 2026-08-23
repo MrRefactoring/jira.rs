@@ -5,8 +5,8 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The status of the role assignment attempt.
     pub enum RoleAssignmentResultStatus {
-        INVITED => "INVITED",
-        ERROR => "ERROR",
+        Invited => "INVITED",
+        Error => "ERROR",
     }
 }
 

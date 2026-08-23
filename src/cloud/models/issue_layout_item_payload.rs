@@ -15,7 +15,7 @@ crate::open_enum! {
 crate::open_enum! {
     /// The item type. Currently only support FIELD
     pub enum IssueLayoutItemPayloadType {
-        FIELD => "FIELD",
+        Field => "FIELD",
     }
 }
 

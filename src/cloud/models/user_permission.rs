@@ -5,8 +5,8 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The type of the permission.
     pub enum UserPermissionType {
-        GLOBAL => "GLOBAL",
-        PROJECT => "PROJECT",
+        Global => "GLOBAL",
+        Project => "PROJECT",
     }
 }
 

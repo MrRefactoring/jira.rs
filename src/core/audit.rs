@@ -58,7 +58,9 @@ fn record(entry: SchemaDrift) {
 }
 
 fn append_to_output(entry: &SchemaDrift) {
-    let Ok(path) = std::env::var(OUTPUT_VARIABLE) else { return };
+    let Ok(path) = std::env::var(OUTPUT_VARIABLE) else {
+        return;
+    };
     let Ok(line) = serde_json::to_string(entry) else { return };
     let opened = std::fs::OpenOptions::new().create(true).append(true).open(path);
 

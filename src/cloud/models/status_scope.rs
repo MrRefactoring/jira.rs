@@ -6,8 +6,8 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The scope of the status. `GLOBAL` for company-managed projects and `PROJECT` for team-managed projects.
     pub enum StatusScopeType {
-        PROJECT => "PROJECT",
-        GLOBAL => "GLOBAL",
+        Project => "PROJECT",
+        Global => "GLOBAL",
     }
 }
 

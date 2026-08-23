@@ -5,9 +5,9 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum RedactionJobStatusResponseJobStatus {
-        PENDING => "PENDING",
-        INPROGRESS => "IN_PROGRESS",
-        COMPLETED => "COMPLETED",
+        Pending => "PENDING",
+        InProgress => "IN_PROGRESS",
+        Completed => "COMPLETED",
     }
 }
 

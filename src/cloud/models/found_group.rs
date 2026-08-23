@@ -10,10 +10,10 @@ crate::open_enum! {
     /// \* team-members - managed by existing team members, new members need to be invited to join.
     /// \* open - anyone can join or modify this team.
     pub enum FoundGroupManagedBy {
-        EXTERNAL => "EXTERNAL",
-        ADMINS => "ADMINS",
-        TEAMMEMBERS => "TEAM_MEMBERS",
-        OPEN => "OPEN",
+        External => "EXTERNAL",
+        Admins => "ADMINS",
+        TeamMembers => "TEAM_MEMBERS",
+        Open => "OPEN",
     }
 }
 
@@ -23,9 +23,9 @@ crate::open_enum! {
     /// \* userbase-group - a group of users created in adminhub.
     /// \* admin-oversight - currently unused.
     pub enum FoundGroupUsageType {
-        USERBASEGROUP => "USERBASE_GROUP",
-        TEAMCOLLABORATION => "TEAM_COLLABORATION",
-        ADMINOVERSIGHT => "ADMIN_OVERSIGHT",
+        UserbaseGroup => "USERBASE_GROUP",
+        TeamCollaboration => "TEAM_COLLABORATION",
+        AdminOversight => "ADMIN_OVERSIGHT",
     }
 }
 

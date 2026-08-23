@@ -4,18 +4,18 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum ReindexRequestStatus {
-        PENDING => "PENDING",
-        ACTIVE => "ACTIVE",
-        RUNNING => "RUNNING",
-        FAILED => "FAILED",
-        COMPLETE => "COMPLETE",
+        Pending => "PENDING",
+        Active => "ACTIVE",
+        Running => "RUNNING",
+        Failed => "FAILED",
+        Complete => "COMPLETE",
     }
 }
 
 crate::open_enum! {
     pub enum ReindexRequestType {
-        IMMEDIATE => "IMMEDIATE",
-        DELAYED => "DELAYED",
+        Immediate => "IMMEDIATE",
+        Delayed => "DELAYED",
     }
 }
 

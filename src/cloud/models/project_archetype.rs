@@ -4,12 +4,12 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum ProjectArchetypeRealType {
-        BUSINESS => "BUSINESS",
-        SOFTWARE => "SOFTWARE",
-        PRODUCTDISCOVERY => "PRODUCT_DISCOVERY",
-        SERVICEDESK => "SERVICE_DESK",
-        CUSTOMERSERVICE => "CUSTOMER_SERVICE",
-        OPS => "OPS",
+        Business => "BUSINESS",
+        Software => "SOFTWARE",
+        ProductDiscovery => "PRODUCT_DISCOVERY",
+        ServiceDesk => "SERVICE_DESK",
+        CustomerService => "CUSTOMER_SERVICE",
+        Ops => "OPS",
     }
 }
 
@@ -22,12 +22,12 @@ crate::open_enum! {
 
 crate::open_enum! {
     pub enum ProjectArchetypeType {
-        BUSINESS => "BUSINESS",
-        SOFTWARE => "SOFTWARE",
-        PRODUCTDISCOVERY => "PRODUCT_DISCOVERY",
-        SERVICEDESK => "SERVICE_DESK",
-        CUSTOMERSERVICE => "CUSTOMER_SERVICE",
-        OPS => "OPS",
+        Business => "BUSINESS",
+        Software => "SOFTWARE",
+        ProductDiscovery => "PRODUCT_DISCOVERY",
+        ServiceDesk => "SERVICE_DESK",
+        CustomerService => "CUSTOMER_SERVICE",
+        Ops => "OPS",
     }
 }
 

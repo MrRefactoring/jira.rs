@@ -15,19 +15,19 @@ crate::open_enum! {
 crate::open_enum! {
     /// The lifecycle status of the account
     pub enum UsersSearchRequestAccountStatuses {
-        ACTIVE => "ACTIVE",
-        INACTIVE => "INACTIVE",
+        Active => "ACTIVE",
+        Inactive => "INACTIVE",
     }
 }
 
 crate::open_enum! {
     /// Indicates the user information fields to include in the response. If unspecified, the response defaults to including only the accountId, accountType, and accountStatus fields.
     pub enum UsersSearchRequestExpand {
-        NAME => "NAME",
-        EMAIL => "EMAIL",
-        EMAILVERIFIED => "EMAIL_VERIFIED",
-        PRODUCTLASTACCESS => "PRODUCT_LAST_ACCESS",
-        GROUPS => "GROUPS",
+        Name => "NAME",
+        Email => "EMAIL",
+        EmailVerified => "EMAIL_VERIFIED",
+        ProductLastAccess => "PRODUCT_LAST_ACCESS",
+        Groups => "GROUPS",
     }
 }
 

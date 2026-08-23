@@ -17,17 +17,17 @@ crate::open_enum! {
 crate::open_enum! {
     /// Configuration status type - whether the import source is enabled or disabled
     pub enum ImportSourceResponseImportStatusConfigurationStatusType {
-        DISABLED => "DISABLED",
-        ENABLED => "ENABLED",
+        Disabled => "DISABLED",
+        Enabled => "ENABLED",
     }
 }
 
 crate::open_enum! {
     /// Validation status type - system-evaluated status (not user-changeable)
     pub enum ImportSourceResponseImportStatusValidationStatusType {
-        VALID => "VALID",
-        INVALIDCONFIGURATION => "INVALID_CONFIGURATION",
-        MODULEUNINSTALLED => "MODULE_UNINSTALLED",
+        Valid => "VALID",
+        InvalidConfiguration => "INVALID_CONFIGURATION",
+        ModuleUninstalled => "MODULE_UNINSTALLED",
     }
 }
 
@@ -71,17 +71,17 @@ pub struct ImportSourceResponseImportSourceOTEntriesObjectType {
 crate::open_enum! {
     /// Configuration status type
     pub enum ImportSourceResponseImportSourceOTEntriesImportStatusConfigurationStatusType {
-        DISABLED => "DISABLED",
-        ENABLED => "ENABLED",
+        Disabled => "DISABLED",
+        Enabled => "ENABLED",
     }
 }
 
 crate::open_enum! {
     /// Validation status type
     pub enum ImportSourceResponseImportSourceOTEntriesImportStatusValidationStatusType {
-        VALID => "VALID",
-        INVALIDCONFIGURATION => "INVALID_CONFIGURATION",
-        MODULEUNINSTALLED => "MODULE_UNINSTALLED",
+        Valid => "VALID",
+        InvalidConfiguration => "INVALID_CONFIGURATION",
+        ModuleUninstalled => "MODULE_UNINSTALLED",
     }
 }
 

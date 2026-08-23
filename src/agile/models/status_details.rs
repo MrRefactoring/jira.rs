@@ -75,8 +75,8 @@ pub struct StatusDetailsScopeProject {
 crate::open_enum! {
     /// The type of scope.
     pub enum StatusDetailsScopeType {
-        PROJECT => "PROJECT",
-        TEMPLATE => "TEMPLATE",
+        Project => "PROJECT",
+        Template => "TEMPLATE",
     }
 }
 

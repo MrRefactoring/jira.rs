@@ -4,11 +4,11 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum NodeState {
-        ACTIVE => "ACTIVE",
-        PASSIVE => "PASSIVE",
-        ACTIVATING => "ACTIVATING",
-        PASSIVATING => "PASSIVATING",
-        OFFLINE => "OFFLINE",
+        Active => "ACTIVE",
+        Passive => "PASSIVE",
+        Activating => "ACTIVATING",
+        Passivating => "PASSIVATING",
+        Offline => "OFFLINE",
     }
 }
 

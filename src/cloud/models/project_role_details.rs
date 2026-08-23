@@ -6,9 +6,9 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The type of the project role. This is "DEFAULT" or "GUEST\_ROLE".
     pub enum ProjectRoleDetailsType {
-        DEFAULT => "DEFAULT",
-        GUESTROLE => "GUEST_ROLE",
-        AIAGENTROLE => "AI_AGENT_ROLE",
+        Default => "DEFAULT",
+        GuestRole => "GUEST_ROLE",
+        AiAgentRole => "AI_AGENT_ROLE",
     }
 }
 

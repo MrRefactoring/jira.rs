@@ -4,9 +4,9 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum DefaultShareScopeScope {
-        GLOBAL => "GLOBAL",
-        AUTHENTICATED => "AUTHENTICATED",
-        PRIVATE => "PRIVATE",
+        Global => "GLOBAL",
+        Authenticated => "AUTHENTICATED",
+        Private => "PRIVATE",
     }
 }
 

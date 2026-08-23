@@ -6,9 +6,9 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The strategy to use when there is a conflict with an existing permission scheme. FAIL - Fail execution, this always needs to be unique; USE - Use the existing entity and ignore new entity parameters; NEW - If the entity exist, try and create a new one with a different name
     pub enum PermissionPayloadDTOOnConflict {
-        FAIL => "FAIL",
-        USE => "USE",
-        NEW => "NEW",
+        Fail => "FAIL",
+        Use => "USE",
+        New => "NEW",
     }
 }
 

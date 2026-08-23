@@ -5,10 +5,10 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum ComponentAssigneeType {
-        PROJECTDEFAULT => "PROJECT_DEFAULT",
-        COMPONENTLEAD => "COMPONENT_LEAD",
-        PROJECTLEAD => "PROJECT_LEAD",
-        UNASSIGNED => "UNASSIGNED",
+        ProjectDefault => "PROJECT_DEFAULT",
+        ComponentLead => "COMPONENT_LEAD",
+        ProjectLead => "PROJECT_LEAD",
+        Unassigned => "UNASSIGNED",
     }
 }
 

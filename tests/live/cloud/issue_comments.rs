@@ -14,7 +14,10 @@ use jira::cloud::{
 use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, document_of, test_name};
 
 fn comment_of(text: &str) -> CommentInput {
-    CommentInput { body: Some(CommentInputBody::Document(document_of(text))), ..CommentInput::default() }
+    CommentInput {
+        body: Some(CommentInputBody::Document(document_of(text))),
+        ..CommentInput::default()
+    }
 }
 
 fn body_text(comment: &Comment) -> String {
@@ -22,7 +25,11 @@ fn body_text(comment: &Comment) -> String {
 }
 
 fn comment_ids(page: &PageOfComments) -> Vec<String> {
-    page.comments.iter().flatten().filter_map(|comment| comment.id.clone()).collect()
+    page.comments
+        .iter()
+        .flatten()
+        .filter_map(|comment| comment.id.clone())
+        .collect()
 }
 
 /// Adds a comment to the issue and registers its deletion.
@@ -56,34 +63,60 @@ async fn walks_a_comment_through_its_lifecycle() {
     let mut tracker = ResourceTracker::new();
     let issue = create_test_issue(&mut tracker, Some(&test_name("comments"))).await;
 
-    let empty = cloud().issue_comments().get_comments(&issue.key).send().await.expect("a fresh issue lists comments");
+    let empty = cloud()
+        .issue_comments()
+        .get_comments(&issue.key)
+        .send()
+        .await
+        .expect("a fresh issue lists comments");
 
     assert_eq!(empty.total, Some(0));
-    assert!(empty.comments.is_none_or(|comments| comments.is_empty()), "a fresh issue carries no comments");
+    assert!(
+        empty.comments.is_none_or(|comments| comments.is_empty()),
+        "a fresh issue carries no comments"
+    );
 
     let created = add_comment(&mut tracker, &issue.key, "first comment").await;
     let comment_id = created.id.clone().expect("a created comment carries an id");
 
-    assert!(comment_id.chars().all(|character| character.is_ascii_digit()), "an id is digits: {comment_id}");
+    assert!(
+        comment_id.chars().all(|character| character.is_ascii_digit()),
+        "an id is digits: {comment_id}"
+    );
     assert!(
         created.self_.as_deref().is_some_and(|url| url.starts_with("https://")),
         "a comment carries its own URL: {:?}",
         created.self_,
     );
     assert!(
-        created.author.as_ref().and_then(|author| author.account_id.as_deref()).is_some_and(|id| !id.is_empty()),
+        created
+            .author
+            .as_ref()
+            .and_then(|author| author.account_id.as_deref())
+            .is_some_and(|id| !id.is_empty()),
         "a comment carries the account that wrote it",
     );
 
     let body = created.body.as_ref().expect("a comment carries a document body");
 
     assert_eq!(body.r#type, DocumentType::Doc);
-    assert!((body.version - 1.0).abs() < f64::EPSILON, "the body is version 1 ADF, got {}", body.version);
+    assert!(
+        (body.version - 1.0).abs() < f64::EPSILON,
+        "the body is version 1 ADF, got {}",
+        body.version
+    );
 
     let created_at = created.created.clone().expect("a comment carries a creation timestamp");
 
-    assert!(created_at.contains('T'), "a timestamp is an ISO 8601 instant: {created_at}");
-    assert_eq!(created.updated.as_deref(), Some(created_at.as_str()), "a fresh comment was never updated");
+    assert!(
+        created_at.contains('T'),
+        "a timestamp is an ISO 8601 instant: {created_at}"
+    );
+    assert_eq!(
+        created.updated.as_deref(),
+        Some(created_at.as_str()),
+        "a fresh comment was never updated"
+    );
 
     let fetched = cloud()
         .issue_comments()
@@ -103,9 +136,15 @@ async fn walks_a_comment_through_its_lifecycle() {
         .expect("the comment body can be replaced");
 
     assert!(body_text(&edited).contains("edited comment"), "{}", body_text(&edited));
-    assert!(!body_text(&edited).contains("first comment"), "an update replaces the body rather than appending to it");
+    assert!(
+        !body_text(&edited).contains("first comment"),
+        "an update replaces the body rather than appending to it"
+    );
     // Timestamps within one response carry the same UTC offset, so lexicographic order is chronological order.
-    assert!(edited.updated.as_deref() > Some(created_at.as_str()), "the edit moves `updated` past `created`");
+    assert!(
+        edited.updated.as_deref() > Some(created_at.as_str()),
+        "the edit moves `updated` past `created`"
+    );
 
     cloud()
         .issue_comments()
@@ -123,11 +162,18 @@ async fn walks_a_comment_through_its_lifecycle() {
 
     assert!(error.is_not_found(), "{error}");
 
-    let remaining =
-        cloud().issue_comments().get_comments(&issue.key).send().await.expect("the listing reads after a delete");
+    let remaining = cloud()
+        .issue_comments()
+        .get_comments(&issue.key)
+        .send()
+        .await
+        .expect("the listing reads after a delete");
 
     assert_eq!(remaining.total, Some(0));
-    assert!(!comment_ids(&remaining).contains(&comment_id), "the deleted comment is gone from the listing");
+    assert!(
+        !comment_ids(&remaining).contains(&comment_id),
+        "the deleted comment is gone from the listing"
+    );
 
     tracker.cleanup().await;
 }
@@ -151,12 +197,17 @@ async fn renders_the_body_as_html_only_when_expand_asks() {
     let rendered = cloud()
         .issue_comments()
         .get_comment(&issue.key, &comment_id)
-        .expand(GetCommentRequestExpand::Variant2(GetCommentRequestExpandVariant2::RenderedBody))
+        .expand(GetCommentRequestExpand::Variant2(
+            GetCommentRequestExpandVariant2::RenderedBody,
+        ))
         .send()
         .await
         .expect("`expand=renderedBody` is accepted");
 
-    assert!(plain.rendered_body.is_none(), "the body is not rendered unless asked for");
+    assert!(
+        plain.rendered_body.is_none(),
+        "the body is not rendered unless asked for"
+    );
 
     let html = rendered.rendered_body.expect("`expand=renderedBody` renders the body");
 
@@ -176,7 +227,12 @@ async fn pages_and_orders_the_comment_list() {
         add_comment(&mut tracker, &issue.key, text).await;
     }
 
-    let all = cloud().issue_comments().get_comments(&issue.key).send().await.expect("the comments list");
+    let all = cloud()
+        .issue_comments()
+        .get_comments(&issue.key)
+        .send()
+        .await
+        .expect("the comments list");
 
     assert_eq!(all.total, Some(3));
 
@@ -191,8 +247,13 @@ async fn pages_and_orders_the_comment_list() {
     assert_eq!(first_page.comments.as_ref().map(Vec::len), Some(2));
     assert_eq!(first_page.max_results, Some(2));
 
-    let second_page =
-        cloud().issue_comments().get_comments(&issue.key).start_at(2).send().await.expect("`startAt` is accepted");
+    let second_page = cloud()
+        .issue_comments()
+        .get_comments(&issue.key)
+        .start_at(2)
+        .send()
+        .await
+        .expect("`startAt` is accepted");
 
     assert_eq!(second_page.start_at, Some(2));
     assert_eq!(second_page.comments.as_ref().map(Vec::len), Some(1));
@@ -208,7 +269,11 @@ async fn pages_and_orders_the_comment_list() {
     let mut reversed = comment_ids(&all);
     reversed.reverse();
 
-    assert_eq!(comment_ids(&descending), reversed, "`-created` is the default listing reversed");
+    assert_eq!(
+        comment_ids(&descending),
+        reversed,
+        "`-created` is the default listing reversed"
+    );
 
     tracker.cleanup().await;
 }
@@ -223,9 +288,17 @@ async fn fetches_comments_by_id_in_one_call() {
         add_comment(&mut tracker, &issue.key, text).await;
     }
 
-    let listing = cloud().issue_comments().get_comments(&issue.key).send().await.expect("the comments list");
+    let listing = cloud()
+        .issue_comments()
+        .get_comments(&issue.key)
+        .send()
+        .await
+        .expect("the comments list");
     let mut expected = comment_ids(&listing);
-    let ids = expected.iter().map(|id| id.parse().expect("a comment id is a number")).collect();
+    let ids = expected
+        .iter()
+        .map(|id| id.parse().expect("a comment id is a number"))
+        .collect();
 
     let page = cloud()
         .issue_comments()

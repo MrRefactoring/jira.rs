@@ -4,12 +4,12 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum JsonNodeNumberType {
-        INT => "INT",
-        LONG => "LONG",
-        BIGINTEGER => "BIG_INTEGER",
-        FLOAT => "FLOAT",
-        DOUBLE => "DOUBLE",
-        BIGDECIMAL => "BIG_DECIMAL",
+        Int => "INT",
+        Long => "LONG",
+        BigInteger => "BIG_INTEGER",
+        Float => "FLOAT",
+        Double => "DOUBLE",
+        BigDecimal => "BIG_DECIMAL",
     }
 }
 

@@ -4,9 +4,9 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum RequestTypePermissionEntityRequestEntityType {
-        USER => "USER",
-        GROUP => "GROUP",
-        ORGANIZATION => "ORGANIZATION",
+        User => "USER",
+        Group => "GROUP",
+        Organization => "ORGANIZATION",
     }
 }
 

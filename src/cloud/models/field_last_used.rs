@@ -9,9 +9,9 @@ crate::open_enum! {
     ///  *  *NOT\_TRACKED*: field is not tracked, last used date is not available.
     ///  *  *NO\_INFORMATION*: field is tracked, but no last used date is available.
     pub enum FieldLastUsedType {
-        TRACKED => "TRACKED",
-        NOTTRACKED => "NOT_TRACKED",
-        NOINFORMATION => "NO_INFORMATION",
+        Tracked => "TRACKED",
+        NotTracked => "NOT_TRACKED",
+        NoInformation => "NO_INFORMATION",
     }
 }
 

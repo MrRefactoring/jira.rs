@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum PermissionJsonType {
-        GLOBAL => "GLOBAL",
-        PROJECT => "PROJECT",
+        Global => "GLOBAL",
+        Project => "PROJECT",
     }
 }
 

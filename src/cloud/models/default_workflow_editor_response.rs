@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum DefaultWorkflowEditorResponseValue {
-        NEW => "NEW",
-        LEGACY => "LEGACY",
+        New => "NEW",
+        Legacy => "LEGACY",
     }
 }
 

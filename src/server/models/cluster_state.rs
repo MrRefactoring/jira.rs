@@ -5,12 +5,12 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum ClusterStateState {
-        STABLE => "STABLE",
-        READYTOUPGRADE => "READY_TO_UPGRADE",
-        MIXED => "MIXED",
-        READYTORUNUPGRADETASKS => "READY_TO_RUN_UPGRADE_TASKS",
-        RUNNINGUPGRADETASKS => "RUNNING_UPGRADE_TASKS",
-        UPGRADETASKSFAILED => "UPGRADE_TASKS_FAILED",
+        Stable => "STABLE",
+        ReadyToUpgrade => "READY_TO_UPGRADE",
+        Mixed => "MIXED",
+        ReadyToRunUpgradeTasks => "READY_TO_RUN_UPGRADE_TASKS",
+        RunningUpgradeTasks => "RUNNING_UPGRADE_TASKS",
+        UpgradeTasksFailed => "UPGRADE_TASKS_FAILED",
     }
 }
 

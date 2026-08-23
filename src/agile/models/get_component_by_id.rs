@@ -31,7 +31,7 @@ crate::open_enum! {
         CloudResource => "Cloud resource",
         DataPipeline => "Data pipeline",
         MachineLearningModel => "Machine learning model",
-        UIElement => "UI element",
+        UiElement => "UI element",
         Website => "Website",
         Other2 => "Other",
     }

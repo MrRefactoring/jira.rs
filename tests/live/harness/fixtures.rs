@@ -27,11 +27,14 @@ pub fn document_of(text: &str) -> Document {
 
 /// Creates an issue in the test project and registers its deletion.
 pub async fn create_test_issue(tracker: &mut ResourceTracker, summary: Option<&str>) -> CreatedIssue {
-    create_issue_with(tracker, json!({
-        "project": { "key": TEST_PROJECT_KEY },
-        "issuetype": { "name": TEST_ISSUE_TYPE },
-        "summary": summary.map_or_else(|| test_name("issue"), ToOwned::to_owned),
-    }))
+    create_issue_with(
+        tracker,
+        json!({
+            "project": { "key": TEST_PROJECT_KEY },
+            "issuetype": { "name": TEST_ISSUE_TYPE },
+            "summary": summary.map_or_else(|| test_name("issue"), ToOwned::to_owned),
+        }),
+    )
     .await
 }
 
@@ -46,7 +49,10 @@ pub async fn create_issue_with(tracker: &mut ResourceTracker, fields: serde_json
 
     let created = cloud()
         .issues()
-        .create_issue(IssueUpdateDetails { fields: Some(fields), ..IssueUpdateDetails::default() })
+        .create_issue(IssueUpdateDetails {
+            fields: Some(fields),
+            ..IssueUpdateDetails::default()
+        })
         .send()
         .await
         .expect("the test project accepts a new issue");

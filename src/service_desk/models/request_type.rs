@@ -6,8 +6,8 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// Whether request type is restricted or not.
     pub enum RequestTypeRestrictionStatus {
-        OPEN => "OPEN",
-        RESTRICTED => "RESTRICTED",
+        Open => "OPEN",
+        Restricted => "RESTRICTED",
     }
 }
 

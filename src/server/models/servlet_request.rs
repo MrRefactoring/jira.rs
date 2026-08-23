@@ -5,11 +5,11 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum ServletRequestDispatcherType {
-        FORWARD => "FORWARD",
-        INCLUDE => "INCLUDE",
-        REQUEST => "REQUEST",
-        ASYNC => "ASYNC",
-        ERROR => "ERROR",
+        Forward => "FORWARD",
+        Include => "INCLUDE",
+        Request => "REQUEST",
+        Async => "ASYNC",
+        Error => "ERROR",
     }
 }
 

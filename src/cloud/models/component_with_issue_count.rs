@@ -11,10 +11,10 @@ crate::open_enum! {
     ///  *  `UNASSIGNED` an assignee is not set for issues created with this component.
     ///  *  `PROJECT_DEFAULT` the assignee to any issues created with this component is nominally the default assignee for the project that the component is in.
     pub enum ComponentWithIssueCountAssigneeType {
-        PROJECTDEFAULT => "PROJECT_DEFAULT",
-        COMPONENTLEAD => "COMPONENT_LEAD",
-        PROJECTLEAD => "PROJECT_LEAD",
-        UNASSIGNED => "UNASSIGNED",
+        ProjectDefault => "PROJECT_DEFAULT",
+        ComponentLead => "COMPONENT_LEAD",
+        ProjectLead => "PROJECT_LEAD",
+        Unassigned => "UNASSIGNED",
     }
 }
 
@@ -26,10 +26,10 @@ crate::open_enum! {
     ///  *  `UNASSIGNED` when `assigneeType` is `UNASSIGNED` and Jira is configured to allow unassigned issues.
     ///  *  `PROJECT_DEFAULT` when none of the preceding cases are true.
     pub enum ComponentWithIssueCountRealAssigneeType {
-        PROJECTDEFAULT => "PROJECT_DEFAULT",
-        COMPONENTLEAD => "COMPONENT_LEAD",
-        PROJECTLEAD => "PROJECT_LEAD",
-        UNASSIGNED => "UNASSIGNED",
+        ProjectDefault => "PROJECT_DEFAULT",
+        ComponentLead => "COMPONENT_LEAD",
+        ProjectLead => "PROJECT_LEAD",
+        Unassigned => "UNASSIGNED",
     }
 }
 

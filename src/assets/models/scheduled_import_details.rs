@@ -5,10 +5,10 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The frequency of the scheduled import. ONCE: runs only at startTime. DAILY: runs every day at the specified time. WEEKLY: runs every 7 days. MONTHLY: runs on the same day of each month.
     pub enum ScheduledImportDetailsRunFrequency {
-        ONCE => "ONCE",
-        DAILY => "DAILY",
-        WEEKLY => "WEEKLY",
-        MONTHLY => "MONTHLY",
+        Once => "ONCE",
+        Daily => "DAILY",
+        Weekly => "WEEKLY",
+        Monthly => "MONTHLY",
     }
 }
 

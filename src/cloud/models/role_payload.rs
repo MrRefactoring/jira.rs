@@ -6,20 +6,20 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The strategy to use when there is a conflict with an existing project role. FAIL - Fail execution, this always needs to be unique; USE - Use the existing entity and ignore new entity parameters
     pub enum RolePayloadOnConflict {
-        FAIL => "FAIL",
-        USE => "USE",
-        NEW => "NEW",
+        Fail => "FAIL",
+        Use => "USE",
+        New => "NEW",
     }
 }
 
 crate::open_enum! {
     /// The type of the role. Only used by project-scoped project
     pub enum RolePayloadType {
-        HIDDEN => "HIDDEN",
-        VIEWABLE => "VIEWABLE",
-        AIAGENT => "AI_AGENT",
-        EDITABLE => "EDITABLE",
-        GUEST => "GUEST",
+        Hidden => "HIDDEN",
+        Viewable => "VIEWABLE",
+        AiAgent => "AI_AGENT",
+        Editable => "EDITABLE",
+        Guest => "GUEST",
     }
 }
 

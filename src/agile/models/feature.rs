@@ -5,40 +5,40 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum FeatureBoardFeature {
-        SIMPLEROADMAP => "SIMPLE_ROADMAP",
-        BACKLOG => "BACKLOG",
-        SPRINTS => "SPRINTS",
-        CALENDAR => "CALENDAR",
-        DEVTOOLS => "DEVTOOLS",
-        REPORTS => "REPORTS",
-        ESTIMATION => "ESTIMATION",
-        PAGES => "PAGES",
-        CODE => "CODE",
-        SECURITY => "SECURITY",
-        REQUESTS => "REQUESTS",
-        INCIDENTS => "INCIDENTS",
-        RELEASES => "RELEASES",
-        DEPLOYMENTS => "DEPLOYMENTS",
-        ISSUENAVIGATOR => "ISSUE_NAVIGATOR",
-        ONCALLSCHEDULE => "ON_CALL_SCHEDULE",
-        BOARD => "BOARD",
-        GOALS => "GOALS",
-        LISTVIEW => "LIST_VIEW",
+        SimpleRoadmap => "SIMPLE_ROADMAP",
+        Backlog => "BACKLOG",
+        Sprints => "SPRINTS",
+        Calendar => "CALENDAR",
+        Devtools => "DEVTOOLS",
+        Reports => "REPORTS",
+        Estimation => "ESTIMATION",
+        Pages => "PAGES",
+        Code => "CODE",
+        Security => "SECURITY",
+        Requests => "REQUESTS",
+        Incidents => "INCIDENTS",
+        Releases => "RELEASES",
+        Deployments => "DEPLOYMENTS",
+        IssueNavigator => "ISSUE_NAVIGATOR",
+        OnCallSchedule => "ON_CALL_SCHEDULE",
+        Board => "BOARD",
+        Goals => "GOALS",
+        ListView => "LIST_VIEW",
     }
 }
 
 crate::open_enum! {
     pub enum FeatureFeatureType {
-        BASIC => "BASIC",
-        ESTIMATION => "ESTIMATION",
+        Basic => "BASIC",
+        Estimation => "ESTIMATION",
     }
 }
 
 crate::open_enum! {
     pub enum FeatureState {
-        ENABLED => "ENABLED",
-        DISABLED => "DISABLED",
-        COMINGSOON => "COMING_SOON",
+        Enabled => "ENABLED",
+        Disabled => "DISABLED",
+        ComingSoon => "COMING_SOON",
     }
 }
 

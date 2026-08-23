@@ -20,7 +20,7 @@ crate::open_enum! {
     ///
     /// Wildcards are not applicable for JSM contexts.
     pub enum UiModificationContextDetailsViewType {
-        GIC => "GIC",
+        Gic => "GIC",
         IssueView => "IssueView",
         IssueTransition => "IssueTransition",
         JSMRequestCreate => "JSMRequestCreate",

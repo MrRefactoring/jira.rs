@@ -5,8 +5,8 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The default assignee when creating issues for this project.
     pub enum UpdateProjectDetailsAssigneeType {
-        PROJECTLEAD => "PROJECT_LEAD",
-        UNASSIGNED => "UNASSIGNED",
+        ProjectLead => "PROJECT_LEAD",
+        Unassigned => "UNASSIGNED",
     }
 }
 

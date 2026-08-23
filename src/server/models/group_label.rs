@@ -4,9 +4,9 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum GroupLabelType {
-        ADMIN => "ADMIN",
-        SINGLE => "SINGLE",
-        MULTIPLE => "MULTIPLE",
+        Admin => "ADMIN",
+        Single => "SINGLE",
+        Multiple => "MULTIPLE",
     }
 }
 

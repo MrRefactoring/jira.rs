@@ -6,24 +6,24 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The validation error level.
     pub enum WorkflowValidationErrorLevel {
-        WARNING => "WARNING",
-        ERROR => "ERROR",
+        Warning => "WARNING",
+        Error => "ERROR",
     }
 }
 
 crate::open_enum! {
     /// The type of element the error or warning references.
     pub enum WorkflowValidationErrorType {
-        RULE => "RULE",
-        STATUS => "STATUS",
-        STATUSLAYOUT => "STATUS_LAYOUT",
-        STATUSPROPERTY => "STATUS_PROPERTY",
-        WORKFLOW => "WORKFLOW",
-        TRANSITION => "TRANSITION",
-        TRANSITIONPROPERTY => "TRANSITION_PROPERTY",
-        SCOPE => "SCOPE",
-        STATUSMAPPING => "STATUS_MAPPING",
-        TRIGGER => "TRIGGER",
+        Rule => "RULE",
+        Status => "STATUS",
+        StatusLayout => "STATUS_LAYOUT",
+        StatusProperty => "STATUS_PROPERTY",
+        Workflow => "WORKFLOW",
+        Transition => "TRANSITION",
+        TransitionProperty => "TRANSITION_PROPERTY",
+        Scope => "SCOPE",
+        StatusMapping => "STATUS_MAPPING",
+        Trigger => "TRIGGER",
     }
 }
 

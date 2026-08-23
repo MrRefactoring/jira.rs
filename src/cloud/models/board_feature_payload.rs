@@ -5,8 +5,8 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The key of the feature
     pub enum BoardFeaturePayloadFeatureKey {
-        ESTIMATION => "ESTIMATION",
-        SPRINTS => "SPRINTS",
+        Estimation => "ESTIMATION",
+        Sprints => "SPRINTS",
     }
 }
 

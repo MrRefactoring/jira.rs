@@ -5,9 +5,9 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The feature state.
     pub enum ProjectFeatureStateState {
-        ENABLED => "ENABLED",
-        DISABLED => "DISABLED",
-        COMINGSOON => "COMING_SOON",
+        Enabled => "ENABLED",
+        Disabled => "DISABLED",
+        ComingSoon => "COMING_SOON",
     }
 }
 

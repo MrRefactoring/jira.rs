@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum GetRepositoryCommitsFlags {
-        MERGECOMMIT => "MERGE_COMMIT",
+        MergeCommit => "MERGE_COMMIT",
     }
 }
 
@@ -32,12 +32,12 @@ pub struct GetRepositoryCommitsAuthor {
 crate::open_enum! {
     /// The operation performed on this file
     pub enum GetRepositoryCommitsFilesChangeType {
-        ADDED => "ADDED",
-        COPIED => "COPIED",
-        DELETED => "DELETED",
-        MODIFIED => "MODIFIED",
-        MOVED => "MOVED",
-        UNKNOWN => "UNKNOWN",
+        Added => "ADDED",
+        Copied => "COPIED",
+        Deleted => "DELETED",
+        Modified => "MODIFIED",
+        Moved => "MOVED",
+        Unknown => "UNKNOWN",
     }
 }
 
@@ -95,7 +95,7 @@ pub struct GetRepositoryCommits {
 
 crate::open_enum! {
     pub enum GetRepositoryBranchesLastCommitFlags {
-        MERGECOMMIT => "MERGE_COMMIT",
+        MergeCommit => "MERGE_COMMIT",
     }
 }
 
@@ -122,12 +122,12 @@ pub struct GetRepositoryBranchesLastCommitAuthor {
 crate::open_enum! {
     /// The operation performed on this file
     pub enum GetRepositoryBranchesLastCommitFilesChangeType {
-        ADDED => "ADDED",
-        COPIED => "COPIED",
-        DELETED => "DELETED",
-        MODIFIED => "MODIFIED",
-        MOVED => "MOVED",
-        UNKNOWN => "UNKNOWN",
+        Added => "ADDED",
+        Copied => "COPIED",
+        Deleted => "DELETED",
+        Modified => "MODIFIED",
+        Moved => "MOVED",
+        Unknown => "UNKNOWN",
     }
 }
 
@@ -209,10 +209,10 @@ pub struct GetRepositoryBranches {
 crate::open_enum! {
     /// The status of the pull request. In the case of concurrent updates, priority is given in the order OPEN, MERGED, DECLINED, UNKNOWN
     pub enum GetRepositoryPullRequestsStatus {
-        OPEN => "OPEN",
-        MERGED => "MERGED",
-        DECLINED => "DECLINED",
-        UNKNOWN => "UNKNOWN",
+        Open => "OPEN",
+        Merged => "MERGED",
+        Declined => "DECLINED",
+        Unknown => "UNKNOWN",
     }
 }
 
@@ -239,8 +239,8 @@ pub struct GetRepositoryPullRequestsAuthor {
 crate::open_enum! {
     /// The approval status of this reviewer, default is UNAPPROVED.
     pub enum GetRepositoryPullRequestsReviewersApprovalStatus {
-        APPROVED => "APPROVED",
-        UNAPPROVED => "UNAPPROVED",
+        Approved => "APPROVED",
+        Unapproved => "UNAPPROVED",
     }
 }
 

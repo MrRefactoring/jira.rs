@@ -6,9 +6,9 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The transition type.
     pub enum TransitionPreviewType {
-        INITIAL => "INITIAL",
-        GLOBAL => "GLOBAL",
-        DIRECTED => "DIRECTED",
+        Initial => "INITIAL",
+        Global => "GLOBAL",
+        Directed => "DIRECTED",
     }
 }
 

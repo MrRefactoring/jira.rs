@@ -6,9 +6,9 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The strategy to use when there is a conflict with an existing entity
     pub enum NotificationSchemePayloadOnConflict {
-        FAIL => "FAIL",
-        USE => "USE",
-        NEW => "NEW",
+        Fail => "FAIL",
+        Use => "USE",
+        New => "NEW",
     }
 }
 

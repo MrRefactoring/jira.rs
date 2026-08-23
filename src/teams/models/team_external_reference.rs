@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum TeamExternalReferenceSource {
-        ATLASSIANGROUP => "ATLASSIAN_GROUP",
-        HRIS => "HRIS",
+        AtlassianGroup => "ATLASSIAN_GROUP",
+        Hris => "HRIS",
     }
 }
 

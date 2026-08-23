@@ -4,17 +4,17 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum RequestTypeAllowedEntityEntityType {
-        USER => "USER",
-        GROUP => "GROUP",
-        ORGANIZATION => "ORGANIZATION",
+        User => "USER",
+        Group => "GROUP",
+        Organization => "ORGANIZATION",
     }
 }
 
 crate::open_enum! {
     pub enum RequestTypeAllowedEntityStatus {
-        DELETED => "DELETED",
-        REMOVED => "REMOVED",
-        ACTIVE => "ACTIVE",
+        Deleted => "DELETED",
+        Removed => "REMOVED",
+        Active => "ACTIVE",
     }
 }
 

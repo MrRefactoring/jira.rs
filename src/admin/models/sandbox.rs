@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum SandboxType {
-        CHILD => "CHILD",
-        NONE => "NONE",
+        Child => "CHILD",
+        None => "NONE",
     }
 }
 

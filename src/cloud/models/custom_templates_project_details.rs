@@ -15,10 +15,10 @@ crate::open_enum! {
 crate::open_enum! {
     /// The default assignee when creating issues in the project
     pub enum CustomTemplatesProjectDetailsAssigneeType {
-        PROJECTDEFAULT => "PROJECT_DEFAULT",
-        COMPONENTLEAD => "COMPONENT_LEAD",
-        PROJECTLEAD => "PROJECT_LEAD",
-        UNASSIGNED => "UNASSIGNED",
+        ProjectDefault => "PROJECT_DEFAULT",
+        ComponentLead => "COMPONENT_LEAD",
+        ProjectLead => "PROJECT_LEAD",
+        Unassigned => "UNASSIGNED",
     }
 }
 

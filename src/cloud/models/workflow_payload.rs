@@ -6,9 +6,9 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The strategy to use if there is a conflict with another workflow
     pub enum WorkflowPayloadOnConflict {
-        FAIL => "FAIL",
-        USE => "USE",
-        NEW => "NEW",
+        Fail => "FAIL",
+        Use => "USE",
+        New => "NEW",
     }
 }
 

@@ -12,8 +12,8 @@ pub enum WorkflowCompoundConditionNodeType {
 crate::open_enum! {
     /// The compound condition operator.
     pub enum WorkflowCompoundConditionOperator {
-        AND => "AND",
-        OR => "OR",
+        And => "AND",
+        Or => "OR",
     }
 }
 

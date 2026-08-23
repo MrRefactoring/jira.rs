@@ -16,7 +16,12 @@ async fn walks_a_vote_through_its_lifecycle() {
     let mut tracker = ResourceTracker::new();
     let issue = create_test_issue(&mut tracker, Some(&test_name("votes"))).await;
 
-    let fresh = cloud().issue_votes().get_votes(&issue.key).send().await.expect("a fresh issue reports its votes");
+    let fresh = cloud()
+        .issue_votes()
+        .get_votes(&issue.key)
+        .send()
+        .await
+        .expect("a fresh issue reports its votes");
 
     assert_eq!(fresh.votes, Some(0));
     assert_eq!(fresh.has_voted, Some(false));
@@ -26,7 +31,12 @@ async fn walks_a_vote_through_its_lifecycle() {
         fresh.self_,
     );
 
-    cloud().issue_votes().add_vote(&issue.key).send().await.expect("the reporter may vote for their own issue");
+    cloud()
+        .issue_votes()
+        .add_vote(&issue.key)
+        .send()
+        .await
+        .expect("the reporter may vote for their own issue");
 
     let key = issue.key.clone();
 
@@ -36,20 +46,49 @@ async fn walks_a_vote_through_its_lifecycle() {
         async move { cloud().issue_votes().remove_vote(key).send().await }
     });
 
-    let voted = cloud().issue_votes().get_votes(&issue.key).send().await.expect("the vote count reads back");
+    let voted = cloud()
+        .issue_votes()
+        .get_votes(&issue.key)
+        .send()
+        .await
+        .expect("the vote count reads back");
 
     assert_eq!(voted.votes, Some(1), "the vote is observable on the next read");
     assert_eq!(voted.has_voted, Some(true));
 
-    cloud().issue_votes().add_vote(&issue.key).send().await.expect("a repeated vote is accepted");
+    cloud()
+        .issue_votes()
+        .add_vote(&issue.key)
+        .send()
+        .await
+        .expect("a repeated vote is accepted");
 
-    let again = cloud().issue_votes().get_votes(&issue.key).send().await.expect("the vote count reads back");
+    let again = cloud()
+        .issue_votes()
+        .get_votes(&issue.key)
+        .send()
+        .await
+        .expect("the vote count reads back");
 
-    assert_eq!(again.votes, Some(1), "a repeated vote is idempotent rather than cumulative");
+    assert_eq!(
+        again.votes,
+        Some(1),
+        "a repeated vote is idempotent rather than cumulative"
+    );
 
-    cloud().issue_votes().remove_vote(&issue.key).send().await.expect("the vote can be withdrawn");
+    cloud()
+        .issue_votes()
+        .remove_vote(&issue.key)
+        .send()
+        .await
+        .expect("the vote can be withdrawn");
 
-    let withdrawn = cloud().issue_votes().get_votes(&issue.key).send().await.expect("the vote count reads back");
+    let withdrawn = cloud()
+        .issue_votes()
+        .get_votes(&issue.key)
+        .send()
+        .await
+        .expect("the vote count reads back");
 
     assert_eq!(withdrawn.votes, Some(0));
     assert_eq!(withdrawn.has_voted, Some(false));

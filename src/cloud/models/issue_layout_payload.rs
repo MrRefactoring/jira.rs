@@ -6,9 +6,9 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The issue layout type
     pub enum IssueLayoutPayloadIssueLayoutType {
-        ISSUEVIEW => "ISSUE_VIEW",
-        ISSUECREATE => "ISSUE_CREATE",
-        REQUESTFORM => "REQUEST_FORM",
+        IssueView => "ISSUE_VIEW",
+        IssueCreate => "ISSUE_CREATE",
+        RequestForm => "REQUEST_FORM",
     }
 }
 

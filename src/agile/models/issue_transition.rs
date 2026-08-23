@@ -75,8 +75,8 @@ pub struct IssueTransitionToScopeProject {
 crate::open_enum! {
     /// The type of scope.
     pub enum IssueTransitionToScopeType {
-        PROJECT => "PROJECT",
-        TEMPLATE => "TEMPLATE",
+        Project => "PROJECT",
+        Template => "TEMPLATE",
     }
 }
 

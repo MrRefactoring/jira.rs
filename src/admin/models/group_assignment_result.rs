@@ -5,8 +5,8 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The status of the group assignment attempt.
     pub enum GroupAssignmentResultStatus {
-        INVITED => "INVITED",
-        ERROR => "ERROR",
+        Invited => "INVITED",
+        Error => "ERROR",
     }
 }
 

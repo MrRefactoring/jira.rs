@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum EstimationConfigurationValue {
-        STORYPOINTS => "STORY_POINTS",
-        ORIGINALESTIMATE => "ORIGINAL_ESTIMATE",
+        StoryPoints => "STORY_POINTS",
+        OriginalEstimate => "ORIGINAL_ESTIMATE",
     }
 }
 

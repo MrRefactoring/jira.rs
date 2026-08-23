@@ -28,9 +28,9 @@ pub enum GetScreensForFieldRequestExpand {
 
 crate::open_enum! {
     pub enum GetScreensRequestScope {
-        GLOBAL => "GLOBAL",
-        TEMPLATE => "TEMPLATE",
-        PROJECT => "PROJECT",
+        Global => "GLOBAL",
+        Template => "TEMPLATE",
+        Project => "PROJECT",
     }
 }
 

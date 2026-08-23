@@ -6,9 +6,9 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The category of the status.
     pub enum JiraWorkflowStatusStatusCategory {
-        TODO => "TODO",
-        INPROGRESS => "IN_PROGRESS",
-        DONE => "DONE",
+        Todo => "TODO",
+        InProgress => "IN_PROGRESS",
+        Done => "DONE",
     }
 }
 

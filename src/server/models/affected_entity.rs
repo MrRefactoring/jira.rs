@@ -4,10 +4,10 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum AffectedEntityType {
-        ANONYMIZE => "ANONYMIZE",
-        TRANSFEROWNERSHIP => "TRANSFER_OWNERSHIP",
-        REMOVE => "REMOVE",
-        MANUAL => "MANUAL",
+        Anonymize => "ANONYMIZE",
+        TransferOwnership => "TRANSFER_OWNERSHIP",
+        Remove => "REMOVE",
+        Manual => "MANUAL",
     }
 }
 

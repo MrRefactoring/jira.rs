@@ -5,9 +5,9 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The state of the feature. When updating the state of a feature, only ENABLED and DISABLED are supported. Responses can contain all values
     pub enum ProjectFeatureState2 {
-        ENABLED => "ENABLED",
-        DISABLED => "DISABLED",
-        COMINGSOON => "COMING_SOON",
+        Enabled => "ENABLED",
+        Disabled => "DISABLED",
+        ComingSoon => "COMING_SOON",
     }
 }
 

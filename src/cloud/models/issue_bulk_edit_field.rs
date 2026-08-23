@@ -5,10 +5,10 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum IssueBulkEditFieldMultiSelectFieldOptions {
-        ADD => "ADD",
-        REMOVE => "REMOVE",
-        REPLACE => "REPLACE",
-        REMOVEALL => "REMOVE_ALL",
+        Add => "ADD",
+        Remove => "REMOVE",
+        Replace => "REPLACE",
+        RemoveAll => "REMOVE_ALL",
     }
 }
 

@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum StoreDevelopmentInformationRequestRepositoriesCommitsFlags {
-        MERGECOMMIT => "MERGE_COMMIT",
+        MergeCommit => "MERGE_COMMIT",
     }
 }
 
@@ -32,12 +32,12 @@ pub struct StoreDevelopmentInformationRequestRepositoriesCommitsAuthor {
 crate::open_enum! {
     /// The operation performed on this file
     pub enum StoreDevelopmentInformationRequestRepositoriesCommitsFilesChangeType {
-        ADDED => "ADDED",
-        COPIED => "COPIED",
-        DELETED => "DELETED",
-        MODIFIED => "MODIFIED",
-        MOVED => "MOVED",
-        UNKNOWN => "UNKNOWN",
+        Added => "ADDED",
+        Copied => "COPIED",
+        Deleted => "DELETED",
+        Modified => "MODIFIED",
+        Moved => "MOVED",
+        Unknown => "UNKNOWN",
     }
 }
 
@@ -95,7 +95,7 @@ pub struct StoreDevelopmentInformationRequestRepositoriesCommits {
 
 crate::open_enum! {
     pub enum StoreDevelopmentInformationRequestRepositoriesBranchesLastCommitFlags {
-        MERGECOMMIT => "MERGE_COMMIT",
+        MergeCommit => "MERGE_COMMIT",
     }
 }
 
@@ -122,12 +122,12 @@ pub struct StoreDevelopmentInformationRequestRepositoriesBranchesLastCommitAutho
 crate::open_enum! {
     /// The operation performed on this file
     pub enum StoreDevelopmentInformationRequestRepositoriesBranchesLastCommitFilesChangeType {
-        ADDED => "ADDED",
-        COPIED => "COPIED",
-        DELETED => "DELETED",
-        MODIFIED => "MODIFIED",
-        MOVED => "MOVED",
-        UNKNOWN => "UNKNOWN",
+        Added => "ADDED",
+        Copied => "COPIED",
+        Deleted => "DELETED",
+        Modified => "MODIFIED",
+        Moved => "MOVED",
+        Unknown => "UNKNOWN",
     }
 }
 
@@ -209,10 +209,10 @@ pub struct StoreDevelopmentInformationRequestRepositoriesBranches {
 crate::open_enum! {
     /// The status of the pull request. In the case of concurrent updates, priority is given in the order OPEN, MERGED, DECLINED, UNKNOWN
     pub enum StoreDevelopmentInformationRequestRepositoriesPullRequestsStatus {
-        OPEN => "OPEN",
-        MERGED => "MERGED",
-        DECLINED => "DECLINED",
-        UNKNOWN => "UNKNOWN",
+        Open => "OPEN",
+        Merged => "MERGED",
+        Declined => "DECLINED",
+        Unknown => "UNKNOWN",
     }
 }
 
@@ -239,8 +239,8 @@ pub struct StoreDevelopmentInformationRequestRepositoriesPullRequestsAuthor {
 crate::open_enum! {
     /// The approval status of this reviewer, default is UNAPPROVED.
     pub enum StoreDevelopmentInformationRequestRepositoriesPullRequestsReviewersApprovalStatus {
-        APPROVED => "APPROVED",
-        UNAPPROVED => "UNAPPROVED",
+        Approved => "APPROVED",
+        Unapproved => "UNAPPROVED",
     }
 }
 
@@ -350,8 +350,8 @@ pub struct StoreDevelopmentInformationRequestRepositories {
 crate::open_enum! {
     /// Indicates the operation being performed by the provider system when sending this data. "NORMAL" - Data received during normal operation (e.g. a user pushing a branch). "BACKFILL" - Data received while backfilling existing data (e.g. indexing a newly connected account). Default is "NORMAL". Please note that "BACKFILL" operations have a much higher rate-limiting threshold but are also processed slower in comparison to "NORMAL" operations.
     pub enum StoreDevelopmentInformationRequestOperationType {
-        NORMAL => "NORMAL",
-        BACKFILL => "BACKFILL",
+        Normal => "NORMAL",
+        Backfill => "BACKFILL",
     }
 }
 

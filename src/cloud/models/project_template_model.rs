@@ -5,8 +5,8 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum ProjectTemplateModelType {
-        LIVE => "LIVE",
-        SNAPSHOT => "SNAPSHOT",
+        Live => "LIVE",
+        Snapshot => "SNAPSHOT",
     }
 }
 

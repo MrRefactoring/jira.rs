@@ -4,11 +4,11 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum HttpServletMappingMappingMatch {
-        CONTEXTROOT => "CONTEXT_ROOT",
-        DEFAULT => "DEFAULT",
-        EXACT => "EXACT",
-        EXTENSION => "EXTENSION",
-        PATH => "PATH",
+        ContextRoot => "CONTEXT_ROOT",
+        Default => "DEFAULT",
+        Exact => "EXACT",
+        Extension => "EXTENSION",
+        Path => "PATH",
     }
 }
 

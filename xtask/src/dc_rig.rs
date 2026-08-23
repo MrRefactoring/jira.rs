@@ -71,7 +71,11 @@ async fn read_state(http: &reqwest::Client, rig: &Rig) -> String {
         .json::<serde_json::Value>()
         .await
         .ok()
-        .and_then(|body| body.get("state").and_then(|state| state.as_str()).map(ToOwned::to_owned))
+        .and_then(|body| {
+            body.get("state")
+                .and_then(|state| state.as_str())
+                .map(ToOwned::to_owned)
+        })
         .unwrap_or_else(|| "UNKNOWN".to_owned())
 }
 
@@ -139,14 +143,21 @@ fn read_form(html: &str, page_url: &str) -> Result<Form, Failure> {
             continue;
         };
 
-        let field_kind = kind.captures(tag).map_or_else(|| "text".to_owned(), |captured| captured[1].to_lowercase());
+        let field_kind = kind
+            .captures(tag)
+            .map_or_else(|| "text".to_owned(), |captured| captured[1].to_lowercase());
 
         // An unchecked radio or checkbox submits nothing, and taking its value would pick the wrong option.
         if matches!(field_kind.as_str(), "radio" | "checkbox") && !checked.is_match(tag) {
             continue;
         }
 
-        fields.insert(field, value.captures(tag).map_or_else(String::new, |captured| captured[1].to_owned()));
+        fields.insert(
+            field,
+            value
+                .captures(tag)
+                .map_or_else(String::new, |captured| captured[1].to_owned()),
+        );
     }
 
     for tag in button.find_iter(body).map(|found| found.as_str()) {
@@ -158,7 +169,12 @@ fn read_form(html: &str, page_url: &str) -> Result<Form, Failure> {
             continue;
         }
 
-        fields.insert(field, value.captures(tag).map_or_else(String::new, |captured| captured[1].to_owned()));
+        fields.insert(
+            field,
+            value
+                .captures(tag)
+                .map_or_else(String::new, |captured| captured[1].to_owned()),
+        );
     }
 
     let action = url::Url::parse(page_url)?.join(&matched[1])?.to_string();
@@ -174,19 +190,25 @@ fn read_form(html: &str, page_url: &str) -> Result<Form, Failure> {
 /// question than Jira Software does gets past it.
 fn answers(rig: &Rig, license: &str) -> Vec<(&'static str, Vec<(&'static str, String)>)> {
     vec![
-        ("SetupApplicationProperties", vec![
-            ("title", rig.title.to_owned()),
-            ("mode", "private".to_owned()),
-            ("baseURL", rig.base_url.clone()),
-        ]),
+        (
+            "SetupApplicationProperties",
+            vec![
+                ("title", rig.title.to_owned()),
+                ("mode", "private".to_owned()),
+                ("baseURL", rig.base_url.clone()),
+            ],
+        ),
         ("SetupLicense", vec![("setupLicenseKey", license.to_owned())]),
-        ("SetupAdminAccount", vec![
-            ("username", rig.admin_username.to_owned()),
-            ("fullname", "jira live suite".to_owned()),
-            ("email", rig.admin_email.to_owned()),
-            ("password", rig.admin_password.to_owned()),
-            ("confirm", rig.admin_password.to_owned()),
-        ]),
+        (
+            "SetupAdminAccount",
+            vec![
+                ("username", rig.admin_username.to_owned()),
+                ("fullname", "jira live suite".to_owned()),
+                ("email", rig.admin_email.to_owned()),
+                ("password", rig.admin_password.to_owned()),
+                ("confirm", rig.admin_password.to_owned()),
+            ],
+        ),
         ("SetupMailNotifications", vec![("noemail", "true".to_owned())]),
     ]
 }
@@ -200,14 +222,20 @@ async fn get(http: &reqwest::Client, target: &str) -> Result<Page, Failure> {
     let response = http.get(target).send().await?;
     let url = response.url().to_string();
 
-    Ok(Page { url, html: response.text().await? })
+    Ok(Page {
+        url,
+        html: response.text().await?,
+    })
 }
 
 async fn post_form(http: &reqwest::Client, target: &str, fields: &BTreeMap<String, String>) -> Result<Page, Failure> {
     let response = http.post(target).form(fields).send().await?;
     let url = response.url().to_string();
 
-    Ok(Page { url, html: response.text().await? })
+    Ok(Page {
+        url,
+        html: response.text().await?,
+    })
 }
 
 /// Waits for the wizard to actually be serving a step.
@@ -237,11 +265,17 @@ async fn wait_for_first_step(http: &reqwest::Client, rig: &Rig, steps: &[&str]) 
         tokio::time::sleep(POLL_INTERVAL).await;
     }
 
-    Err(format!("The wizard never served a step within {}s (last: {last}).", STARTUP_TIMEOUT.as_secs()).into())
+    Err(format!(
+        "The wizard never served a step within {}s (last: {last}).",
+        STARTUP_TIMEOUT.as_secs()
+    )
+    .into())
 }
 
 async fn run_wizard(http: &reqwest::Client, rig: &Rig) -> Result<(), Failure> {
-    let license = std::fs::read_to_string(rig.compose_dir.join("timebomb-license.txt"))?.trim().to_owned();
+    let license = std::fs::read_to_string(rig.compose_dir.join("timebomb-license.txt"))?
+        .trim()
+        .to_owned();
     let answers = answers(rig, &license);
     let steps: Vec<&str> = answers.iter().map(|(step, _)| *step).collect();
 

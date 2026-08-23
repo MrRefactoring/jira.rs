@@ -5,10 +5,10 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The frequency of the scheduled import
     pub enum ImportScheduleResponseRunInterval {
-        ONCE => "ONCE",
-        DAILY => "DAILY",
-        WEEKLY => "WEEKLY",
-        MONTHLY => "MONTHLY",
+        Once => "ONCE",
+        Daily => "DAILY",
+        Weekly => "WEEKLY",
+        Monthly => "MONTHLY",
     }
 }
 

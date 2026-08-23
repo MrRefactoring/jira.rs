@@ -71,20 +71,38 @@ async fn walks_a_worklog_through_its_lifecycle() {
     let mut tracker = ResourceTracker::new();
     let issue = create_test_issue(&mut tracker, Some(&test_name("worklogs"))).await;
 
-    let empty =
-        cloud().issue_worklogs().get_issue_worklog(&issue.key).send().await.expect("a fresh issue lists worklogs");
+    let empty = cloud()
+        .issue_worklogs()
+        .get_issue_worklog(&issue.key)
+        .send()
+        .await
+        .expect("a fresh issue lists worklogs");
 
     assert_eq!(empty.total, Some(0));
-    assert!(empty.worklogs.is_none_or(|worklogs| worklogs.is_empty()), "a fresh issue carries no worklogs");
+    assert!(
+        empty.worklogs.is_none_or(|worklogs| worklogs.is_empty()),
+        "a fresh issue carries no worklogs"
+    );
 
     let created = add_worklog(&mut tracker, &issue.key, "1h 30m", Some("worked on it")).await;
     let worklog_id = created.id.clone().expect("a created worklog carries an id");
 
-    assert!(worklog_id.chars().all(|character| character.is_ascii_digit()), "an id is digits: {worklog_id}");
-    assert_eq!(created.time_spent_seconds, Some(5400), "the server parses `1h 30m` into seconds");
+    assert!(
+        worklog_id.chars().all(|character| character.is_ascii_digit()),
+        "an id is digits: {worklog_id}"
+    );
+    assert_eq!(
+        created.time_spent_seconds,
+        Some(5400),
+        "the server parses `1h 30m` into seconds"
+    );
     assert_eq!(created.time_spent.as_deref(), Some("1h 30m"));
     assert!(
-        created.author.as_ref().and_then(|author| author.account_id.as_deref()).is_some_and(|id| !id.is_empty()),
+        created
+            .author
+            .as_ref()
+            .and_then(|author| author.account_id.as_deref())
+            .is_some_and(|id| !id.is_empty()),
         "a worklog carries the account that logged it",
     );
     assert!(
@@ -93,7 +111,11 @@ async fn walks_a_worklog_through_its_lifecycle() {
         created.started,
     );
 
-    assert_eq!(time_spent_seconds(&issue.key).await, Some(5400), "the logged time lands on the issue total");
+    assert_eq!(
+        time_spent_seconds(&issue.key).await,
+        Some(5400),
+        "the logged time lands on the issue total"
+    );
 
     let fetched = cloud()
         .issue_worklogs()
@@ -117,7 +139,11 @@ async fn walks_a_worklog_through_its_lifecycle() {
         .expect("the duration can be changed");
 
     assert_eq!(updated.time_spent_seconds, Some(7200));
-    assert_eq!(time_spent_seconds(&issue.key).await, Some(7200), "the issue total moves with the worklog");
+    assert_eq!(
+        time_spent_seconds(&issue.key).await,
+        Some(7200),
+        "the issue total moves with the worklog"
+    );
 
     cloud()
         .issue_worklogs()
@@ -156,7 +182,12 @@ async fn pages_the_worklog_listing() {
     add_worklog(&mut tracker, &issue.key, "1h 30m", Some("worked on it")).await;
     add_worklog(&mut tracker, &issue.key, "15m", None).await;
 
-    let all = cloud().issue_worklogs().get_issue_worklog(&issue.key).send().await.expect("the worklog list");
+    let all = cloud()
+        .issue_worklogs()
+        .get_issue_worklog(&issue.key)
+        .send()
+        .await
+        .expect("the worklog list");
 
     assert_eq!(all.total, Some(2));
 
@@ -184,7 +215,9 @@ async fn fetches_worklogs_by_id_across_issues() {
 
     let worklogs = cloud()
         .issue_worklogs()
-        .get_worklogs_for_ids(WorklogIdsRequest { ids: vec![worklog_id.parse().expect("a worklog id is a number")] })
+        .get_worklogs_for_ids(WorklogIdsRequest {
+            ids: vec![worklog_id.parse().expect("a worklog id is a number")],
+        })
         .send()
         .await
         .expect("worklogs can be fetched by id");
@@ -200,7 +233,10 @@ async fn fetches_worklogs_by_id_across_issues() {
 #[ignore = "live: needs a Jira site"]
 async fn reports_worklogs_modified_since_a_point_in_the_past() {
     let now = i64::try_from(
-        SystemTime::now().duration_since(UNIX_EPOCH).expect("the clock is past the epoch").as_millis(),
+        SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .expect("the clock is past the epoch")
+            .as_millis(),
     )
     .expect("a millisecond timestamp fits in an i64");
     let since = now - 60 * 60 * 1000;
@@ -213,9 +249,16 @@ async fn reports_worklogs_modified_since_a_point_in_the_past() {
         .await
         .expect("the modified-since feed answers");
 
-    assert!(page.values.is_some(), "the feed carries a list of entries, empty or not");
+    assert!(
+        page.values.is_some(),
+        "the feed carries a list of entries, empty or not"
+    );
     assert!(page.last_page.is_some(), "the feed says whether this is the last page");
-    assert!(page.until.is_some_and(|until| until >= since), "the cursor cannot end before it started: {:?}", page.until);
+    assert!(
+        page.until.is_some_and(|until| until >= since),
+        "the cursor cannot end before it started: {:?}",
+        page.until
+    );
 
     for entry in page.values.into_iter().flatten() {
         assert!(
@@ -223,7 +266,11 @@ async fn reports_worklogs_modified_since_a_point_in_the_past() {
             "an entry cannot predate the cursor: {:?}",
             entry.updated_time,
         );
-        assert!(entry.worklog_id.is_some_and(|id| id > 0), "an entry names a worklog: {:?}", entry.worklog_id);
+        assert!(
+            entry.worklog_id.is_some_and(|id| id > 0),
+            "an entry names a worklog: {:?}",
+            entry.worklog_id
+        );
     }
 }
 

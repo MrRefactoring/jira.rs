@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum CardLayoutFieldMode {
-        PLAN => "PLAN",
-        WORK => "WORK",
+        Plan => "PLAN",
+        Work => "WORK",
     }
 }
 

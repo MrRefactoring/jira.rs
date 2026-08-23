@@ -6,10 +6,10 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// Indicates the user information fields to include in the response. If unspecified, the response defaults to id, name and description.
     pub enum GroupsSearchRequestExpand {
-        USERS => "USERS",
-        META => "META",
-        ROLEASSIGNMENTS => "ROLE_ASSIGNMENTS",
-        MANAGEMENTACCESS => "MANAGEMENT_ACCESS",
+        Users => "USERS",
+        Meta => "META",
+        RoleAssignments => "ROLE_ASSIGNMENTS",
+        ManagementAccess => "MANAGEMENT_ACCESS",
     }
 }
 

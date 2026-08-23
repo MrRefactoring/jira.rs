@@ -6,12 +6,12 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// Card color settings of the board
     pub enum BoardPayloadCardColorStrategy {
-        ISSUETYPE => "ISSUE_TYPE",
-        REQUESTTYPE => "REQUEST_TYPE",
-        ASSIGNEE => "ASSIGNEE",
-        PRIORITY => "PRIORITY",
-        NONE => "NONE",
-        CUSTOM => "CUSTOM",
+        IssueType => "ISSUE_TYPE",
+        RequestType => "REQUEST_TYPE",
+        Assignee => "ASSIGNEE",
+        Priority => "PRIORITY",
+        None => "NONE",
+        Custom => "CUSTOM",
     }
 }
 

@@ -4,10 +4,10 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum TeamCreationPayloadTeamType {
-        OPEN => "OPEN",
-        MEMBERINVITE => "MEMBER_INVITE",
-        EXTERNAL => "EXTERNAL",
-        ORGADMINMANAGED => "ORG_ADMIN_MANAGED",
+        Open => "OPEN",
+        MemberInvite => "MEMBER_INVITE",
+        External => "EXTERNAL",
+        OrgAdminManaged => "ORG_ADMIN_MANAGED",
     }
 }
 

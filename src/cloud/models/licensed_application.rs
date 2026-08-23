@@ -5,9 +5,9 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The licensing plan.
     pub enum LicensedApplicationPlan {
-        UNLICENSED => "UNLICENSED",
-        FREE => "FREE",
-        PAID => "PAID",
+        Unlicensed => "UNLICENSED",
+        Free => "FREE",
+        Paid => "PAID",
     }
 }
 

@@ -9,8 +9,8 @@ crate::open_enum! {
         ContainerToken => "container-token",
         ApiToken => "api-token",
         ConnectToken => "connect-token",
-        AuthTokenFor2LO => "auth-token-for-2LO",
-        AuthTokenFor3LO => "auth-token-for-3LO",
+        AuthTokenFor2Lo => "auth-token-for-2LO",
+        AuthTokenFor3Lo => "auth-token-for-3LO",
     }
 }
 

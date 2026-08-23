@@ -5,8 +5,8 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The action to perform: PIN or UNPIN.
     pub enum ProjectPinActionAction {
-        PIN => "PIN",
-        UNPIN => "UNPIN",
+        Pin => "PIN",
+        Unpin => "UNPIN",
     }
 }
 

@@ -4,10 +4,10 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum ReindexType {
-        FOREGROUND => "FOREGROUND",
-        BACKGROUND => "BACKGROUND",
-        BACKGROUNDPREFFERED => "BACKGROUND_PREFFERED",
-        BACKGROUNDPREFERRED => "BACKGROUND_PREFERRED",
+        Foreground => "FOREGROUND",
+        Background => "BACKGROUND",
+        BackgroundPreffered => "BACKGROUND_PREFFERED",
+        BackgroundPreferred => "BACKGROUND_PREFERRED",
     }
 }
 

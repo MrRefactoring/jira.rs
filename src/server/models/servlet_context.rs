@@ -147,25 +147,25 @@ pub struct ServletContextClassLoader {
 
 crate::open_enum! {
     pub enum ServletContextDefaultSessionTrackingModes {
-        COOKIE => "COOKIE",
-        URL => "URL",
-        SSL => "SSL",
+        Cookie => "COOKIE",
+        Url => "URL",
+        Ssl => "SSL",
     }
 }
 
 crate::open_enum! {
     pub enum ServletContextEffectiveSessionTrackingModes {
-        COOKIE => "COOKIE",
-        URL => "URL",
-        SSL => "SSL",
+        Cookie => "COOKIE",
+        Url => "URL",
+        Ssl => "SSL",
     }
 }
 
 crate::open_enum! {
     pub enum ServletContextSessionTrackingModes {
-        COOKIE => "COOKIE",
-        URL => "URL",
-        SSL => "SSL",
+        Cookie => "COOKIE",
+        Url => "URL",
+        Ssl => "SSL",
     }
 }
 

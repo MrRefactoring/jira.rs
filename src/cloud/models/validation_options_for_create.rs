@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum ValidationOptionsForCreateLevels {
-        WARNING => "WARNING",
-        ERROR => "ERROR",
+        Warning => "WARNING",
+        Error => "ERROR",
     }
 }
 

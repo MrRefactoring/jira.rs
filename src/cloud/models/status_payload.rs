@@ -6,18 +6,18 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The conflict strategy for the status already exists. FAIL - Fail execution, this always needs to be unique; USE - Use the existing entity and ignore new entity parameters; NEW - Create a new entity
     pub enum StatusPayloadOnConflict {
-        FAIL => "FAIL",
-        USE => "USE",
-        NEW => "NEW",
+        Fail => "FAIL",
+        Use => "USE",
+        New => "NEW",
     }
 }
 
 crate::open_enum! {
     /// The status category of the status. The value is case-sensitive.
     pub enum StatusPayloadStatusCategory {
-        TODO => "TODO",
-        INPROGRESS => "IN_PROGRESS",
-        DONE => "DONE",
+        Todo => "TODO",
+        InProgress => "IN_PROGRESS",
+        Done => "DONE",
     }
 }
 

@@ -39,11 +39,18 @@ async fn walks_a_project_category_through_its_lifecycle() {
         }
     };
 
-    let category_id: i64 =
-        created.id.expect("a created category carries an id").parse().expect("a category id is a number");
+    let category_id: i64 = created
+        .id
+        .expect("a created category carries an id")
+        .parse()
+        .expect("a category id is a number");
 
     tracker.defer(move || async move {
-        cloud().project_categories().remove_project_category(category_id).send().await
+        cloud()
+            .project_categories()
+            .remove_project_category(category_id)
+            .send()
+            .await
     });
 
     assert!(category_id > 0, "an id identifies the category: {category_id}");
@@ -57,7 +64,10 @@ async fn walks_a_project_category_through_its_lifecycle() {
 
     assert_eq!(read.name.as_deref(), Some(name.as_str()));
     assert_eq!(read.description.as_deref(), Some("created by the live suite"));
-    assert!(read.self_.is_some_and(|link| link.starts_with("https://")), "a category carries an absolute self link");
+    assert!(
+        read.self_.is_some_and(|link| link.starts_with("https://")),
+        "a category carries an absolute self link"
+    );
 
     let all = cloud()
         .project_categories()
@@ -67,7 +77,8 @@ async fn walks_a_project_category_through_its_lifecycle() {
         .expect("the site lists its categories");
 
     assert!(
-        all.iter().any(|category| category.id.as_deref() == Some(category_id.to_string().as_str())),
+        all.iter()
+            .any(|category| category.id.as_deref() == Some(category_id.to_string().as_str())),
         "the new category is among the site categories",
     );
 
@@ -75,7 +86,10 @@ async fn walks_a_project_category_through_its_lifecycle() {
         .project_categories()
         .update_project_category(
             category_id,
-            ProjectCategory { description: Some("edited".to_owned()), ..ProjectCategory::default() },
+            ProjectCategory {
+                description: Some("edited".to_owned()),
+                ..ProjectCategory::default()
+            },
         )
         .send()
         .await
@@ -88,12 +102,23 @@ async fn walks_a_project_category_through_its_lifecycle() {
         .await
         .expect("the edited category reads back");
 
-    assert_eq!(after_edit.description.as_deref(), Some("edited"), "the edit is observable on the next read");
-    assert_eq!(after_edit.name.as_deref(), Some(name.as_str()), "editing the description leaves the name alone");
+    assert_eq!(
+        after_edit.description.as_deref(),
+        Some("edited"),
+        "the edit is observable on the next read"
+    );
+    assert_eq!(
+        after_edit.name.as_deref(),
+        Some(name.as_str()),
+        "editing the description leaves the name alone"
+    );
 
     let collision = cloud()
         .project_categories()
-        .create_project_category(ProjectCategory { name: Some(name.clone()), ..ProjectCategory::default() })
+        .create_project_category(ProjectCategory {
+            name: Some(name.clone()),
+            ..ProjectCategory::default()
+        })
         .send()
         .await
         .expect_err("two categories cannot share a name");
@@ -110,11 +135,18 @@ async fn walks_a_project_category_through_its_lifecycle() {
         .await
         .expect("a second category can be created");
 
-    let throwaway_id: i64 =
-        throwaway.id.expect("a created category carries an id").parse().expect("a category id is a number");
+    let throwaway_id: i64 = throwaway
+        .id
+        .expect("a created category carries an id")
+        .parse()
+        .expect("a category id is a number");
 
     tracker.defer(move || async move {
-        cloud().project_categories().remove_project_category(throwaway_id).send().await
+        cloud()
+            .project_categories()
+            .remove_project_category(throwaway_id)
+            .send()
+            .await
     });
 
     cloud()

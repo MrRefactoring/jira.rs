@@ -15,9 +15,9 @@ pub enum DeleteLinkedWorkspacesRequestWorkspaceIds {
 crate::open_enum! {
     /// Indicates the operation being performed by the provider system when sending this data. "NORMAL" - Data received during real-time, user-triggered actions (e.g. user closed or updated a vulnerability). "SCAN" - Data sent through some automated process (e.g. some periodically scheduled repository scan). "BACKFILL" - Data received while backfilling existing data (e.g. pushing historical vulnerabilities when re-connect a workspace). Default is "NORMAL". "NORMAL" traffic has higher priority but tighter rate limits, "SCAN" traffic has medium priority and looser limits, "BACKFILL" has lower priority and much looser limits
     pub enum SubmitVulnerabilitiesRequestOperationType {
-        NORMAL => "NORMAL",
-        SCAN => "SCAN",
-        BACKFILL => "BACKFILL",
+        Normal => "NORMAL",
+        Scan => "SCAN",
+        Backfill => "BACKFILL",
     }
 }
 

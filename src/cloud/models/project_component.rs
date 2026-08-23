@@ -14,10 +14,10 @@ crate::open_enum! {
     /// Default value: `PROJECT_DEFAULT`.
     /// Optional when creating or updating a component.
     pub enum ProjectComponentAssigneeType {
-        PROJECTDEFAULT => "PROJECT_DEFAULT",
-        COMPONENTLEAD => "COMPONENT_LEAD",
-        PROJECTLEAD => "PROJECT_LEAD",
-        UNASSIGNED => "UNASSIGNED",
+        ProjectDefault => "PROJECT_DEFAULT",
+        ComponentLead => "COMPONENT_LEAD",
+        ProjectLead => "PROJECT_LEAD",
+        Unassigned => "UNASSIGNED",
     }
 }
 
@@ -29,10 +29,10 @@ crate::open_enum! {
     ///  *  `UNASSIGNED` when `assigneeType` is `UNASSIGNED` and Jira is configured to allow unassigned issues.
     ///  *  `PROJECT_DEFAULT` when none of the preceding cases are true.
     pub enum ProjectComponentRealAssigneeType {
-        PROJECTDEFAULT => "PROJECT_DEFAULT",
-        COMPONENTLEAD => "COMPONENT_LEAD",
-        PROJECTLEAD => "PROJECT_LEAD",
-        UNASSIGNED => "UNASSIGNED",
+        ProjectDefault => "PROJECT_DEFAULT",
+        ComponentLead => "COMPONENT_LEAD",
+        ProjectLead => "PROJECT_LEAD",
+        Unassigned => "UNASSIGNED",
     }
 }
 

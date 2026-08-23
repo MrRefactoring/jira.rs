@@ -4,15 +4,15 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum JsonNodeNodeType {
-        ARRAY => "ARRAY",
-        BINARY => "BINARY",
-        BOOLEAN => "BOOLEAN",
-        MISSING => "MISSING",
-        NULL => "NULL",
-        NUMBER => "NUMBER",
-        OBJECT => "OBJECT",
-        POJO => "POJO",
-        STRING => "STRING",
+        Array => "ARRAY",
+        Binary => "BINARY",
+        Boolean => "BOOLEAN",
+        Missing => "MISSING",
+        Null => "NULL",
+        Number => "NUMBER",
+        Object => "OBJECT",
+        Pojo => "POJO",
+        String => "STRING",
     }
 }
 

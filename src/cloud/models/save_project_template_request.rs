@@ -6,8 +6,8 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The type of the template: LIVE | SNAPSHOT
     pub enum SaveProjectTemplateRequestTemplateType {
-        LIVE => "LIVE",
-        SNAPSHOT => "SNAPSHOT",
+        Live => "LIVE",
+        Snapshot => "SNAPSHOT",
     }
 }
 

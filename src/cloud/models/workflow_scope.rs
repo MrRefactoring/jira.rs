@@ -6,8 +6,8 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The scope of the workflow. `GLOBAL` for company-managed projects and `PROJECT` for team-managed projects.
     pub enum WorkflowScopeType {
-        PROJECT => "PROJECT",
-        GLOBAL => "GLOBAL",
+        Project => "PROJECT",
+        Global => "GLOBAL",
     }
 }
 

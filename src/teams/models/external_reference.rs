@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum ExternalReferenceSource {
-        ATLASSIANGROUP => "ATLASSIAN_GROUP",
+        AtlassianGroup => "ATLASSIAN_GROUP",
     }
 }
 

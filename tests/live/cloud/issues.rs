@@ -14,15 +14,29 @@ async fn walks_an_issue_through_its_lifecycle() {
     let mut tracker = ResourceTracker::new();
     let issue = create_test_issue(&mut tracker, Some(&test_name("lifecycle"))).await;
 
-    assert!(issue.id.chars().all(|c| c.is_ascii_digit()), "an id is digits: {}", issue.id);
+    assert!(
+        issue.id.chars().all(|c| c.is_ascii_digit()),
+        "an id is digits: {}",
+        issue.id
+    );
     assert!(
         issue.key.starts_with(&format!("{TEST_PROJECT_KEY}-")),
         "a key is the project and a number: {}",
         issue.key,
     );
 
-    let by_key = cloud().issues().get_issue(&issue.key).send().await.expect("the issue reads back by key");
-    let by_id = cloud().issues().get_issue(&issue.id).send().await.expect("the issue reads back by id");
+    let by_key = cloud()
+        .issues()
+        .get_issue(&issue.key)
+        .send()
+        .await
+        .expect("the issue reads back by key");
+    let by_id = cloud()
+        .issues()
+        .get_issue(&issue.id)
+        .send()
+        .await
+        .expect("the issue reads back by id");
 
     assert_eq!(by_key.id.as_deref(), Some(issue.id.as_str()));
     assert_eq!(by_id.key.as_deref(), Some(issue.key.as_str()));
@@ -42,10 +56,19 @@ async fn walks_an_issue_through_its_lifecycle() {
         .await
         .expect("the summary can be edited");
 
-    let after_edit = cloud().issues().get_issue(&issue.key).send().await.expect("the edited issue reads back");
+    let after_edit = cloud()
+        .issues()
+        .get_issue(&issue.key)
+        .send()
+        .await
+        .expect("the edited issue reads back");
 
     assert_eq!(
-        after_edit.fields.as_ref().and_then(|fields| fields.get("summary")).and_then(|value| value.as_str()),
+        after_edit
+            .fields
+            .as_ref()
+            .and_then(|fields| fields.get("summary"))
+            .and_then(|value| value.as_str()),
         Some(edited.as_str()),
         "the edit is observable on the next read",
     );
@@ -60,7 +83,10 @@ async fn walks_an_issue_through_its_lifecycle() {
 
     let returned = trimmed.fields.as_ref().map_or(0, std::collections::HashMap::len);
 
-    assert!(returned > 0 && returned < 10, "the fields parameter trims the response, got {returned} fields");
+    assert!(
+        returned > 0 && returned < 10,
+        "the fields parameter trims the response, got {returned} fields"
+    );
 
     tracker.cleanup().await;
 }

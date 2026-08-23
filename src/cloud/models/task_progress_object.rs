@@ -5,13 +5,13 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The status of the task.
     pub enum TaskProgressObjectStatus {
-        ENQUEUED => "ENQUEUED",
-        RUNNING => "RUNNING",
-        COMPLETE => "COMPLETE",
-        FAILED => "FAILED",
-        CANCELREQUESTED => "CANCEL_REQUESTED",
-        CANCELLED => "CANCELLED",
-        DEAD => "DEAD",
+        Enqueued => "ENQUEUED",
+        Running => "RUNNING",
+        Complete => "COMPLETE",
+        Failed => "FAILED",
+        CancelRequested => "CANCEL_REQUESTED",
+        Cancelled => "CANCELLED",
+        Dead => "DEAD",
     }
 }
 

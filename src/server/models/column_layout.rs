@@ -5,11 +5,11 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     pub enum ColumnLayoutColumnConfig {
-        SYSTEM => "SYSTEM",
-        EXPLICIT => "EXPLICIT",
-        FILTER => "FILTER",
-        USER => "USER",
-        NONE => "NONE",
+        System => "SYSTEM",
+        Explicit => "EXPLICIT",
+        Filter => "FILTER",
+        User => "USER",
+        None => "NONE",
     }
 }
 

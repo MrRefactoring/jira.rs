@@ -9,9 +9,9 @@ crate::open_enum! {
     ///  *  `GLOBAL` Shared with all logged-in users. This shows as `AUTHENTICATED` in the response.
     ///  *  `PRIVATE` Not shared with any users.
     pub enum DefaultShareScopeScope {
-        GLOBAL => "GLOBAL",
-        AUTHENTICATED => "AUTHENTICATED",
-        PRIVATE => "PRIVATE",
+        Global => "GLOBAL",
+        Authenticated => "AUTHENTICATED",
+        Private => "PRIVATE",
     }
 }
 

@@ -5,9 +5,9 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The name of the resource type of the resource. This is a read-only and  case-sensitive field.
     pub enum ScimMetadataResourceType {
-        USER => "USER",
-        GROUP => "GROUP",
-        DIRECTORY => "DIRECTORY",
+        User => "USER",
+        Group => "GROUP",
+        Directory => "DIRECTORY",
     }
 }
 

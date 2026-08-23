@@ -3,8 +3,8 @@
 crate::open_enum! {
     /// The group type.
     pub enum GroupType {
-        TEAM => "TEAM",
-        GROUP => "GROUP",
-        USERBASEGROUP => "USERBASE_GROUP",
+        Team => "TEAM",
+        Group => "GROUP",
+        UserbaseGroup => "USERBASE_GROUP",
     }
 }

@@ -13,8 +13,15 @@ type Failure = Box<dyn std::error::Error>;
 #[derive(Debug, serde::Deserialize)]
 #[serde(tag = "kind", rename_all = "camelCase")]
 enum Finding {
-    UndocumentedKeys { endpoint: String, path: String },
-    UndocumentedValue { type_name: String, value: String, documented: Vec<String> },
+    UndocumentedKeys {
+        endpoint: String,
+        path: String,
+    },
+    UndocumentedValue {
+        type_name: String,
+        value: String,
+        documented: Vec<String>,
+    },
 }
 
 pub async fn run(workspace_root: &std::path::Path, arguments: &[String]) -> Result<(), Failure> {
@@ -60,10 +67,19 @@ fn read_findings(output: &std::path::Path) -> Result<String, Failure> {
     for line in contents.lines().filter(|line| !line.trim().is_empty()) {
         match serde_json::from_str::<Finding>(line)? {
             Finding::UndocumentedKeys { endpoint, path } => {
-                keys.entry(endpoint).or_default().push(if path.is_empty() { "(root)".to_owned() } else { path });
+                keys.entry(endpoint)
+                    .or_default()
+                    .push(if path.is_empty() { "(root)".to_owned() } else { path });
             }
-            Finding::UndocumentedValue { type_name, value, documented } => {
-                values.entry(type_name).or_default().push(format!("`{value}` (documented: {})", documented.join(", ")));
+            Finding::UndocumentedValue {
+                type_name,
+                value,
+                documented,
+            } => {
+                values
+                    .entry(type_name)
+                    .or_default()
+                    .push(format!("`{value}` (documented: {})", documented.join(", ")));
             }
         }
     }
@@ -99,8 +115,10 @@ fn read_findings(output: &std::path::Path) -> Result<String, Failure> {
         }
     }
 
-    report.push_str("\nEach of these is a gap in the specification rather than breakage: repair them in the \
-generator's patches, then regenerate.\n");
+    report.push_str(
+        "\nEach of these is a gap in the specification rather than breakage: repair them in the \
+generator's patches, then regenerate.\n",
+    );
 
     Ok(report)
 }

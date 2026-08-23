@@ -5,8 +5,8 @@ use serde::{Deserialize, Serialize};
 crate::open_enum! {
     /// The type of the scope. Use `GLOBAL` or empty for company-managed project, and `PROJECT` for team-managed project
     pub enum ScopePayloadType {
-        GLOBAL => "GLOBAL",
-        PROJECT => "PROJECT",
+        Global => "GLOBAL",
+        Project => "PROJECT",
     }
 }
 
