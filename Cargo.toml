@@ -14,6 +14,9 @@ documentation = "https://docs.rs/jira"
 readme = "README.md"
 keywords = ["jira", "atlassian", "api", "client", "rest"]
 categories = ["api-bindings", "web-programming::http-client"]
+# Neither reaches a consumer: the workflows are this repository's, and the compose files describe a throwaway
+# instance the live suites run against.
+exclude = [".github/", "docker/"]
 
 [features]
 default = ["cloud"]
