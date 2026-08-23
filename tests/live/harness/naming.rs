@@ -28,12 +28,28 @@ pub fn test_name(label: &str) -> String {
 ///
 /// Jira is stricter here than it looks — over ten characters, or a leading digit, and project creation fails with a
 /// validation error rather than a truncated key.
+///
+/// The run id is hashed rather than truncated. Its leading characters are the high digits of a millisecond clock and
+/// barely move within an hour, so a key built from the first few of them collides with the one the last run used —
+/// and Jira answers "another project uses this project key", which reads as a leaked fixture rather than as a naming
+/// bug. Hashing spreads the whole run id, and the label, across every character.
 pub fn project_key(label: &str) -> String {
-    let suffix: String = format!("{}{label}", run_id())
-        .chars()
-        .filter(|character| character.is_ascii_alphanumeric())
-        .collect::<String>()
-        .to_uppercase();
+    let mut hash: u64 = 0xcbf2_9ce4_8422_2325;
 
-    format!("JRS{suffix}").chars().take(10).collect()
+    for byte in format!("{}{label}", run_id()).bytes() {
+        hash ^= u64::from(byte);
+        hash = hash.wrapping_mul(0x100_0000_01b3);
+    }
+
+    const ALPHABET: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    let suffix: String = (0..7)
+        .map(|position| {
+            let index = (hash >> (position * 8)) as usize % ALPHABET.len();
+
+            char::from(ALPHABET[index])
+        })
+        .collect();
+
+    format!("JRS{suffix}")
 }
