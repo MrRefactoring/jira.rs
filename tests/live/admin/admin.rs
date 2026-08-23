@@ -173,7 +173,8 @@ async fn finds_groups_and_counts_them() {
         "a group comes back attributed to the directory it was searched in",
     );
 
-    let count = admin.groups().get_groups_count(&org, &directory).send().await.expect("the directory counts its groups");
+    let count =
+        admin.groups().get_groups_count(&org, &directory).send().await.expect("the directory counts its groups");
 
     assert!(
         count.count.is_some_and(|total| total >= page.data.len() as i64),

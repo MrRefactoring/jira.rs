@@ -4,8 +4,8 @@
 //! stand in the way, and both belong to the organization rather than to the library:
 //!
 //! 1. **A scoped API key is refused outright.** Every operation answers `403 forbidden.insufficientScope` and names
-//!    `manage:org` among the scopes it would accept — a scope the key creation flow does not offer. The `read:*:admin`
-//!    scopes that reach the organization API reach nothing here.
+//!    `manage:org` among the scopes it would accept — a scope the key creation flow does not offer. The
+//!    `read:*:admin` scopes that reach the organization API reach nothing here.
 //! 2. **Nothing on this organization is manageable.** Its one account reports `claimStatus: unmanaged`, and the
 //!    organization's managed-account listing returns none. These operations act on accounts whose email domain the
 //!    organization has claimed and verified; with no claimed domain there is no subject.

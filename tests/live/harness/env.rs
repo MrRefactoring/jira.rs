@@ -56,6 +56,32 @@ pub fn has_server_env() -> bool {
     first_set(&["JIRA_SERVER_BASE_URL"]).is_some()
 }
 
+/// Whether a Service Management Data Center instance is reachable, which the `jsm` suites need.
+pub fn has_jsm_env() -> bool {
+    first_set(&["JSM_SERVER_BASE_URL"]).is_some()
+}
+
+/// The Service Management Data Center instance, or a single actionable failure.
+///
+/// A separate rig from the Jira one, on its own port. Both cannot run at once on a machine with less memory than the
+/// two of them want, so the suites that need this one are run on their own.
+pub fn require_jsm_env() -> ServerEnv {
+    let host = first_set(&["JSM_SERVER_BASE_URL"]).map(|host| host.trim_end_matches('/').to_owned());
+
+    match host {
+        Some(host) => ServerEnv {
+            host,
+            pat: first_set(&["JSM_SERVER_PAT"]),
+            username: first_set(&["JSM_SERVER_USERNAME"]).unwrap_or_else(|| "admin".to_owned()),
+            password: first_set(&["JSM_SERVER_PASSWORD"]).unwrap_or_else(|| "admin123".to_owned()),
+        },
+        None => panic!(
+            "The Service Management Data Center suites need JSM_SERVER_BASE_URL. Bring an instance up with \
+`cargo xtask jsm-dc up` — and take the Jira rig down first, they do not fit side by side."
+        ),
+    }
+}
+
 /// The credentials, or a single actionable failure naming what is missing.
 pub fn require_live_env() -> LiveEnv {
     let host = first_set(&["JIRA_BASE_URL", "HOST"]).map(|host| host.trim_end_matches('/').to_owned());
