@@ -62,14 +62,12 @@ async fn lists_the_object_types_of_a_schema_flat() {
 async fn creates_updates_and_deletes_a_schema() {
     let mut tracker = ResourceTracker::new();
 
-    let key: String = format!("{}X", schema_key()).chars().take(10).collect();
-
     let created = assets_server()
         .object_schemas()
         .create_schema()
         .object_schema_in(ObjectSchemaIn {
             name: asset_name("spare schema"),
-            object_schema_key: key,
+            object_schema_key: schema_key("spare schema"),
             description: Some("Created and removed by one test.".to_owned()),
         })
         .send()

@@ -29,11 +29,17 @@ pub fn test_name(label: &str) -> String {
 /// Jira is stricter here than it looks — over ten characters, or a leading digit, and project creation fails with a
 /// validation error rather than a truncated key.
 ///
-/// The run id is hashed rather than truncated. Its leading characters are the high digits of a millisecond clock and
-/// barely move within an hour, so a key built from the first few of them collides with the one the last run used —
-/// and Jira answers "another project uses this project key", which reads as a leaked fixture rather than as a naming
-/// bug. Hashing spreads the whole run id, and the label, across every character.
+/// Built through [`run_suffix`], so two runs an hour apart do not land on the same key.
 pub fn project_key(label: &str) -> String {
+    format!("JRS{}", run_suffix(label, b"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 7))
+}
+
+/// `length` characters drawn from `alphabet`, standing for this run and the label together.
+///
+/// The whole run id is hashed rather than trimmed. Its leading characters are the high digits of a millisecond clock
+/// and barely move within an hour, so a key built from the first few of them repeats between runs — and whatever is
+/// being named answers that the key is already taken, which reads as leaked state rather than as a naming bug.
+pub fn run_suffix(label: &str, alphabet: &[u8], length: usize) -> String {
     let mut hash: u64 = 0xcbf2_9ce4_8422_2325;
 
     for byte in format!("{}{label}", run_id()).bytes() {
@@ -41,15 +47,11 @@ pub fn project_key(label: &str) -> String {
         hash = hash.wrapping_mul(0x100_0000_01b3);
     }
 
-    const ALPHABET: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-    let suffix: String = (0..7)
+    (0..length)
         .map(|position| {
-            let index = (hash >> (position * 8)) as usize % ALPHABET.len();
+            let index = (hash >> (position * 8)) as usize % alphabet.len();
 
-            char::from(ALPHABET[index])
+            char::from(alphabet[index])
         })
-        .collect();
-
-    format!("JRS{suffix}")
+        .collect()
 }

@@ -23,7 +23,7 @@ pub use fixtures::{
     TEST_ISSUE_TYPE, TEST_PROJECT_KEY, TestBoard, create_issue_with, create_test_board, create_test_issue, document_of,
     scrum_board,
 };
-pub use naming::{RESOURCE_MARKER, project_key, run_id, test_name};
+pub use naming::{RESOURCE_MARKER, project_key, run_id, run_suffix, test_name};
 pub use poll::poll_until;
 pub use resources::ResourceTracker;
 pub use server_client::{assets_server, server, server_client, service_desk_server};

@@ -10,7 +10,7 @@ use jira::assets_server::{
 };
 use tokio::sync::OnceCell;
 
-use crate::harness::{RESOURCE_MARKER, ResourceTracker, assets_server, run_id, service_desk_server};
+use crate::harness::{RESOURCE_MARKER, ResourceTracker, assets_server, run_id, run_suffix, service_desk_server};
 
 /// The world the suites run in, made once.
 pub struct Fixtures {
@@ -35,19 +35,11 @@ pub fn asset_name(label: &str) -> String {
 
 /// A schema key: uppercase letters only, and short.
 ///
-/// Assets builds every object key out of it — `JRSABC-1` — so it has to be unique on the instance. The run id is
-/// hexadecimal, and its digits are shifted into letters rather than dropped, which would collapse two runs onto one
-/// key.
-pub fn schema_key() -> String {
-    let letters: String = run_id()
-        .chars()
-        .map(|character| match character.to_digit(10) {
-            Some(digit) => char::from(b'K' + u8::try_from(digit).unwrap_or(0)),
-            None => character.to_ascii_uppercase(),
-        })
-        .collect();
-
-    format!("JRS{letters}").chars().take(10).collect()
+/// Assets builds every object key out of it — `JRSABCDEFG-1` — so it has to be unique on the instance, and the
+/// instance outlives a run: the fixture schema is never removed, so the next run must not ask for the key the last one
+/// took. The label separates the fixture schema from a schema a single test makes for itself.
+pub fn schema_key(label: &str) -> String {
+    format!("JRS{}", run_suffix(label, b"ABCDEFGHIJKLMNOPQRSTUVWXYZ", 7))
 }
 
 /// The fixtures, built on first use and shared by every suite.
@@ -98,7 +90,7 @@ async fn build() -> Fixtures {
         .create_schema()
         .object_schema_in(ObjectSchemaIn {
             name: asset_name("schema"),
-            object_schema_key: schema_key(),
+            object_schema_key: schema_key("fixtures"),
             description: Some("Created by the jira live suite.".to_owned()),
         })
         .send()
