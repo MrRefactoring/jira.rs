@@ -23,11 +23,13 @@ pub async fn run(workspace_root: &std::path::Path, arguments: &[String]) -> Resu
 
     let mut command = Command::new("cargo");
 
+    // Anything extra is a test filter, so it goes after the separator: `cargo xtask audit cloud::issues` audits one
+    // suite rather than asking cargo to make sense of the name.
     command
         .current_dir(workspace_root)
         .args(["test", "--test", "live", "--all-features"])
-        .args(arguments)
         .args(["--", "--ignored", "--test-threads=1"])
+        .args(arguments)
         .env("JIRA_AUDIT_OUTPUT", &output);
 
     println!("▸ running the live suite with the audit on");
