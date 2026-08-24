@@ -29,6 +29,14 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
       - name: 💾 Cache the build
         uses: Swatinem/rust-cache@v2
+      # Atlassian publishes three-hour timebomb keys and a fresh container starts the three hours again, which is what
+      # makes a rig per run workable. It lives in a secret rather than in the repository because a licence key is not
+      # ours to redistribute. Use the Jira Service Desk Data Center key for both rigs: the published Jira Software one
+      # is expired, and the Service Desk one licenses Assets and Service Desk together.
+      - name: 🔑 Write the timebomb licence
+        run: |
+          printf '%s' "${{ secrets.JSM_DC_TIMEBOMB_LICENSE }}" > docker/jsm-dc/timebomb-license.txt
+          test -s docker/jsm-dc/timebomb-license.txt
       - name: 🧱 Bring up Service Management Data Center
         run: cargo xtask jsm-dc up
       - name: 🚀 Run the Service Management suite

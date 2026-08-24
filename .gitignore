@@ -3,3 +3,4 @@
 Cargo.lock
 .idea/
 .env
+docker/*/timebomb-license.txt

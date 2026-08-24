@@ -235,8 +235,29 @@ async fn wait_for_first_step(http: &reqwest::Client, rig: &Rig, steps: &[&str]) 
     Err(format!("The wizard never served a step within {}s (last: {last}).", STARTUP_TIMEOUT.as_secs()).into())
 }
 
+/// The timebomb licence, or a failure that says where to get one.
+///
+/// The file is not in the repository — a licence key is Atlassian's to publish and not ours to redistribute — so a
+/// fresh checkout reaches this with nothing to read, and a bare io error names a path without saying what belongs
+/// there.
+fn read_license(rig: &Rig) -> Result<String, Failure> {
+    let path = rig.compose_dir.join("timebomb-license.txt");
+
+    match std::fs::read_to_string(&path) {
+        Ok(license) => Ok(license.trim().to_owned()),
+        Err(_) => Err(format!(
+            "No licence at {}. Atlassian publishes three-hour timebomb keys for exactly this at \
+https://developer.atlassian.com/platform/marketplace/timebomb-licenses-for-testing-server-apps/ — take the Jira \
+Service Desk Data Center one, which licenses both halves of the rig, and write it to that path. In CI it comes from \
+the repository secret instead.",
+            path.display()
+        )
+        .into()),
+    }
+}
+
 async fn run_wizard(http: &reqwest::Client, rig: &Rig) -> Result<(), Failure> {
-    let license = std::fs::read_to_string(rig.compose_dir.join("timebomb-license.txt"))?.trim().to_owned();
+    let license = read_license(rig)?;
     let answers = answers(rig, &license);
     let steps: Vec<&str> = answers.iter().map(|(step, _)| *step).collect();
 
