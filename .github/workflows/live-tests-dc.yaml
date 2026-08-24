@@ -31,7 +31,7 @@ jobs:
       - name: 🧱 Bring up Jira Data Center
         run: cargo xtask jira-dc up
       - name: 🚀 Run the Data Center suite
-        run: cargo test --test live --all-features -- --ignored --test-threads=1 server::
+        run: cargo live-server
         env:
           JIRA_SERVER_BASE_URL: http://localhost:8080
       - name: 🧹 Tear it down

@@ -31,7 +31,7 @@ jobs:
       - name: 💾 Cache the build
         uses: Swatinem/rust-cache@v2
       - name: 🚀 Run the live suite
-        run: cargo test --test live --all-features -- --ignored --test-threads=1
+        run: cargo live
         env:
           JIRA_BASE_URL: ${{ secrets.HOST }}
           JIRA_EMAIL: ${{ secrets.EMAIL }}

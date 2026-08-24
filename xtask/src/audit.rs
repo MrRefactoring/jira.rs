@@ -17,6 +17,20 @@ enum Finding {
     UndocumentedValue { type_name: String, value: String, documented: Vec<String> },
 }
 
+/// The whole hosted surface when nothing was named, and exactly what was named otherwise.
+///
+/// The self-hosted suites need a container brought up first, and an audit run has only the hosted credentials — left
+/// in, they fail on a connection rather than reporting what the types do not describe. The same boundary is drawn for
+/// a plain run by the `live` alias in `.cargo/config.toml`; the two are stated apart because a filter given here is
+/// meant to override it, and they have to be changed together the day a self-hosted surface is added.
+fn default_filter(arguments: &[String]) -> Vec<String> {
+    if !arguments.is_empty() {
+        return arguments.to_vec();
+    }
+
+    ["--skip", "server::", "--skip", "jsm::"].into_iter().map(str::to_owned).collect()
+}
+
 pub async fn run(workspace_root: &std::path::Path, arguments: &[String]) -> Result<(), Failure> {
     let output: PathBuf = std::env::temp_dir().join("jira-rs-schema-audit.jsonl");
     let _ = std::fs::remove_file(&output);
@@ -29,7 +43,7 @@ pub async fn run(workspace_root: &std::path::Path, arguments: &[String]) -> Resu
         .current_dir(workspace_root)
         .args(["test", "--test", "live", "--all-features"])
         .args(["--", "--ignored", "--test-threads=1"])
-        .args(arguments)
+        .args(default_filter(arguments))
         .env("JIRA_AUDIT_OUTPUT", &output);
 
     println!("▸ running the live suite with the audit on");
