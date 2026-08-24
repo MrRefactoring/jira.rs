@@ -157,7 +157,7 @@ impl<'a> IssueBulkOperationsService<'a> {
     ///
     /// If the task has completed, then this resource will return:
     ///
-    ///    {"processedAccessibleIssues":[10001,10002],"created":1709189449954,"progressPercent":100,"started":1709189450154,"status":"COMPLETE","submittedBy":{"accountId":"5b10a2844c20165700ede21g"},"invalidOrInaccessibleIssueCount":0,"taskId":"10000","totalIssueCount":2,"updated":1709189450354}
+    ///    {"processedAccessibleIssues":\[10001,10002\],"created":1709189449954,"progressPercent":100,"started":1709189450154,"status":"COMPLETE","submittedBy":{"accountId":"5b10a2844c20165700ede21g"},"invalidOrInaccessibleIssueCount":0,"taskId":"10000","totalIssueCount":2,"updated":1709189450354}
     ///
     /// **Note:** You can view task progress for up to 14 days from creation.
     pub fn get_bulk_operation_progress(&self, task_id: impl Into<String>) -> GetBulkOperationProgressRequest<'a> {
@@ -625,7 +625,7 @@ impl<'a> SubmitBulkWatchRequest<'a> {
 ///
 /// If the task has completed, then this resource will return:
 ///
-///    {"processedAccessibleIssues":[10001,10002],"created":1709189449954,"progressPercent":100,"started":1709189450154,"status":"COMPLETE","submittedBy":{"accountId":"5b10a2844c20165700ede21g"},"invalidOrInaccessibleIssueCount":0,"taskId":"10000","totalIssueCount":2,"updated":1709189450354}
+///    {"processedAccessibleIssues":\[10001,10002\],"created":1709189449954,"progressPercent":100,"started":1709189450154,"status":"COMPLETE","submittedBy":{"accountId":"5b10a2844c20165700ede21g"},"invalidOrInaccessibleIssueCount":0,"taskId":"10000","totalIssueCount":2,"updated":1709189450354}
 ///
 /// **Note:** You can view task progress for up to 14 days from creation.
 pub struct GetBulkOperationProgressRequest<'a> {

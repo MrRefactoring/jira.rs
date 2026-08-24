@@ -24,7 +24,7 @@ crate::open_enum! {
 /// The current page of search results
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct PublicUser {
-    /// Unique ID of the users account. The format is [a-zA-Z0-9_|-:]{1,128}
+    /// Unique ID of the users account. The format is \[a-zA-Z0-9_|-:\]{1,128}
     #[serde(rename = "accountId", default, skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
     /// The display name of the user. Should be used for contextual rendering of the authorship in content. If the user has restricted visibility of their name, their nickname is displayed as a substitute value

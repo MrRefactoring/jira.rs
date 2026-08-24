@@ -2,7 +2,7 @@
 
 crate::open_enum! {
     /// The claim status for the user account.
-    ///   - `managed` - Returns only managed accounts. For more on managed accounts: https://support.atlassian.com/user-management/docs/what-are-managed-accounts/.
+    ///   - `managed` - Returns only managed accounts. For more on managed accounts: <https://support.atlassian.com/user-management/docs/what-are-managed-accounts/>.
     ///   - `unmanaged` - Returns only unmanaged accounts.
     pub enum ClaimStatus {
         Managed => "managed",

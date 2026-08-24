@@ -12,7 +12,7 @@ crate::open_enum! {
     }
 }
 
-/// The payload for creating workflow, see https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/\#api-rest-api-3-workflows-create-post
+/// The payload for creating workflow, see <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/\#api-rest-api-3-workflows-create-post>
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct WorkflowPayload {
     /// The description of the workflow

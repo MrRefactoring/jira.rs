@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 /// Details about a filter.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct Filter {
-    /// \[Experimental\] Approximate last used time. Returns the date and time when the filter was last used. Returns `null` if the filter hasn't been used after tracking was enabled. For performance reasons, timestamps aren't updated in real time and therefore may not be exactly accurate.
+    /// \\[Experimental\\] Approximate last used time. Returns the date and time when the filter was last used. Returns `null` if the filter hasn't been used after tracking was enabled. For performance reasons, timestamps aren't updated in real time and therefore may not be exactly accurate.
     #[serde(
         rename = "approximateLastUsed",
         default,
@@ -36,7 +36,7 @@ pub struct Filter {
     pub name: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub owner: Option<DashboardUser>,
-    /// A URL to view the filter results in Jira, using the [Search for issues using JQL](#api-rest-api-3-filter-search-get) operation with the filter's JQL string to return the filter results. For example, *https://your-domain.atlassian.net/rest/api/3/search?jql=project+%3D+SSP+AND+issuetype+%3D+Bug*.
+    /// A URL to view the filter results in Jira, using the [Search for issues using JQL](#api-rest-api-3-filter-search-get) operation with the filter's JQL string to return the filter results. For example, *<https://your-domain.atlassian.net/rest/api/3/search?jql=project+%3D+SSP+AND+issuetype+%3D+Bug*>.
     #[serde(rename = "searchUrl", default, skip_serializing_if = "Option::is_none")]
     pub search_url: Option<String>,
     /// The URL of the filter.
@@ -49,7 +49,7 @@ pub struct Filter {
     pub shared_users: Option<UserList>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub subscriptions: Option<FilterSubscriptionsList>,
-    /// A URL to view the filter results in Jira, using the ID of the filter. For example, *https://your-domain.atlassian.net/issues/?filter=10100*.
+    /// A URL to view the filter results in Jira, using the ID of the filter. For example, *<https://your-domain.atlassian.net/issues/?filter=10100*>.
     #[serde(rename = "viewUrl", default, skip_serializing_if = "Option::is_none")]
     pub view_url: Option<String>,
     #[serde(rename = "isWritable", default, skip_serializing_if = "Option::is_none")]

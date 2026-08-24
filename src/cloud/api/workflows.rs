@@ -291,7 +291,7 @@ impl<'a> WorkflowsService<'a> {
     ///       "ruleKey": "system:validate-field-value",
     ///       "parameters": {
     ///         "ruleType": "fieldMatchesRegularExpression",
-    ///         "regexp": "[0-9]{4}",
+    ///         "regexp": "\[0-9\]{4}",
     ///         "fieldKey": "description"
     ///       }
     ///     }
@@ -378,7 +378,7 @@ impl<'a> WorkflowsService<'a> {
     ///       "ruleKey": "system:check-field-value",
     ///       "parameters": {
     ///         "fieldId": "description",
-    ///         "fieldValue": "[\"Done\"]",
+    ///         "fieldValue": "\[\"Done\"\]",
     ///         "comparator": "=",
     ///         "comparisonType": "STRING"
     ///       }
@@ -1281,7 +1281,7 @@ impl<'a> ReadWorkflowsRequest<'a> {
 ///       "ruleKey": "system:validate-field-value",
 ///       "parameters": {
 ///         "ruleType": "fieldMatchesRegularExpression",
-///         "regexp": "[0-9]{4}",
+///         "regexp": "\[0-9\]{4}",
 ///         "fieldKey": "description"
 ///       }
 ///     }
@@ -1368,7 +1368,7 @@ impl<'a> ReadWorkflowsRequest<'a> {
 ///       "ruleKey": "system:check-field-value",
 ///       "parameters": {
 ///         "fieldId": "description",
-///         "fieldValue": "[\"Done\"]",
+///         "fieldValue": "\[\"Done\"\]",
 ///         "comparator": "=",
 ///         "comparisonType": "STRING"
 ///       }

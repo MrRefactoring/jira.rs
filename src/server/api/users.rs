@@ -123,7 +123,7 @@ impl<'a> UsersService<'a> {
     /// You *must* use "avatar" as the name of the upload parameter:
     /// curl -c cookiejar.txt -X POST -u admin:admin -H "X-Atlassian-Token: no-check" \
     ///   -F "avatar=@mynewavatar.png;type=image/png" \
-    ///   'http://localhost:8090/jira/rest/api/2/user/avatar/temporary?username=admin'
+    ///   '<http://localhost:8090/jira/rest/api/2/user/avatar/temporary?username=admin>'
     pub fn store_temporary_user_avatar_using_multi_part(
         &self,
         avatar: impl IntoIterator<Item = crate::core::Attachment>,
@@ -163,7 +163,7 @@ impl<'a> UsersService<'a> {
     /// The data returned by this endpoint is cached for 10 minutes and the cache is flushed when any User Directory
     /// is added, removed, enabled, disabled, or synchronized.
     /// A System Administrator can also flush the cache manually.
-    /// Related JAC ticket: https://jira.atlassian.com/browse/JRASERVER-68797
+    /// Related JAC ticket: <https://jira.atlassian.com/browse/JRASERVER-68797>
     pub fn get_duplicated_users_count(&self) -> GetDuplicatedUsersCountRequest<'a> {
         GetDuplicatedUsersCountRequest::new(self.client)
     }
@@ -174,7 +174,7 @@ impl<'a> UsersService<'a> {
     /// The data returned by this endpoint is cached for 10 minutes and the cache is flushed when any User Directory
     /// is added, removed, enabled, disabled, or synchronized.
     /// A System Administrator can also flush the cache manually.
-    /// Related JAC ticket: https://jira.atlassian.com/browse/JRASERVER-68797
+    /// Related JAC ticket: <https://jira.atlassian.com/browse/JRASERVER-68797>
     pub fn get_duplicated_users_mapping(&self) -> GetDuplicatedUsersMappingRequest<'a> {
         GetDuplicatedUsersMappingRequest::new(self.client)
     }
@@ -1157,7 +1157,7 @@ impl<'a> UpdateUserAvatarRequest<'a> {
 /// You *must* use "avatar" as the name of the upload parameter:
 /// curl -c cookiejar.txt -X POST -u admin:admin -H "X-Atlassian-Token: no-check" \
 ///   -F "avatar=@mynewavatar.png;type=image/png" \
-///   'http://localhost:8090/jira/rest/api/2/user/avatar/temporary?username=admin'
+///   '<http://localhost:8090/jira/rest/api/2/user/avatar/temporary?username=admin>'
 pub struct StoreTemporaryUserAvatarUsingMultiPartRequest<'a> {
     client: &'a crate::core::Client,
     username: Option<String>,
@@ -1453,7 +1453,7 @@ impl<'a> ResetUserColumnsRequest<'a> {
 /// The data returned by this endpoint is cached for 10 minutes and the cache is flushed when any User Directory
 /// is added, removed, enabled, disabled, or synchronized.
 /// A System Administrator can also flush the cache manually.
-/// Related JAC ticket: https://jira.atlassian.com/browse/JRASERVER-68797
+/// Related JAC ticket: <https://jira.atlassian.com/browse/JRASERVER-68797>
 pub struct GetDuplicatedUsersCountRequest<'a> {
     client: &'a crate::core::Client,
     flush: Option<bool>,
@@ -1501,7 +1501,7 @@ impl<'a> GetDuplicatedUsersCountRequest<'a> {
 /// The data returned by this endpoint is cached for 10 minutes and the cache is flushed when any User Directory
 /// is added, removed, enabled, disabled, or synchronized.
 /// A System Administrator can also flush the cache manually.
-/// Related JAC ticket: https://jira.atlassian.com/browse/JRASERVER-68797
+/// Related JAC ticket: <https://jira.atlassian.com/browse/JRASERVER-68797>
 pub struct GetDuplicatedUsersMappingRequest<'a> {
     client: &'a crate::core::Client,
     flush: Option<bool>,

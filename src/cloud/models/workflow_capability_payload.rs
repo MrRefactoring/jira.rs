@@ -3,7 +3,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-/// The payload for creating a workflows. See https://www.atlassian.com/software/jira/guides/workflows/overview\#what-is-a-jira-workflow
+/// The payload for creating a workflows. See <https://www.atlassian.com/software/jira/guides/workflows/overview\#what-is-a-jira-workflow>
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct WorkflowCapabilityPayload {
     /// The statuses for the workflow

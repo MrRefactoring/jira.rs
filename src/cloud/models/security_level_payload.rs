@@ -11,7 +11,7 @@ crate::open_enum! {
     }
 }
 
-/// The payload for creating a security level. See https://support.atlassian.com/jira-cloud-administration/docs/configure-issue-security-schemes/
+/// The payload for creating a security level. See <https://support.atlassian.com/jira-cloud-administration/docs/configure-issue-security-schemes/>
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct SecurityLevelPayload {
     /// The description of the security level

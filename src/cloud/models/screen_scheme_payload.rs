@@ -3,7 +3,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-/// Defines the payload for the screen schemes. See https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/\#api-rest-api-3-screenscheme-post
+/// Defines the payload for the screen schemes. See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/\#api-rest-api-3-screenscheme-post>
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ScreenSchemePayload {
     #[serde(rename = "defaultScreen", default, skip_serializing_if = "Option::is_none")]
@@ -16,7 +16,7 @@ pub struct ScreenSchemePayload {
     pub name: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pcri: Option<ProjectCreateResourceIdentifier>,
-    /// Similar to the field layout scheme those mappings allow users to set different screens for different operations: default - always there, applied to all operations that don't have an explicit mapping `create`, `view`, `edit` - specific operations that are available and users can assign a different screen for each one of them https://support.atlassian.com/jira-cloud-administration/docs/manage-screen-schemes/\#Associating-a-screen-with-an-issue-operation
+    /// Similar to the field layout scheme those mappings allow users to set different screens for different operations: default - always there, applied to all operations that don't have an explicit mapping `create`, `view`, `edit` - specific operations that are available and users can assign a different screen for each one of them <https://support.atlassian.com/jira-cloud-administration/docs/manage-screen-schemes/\#Associating-a-screen-with-an-issue-operation>
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub screens: Option<std::collections::HashMap<String, serde_json::Value>>,
 }

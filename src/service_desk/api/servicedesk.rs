@@ -40,7 +40,7 @@ impl<'a> ServicedeskService<'a> {
     ///
     /// For example, to upload a file called `myfile.txt` in the Service Desk with ID 10001 use
     ///
-    ///    curl -D- -u customer:customer -X POST -H "X-ExperimentalApi: opt-in" -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt" https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10001/attachTemporaryFile
+    ///    curl -D- -u customer:customer -X POST -H "X-ExperimentalApi: opt-in" -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt" <https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10001/attachTemporaryFile>
     ///
     /// **[Permissions](#permissions) required**: Permission to add attachments in this Service Desk.
     pub fn attach_temporary_file(
@@ -267,7 +267,7 @@ impl<'a> GetServiceDeskByIdRequest<'a> {
 ///
 /// For example, to upload a file called `myfile.txt` in the Service Desk with ID 10001 use
 ///
-///    curl -D- -u customer:customer -X POST -H "X-ExperimentalApi: opt-in" -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt" https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10001/attachTemporaryFile
+///    curl -D- -u customer:customer -X POST -H "X-ExperimentalApi: opt-in" -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt" <https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10001/attachTemporaryFile>
 ///
 /// **[Permissions](#permissions) required**: Permission to add attachments in this Service Desk.
 pub struct AttachTemporaryFileRequest<'a> {

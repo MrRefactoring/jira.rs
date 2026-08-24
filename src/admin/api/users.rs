@@ -21,7 +21,7 @@ crate::open_enum! {
 
 crate::open_enum! {
     /// The claim status for the user account. By default, both `managed` and `unmanaged` accounts are returned.
-    ///   - `managed` - Returns only managed accounts. For more on managed accounts: https://support.atlassian.com/user-management/docs/what-are-managed-accounts/
+    ///   - `managed` - Returns only managed accounts. For more on managed accounts: <https://support.atlassian.com/user-management/docs/what-are-managed-accounts/>
     ///   - `unmanaged` - Returns only unmanaged accounts.
     pub enum GetDirectoryUsersCountRequestClaimStatus {
         Managed => "managed",
@@ -73,7 +73,7 @@ crate::open_enum! {
 
 crate::open_enum! {
     /// The claim status for the user account. By default, both `managed` and `unmanaged` accounts are returned.
-    ///   - `managed` - Returns only managed accounts. For more on managed accounts: https://support.atlassian.com/user-management/docs/what-are-managed-accounts/
+    ///   - `managed` - Returns only managed accounts. For more on managed accounts: <https://support.atlassian.com/user-management/docs/what-are-managed-accounts/>
     ///   - `unmanaged` - Returns only unmanaged accounts.
     pub enum GetDirectoryUsersRequestClaimStatus {
         Managed => "managed",
@@ -1082,7 +1082,7 @@ impl<'a> GetDirectoryUsersCountRequest<'a> {
     }
 
     /// The claim status for the user account. By default, both `managed` and `unmanaged` accounts are returned.
-    ///   - `managed` - Returns only managed accounts. For more on managed accounts: https://support.atlassian.com/user-management/docs/what-are-managed-accounts/
+    ///   - `managed` - Returns only managed accounts. For more on managed accounts: <https://support.atlassian.com/user-management/docs/what-are-managed-accounts/>
     ///   - `unmanaged` - Returns only unmanaged accounts.
     #[must_use]
     pub fn claim_status(mut self, value: impl Into<GetDirectoryUsersCountRequestClaimStatus>) -> Self {
@@ -1440,7 +1440,7 @@ impl<'a> GetDirectoryUsersRequest<'a> {
     }
 
     /// The claim status for the user account. By default, both `managed` and `unmanaged` accounts are returned.
-    ///   - `managed` - Returns only managed accounts. For more on managed accounts: https://support.atlassian.com/user-management/docs/what-are-managed-accounts/
+    ///   - `managed` - Returns only managed accounts. For more on managed accounts: <https://support.atlassian.com/user-management/docs/what-are-managed-accounts/>
     ///   - `unmanaged` - Returns only unmanaged accounts.
     #[must_use]
     pub fn claim_status(mut self, value: impl Into<GetDirectoryUsersRequestClaimStatus>) -> Self {

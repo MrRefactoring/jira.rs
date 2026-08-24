@@ -3,7 +3,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-/// Defines the payload for the field screens. See https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/\#api-rest-api-3-screens-post
+/// Defines the payload for the field screens. See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/\#api-rest-api-3-screens-post>
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ScreenPayload {
     /// The description of the screen
@@ -14,7 +14,7 @@ pub struct ScreenPayload {
     pub name: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pcri: Option<ProjectCreateResourceIdentifier>,
-    /// The tabs of the screen. See https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tab-fields/\#api-rest-api-3-screens-screenid-tabs-tabid-fields-post
+    /// The tabs of the screen. See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-tab-fields/\#api-rest-api-3-screens-screenid-tabs-tabid-fields-post>
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub tabs: Option<Vec<TabPayload>>,
 }

@@ -173,7 +173,7 @@ crate::open_enum! {
 ///  *  `sharePermissions` Returns the share permissions defined for the filter.
 ///  *  `editPermissions` Returns the edit permissions defined for the filter.
 ///  *  `isWritable` Returns whether the current user has permission to edit the filter.
-///  *  `approximateLastUsed` \[Experimental\] Returns the approximate date and time when the filter was last evaluated.
+///  *  `approximateLastUsed` \\[Experimental\\] Returns the approximate date and time when the filter was last evaluated.
 ///  *  `subscriptions` Returns the users that are subscribed to the filter.
 ///  *  `viewUrl` Returns a URL to view the filter.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -803,7 +803,7 @@ impl<'a> GetFiltersPaginatedRequest<'a> {
     ///  *  `sharePermissions` Returns the share permissions defined for the filter.
     ///  *  `editPermissions` Returns the edit permissions defined for the filter.
     ///  *  `isWritable` Returns whether the current user has permission to edit the filter.
-    ///  *  `approximateLastUsed` \[Experimental\] Returns the approximate date and time when the filter was last evaluated.
+    ///  *  `approximateLastUsed` \\[Experimental\\] Returns the approximate date and time when the filter was last evaluated.
     ///  *  `subscriptions` Returns the users that are subscribed to the filter.
     ///  *  `viewUrl` Returns a URL to view the filter.
     #[must_use]

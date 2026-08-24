@@ -23,7 +23,7 @@ crate::open_enum! {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct User {
-    /// Unique ID of the users account. The format is [a-zA-Z0-9_|-:]{1,128}
+    /// Unique ID of the users account. The format is \[a-zA-Z0-9_|-:\]{1,128}
     pub account_id: String,
     /// The type of account
     pub account_type: UserAccountType,

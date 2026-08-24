@@ -52,7 +52,7 @@ impl<'a> FetchMembersRequest<'a> {
         Self { client, org_id: org_id.into(), team_id: team_id.into(), site_id: None, membership_fetch_payload: None }
     }
 
-    /// [Optional] The ID of the site you are fetching members for. [Deprecated] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
+    /// \[Optional\] The ID of the site you are fetching members for. \[Deprecated\] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
     #[must_use]
     pub fn site_id(mut self, value: impl Into<String>) -> Self {
         self.site_id = Some(value.into());

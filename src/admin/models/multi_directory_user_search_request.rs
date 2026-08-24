@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
     /// The claim status for the user account. By default, both `managed` and `unmanaged` accounts are returned.
-    ///   - `managed` - Returns only managed accounts. For more on managed accounts: https://support.atlassian.com/user-management/docs/what-are-managed-accounts/
+    ///   - `managed` - Returns only managed accounts. For more on managed accounts: <https://support.atlassian.com/user-management/docs/what-are-managed-accounts/>
     ///   - `unmanaged` - Returns only unmanaged accounts.
     pub enum MultiDirectoryUserSearchRequestClaimStatus {
         Managed => "managed",
@@ -111,7 +111,7 @@ pub struct MultiDirectoryUserSearchRequest {
     #[serde(rename = "mfaEnabled", default, skip_serializing_if = "Option::is_none")]
     pub mfa_enabled: Option<bool>,
     /// The claim status for the user account. By default, both `managed` and `unmanaged` accounts are returned.
-    ///   - `managed` - Returns only managed accounts. For more on managed accounts: https://support.atlassian.com/user-management/docs/what-are-managed-accounts/
+    ///   - `managed` - Returns only managed accounts. For more on managed accounts: <https://support.atlassian.com/user-management/docs/what-are-managed-accounts/>
     ///   - `unmanaged` - Returns only unmanaged accounts.
     #[serde(rename = "claimStatus", default, skip_serializing_if = "Option::is_none")]
     pub claim_status: Option<MultiDirectoryUserSearchRequestClaimStatus>,

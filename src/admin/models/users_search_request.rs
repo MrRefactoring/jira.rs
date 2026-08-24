@@ -33,7 +33,7 @@ crate::open_enum! {
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct UsersSearchRequest {
-    /// Unique ID of the users account. The format is [a-zA-Z0-9_|-:]{1,128}
+    /// Unique ID of the users account. The format is \[a-zA-Z0-9_|-:\]{1,128}
     #[serde(rename = "accountIds", default, skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
     /// The type of account

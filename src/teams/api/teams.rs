@@ -88,7 +88,7 @@ impl<'a> QueryTeamsRequest<'a> {
         Self { client, org_id: org_id.into(), site_id: None, size: None, cursor: None }
     }
 
-    /// [Optional] The ID of the site to retrieve teams which are site scoped. Please note that if the org is site-scoped, teams will not be included in response if siteId is not provided. [Deprecated] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
+    /// \[Optional\] The ID of the site to retrieve teams which are site scoped. Please note that if the org is site-scoped, teams will not be included in response if siteId is not provided. \[Deprecated\] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
     #[must_use]
     pub fn site_id(mut self, value: impl Into<String>) -> Self {
         self.site_id = Some(value.into());
@@ -287,7 +287,7 @@ impl<'a> GetTeamRequest<'a> {
         Self { client, org_id: org_id.into(), team_id: team_id.into(), site_id: None }
     }
 
-    /// [Optional] The ID of the site to retrieve teams which are site scoped. Please note that if the org is site-scoped, teams will not be included in response if siteId is not provided. [Deprecated] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
+    /// \[Optional\] The ID of the site to retrieve teams which are site scoped. Please note that if the org is site-scoped, teams will not be included in response if siteId is not provided. \[Deprecated\] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
     #[must_use]
     pub fn site_id(mut self, value: impl Into<String>) -> Self {
         self.site_id = Some(value.into());

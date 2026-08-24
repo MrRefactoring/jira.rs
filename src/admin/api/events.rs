@@ -184,7 +184,7 @@ impl<'a> GetEventsRequest<'a> {
         self
     }
 
-    /// A query filter that returns events by one or more specific locations. Of format: [ { "city": "", "countryName": "" }, ... ]
+    /// A query filter that returns events by one or more specific locations. Of format: \[ { "city": "", "countryName": "" }, ... \]
     #[must_use]
     pub fn location(mut self, value: impl Into<String>) -> Self {
         self.location = Some(value.into());

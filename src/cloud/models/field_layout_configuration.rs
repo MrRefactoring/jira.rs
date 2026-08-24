@@ -3,7 +3,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-/// Defines the payload for the field layout configuration. See https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/\#api-rest-api-3-fieldconfiguration-post
+/// Defines the payload for the field layout configuration. See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/\#api-rest-api-3-fieldconfiguration-post>
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct FieldLayoutConfiguration {
     /// Whether to show the field

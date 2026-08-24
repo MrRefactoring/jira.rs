@@ -196,7 +196,7 @@ impl<'a> IssuesService<'a> {
     /// on it. This means you must submit a header of X-Atlassian-Token: no-check with the request, otherwise it will be blocked.
     /// The name of the multipart/form-data parameter that contains attachments must be file.
     /// A simple example to upload a file called "myfile.txt" to issue TEST-123:
-    /// curl -D- -u admin:admin -X POST -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt" http://myhost/rest/api/2/issue/TEST-123/attachments
+    /// curl -D- -u admin:admin -X POST -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt" <http://myhost/rest/api/2/issue/TEST-123/attachments>
     pub fn add_attachment(
         &self,
         issue_id_or_key: impl Into<String>,
@@ -1460,7 +1460,7 @@ impl<'a> AssignRequest<'a> {
 /// on it. This means you must submit a header of X-Atlassian-Token: no-check with the request, otherwise it will be blocked.
 /// The name of the multipart/form-data parameter that contains attachments must be file.
 /// A simple example to upload a file called "myfile.txt" to issue TEST-123:
-/// curl -D- -u admin:admin -X POST -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt" http://myhost/rest/api/2/issue/TEST-123/attachments
+/// curl -D- -u admin:admin -X POST -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt" <http://myhost/rest/api/2/issue/TEST-123/attachments>
 pub struct AddAttachmentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,

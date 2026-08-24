@@ -8,7 +8,7 @@ pub struct RulePayload {
     /// The parameters of the rule
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub parameters: Option<std::collections::HashMap<String, serde_json::Value>>,
-    /// The key of the rule. See https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/\#api-rest-api-3-workflows-capabilities-get
+    /// The key of the rule. See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/\#api-rest-api-3-workflows-capabilities-get>
     #[serde(rename = "ruleKey", default, skip_serializing_if = "Option::is_none")]
     pub rule_key: Option<String>,
 }

@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 /// Defines the payload for the fields, screens, screen schemes, issue type screen schemes, field layouts, and field layout schemes
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct FieldCapabilityPayload {
-    /// The custom field definitions. See https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/\#api-rest-api-3-field-post
+    /// The custom field definitions. See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/\#api-rest-api-3-field-post>
     #[serde(rename = "customFieldDefinitions", default, skip_serializing_if = "Option::is_none")]
     pub custom_field_definitions: Option<Vec<CustomFieldPayload>>,
     #[serde(rename = "fieldLayoutScheme", default, skip_serializing_if = "Option::is_none")]
@@ -18,10 +18,10 @@ pub struct FieldCapabilityPayload {
     pub issue_layouts: Option<Vec<IssueLayoutPayload>>,
     #[serde(rename = "issueTypeScreenScheme", default, skip_serializing_if = "Option::is_none")]
     pub issue_type_screen_scheme: Option<IssueTypeScreenSchemePayload>,
-    /// The screen schemes See https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/\#api-rest-api-3-screenscheme-post
+    /// The screen schemes See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screen-schemes/\#api-rest-api-3-screenscheme-post>
     #[serde(rename = "screenScheme", default, skip_serializing_if = "Option::is_none")]
     pub screen_scheme: Option<Vec<ScreenSchemePayload>>,
-    /// The screens. See https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/\#api-rest-api-3-screens-post
+    /// The screens. See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-screens/\#api-rest-api-3-screens-post>
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub screens: Option<Vec<ScreenPayload>>,
 }

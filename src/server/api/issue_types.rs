@@ -69,7 +69,7 @@ impl<'a> IssueTypesService<'a> {
     /// You *must* use "avatar" as the name of the upload parameter:
     /// curl -c cookiejar.txt -X POST -u admin:admin -H "X-Atlassian-Token: no-check" \
     ///   -F "avatar=@mynewavatar.png;type=image/png" \
-    ///   'http://localhost:8090/jira/rest/api/2/issuetype/1/avatar/temporary'
+    ///   '<http://localhost:8090/jira/rest/api/2/issuetype/1/avatar/temporary>'
     pub fn store_temporary_issue_type_avatar_using_multi_part(
         &self,
         id: impl Into<String>,
@@ -464,7 +464,7 @@ impl<'a> CreateIssueTypeAvatarFromTemporaryRequest<'a> {
 /// You *must* use "avatar" as the name of the upload parameter:
 /// curl -c cookiejar.txt -X POST -u admin:admin -H "X-Atlassian-Token: no-check" \
 ///   -F "avatar=@mynewavatar.png;type=image/png" \
-///   'http://localhost:8090/jira/rest/api/2/issuetype/1/avatar/temporary'
+///   '<http://localhost:8090/jira/rest/api/2/issuetype/1/avatar/temporary>'
 pub struct StoreTemporaryIssueTypeAvatarUsingMultiPartRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

@@ -11,7 +11,7 @@ crate::open_enum! {
     }
 }
 
-/// The payload for creating a security level member. See https://support.atlassian.com/jira-cloud-administration/docs/configure-issue-security-schemes/
+/// The payload for creating a security level member. See <https://support.atlassian.com/jira-cloud-administration/docs/configure-issue-security-schemes/>
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct SecurityLevelMemberPayload {
     /// Defines the value associated with the type. For reporter this would be \{"null"\}; for users this would be the names of specific users); for group this would be group names like \{"administrators", "jira-administrators", "jira-users"\}
