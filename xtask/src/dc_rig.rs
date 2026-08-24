@@ -242,14 +242,39 @@ async fn run_wizard(http: &reqwest::Client, rig: &Rig) -> Result<(), Failure> {
 
     let mut page = wait_for_first_step(http, rig, &steps).await?;
 
+    let mut repeated = 0;
+    let mut previous = String::new();
+
     for _ in 0..12 {
         if is_set_up(http, rig).await {
             return Ok(());
         }
 
         let form = read_form(&page.html, &page.url)?;
+        let step = form.action.replace(&rig.base_url, "");
 
-        println!("  step: {}", form.action.replace(&rig.base_url, ""));
+        // A step that answers with itself has refused what it was given. Jira renders the reason through the browser
+        // rather than into the reply, so the honest thing this can do is name the step and stop, instead of spending
+        // the remaining tries re-sending an answer already refused.
+        if step == previous {
+            repeated += 1;
+
+            if repeated == 2 {
+                return Err(format!(
+                    "The wizard keeps serving {step} rather than moving on, so it has refused what was sent. Open \
+                     {}{step} in a browser and submit it by hand; that is where the reason is shown. An expired \
+                     timebomb in {} reads exactly like this.",
+                    rig.base_url,
+                    rig.compose_dir.join("timebomb-license.txt").display()
+                )
+                .into());
+            }
+        } else {
+            repeated = 0;
+            previous = step.clone();
+        }
+
+        println!("  step: {step}");
 
         let mut fields = form.fields.clone();
 

@@ -18,6 +18,7 @@ mod admin;
 mod agile;
 mod assets;
 mod cloud;
+mod jsm;
 mod server;
 mod service_desk;
 mod teams;
