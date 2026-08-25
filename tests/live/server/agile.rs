@@ -16,13 +16,17 @@ use jira::server::{
 };
 
 use super::fixtures::{
-    board_of, create_epic, create_task, create_test_filter, property_body, property_value, scrum_project, touch,
+    board_of, create_epic, create_task, create_test_filter, property_body, property_value, scrum_project,
+    software_licensed, touch,
 };
 use crate::harness::{ResourceTracker, server, test_name};
 
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn creates_a_board_over_a_filter_of_its_own() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "board owner").await;
     let filter = create_test_filter(&mut tracker, "board filter", &format!("project = {}", project.key)).await;
@@ -68,6 +72,9 @@ async fn creates_a_board_over_a_filter_of_its_own() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn reads_the_board_the_template_made() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "board reader").await;
     let board_id = board_of(&project.key).await;
@@ -121,6 +128,9 @@ async fn reads_the_board_the_template_made() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "sprint owner").await;
     let board_id = board_of(&project.key).await;
@@ -244,6 +254,9 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn moves_an_issue_into_an_epic_and_renames_it() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "epic owner").await;
     let epic = create_epic(&mut tracker, &project.key, "an epic").await;
@@ -307,6 +320,9 @@ async fn moves_an_issue_into_an_epic_and_renames_it() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn ranks_and_estimates_an_issue() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "ranking owner").await;
     let board_id = board_of(&project.key).await;

@@ -10,6 +10,7 @@ use std::time::Duration;
 
 use jira::server::{AddGroup, Filter, IssueCreateResponse, IssueUpdate, ProjectInput, UserWrite};
 use serde_json::json;
+use tokio::sync::OnceCell;
 
 use crate::harness::{ResourceTracker, project_key, require_server_env, run_id, server, test_name};
 
@@ -18,6 +19,27 @@ const SCRUM_TEMPLATE: &str = "com.pyxis.greenhopper.jira:gh-scrum-template";
 
 /// The Jira Core template, for the suites that want a project and nothing hung off it.
 const BUSINESS_TEMPLATE: &str = "com.atlassian.jira-core-project-templates:jira-core-project-management";
+
+pub async fn software_licensed() -> bool {
+    static LICENSED: OnceCell<bool> = OnceCell::const_new();
+
+    *LICENSED
+        .get_or_init(|| async {
+            let licensed = server().application_roles().get_application_role("jira-software").send().await.is_ok();
+
+            if !licensed {
+                eprintln!(
+                    "[live] Jira Software is not licensed on this instance, so every suite needing a board, a \
+sprint or an issue in a software project stands down. Atlassian's published Jira Software Data Center timebomb is \
+expired and they have not replaced it, so a licence of your own in docker/jira-dc/timebomb-license.txt is what \
+brings these back."
+                );
+            }
+
+            licensed
+        })
+        .await
+}
 
 /// A 1×1 transparent PNG: the smallest thing the avatar endpoints accept.
 const TINY_PNG: &[u8] = &[

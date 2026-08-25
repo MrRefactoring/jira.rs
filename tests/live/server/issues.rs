@@ -17,7 +17,9 @@ use jira::server::{
 };
 use serde_json::json;
 
-use super::fixtures::{admin_username, create_issue, create_task, property_body, property_value, scrum_project, touch};
+use super::fixtures::{
+    admin_username, create_issue, create_task, property_body, property_value, scrum_project, software_licensed, touch,
+};
 use crate::harness::{ResourceTracker, poll_until, server, test_name};
 
 /// The global id the remote issue links in this suite are written under.
@@ -40,6 +42,9 @@ fn fields(value: serde_json::Value) -> HashMap<String, serde_json::Value> {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn creates_an_issue_in_wiki_markup_and_edits_it() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "issues suite").await;
     let username = admin_username();
@@ -125,6 +130,9 @@ async fn creates_an_issue_in_wiki_markup_and_edits_it() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn creates_issues_in_bulk() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "bulk issues").await;
 
@@ -171,6 +179,9 @@ async fn creates_issues_in_bulk() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn moves_the_issue_through_a_transition() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "transition subject").await;
     let issue = create_task(&mut tracker, &project.key, "an issue to transition").await;
@@ -215,6 +226,9 @@ async fn moves_the_issue_through_a_transition() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn adds_updates_pins_and_deletes_a_comment() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "comment subject").await;
     let issue = create_task(&mut tracker, &project.key, "an issue to comment on").await;
@@ -283,6 +297,9 @@ async fn adds_updates_pins_and_deletes_a_comment() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn logs_work_and_edits_it() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "worklog subject").await;
     let issue = create_task(&mut tracker, &project.key, "an issue to log work against").await;
@@ -341,6 +358,9 @@ async fn logs_work_and_edits_it() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn votes_and_watches() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "vote subject").await;
     let issue = create_task(&mut tracker, &project.key, "an issue to vote on").await;
@@ -376,6 +396,9 @@ async fn votes_and_watches() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn stores_and_removes_a_property() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "issue property holder").await;
     let issue = create_task(&mut tracker, &project.key, "an issue with a property").await;
@@ -416,6 +439,9 @@ async fn stores_and_removes_a_property() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn keeps_remote_links_by_id_and_by_global_id() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "remote link holder").await;
     let issue = create_task(&mut tracker, &project.key, "an issue with remote links").await;
@@ -497,6 +523,9 @@ async fn keeps_remote_links_by_id_and_by_global_id() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn links_two_issues_and_unlinks_them() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "link holder").await;
     let issue = create_task(&mut tracker, &project.key, "one end of a link").await;
@@ -544,6 +573,9 @@ async fn links_two_issues_and_unlinks_them() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn reads_and_moves_sub_tasks() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "sub-task holder").await;
     let parent = create_task(&mut tracker, &project.key, "a parent").await;
@@ -584,6 +616,9 @@ async fn reads_and_moves_sub_tasks() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn attaches_a_file_and_removes_it() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "attachment holder").await;
     let issue = create_task(&mut tracker, &project.key, "an issue with an attachment").await;
@@ -622,6 +657,9 @@ async fn attaches_a_file_and_removes_it() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn archives_restores_and_notifies() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "archive subject").await;
     let issue = create_task(&mut tracker, &project.key, "an issue to archive").await;
@@ -656,6 +694,9 @@ async fn archives_restores_and_notifies() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn finds_the_issue_by_jql_and_through_the_picker() {
+    if !software_licensed().await {
+        return;
+    }
     let mut tracker = ResourceTracker::new();
     let project = scrum_project(&mut tracker, "search subject").await;
     let issue = create_task(&mut tracker, &project.key, "an issue to find").await;

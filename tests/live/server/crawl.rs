@@ -34,6 +34,7 @@ use std::fs;
 use jira::server::{CommentJson, Filter, IssueUpdate, ProjectInput, Version, WorkflowScheme};
 use serde_json::{Value, json};
 
+use super::fixtures::software_licensed;
 use crate::harness::{ResourceTracker, run_id, server, server_client, test_name};
 
 /// Where the generated operations live, as the crate compiles them.
@@ -489,6 +490,9 @@ fn fill(endpoint: &Endpoint, values: &Values) -> Option<String> {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn reads_every_endpoint_whose_path_parameters_it_can_supply() {
+    if !software_licensed().await {
+        return;
+    }
     let generated = read_generated();
 
     // Every generated operation writes both as literals. A miss means the generator started building its URLs some
