@@ -16,9 +16,7 @@ pub mod server_client;
 
 pub use client::{admin_key_client, admin_surface, agile, client, cloud, org_id, service_desk, teams, user_management};
 pub use entitlement::is_not_entitled;
-pub use env::{
-    has_admin_env, has_jsm_env, has_live_env, has_server_env, require_jsm_env, require_live_env, require_server_env,
-};
+pub use env::{has_admin_env, require_jsm_env, require_live_env, require_server_env};
 pub use fixtures::{
     TEST_ISSUE_TYPE, TEST_PROJECT_KEY, TestBoard, create_issue_with, create_test_board, create_test_issue, document_of,
     scrum_board,

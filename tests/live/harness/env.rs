@@ -41,24 +41,9 @@ fn first_set(names: &[&str]) -> Option<String> {
     names.iter().filter_map(|name| std::env::var(name).ok()).find(|value| !value.trim().is_empty())
 }
 
-/// Whether the credentials the Cloud suites need are present.
-pub fn has_live_env() -> bool {
-    first_set(&["JIRA_BASE_URL", "HOST"]).is_some() && first_set(&["JIRA_EMAIL", "EMAIL"]).is_some()
-}
-
 /// Whether an organization API key is configured, which the administration suites need and CI does not have.
 pub fn has_admin_env() -> bool {
     first_set(&["JIRA_ADMIN_API_KEY"]).is_some()
-}
-
-/// Whether a Data Center instance is reachable, which the `server` suites need.
-pub fn has_server_env() -> bool {
-    first_set(&["JIRA_SERVER_BASE_URL"]).is_some()
-}
-
-/// Whether a Service Management Data Center instance is reachable, which the `jsm` suites need.
-pub fn has_jsm_env() -> bool {
-    first_set(&["JSM_SERVER_BASE_URL"]).is_some()
 }
 
 /// The Service Management Data Center instance, or a single actionable failure.
