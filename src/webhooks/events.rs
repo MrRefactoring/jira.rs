@@ -1,4 +1,13 @@
+//! The events Jira sends a webhook for.
+
 crate::open_enum! {
+    /// The event a delivery reports, and the field to switch on.
+    ///
+    /// The variants spell the literal values of the body's `webhookEvent` field, prefix included — Atlassian prefixes
+    /// some with `jira:` and not others, and nothing about the event decides which.
+    ///
+    /// Open, like every enum in this crate, and here the reason is sharper than usual: a receiver that rejects an
+    /// event Atlassian added last Tuesday is an outage rather than a safeguard.
     pub enum WebhookEvent {
         JiraIssueCreated => "jira:issue_created",
         JiraIssueUpdated => "jira:issue_updated",
