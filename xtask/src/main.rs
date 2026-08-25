@@ -6,9 +6,11 @@
 //! cargo xtask jira-dc down
 //! cargo xtask jsm-dc up       # the same for the Service Management suites
 //! cargo xtask audit           # run the live suite and report what the types do not describe
+//! cargo xtask coverage server # run a rig's suite and report which of its operations it called
 //! ```
 
 mod audit;
+mod coverage;
 mod dc_rig;
 
 use std::path::PathBuf;
@@ -53,6 +55,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         "jira-dc" => dc_rig::run(&jira_dc(), &command).await,
         "jsm-dc" => dc_rig::run(&jsm_dc(), &command).await,
         "audit" => audit::run(&workspace_root(), &std::env::args().skip(2).collect::<Vec<_>>()).await,
+        "coverage" => coverage::run(&workspace_root(), &std::env::args().skip(2).collect::<Vec<_>>()).await,
         other => Err(format!(
             "Unknown task \"{other}\". Use `cargo xtask jira-dc <up|status|down>` or `cargo xtask jsm-dc <…>`."
         )

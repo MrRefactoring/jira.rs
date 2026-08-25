@@ -190,6 +190,9 @@ impl Client {
 
     /// The whole request loop: auth, retry, re-authentication and the error the status maps to.
     async fn execute(&self, config: &RequestConfig) -> Result<RawResponse> {
+        #[cfg(feature = "coverage")]
+        crate::core::coverage::record(&config.endpoint());
+
         let base = match &self.inner.oauth {
             Some(manager) => Some(manager.base_url().await?),
             None => self.inner.host.clone(),

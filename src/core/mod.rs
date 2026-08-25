@@ -5,6 +5,8 @@
 
 #[cfg(feature = "audit")]
 pub mod audit;
+#[cfg(feature = "coverage")]
+pub mod coverage;
 
 mod auth;
 mod body;
