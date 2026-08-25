@@ -14,13 +14,12 @@ documentation = "https://docs.rs/jira"
 readme = "README.md"
 keywords = ["jira", "atlassian", "api", "client", "rest"]
 categories = ["api-bindings", "web-programming::http-client"]
-# Neither reaches a consumer: the workflows are this repository's, and the compose files describe a throwaway
-# instance the live suites run against.
-exclude = [".github/", "docker/"]
+exclude = [".github/", "docker/", "tests/live/", "operations.json"]
 
 [features]
 default = ["cloud"]
 audit = ["dep:serde_ignored"]
+coverage = []
 
 # One feature per API surface, so a caller compiles the endpoints they use and not the ten thousand they do not.
 admin = []
