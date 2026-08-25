@@ -36,8 +36,12 @@ impl<'a> RequestAttachmentsService<'a> {
     /// A simple example to upload a file called "myfile.txt" in service project with ID 10001
     ///
     /// `curl -D- -u customer:customer -X POST -H "X-Atlassian-Token: no-check" -F`.
-    pub fn attach_temporary_file(&self, service_desk_id: impl Into<String>) -> AttachTemporaryFileRequest<'a> {
-        AttachTemporaryFileRequest::new(self.client, service_desk_id)
+    pub fn attach_temporary_file(
+        &self,
+        service_desk_id: impl Into<String>,
+        body: impl IntoIterator<Item = crate::core::Attachment>,
+    ) -> AttachTemporaryFileRequest<'a> {
+        AttachTemporaryFileRequest::new(self.client, service_desk_id, body)
     }
 }
 
@@ -110,17 +114,23 @@ impl<'a> CreateAttachmentRequest<'a> {
 pub struct AttachTemporaryFileRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
-    body: Option<Vec<FilePart>>,
+    body: Vec<crate::core::Attachment>,
+    content_type: Option<String>,
 }
 
 impl<'a> AttachTemporaryFileRequest<'a> {
-    fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self { client, service_desk_id: service_desk_id.into(), body: None }
+    fn new(
+        client: &'a crate::core::Client,
+        service_desk_id: impl Into<String>,
+        body: impl IntoIterator<Item = crate::core::Attachment>,
+    ) -> Self {
+        Self { client, service_desk_id: service_desk_id.into(), body: body.into_iter().collect(), content_type: None }
     }
 
+    /// The media type of the bytes being sent, e.g. `image/png`.
     #[must_use]
-    pub fn body(mut self, value: impl IntoIterator<Item = FilePart>) -> Self {
-        self.body = Some(value.into_iter().collect());
+    pub fn content_type(mut self, value: impl Into<String>) -> Self {
+        self.content_type = Some(value.into());
 
         self
     }
@@ -132,7 +142,11 @@ impl<'a> AttachTemporaryFileRequest<'a> {
             format!("/rest/servicedeskapi/servicedesk/{}/attachTemporaryFile", self.service_desk_id),
         );
 
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+        config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
+
+        config.body = Some(crate::core::Body::Multipart(crate::core::MultipartBody::new("file", self.body.clone())));
+
+        config.content_type = self.content_type.clone().or(None);
 
         Ok(config)
     }

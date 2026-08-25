@@ -9,7 +9,7 @@ pub struct CustomerRequestFieldValue {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub value: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub value: Option<serde_json::Value>,
     #[serde(rename = "renderedValue", default, skip_serializing_if = "Option::is_none")]
-    pub rendered_value: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub rendered_value: Option<serde_json::Value>,
 }

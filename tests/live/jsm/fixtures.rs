@@ -10,7 +10,9 @@ use jira::assets_server::{
 };
 use tokio::sync::OnceCell;
 
-use crate::harness::{RESOURCE_MARKER, ResourceTracker, assets_server, run_id, run_suffix, service_desk_server};
+use crate::harness::{
+    RESOURCE_MARKER, ResourceTracker, assets_server, jsm_platform, run_id, run_suffix, service_desk_server,
+};
 
 /// The world the suites run in, made once.
 pub struct Fixtures {
@@ -40,6 +42,54 @@ pub fn asset_name(label: &str) -> String {
 /// took. The label separates the fixture schema from a schema a single test makes for itself.
 pub fn schema_key(label: &str) -> String {
     format!("JRS{}", run_suffix(label, b"ABCDEFGHIJKLMNOPQRSTUVWXYZ", 7))
+}
+
+pub struct ServiceDeskProject {
+    pub service_desk_id: i64,
+    pub project_key: String,
+}
+
+const SERVICE_DESK_TEMPLATE: &str = "com.atlassian.servicedesk:basic-service-desk-project";
+
+pub async fn service_desk_project() -> &'static ServiceDeskProject {
+    static PROJECT: OnceCell<ServiceDeskProject> = OnceCell::const_new();
+
+    PROJECT.get_or_init(build_service_desk_project).await
+}
+
+async fn build_service_desk_project() -> ServiceDeskProject {
+    let project_key = schema_key("service desk");
+
+    jsm_platform()
+        .projects()
+        .create_project(jira::server::ProjectInput {
+            key: Some(project_key.clone()),
+            name: Some(asset_name("service desk")),
+            lead: Some("admin".to_owned()),
+            project_type_key: Some("service_desk".to_owned()),
+            project_template_key: Some(SERVICE_DESK_TEMPLATE.to_owned()),
+            ..jira::server::ProjectInput::default()
+        })
+        .send()
+        .await
+        .expect("a licensed instance accepts a service desk project");
+
+    let desks = service_desk_server()
+        .service_desks()
+        .get_service_desks()
+        .send()
+        .await
+        .expect("the instance lists its service desks");
+
+    let service_desk_id = desks
+        .values
+        .iter()
+        .find(|desk| desk.project_key.as_deref() == Some(project_key.as_str()))
+        .and_then(|desk| desk.id.as_ref())
+        .and_then(|id| id.parse::<i64>().ok())
+        .expect("the project just created is served as a service desk");
+
+    ServiceDeskProject { service_desk_id, project_key }
 }
 
 /// The fixtures, built on first use and shared by every suite.

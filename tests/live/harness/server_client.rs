@@ -69,6 +69,13 @@ pub fn assets_server() -> &'static AssetsServerClient {
     SURFACE.get_or_init(|| AssetsServerClient::new(jsm_client().clone()))
 }
 
+/// The Jira platform on the Service Management rig, which is where a service desk project is made.
+pub fn jsm_platform() -> &'static ServerClient {
+    static SURFACE: OnceLock<ServerClient> = OnceLock::new();
+
+    SURFACE.get_or_init(|| ServerClient::new(jsm_client().clone()))
+}
+
 /// Service Management, as a self-hosted instance serves it.
 pub fn service_desk_server() -> &'static ServiceDeskServerClient {
     static SURFACE: OnceLock<ServiceDeskServerClient> = OnceLock::new();

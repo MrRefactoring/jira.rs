@@ -426,7 +426,7 @@ impl<'a> GetIssuesInQueueRequest<'a> {
 pub struct ReorderQueuesRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
-    body: Option<String>,
+    body: Option<Vec<i64>>,
 }
 
 impl<'a> ReorderQueuesRequest<'a> {
@@ -435,8 +435,8 @@ impl<'a> ReorderQueuesRequest<'a> {
     }
 
     #[must_use]
-    pub fn body(mut self, value: impl Into<String>) -> Self {
-        self.body = Some(value.into());
+    pub fn body(mut self, value: impl IntoIterator<Item = i64>) -> Self {
+        self.body = Some(value.into_iter().collect());
 
         self
     }
@@ -454,7 +454,7 @@ impl<'a> ReorderQueuesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Queue> {
+    pub async fn send(self) -> crate::core::Result<Vec<Queue>> {
         self.client.send(&self.config()?).await
     }
 
