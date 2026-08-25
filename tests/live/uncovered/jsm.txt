@@ -1,0 +1,4 @@
+unreachable DELETE /rest/servicedeskapi/organization/cleanup — Service Management 10.3 does not route it: the instance answers 500 wrapping its own 404.
+unreachable GET /rest/servicedeskapi/request/{issueIdOrKey}/approval/{approvalId} — the basic service desk template configures no approval workflow, so nothing has an approval.
+unreachable POST /rest/servicedeskapi/request/{issueIdOrKey}/approval/{approvalId} — the basic service desk template configures no approval workflow, so nothing has an approval.
+unreachable GET /rest/servicedeskapi/request/{issueIdOrKey}/approval/{approvalId}/config — the basic service desk template configures no approval workflow, so nothing has an approval.

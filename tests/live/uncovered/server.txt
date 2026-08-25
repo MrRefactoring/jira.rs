@@ -1,0 +1,86 @@
+unreachable POST /rest/agile/1.0/backlog/issue — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable POST /rest/agile/1.0/board — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable DELETE /rest/agile/1.0/board/{boardId} — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/board/{boardId} — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/board/{boardId}/backlog — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/board/{boardId}/configuration — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/board/{boardId}/epic — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/board/{boardId}/epic/none/issue — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/board/{boardId}/epic/{epicId}/issue — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/board/{boardId}/issue — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/board/{boardId}/project — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/board/{boardId}/properties — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable DELETE /rest/agile/1.0/board/{boardId}/properties/{propertyKey} — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/board/{boardId}/properties/{propertyKey} — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable PUT /rest/agile/1.0/board/{boardId}/properties/{propertyKey} — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/board/{boardId}/settings/refined-velocity — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable PUT /rest/agile/1.0/board/{boardId}/settings/refined-velocity — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/board/{boardId}/sprint — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/board/{boardId}/sprint/{sprintId}/issue — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/board/{boardId}/version — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable POST /rest/agile/1.0/epic/none/issue — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/epic/{epicIdOrKey} — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable POST /rest/agile/1.0/epic/{epicIdOrKey} — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/epic/{epicIdOrKey}/issue — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable POST /rest/agile/1.0/epic/{epicIdOrKey}/issue — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable PUT /rest/agile/1.0/epic/{epicIdOrKey}/rank — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable PUT /rest/agile/1.0/issue/rank — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable PUT /rest/agile/1.0/issue/{issueIdOrKey}/estimation — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable POST /rest/agile/1.0/sprint — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable PUT /rest/agile/1.0/sprint/unmap — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable PUT /rest/agile/1.0/sprint/unmap-all — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable DELETE /rest/agile/1.0/sprint/{sprintId} — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/sprint/{sprintId} — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable POST /rest/agile/1.0/sprint/{sprintId} — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable PUT /rest/agile/1.0/sprint/{sprintId} — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/sprint/{sprintId}/issue — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable POST /rest/agile/1.0/sprint/{sprintId}/issue — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/sprint/{sprintId}/properties — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable DELETE /rest/agile/1.0/sprint/{sprintId}/properties/{propertyKey} — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable GET /rest/agile/1.0/sprint/{sprintId}/properties/{propertyKey} — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable PUT /rest/agile/1.0/sprint/{sprintId}/properties/{propertyKey} — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+unreachable POST /rest/agile/1.0/sprint/{sprintId}/swap — the Agile endpoints need a board, and a board needs a Jira Software licence this rig has no public key for.
+untested DELETE /rest/api/2/attachment/{id}
+untested GET /rest/api/2/attachment/{id}
+untested GET /rest/api/2/attachment/{id}/expand/human
+untested GET /rest/api/2/attachment/{id}/expand/raw
+untested DELETE /rest/api/2/comment/{commentId}/properties/{propertyKey}
+untested PUT /rest/api/2/comment/{commentId}/properties/{propertyKey}
+untested GET /rest/api/2/customFieldOption/{id}
+untested GET /rest/api/2/dashboard/{dashboardId}/items/{itemId}/properties
+untested DELETE /rest/api/2/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}
+untested GET /rest/api/2/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}
+untested PUT /rest/api/2/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}
+untested POST /rest/api/2/issue/archive
+untested POST /rest/api/2/issue/bulk
+untested POST /rest/api/2/issue/remotelink/reciprocal
+untested PUT /rest/api/2/issue/{issueIdOrKey}
+untested PUT /rest/api/2/issue/{issueIdOrKey}/archive
+untested PUT /rest/api/2/issue/{issueIdOrKey}/assignee
+untested POST /rest/api/2/issue/{issueIdOrKey}/attachments
+untested DELETE /rest/api/2/issue/{issueIdOrKey}/comment/{id}
+untested PUT /rest/api/2/issue/{issueIdOrKey}/comment/{id}
+untested PUT /rest/api/2/issue/{issueIdOrKey}/comment/{id}/pin
+untested POST /rest/api/2/issue/{issueIdOrKey}/notify
+untested DELETE /rest/api/2/issue/{issueIdOrKey}/properties/{propertyKey}
+untested DELETE /rest/api/2/issue/{issueIdOrKey}/remotelink
+untested POST /rest/api/2/issue/{issueIdOrKey}/remotelink
+untested DELETE /rest/api/2/issue/{issueIdOrKey}/remotelink/{linkId}
+untested GET /rest/api/2/issue/{issueIdOrKey}/remotelink/{linkId}
+untested PUT /rest/api/2/issue/{issueIdOrKey}/remotelink/{linkId}
+untested PUT /rest/api/2/issue/{issueIdOrKey}/restore
+untested POST /rest/api/2/issue/{issueIdOrKey}/subtask/move
+untested POST /rest/api/2/issue/{issueIdOrKey}/transitions
+untested DELETE /rest/api/2/issue/{issueIdOrKey}/votes
+untested POST /rest/api/2/issue/{issueIdOrKey}/votes
+untested DELETE /rest/api/2/issue/{issueIdOrKey}/watchers
+untested POST /rest/api/2/issue/{issueIdOrKey}/watchers
+untested POST /rest/api/2/issue/{issueIdOrKey}/worklog
+untested DELETE /rest/api/2/issue/{issueIdOrKey}/worklog/{id}
+untested PUT /rest/api/2/issue/{issueIdOrKey}/worklog/{id}
+untested POST /rest/api/2/issueLink
+untested DELETE /rest/api/2/issueLink/{linkId}
+untested GET /rest/api/2/issueLink/{linkId}
+untested POST /rest/api/2/search
+untested GET /rest/api/2/securitylevel/{id}
+untested POST /rest/api/2/worklog/list

@@ -1,3 +1,4 @@
+use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 use std::process::Command;
 
@@ -56,7 +57,9 @@ pub async fn run(workspace_root: &Path, arguments: &[String]) -> Result<(), Fail
         .status()?;
 
     let recorded = std::fs::read_to_string(&output).unwrap_or_default();
-    let report = report(name, &shipped, &recorded);
+    let ledger = read_ledger(&ledger_path(workspace_root, name))?;
+    let called = called_operations(&shipped, &recorded);
+    let report = report(name, &shipped, &called, &ledger);
 
     println!("\n{report}");
 
@@ -68,7 +71,138 @@ pub async fn run(workspace_root: &Path, arguments: &[String]) -> Result<(), Fail
         return Err("the suite failed; the coverage above is what it reached before stopping".into());
     }
 
-    Ok(())
+    hold_the_ratchet(name, &shipped, &called, &ledger)
+}
+
+fn ledger_path(workspace_root: &Path, rig: &str) -> std::path::PathBuf {
+    workspace_root.join("tests/live/uncovered").join(format!("{rig}.txt"))
+}
+
+fn hold_the_ratchet(
+    rig: &str,
+    shipped: &[&Operation],
+    called: &BTreeSet<String>,
+    ledger: &Ledger,
+) -> Result<(), Failure> {
+    let key = |operation: &Operation| format!("{} {}", operation.method, operation.path);
+    let known: BTreeSet<String> = shipped.iter().map(|operation| key(operation)).collect();
+
+    let unaccounted: Vec<String> = shipped
+        .iter()
+        .filter(|operation| !called.contains(&operation.operation) && !ledger.holds(&key(operation)))
+        .map(|operation| format!("  {} — {}", key(operation), operation.operation))
+        .collect();
+
+    let stale: Vec<String> = shipped
+        .iter()
+        .filter(|operation| called.contains(&operation.operation) && ledger.holds(&key(operation)))
+        .map(|operation| format!("  {}", key(operation)))
+        .collect();
+
+    let unknown: Vec<String> =
+        ledger.keys().filter(|listed| !known.contains(*listed)).map(|listed| format!("  {listed}")).collect();
+
+    let mut refusal = String::new();
+
+    if !unaccounted.is_empty() {
+        refusal.push_str(&format!(
+            "Operations this rig ships that no suite calls and {}.txt does not record: {}. Write a test, or record \
+             the operation as `untested` while it waits for one, and as `unreachable` with a reason where this \
+             instance cannot answer it at all.\n{}\n\n",
+            rig,
+            unaccounted.len(),
+            unaccounted.join("\n"),
+        ));
+    }
+
+    if !stale.is_empty() {
+        refusal.push_str(&format!(
+            "Operations recorded in {}.txt that a suite called anyway: {}. Remove these lines — a ledger that names \
+             what is already covered stops saying anything.\n{}\n\n",
+            rig,
+            stale.len(),
+            stale.join("\n"),
+        ));
+    }
+
+    if !unknown.is_empty() {
+        refusal.push_str(&format!(
+            "Operations recorded in {}.txt that this rig does not ship: {}. A regenerated surface renamed or \
+             dropped them.\n{}\n",
+            rig,
+            unknown.len(),
+            unknown.join("\n"),
+        ));
+    }
+
+    if refusal.is_empty() { Ok(()) } else { Err(refusal.into()) }
+}
+
+fn called_operations(shipped: &[&Operation], recorded: &str) -> BTreeSet<String> {
+    recorded
+        .lines()
+        .filter(|line| !line.trim().is_empty())
+        .filter_map(|call| attribute(shipped, call))
+        .map(|operation| operation.operation.clone())
+        .collect()
+}
+
+#[derive(Default)]
+struct Ledger {
+    unreachable: BTreeMap<String, String>,
+    untested: BTreeSet<String>,
+}
+
+impl Ledger {
+    fn holds(&self, key: &str) -> bool {
+        self.unreachable.contains_key(key) || self.untested.contains(key)
+    }
+
+    fn keys(&self) -> impl Iterator<Item = &String> {
+        self.unreachable.keys().chain(self.untested.iter())
+    }
+}
+
+fn read_ledger(path: &Path) -> Result<Ledger, Failure> {
+    let Ok(contents) = std::fs::read_to_string(path) else {
+        return Ok(Ledger::default());
+    };
+
+    let mut ledger = Ledger::default();
+
+    for (number, line) in contents.lines().enumerate() {
+        let line = line.trim();
+
+        if line.is_empty() {
+            continue;
+        }
+
+        let at = format!("{}:{}", path.display(), number + 1);
+        let (kind, rest) = line.split_once(' ').ok_or_else(|| format!("{at}: a line names a kind and an operation"))?;
+        let (operation, reason) = match rest.split_once(" — ") {
+            Some((operation, reason)) => (operation.trim(), Some(reason.trim())),
+            None => (rest.trim(), None),
+        };
+
+        match kind {
+            "unreachable" => {
+                let reason = reason.ok_or_else(|| {
+                    format!(
+                        "{at}: an unreachable operation records why this instance cannot answer it, after an em \
+                         dash. \"Hard to test\" is not a reason — the rig is disposable and the suites may ruin it."
+                    )
+                })?;
+
+                ledger.unreachable.insert(operation.to_owned(), reason.to_owned());
+            }
+            "untested" => {
+                ledger.untested.insert(operation.to_owned());
+            }
+            other => return Err(format!("{at}: \"{other}\" is neither `unreachable` nor `untested`.").into()),
+        }
+    }
+
+    Ok(ledger)
 }
 
 fn placeholders(path: &str) -> usize {
@@ -97,21 +231,9 @@ fn attribute<'a>(shipped: &[&'a Operation], call: &str) -> Option<&'a Operation>
         .copied()
 }
 
-fn report(name: &str, shipped: &[&Operation], recorded: &str) -> String {
-    let calls: Vec<&str> = recorded.lines().filter(|line| !line.trim().is_empty()).collect();
-
-    let mut called: Vec<&str> = Vec::new();
-    let mut unattributed = 0;
-
-    for call in &calls {
-        match attribute(shipped, call) {
-            Some(operation) => called.push(&operation.operation),
-            None => unattributed += 1,
-        }
-    }
-
+fn report(rig: &str, shipped: &[&Operation], called: &BTreeSet<String>, ledger: &Ledger) -> String {
     let mut uncovered: Vec<&&Operation> =
-        shipped.iter().filter(|operation| !called.contains(&operation.operation.as_str())).collect();
+        shipped.iter().filter(|operation| !called.contains(&operation.operation)).collect();
 
     uncovered.sort_by(|left, right| left.path.cmp(&right.path).then(left.method.cmp(&right.method)));
 
@@ -119,14 +241,7 @@ fn report(name: &str, shipped: &[&Operation], recorded: &str) -> String {
     let covered = total - uncovered.len();
     let percent = covered * 100 / total;
 
-    let mut report = format!("## Coverage — {name}\n\n{covered} of {total} operations called ({percent}%).\n");
-
-    if unattributed > 0 {
-        report.push_str(&format!(
-            "\nRecorded requests that matched no operation this rig ships: {unattributed}. A request the harness builds \
-             by hand looks like this, and so does a path the manifest spells differently.\n"
-        ));
-    }
+    let mut report = format!("## Coverage — {rig}\n\n{covered} of {total} operations called ({percent}%).\n");
 
     if uncovered.is_empty() {
         report.push_str("\nEvery operation this rig ships was called.\n");
@@ -134,16 +249,18 @@ fn report(name: &str, shipped: &[&Operation], recorded: &str) -> String {
         return report;
     }
 
-    report.push_str("\n### Never called\n\n");
+    report.push_str("\n### Not called\n\n");
 
     for operation in uncovered {
-        report.push_str(&format!("- `{} {}` — {}\n", operation.method, operation.path, operation.operation));
-    }
+        let key = format!("{} {}", operation.method, operation.path);
+        let note = match ledger.unreachable.get(&key) {
+            Some(reason) => format!(" — unreachable: {reason}"),
+            None if ledger.untested.contains(&key) => " — untested".to_owned(),
+            None => " — neither called nor recorded".to_owned(),
+        };
 
-    report.push_str(
-        "\nEach line is either a test to write or a reason to record. The instance is disposable and the suites may \
-         ruin it, so \"hard to test\" is not one.\n",
-    );
+        report.push_str(&format!("- `{key}` — {}{note}\n", operation.operation));
+    }
 
     report
 }
@@ -210,11 +327,12 @@ mod tests {
         ];
         let shipped: Vec<&Operation> = shipped.iter().collect();
 
-        let report = report("server", &shipped, "GET /rest/api/2/myself\n");
+        let called = called_operations(&shipped, "GET /rest/api/2/myself\n");
+        let report = report("server", &shipped, &called, &Ledger::default());
 
         assert!(report.contains("1 of 2 operations called (50%)"), "{report}");
         assert!(report.contains("getDashboards"), "{report}");
-        assert!(!report.contains("getMyself"), "{report}");
+        assert!(report.contains("neither called nor recorded"), "{report}");
     }
 
     #[test]
@@ -222,9 +340,61 @@ mod tests {
         let shipped = [operation("GET", "/rest/api/2/myself", "getMyself")];
         let shipped: Vec<&Operation> = shipped.iter().collect();
 
-        let report = report("server", &shipped, "GET /rest/api/2/myself\nGET /rest/api/2/somethingElse\n");
+        let called = called_operations(&shipped, "GET /rest/api/2/myself\nGET /rest/api/2/somethingElse\n");
+        let report = report("server", &shipped, &called, &Ledger::default());
 
         assert!(report.contains("Every operation this rig ships was called."), "{report}");
-        assert!(report.contains("matched no operation this rig ships: 1"), "{report}");
+    }
+
+    #[test]
+    fn an_operation_neither_called_nor_recorded_holds_the_ratchet() {
+        let shipped = [operation("GET", "/rest/api/2/myself", "getMyself")];
+        let shipped: Vec<&Operation> = shipped.iter().collect();
+
+        let refused = hold_the_ratchet("server", &shipped, &BTreeSet::new(), &Ledger::default())
+            .expect_err("an operation nobody calls and nobody recorded fails the run");
+
+        assert!(refused.to_string().contains("does not record: 1"), "{refused}");
+    }
+
+    #[test]
+    fn a_recorded_operation_lets_the_run_pass() {
+        let shipped = [operation("GET", "/rest/api/2/myself", "getMyself")];
+        let shipped: Vec<&Operation> = shipped.iter().collect();
+
+        let mut ledger = Ledger::default();
+        ledger.untested.insert("GET /rest/api/2/myself".to_owned());
+
+        assert!(hold_the_ratchet("server", &shipped, &BTreeSet::new(), &ledger).is_ok());
+    }
+
+    #[test]
+    fn a_recorded_operation_that_is_called_after_all_holds_the_ratchet() {
+        let shipped = [operation("GET", "/rest/api/2/myself", "getMyself")];
+        let shipped: Vec<&Operation> = shipped.iter().collect();
+
+        let mut ledger = Ledger::default();
+        ledger.untested.insert("GET /rest/api/2/myself".to_owned());
+
+        let called: BTreeSet<String> = ["getMyself".to_owned()].into_iter().collect();
+        let refused = hold_the_ratchet("server", &shipped, &called, &ledger)
+            .expect_err("a ledger that names what is covered says nothing");
+
+        assert!(refused.to_string().contains("recorded"), "{refused}");
+    }
+
+    #[test]
+    fn an_operation_the_rig_no_longer_ships_holds_the_ratchet() {
+        let shipped = [operation("GET", "/rest/api/2/myself", "getMyself")];
+        let shipped: Vec<&Operation> = shipped.iter().collect();
+
+        let mut ledger = Ledger::default();
+        ledger.untested.insert("GET /rest/api/2/gone".to_owned());
+
+        let called: BTreeSet<String> = ["getMyself".to_owned()].into_iter().collect();
+        let refused = hold_the_ratchet("server", &shipped, &called, &ledger)
+            .expect_err("a line naming an operation the rig does not ship is out of step");
+
+        assert!(refused.to_string().contains("does not ship: 1"), "{refused}");
     }
 }

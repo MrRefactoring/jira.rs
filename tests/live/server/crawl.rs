@@ -308,6 +308,12 @@ struct Fixture {
 }
 
 async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
+    let (project_type, project_template) = if software_licensed().await {
+        ("software", "com.pyxis.greenhopper.jira:gh-scrum-template")
+    } else {
+        ("business", "com.atlassian.jira-core-project-templates:jira-core-project-management")
+    };
+
     let me = server().myself().get_current_user().send().await.expect("the instance knows the caller");
     let lead = me.name.expect("a Data Center user is addressed by name, not by id");
     let project_key = crawl_project_key();
@@ -318,8 +324,8 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
             key: Some(project_key.clone()),
             name: Some(test_name("crawl")),
             lead: Some(lead),
-            project_type_key: Some("software".to_owned()),
-            project_template_key: Some("com.pyxis.greenhopper.jira:gh-scrum-template".to_owned()),
+            project_type_key: Some(project_type.to_owned()),
+            project_template_key: Some(project_template.to_owned()),
             ..ProjectInput::default()
         })
         .send()
@@ -490,9 +496,6 @@ fn fill(endpoint: &Endpoint, values: &Values) -> Option<String> {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn reads_every_endpoint_whose_path_parameters_it_can_supply() {
-    if !software_licensed().await {
-        return;
-    }
     let generated = read_generated();
 
     // Every generated operation writes both as literals. A miss means the generator started building its URLs some
