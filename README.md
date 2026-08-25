@@ -191,6 +191,7 @@ let client = Client::builder().host("https://your-domain.atlassian.net").http_cl
 | `admin` | Organization administration |
 | `teams` | Teams |
 | `user-management` / `user-provisioning` | User management and SCIM provisioning |
+| `webhooks` | Event and payload types, and the signature check that says a delivery came from Jira |
 
 A surface you do not enable is not compiled: the whole crate is ten thousand types, and almost nobody needs all of
 them.

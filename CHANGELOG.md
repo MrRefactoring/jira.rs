@@ -10,6 +10,8 @@ version.
 ### Added
 
 - The transport: a client carrying auth, retry policy and error handling, shared by every API surface.
+- `webhooks`: the events Jira sends, the payloads it posts, and `verify_signature`, which is what tells a
+  delivery from Jira apart from a POST anyone can make to the same URL.
 - Authentication by API token, by personal access token, by a token minted per request, by Jira Cloud OAuth 2.0 (3LO)
   and by a Data Center instance's own OAuth 2.0 provider. Refreshes are single-flighted and a 401 buys one retry.
 - Eleven API surfaces behind a cargo feature each, generated from the same OpenAPI pipeline as `jira.js`: Cloud,

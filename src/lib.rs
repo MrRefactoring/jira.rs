@@ -65,6 +65,10 @@ pub mod user_management;
 #[cfg_attr(docsrs, doc(cfg(feature = "user-provisioning")))]
 pub mod user_provisioning;
 
+#[cfg(feature = "webhooks")]
+#[cfg_attr(docsrs, doc(cfg(feature = "webhooks")))]
+pub mod webhooks;
+
 pub use crate::core::{
     Attachment, Auth, Body, Client, ClientBuilder, Error, MultipartBody, QueryValue, RequestConfig, Result,
     RetryConfig, RetryOptions, SchemaMismatchIssue, SchemaMismatchReport, TenantContext, with_retry,
