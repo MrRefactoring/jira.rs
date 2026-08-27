@@ -1,6 +1,6 @@
 use jira::cloud::{
-    DeleteAndReplaceVersion, GetProjectVersionsPaginatedRequestOrderBy, GetVersionRequestExpand, IssueUpdateDetails,
-    Version, VersionMove, VersionMovePosition,
+    DeleteAndReplaceVersion, GetProjectVersionsPaginatedRequestOrderBy, GetVersionRequestExpand,
+    GetVersionRequestExpandValue, IssueUpdateDetails, Version, VersionMove, VersionMovePosition,
 };
 use serde_json::json;
 
@@ -69,7 +69,7 @@ async fn walks_a_version_through_its_lifecycle() {
     let expanded = cloud()
         .project_versions()
         .get_version(&version_id)
-        .expand(GetVersionRequestExpand::Variant1(vec!["issuesstatus".to_owned()]))
+        .expand(GetVersionRequestExpand::One(GetVersionRequestExpandValue::Issuesstatus))
         .send()
         .await
         .expect("the expand parameter is accepted");

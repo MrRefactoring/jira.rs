@@ -7,7 +7,7 @@
 //! everything else: paging, ordering, `expand`, and that an update is a replacement.
 
 use jira::cloud::{
-    Comment, CommentInput, CommentInputBody, DocumentType, GetCommentRequestExpand, GetCommentRequestExpandVariant2,
+    Comment, CommentInput, CommentInputBody, DocumentType, GetCommentRequestExpand, GetCommentRequestExpandValue,
     GetCommentsRequestOrderBy, IssueCommentListRequest, PageOfComments,
 };
 
@@ -157,7 +157,7 @@ async fn renders_the_body_as_html_only_when_expand_asks() {
     let rendered = cloud()
         .issue_comments()
         .get_comment(&issue.key, &comment_id)
-        .expand(GetCommentRequestExpand::Variant2(GetCommentRequestExpandVariant2::RenderedBody))
+        .expand(GetCommentRequestExpand::One(GetCommentRequestExpandValue::RenderedBody))
         .send()
         .await
         .expect("`expand=renderedBody` is accepted");

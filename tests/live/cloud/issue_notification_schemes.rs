@@ -1,5 +1,5 @@
 use jira::cloud::{
-    AddNotificationsDetails, GetNotificationSchemeRequestExpand, GetNotificationSchemeRequestExpandVariant2,
+    AddNotificationsDetails, GetNotificationSchemeRequestExpand, GetNotificationSchemeRequestExpandValue,
 };
 
 use crate::harness::cloud;
@@ -57,7 +57,7 @@ async fn returns_the_notification_events_only_when_expanded() {
     let expanded = cloud()
         .issue_notification_schemes()
         .get_notification_scheme(scheme_id)
-        .expand(GetNotificationSchemeRequestExpand::Variant2(GetNotificationSchemeRequestExpandVariant2::All))
+        .expand(GetNotificationSchemeRequestExpand::One(GetNotificationSchemeRequestExpandValue::All))
         .send()
         .await
         .expect("the expand parameter is accepted");
@@ -76,7 +76,7 @@ async fn pairs_each_event_with_the_holders_that_get_notified() {
     let scheme = cloud()
         .issue_notification_schemes()
         .get_notification_scheme(scheme_id)
-        .expand(GetNotificationSchemeRequestExpand::Variant2(GetNotificationSchemeRequestExpandVariant2::All))
+        .expand(GetNotificationSchemeRequestExpand::One(GetNotificationSchemeRequestExpandValue::All))
         .send()
         .await
         .expect("an expanded notification scheme reads back");

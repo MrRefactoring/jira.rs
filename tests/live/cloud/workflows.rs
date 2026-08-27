@@ -12,7 +12,7 @@
 //! endpoint returning the workflow model then failed to deserialize on every call. That the listing reads back at all
 //! is the standing proof the field is a string.
 
-use jira::cloud::{SearchWorkflowsRequestExpand, SearchWorkflowsRequestExpandVariant2, WorkflowSearchResponse};
+use jira::cloud::{SearchWorkflowsRequestExpand, SearchWorkflowsRequestExpandValue, WorkflowSearchResponse};
 
 use crate::harness::{TEST_PROJECT_KEY, cloud};
 
@@ -41,7 +41,7 @@ async fn returns_transitions_only_when_expand_asks_for_them() {
         .workflows()
         .search_workflows()
         .max_results(1)
-        .expand(SearchWorkflowsRequestExpand::Variant2(SearchWorkflowsRequestExpandVariant2::ValuesTransitions))
+        .expand(SearchWorkflowsRequestExpand::One(SearchWorkflowsRequestExpandValue::ValuesTransitions))
         .send()
         .await
         .expect("the expand parameter is accepted");
@@ -78,7 +78,7 @@ async fn describes_each_transition_with_a_type() {
         .workflows()
         .search_workflows()
         .max_results(1)
-        .expand(SearchWorkflowsRequestExpand::Variant2(SearchWorkflowsRequestExpandVariant2::ValuesTransitions))
+        .expand(SearchWorkflowsRequestExpand::One(SearchWorkflowsRequestExpandValue::ValuesTransitions))
         .send()
         .await
         .expect("the expand parameter is accepted");

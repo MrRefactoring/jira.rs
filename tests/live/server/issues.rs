@@ -728,7 +728,7 @@ async fn finds_the_issue_by_jql_and_through_the_picker() {
         .issue_search()
         .search()
         .jql(format!("key = {key}"))
-        .fields(SearchRequest2Fields::Variant1(vec!["summary".to_owned()]))
+        .fields(SearchRequest2Fields::Many(vec!["summary".to_owned()]))
         .send()
         .await
         .expect("a JQL search is accepted as query parameters too");

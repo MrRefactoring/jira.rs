@@ -560,8 +560,8 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
         .expect("the mapping for one workflow reads back");
 
     let named = match for_workflow {
-        GetWorkflow::WorkflowMapping(mapping) => mapping.workflow,
-        GetWorkflow::Variant1(mappings) => mappings.into_iter().next().and_then(|mapping| mapping.workflow),
+        GetWorkflow::One(mapping) => mapping.workflow,
+        GetWorkflow::Many(mappings) => mappings.into_iter().next().and_then(|mapping| mapping.workflow),
         other => panic!("naming a workflow answers with a mapping, got {other:?}"),
     };
 
@@ -569,7 +569,7 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
 
     let all = server().workflow_schemes().get_workflow(scheme_id).send().await.expect("every mapping reads back");
 
-    assert!(matches!(&all, GetWorkflow::Variant1(_)), "leaving the workflow out lists them all, got {all:?}");
+    assert!(matches!(&all, GetWorkflow::Many(_)), "leaving the workflow out lists them all, got {all:?}");
 
     touch(
         server().workflow_schemes().delete_workflow_scheme_issue_type(&issue_type, scheme_id).send().await,

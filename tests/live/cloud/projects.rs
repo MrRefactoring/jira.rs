@@ -1,4 +1,4 @@
-use jira::cloud::{GetProjectRequestExpand, SearchProjectsRequestOrderBy};
+use jira::cloud::{GetProjectRequestExpand, GetProjectRequestExpandValue, SearchProjectsRequestOrderBy};
 
 use crate::harness::{TEST_PROJECT_KEY, cloud};
 
@@ -46,7 +46,10 @@ async fn already_returns_lead_and_description_without_being_asked() {
     let expanded = cloud()
         .projects()
         .get_project(TEST_PROJECT_KEY)
-        .expand(GetProjectRequestExpand::Variant1(vec!["description".to_owned(), "lead".to_owned()]))
+        .expand(GetProjectRequestExpand::Many(vec![
+            GetProjectRequestExpandValue::Description,
+            GetProjectRequestExpandValue::Lead,
+        ]))
         .send()
         .await
         .expect("the expand parameter is accepted");
