@@ -20,7 +20,7 @@ jobs:
       version: ${{ steps.version.outputs.version }}
     steps:
       - name: 🔄 Checkout sources
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: ⚙️ Install the toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -59,7 +59,7 @@ jobs:
       release-id: ${{ steps.create.outputs.result }}
     steps:
       - name: 🔄 Checkout sources
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       # A draft, not a release. `cargo publish` is the irreversible step and it has not run yet; a draft that is never
       # un-drafted is what a failed publish looks like from the outside.
       - name: 📝 Create draft release from CHANGELOG
@@ -103,7 +103,7 @@ jobs:
       id-token: write
     steps:
       - name: 🔄 Checkout sources
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: ⚙️ Install the toolchain
         uses: dtolnay/rust-toolchain@stable
       - name: 🔑 Exchange the OIDC token

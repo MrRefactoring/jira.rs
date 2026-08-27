@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🔄 Checkout sources
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: ⚙️ Install the toolchain
         uses: dtolnay/rust-toolchain@stable
       - name: 💾 Cache the build

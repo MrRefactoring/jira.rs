@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🔄 Checkout sources
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: ⚙️ Install the toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🔄 Checkout sources
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: ⚙️ Install the toolchain
         uses: dtolnay/rust-toolchain@stable
       - name: 💾 Cache the build
@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🔄 Checkout sources
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: 📖 Read rust-version from the manifest
         id: msrv
         run: echo "version=$(grep '^rust-version' Cargo.toml | cut -d'"' -f2)" >> "$GITHUB_OUTPUT"
