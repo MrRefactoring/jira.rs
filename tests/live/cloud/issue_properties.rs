@@ -8,7 +8,9 @@
 use jira::cloud::{BulkIssuePropertyUpdateRequest, IssueFilterForBulkPropertySet};
 use serde_json::json;
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, poll_until, test_name};
+use crate::harness::{
+    ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, create_test_issue, poll_until, test_name,
+};
 
 const PROPERTY_KEY: &str = "jira.rs.livetest";
 
@@ -102,12 +104,10 @@ async fn walks_a_property_through_its_lifecycle() {
         .await
         .expect("the property can be deleted");
 
-    let error = cloud()
-        .issue_properties()
-        .get_issue_property(&issue.key, PROPERTY_KEY)
-        .send()
-        .await
-        .expect_err("a deleted property cannot be read");
+    let error = await_refused("a deleted property cannot be read", || {
+        cloud().issue_properties().get_issue_property(&issue.key, PROPERTY_KEY).send()
+    })
+    .await;
 
     assert!(error.is_not_found(), "{error}");
 

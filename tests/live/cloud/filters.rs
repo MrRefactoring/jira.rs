@@ -1,6 +1,6 @@
 use jira::cloud::{ColumnRequestBody, Filter};
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, test_name};
+use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, poll_until, test_name};
 
 /// A filter is owned by the account that created it and is private until shared, so it is one of the few pieces of
 /// Jira configuration a live test can create without affecting anyone else.
@@ -143,12 +143,13 @@ async fn marks_the_filter_as_a_favourite() {
 
     assert_eq!(favourited.favourite, Some(true));
 
-    let favourites = cloud().filters().get_favourite_filters().send().await.expect("the account lists its favourites");
+    poll_until("the filter to appear among the account's favourites", || async {
+        let favourites =
+            cloud().filters().get_favourite_filters().send().await.expect("the account lists its favourites");
 
-    assert!(
-        favourites.iter().any(|favourite| favourite.id.as_deref() == filter.id.as_deref()),
-        "the filter is among the account's favourites",
-    );
+        favourites.iter().any(|favourite| favourite.id.as_deref() == filter.id.as_deref()).then_some(())
+    })
+    .await;
 
     let unfavourited =
         cloud().filters().delete_favourite_for_filter(id).send().await.expect("a favourite can be given up");
@@ -189,7 +190,7 @@ async fn makes_the_filter_unreadable_once_deleted() {
 
     cloud().filters().delete_filter(id).send().await.expect("the owner may delete the filter");
 
-    let error = cloud().filters().get_filter(id).send().await.expect_err("a deleted filter cannot be read");
+    let error = await_refused("a deleted filter cannot be read", || cloud().filters().get_filter(id).send()).await;
 
     assert!(error.is_not_found(), "{error}");
 
@@ -235,7 +236,7 @@ async fn gives_a_filter_its_own_columns_then_takes_them_away_again() {
 
     cloud().filters().reset_columns(id).send().await.expect("the columns can be taken away again");
 
-    let after_reset = cloud().filters().get_columns(id).send().await.expect_err("the layout is gone again");
+    let after_reset = await_refused("the layout is gone again", || cloud().filters().get_columns(id).send()).await;
 
     assert!(after_reset.is_not_found(), "{after_reset}");
 

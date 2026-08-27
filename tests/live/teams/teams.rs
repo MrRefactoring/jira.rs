@@ -10,7 +10,7 @@ use jira::teams::{
     TeamResponseWithMembers, TeamResponseWithMembersState, TeamResponseWithMembersTeamType, TeamUpdatePayload,
 };
 
-use crate::harness::{ResourceTracker, org_id, teams, test_name};
+use crate::harness::{ResourceTracker, await_refused, org_id, teams, test_name};
 
 /// Creates a team on the organization and registers its deletion.
 ///
@@ -207,7 +207,8 @@ async fn deletes_a_team_and_the_api_then_reports_it_gone_rather_than_missing() {
 
     teams().teams().delete_team(&org, &team.team_id).send().await.expect("the team can be deleted");
 
-    let error = teams().teams().get_team(&org, &team.team_id).send().await.expect_err("a deleted team cannot be read");
+    let error =
+        await_refused("a deleted team cannot be read", || teams().teams().get_team(&org, &team.team_id).send()).await;
 
     assert!(error.is_api(), "{error}");
     assert_eq!(error.status(), Some(410), "a deleted team is gone, not absent: {error}");

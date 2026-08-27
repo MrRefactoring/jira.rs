@@ -9,7 +9,7 @@
 
 use serde_json::json;
 
-use crate::harness::{ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, cloud};
+use crate::harness::{ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, await_refused, cloud};
 
 const PROPERTY_KEY: &str = "jira.rs.livetest.issuetype";
 
@@ -73,12 +73,10 @@ async fn walks_an_issue_type_property_through_its_lifecycle() {
         .await
         .expect("the property can be deleted");
 
-    let error = cloud()
-        .issue_type_properties()
-        .get_issue_type_property(&issue_type_id, PROPERTY_KEY)
-        .send()
-        .await
-        .expect_err("a deleted property cannot be read");
+    let error = await_refused("a deleted property cannot be read", || {
+        cloud().issue_type_properties().get_issue_type_property(&issue_type_id, PROPERTY_KEY).send()
+    })
+    .await;
 
     assert!(error.is_not_found(), "{error}");
 

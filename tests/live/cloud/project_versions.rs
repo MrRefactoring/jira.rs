@@ -4,7 +4,9 @@ use jira::cloud::{
 };
 use serde_json::json;
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, poll_until, test_name};
+use crate::harness::{
+    ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, create_test_issue, poll_until, test_name,
+};
 
 /// A version, from creation to merge, inside the standing test project.
 ///
@@ -193,12 +195,10 @@ async fn walks_a_version_through_its_lifecycle() {
         .await
         .expect("one version can be merged into another");
 
-    let gone = cloud()
-        .project_versions()
-        .get_version(&version_id)
-        .send()
-        .await
-        .expect_err("a merged version no longer exists");
+    let gone = await_refused("a merged version no longer exists", || {
+        cloud().project_versions().get_version(&version_id).send()
+    })
+    .await;
 
     assert!(gone.is_not_found(), "{gone}");
 

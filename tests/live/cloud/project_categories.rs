@@ -1,6 +1,6 @@
 use jira::cloud::ProjectCategory;
 
-use crate::harness::{ResourceTracker, cloud, test_name};
+use crate::harness::{ResourceTracker, await_refused, cloud, test_name};
 
 /// A project category, from creation to removal.
 ///
@@ -118,12 +118,10 @@ async fn walks_a_project_category_through_its_lifecycle() {
         .await
         .expect("the category can be removed");
 
-    let gone = cloud()
-        .project_categories()
-        .get_project_category_by_id(throwaway_id)
-        .send()
-        .await
-        .expect_err("a removed category cannot be read");
+    let gone = await_refused("a removed category cannot be read", || {
+        cloud().project_categories().get_project_category_by_id(throwaway_id).send()
+    })
+    .await;
 
     assert!(gone.is_not_found(), "{gone}");
 

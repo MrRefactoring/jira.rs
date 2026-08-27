@@ -3,7 +3,7 @@ use jira::cloud::{
 };
 use serde_json::json;
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, test_name};
+use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, create_test_issue, test_name};
 
 /// A component, from creation to deletion, inside the standing test project.
 ///
@@ -140,12 +140,10 @@ async fn walks_a_component_through_its_lifecycle() {
 
     cloud().project_components().delete_component(&component_id).send().await.expect("the component can be deleted");
 
-    let gone = cloud()
-        .project_components()
-        .get_component(&component_id)
-        .send()
-        .await
-        .expect_err("a deleted component cannot be read");
+    let gone = await_refused("a deleted component cannot be read", || {
+        cloud().project_components().get_component(&component_id).send()
+    })
+    .await;
 
     assert!(gone.is_not_found(), "{gone}");
 

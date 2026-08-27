@@ -8,7 +8,9 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use jira::cloud::{Worklog, WorklogIdsRequest, WorklogInput, WorklogInputComment};
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, document_of, poll_until, test_name};
+use crate::harness::{
+    ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, create_test_issue, document_of, poll_until, test_name,
+};
 
 fn worklog_of(time_spent: &str, comment: Option<&str>) -> WorklogInput {
     WorklogInput {
@@ -133,12 +135,10 @@ async fn walks_a_worklog_through_its_lifecycle() {
     })
     .await;
 
-    let error = cloud()
-        .issue_worklogs()
-        .get_worklog(&issue.key, &worklog_id)
-        .send()
-        .await
-        .expect_err("a deleted worklog cannot be read");
+    let error = await_refused("a deleted worklog cannot be read", || {
+        cloud().issue_worklogs().get_worklog(&issue.key, &worklog_id).send()
+    })
+    .await;
 
     assert!(error.is_not_found(), "{error}");
 

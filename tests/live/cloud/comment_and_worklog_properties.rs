@@ -10,7 +10,7 @@
 use jira::cloud::{CommentInput, CommentInputBody, WorklogInput};
 use serde_json::json;
 
-use crate::harness::{ResourceTracker, cloud, create_test_issue, document_of, test_name};
+use crate::harness::{ResourceTracker, await_refused, cloud, create_test_issue, document_of, test_name};
 
 const PROPERTY_KEY: &str = "jira.rs.livetest.child";
 
@@ -134,12 +134,10 @@ async fn walks_comment_and_worklog_properties_side_by_side() {
         .await
         .expect("the comment property can be deleted");
 
-    let gone_from_comment = cloud()
-        .issue_comment_properties()
-        .get_comment_property(&comment_id, PROPERTY_KEY)
-        .send()
-        .await
-        .expect_err("a deleted comment property cannot be read");
+    let gone_from_comment = await_refused("a deleted comment property cannot be read", || {
+        cloud().issue_comment_properties().get_comment_property(&comment_id, PROPERTY_KEY).send()
+    })
+    .await;
 
     assert!(gone_from_comment.is_not_found(), "{gone_from_comment}");
 

@@ -12,7 +12,7 @@
 
 use jira::cloud::{GetRemoteIssueLinks, RemoteIssueLink, RemoteIssueLinkRequest, RemoteObject};
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, run_id, test_name};
+use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, create_test_issue, run_id, test_name};
 
 /// The listing answers with a single object when filtered by `globalId` and an array otherwise, so both shapes are
 /// flattened to the same thing.
@@ -157,12 +157,10 @@ async fn walks_a_remote_link_through_its_lifecycle() {
         .await
         .expect("a link can be deleted by its global id");
 
-    let error = cloud()
-        .issue_remote_links()
-        .get_remote_issue_link_by_id(&issue.key, &link_id)
-        .send()
-        .await
-        .expect_err("a deleted link cannot be read");
+    let error = await_refused("a deleted link cannot be read", || {
+        cloud().issue_remote_links().get_remote_issue_link_by_id(&issue.key, &link_id).send()
+    })
+    .await;
 
     assert!(error.is_not_found(), "{error}");
 

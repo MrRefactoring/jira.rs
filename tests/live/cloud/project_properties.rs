@@ -8,7 +8,7 @@
 
 use serde_json::json;
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud};
+use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud};
 
 const PROPERTY_KEY: &str = "jira.rs.livetest.project";
 
@@ -104,12 +104,10 @@ async fn walks_a_project_property_through_its_lifecycle() {
         .await
         .expect("the property can be deleted");
 
-    let error = cloud()
-        .project_properties()
-        .get_project_property(TEST_PROJECT_KEY, PROPERTY_KEY)
-        .send()
-        .await
-        .expect_err("a deleted property cannot be read");
+    let error = await_refused("a deleted property cannot be read", || {
+        cloud().project_properties().get_project_property(TEST_PROJECT_KEY, PROPERTY_KEY).send()
+    })
+    .await;
 
     assert!(error.is_not_found(), "{error}");
 

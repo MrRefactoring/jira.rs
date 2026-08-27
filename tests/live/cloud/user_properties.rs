@@ -6,7 +6,7 @@
 
 use serde_json::json;
 
-use crate::harness::{ResourceTracker, cloud};
+use crate::harness::{ResourceTracker, await_refused, cloud};
 
 const PROPERTY_KEY: &str = "jira.rs.livetest.user";
 
@@ -128,13 +128,10 @@ async fn walks_a_user_property_through_its_lifecycle() {
         .await
         .expect("the property can be deleted");
 
-    let error = cloud()
-        .user_properties()
-        .get_user_property(PROPERTY_KEY)
-        .account_id(&account_id)
-        .send()
-        .await
-        .expect_err("a deleted property cannot be read");
+    let error = await_refused("a deleted property cannot be read", || {
+        cloud().user_properties().get_user_property(PROPERTY_KEY).account_id(&account_id).send()
+    })
+    .await;
 
     assert!(error.is_not_found(), "{error}");
 

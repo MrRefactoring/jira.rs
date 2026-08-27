@@ -11,7 +11,9 @@ use jira::cloud::{
     GetCommentsRequestOrderBy, IssueCommentListRequest, PageOfComments,
 };
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, document_of, test_name};
+use crate::harness::{
+    ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, create_test_issue, document_of, test_name,
+};
 
 fn comment_of(text: &str) -> CommentInput {
     CommentInput { body: Some(CommentInputBody::Document(document_of(text))), ..CommentInput::default() }
@@ -109,12 +111,10 @@ async fn walks_a_comment_through_its_lifecycle() {
 
     cloud().issue_comments().delete_comment(&issue.key, &comment_id).send().await.expect("the comment can be deleted");
 
-    let error = cloud()
-        .issue_comments()
-        .get_comment(&issue.key, &comment_id)
-        .send()
-        .await
-        .expect_err("a deleted comment cannot be read");
+    let error = await_refused("a deleted comment cannot be read", || {
+        cloud().issue_comments().get_comment(&issue.key, &comment_id).send()
+    })
+    .await;
 
     assert!(error.is_not_found(), "{error}");
 

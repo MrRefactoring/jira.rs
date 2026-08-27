@@ -9,7 +9,7 @@
 
 use jira::core::Attachment;
 
-use crate::harness::{ResourceTracker, cloud, create_test_issue, test_name};
+use crate::harness::{ResourceTracker, await_refused, cloud, create_test_issue, test_name};
 
 /// Deliberately multibyte: a size measured in characters rather than bytes would not match.
 const TEXT: &str = "attachment body — с кириллицей и эмодзи 🎯";
@@ -164,12 +164,10 @@ async fn walks_an_attachment_through_its_lifecycle() {
 
     cloud().issue_attachments().remove_attachment(&attachment_id).send().await.expect("an attachment can be removed");
 
-    let error = cloud()
-        .issue_attachments()
-        .get_attachment(&attachment_id)
-        .send()
-        .await
-        .expect_err("a removed attachment cannot be described");
+    let error = await_refused("a removed attachment cannot be described", || {
+        cloud().issue_attachments().get_attachment(&attachment_id).send()
+    })
+    .await;
 
     assert!(error.is_not_found(), "{error}");
 

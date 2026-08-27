@@ -9,7 +9,7 @@
 
 use jira::cloud::{IssueLinkType, LinkIssueRequest, LinkedIssue};
 
-use crate::harness::{ResourceTracker, cloud, create_test_issue, test_name};
+use crate::harness::{ResourceTracker, await_refused, cloud, create_test_issue, poll_until, test_name};
 
 /// The full cycle, walked in one test because each step needs the link the step before it made.
 #[tokio::test]
@@ -64,10 +64,14 @@ async fn walks_a_link_through_creation_reading_and_deletion() {
     cloud().issue_links().delete_issue_link(&link_id).send().await.expect("a link can be removed");
 
     let gone =
-        cloud().issue_links().get_issue_link(&link_id).send().await.expect_err("a deleted link cannot be read back");
+        await_refused("a deleted link cannot be read back", || cloud().issue_links().get_issue_link(&link_id).send())
+            .await;
 
     assert!(gone.is_not_found(), "{gone}");
-    assert!(links_on(&outward.key).await.is_empty(), "the delete removes the link from the issues as well");
+    poll_until("the delete to remove the link from the issues as well", || async {
+        links_on(&outward.key).await.is_empty().then_some(())
+    })
+    .await;
 
     tracker.cleanup().await;
 }

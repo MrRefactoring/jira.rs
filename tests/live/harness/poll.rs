@@ -1,6 +1,8 @@
 use std::future::Future;
 use std::time::Duration;
 
+use jira::Error;
+
 /// Waits for state the API reaches on its own schedule.
 ///
 /// Jira is eventually consistent about indexing, permission propagation and asynchronous deletes, so a read taken the
@@ -23,4 +25,23 @@ where
     }
 
     panic!("[live] gave up waiting for {description} after {ATTEMPTS} attempts");
+}
+
+/// Waits for a read to start refusing, which is how an asynchronous delete finishes.
+///
+/// Jira acknowledges a delete before it has finished making it true, so the read straight after it can still answer
+/// the resource in full. It is the same lag as the one after a write, seen from the other side, and every case that
+/// deletes something and then asserts it is gone is exposed to it — two of them failed on a GitHub runner, where the
+/// round trip is longer than it is from a laptop, having passed locally minutes before.
+pub async fn await_refused<F, Fut, T>(description: &str, mut attempt: F) -> Error
+where
+    F: FnMut() -> Fut,
+    Fut: Future<Output = Result<T, Error>>,
+{
+    poll_until(description, move || {
+        let call = attempt();
+
+        async move { call.await.err() }
+    })
+    .await
 }
