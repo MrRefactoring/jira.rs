@@ -8,7 +8,7 @@
 
 use serde_json::json;
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud};
+use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_readable, await_refused, cloud};
 
 const PROPERTY_KEY: &str = "jira.rs.livetest.project";
 
@@ -38,12 +38,10 @@ async fn walks_a_project_property_through_its_lifecycle() {
         cloud().project_properties().delete_project_property(TEST_PROJECT_KEY, PROPERTY_KEY).send().await
     });
 
-    let property = cloud()
-        .project_properties()
-        .get_project_property(TEST_PROJECT_KEY, PROPERTY_KEY)
-        .send()
-        .await
-        .expect("the property reads back");
+    let property = await_readable("the property reads back", || {
+        cloud().project_properties().get_project_property(TEST_PROJECT_KEY, PROPERTY_KEY).send()
+    })
+    .await;
 
     assert_eq!(property.key.as_deref(), Some(PROPERTY_KEY));
     assert_eq!(property.value, Some(value), "a nested, mixed-type value survives the round trip untouched");
@@ -75,25 +73,23 @@ async fn walks_a_project_property_through_its_lifecycle() {
         .await
         .expect("the property can be written a second time");
 
-    let replaced = cloud()
-        .project_properties()
-        .get_project_property(TEST_PROJECT_KEY, PROPERTY_KEY)
-        .send()
-        .await
-        .expect("the rewritten property reads back");
+    let replaced = await_readable("the rewritten property reads back", || {
+        cloud().project_properties().get_project_property(TEST_PROJECT_KEY, PROPERTY_KEY).send()
+    })
+    .await;
 
     assert_eq!(replaced.value, Some(json!({ "only": "this" })), "a second write replaces the value, it does not merge");
 
-    let project =
-        cloud().projects().get_project(TEST_PROJECT_KEY).send().await.expect("the test project reads back by key");
+    let project = await_readable("the test project reads back by key", || {
+        cloud().projects().get_project(TEST_PROJECT_KEY).send()
+    })
+    .await;
     let id = project.id.expect("a project carries an id");
 
-    let by_id = cloud()
-        .project_properties()
-        .get_project_property(&id, PROPERTY_KEY)
-        .send()
-        .await
-        .expect("the property reads back with the project addressed by id");
+    let by_id = await_readable("the property reads back with the project addressed by id", || {
+        cloud().project_properties().get_project_property(&id, PROPERTY_KEY).send()
+    })
+    .await;
 
     assert_eq!(by_id.value, Some(json!({ "only": "this" })), "id and key address the same property store");
 

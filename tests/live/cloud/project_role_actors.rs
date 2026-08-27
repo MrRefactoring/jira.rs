@@ -13,7 +13,7 @@ use std::collections::HashMap;
 
 use jira::cloud::ActorsMap;
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, is_not_entitled};
+use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_readable, cloud, is_not_entitled};
 
 async fn project_roles() -> HashMap<String, String> {
     cloud().project_roles().get_project_roles(TEST_PROJECT_KEY).send().await.expect("the test project lists its roles")
@@ -169,12 +169,10 @@ async fn silently_succeeds_when_removing_an_actor_that_is_not_in_the_role() {
 
     match outcome {
         Ok(()) => {
-            let role = cloud()
-                .project_roles()
-                .get_project_role(TEST_PROJECT_KEY, id)
-                .send()
-                .await
-                .expect("the role reads back");
+            let role = await_readable("the role reads back", || {
+                cloud().project_roles().get_project_role(TEST_PROJECT_KEY, id).send()
+            })
+            .await;
 
             assert!(
                 role.actors.unwrap_or_default().iter().any(|actor| actor

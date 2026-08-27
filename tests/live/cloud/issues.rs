@@ -1,7 +1,9 @@
 use jira::cloud::IssueUpdateDetails;
 use serde_json::json;
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, poll_until, test_name};
+use crate::harness::{
+    ResourceTracker, TEST_PROJECT_KEY, await_readable, cloud, create_test_issue, poll_until, test_name,
+};
 
 /// The issue lifecycle, end to end.
 ///
@@ -38,7 +40,8 @@ async fn walks_an_issue_through_its_lifecycle() {
         .await
         .expect("the summary can be edited");
 
-    let after_edit = cloud().issues().get_issue(&issue.key).send().await.expect("the edited issue reads back");
+    let after_edit =
+        await_readable("the edited issue reads back", || cloud().issues().get_issue(&issue.key).send()).await;
 
     assert_eq!(
         after_edit.fields.as_ref().and_then(|fields| fields.get("summary")).and_then(|value| value.as_str()),

@@ -9,7 +9,9 @@
 
 use jira::cloud::IssueList;
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, test_name};
+use crate::harness::{
+    ResourceTracker, TEST_PROJECT_KEY, await_readable, cloud, create_test_issue, poll_until, test_name,
+};
 
 async fn current_account_id() -> String {
     cloud()
@@ -68,18 +70,28 @@ async fn walks_a_watcher_through_its_lifecycle() {
         async move { cloud().issue_watchers().remove_watcher(key).account_id(watcher).send().await }
     });
 
-    let watching =
-        cloud().issue_watchers().get_issue_watchers(&issue.key).send().await.expect("the watchers read back");
+    let watching = poll_until("the calling account to appear in the watcher list", || async {
+        let watching =
+            await_readable("the watchers read back", || cloud().issue_watchers().get_issue_watchers(&issue.key).send())
+                .await;
+
+        let listed = watching
+            .watchers
+            .iter()
+            .flatten()
+            .any(|watcher| watcher.account_id.as_deref() == Some(account_id.as_str()));
+
+        listed.then_some(watching)
+    })
+    .await;
 
     assert_eq!(watching.is_watching, Some(true), "the add is observable on the next read");
-    assert!(
-        watching.watchers.iter().flatten().any(|watcher| watcher.account_id.as_deref() == Some(account_id.as_str())),
-        "the calling account is in the watcher list",
-    );
 
     cloud().issue_watchers().add_watcher(&issue.key, &account_id).send().await.expect("a repeated add is accepted");
 
-    let again = cloud().issue_watchers().get_issue_watchers(&issue.key).send().await.expect("the watchers read back");
+    let again =
+        await_readable("the watchers read back", || cloud().issue_watchers().get_issue_watchers(&issue.key).send())
+            .await;
 
     assert_eq!(again.watch_count, watching.watch_count, "a repeated add is idempotent rather than cumulative");
 
@@ -107,13 +119,22 @@ async fn walks_a_watcher_through_its_lifecycle() {
         .await
         .expect("the watcher can be removed through the query parameter");
 
-    let removed = cloud().issue_watchers().get_issue_watchers(&issue.key).send().await.expect("the watchers read back");
+    let removed = poll_until("the removed account to leave the watcher list", || async {
+        let removed =
+            await_readable("the watchers read back", || cloud().issue_watchers().get_issue_watchers(&issue.key).send())
+                .await;
+
+        let gone = !removed
+            .watchers
+            .iter()
+            .flatten()
+            .any(|watcher| watcher.account_id.as_deref() == Some(account_id.as_str()));
+
+        gone.then_some(removed)
+    })
+    .await;
 
     assert_eq!(removed.is_watching, Some(false));
-    assert!(
-        !removed.watchers.iter().flatten().any(|watcher| watcher.account_id.as_deref() == Some(account_id.as_str())),
-        "the removed account is gone from the watcher list",
-    );
 
     tracker.cleanup().await;
 }

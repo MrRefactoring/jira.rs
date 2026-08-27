@@ -10,7 +10,7 @@ use jira::teams::{
     TeamResponseWithMembers, TeamResponseWithMembersState, TeamResponseWithMembersTeamType, TeamUpdatePayload,
 };
 
-use crate::harness::{ResourceTracker, await_refused, org_id, teams, test_name};
+use crate::harness::{ResourceTracker, await_readable, await_refused, org_id, poll_until, teams, test_name};
 
 /// Creates a team on the organization and registers its deletion.
 ///
@@ -126,7 +126,8 @@ async fn renames_a_team_and_the_change_survives_a_re_read() {
 
     assert_eq!(updated.display_name, renamed);
 
-    let read = teams().teams().get_team(&org, &team.team_id).send().await.expect("the renamed team reads back");
+    let read =
+        await_readable("the renamed team reads back", || teams().teams().get_team(&org, &team.team_id).send()).await;
 
     assert_eq!(read.display_name, renamed, "the rename is observable on the next read");
 
@@ -150,9 +151,13 @@ async fn archives_and_unarchives_in_bulk_and_the_state_follows() {
     assert_eq!(archived.successful_team_ids, vec![team.team_id.clone()], "the bulk answer names what it acted on");
     assert!(archived.errors.is_empty(), "{:?}", archived.errors);
 
-    let after_archive = teams().teams().get_team(&org, &team.team_id).send().await.expect("the team still reads back");
+    poll_until("the team to report itself archived", || async {
+        let after_archive =
+            teams().teams().get_team(&org, &team.team_id).send().await.expect("the team still reads back");
 
-    assert_eq!(after_archive.state, TeamResponseState::Archived);
+        (after_archive.state == TeamResponseState::Archived).then_some(())
+    })
+    .await;
 
     let unarchived = teams()
         .teams()
@@ -163,9 +168,12 @@ async fn archives_and_unarchives_in_bulk_and_the_state_follows() {
 
     assert_eq!(unarchived.successful_team_ids, vec![team.team_id.clone()]);
 
-    let after_unarchive = teams().teams().get_team(&org, &team.team_id).send().await.expect("the team reads back");
+    poll_until("unarchiving to put the team back where it was", || async {
+        let after_unarchive = teams().teams().get_team(&org, &team.team_id).send().await.expect("the team reads back");
 
-    assert_eq!(after_unarchive.state, TeamResponseState::Active, "unarchiving puts the team back where it was");
+        (after_unarchive.state == TeamResponseState::Active).then_some(())
+    })
+    .await;
 
     tracker.cleanup().await;
 }

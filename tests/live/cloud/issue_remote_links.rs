@@ -12,7 +12,9 @@
 
 use jira::cloud::{GetRemoteIssueLinks, RemoteIssueLink, RemoteIssueLinkRequest, RemoteObject};
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, create_test_issue, run_id, test_name};
+use crate::harness::{
+    ResourceTracker, TEST_PROJECT_KEY, await_readable, await_refused, cloud, create_test_issue, run_id, test_name,
+};
 
 /// The listing answers with a single object when filtered by `globalId` and an array otherwise, so both shapes are
 /// flattened to the same thing.
@@ -86,12 +88,10 @@ async fn walks_a_remote_link_through_its_lifecycle() {
         async move { cloud().issue_remote_links().delete_remote_issue_link_by_id(key, id).send().await }
     });
 
-    let fetched = cloud()
-        .issue_remote_links()
-        .get_remote_issue_link_by_id(&issue.key, &link_id)
-        .send()
-        .await
-        .expect("the link reads back by id");
+    let fetched = await_readable("the link reads back by id", || {
+        cloud().issue_remote_links().get_remote_issue_link_by_id(&issue.key, &link_id).send()
+    })
+    .await;
 
     assert_eq!(fetched.global_id.as_deref(), Some(global_id.as_str()));
     assert_eq!(fetched.relationship.as_deref(), Some("documented by"));

@@ -19,8 +19,8 @@ use jira::cloud::{Comment, CommentInput, CommentInputBody, Document, Worklog, Wo
 use serde_json::{Value, json};
 
 use crate::harness::{
-    ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, client, cloud, create_issue_with, create_test_issue,
-    document_of, test_name,
+    ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, await_readable, client, cloud, create_issue_with,
+    create_test_issue, document_of, poll_until, test_name,
 };
 
 /// Every node type in the tree, in document order, so a shape can be asserted without pinning exact output.
@@ -69,6 +69,13 @@ async fn add_comment(tracker: &mut ResourceTracker, issue_key: &str, text: &str)
         async move { cloud().issue_comments().delete_comment(key, id).send().await }
     });
 
+    let readable = created.id.clone().expect("a created comment carries an id");
+
+    poll_until("the comment just added to read back", || async {
+        cloud().issue_comments().get_comment(issue_key, &readable).send().await.ok()
+    })
+    .await;
+
     created
 }
 
@@ -85,12 +92,10 @@ async fn sends_a_document_to_v3_and_reads_the_same_document_back() {
     assert_eq!(node_types(body), ["doc", "paragraph", "text"], "Jira added nothing to the document and lost nothing");
     assert!(rendered(body).contains("untouched"), "the text arrives verbatim: {}", rendered(body));
 
-    let fetched = cloud()
-        .issue_comments()
-        .get_comment(&issue.key, &comment_id)
-        .send()
-        .await
-        .expect("the comment reads back by id");
+    let fetched = await_readable("the comment reads back by id", || {
+        cloud().issue_comments().get_comment(&issue.key, &comment_id).send()
+    })
+    .await;
 
     let stored = fetched.body.as_ref().expect("a stored comment carries a document body");
 

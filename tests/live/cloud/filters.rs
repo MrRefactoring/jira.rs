@@ -1,6 +1,6 @@
 use jira::cloud::{ColumnRequestBody, Filter};
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, poll_until, test_name};
+use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_readable, await_refused, cloud, poll_until, test_name};
 
 /// A filter is owned by the account that created it and is private until shared, so it is one of the few pieces of
 /// Jira configuration a live test can create without affecting anyone else.
@@ -20,6 +20,9 @@ async fn create_filter(tracker: &mut ResourceTracker, name: &str, jql: &str) -> 
     let id = id_of(&filter);
 
     tracker.defer(move || async move { cloud().filters().delete_filter(id).send().await });
+
+    poll_until("the filter just created to read back", || async { cloud().filters().get_filter(id).send().await.ok() })
+        .await;
 
     filter
 }
@@ -226,7 +229,7 @@ async fn gives_a_filter_its_own_columns_then_takes_them_away_again() {
         .await
         .expect("a filter can be given columns of its own");
 
-    let columns = cloud().filters().get_columns(id).send().await.expect("the columns read back");
+    let columns = await_readable("the columns read back", || cloud().filters().get_columns(id).send()).await;
 
     assert_eq!(
         columns.iter().map(|column| column.value.clone()).collect::<Vec<_>>(),

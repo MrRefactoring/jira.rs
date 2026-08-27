@@ -10,7 +10,7 @@
 
 use jira::cloud::{DeleteAvatarRequestType, GetAvatarsRequestType, IssueTypeDetails};
 
-use crate::harness::{ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, cloud};
+use crate::harness::{ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, cloud, poll_until};
 
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
@@ -52,17 +52,17 @@ async fn stores_an_avatar_for_an_issue_type_from_image_bytes() {
         }
     });
 
-    let avatars = cloud()
-        .avatars()
-        .get_avatars(GetAvatarsRequestType::Issuetype, &type_id)
-        .send()
-        .await
-        .expect("an issue type lists the avatars available to it");
+    poll_until("the upload to be offered to the type as a custom avatar", || async {
+        let avatars = cloud()
+            .avatars()
+            .get_avatars(GetAvatarsRequestType::Issuetype, &type_id)
+            .send()
+            .await
+            .expect("an issue type lists the avatars available to it");
 
-    assert!(
-        avatars.custom.unwrap_or_default().iter().any(|candidate| candidate.id == avatar.id),
-        "the upload is offered to the type as a custom avatar",
-    );
+        avatars.custom.unwrap_or_default().into_iter().find(|candidate| candidate.id == avatar.id)
+    })
+    .await;
 
     tracker.cleanup().await;
 }

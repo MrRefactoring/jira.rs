@@ -12,7 +12,7 @@ use jira::cloud::{
 };
 
 use crate::harness::{
-    ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, create_test_issue, document_of, test_name,
+    ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, create_test_issue, document_of, poll_until, test_name,
 };
 
 fn comment_of(text: &str) -> CommentInput {
@@ -44,6 +44,13 @@ async fn add_comment(tracker: &mut ResourceTracker, issue_key: &str, text: &str)
 
         async move { cloud().issue_comments().delete_comment(key, id).send().await }
     });
+
+    let readable = created.id.clone().expect("a created comment carries an id");
+
+    poll_until("the comment just added to read back", || async {
+        cloud().issue_comments().get_comment(issue_key, &readable).send().await.ok()
+    })
+    .await;
 
     created
 }
@@ -118,11 +125,15 @@ async fn walks_a_comment_through_its_lifecycle() {
 
     assert!(error.is_not_found(), "{error}");
 
-    let remaining =
-        cloud().issue_comments().get_comments(&issue.key).send().await.expect("the listing reads after a delete");
+    let remaining = poll_until("the deleted comment to leave the listing", || async {
+        let remaining =
+            cloud().issue_comments().get_comments(&issue.key).send().await.expect("the listing reads after a delete");
+
+        (!comment_ids(&remaining).contains(&comment_id)).then_some(remaining)
+    })
+    .await;
 
     assert_eq!(remaining.total, Some(0));
-    assert!(!comment_ids(&remaining).contains(&comment_id), "the deleted comment is gone from the listing");
 
     tracker.cleanup().await;
 }

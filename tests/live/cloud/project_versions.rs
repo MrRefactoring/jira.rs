@@ -5,7 +5,7 @@ use jira::cloud::{
 use serde_json::json;
 
 use crate::harness::{
-    ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, create_test_issue, poll_until, test_name,
+    ResourceTracker, TEST_PROJECT_KEY, await_readable, await_refused, cloud, create_test_issue, poll_until, test_name,
 };
 
 /// A version, from creation to merge, inside the standing test project.
@@ -58,7 +58,9 @@ async fn walks_a_version_through_its_lifecycle() {
     assert_eq!(created.released, Some(false));
     assert_eq!(created.archived, Some(false));
 
-    let read = cloud().project_versions().get_version(&version_id).send().await.expect("the version reads back by id");
+    let read =
+        await_readable("the version reads back by id", || cloud().project_versions().get_version(&version_id).send())
+            .await;
 
     assert_eq!(read.id.as_deref(), Some(version_id.as_str()));
     assert_eq!(read.project_id, Some(project_id));

@@ -3,7 +3,7 @@
 //! A full write cycle that is genuinely safe: votes live entirely inside a disposable fixture issue, and both halves
 //! of the mutation are exercised, so the suite leaves nothing behind even before teardown runs.
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, test_name};
+use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_readable, cloud, create_test_issue, test_name};
 
 /// The vote lifecycle, end to end.
 ///
@@ -36,20 +36,23 @@ async fn walks_a_vote_through_its_lifecycle() {
         async move { cloud().issue_votes().remove_vote(key).send().await }
     });
 
-    let voted = cloud().issue_votes().get_votes(&issue.key).send().await.expect("the vote count reads back");
+    let voted =
+        await_readable("the vote count reads back", || cloud().issue_votes().get_votes(&issue.key).send()).await;
 
     assert_eq!(voted.votes, Some(1), "the vote is observable on the next read");
     assert_eq!(voted.has_voted, Some(true));
 
     cloud().issue_votes().add_vote(&issue.key).send().await.expect("a repeated vote is accepted");
 
-    let again = cloud().issue_votes().get_votes(&issue.key).send().await.expect("the vote count reads back");
+    let again =
+        await_readable("the vote count reads back", || cloud().issue_votes().get_votes(&issue.key).send()).await;
 
     assert_eq!(again.votes, Some(1), "a repeated vote is idempotent rather than cumulative");
 
     cloud().issue_votes().remove_vote(&issue.key).send().await.expect("the vote can be withdrawn");
 
-    let withdrawn = cloud().issue_votes().get_votes(&issue.key).send().await.expect("the vote count reads back");
+    let withdrawn =
+        await_readable("the vote count reads back", || cloud().issue_votes().get_votes(&issue.key).send()).await;
 
     assert_eq!(withdrawn.votes, Some(0));
     assert_eq!(withdrawn.has_voted, Some(false));

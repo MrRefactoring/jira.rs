@@ -2,7 +2,7 @@ use jira::cloud::{
     DashboardUserAccountType, GetUserRequestExpand, GetUserRequestExpandVariant2, UserColumnRequestBody,
 };
 
-use crate::harness::{ResourceTracker, cloud};
+use crate::harness::{ResourceTracker, await_readable, cloud};
 
 /// The account the token authenticates as.
 ///
@@ -178,7 +178,8 @@ async fn sets_the_calling_accounts_issue_navigator_columns_then_resets_them() {
     let mut tracker = ResourceTracker::new();
 
     let before =
-        cloud().users().get_user_default_columns().send().await.expect("the calling account's columns read back");
+        await_readable("the calling account's columns read back", || cloud().users().get_user_default_columns().send())
+            .await;
 
     let before_values: Vec<_> = before.iter().map(|column| column.value.clone()).collect();
 
@@ -191,14 +192,16 @@ async fn sets_the_calling_accounts_issue_navigator_columns_then_resets_them() {
         .await
         .expect("the calling account's columns can be set");
 
-    let columns = cloud().users().get_user_default_columns().send().await.expect("the new columns read back");
+    let columns =
+        await_readable("the new columns read back", || cloud().users().get_user_default_columns().send()).await;
     let values: Vec<_> = columns.iter().filter_map(|column| column.value.clone()).collect();
 
     assert_eq!(values, ["summary", "status"], "the columns set are the columns returned, in order");
 
     cloud().users().reset_user_columns().send().await.expect("the columns can be reset");
 
-    let reset = cloud().users().get_user_default_columns().send().await.expect("the reset columns read back");
+    let reset =
+        await_readable("the reset columns read back", || cloud().users().get_user_default_columns().send()).await;
     let reset_values: Vec<_> = reset.iter().map(|column| column.value.clone()).collect();
 
     assert_eq!(reset_values, before_values, "the reset puts the site default back");

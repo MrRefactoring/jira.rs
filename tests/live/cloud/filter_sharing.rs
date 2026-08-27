@@ -11,7 +11,7 @@
 
 use jira::cloud::{Filter, SharePermissionInput, SharePermissionInputType, SharePermissionType};
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, test_name};
+use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_readable, cloud, poll_until, test_name};
 
 /// The sharing cycle, end to end.
 ///
@@ -53,12 +53,10 @@ async fn shares_a_filter_with_one_project_and_takes_it_back() {
 
     assert!(!added.is_empty(), "adding a share permission answers with what the filter is now shared with");
 
-    let permissions = cloud()
-        .filter_sharing()
-        .get_share_permissions(filter_id)
-        .send()
-        .await
-        .expect("the share reads back through the sharing API");
+    let permissions = await_readable("the share reads back through the sharing API", || {
+        cloud().filter_sharing().get_share_permissions(filter_id).send()
+    })
+    .await;
 
     assert_eq!(permissions.len(), 1, "one share was added, so one is listed");
     assert_eq!(permissions[0].r#type, SharePermissionType::Project);
@@ -95,14 +93,17 @@ async fn shares_a_filter_with_one_project_and_takes_it_back() {
         .await
         .expect("the share can be taken back");
 
-    let remaining = cloud()
-        .filter_sharing()
-        .get_share_permissions(filter_id)
-        .send()
-        .await
-        .expect("the listing reads after an unshare");
+    poll_until("unsharing to return the filter to private", || async {
+        let remaining = cloud()
+            .filter_sharing()
+            .get_share_permissions(filter_id)
+            .send()
+            .await
+            .expect("the listing reads after an unshare");
 
-    assert!(remaining.is_empty(), "unsharing returns the filter to private");
+        remaining.is_empty().then_some(())
+    })
+    .await;
 
     tracker.cleanup().await;
 }
@@ -201,6 +202,9 @@ async fn create_filter(tracker: &mut ResourceTracker) -> i64 {
     let id: i64 = filter.id.as_deref().expect("a created filter has an id").parse().expect("a filter id is a number");
 
     tracker.defer(move || async move { cloud().filters().delete_filter(id).send().await });
+
+    poll_until("the filter just created to read back", || async { cloud().filters().get_filter(id).send().await.ok() })
+        .await;
 
     id
 }

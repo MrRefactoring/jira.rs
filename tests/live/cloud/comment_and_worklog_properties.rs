@@ -10,7 +10,9 @@
 use jira::cloud::{CommentInput, CommentInputBody, WorklogInput};
 use serde_json::json;
 
-use crate::harness::{ResourceTracker, await_refused, cloud, create_test_issue, document_of, test_name};
+use crate::harness::{
+    ResourceTracker, await_readable, await_refused, cloud, create_test_issue, document_of, test_name,
+};
 
 const PROPERTY_KEY: &str = "jira.rs.livetest.child";
 
@@ -59,12 +61,10 @@ async fn walks_comment_and_worklog_properties_side_by_side() {
         .await
         .expect("the comment takes a property");
 
-    let on_comment = cloud()
-        .issue_comment_properties()
-        .get_comment_property(&comment_id, PROPERTY_KEY)
-        .send()
-        .await
-        .expect("the comment property reads back");
+    let on_comment = await_readable("the comment property reads back", || {
+        cloud().issue_comment_properties().get_comment_property(&comment_id, PROPERTY_KEY).send()
+    })
+    .await;
 
     assert_eq!(on_comment.key.as_deref(), Some(PROPERTY_KEY));
     assert_eq!(on_comment.value, Some(json!({ "on": "comment" })));
@@ -76,12 +76,10 @@ async fn walks_comment_and_worklog_properties_side_by_side() {
         .await
         .expect("the worklog takes a property");
 
-    let on_worklog = cloud()
-        .issue_worklog_properties()
-        .get_worklog_property(&issue.key, &worklog_id, PROPERTY_KEY)
-        .send()
-        .await
-        .expect("the worklog property reads back");
+    let on_worklog = await_readable("the worklog property reads back", || {
+        cloud().issue_worklog_properties().get_worklog_property(&issue.key, &worklog_id, PROPERTY_KEY).send()
+    })
+    .await;
 
     assert_eq!(on_worklog.value, Some(json!({ "on": "worklog" })));
 

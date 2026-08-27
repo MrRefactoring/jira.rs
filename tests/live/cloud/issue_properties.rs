@@ -9,7 +9,7 @@ use jira::cloud::{BulkIssuePropertyUpdateRequest, IssueFilterForBulkPropertySet}
 use serde_json::json;
 
 use crate::harness::{
-    ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, create_test_issue, poll_until, test_name,
+    ResourceTracker, TEST_PROJECT_KEY, await_readable, await_refused, cloud, create_test_issue, poll_until, test_name,
 };
 
 const PROPERTY_KEY: &str = "jira.rs.livetest";
@@ -55,12 +55,10 @@ async fn walks_a_property_through_its_lifecycle() {
         .await
         .expect("the issue takes a property");
 
-    let property = cloud()
-        .issue_properties()
-        .get_issue_property(&issue.key, PROPERTY_KEY)
-        .send()
-        .await
-        .expect("the property reads back");
+    let property = await_readable("the property reads back", || {
+        cloud().issue_properties().get_issue_property(&issue.key, PROPERTY_KEY).send()
+    })
+    .await;
 
     assert_eq!(property.key.as_deref(), Some(PROPERTY_KEY));
     assert_eq!(property.value, Some(value()), "a nested, mixed-type value survives the round trip untouched");
@@ -88,12 +86,10 @@ async fn walks_a_property_through_its_lifecycle() {
         .await
         .expect("the property can be written a second time");
 
-    let replaced = cloud()
-        .issue_properties()
-        .get_issue_property(&issue.key, PROPERTY_KEY)
-        .send()
-        .await
-        .expect("the rewritten property reads back");
+    let replaced = await_readable("the rewritten property reads back", || {
+        cloud().issue_properties().get_issue_property(&issue.key, PROPERTY_KEY).send()
+    })
+    .await;
 
     assert_eq!(replaced.value, Some(json!({ "only": "this" })), "a second write replaces the value, it does not merge");
 
@@ -111,17 +107,18 @@ async fn walks_a_property_through_its_lifecycle() {
 
     assert!(error.is_not_found(), "{error}");
 
-    let remaining = cloud()
-        .issue_properties()
-        .get_issue_property_keys(&issue.key)
-        .send()
-        .await
-        .expect("the listing reads after a delete");
+    poll_until("the deleted property to leave the listing", || async {
+        let remaining = cloud()
+            .issue_properties()
+            .get_issue_property_keys(&issue.key)
+            .send()
+            .await
+            .expect("the listing reads after a delete");
 
-    assert!(
-        !remaining.keys.unwrap_or_default().iter().any(|entry| entry.key.as_deref() == Some(PROPERTY_KEY)),
-        "the deleted property is gone from the listing",
-    );
+        (!remaining.keys.unwrap_or_default().iter().any(|entry| entry.key.as_deref() == Some(PROPERTY_KEY)))
+            .then_some(())
+    })
+    .await;
 
     tracker.cleanup().await;
 }

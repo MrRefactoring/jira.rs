@@ -1,4 +1,4 @@
-use crate::harness::{ResourceTracker, cloud, create_test_issue, test_name};
+use crate::harness::{ResourceTracker, await_refused, cloud, create_test_issue, test_name};
 
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
@@ -23,7 +23,9 @@ async fn creates_reads_and_deletes_an_issue() {
 
     tracker.cleanup().await;
 
-    let after = cloud().issues().get_issue(&created.key).send().await;
+    let after =
+        await_refused("the issue to be gone once cleanup has run", || cloud().issues().get_issue(&created.key).send())
+            .await;
 
-    assert!(after.is_err_and(|error| error.is_not_found()), "the issue is gone once cleanup has run");
+    assert!(after.is_not_found(), "{after}");
 }

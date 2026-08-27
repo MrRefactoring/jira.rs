@@ -5,7 +5,7 @@
 //! lands in the project's list of custom avatars and is deleted again here. `update_project_avatar`, which would
 //! select one as the project's displayed avatar, is deliberately not called — that changes what everyone sees.
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud};
+use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, poll_until};
 
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
@@ -34,18 +34,21 @@ async fn stores_an_avatar_for_the_project_from_image_bytes() {
         cloud().project_avatars().delete_project_avatar(TEST_PROJECT_KEY, avatar_id).send().await
     });
 
-    let avatars = cloud()
-        .project_avatars()
-        .get_all_project_avatars(TEST_PROJECT_KEY)
-        .send()
-        .await
-        .expect("the project lists the avatars available to it");
+    let avatars = poll_until("the upload to be offered to the project as a custom avatar", || async {
+        let avatars = cloud()
+            .project_avatars()
+            .get_all_project_avatars(TEST_PROJECT_KEY)
+            .send()
+            .await
+            .expect("the project lists the avatars available to it");
+
+        let listed = avatars.custom.clone().unwrap_or_default().iter().any(|candidate| candidate.id == avatar.id);
+
+        listed.then_some(avatars)
+    })
+    .await;
 
     assert!(!avatars.system.unwrap_or_default().is_empty(), "a project always has Jira's own avatars to choose from");
-    assert!(
-        avatars.custom.unwrap_or_default().iter().any(|candidate| candidate.id == avatar.id),
-        "the upload is offered to the project as a custom avatar",
-    );
 
     tracker.cleanup().await;
 }

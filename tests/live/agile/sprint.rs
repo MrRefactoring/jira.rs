@@ -10,7 +10,7 @@
 
 use jira::agile::{GetAllSprintsRequestState, SprintState};
 
-use crate::harness::{ResourceTracker, agile, scrum_board, test_name};
+use crate::harness::{ResourceTracker, agile, await_readable, scrum_board, test_name};
 
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
@@ -63,7 +63,7 @@ async fn walks_a_sprint_through_its_lifecycle() {
     assert_eq!(created.state, SprintState::Future, "a sprint is born in the future state");
     assert_eq!(created.origin_board_id, Some(board_id), "a sprint knows the board it belongs to");
 
-    let read = agile().sprint().get_sprint(sprint_id).send().await.expect("the sprint reads back by id");
+    let read = await_readable("the sprint reads back by id", || agile().sprint().get_sprint(sprint_id).send()).await;
 
     assert_eq!(read.id, Some(sprint_id));
     assert_eq!(read.name.as_deref(), Some(name.as_str()));
@@ -78,7 +78,8 @@ async fn walks_a_sprint_through_its_lifecycle() {
         .await
         .expect("a sprint can be renamed through a partial update");
 
-    let after_rename = agile().sprint().get_sprint(sprint_id).send().await.expect("the renamed sprint reads back");
+    let after_rename =
+        await_readable("the renamed sprint reads back", || agile().sprint().get_sprint(sprint_id).send()).await;
 
     assert_eq!(after_rename.name.as_deref(), Some(renamed.as_str()));
     assert_eq!(after_rename.state, SprintState::Future, "renaming a sprint does not move it through its states");

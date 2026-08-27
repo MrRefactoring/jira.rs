@@ -9,7 +9,7 @@
 
 use jira::core::Attachment;
 
-use crate::harness::{ResourceTracker, await_refused, cloud, create_test_issue, test_name};
+use crate::harness::{ResourceTracker, await_readable, await_refused, cloud, create_test_issue, test_name};
 
 /// Deliberately multibyte: a size measured in characters rather than bytes would not match.
 const TEXT: &str = "attachment body — с кириллицей и эмодзи 🎯";
@@ -84,12 +84,13 @@ async fn walks_an_attachment_through_its_lifecycle() {
 
     assert_eq!(binary.size, Some(i64::try_from(raw.len()).expect("six bytes fit an i64")));
 
-    let returned = cloud()
-        .issue_attachments()
-        .get_attachment_content(binary.id.clone().expect("a stored attachment carries an id"))
-        .send()
-        .await
-        .expect("the binary content reads back");
+    let returned = await_readable("the binary content reads back", || {
+        cloud()
+            .issue_attachments()
+            .get_attachment_content(binary.id.clone().expect("a stored attachment carries an id"))
+            .send()
+    })
+    .await;
 
     assert_eq!(returned.as_ref(), raw.as_slice(), "bytes outside the ASCII range survive intact");
 
@@ -125,13 +126,10 @@ async fn walks_an_attachment_through_its_lifecycle() {
     assert_eq!(several.len(), 2, "one request, two attachments");
     assert_eq!(names, ["one.txt", "two.txt"]);
 
-    let fetched = cloud()
-        .issues()
-        .get_issue(&issue.key)
-        .fields(["attachment"])
-        .send()
-        .await
-        .expect("the issue reads back with its attachments");
+    let fetched = await_readable("the issue reads back with its attachments", || {
+        cloud().issues().get_issue(&issue.key).fields(["attachment"]).send()
+    })
+    .await;
 
     let mut listed = fetched
         .fields

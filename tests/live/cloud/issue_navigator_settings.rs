@@ -10,7 +10,7 @@
 
 use jira::cloud::ColumnRequestBody;
 
-use crate::harness::{ResourceTracker, cloud};
+use crate::harness::{ResourceTracker, await_readable, cloud};
 
 /// Read, replace, read back — and put the site's own list back on the way out.
 #[tokio::test]
@@ -61,12 +61,10 @@ async fn replaces_the_default_navigator_columns_and_puts_them_back() {
         .await
         .expect("the default columns can be replaced");
 
-    let replaced = cloud()
-        .issue_navigator_settings()
-        .get_issue_navigator_default_columns()
-        .send()
-        .await
-        .expect("the replacement reads back");
+    let replaced = await_readable("the replacement reads back", || {
+        cloud().issue_navigator_settings().get_issue_navigator_default_columns().send()
+    })
+    .await;
 
     assert_eq!(
         replaced.iter().filter_map(|column| column.value.clone()).collect::<Vec<String>>(),

@@ -12,7 +12,7 @@
 
 use jira::cloud::{Page, WorkflowScheme, WorkflowSchemeReadRequest};
 
-use crate::harness::{TEST_PROJECT_KEY, cloud};
+use crate::harness::{TEST_PROJECT_KEY, await_readable, cloud};
 
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
@@ -146,7 +146,9 @@ async fn fails_typed_on_the_destructive_path() {
 
 /// The numeric id of the project every suite works in, which is what the association endpoints take.
 async fn test_project_id() -> i64 {
-    let project = cloud().projects().get_project(TEST_PROJECT_KEY).send().await.expect("the test project is readable");
+    let project =
+        await_readable("the test project is readable", || cloud().projects().get_project(TEST_PROJECT_KEY).send())
+            .await;
     let id = project.id.expect("a project carries an id");
 
     id.parse().expect("a project id is a number")

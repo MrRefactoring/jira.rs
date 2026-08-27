@@ -6,7 +6,7 @@
 
 use serde_json::json;
 
-use crate::harness::{ResourceTracker, await_refused, cloud};
+use crate::harness::{ResourceTracker, await_readable, await_refused, cloud};
 
 const PROPERTY_KEY: &str = "jira.rs.livetest.user";
 
@@ -70,13 +70,10 @@ async fn walks_a_user_property_through_its_lifecycle() {
         async move { cloud().user_properties().delete_user_property(PROPERTY_KEY).account_id(owner).send().await }
     });
 
-    let property = cloud()
-        .user_properties()
-        .get_user_property(PROPERTY_KEY)
-        .account_id(&account_id)
-        .send()
-        .await
-        .expect("the property reads back");
+    let property = await_readable("the property reads back", || {
+        cloud().user_properties().get_user_property(PROPERTY_KEY).account_id(&account_id).send()
+    })
+    .await;
 
     assert_eq!(property.key.as_deref(), Some(PROPERTY_KEY));
     assert_eq!(property.value, Some(json!({ "written": "with an accountId" })));
@@ -110,13 +107,10 @@ async fn walks_a_user_property_through_its_lifecycle() {
         .await
         .expect("the property can be written a second time");
 
-    let replaced = cloud()
-        .user_properties()
-        .get_user_property(PROPERTY_KEY)
-        .account_id(&account_id)
-        .send()
-        .await
-        .expect("the rewritten property reads back");
+    let replaced = await_readable("the rewritten property reads back", || {
+        cloud().user_properties().get_user_property(PROPERTY_KEY).account_id(&account_id).send()
+    })
+    .await;
 
     assert_eq!(replaced.value, Some(json!({ "only": "this" })), "a second write replaces the value, it does not merge");
 

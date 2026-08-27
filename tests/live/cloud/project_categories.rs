@@ -1,6 +1,6 @@
 use jira::cloud::ProjectCategory;
 
-use crate::harness::{ResourceTracker, await_refused, cloud, test_name};
+use crate::harness::{ResourceTracker, await_readable, await_refused, cloud, test_name};
 
 /// A project category, from creation to removal.
 ///
@@ -47,12 +47,10 @@ async fn walks_a_project_category_through_its_lifecycle() {
 
     assert!(category_id > 0, "an id identifies the category: {category_id}");
 
-    let read = cloud()
-        .project_categories()
-        .get_project_category_by_id(category_id)
-        .send()
-        .await
-        .expect("the category reads back by id");
+    let read = await_readable("the category reads back by id", || {
+        cloud().project_categories().get_project_category_by_id(category_id).send()
+    })
+    .await;
 
     assert_eq!(read.name.as_deref(), Some(name.as_str()));
     assert_eq!(read.description.as_deref(), Some("created by the live suite"));
@@ -76,12 +74,10 @@ async fn walks_a_project_category_through_its_lifecycle() {
         .await
         .expect("the description can be edited");
 
-    let after_edit = cloud()
-        .project_categories()
-        .get_project_category_by_id(category_id)
-        .send()
-        .await
-        .expect("the edited category reads back");
+    let after_edit = await_readable("the edited category reads back", || {
+        cloud().project_categories().get_project_category_by_id(category_id).send()
+    })
+    .await;
 
     assert_eq!(after_edit.description.as_deref(), Some("edited"), "the edit is observable on the next read");
     assert_eq!(after_edit.name.as_deref(), Some(name.as_str()), "editing the description leaves the name alone");

@@ -3,7 +3,9 @@ use jira::cloud::{
 };
 use serde_json::json;
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, create_test_issue, test_name};
+use crate::harness::{
+    ResourceTracker, TEST_PROJECT_KEY, await_readable, await_refused, cloud, create_test_issue, test_name,
+};
 
 /// A component, from creation to deletion, inside the standing test project.
 ///
@@ -47,8 +49,10 @@ async fn walks_a_component_through_its_lifecycle() {
     assert_eq!(created.project.as_deref(), Some(TEST_PROJECT_KEY));
     assert!(created.self_.is_some_and(|link| link.starts_with("https://")), "a component carries a self link");
 
-    let read =
-        cloud().project_components().get_component(&component_id).send().await.expect("the component reads back by id");
+    let read = await_readable("the component reads back by id", || {
+        cloud().project_components().get_component(&component_id).send()
+    })
+    .await;
 
     assert_eq!(read.id.as_deref(), Some(component_id.as_str()));
     assert_eq!(read.description.as_deref(), Some("created by the live suite"));
@@ -77,12 +81,10 @@ async fn walks_a_component_through_its_lifecycle() {
         .await
         .expect("the description can be edited");
 
-    let after_edit = cloud()
-        .project_components()
-        .get_component(&component_id)
-        .send()
-        .await
-        .expect("the edited component reads back");
+    let after_edit = await_readable("the edited component reads back", || {
+        cloud().project_components().get_component(&component_id).send()
+    })
+    .await;
 
     assert_eq!(after_edit.description.as_deref(), Some("edited"), "the edit is observable on the next read");
     assert_eq!(after_edit.name.as_deref(), Some(name.as_str()), "editing the description leaves the name alone");
@@ -147,13 +149,10 @@ async fn walks_a_component_through_its_lifecycle() {
 
     assert!(gone.is_not_found(), "{gone}");
 
-    let fetched = cloud()
-        .issues()
-        .get_issue(&issue.key)
-        .fields(["components"])
-        .send()
-        .await
-        .expect("the issue that carried the component reads back");
+    let fetched = await_readable("the issue that carried the component reads back", || {
+        cloud().issues().get_issue(&issue.key).fields(["components"]).send()
+    })
+    .await;
 
     let components = fetched
         .fields

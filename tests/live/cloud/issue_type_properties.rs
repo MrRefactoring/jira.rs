@@ -9,7 +9,7 @@
 
 use serde_json::json;
 
-use crate::harness::{ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, await_refused, cloud};
+use crate::harness::{ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, await_readable, await_refused, cloud};
 
 const PROPERTY_KEY: &str = "jira.rs.livetest.issuetype";
 
@@ -57,12 +57,10 @@ async fn walks_an_issue_type_property_through_its_lifecycle() {
         .await
         .expect("the property can be written a second time");
 
-    let replaced = cloud()
-        .issue_type_properties()
-        .get_issue_type_property(&issue_type_id, PROPERTY_KEY)
-        .send()
-        .await
-        .expect("the rewritten property reads back");
+    let replaced = await_readable("the rewritten property reads back", || {
+        cloud().issue_type_properties().get_issue_type_property(&issue_type_id, PROPERTY_KEY).send()
+    })
+    .await;
 
     assert_eq!(replaced.value, Some(json!({ "only": "this" })), "a second write replaces the value, it does not merge");
 

@@ -152,6 +152,11 @@ pub async fn create_test_board(tracker: &mut ResourceTracker) -> TestBoard {
 
     tracker.defer(move || async move { agile().board().delete_board(id).send().await });
 
+    poll_until("the board just created to be servable by the Agile API", || async {
+        agile().board().get_board(id).send().await.ok()
+    })
+    .await;
+
     TestBoard { id, filter_id }
 }
 
@@ -167,8 +172,15 @@ pub async fn scrum_board(tracker: &mut ResourceTracker) -> i64 {
         .await
         .expect("the board listing is accepted");
 
-    match boards.values.first().and_then(|board| board.id) {
+    let id = match boards.values.first().and_then(|board| board.id) {
         Some(id) => id,
-        None => create_test_board(tracker).await.id,
-    }
+        None => return create_test_board(tracker).await.id,
+    };
+
+    poll_until("the board the listing named to be servable by the Agile API", || async {
+        agile().board().get_board(id).send().await.ok()
+    })
+    .await;
+
+    id
 }

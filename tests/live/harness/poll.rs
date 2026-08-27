@@ -45,3 +45,21 @@ where
     })
     .await
 }
+
+/// Waits for a read to start answering, which is how an asynchronous write finishes.
+///
+/// The mirror of [`await_refused`]. Jira answers a create before every endpoint can see the result, so a read of the
+/// thing just made is a coin toss for a second or so — a remote link created and read straight back by id answered
+/// "The remote link does not exist" on a run where the other four hundred and thirty-six cases passed.
+pub async fn await_readable<F, Fut, T>(description: &str, mut attempt: F) -> T
+where
+    F: FnMut() -> Fut,
+    Fut: Future<Output = Result<T, Error>>,
+{
+    poll_until(description, move || {
+        let call = attempt();
+
+        async move { call.await.ok() }
+    })
+    .await
+}

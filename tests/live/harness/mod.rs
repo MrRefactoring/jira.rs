@@ -22,6 +22,6 @@ pub use fixtures::{
     create_test_issue, document_of, scrum_board,
 };
 pub use naming::{RESOURCE_MARKER, project_key, run_id, run_suffix, test_name};
-pub use poll::{await_refused, poll_until};
+pub use poll::{await_readable, await_refused, poll_until};
 pub use resources::ResourceTracker;
 pub use server_client::{assets_server, jsm_platform, server, server_client, service_desk_server};

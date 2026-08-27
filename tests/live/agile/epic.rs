@@ -12,7 +12,8 @@ use jira::cloud::IssueUpdateDetails;
 use serde_json::json;
 
 use crate::harness::{
-    ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, agile, cloud, create_test_issue, scrum_board, test_name,
+    ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, agile, await_readable, cloud, create_test_issue, poll_until,
+    scrum_board, test_name,
 };
 
 /// The id of the project's Epic issue type, where its issue type scheme carries one.
@@ -86,7 +87,9 @@ async fn runs_the_whole_epic_cycle_where_an_epic_type_is_available() {
         });
     }
 
-    let epic = agile().epic().get_epic(&created.key).send().await.expect("the epic reads back through the Agile API");
+    let epic =
+        await_readable("the epic reads back through the Agile API", || agile().epic().get_epic(&created.key).send())
+            .await;
 
     assert_eq!(epic.key.as_deref(), Some(created.key.as_str()));
     assert!(epic.name.as_ref().is_some_and(|name| !name.is_empty()), "an epic carries a name of its own");
@@ -114,19 +117,18 @@ async fn runs_the_whole_epic_cycle_where_an_epic_type_is_available() {
         .await
         .expect("an issue can be moved into the epic");
 
-    let with_child = agile()
-        .epic()
-        .get_issues_for_epic(&created.key)
-        .max_results(10)
-        .send()
-        .await
-        .expect("the epic lists its issues");
+    poll_until("the epic to report the issue just moved into it", || async {
+        let with_child = agile()
+            .epic()
+            .get_issues_for_epic(&created.key)
+            .max_results(10)
+            .send()
+            .await
+            .expect("the epic lists its issues");
 
-    assert!(
-        with_child.issues.iter().any(|issue| issue.key == child.key),
-        "the membership the platform payload does not carry is visible here: {:?}",
-        with_child.issues.iter().map(|issue| issue.key.as_str()).collect::<Vec<_>>(),
-    );
+        with_child.issues.iter().any(|issue| issue.key == child.key).then_some(())
+    })
+    .await;
 
     let renamed = test_name("epic renamed");
 
@@ -137,7 +139,7 @@ async fn runs_the_whole_epic_cycle_where_an_epic_type_is_available() {
         .await
         .expect("an epic can be renamed");
 
-    let after = agile().epic().get_epic(&created.key).send().await.expect("the renamed epic reads back");
+    let after = await_readable("the renamed epic reads back", || agile().epic().get_epic(&created.key).send()).await;
 
     assert_eq!(after.name.as_deref(), Some(renamed.as_str()));
     assert!(
@@ -152,18 +154,18 @@ async fn runs_the_whole_epic_cycle_where_an_epic_type_is_available() {
         .await
         .expect("an issue can be removed from its epic");
 
-    let without_child = agile()
-        .epic()
-        .get_issues_for_epic(&created.key)
-        .max_results(10)
-        .send()
-        .await
-        .expect("the emptied epic lists its issues");
+    poll_until("the epic to stop reporting the issue removed from it", || async {
+        let without_child = agile()
+            .epic()
+            .get_issues_for_epic(&created.key)
+            .max_results(10)
+            .send()
+            .await
+            .expect("the emptied epic lists its issues");
 
-    assert!(
-        !without_child.issues.iter().any(|issue| issue.key == child.key),
-        "the epic no longer reports the issue removed from it",
-    );
+        (!without_child.issues.iter().any(|issue| issue.key == child.key)).then_some(())
+    })
+    .await;
 
     tracker.cleanup().await;
 }
