@@ -16,7 +16,7 @@ use jira::cloud::{
     GetAvatarImageByOwnerRequestType, GetAvatarImageByTypeRequestType, GetAvatarsRequestType, StoreAvatarRequestType,
 };
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud};
+use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, poll_until};
 
 /// The side, in pixels, of both the uploaded image and the crop asked of it.
 const AVATAR_SIDE: u32 = 48;
@@ -149,17 +149,17 @@ async fn stores_a_custom_avatar_from_image_bytes_and_serves_it_back() {
         async move { cloud().avatars().delete_avatar(DeleteAvatarRequestType::Project, owner, avatar_id).send().await }
     });
 
-    let avatars = cloud()
-        .avatars()
-        .get_avatars(GetAvatarsRequestType::Project, &project_id)
-        .send()
-        .await
-        .expect("the project lists the avatars available to it");
+    poll_until("the upload to be offered to the project as a custom avatar", || async {
+        let avatars = cloud()
+            .avatars()
+            .get_avatars(GetAvatarsRequestType::Project, &project_id)
+            .send()
+            .await
+            .expect("the project lists the avatars available to it");
 
-    assert!(
-        avatars.custom.unwrap_or_default().iter().any(|candidate| candidate.id == stored.id),
-        "the upload is offered to the project as a custom avatar",
-    );
+        avatars.custom.unwrap_or_default().into_iter().find(|candidate| candidate.id == stored.id)
+    })
+    .await;
 
     let image = cloud()
         .avatars()

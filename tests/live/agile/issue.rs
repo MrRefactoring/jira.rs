@@ -9,13 +9,17 @@
 
 use jira::agile::IssueRankRequest;
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, agile, cloud, create_test_issue, scrum_board, test_name};
+use crate::harness::{
+    ResourceTracker, TEST_PROJECT_KEY, agile, await_agile_visibility, cloud, create_test_issue, scrum_board, test_name,
+};
 
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn returns_the_issue_with_the_agile_fields_the_platform_endpoint_omits() {
     let mut tracker = ResourceTracker::new();
     let issue = create_test_issue(&mut tracker, Some(&test_name("agile lens"))).await;
+
+    await_agile_visibility(&issue.key).await;
 
     let read = agile().issue().get_issue(&issue.key).send().await.expect("the issue reads back through the Agile API");
 
@@ -38,6 +42,8 @@ async fn agrees_with_the_platform_endpoint_on_the_fields_they_share() {
     let mut tracker = ResourceTracker::new();
     let summary = test_name("two lenses");
     let issue = create_test_issue(&mut tracker, Some(&summary)).await;
+
+    await_agile_visibility(&issue.key).await;
 
     let via_agile = agile().issue().get_issue(&issue.key).send().await.expect("the Agile endpoint answers");
     let via_platform = cloud().issues().get_issue(&issue.key).send().await.expect("the platform endpoint answers");
@@ -62,6 +68,9 @@ async fn ranks_issues_relative_to_one_another() {
     let mut tracker = ResourceTracker::new();
     let first = create_test_issue(&mut tracker, Some(&test_name("rank first"))).await;
     let second = create_test_issue(&mut tracker, Some(&test_name("rank second"))).await;
+
+    await_agile_visibility(&first.key).await;
+    await_agile_visibility(&second.key).await;
 
     agile()
         .issue()

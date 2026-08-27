@@ -11,7 +11,7 @@ where
     F: FnMut() -> Fut,
     Fut: Future<Output = Option<T>>,
 {
-    const ATTEMPTS: u32 = 20;
+    const ATTEMPTS: u32 = 60;
     const INTERVAL: Duration = Duration::from_millis(500);
 
     for _ in 0..ATTEMPTS {

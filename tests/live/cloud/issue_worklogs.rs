@@ -8,7 +8,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use jira::cloud::{Worklog, WorklogIdsRequest, WorklogInput, WorklogInputComment};
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, document_of, test_name};
+use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, document_of, poll_until, test_name};
 
 fn worklog_of(time_spent: &str, comment: Option<&str>) -> WorklogInput {
     WorklogInput {
@@ -121,10 +121,17 @@ async fn walks_a_worklog_through_its_lifecycle() {
 
     cloud().issue_worklogs().delete_worklog(&issue.key, &worklog_id).send().await.expect("the worklog can be deleted");
 
-    let remaining =
-        cloud().issue_worklogs().get_issue_worklog(&issue.key).send().await.expect("the listing reads after a delete");
+    poll_until("the worklog listing to reflect the delete", || async {
+        let listing = cloud()
+            .issue_worklogs()
+            .get_issue_worklog(&issue.key)
+            .send()
+            .await
+            .expect("the listing reads after a delete");
 
-    assert_eq!(remaining.total, Some(0));
+        (listing.total == Some(0)).then_some(listing)
+    })
+    .await;
 
     let error = cloud()
         .issue_worklogs()

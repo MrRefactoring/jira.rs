@@ -1,4 +1,4 @@
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, test_name};
+use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, poll_until, test_name};
 
 /// The account the token authenticates as, which every search here is expected to find.
 async fn current_account_id() -> String {
@@ -81,13 +81,10 @@ async fn lists_who_can_be_assigned_a_specific_issue() {
     let account_id = current_account_id().await;
     let issue = create_test_issue(&mut tracker, Some(&test_name("assignable"))).await;
 
-    let assignable = cloud()
-        .user_search()
-        .find_assignable_users()
-        .issue_key(&issue.key)
-        .send()
-        .await
-        .expect("the issue names who can take it");
+    let assignable = poll_until("the assignable-user search to see the issue", || async {
+        cloud().user_search().find_assignable_users().issue_key(&issue.key).send().await.ok()
+    })
+    .await;
 
     let ids: Vec<_> = assignable.iter().filter_map(|user| user.account_id.clone()).collect();
 

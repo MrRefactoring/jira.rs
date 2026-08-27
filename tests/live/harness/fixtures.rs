@@ -3,6 +3,7 @@ use serde_json::json;
 
 use super::client::{agile, cloud};
 use super::naming::test_name;
+use super::poll::poll_until;
 use super::resources::ResourceTracker;
 
 /// The project every Cloud suite works in. Its issue types are `Task` and `Sub-task`.
@@ -38,7 +39,12 @@ pub async fn create_test_issue(tracker: &mut ResourceTracker, summary: Option<&s
     .await
 }
 
-/// Creates an issue from the fields given, and registers its deletion.
+/// Creates an issue from the fields given, registers its deletion, and waits for it to be readable.
+///
+/// A key that `create_issue` has just answered with is not yet an issue every endpoint can see: for a second or so
+/// after the write, `getIssue`, the worklog endpoints and the watcher endpoints all answer 404 with "Issue does not
+/// exist or you do not have permission to see it". Waiting here rather than in each caller is what keeps the whole
+/// class fixed instead of the three cases that happened to fail on the day someone looked.
 pub async fn create_issue_with(tracker: &mut ResourceTracker, fields: serde_json::Value) -> CreatedIssue {
     let fields = fields
         .as_object()
@@ -62,7 +68,22 @@ pub async fn create_issue_with(tracker: &mut ResourceTracker, fields: serde_json
         async move { cloud().issues().delete_issue(key).send().await }
     });
 
+    poll_until("the issue just created to read back", || async {
+        cloud().issues().get_issue(&created.key).send().await.ok()
+    })
+    .await;
+
     created
+}
+
+/// Waits until the Agile lens can see an issue the platform API has already created.
+///
+/// The Agile endpoints read their own index, which catches up on Jira's schedule rather than on the write's. An issue
+/// that `create_test_issue` has just returned a key for is answered with a 404 by `agile().issue()` and with a 400 by
+/// `rank_issues` until that index has it, and both refusals say "Issue does not exist or you do not have permission to
+/// see it" — which is indistinguishable from the real thing at the call site.
+pub async fn await_agile_visibility(key: &str) {
+    poll_until("the Agile index to see the issue", || async { agile().issue().get_issue(key).send().await.ok() }).await;
 }
 
 /// A scrum board over the test project, and the filter it is built on.

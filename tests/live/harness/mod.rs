@@ -18,8 +18,8 @@ pub use client::{admin_key_client, admin_surface, agile, client, cloud, org_id, 
 pub use entitlement::is_not_entitled;
 pub use env::{has_admin_env, require_jsm_env, require_live_env, require_server_env};
 pub use fixtures::{
-    TEST_ISSUE_TYPE, TEST_PROJECT_KEY, TestBoard, create_issue_with, create_test_board, create_test_issue, document_of,
-    scrum_board,
+    TEST_ISSUE_TYPE, TEST_PROJECT_KEY, TestBoard, await_agile_visibility, create_issue_with, create_test_board,
+    create_test_issue, document_of, scrum_board,
 };
 pub use naming::{RESOURCE_MARKER, project_key, run_id, run_suffix, test_name};
 pub use poll::poll_until;
