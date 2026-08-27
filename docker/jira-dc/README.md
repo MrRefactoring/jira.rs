@@ -16,9 +16,10 @@ The published **Jira Service Desk Data Center** key does install, and the rig co
 /rest/api/2/applicationrole/jira-software` then answers 404 and the Scrum project template disappears, which takes
 the board, the sprint and the epic with it.
 
-Nineteen cases need that template — all of `server::agile`, all of `server::issues` and `server::crawl` — and they
-stand down rather than fail when it is missing. `cargo xtask coverage server` counts what a run reached, so the cost
-of an unlicensed rig is visible as a number: 242 of 444 operations on a Service Desk licence.
+Eighteen cases need that template — five in `server::agile` and thirteen in `server::issues` — and they stand down
+rather than fail when it is missing. `server::crawl` is not among them: it needs a project rather than a Scrum one,
+so it falls back to a business project and keeps going. `cargo xtask coverage server` counts what a run reached, so
+the cost of an unlicensed rig is visible as a number: 358 of 444 operations on a Service Desk licence.
 
 A Jira Software Data Center evaluation from [my.atlassian.com](https://my.atlassian.com) brings them back. Nothing in
 the suites needs editing.

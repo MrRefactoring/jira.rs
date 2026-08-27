@@ -48,7 +48,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 Build the transport **once** and hand it to each surface. Under OAuth 2.0 this matters: two clients mean two token
 states, and since Atlassian rotates the refresh token on every refresh, whichever refreshes first invalidates the
-other\'s copy.
+other's copy.
 
 ```rust,no_run
 # use jira::{Auth, Client};
@@ -180,9 +180,8 @@ let client = Client::builder().host("https://your-domain.atlassian.net").http_cl
 
 ## Feature flags
 
-| Feature | What it adds |
-|---|---|
-| `audit` | Collects the gaps between the generated types and what the API actually sends. For this crate's own audit run. |
+One feature per API surface. A surface you do not enable is not compiled, and the crate holds over three thousand
+types, so almost nobody wants all of them.
 
 | Feature | Surface |
 |---|---|
@@ -197,8 +196,13 @@ let client = Client::builder().host("https://your-domain.atlassian.net").http_cl
 | `user-management` / `user-provisioning` | User management and SCIM provisioning |
 | `webhooks` | Event and payload types, and the signature check that says a delivery came from Jira |
 
-A surface you do not enable is not compiled: the whole crate is ten thousand types, and almost nobody needs all of
-them.
+Two more are instruments rather than surfaces. They exist for this crate's own runs against a live site, and cost
+nothing when they are off:
+
+| Feature | What it adds |
+|---|---|
+| `audit` | Collects the fields the API sends that the generated types do not describe |
+| `coverage` | Records the endpoint of every call the process makes, which is how a live run counts what it reached |
 
 ## Other products
 
