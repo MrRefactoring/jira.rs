@@ -1,14 +1,18 @@
 # jira
 
+[![crates.io](https://img.shields.io/crates/v/jira.svg?style=flat-square)](https://crates.io/crates/jira)
+[![docs.rs](https://img.shields.io/docsrs/jira?style=flat-square)](https://docs.rs/jira)
+[![build status](https://img.shields.io/github/actions/workflow/status/mrrefactoring/jira.rs/.github/workflows/ci.yaml?branch=master&style=flat-square)](https://github.com/MrRefactoring/jira.rs/actions/workflows/ci.yaml)
+[![license](https://img.shields.io/crates/l/jira?style=flat-square)](https://github.com/MrRefactoring/jira.rs/blob/master/LICENSE)
+[![MSRV](https://img.shields.io/badge/MSRV-1.91-blue?style=flat-square&logo=rust)](https://blog.rust-lang.org/)
+
 > 🌐 **English** · [Русский](README.ru.md)
 
 Rust client for the Atlassian Jira REST APIs — the Rust counterpart of
-[jira.js](https://github.com/MrRefactoring/jira.js), generated from the same OpenAPI pipeline.
-
-> **Status: `0.1.0` is not published yet.** The transport is written by hand; every operation and model is generated
-> from the same OpenAPI pipeline that produces `jira.js`, so the two cannot drift on anything but the language. Five
-> hundred and sixty-three live cases run against a real Jira site and the Data Center rigs in Docker, and they are what
-> found the defects the type checker could not.
+[jira.js](https://github.com/MrRefactoring/jira.js). The transport is written by hand; every operation and model is
+generated from the same OpenAPI pipeline that produces `jira.js`, so the two cannot drift on anything but the language.
+Five hundred and sixty-three live cases run against a real Jira site and the Data Center rigs in Docker, and they are
+what found the defects the type checker could not.
 
 ## Installation
 

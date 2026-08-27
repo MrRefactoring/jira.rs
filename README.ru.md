@@ -1,13 +1,17 @@
 # jira
 
+[![crates.io](https://img.shields.io/crates/v/jira.svg?style=flat-square)](https://crates.io/crates/jira)
+[![docs.rs](https://img.shields.io/docsrs/jira?style=flat-square)](https://docs.rs/jira)
+[![build status](https://img.shields.io/github/actions/workflow/status/mrrefactoring/jira.rs/.github/workflows/ci.yaml?branch=master&style=flat-square)](https://github.com/MrRefactoring/jira.rs/actions/workflows/ci.yaml)
+[![license](https://img.shields.io/crates/l/jira?style=flat-square)](https://github.com/MrRefactoring/jira.rs/blob/master/LICENSE)
+[![MSRV](https://img.shields.io/badge/MSRV-1.91-blue?style=flat-square&logo=rust)](https://blog.rust-lang.org/)
+
 > [English](README.md) · 🌐 **Русский**
 
-Rust-клиент для Atlassian Jira REST API — Rust-близнец [jira.js](https://github.com/MrRefactoring/jira.js),
-генерируемый из того же OpenAPI-конвейера.
-
-> **Статус: `0.1.0` ещё не опубликован.** Транспорт написан вручную; каждая операция и модель генерируются тем же
-> конвейером, что и `jira.js`, поэтому разойтись библиотеки могут только в языке. Пятьсот шестьдесят три живых теста идут
-> против реального сайта Jira и стендов Data Center в Docker — именно они нашли дефекты, которых не видит компилятор.
+Rust-клиент для Atlassian Jira REST API — Rust-близнец [jira.js](https://github.com/MrRefactoring/jira.js). Транспорт
+написан вручную; каждая операция и модель генерируются тем же конвейером, что и `jira.js`, поэтому разойтись библиотеки
+могут только в языке. Пятьсот шестьдесят три живых теста идут против реального сайта Jira и стендов Data Center в
+Docker — именно они нашли дефекты, которых не видит компилятор.
 
 ## Установка
 
