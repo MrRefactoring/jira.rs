@@ -49,13 +49,55 @@ jobs:
       - name: 📦 Package
         run: cargo publish --dry-run --all-features
 
+  create-release:
+    name: 📝 Create draft release
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      release-id: ${{ steps.create.outputs.result }}
+    steps:
+      - name: 🔄 Checkout sources
+        uses: actions/checkout@v5
+      # A draft, not a release. `cargo publish` is the irreversible step and it has not run yet; a draft that is never
+      # un-drafted is what a failed publish looks like from the outside.
+      - name: 📝 Create draft release from CHANGELOG
+        id: create
+        uses: actions/github-script@v9
+        with:
+          result-encoding: string
+          script: |
+            const fs = require('fs');
+            const tag = context.ref.replace('refs/tags/', '');
+            const version = tag.replace(/^v/, '');
+            const changelog = fs.readFileSync('CHANGELOG.md', 'utf8');
+
+            const escaped = version.replace(/\./g, '\\.');
+            const match = changelog.match(
+              new RegExp(`## \\[?${escaped}\\]?(?![0-9.])[^\\n]*\\n([\\s\\S]*?)(?=\\n## |$)`)
+            );
+            const body = match ? match[1].trim() : '<!-- changelog section not found -->';
+
+            const { data } = await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: tag,
+              name: tag,
+              body,
+              draft: true,
+              prerelease: version.includes('-'),
+            });
+
+            return data.id;
+
   publish:
     name: 🚀 crates.io
-    needs: verify
+    needs: [verify, create-release]
     runs-on: ubuntu-latest
     environment: crates-io
     permissions:
-      contents: read
+      contents: write
       # Trusted Publishing: crates.io trades this token for a short-lived publish token, so no API token is stored
       # in this repository at all.
       id-token: write
@@ -71,3 +113,15 @@ jobs:
         run: cargo publish --all-features
         env:
           CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
+      - name: ✅ Activate GitHub release (un-draft)
+        uses: actions/github-script@v9
+        env:
+          RELEASE_ID: ${{ needs.create-release.outputs.release-id }}
+        with:
+          script: |
+            await github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: parseInt(process.env.RELEASE_ID, 10),
+              draft: false,
+            });
