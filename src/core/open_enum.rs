@@ -63,16 +63,7 @@ macro_rules! open_enum {
             fn from(value: &str) -> Self {
                 match value {
                     $( $wire => $name::$variant, )*
-                    other => {
-                        #[cfg(feature = "audit")]
-                        $crate::core::audit::record_undocumented_value(
-                            ::std::stringify!($name),
-                            other,
-                            $name::documented(),
-                        );
-
-                        $name::Other(other.to_owned())
-                    }
+                    other => $name::Other(other.to_owned()),
                 }
             }
         }
@@ -108,8 +99,20 @@ macro_rules! open_enum {
                 deserializer: D,
             ) -> ::std::result::Result<Self, D::Error> {
                 let value = <::std::string::String as ::serde::Deserialize>::deserialize(deserializer)?;
+                let parsed = $name::from(value);
 
-                ::std::result::Result::Ok($name::from(value))
+                #[cfg(feature = "audit")]
+                {
+                    if let $name::Other(ref undocumented) = parsed {
+                        $crate::core::audit::record_undocumented_value(
+                            ::std::stringify!($name),
+                            undocumented,
+                            $name::documented(),
+                        );
+                    }
+                }
+
+                ::std::result::Result::Ok(parsed)
             }
         }
 
