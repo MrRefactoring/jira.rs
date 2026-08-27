@@ -6,5 +6,5 @@ xtask = "run --package xtask --"
 # do not fail on the library — they fail on a connection. A new self-hosted surface belongs on this skip list the day
 # its module appears.
 live = "test --test live --all-features -- --ignored --test-threads=1 --skip server:: --skip jsm::"
-live-server = "test --test live --all-features -- --ignored --test-threads=1 server::"
-live-jsm = "test --test live --all-features -- --ignored --test-threads=1 jsm::"
+live-server = "test --test live --all-features -- --ignored --test-threads=1 --nocapture server::"
+live-jsm = "test --test live --all-features -- --ignored --test-threads=1 --nocapture jsm::"
