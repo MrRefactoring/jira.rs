@@ -16,6 +16,11 @@ crate::open_enum! {
         IpAllowlist => "ip-allowlist",
         DataResidency => "data-residency",
         DataSecurity => "data-security",
+        AdminNotificationSettings => "admin-notification-settings",
+        GenerativeAi => "generative-ai",
+        Hipaa => "hipaa",
+        UgcDataUsePreferences => "ugc-data-use-preferences",
+        UserJoinSettingsDefault => "user-join-settings-default",
     }
 }
 
@@ -55,6 +60,18 @@ pub struct PolicyModelAttributes {
     /// list of resources Policy is associated with
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub resources: Option<Vec<Resource>>,
+    #[serde(rename = "createdAt", default, skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<serde_json::Value>,
+    #[serde(rename = "ownerId", default, skip_serializing_if = "Option::is_none")]
+    pub owner_id: Option<String>,
+    #[serde(rename = "queryData", default, skip_serializing_if = "Option::is_none")]
+    pub query_data: Option<serde_json::Value>,
+    #[serde(rename = "updatedAt", default, skip_serializing_if = "Option::is_none")]
+    pub updated_at: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -65,4 +82,8 @@ pub struct PolicyModel {
     pub r#type: PolicyModelType,
     /// Attributes of this object
     pub attributes: PolicyModelAttributes,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub links: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub message: Option<serde_json::Value>,
 }

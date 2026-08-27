@@ -94,4 +94,8 @@ pub struct MultiDirectoryUser {
     pub groups: Option<Vec<MultiDirectoryUserGroup>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub links: Option<LinkSelfCursor>,
+    #[serde(rename = "deactivatedOn", default, skip_serializing_if = "Option::is_none")]
+    pub deactivated_on: Option<String>,
+    #[serde(rename = "forDeletion", default, skip_serializing_if = "Option::is_none")]
+    pub for_deletion: Option<bool>,
 }

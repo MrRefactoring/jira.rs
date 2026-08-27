@@ -54,6 +54,10 @@ pub struct WorkspaceModelAttributes {
     pub realm: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub regions: Option<Vec<String>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub directory: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub unit: Option<String>,
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -68,4 +72,6 @@ pub struct WorkspaceModel {
     pub links: Option<LinkSelfModel>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub relationships: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(rename = "appType", default, skip_serializing_if = "Option::is_none")]
+    pub app_type: Option<String>,
 }

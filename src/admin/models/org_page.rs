@@ -10,4 +10,6 @@ pub struct OrgPage {
     pub data: Option<Vec<OrgModel>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub links: Option<LinkPageModel>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<serde_json::Value>,
 }

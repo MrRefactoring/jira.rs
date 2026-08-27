@@ -23,6 +23,8 @@ pub struct OrgModelAttributes {
 pub struct OrgModelRelationshipsDomains {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub links: Option<LinkRelatedModel>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub related: Option<String>,
 }
 
 /// Link to the related Users of the Org
@@ -30,6 +32,8 @@ pub struct OrgModelRelationshipsDomains {
 pub struct OrgModelRelationshipsUsers {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub links: Option<LinkRelatedModel>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub related: Option<String>,
 }
 
 /// Relationships of this object

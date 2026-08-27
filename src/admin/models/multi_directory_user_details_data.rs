@@ -89,4 +89,8 @@ pub struct MultiDirectoryUserDetailsData {
     pub time_zone: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub counts: Option<UserCounts>,
+    #[serde(rename = "forDeletion", default, skip_serializing_if = "Option::is_none")]
+    pub for_deletion: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub links: Option<std::collections::HashMap<String, serde_json::Value>>,
 }

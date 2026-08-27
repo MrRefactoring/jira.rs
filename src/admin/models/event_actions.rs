@@ -8,4 +8,8 @@ pub struct EventActions {
     /// 0 or more values of event actions are returned.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub data: Option<Vec<EventActionModel>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub links: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<serde_json::Value>,
 }

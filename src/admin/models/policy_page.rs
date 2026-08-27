@@ -11,6 +11,18 @@ pub struct PolicyPageMeta {
     /// Number of items in a page
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<serde_json::Value>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub current: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub end_index: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub prev: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub start_index: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub total: Option<i64>,
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]

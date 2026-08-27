@@ -11,6 +11,8 @@ pub struct EventActionModelAttributes {
     /// Display name of the event action group.
     #[serde(rename = "groupDisplayName", default, skip_serializing_if = "Option::is_none")]
     pub group_display_name: Option<String>,
+    #[serde(rename = "groupDisplayNames", default, skip_serializing_if = "Option::is_none")]
+    pub group_display_names: Option<Vec<String>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -21,4 +23,8 @@ pub struct EventActionModel {
     pub r#type: String,
     /// Attributes of this object.
     pub attributes: EventActionModelAttributes,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub links: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub message: Option<serde_json::Value>,
 }

@@ -11,6 +11,7 @@ crate::open_enum! {
         Applied => "applied",
         Failed => "failed",
         Scheduled => "scheduled",
+        Enabled => "enabled",
     }
 }
 
@@ -24,4 +25,12 @@ pub struct Resource {
     pub meta: Option<Meta>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub links: Option<Links>,
+    #[serde(rename = "createdAt", default, skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<serde_json::Value>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<String>,
+    #[serde(rename = "updatedAt", default, skip_serializing_if = "Option::is_none")]
+    pub updated_at: Option<String>,
 }

@@ -12,4 +12,6 @@ pub struct MetaV2 {
     pub end_index: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub total: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<serde_json::Value>,
 }
