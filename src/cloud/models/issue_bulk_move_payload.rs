@@ -12,7 +12,7 @@ pub struct IssueBulkMovePayload {
     pub send_bulk_notification: Option<bool>,
     /// An object representing the mapping of issues and data related to destination entities, like fields and statuses, that are required during a bulk move.
     ///
-    /// The key is a string that is created by concatenating the following three entities in order, separated by commas. The format is `,,`. It should be unique across mappings provided in the payload. If you provide multiple mappings for the same key, only one will be processed. However, the operation won't fail, so the error may be hard to track down.
+    /// The key is a string that is created by concatenating the following three entities in order, separated by commas. The format is `<project ID or key>,<issueType ID>,<parent ID or key>`. It should be unique across mappings provided in the payload. If you provide multiple mappings for the same key, only one will be processed. However, the operation won't fail, so the error may be hard to track down.
     ///
     ///  *  ***Destination project*** (Required): ID or key of the project to which the issues are being moved.
     ///  *  ***Destination issueType*** (Required): ID of the issueType to which the issues are being moved.

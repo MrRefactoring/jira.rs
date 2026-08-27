@@ -46,7 +46,7 @@ impl<'a> ProjectAvatarsService<'a> {
     /// For example:
     /// `curl --request POST `
     ///
-    /// `--user email@example.com: `
+    /// `--user email@example.com:<api_token> `
     ///
     /// `--header 'X-Atlassian-Token: no-check' `
     ///
@@ -170,7 +170,7 @@ impl<'a> DeleteProjectAvatarRequest<'a> {
 /// For example:
 /// `curl --request POST `
 ///
-/// `--user email@example.com: `
+/// `--user email@example.com:<api_token> `
 ///
 /// `--header 'X-Atlassian-Token: no-check' `
 ///
