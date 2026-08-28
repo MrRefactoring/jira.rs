@@ -27,6 +27,7 @@ impl<'a> OrgsService<'a> {
 }
 
 /// Returns a list of your organizations (based on your API key).
+#[derive(Clone)]
 pub struct GetOrgsRequest<'a> {
     client: &'a crate::core::Client,
     cursor: Option<String>,
@@ -71,6 +72,7 @@ impl<'a> GetOrgsRequest<'a> {
 ///
 /// #### Scopes
 /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:orgs:admin`
+#[derive(Clone)]
 pub struct GetOrgByIdRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,

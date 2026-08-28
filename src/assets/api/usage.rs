@@ -19,6 +19,7 @@ impl<'a> UsageService<'a> {
 }
 
 /// Retrieves comprehensive usage statistics for the current tenant including total object counts and a per-schema breakdown for billing and analytics.
+#[derive(Clone)]
 pub struct GetTenantUsageInfoRequest<'a> {
     client: &'a crate::core::Client,
 }

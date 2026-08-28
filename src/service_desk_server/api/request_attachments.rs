@@ -52,6 +52,7 @@ impl<'a> RequestAttachmentsService<'a> {
 /// Setting attachment visibility is dependent on the user's permission. For example, Agents can create either public or internal attachments, while Unlicensed users can only create internal attachments, and Customers can only create public attachments.
 ///
 /// An additional comment may be provided which will be prepended to the attachments.
+#[derive(Clone)]
 pub struct CreateAttachmentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -114,6 +115,7 @@ impl<'a> CreateAttachmentRequest<'a> {
 /// A simple example to upload a file called "myfile.txt" in service project with ID 10001
 ///
 /// `curl -D- -u customer:customer -X POST -H "X-Atlassian-Token: no-check" -F`.
+#[derive(Clone)]
 pub struct AttachTemporaryFileRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,

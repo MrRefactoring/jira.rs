@@ -106,6 +106,7 @@ impl<'a> IssueAttachmentsService<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  If attachments are added in private comments, the comment-level restriction will be applied.
+#[derive(Clone)]
 pub struct GetAttachmentContentRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -157,6 +158,7 @@ impl<'a> GetAttachmentContentRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetAttachmentMetaRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -196,6 +198,7 @@ impl<'a> GetAttachmentMetaRequest<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  If attachments are added in private comments, the comment-level restriction will be applied.
+#[derive(Clone)]
 pub struct GetAttachmentThumbnailRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -288,6 +291,7 @@ impl<'a> GetAttachmentThumbnailRequest<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  If attachments are added in private comments, the comment-level restriction will be applied.
+#[derive(Clone)]
 pub struct GetAttachmentRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -327,6 +331,7 @@ impl<'a> GetAttachmentRequest<'a> {
 ///
 ///  *  *Delete own attachments* [project permission](https://confluence.atlassian.com/x/yodKLg) to delete an attachment created by the calling user.
 ///  *  *Delete all attachments* [project permission](https://confluence.atlassian.com/x/yodKLg) to delete an attachment created by any user.
+#[derive(Clone)]
 pub struct RemoveAttachmentRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -366,6 +371,7 @@ impl<'a> RemoveAttachmentRequest<'a> {
 ///
 ///  *  *Browse Projects* and *Create attachments* [ project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct AddAttachmentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,

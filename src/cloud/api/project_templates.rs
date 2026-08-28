@@ -52,6 +52,7 @@ impl<'a> ProjectTemplatesService<'a> {
 /// ***Note: This API is only supported for Jira Enterprise edition.***
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct CreateProjectWithCustomTemplateRequest<'a> {
     client: &'a crate::core::Client,
     project_custom_template_create_request_dto: ProjectCustomTemplateCreateRequestDTO,

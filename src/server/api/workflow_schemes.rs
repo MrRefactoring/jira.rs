@@ -179,6 +179,7 @@ impl<'a> WorkflowSchemesService<'a> {
 }
 
 /// Create a new workflow scheme. The body contains a representation of the new scheme. Values not passed are assumed to be set to their defaults.
+#[derive(Clone)]
 pub struct CreateSchemeRequest<'a> {
     client: &'a crate::core::Client,
     workflow_scheme: WorkflowScheme,
@@ -216,6 +217,7 @@ impl<'a> CreateSchemeRequest<'a> {
 }
 
 /// Returns the requested workflow scheme to the caller.
+#[derive(Clone)]
 pub struct GetByIdRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -264,6 +266,7 @@ impl<'a> GetByIdRequest<'a> {
 /// The passed representation can have its updateDraftIfNeeded flag set to true to indicate that the draft
 /// should be created and/or updated when the actual scheme cannot be edited (e.g. when the scheme is being used by
 /// a project). Values not appearing the body will not be touched.
+#[derive(Clone)]
 pub struct UpdateWorkflowSchemeRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -299,6 +302,7 @@ impl<'a> UpdateWorkflowSchemeRequest<'a> {
 }
 
 /// Delete the passed workflow scheme.
+#[derive(Clone)]
 pub struct DeleteSchemeRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -331,6 +335,7 @@ impl<'a> DeleteSchemeRequest<'a> {
 }
 
 /// Create a draft for the passed scheme. The draft will be a copy of the state of the parent.
+#[derive(Clone)]
 pub struct CreateDraftForParentRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -363,6 +368,7 @@ impl<'a> CreateDraftForParentRequest<'a> {
 }
 
 /// Return the default workflow from the passed workflow scheme.
+#[derive(Clone)]
 pub struct GetDefaultRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -410,6 +416,7 @@ impl<'a> GetDefaultRequest<'a> {
 /// Set the default workflow for the passed workflow scheme. The passed representation can have its
 /// updateDraftIfNeeded flag set to true to indicate that the draft should be created/updated when the actual scheme
 /// cannot be edited.
+#[derive(Clone)]
 pub struct UpdateDefaultRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -450,6 +457,7 @@ impl<'a> UpdateDefaultRequest<'a> {
 }
 
 /// Remove the default workflow from the passed workflow scheme.
+#[derive(Clone)]
 pub struct DeleteDefaultRequest<'a> {
     client: &'a crate::core::Client,
     update_draft_if_needed: Option<bool>,
@@ -495,6 +503,7 @@ impl<'a> DeleteDefaultRequest<'a> {
 }
 
 /// Returns the requested draft workflow scheme to the caller.
+#[derive(Clone)]
 pub struct GetDraftByIdRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -527,6 +536,7 @@ impl<'a> GetDraftByIdRequest<'a> {
 }
 
 /// Update a draft workflow scheme. The draft will created if necessary. The body of the request is a representation of the workflow scheme. Values not passed are assumed to indicate no change for that field.
+#[derive(Clone)]
 pub struct UpdateDraftRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -562,6 +572,7 @@ impl<'a> UpdateDraftRequest<'a> {
 }
 
 /// Delete the passed draft workflow scheme.
+#[derive(Clone)]
 pub struct DeleteDraftByIdRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -594,6 +605,7 @@ impl<'a> DeleteDraftByIdRequest<'a> {
 }
 
 /// Return the default workflow from the passed draft workflow scheme to the caller.
+#[derive(Clone)]
 pub struct GetDraftDefaultRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -626,6 +638,7 @@ impl<'a> GetDraftDefaultRequest<'a> {
 }
 
 /// Set the default workflow for the passed draft workflow scheme.
+#[derive(Clone)]
 pub struct UpdateDraftDefaultRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -666,6 +679,7 @@ impl<'a> UpdateDraftDefaultRequest<'a> {
 }
 
 /// Remove the default workflow from the passed draft workflow scheme.
+#[derive(Clone)]
 pub struct DeleteDraftDefaultRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -698,6 +712,7 @@ impl<'a> DeleteDraftDefaultRequest<'a> {
 }
 
 /// Returns the issue type mapping for the passed draft workflow scheme.
+#[derive(Clone)]
 pub struct GetDraftIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type: String,
@@ -736,6 +751,7 @@ impl<'a> GetDraftIssueTypeRequest<'a> {
 
 /// Set the issue type mapping for the passed draft scheme. The passed representation can have its updateDraftIfNeeded flag set to true to indicate that
 /// the draft should be created/updated when the actual scheme cannot be edited.
+#[derive(Clone)]
 pub struct SetDraftIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type: String,
@@ -776,6 +792,7 @@ impl<'a> SetDraftIssueTypeRequest<'a> {
 }
 
 /// Remove the specified issue type mapping from the draft scheme.
+#[derive(Clone)]
 pub struct DeleteDraftIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type: String,
@@ -813,6 +830,7 @@ impl<'a> DeleteDraftIssueTypeRequest<'a> {
 }
 
 /// Returns the draft workflow mappings or requested mapping to the caller.
+#[derive(Clone)]
 pub struct GetDraftWorkflowRequest<'a> {
     client: &'a crate::core::Client,
     workflow_name: Option<String>,
@@ -858,6 +876,7 @@ impl<'a> GetDraftWorkflowRequest<'a> {
 }
 
 /// Update the draft scheme to include the passed mapping. The body is a representation of the workflow mapping. Values not passed are assumed to indicate no change for that field.
+#[derive(Clone)]
 pub struct UpdateDraftWorkflowMappingRequest<'a> {
     client: &'a crate::core::Client,
     workflow_name: Option<String>,
@@ -911,6 +930,7 @@ impl<'a> UpdateDraftWorkflowMappingRequest<'a> {
 }
 
 /// Delete the passed workflow from the draft workflow scheme.
+#[derive(Clone)]
 pub struct DeleteDraftWorkflowMappingRequest<'a> {
     client: &'a crate::core::Client,
     workflow_name: Option<String>,
@@ -956,6 +976,7 @@ impl<'a> DeleteDraftWorkflowMappingRequest<'a> {
 }
 
 /// Returns the issue type mapping for the passed workflow scheme.
+#[derive(Clone)]
 pub struct GetWorkflowSchemeIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type: String,
@@ -1007,6 +1028,7 @@ impl<'a> GetWorkflowSchemeIssueTypeRequest<'a> {
 
 /// Set the issue type mapping for the passed scheme. The passed representation can have its updateDraftIfNeeded flag set to true to indicate that
 /// the draft should be created/updated when the actual scheme cannot be edited.
+#[derive(Clone)]
 pub struct SetIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type: String,
@@ -1047,6 +1069,7 @@ impl<'a> SetIssueTypeRequest<'a> {
 }
 
 /// Remove the specified issue type mapping from the scheme.
+#[derive(Clone)]
 pub struct DeleteWorkflowSchemeIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type: String,
@@ -1097,6 +1120,7 @@ impl<'a> DeleteWorkflowSchemeIssueTypeRequest<'a> {
 }
 
 /// Returns the workflow mappings or requested mapping to the caller for the passed scheme.
+#[derive(Clone)]
 pub struct GetWorkflowRequest<'a> {
     client: &'a crate::core::Client,
     workflow_name: Option<String>,
@@ -1157,6 +1181,7 @@ impl<'a> GetWorkflowRequest<'a> {
 /// Update the scheme to include the passed mapping. The body is a representation of the workflow mapping. Values not passed are assumed to indicate no change for that field.
 /// The passed representation can have its updateDraftIfNeeded flag set to true to indicate that the draft
 /// should be created/updated when the actual scheme cannot be edited.
+#[derive(Clone)]
 pub struct UpdateWorkflowMappingRequest<'a> {
     client: &'a crate::core::Client,
     workflow_name: Option<String>,
@@ -1210,6 +1235,7 @@ impl<'a> UpdateWorkflowMappingRequest<'a> {
 }
 
 /// Delete the passed workflow from the workflow scheme.
+#[derive(Clone)]
 pub struct DeleteWorkflowMappingRequest<'a> {
     client: &'a crate::core::Client,
     update_draft_if_needed: Option<bool>,

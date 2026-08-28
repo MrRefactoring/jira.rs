@@ -23,6 +23,7 @@ impl<'a> EmailService<'a> {
 /// Sets the specified user's email address. Before using this endpoint, you must [verify the target domain](https://confluence.atlassian.com/x/gjcWN) as the new email address will be considered verified.
 /// The permission to make use of this resource is exposed by the `email.set` privilege.
 /// This call invalidates all active sessions.
+#[derive(Clone)]
 pub struct SetEmailRequest<'a> {
     client: &'a crate::core::Client,
     account_id: AccountId,

@@ -270,6 +270,7 @@ impl<'a> AvatarsService<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetAllSystemAvatarsRequest<'a> {
     client: &'a crate::core::Client,
     r#type: GetAllSystemAvatarsRequestType,
@@ -311,6 +312,7 @@ impl<'a> GetAllSystemAvatarsRequest<'a> {
 ///  *  for custom issue type avatars, *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for at least one project the issue type is used in.
 ///  *  for system avatars, none.
 ///  *  for priority avatars, none.
+#[derive(Clone)]
 pub struct GetAvatarsRequest<'a> {
     client: &'a crate::core::Client,
     r#type: GetAvatarsRequestType,
@@ -382,6 +384,7 @@ impl<'a> GetAvatarsRequest<'a> {
 ///  *  [Update priority](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-priority/#api-rest-api-3-priority-id-put) to set it as the priority's displayed avatar.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct StoreAvatarRequest<'a> {
     client: &'a crate::core::Client,
     r#type: StoreAvatarRequestType,
@@ -481,6 +484,7 @@ impl<'a> StoreAvatarRequest<'a> {
 /// Deletes an avatar from a project, issue type or priority.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeleteAvatarRequest<'a> {
     client: &'a crate::core::Client,
     r#type: DeleteAvatarRequestType,
@@ -529,6 +533,7 @@ impl<'a> DeleteAvatarRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetAvatarImageByTypeRequest<'a> {
     client: &'a crate::core::Client,
     r#type: GetAvatarImageByTypeRequestType,
@@ -599,6 +604,7 @@ impl<'a> GetAvatarImageByTypeRequest<'a> {
 ///  *  For custom project avatars, *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project the avatar belongs to.
 ///  *  For custom issue type avatars, *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for at least one project the issue type is used in.
 ///  *  For priority avatars, none.
+#[derive(Clone)]
 pub struct GetAvatarImageByIDRequest<'a> {
     client: &'a crate::core::Client,
     r#type: GetAvatarImageByIDRequestType,
@@ -671,6 +677,7 @@ impl<'a> GetAvatarImageByIDRequest<'a> {
 ///  *  For custom project avatars, *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project the avatar belongs to.
 ///  *  For custom issue type avatars, *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for at least one project the issue type is used in.
 ///  *  For priority avatars, none.
+#[derive(Clone)]
 pub struct GetAvatarImageByOwnerRequest<'a> {
     client: &'a crate::core::Client,
     r#type: GetAvatarImageByOwnerRequestType,

@@ -19,6 +19,7 @@ impl<'a> ConnectedTicketsService<'a> {
 }
 
 /// Relation between Jira issues and Assets objects
+#[derive(Clone)]
 pub struct FindObjectTicketsRequest<'a> {
     client: &'a crate::core::Client,
     object_id: String,

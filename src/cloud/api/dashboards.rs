@@ -208,6 +208,7 @@ impl<'a> DashboardsService<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetAllDashboardsRequest<'a> {
     client: &'a crate::core::Client,
     filter: Option<GetAllDashboardsRequestFilter>,
@@ -288,6 +289,7 @@ impl<'a> GetAllDashboardsRequest<'a> {
 ///  *  Dashboards shared with a private project that the user can browse. Not returned for anonymous users.
 ///  *  Dashboards shared with a public project.
 ///  *  Dashboards shared with the public.
+#[derive(Clone)]
 pub struct GetDashboardsPaginatedRequest<'a> {
     client: &'a crate::core::Client,
     dashboard_name: Option<String>,
@@ -479,6 +481,7 @@ impl<'a> GetDashboardsPaginatedRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** The user must have read permission of the dashboard or have the dashboard shared with them.
+#[derive(Clone)]
 pub struct GetDashboardItemPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     dashboard_id: String,
@@ -526,6 +529,7 @@ impl<'a> GetDashboardItemPropertyKeysRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** The user must have read permission of the dashboard or have the dashboard shared with them.
+#[derive(Clone)]
 pub struct GetDashboardItemPropertyRequest<'a> {
     client: &'a crate::core::Client,
     dashboard_id: String,
@@ -582,6 +586,7 @@ impl<'a> GetDashboardItemPropertyRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** The user must have edit permisson of the dashboard.
+#[derive(Clone)]
 pub struct SetDashboardItemPropertyRequest<'a> {
     client: &'a crate::core::Client,
     dashboard_id: String,
@@ -640,6 +645,7 @@ impl<'a> SetDashboardItemPropertyRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** The user must have edit permission of the dashboard.
+#[derive(Clone)]
 pub struct DeleteDashboardItemPropertyRequest<'a> {
     client: &'a crate::core::Client,
     dashboard_id: String,
@@ -690,6 +696,7 @@ impl<'a> DeleteDashboardItemPropertyRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 ///
 /// However, to get a dashboard, the dashboard must be shared with the user or the user must own it. Note, users with the *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) are considered owners of the System dashboard. The System dashboard is considered to be shared with all other users.
+#[derive(Clone)]
 pub struct GetDashboardRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

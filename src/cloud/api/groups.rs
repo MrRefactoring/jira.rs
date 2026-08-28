@@ -71,6 +71,7 @@ impl<'a> GroupsService<'a> {
 /// Creates a group.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+#[derive(Clone)]
 pub struct CreateGroupRequest<'a> {
     client: &'a crate::core::Client,
     add_group: AddGroup,
@@ -109,6 +110,7 @@ impl<'a> CreateGroupRequest<'a> {
 /// Deletes a group.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, member of the *site-admin* strategic [group](https://confluence.atlassian.com/x/24xjL)).
+#[derive(Clone)]
 pub struct RemoveGroupRequest<'a> {
     client: &'a crate::core::Client,
     groupname: Option<String>,
@@ -196,6 +198,7 @@ impl<'a> RemoveGroupRequest<'a> {
 ///
 ///  *  *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetUsersFromGroupRequest<'a> {
     client: &'a crate::core::Client,
     groupname: Option<String>,
@@ -300,6 +303,7 @@ impl<'a> GetUsersFromGroupRequest<'a> {
 /// Adds a user to a group.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+#[derive(Clone)]
 pub struct AddUserToGroupRequest<'a> {
     client: &'a crate::core::Client,
     groupname: Option<String>,
@@ -366,6 +370,7 @@ impl<'a> AddUserToGroupRequest<'a> {
 /// Removes a user from a group.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+#[derive(Clone)]
 pub struct RemoveUserFromGroupRequest<'a> {
     client: &'a crate::core::Client,
     groupname: Option<String>,
@@ -435,6 +440,7 @@ impl<'a> RemoveUserFromGroupRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg). Anonymous calls and calls by users without the required permission return an empty list.
 ///
 /// *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg). Without this permission, calls where query is not an exact match to an existing group will return an empty list.
+#[derive(Clone)]
 pub struct FindGroupsRequest<'a> {
     client: &'a crate::core::Client,
     query: Option<String>,

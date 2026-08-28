@@ -62,6 +62,7 @@ impl<'a> ProjectRolesService<'a> {
 }
 
 /// Get all the ProjectRoles available in Jira. Currently this list is global.
+#[derive(Clone)]
 pub struct GetAllProjectRolesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -90,6 +91,7 @@ impl<'a> GetAllProjectRolesRequest<'a> {
 }
 
 /// Creates a new ProjectRole to be available in Jira. The created role does not have any default actors assigned.
+#[derive(Clone)]
 pub struct CreateProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     create_update_role_request: CreateUpdateRoleRequest,
@@ -126,6 +128,7 @@ impl<'a> CreateProjectRoleRequest<'a> {
 }
 
 /// Get a specific ProjectRole available in Jira.
+#[derive(Clone)]
 pub struct GetProjectRolesByIdRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -155,6 +158,7 @@ impl<'a> GetProjectRolesByIdRequest<'a> {
 }
 
 /// Partially updates a roles name or description.
+#[derive(Clone)]
 pub struct PartialUpdateProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -200,6 +204,7 @@ impl<'a> PartialUpdateProjectRoleRequest<'a> {
 }
 
 /// Fully updates a roles. Both name and description must be given.
+#[derive(Clone)]
 pub struct FullyUpdateProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -245,6 +250,7 @@ impl<'a> FullyUpdateProjectRoleRequest<'a> {
 }
 
 /// Deletes a role. May return 403 in the future
+#[derive(Clone)]
 pub struct DeleteProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     swap: Option<i64>,
@@ -288,6 +294,7 @@ impl<'a> DeleteProjectRoleRequest<'a> {
 }
 
 /// Gets default actors for the given role.
+#[derive(Clone)]
 pub struct GetProjectRoleActorsForRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -318,6 +325,7 @@ impl<'a> GetProjectRoleActorsForRoleRequest<'a> {
 }
 
 /// Adds default actors to the given role. The request data should contain a list of usernames or a list of groups to add.
+#[derive(Clone)]
 pub struct AddProjectRoleActorsToRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -363,6 +371,7 @@ impl<'a> AddProjectRoleActorsToRoleRequest<'a> {
 }
 
 /// Removes default actor from the given role.
+#[derive(Clone)]
 pub struct DeleteProjectRoleActorsFromRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,

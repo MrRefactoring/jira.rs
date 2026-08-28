@@ -19,6 +19,7 @@ impl<'a> ProjectKeyAndNameValidationService<'a> {
 }
 
 /// Validates a project key.
+#[derive(Clone)]
 pub struct ValidateProjectKeyRequest<'a> {
     client: &'a crate::core::Client,
     key: Option<String>,

@@ -391,6 +391,7 @@ impl<'a> FiltersService<'a> {
 /// Creates a filter. The filter is shared according to the [default share scope](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-post). The filter is not selected as a favorite.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct CreateFilterRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<CreateFilterRequestExpand>,
@@ -470,6 +471,7 @@ impl<'a> CreateFilterRequest<'a> {
 ///  *  shared with the public.
 ///
 /// For example, if the user favorites a public filter that is subsequently made private that filter is not returned by this operation.
+#[derive(Clone)]
 pub struct GetFavouriteFiltersRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetFavouriteFiltersRequestExpand>,
@@ -525,6 +527,7 @@ impl<'a> GetFavouriteFiltersRequest<'a> {
 ///  *  shared with the public.
 ///
 /// For example, if the user favorites a public filter that is subsequently made private that filter is not returned by this operation.
+#[derive(Clone)]
 pub struct GetMyFiltersRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetMyFiltersRequestExpand>,
@@ -595,6 +598,7 @@ impl<'a> GetMyFiltersRequest<'a> {
 ///  *  filters shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
 ///  *  filters shared with a public project.
 ///  *  filters shared with the public.
+#[derive(Clone)]
 pub struct GetFiltersPaginatedRequest<'a> {
     client: &'a crate::core::Client,
     filter_name: Option<String>,
@@ -827,6 +831,7 @@ impl<'a> GetFiltersPaginatedRequest<'a> {
 ///  *  shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
 ///  *  shared with a public project.
 ///  *  shared with the public.
+#[derive(Clone)]
 pub struct GetFilterRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -890,6 +895,7 @@ impl<'a> GetFilterRequest<'a> {
 /// Updates a filter. Use this operation to update a filter's name, description, JQL, or sharing.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira, however the user must own the filter.
+#[derive(Clone)]
 pub struct UpdateFilterRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -956,6 +962,7 @@ impl<'a> UpdateFilterRequest<'a> {
 /// Delete a filter.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira, however filters can only be deleted by the creator of the filter or a user with *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeleteFilterRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -996,6 +1003,7 @@ impl<'a> DeleteFilterRequest<'a> {
 ///  *  filters shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
 ///  *  filters shared with a public project.
 ///  *  filters shared with the public.
+#[derive(Clone)]
 pub struct GetColumnsRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -1040,6 +1048,7 @@ impl<'a> GetColumnsRequest<'a> {
 ///  *  filters shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
 ///  *  filters shared with a public project.
 ///  *  filters shared with the public.
+#[derive(Clone)]
 pub struct SetColumnsRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -1088,6 +1097,7 @@ impl<'a> SetColumnsRequest<'a> {
 ///  *  filters shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
 ///  *  filters shared with a public project.
 ///  *  filters shared with the public.
+#[derive(Clone)]
 pub struct ResetColumnsRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -1128,6 +1138,7 @@ impl<'a> ResetColumnsRequest<'a> {
 ///  *  filters shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
 ///  *  filters shared with a public project.
 ///  *  filters shared with the public.
+#[derive(Clone)]
 pub struct SetFavouriteForFilterRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -1178,6 +1189,7 @@ impl<'a> SetFavouriteForFilterRequest<'a> {
 /// Removes a filter as a favorite for the user. Note that this operation only removes filters visible to the user from the user's favorites list. For example, if the user favorites a public filter that is subsequently made private (and is therefore no longer visible on their favorites list) they cannot remove it from their favorites list.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct DeleteFavouriteForFilterRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,

@@ -39,6 +39,7 @@ impl<'a> EmailTemplatesService<'a> {
 }
 
 /// Creates a zip file containing email templates at local home and returns the file.
+#[derive(Clone)]
 pub struct DownloadEmailTemplatesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -70,6 +71,7 @@ impl<'a> DownloadEmailTemplatesRequest<'a> {
 }
 
 /// Extracts given zip file to temporary templates folder. If the folder already exists it will replace it's content
+#[derive(Clone)]
 pub struct UploadEmailTemplatesRequest<'a> {
     client: &'a crate::core::Client,
     body: Option<std::collections::HashMap<String, serde_json::Value>>,
@@ -111,6 +113,7 @@ impl<'a> UploadEmailTemplatesRequest<'a> {
 }
 
 /// Replaces the current email templates pack with previously uploaded one, if exists.
+#[derive(Clone)]
 pub struct ApplyEmailTemplatesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -140,6 +143,7 @@ impl<'a> ApplyEmailTemplatesRequest<'a> {
 }
 
 /// Replaces the current email templates pack with default templates, which are copied over from Jira binaries.
+#[derive(Clone)]
 pub struct RevertEmailTemplatesToDefaultRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -169,6 +173,7 @@ impl<'a> RevertEmailTemplatesToDefaultRequest<'a> {
 }
 
 /// Returns a list of root templates mapped with Event Types. The list can be used to decide which test emails to send.
+#[derive(Clone)]
 pub struct GetEmailTypesRequest<'a> {
     client: &'a crate::core::Client,
 }

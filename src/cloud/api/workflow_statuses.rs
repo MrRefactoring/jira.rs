@@ -38,6 +38,7 @@ impl<'a> WorkflowStatusesService<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// [Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required: *Browse projects* [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) for the project.
+#[derive(Clone)]
 pub struct GetStatusesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -72,6 +73,7 @@ impl<'a> GetStatusesRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// [Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required: *Browse projects* [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) for the project.
+#[derive(Clone)]
 pub struct GetStatusRequest<'a> {
     client: &'a crate::core::Client,
     id_or_name: String,

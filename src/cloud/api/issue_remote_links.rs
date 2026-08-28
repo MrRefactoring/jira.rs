@@ -132,6 +132,7 @@ impl<'a> IssueRemoteLinksService<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct GetRemoteIssueLinksRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -188,6 +189,7 @@ impl<'a> GetRemoteIssueLinksRequest<'a> {
 ///
 ///  *  *Browse projects* and *Link issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct CreateOrUpdateRemoteIssueLinkRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -241,6 +243,7 @@ impl<'a> CreateOrUpdateRemoteIssueLinkRequest<'a> {
 ///
 ///  *  *Browse projects* and *Link issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is implemented, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct DeleteRemoteIssueLinkByGlobalIdRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -285,6 +288,7 @@ impl<'a> DeleteRemoteIssueLinkByGlobalIdRequest<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct GetRemoteIssueLinkByIdRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -333,6 +337,7 @@ impl<'a> GetRemoteIssueLinkByIdRequest<'a> {
 ///
 ///  *  *Browse projects* and *Link issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct UpdateRemoteIssueLinkRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -392,6 +397,7 @@ impl<'a> UpdateRemoteIssueLinkRequest<'a> {
 ///
 ///  *  *Browse projects*, *Edit issues*, and *Link issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct DeleteRemoteIssueLinkByIdRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,

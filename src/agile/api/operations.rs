@@ -400,6 +400,7 @@ impl<'a> OperationsService<'a> {
 ///
 /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
 /// This resource requires the 'WRITE' scope for Connect apps.
+#[derive(Clone)]
 pub struct SubmitOperationsWorkspacesRequest<'a> {
     client: &'a crate::core::Client,
     workspace_ids: Vec<String>,
@@ -443,6 +444,7 @@ impl<'a> SubmitOperationsWorkspacesRequest<'a> {
 /// This resource requires the 'DELETE' scope for Connect apps.
 ///
 /// e.g. DELETE /bulk?workspaceIds=111-222-333,444-555-666
+#[derive(Clone)]
 pub struct DeleteWorkspacesRequest<'a> {
     client: &'a crate::core::Client,
     workspace_ids: DeleteWorkspacesRequestWorkspaceIds,
@@ -486,6 +488,7 @@ impl<'a> DeleteWorkspacesRequest<'a> {
 ///
 /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
 /// This resource requires the 'READ' scope for Connect apps.
+#[derive(Clone)]
 pub struct GetWorkspacesRequest<'a> {
     client: &'a crate::core::Client,
     workspace_id: Option<String>,
@@ -541,6 +544,7 @@ impl<'a> GetWorkspacesRequest<'a> {
 ///
 /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
 /// This resource requires the 'WRITE' scope for Connect apps.
+#[derive(Clone)]
 pub struct SubmitEntityRequest<'a> {
     client: &'a crate::core::Client,
     body: SubmitEntityRequestBody,
@@ -584,6 +588,7 @@ impl<'a> SubmitEntityRequest<'a> {
 ///
 /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
 /// This resource requires the 'DELETE' scope for Connect apps.
+#[derive(Clone)]
 pub struct DeleteEntityByPropertyRequest<'a> {
     client: &'a crate::core::Client,
     account_id: String,
@@ -636,6 +641,7 @@ impl<'a> DeleteEntityByPropertyRequest<'a> {
 ///
 /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
 /// This resource requires the 'READ' scope for Connect apps.
+#[derive(Clone)]
 pub struct GetIncidentByIdRequest<'a> {
     client: &'a crate::core::Client,
     incident_id: String,
@@ -673,6 +679,7 @@ impl<'a> GetIncidentByIdRequest<'a> {
 ///
 /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
 /// This resource requires the 'DELETE' scope for Connect apps.
+#[derive(Clone)]
 pub struct DeleteIncidentByIdRequest<'a> {
     client: &'a crate::core::Client,
     incident_id: String,
@@ -710,6 +717,7 @@ impl<'a> DeleteIncidentByIdRequest<'a> {
 ///
 /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
 /// This resource requires the 'READ' scope for Connect apps.
+#[derive(Clone)]
 pub struct GetReviewByIdRequest<'a> {
     client: &'a crate::core::Client,
     review_id: String,
@@ -747,6 +755,7 @@ impl<'a> GetReviewByIdRequest<'a> {
 ///
 /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
 /// This resource requires the 'DELETE' scope for Connect apps.
+#[derive(Clone)]
 pub struct DeleteReviewByIdRequest<'a> {
     client: &'a crate::core::Client,
     review_id: String,

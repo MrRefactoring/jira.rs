@@ -55,6 +55,7 @@ impl<'a> IssueNotificationSchemesService<'a> {
 /// a list of events and recipient configured to receive notifications for these events. Consumer should allow events without recipients to appear in response.
 /// The list is ordered by the scheme's name.
 /// Follow the documentation of /notificationscheme/{id} resource for all details about returned value.
+#[derive(Clone)]
 pub struct GetNotificationSchemesRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -146,6 +147,7 @@ impl<'a> GetNotificationSchemesRequest<'a> {
 /// Please see the example for reference.
 /// The events can be Jira system events or events configured by administrator. In case of the system events, data about theirs
 /// ids, names and descriptions is provided. In case of custom events, the template event is included as well.
+#[derive(Clone)]
 pub struct GetNotificationSchemeRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,

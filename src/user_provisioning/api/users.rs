@@ -65,6 +65,7 @@ impl<'a> UsersService<'a> {
 }
 
 /// Retrieves a user from the directory based on their `userId`.
+#[derive(Clone)]
 pub struct GetUserRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
@@ -134,6 +135,7 @@ impl<'a> GetUserRequest<'a> {
 }
 
 /// Update the directory-based user information using the user attributes associated with their `userId`. User information  is replaced attribute-by-attribute, with the exception of immutable and read-only  attributes. Existing values of unspecified attributes are cleaned.
+#[derive(Clone)]
 pub struct ReplaceUserRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
@@ -221,6 +223,7 @@ impl<'a> ReplaceUserRequest<'a> {
 /// The deleted user is not available for future requests until created with a new `userId`. If the user is deactivated they can be activated again via [Atlassian Administration](https://admin.atlassian.com/).
 ///
 /// **Note:** Executing this API call will result in the deletion of the SCIM record, and there is no method to reverse these changes except by creating a new SCIM record with [Create a user API](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-users/#api-scim-directory-directoryid-users-post).
+#[derive(Clone)]
 pub struct DeleteUserRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
@@ -258,6 +261,7 @@ impl<'a> DeleteUserRequest<'a> {
 }
 
 /// Updates a user's information in the directory based on their `userId` via `PATCH`. Refer to  [Service Provider Configuration APIs](https://developer.atlassian.com/cloud/admin/user-provisioning/rest/api-group-service-provider-configuration/#api-group-service-provider-configuration) for details on supported operations.
+#[derive(Clone)]
 pub struct PatchUserRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
@@ -343,6 +347,7 @@ impl<'a> PatchUserRequest<'a> {
 /// Get users from the specified directory. Filtering is supported with a single exact match  (`eq`) against the `userName` and `externalId` attributes.
 ///
 ///  **Note**: While this API enables pagination, sorting functionality is not supported.
+#[derive(Clone)]
 pub struct GetUsersRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
@@ -453,6 +458,7 @@ impl<'a> GetUsersRequest<'a> {
 /// Use this API to manage accounts outside your organization when assigning these users to SCIM groups.
 ///
 /// If there's already a managed Atlassian account associated with the specified email address on the Atlassian platform, the user in your identity provider will be connected or linked to the user in your Atlassian organization.
+#[derive(Clone)]
 pub struct CreateUserRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,

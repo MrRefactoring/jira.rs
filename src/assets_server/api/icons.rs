@@ -29,6 +29,7 @@ impl<'a> IconsService<'a> {
 }
 
 /// Get all global icons i.e. icons not associated with a particular object schema.
+#[derive(Clone)]
 pub struct FindGlobalIconsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -58,6 +59,7 @@ impl<'a> FindGlobalIconsRequest<'a> {
 }
 
 /// Get all icons associated with an object schema. This resource will not include global icons.
+#[derive(Clone)]
 pub struct FindIconsRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -90,6 +92,7 @@ impl<'a> FindIconsRequest<'a> {
 }
 
 /// Get a single icon by ID.
+#[derive(Clone)]
 pub struct GetIconRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

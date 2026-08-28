@@ -133,6 +133,7 @@ impl<'a> FiltersService<'a> {
 }
 
 /// Creates a new filter, and returns newly created filter. Currently sets permissions just using the users default sharing permissions
+#[derive(Clone)]
 pub struct CreateFilterRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<CreateFilterRequestExpand>,
@@ -188,6 +189,7 @@ impl<'a> CreateFilterRequest<'a> {
 }
 
 /// Returns the default share scope of the logged-in user
+#[derive(Clone)]
 pub struct GetDefaultShareScopeRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -219,6 +221,7 @@ impl<'a> GetDefaultShareScopeRequest<'a> {
 }
 
 /// Sets the default share scope of the logged-in user. Available values are: AUTHENTICATED (for sharing with all logged-in users) and PRIVATE (for no shares).
+#[derive(Clone)]
 pub struct SetDefaultShareScopeRequest<'a> {
     client: &'a crate::core::Client,
     default_share_scope: Option<DefaultShareScope>,
@@ -265,6 +268,7 @@ impl<'a> SetDefaultShareScopeRequest<'a> {
 }
 
 /// Returns the favourite filters of the logged-in user
+#[derive(Clone)]
 pub struct GetFavouriteFiltersRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetFavouriteFiltersRequestExpand>,
@@ -306,6 +310,7 @@ impl<'a> GetFavouriteFiltersRequest<'a> {
 }
 
 /// Returns a filter given an id
+#[derive(Clone)]
 pub struct GetFilterRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetFilterRequestExpand>,
@@ -350,6 +355,7 @@ impl<'a> GetFilterRequest<'a> {
 }
 
 /// Updates an existing filter, and returns its new value. The following properties of a filter can be updated: 'jql', 'name', 'description'. Additionally, administrators can also update the 'owner' field. To get, set or unset 'favourite', use rest/api/1.0/filters/{id}/favourite with GET, PUT and DELETE methods instead.
+#[derive(Clone)]
 pub struct EditFilterRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<EditFilterRequestExpand>,
@@ -404,6 +410,7 @@ impl<'a> EditFilterRequest<'a> {
 }
 
 /// Delete a filter
+#[derive(Clone)]
 pub struct DeleteFilterRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -436,6 +443,7 @@ impl<'a> DeleteFilterRequest<'a> {
 }
 
 /// Returns the default columns for the given filter. Currently logged in user will be used as the user making such request.
+#[derive(Clone)]
 pub struct GetFilterColumnsRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -468,6 +476,7 @@ impl<'a> GetFilterColumnsRequest<'a> {
 }
 
 /// Sets the default columns for the given filter
+#[derive(Clone)]
 pub struct SetColumnsRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -516,6 +525,7 @@ impl<'a> SetColumnsRequest<'a> {
 }
 
 /// Resets the columns for the given filter such that the filter no longer has its own column config
+#[derive(Clone)]
 pub struct ResetColumnsRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -548,6 +558,7 @@ impl<'a> ResetColumnsRequest<'a> {
 }
 
 /// Returns all share permissions of the given filter
+#[derive(Clone)]
 pub struct GetSharePermissionsRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -580,6 +591,7 @@ impl<'a> GetSharePermissionsRequest<'a> {
 }
 
 /// Adds a share permissions to the given filter. Adding a global permission removes all previous permissions from the filter
+#[derive(Clone)]
 pub struct AddSharePermissionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -627,6 +639,7 @@ impl<'a> AddSharePermissionRequest<'a> {
 }
 
 /// Returns a single share permission of the given filter
+#[derive(Clone)]
 pub struct GetSharePermissionRequest<'a> {
     client: &'a crate::core::Client,
     permission_id: String,
@@ -664,6 +677,7 @@ impl<'a> GetSharePermissionRequest<'a> {
 }
 
 /// Removes a share permissions from the given filter
+#[derive(Clone)]
 pub struct DeleteSharePermissionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

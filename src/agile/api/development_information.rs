@@ -441,6 +441,7 @@ impl<'a> DevelopmentInformationService<'a> {
 }
 
 /// Stores development information provided in the request to make it available when viewing issues in Jira. Existing repository and entity data for the same ID will be replaced if the updateSequenceId of existing data is less than the incoming data. Submissions are performed asynchronously. Submitted data will eventually be available in Jira; most updates are available within a short period of time, but may take some time during peak load and/or maintenance times.
+#[derive(Clone)]
 pub struct StoreDevelopmentInformationRequest<'a> {
     client: &'a crate::core::Client,
     repositories: Vec<StoreDevelopmentInformationRequestRepositories>,
@@ -539,6 +540,7 @@ impl<'a> StoreDevelopmentInformationRequest<'a> {
 }
 
 /// For the specified repository ID, retrieves the repository and the most recent 400 development information entities. The result will be what is currently stored, ignoring any pending updates or deletes.
+#[derive(Clone)]
 pub struct GetRepositoryRequest<'a> {
     client: &'a crate::core::Client,
     repository_id: String,
@@ -571,6 +573,7 @@ impl<'a> GetRepositoryRequest<'a> {
 }
 
 /// Deletes the repository data stored by the given ID and all related development information entities. Deletion is performed asynchronously.
+#[derive(Clone)]
 pub struct DeleteRepositoryRequest<'a> {
     client: &'a crate::core::Client,
     repository_id: String,
@@ -609,6 +612,7 @@ impl<'a> DeleteRepositoryRequest<'a> {
 }
 
 /// Deletes development information entities which have all the provided properties. Repositories which have properties that match ALL of the properties (i.e. treated as an AND), and all their related development information (such as commits, branches and pull requests), will be deleted. For example if request is `DELETE bulk?accountId=123&projectId=ABC` entities which have properties `accountId=123` and `projectId=ABC` will be deleted. Optional param `_updateSequenceId` is no longer supported. Deletion is performed asynchronously: specified entities will eventually be removed from Jira.
+#[derive(Clone)]
 pub struct DeleteByPropertiesRequest<'a> {
     client: &'a crate::core::Client,
     update_sequence_id: i64,
@@ -646,6 +650,7 @@ impl<'a> DeleteByPropertiesRequest<'a> {
 }
 
 /// Checks if repositories which have all the provided properties exists. For example, if request is `GET existsByProperties?accountId=123&projectId=ABC` then result will be positive only if there is at least one repository with both properties `accountId=123` and `projectId=ABC`. Special property `_updateSequenceId` can be used to filter all entities with updateSequenceId less or equal than the value specified. In addition to the optional `_updateSequenceId`, one or more query params must be supplied to specify properties to search by.
+#[derive(Clone)]
 pub struct ExistsByPropertiesRequest<'a> {
     client: &'a crate::core::Client,
     update_sequence_id: Option<i64>,
@@ -690,6 +695,7 @@ impl<'a> ExistsByPropertiesRequest<'a> {
 }
 
 /// Deletes particular development information entity. Deletion is performed asynchronously.
+#[derive(Clone)]
 pub struct DeleteEntityRequest<'a> {
     client: &'a crate::core::Client,
     repository_id: String,

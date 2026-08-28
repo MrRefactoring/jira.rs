@@ -28,6 +28,7 @@ impl<'a> SearchLimitsService<'a> {
 /// Returns the maximum number of aggregation buckets allowed by the underlying search platform
 ///
 /// Available since Jira Data Center 11.3.
+#[derive(Clone)]
 pub struct GetMaxAggregationBucketsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -61,6 +62,7 @@ impl<'a> GetMaxAggregationBucketsRequest<'a> {
 /// Returns the maximum number of search results that can be returned by the underlying search platform
 ///
 /// Available since Jira Data Center 11.3.
+#[derive(Clone)]
 pub struct GetMaxResultWindowRequest<'a> {
     client: &'a crate::core::Client,
 }

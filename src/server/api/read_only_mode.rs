@@ -30,6 +30,7 @@ impl<'a> ReadOnlyModeService<'a> {
 /// Returns whether Jira is currently in read-only mode.
 ///
 /// Available since Jira Data Center 11.3, and in 10.3 LTS.
+#[derive(Clone)]
 pub struct GetReadOnlyModeRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -60,6 +61,7 @@ impl<'a> GetReadOnlyModeRequest<'a> {
 /// Enables or disables Jira read-only mode.
 ///
 /// Available since Jira Data Center 11.3, and in 10.3 LTS.
+#[derive(Clone)]
 pub struct UpdateReadOnlyModeRequest<'a> {
     client: &'a crate::core::Client,
     read_only_mode_update_request: Option<ReadOnlyModeUpdateRequest>,

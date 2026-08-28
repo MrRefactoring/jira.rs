@@ -27,6 +27,7 @@ impl<'a> ServerInfoService<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetServerInfoRequest<'a> {
     client: &'a crate::core::Client,
 }

@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
-    pub enum SearchAndReconsileIssuesUsingJqlRequestExpandValue {
+    pub enum SearchIssuesRequestExpandValue {
         RenderedFields => "renderedFields",
         Names => "names",
         Schema => "schema",
@@ -31,9 +31,9 @@ crate::open_enum! {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
-pub enum SearchAndReconsileIssuesUsingJqlRequestExpand {
-    One(SearchAndReconsileIssuesUsingJqlRequestExpandValue),
-    Many(Vec<SearchAndReconsileIssuesUsingJqlRequestExpandValue>),
+pub enum SearchIssuesRequestExpand {
+    One(SearchIssuesRequestExpandValue),
+    Many(Vec<SearchIssuesRequestExpandValue>),
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
@@ -92,8 +92,8 @@ impl<'a> IssueSearchService<'a> {
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-    pub fn search_and_reconsile_issues_using_jql(&self) -> SearchAndReconsileIssuesUsingJqlRequest<'a> {
-        SearchAndReconsileIssuesUsingJqlRequest::new(self.client)
+    pub fn search_issues(&self) -> SearchIssuesRequest<'a> {
+        SearchIssuesRequest::new(self.client)
     }
 
     /// Searches for issues using [JQL](https://confluence.atlassian.com/x/egORLQ). Recent updates might not be immediately visible in the returned search results. If you need [read-after-write](https://developer.atlassian.com/cloud/jira/platform/search-and-reconcile/) consistency, you can utilize the `reconcileIssues` parameter to ensure stronger consistency assurances. This operation can be accessed anonymously.
@@ -102,11 +102,11 @@ impl<'a> IssueSearchService<'a> {
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-    pub fn search_and_reconsile_issues_using_jql_post(
+    pub fn search_issues_post(
         &self,
         search_and_reconcile_request: SearchAndReconcileRequest,
-    ) -> SearchAndReconsileIssuesUsingJqlPostRequest<'a> {
-        SearchAndReconsileIssuesUsingJqlPostRequest::new(self.client, search_and_reconcile_request)
+    ) -> SearchIssuesPostRequest<'a> {
+        SearchIssuesPostRequest::new(self.client, search_and_reconcile_request)
     }
 }
 
@@ -120,6 +120,7 @@ impl<'a> IssueSearchService<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetIssuePickerResourceRequest<'a> {
     client: &'a crate::core::Client,
     query: Option<String>,
@@ -240,6 +241,7 @@ impl<'a> GetIssuePickerResourceRequest<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct MatchIssuesRequest<'a> {
     client: &'a crate::core::Client,
     issues_and_jql_queries: IssuesAndJQLQueries,
@@ -283,6 +285,7 @@ impl<'a> MatchIssuesRequest<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct CountIssuesRequest<'a> {
     client: &'a crate::core::Client,
     jql_count_request: JQLCountRequest,
@@ -329,20 +332,21 @@ impl<'a> CountIssuesRequest<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-pub struct SearchAndReconsileIssuesUsingJqlRequest<'a> {
+#[derive(Clone)]
+pub struct SearchIssuesRequest<'a> {
     client: &'a crate::core::Client,
     jql: Option<String>,
     next_page_token: Option<String>,
     max_results: Option<i64>,
     fields: Option<Vec<String>>,
-    expand: Option<SearchAndReconsileIssuesUsingJqlRequestExpand>,
+    expand: Option<SearchIssuesRequestExpand>,
     properties: Option<Vec<String>>,
     fields_by_keys: Option<bool>,
     fail_fast: Option<bool>,
     reconcile_issues: Option<Vec<i64>>,
 }
 
-impl<'a> SearchAndReconsileIssuesUsingJqlRequest<'a> {
+impl<'a> SearchIssuesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
         Self {
             client,
@@ -427,7 +431,7 @@ impl<'a> SearchAndReconsileIssuesUsingJqlRequest<'a> {
     ///
     /// Examples: `"names,changelog"` Returns the display name of each field as well as a list of recent updates to an issue.
     #[must_use]
-    pub fn expand(mut self, value: SearchAndReconsileIssuesUsingJqlRequestExpand) -> Self {
+    pub fn expand(mut self, value: SearchIssuesRequestExpand) -> Self {
         self.expand = Some(value);
 
         self
@@ -525,12 +529,13 @@ impl<'a> SearchAndReconsileIssuesUsingJqlRequest<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-pub struct SearchAndReconsileIssuesUsingJqlPostRequest<'a> {
+#[derive(Clone)]
+pub struct SearchIssuesPostRequest<'a> {
     client: &'a crate::core::Client,
     search_and_reconcile_request: SearchAndReconcileRequest,
 }
 
-impl<'a> SearchAndReconsileIssuesUsingJqlPostRequest<'a> {
+impl<'a> SearchIssuesPostRequest<'a> {
     fn new(client: &'a crate::core::Client, search_and_reconcile_request: SearchAndReconcileRequest) -> Self {
         Self { client, search_and_reconcile_request }
     }

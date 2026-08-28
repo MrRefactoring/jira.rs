@@ -19,6 +19,7 @@ impl<'a> WorkflowsService<'a> {
 }
 
 /// Returns all workflows. The “lastModifiedDate” is returned in Jira Complete Date/Time Format (dd/MMM/yy h:mm by default), but can also be returned as a relative date.
+#[derive(Clone)]
 pub struct GetAllWorkflowsRequest<'a> {
     client: &'a crate::core::Client,
     workflow_name: Option<String>,

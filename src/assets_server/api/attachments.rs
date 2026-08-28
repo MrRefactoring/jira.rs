@@ -33,6 +33,7 @@ impl<'a> AttachmentsService<'a> {
 }
 
 /// Get the attachments for an object by object ID.
+#[derive(Clone)]
 pub struct GetAttachmentsRequest<'a> {
     client: &'a crate::core::Client,
     object_id: String,
@@ -65,6 +66,7 @@ impl<'a> GetAttachmentsRequest<'a> {
 }
 
 /// Add an attachment to an object by object ID.
+#[derive(Clone)]
 pub struct AddAttachmentsRequest<'a> {
     client: &'a crate::core::Client,
     object_id: String,
@@ -118,6 +120,7 @@ impl<'a> AddAttachmentsRequest<'a> {
 }
 
 /// Delete an attachment by attachment ID.
+#[derive(Clone)]
 pub struct DeleteAttachmentRequest<'a> {
     client: &'a crate::core::Client,
     attachment_id: String,

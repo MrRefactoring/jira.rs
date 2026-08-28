@@ -35,6 +35,7 @@ impl<'a> TerminologyService<'a> {
 }
 
 /// Returns a list of all defined names for the default words 'epic' and 'sprint'
+#[derive(Clone)]
 pub struct GetAllTerminologyEntriesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -70,6 +71,7 @@ impl<'a> GetAllTerminologyEntriesRequest<'a> {
 /// {"newName"} must be between 1 to 100 characters.
 /// It can't use the already defined {"newName"} values or restricted JQL words.
 /// To reset {"newName"} to the default value, enter the {"originalName"} value as the value for {"newName"}. For example, if you want to return to {"originalName": "sprint"}, enter {"newName": "sprint"}.
+#[derive(Clone)]
 pub struct SetTerminologyEntriesRequest<'a> {
     client: &'a crate::core::Client,
     terminology_request: TerminologyRequest,
@@ -107,6 +109,7 @@ impl<'a> SetTerminologyEntriesRequest<'a> {
 }
 
 /// Returns epic or sprint name as specified in the {originalName} path param
+#[derive(Clone)]
 pub struct GetTerminologyEntryRequest<'a> {
     client: &'a crate::core::Client,
     original_name: String,

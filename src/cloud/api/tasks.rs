@@ -41,6 +41,7 @@ impl<'a> TasksService<'a> {
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 ///  *  Creator of the task.
+#[derive(Clone)]
 pub struct GetTaskRequest<'a> {
     client: &'a crate::core::Client,
     task_id: String,

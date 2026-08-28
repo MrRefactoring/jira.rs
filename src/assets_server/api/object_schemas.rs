@@ -44,6 +44,7 @@ impl<'a> ObjectSchemasService<'a> {
 }
 
 /// Create a new object schema.
+#[derive(Clone)]
 pub struct CreateSchemaRequest<'a> {
     client: &'a crate::core::Client,
     object_schema_in: Option<ObjectSchemaIn>,
@@ -90,6 +91,7 @@ impl<'a> CreateSchemaRequest<'a> {
 }
 
 /// Get a single object schema.
+#[derive(Clone)]
 pub struct LoadSchemaRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -122,6 +124,7 @@ impl<'a> LoadSchemaRequest<'a> {
 }
 
 /// Update an object schema.
+#[derive(Clone)]
 pub struct UpdateSchemaRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -164,6 +167,7 @@ impl<'a> UpdateSchemaRequest<'a> {
 }
 
 /// Deletes a single object schema.
+#[derive(Clone)]
 pub struct DeleteSchemaRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -196,6 +200,7 @@ impl<'a> DeleteSchemaRequest<'a> {
 }
 
 /// Searches for an object schema by name.
+#[derive(Clone)]
 pub struct FindSchemasRequest<'a> {
     client: &'a crate::core::Client,
     xoauth_requestor_id: Option<String>,
@@ -250,6 +255,7 @@ impl<'a> FindSchemasRequest<'a> {
 }
 
 /// Get a flat list of all object types belonging to a certain object schema.
+#[derive(Clone)]
 pub struct FindObjectTypeFlatListRequest<'a> {
     client: &'a crate::core::Client,
     role: Option<String>,

@@ -24,6 +24,7 @@ impl<'a> ApiTokensService<'a> {
 }
 
 /// Gets the API tokens owned by the specified user.
+#[derive(Clone)]
 pub struct GetApiTokensRequest<'a> {
     client: &'a crate::core::Client,
     account_id: AccountId,
@@ -56,6 +57,7 @@ impl<'a> GetApiTokensRequest<'a> {
 }
 
 /// Deletes a specifid API token by ID.
+#[derive(Clone)]
 pub struct DeleteApiTokenRequest<'a> {
     client: &'a crate::core::Client,
     account_id: AccountId,

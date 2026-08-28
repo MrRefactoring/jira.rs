@@ -90,6 +90,7 @@ impl<'a> IssuePrioritiesService<'a> {
 /// **Deprecation notice:** The `iconUrl` parameter was sunset on 16th Mar 2025, and replaced with `avatarId`. See [CHANGE-1525](https://developer.atlassian.com/changelog/#CHANGE-1525).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct CreatePriorityRequest<'a> {
     client: &'a crate::core::Client,
     create_priority_details: CreatePriorityDetails,
@@ -128,6 +129,7 @@ impl<'a> CreatePriorityRequest<'a> {
 /// Sets default issue priority.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct SetDefaultPriorityRequest2<'a> {
     client: &'a crate::core::Client,
     set_default_priority_request: SetDefaultPriorityRequest,
@@ -167,6 +169,7 @@ impl<'a> SetDefaultPriorityRequest2<'a> {
 /// Changes the order of issue priorities.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct MovePrioritiesRequest<'a> {
     client: &'a crate::core::Client,
     reorder_issue_priorities: ReorderIssuePriorities,
@@ -214,6 +217,7 @@ impl<'a> MovePrioritiesRequest<'a> {
 /// **Deprecation notice:** The `isDefault` property of priorities is deprecated and will be removed at a later date. See [CHANGE-1655](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-1655).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct SearchPrioritiesRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<String>,
@@ -345,6 +349,7 @@ impl<'a> SearchPrioritiesRequest<'a> {
 /// Returns an issue priority. To fetch multiple priorities at once, use [Search priorities](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-priority/#api-rest-api-3-priority-search-get) instead.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct GetPriorityRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -383,6 +388,7 @@ impl<'a> GetPriorityRequest<'a> {
 /// **Deprecation notice:** The `iconUrl` parameter was sunset on 16th Mar 2025, and replaced with `avatarId`. See [CHANGE-1525](https://developer.atlassian.com/changelog/#CHANGE-1525).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct UpdatePriorityRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -431,6 +437,7 @@ impl<'a> UpdatePriorityRequest<'a> {
 /// This operation is [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `location` link in the response to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeletePriorityRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

@@ -69,6 +69,7 @@ impl<'a> IssueSecurityLevelService<'a> {
 /// Only issue security level members in context of classic projects are returned.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetIssueSecurityLevelMembersRequest<'a> {
     client: &'a crate::core::Client,
     issue_security_scheme_id: i64,
@@ -172,6 +173,7 @@ impl<'a> GetIssueSecurityLevelMembersRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetIssueSecurityLevelRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

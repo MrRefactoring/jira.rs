@@ -34,6 +34,7 @@ impl<'a> IssueRedactionService<'a> {
 /// Submit a job to redact issue field data. This will trigger the redaction of the data in the specified fields asynchronously.
 ///
 /// The redaction status can be polled using the job id.
+#[derive(Clone)]
 pub struct RedactRequest<'a> {
     client: &'a crate::core::Client,
     bulk_redaction_request: BulkRedactionRequest,
@@ -76,6 +77,7 @@ impl<'a> RedactRequest<'a> {
 ///  *  IN\_PROGRESS - The redaction job is currently in progress
 ///  *  COMPLETED - The redaction job has completed successfully.
 ///  *  PENDING - The redaction job has not started yet
+#[derive(Clone)]
 pub struct GetRedactionStatusRequest<'a> {
     client: &'a crate::core::Client,
     job_id: String,

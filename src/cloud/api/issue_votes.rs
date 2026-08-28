@@ -65,6 +65,7 @@ impl<'a> IssueVotesService<'a> {
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///
 /// Note that users with the necessary permissions for this operation but without the *View voters and watchers* project permissions are not returned details in the `voters` field.
+#[derive(Clone)]
 pub struct GetVotesRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -104,6 +105,7 @@ impl<'a> GetVotesRequest<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct AddVoteRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -143,6 +145,7 @@ impl<'a> AddVoteRequest<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct RemoveVoteRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,

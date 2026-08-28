@@ -29,6 +29,7 @@ impl<'a> IssueWorklogsService<'a> {
 }
 
 /// Returns worklogs id and delete time of worklogs that was deleted since given time. The returns set of worklogs is limited to 1000 elements. This API will not return worklogs deleted during last minute.
+#[derive(Clone)]
 pub struct GetIdsOfWorklogsDeletedSinceRequest<'a> {
     client: &'a crate::core::Client,
     since: Option<i64>,
@@ -71,6 +72,7 @@ impl<'a> GetIdsOfWorklogsDeletedSinceRequest<'a> {
 }
 
 /// Returns worklogs for given worklog ids. Only worklogs to which the calling user has permissions, will be included in the result. The returns set of worklogs is limited to 1000 elements.
+#[derive(Clone)]
 pub struct GetWorklogsForIdsRequest<'a> {
     client: &'a crate::core::Client,
     worklog_ids_request: WorklogIdsRequest,
@@ -108,6 +110,7 @@ impl<'a> GetWorklogsForIdsRequest<'a> {
 }
 
 /// Returns worklogs id and update time of worklogs that was updated since given time. The returns set of worklogs is limited to 1000 elements. This API will not return worklogs updated during last minute.
+#[derive(Clone)]
 pub struct GetIdsOfWorklogsModifiedSinceRequest<'a> {
     client: &'a crate::core::Client,
     since: Option<i64>,

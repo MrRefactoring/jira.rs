@@ -98,6 +98,7 @@ impl<'a> IndexingService<'a> {
 }
 
 /// Lists available index snapshots absolute paths with timestamps
+#[derive(Clone)]
 pub struct ListIndexSnapshotRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -126,6 +127,7 @@ impl<'a> ListIndexSnapshotRequest<'a> {
 }
 
 /// Starts taking an index snapshot if no other snapshot creation process is in progress
+#[derive(Clone)]
 pub struct CreateIndexSnapshotRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -155,6 +157,7 @@ impl<'a> CreateIndexSnapshotRequest<'a> {
 }
 
 /// Checks if index snapshot creation is currently running
+#[derive(Clone)]
 pub struct IsIndexSnapshotRunningRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -215,6 +218,7 @@ impl<'a> IsIndexSnapshotRunningRequest<'a> {
 ///     - `lastOperationInQueue.id` - Identifier of the operation.
 ///     - `lastOperationInQueue.journalWriteTime` - Time when the operation was written to the journal.
 ///     - `queueSize` - Number of operations in the queue awaiting synchronization with the external platform's index.
+#[derive(Clone)]
 pub struct GetIndexSummaryRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -243,6 +247,7 @@ impl<'a> GetIndexSummaryRequest<'a> {
 }
 
 /// Returns information on the system reindexes. If a reindex is currently taking place then information about this reindex is returned. If there is no active index task, then returns information about the latest reindex task run, otherwise returns a 404 indicating that no reindex has taken place.
+#[derive(Clone)]
 pub struct GetReindexInfoRequest<'a> {
     client: &'a crate::core::Client,
     task_id: Option<i64>,
@@ -284,6 +289,7 @@ impl<'a> GetReindexInfoRequest<'a> {
 }
 
 /// Kicks off a reindex. Need Admin permissions to perform this reindex.
+#[derive(Clone)]
 pub struct ReindexRequest2<'a> {
     client: &'a crate::core::Client,
     index_change_history: Option<bool>,
@@ -364,6 +370,7 @@ impl<'a> ReindexRequest2<'a> {
 }
 
 /// Reindexes one or more individual issues. Indexing is performed synchronously - the call returns when indexing of the issues has completed or a failure occurs.
+#[derive(Clone)]
 pub struct ReindexIssuesRequest<'a> {
     client: &'a crate::core::Client,
     issue_id: Option<Vec<String>>,
@@ -445,6 +452,7 @@ impl<'a> ReindexIssuesRequest<'a> {
 }
 
 /// Returns information on the system reindexes. If a reindex is currently taking place then information about this reindex is returned. If there is no active index task, then returns information about the latest reindex task run, otherwise returns a 404 indicating that no reindex has taken place.
+#[derive(Clone)]
 pub struct GetReindexProgressRequest<'a> {
     client: &'a crate::core::Client,
     task_id: Option<i64>,
@@ -487,6 +495,7 @@ impl<'a> GetReindexProgressRequest<'a> {
 }
 
 /// Executes any pending reindex requests. Execution is asynchronous - progress of the returned tasks can be monitored through other REST calls.
+#[derive(Clone)]
 pub struct ProcessRequestsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -516,6 +525,7 @@ impl<'a> ProcessRequestsRequest<'a> {
 }
 
 /// Retrieves the progress of multiple reindex requests. Only reindex requests that actually exist will be returned in the results.
+#[derive(Clone)]
 pub struct GetProgressBulkRequest<'a> {
     client: &'a crate::core::Client,
     request_id: Option<Vec<i64>>,
@@ -558,6 +568,7 @@ impl<'a> GetProgressBulkRequest<'a> {
 }
 
 /// Retrieves the progress of a single reindex request.
+#[derive(Clone)]
 pub struct GetReindexRequestProgressRequest<'a> {
     client: &'a crate::core::Client,
     request_id: i64,

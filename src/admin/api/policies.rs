@@ -81,6 +81,7 @@ impl<'a> PoliciesService<'a> {
 }
 
 /// Returns information about org policies
+#[derive(Clone)]
 pub struct GetPoliciesRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -139,6 +140,7 @@ impl<'a> GetPoliciesRequest<'a> {
 }
 
 /// Create a policy for an org
+#[derive(Clone)]
 pub struct CreatePolicyRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -186,6 +188,7 @@ impl<'a> CreatePolicyRequest<'a> {
 }
 
 /// Returns information about a single policy by ID
+#[derive(Clone)]
 pub struct GetPolicyByIdRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -223,6 +226,7 @@ impl<'a> GetPolicyByIdRequest<'a> {
 }
 
 /// Update a policy for an org
+#[derive(Clone)]
 pub struct UpdatePolicyRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -275,6 +279,7 @@ impl<'a> UpdatePolicyRequest<'a> {
 }
 
 /// Delete a policy for an org
+#[derive(Clone)]
 pub struct DeletePolicyRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -312,6 +317,7 @@ impl<'a> DeletePolicyRequest<'a> {
 }
 
 /// Adds a resource to an existing Policy
+#[derive(Clone)]
 pub struct AddResourceToPolicyRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -364,6 +370,7 @@ impl<'a> AddResourceToPolicyRequest<'a> {
 }
 
 /// Update an existing Policy Resource
+#[derive(Clone)]
 pub struct UpdatePolicyResourceRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -429,6 +436,7 @@ impl<'a> UpdatePolicyResourceRequest<'a> {
 }
 
 /// Delete an existing Policy Resource
+#[derive(Clone)]
 pub struct DeletePolicyResourceRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -473,6 +481,7 @@ impl<'a> DeletePolicyResourceRequest<'a> {
 }
 
 /// Validate a policy based on specific requirements. For example, Trigger CDEN validation by pushing a task into the SQS dns-validation queue
+#[derive(Clone)]
 pub struct ValidatePolicyRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,

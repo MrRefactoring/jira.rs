@@ -163,6 +163,7 @@ impl<'a> ImportSourcesService<'a> {
 }
 
 /// Retrieves a specific import source configuration by its ID. If scheduled imports are enabled, the response includes scheduling information.
+#[derive(Clone)]
 pub struct GetImportSourceRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -195,6 +196,7 @@ impl<'a> GetImportSourceRequest<'a> {
 }
 
 /// Provide object schema and mapping configuration for the external import
+#[derive(Clone)]
 pub struct SubmitSchemaAndMappingRequest<'a> {
     client: &'a crate::core::Client,
     import_source_id: String,
@@ -252,6 +254,7 @@ impl<'a> SubmitSchemaAndMappingRequest<'a> {
 }
 
 /// Update object schema and mapping configuration for the external import
+#[derive(Clone)]
 pub struct UpdateSchemaAndMappingRequest<'a> {
     client: &'a crate::core::Client,
     import_source_id: String,
@@ -312,6 +315,7 @@ impl<'a> UpdateSchemaAndMappingRequest<'a> {
 }
 
 /// Get the progress of an asynchronous schema and mapping operation
+#[derive(Clone)]
 pub struct GetSchemaAndMappingProgressRequest<'a> {
     client: &'a crate::core::Client,
     import_source_id: String,
@@ -353,6 +357,7 @@ impl<'a> GetSchemaAndMappingProgressRequest<'a> {
 }
 
 /// Get the current status of the import configuration
+#[derive(Clone)]
 pub struct GetImportConfigurationStatusRequest<'a> {
     client: &'a crate::core::Client,
     import_source_id: String,
@@ -385,6 +390,7 @@ impl<'a> GetImportConfigurationStatusRequest<'a> {
 }
 
 /// Get the current schema and mapping of the import configuration
+#[derive(Clone)]
 pub struct GetSchemaAndMappingRequest<'a> {
     client: &'a crate::core::Client,
     import_source_id: String,
@@ -417,6 +423,7 @@ impl<'a> GetSchemaAndMappingRequest<'a> {
 }
 
 /// Move to the data ingestion steps of external imports
+#[derive(Clone)]
 pub struct StartImportExecutionRequest<'a> {
     client: &'a crate::core::Client,
     import_source_id: String,
@@ -449,6 +456,7 @@ impl<'a> StartImportExecutionRequest<'a> {
 }
 
 /// Cancel current on-going import
+#[derive(Clone)]
 pub struct CancelImportExecutionRequest<'a> {
     client: &'a crate::core::Client,
     import_execution_id: String,
@@ -490,6 +498,7 @@ impl<'a> CancelImportExecutionRequest<'a> {
 }
 
 /// Submit progress of ingesting data
+#[derive(Clone)]
 pub struct SubmitImportExecutionProgressRequest<'a> {
     client: &'a crate::core::Client,
     import_execution_id: String,
@@ -546,6 +555,7 @@ impl<'a> SubmitImportExecutionProgressRequest<'a> {
 }
 
 /// Providing data to be ingested
+#[derive(Clone)]
 pub struct SubmitImportExecutionDataRequest<'a> {
     client: &'a crate::core::Client,
     import_execution_id: String,
@@ -602,6 +612,7 @@ impl<'a> SubmitImportExecutionDataRequest<'a> {
 }
 
 /// Get the status of the import
+#[derive(Clone)]
 pub struct GetImportExecutionStatusRequest<'a> {
     client: &'a crate::core::Client,
     import_execution_id: String,
@@ -643,6 +654,7 @@ impl<'a> GetImportExecutionStatusRequest<'a> {
 }
 
 /// Get the status of the most recently created import execution
+#[derive(Clone)]
 pub struct GetLatestImportExecutionStatusRequest<'a> {
     client: &'a crate::core::Client,
     import_source_id: String,
@@ -675,6 +687,7 @@ impl<'a> GetLatestImportExecutionStatusRequest<'a> {
 }
 
 /// Creates a failed import history record for the specified import source and execution with the given failure reason
+#[derive(Clone)]
 pub struct CreateFailedImportHistoryRequest<'a> {
     client: &'a crate::core::Client,
     import_source_id: String,
@@ -726,6 +739,7 @@ impl<'a> CreateFailedImportHistoryRequest<'a> {
 }
 
 /// Generate a Bearer token which can be used to authenticate against Assets `/importsource/` APIs, to take actions against the specified import source.
+#[derive(Clone)]
 pub struct GenerateImportSourceTokenRequest<'a> {
     client: &'a crate::core::Client,
     import_source_id: String,
@@ -758,6 +772,7 @@ impl<'a> GenerateImportSourceTokenRequest<'a> {
 }
 
 /// Retrieve links for import schedule operations (create, get, update, delete). Returns a createSchedule link to POST a new schedule, and if a schedule already exists, returns a schedule link that can be used with GET, PUT, or DELETE operations.
+#[derive(Clone)]
 pub struct GetImportScheduleLinksRequest<'a> {
     client: &'a crate::core::Client,
     import_source_id: String,
@@ -790,6 +805,7 @@ impl<'a> GetImportScheduleLinksRequest<'a> {
 }
 
 /// Creates a new scheduled import configuration for the specified import source. Scheduled imports allow you to automate data imports on a recurring basis (daily, weekly, monthly) or run them once at a specific time.
+#[derive(Clone)]
 pub struct CreateImportScheduleRequest<'a> {
     client: &'a crate::core::Client,
     import_source_id: String,
@@ -834,6 +850,7 @@ impl<'a> CreateImportScheduleRequest<'a> {
 }
 
 /// Retrieves a specific scheduled import configuration by ID
+#[derive(Clone)]
 pub struct GetImportScheduleRequest<'a> {
     client: &'a crate::core::Client,
     import_source_id: String,
@@ -875,6 +892,7 @@ impl<'a> GetImportScheduleRequest<'a> {
 }
 
 /// Updates an existing scheduled import configuration. You can modify the start time, run interval, or callback URL.
+#[derive(Clone)]
 pub struct UpdateImportScheduleRequest<'a> {
     client: &'a crate::core::Client,
     import_source_id: String,
@@ -930,6 +948,7 @@ impl<'a> UpdateImportScheduleRequest<'a> {
 }
 
 /// Deletes a scheduled import configuration. The import source will remain, but will no longer execute on a schedule.
+#[derive(Clone)]
 pub struct DeleteImportScheduleRequest<'a> {
     client: &'a crate::core::Client,
     import_source_id: String,

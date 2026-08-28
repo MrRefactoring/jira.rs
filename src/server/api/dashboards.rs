@@ -64,6 +64,7 @@ impl<'a> DashboardsService<'a> {
 }
 
 /// Returns a list of all dashboards, optionally filtering them.
+#[derive(Clone)]
 pub struct ListRequest<'a> {
     client: &'a crate::core::Client,
     filter: Option<String>,
@@ -131,6 +132,7 @@ impl<'a> ListRequest<'a> {
 }
 
 /// Returns the keys of all properties for the dashboard item identified by the id.
+#[derive(Clone)]
 pub struct GetDashboardItemPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     item_id: String,
@@ -168,6 +170,7 @@ impl<'a> GetDashboardItemPropertyKeysRequest<'a> {
 }
 
 /// Returns the value of the property with a given key from the dashboard item identified by the id.
+#[derive(Clone)]
 pub struct GetDashboardItemPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -212,6 +215,7 @@ impl<'a> GetDashboardItemPropertyRequest<'a> {
 }
 
 /// Sets the value of the property with a given key on the dashboard item identified by the id.
+#[derive(Clone)]
 pub struct SetDashboardItemPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -266,6 +270,7 @@ impl<'a> SetDashboardItemPropertyRequest<'a> {
 }
 
 /// Removes the property from the dashboard item identified by the key or by the id.
+#[derive(Clone)]
 pub struct DeleteDashboardItemPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -310,6 +315,7 @@ impl<'a> DeleteDashboardItemPropertyRequest<'a> {
 }
 
 /// Returns a single dashboard.
+#[derive(Clone)]
 pub struct GetDashboardRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

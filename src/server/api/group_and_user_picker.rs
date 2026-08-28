@@ -19,6 +19,7 @@ impl<'a> GroupAndUserPickerService<'a> {
 }
 
 /// Returns a list of users and groups matching query with highlighting
+#[derive(Clone)]
 pub struct FindUsersAndGroupsRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_id: Option<String>,

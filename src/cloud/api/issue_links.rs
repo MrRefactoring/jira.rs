@@ -70,6 +70,7 @@ impl<'a> IssueLinksService<'a> {
 ///  *  *Link issues* [project permission](https://confluence.atlassian.com/x/yodKLg) on the project containing the from (outward) issue,
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  If the comment has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
 pub struct LinkIssuesRequest<'a> {
     client: &'a crate::core::Client,
     link_issue_request: LinkIssueRequest,
@@ -113,6 +114,7 @@ impl<'a> LinkIssuesRequest<'a> {
 ///
 ///  *  *Browse project* [project permission](https://confluence.atlassian.com/x/yodKLg) for all the projects containing the linked issues.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, permission to view both of the issues.
+#[derive(Clone)]
 pub struct GetIssueLinkRequest<'a> {
     client: &'a crate::core::Client,
     link_id: String,
@@ -153,6 +155,7 @@ impl<'a> GetIssueLinkRequest<'a> {
 ///  *  Browse project [project permission](https://confluence.atlassian.com/x/yodKLg) for all the projects containing the issues in the link.
 ///  *  *Link issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for at least one of the projects containing issues in the link.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, permission to view both of the issues.
+#[derive(Clone)]
 pub struct DeleteIssueLinkRequest<'a> {
     client: &'a crate::core::Client,
     link_id: String,

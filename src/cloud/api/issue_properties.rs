@@ -197,6 +197,7 @@ impl<'a> IssuePropertiesService<'a> {
 ///
 ///  *  *Browse projects* and *Edit issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct BulkSetIssuesPropertiesListRequest<'a> {
     client: &'a crate::core::Client,
     issue_entity_properties: IssueEntityProperties,
@@ -246,6 +247,7 @@ impl<'a> BulkSetIssuesPropertiesListRequest<'a> {
 ///
 ///  *  *Browse projects* and *Edit issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct BulkSetIssuePropertiesByIssueRequest<'a> {
     client: &'a crate::core::Client,
     multi_issue_entity_properties: MultiIssueEntityProperties,
@@ -313,6 +315,7 @@ impl<'a> BulkSetIssuePropertiesByIssueRequest<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for each project containing issues.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  *Edit issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for each issue.
+#[derive(Clone)]
 pub struct BulkSetIssuePropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -377,6 +380,7 @@ impl<'a> BulkSetIssuePropertyRequest<'a> {
 ///  *  *Browse projects* [ project permission](https://confluence.atlassian.com/x/yodKLg) for each project containing issues.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  *Edit issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for each issue.
+#[derive(Clone)]
 pub struct BulkDeleteIssuePropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -428,6 +432,7 @@ impl<'a> BulkDeleteIssuePropertyRequest<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct GetIssuePropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -467,6 +472,7 @@ impl<'a> GetIssuePropertyKeysRequest<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct GetIssuePropertyRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -517,6 +523,7 @@ impl<'a> GetIssuePropertyRequest<'a> {
 ///
 ///  *  *Browse projects* and *Edit issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct SetIssuePropertyRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -569,6 +576,7 @@ impl<'a> SetIssuePropertyRequest<'a> {
 ///
 ///  *  *Browse projects* and *Edit issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct DeleteIssuePropertyRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,

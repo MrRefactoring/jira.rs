@@ -177,6 +177,7 @@ impl<'a> IssueTypeScreenSchemesService<'a> {
 /// Only issue type screen schemes used in classic projects are returned.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetIssueTypeScreenSchemesRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -289,6 +290,7 @@ impl<'a> GetIssueTypeScreenSchemesRequest<'a> {
 /// Creates an issue type screen scheme.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct CreateIssueTypeScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_screen_scheme_details: IssueTypeScreenSchemeDetails,
@@ -330,6 +332,7 @@ impl<'a> CreateIssueTypeScreenSchemeRequest<'a> {
 /// Only issue type screen schemes used in classic projects are returned.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetIssueTypeScreenSchemeMappingsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -406,6 +409,7 @@ impl<'a> GetIssueTypeScreenSchemeMappingsRequest<'a> {
 /// Only issue type screen schemes used in classic projects are returned.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetIssueTypeScreenSchemeProjectAssociationsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -470,6 +474,7 @@ impl<'a> GetIssueTypeScreenSchemeProjectAssociationsRequest<'a> {
 /// Issue type screen schemes can only be assigned to classic projects.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct AssignIssueTypeScreenSchemeToProjectRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_screen_scheme_project_association: IssueTypeScreenSchemeProjectAssociation,
@@ -514,6 +519,7 @@ impl<'a> AssignIssueTypeScreenSchemeToProjectRequest<'a> {
 /// Updates an issue type screen scheme.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct UpdateIssueTypeScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_screen_scheme_id: String,
@@ -567,6 +573,7 @@ impl<'a> UpdateIssueTypeScreenSchemeRequest<'a> {
 /// Deletes an issue type screen scheme.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeleteIssueTypeScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_screen_scheme_id: String,
@@ -604,6 +611,7 @@ impl<'a> DeleteIssueTypeScreenSchemeRequest<'a> {
 /// Appends issue type to screen scheme mappings to an issue type screen scheme.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct AppendMappingsForIssueTypeScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_screen_scheme_id: String,
@@ -657,6 +665,7 @@ impl<'a> AppendMappingsForIssueTypeScreenSchemeRequest<'a> {
 /// Updates the default screen scheme of an issue type screen scheme. The default screen scheme is used for all unmapped issue types.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct UpdateDefaultScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_screen_scheme_id: String,
@@ -706,6 +715,7 @@ impl<'a> UpdateDefaultScreenSchemeRequest<'a> {
 /// Removes issue type to screen scheme mappings from an issue type screen scheme.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct RemoveMappingsFromIssueTypeScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_screen_scheme_id: String,
@@ -757,6 +767,7 @@ impl<'a> RemoveMappingsFromIssueTypeScreenSchemeRequest<'a> {
 /// Only company-managed projects associated with an issue type screen scheme are returned.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetProjectsForIssueTypeScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_screen_scheme_id: i64,

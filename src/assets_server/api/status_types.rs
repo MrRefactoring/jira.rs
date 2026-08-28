@@ -39,6 +39,7 @@ impl<'a> StatusTypesService<'a> {
 }
 
 /// Get details on a given status.
+#[derive(Clone)]
 pub struct GetStatusTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -71,6 +72,7 @@ impl<'a> GetStatusTypeRequest<'a> {
 }
 
 /// Update an existing status type.
+#[derive(Clone)]
 pub struct UpdateStatusTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -113,6 +115,7 @@ impl<'a> UpdateStatusTypeRequest<'a> {
 }
 
 /// Delete a single status type.
+#[derive(Clone)]
 pub struct DeleteStatusTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -145,6 +148,7 @@ impl<'a> DeleteStatusTypeRequest<'a> {
 }
 
 /// Find status types for a given object schema ID.
+#[derive(Clone)]
 pub struct FindStatusTypesRequest<'a> {
     client: &'a crate::core::Client,
     object_schema_id: Option<String>,
@@ -187,6 +191,7 @@ impl<'a> FindStatusTypesRequest<'a> {
 }
 
 /// Store a new status type.
+#[derive(Clone)]
 pub struct StoreStatusTypeRequest<'a> {
     client: &'a crate::core::Client,
     status_type: Option<StatusType>,

@@ -42,6 +42,7 @@ impl<'a> ExternalTeamsService<'a> {
 }
 
 /// Creates an external linked team, and membership will be synced with the external reference.
+#[derive(Clone)]
 pub struct CreateExternalLinkedTeamRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -89,6 +90,7 @@ impl<'a> CreateExternalLinkedTeamRequest<'a> {
 }
 
 /// Unlinks managed teams from their external references in bulk. Each team's membership setting will be transitioned from EXTERNAL to ORG_ADMIN_MANAGED.
+#[derive(Clone)]
 pub struct UnlinkTeamsFromExternalSourceRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -136,6 +138,7 @@ impl<'a> UnlinkTeamsFromExternalSourceRequest<'a> {
 }
 
 /// Links an existing team to an external reference, and membership and team name will be synced with the external reference.
+#[derive(Clone)]
 pub struct LinkTeamToExternalSourceRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,

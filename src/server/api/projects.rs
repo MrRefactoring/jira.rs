@@ -326,6 +326,7 @@ impl<'a> ProjectsService<'a> {
 }
 
 /// Returns all projects which are visible for the currently logged in user. If no user is logged in, it returns the list of projects that are visible when using anonymous access.
+#[derive(Clone)]
 pub struct GetAllProjectsRequest<'a> {
     client: &'a crate::core::Client,
     include_archived: Option<bool>,
@@ -406,6 +407,7 @@ impl<'a> GetAllProjectsRequest<'a> {
 }
 
 /// Creates a new project
+#[derive(Clone)]
 pub struct CreateProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_input: ProjectInput,
@@ -442,6 +444,7 @@ impl<'a> CreateProjectRequest<'a> {
 }
 
 /// Returns all the project types defined on the Jira instance, not taking into account whether the license to use those project types is valid or not. In case of anonymous checks if they can access at least one project.
+#[derive(Clone)]
 pub struct GetAllProjectTypesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -470,6 +473,7 @@ impl<'a> GetAllProjectTypesRequest<'a> {
 }
 
 /// Returns the project type with the given key. In case of anonymous checks if they can access at least one project.
+#[derive(Clone)]
 pub struct GetProjectTypeByKeyRequest<'a> {
     client: &'a crate::core::Client,
     project_type_key: String,
@@ -502,6 +506,7 @@ impl<'a> GetProjectTypeByKeyRequest<'a> {
 }
 
 /// Returns the project type with the given key, if it is accessible to the logged in user. This takes into account whether the user is licensed on the Application that defines the project type.
+#[derive(Clone)]
 pub struct GetAccessibleProjectTypeByKeyRequest<'a> {
     client: &'a crate::core::Client,
     project_type_key: String,
@@ -534,6 +539,7 @@ impl<'a> GetAccessibleProjectTypeByKeyRequest<'a> {
 }
 
 /// Returns a full representation of a project in JSON format. All project keys associated with the project will only be returned if `expand=projectKeys`.
+#[derive(Clone)]
 pub struct GetProjectRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -579,6 +585,7 @@ impl<'a> GetProjectRequest<'a> {
 }
 
 /// Updates a project. Only non null values sent in JSON will be updated in the project. Values available for the assigneeType field are: "PROJECT_LEAD" and "UNASSIGNED".
+#[derive(Clone)]
 pub struct UpdateProjectRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -636,6 +643,7 @@ impl<'a> UpdateProjectRequest<'a> {
 }
 
 /// Deletes a project
+#[derive(Clone)]
 pub struct DeleteProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -668,6 +676,7 @@ impl<'a> DeleteProjectRequest<'a> {
 }
 
 /// Archives a project
+#[derive(Clone)]
 pub struct ArchiveProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -703,6 +712,7 @@ impl<'a> ArchiveProjectRequest<'a> {
 /// - Upload (store temporary avatar)
 /// - Crop (create avatar from temporary)
 /// - Update (update project avatar)
+#[derive(Clone)]
 pub struct CreateProjectAvatarFromTemporaryRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -747,6 +757,7 @@ impl<'a> CreateProjectAvatarFromTemporaryRequest<'a> {
 }
 
 /// Updates an avatar for a project. This is step 3/3 of changing an avatar for a project.
+#[derive(Clone)]
 pub struct UpdateProjectAvatarRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -789,6 +800,7 @@ impl<'a> UpdateProjectAvatarRequest<'a> {
 /// Creates temporary avatar using multipart. The response is sent back as JSON stored in a textarea. This is because
 /// the client uses remote iframing to submit avatars using multipart. So we must send them a valid HTML page back from
 /// which the client parses the JSON.
+#[derive(Clone)]
 pub struct StoreTemporaryProjectAvatarUsingMultiPartRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -850,6 +862,7 @@ impl<'a> StoreTemporaryProjectAvatarUsingMultiPartRequest<'a> {
 }
 
 /// Deletes avatar
+#[derive(Clone)]
 pub struct DeleteProjectAvatarRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -887,6 +900,7 @@ impl<'a> DeleteProjectAvatarRequest<'a> {
 }
 
 /// Returns all avatars which are visible for the currently logged in user. The avatars are grouped into system and custom.
+#[derive(Clone)]
 pub struct GetAllProjectAvatarsRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -919,6 +933,7 @@ impl<'a> GetAllProjectAvatarsRequest<'a> {
 }
 
 /// Contains a full representation of the specified project's components.
+#[derive(Clone)]
 pub struct GetProjectComponentsRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -951,6 +966,7 @@ impl<'a> GetProjectComponentsRequest<'a> {
 }
 
 /// Returns the keys of all properties for the project identified by the key or by the id.
+#[derive(Clone)]
 pub struct GetProjectPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -983,6 +999,7 @@ impl<'a> GetProjectPropertyKeysRequest<'a> {
 }
 
 /// Returns the value of the property with a given key from the project identified by the key or by the id.
+#[derive(Clone)]
 pub struct GetProjectPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -1024,6 +1041,7 @@ impl<'a> GetProjectPropertyRequest<'a> {
 }
 
 /// Sets the value of the specified project's property. You can use this resource to store a custom data against the project identified by the key or by the id. The user who stores the data is required to have permissions to administer the project.
+#[derive(Clone)]
 pub struct SetProjectPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -1069,6 +1087,7 @@ impl<'a> SetProjectPropertyRequest<'a> {
 }
 
 /// Removes the property from the project identified by the key or by the id.
+#[derive(Clone)]
 pub struct DeleteProjectPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -1110,6 +1129,7 @@ impl<'a> DeleteProjectPropertyRequest<'a> {
 }
 
 /// Restores an archived project. In case of success restored project should be re-indexed.
+#[derive(Clone)]
 pub struct RestoreProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -1142,6 +1162,7 @@ impl<'a> RestoreProjectRequest<'a> {
 }
 
 /// Returns all roles in the given project Id or key, with links to full details on each role.
+#[derive(Clone)]
 pub struct GetProjectRolesRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -1174,6 +1195,7 @@ impl<'a> GetProjectRolesRequest<'a> {
 }
 
 /// Returns the details for a given project role in a project.
+#[derive(Clone)]
 pub struct GetProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -1211,6 +1233,7 @@ impl<'a> GetProjectRoleRequest<'a> {
 }
 
 /// Adds an actor (user or group) to a project role. For user actors, their usernames should be used.
+#[derive(Clone)]
 pub struct AddActorUsersRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -1261,6 +1284,7 @@ impl<'a> AddActorUsersRequest<'a> {
 }
 
 /// Updates a project role to include the specified actors (users or groups). Can be also used to clear roles to not include any users or groups. For user actors, their usernames should be used.
+#[derive(Clone)]
 pub struct SetActorsRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -1306,6 +1330,7 @@ impl<'a> SetActorsRequest<'a> {
 }
 
 /// Deletes actors (users or groups) from a project role.
+#[derive(Clone)]
 pub struct DeleteActorRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -1369,6 +1394,7 @@ impl<'a> DeleteActorRequest<'a> {
 }
 
 /// Get all issue types with valid status values for a project
+#[derive(Clone)]
 pub struct GetAllStatusesRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -1401,6 +1427,7 @@ impl<'a> GetAllStatusesRequest<'a> {
 }
 
 /// Updates the type of a project
+#[derive(Clone)]
 pub struct UpdateProjectTypeRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -1442,6 +1469,7 @@ impl<'a> UpdateProjectTypeRequest<'a> {
 }
 
 /// Returns all versions for the specified project. Results are paginated. Results can be ordered by the following fields: sequence, name, startDate, releaseDate.
+#[derive(Clone)]
 pub struct GetProjectVersionsPaginatedRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -1533,6 +1561,7 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
 }
 
 /// Contains a full representation of a the specified project's versions.
+#[derive(Clone)]
 pub struct GetProjectVersionsRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -1578,6 +1607,7 @@ impl<'a> GetProjectVersionsRequest<'a> {
 }
 
 /// Returns the issue security scheme for project.
+#[derive(Clone)]
 pub struct GetProjectIssueSecuritySchemeRequest<'a> {
     client: &'a crate::core::Client,
     project_key_or_id: String,
@@ -1613,6 +1643,7 @@ impl<'a> GetProjectIssueSecuritySchemeRequest<'a> {
 }
 
 /// Gets a notification scheme associated with the project. Follow the documentation of /notificationscheme/{id} resource for all details about returned value.
+#[derive(Clone)]
 pub struct GetProjectNotificationSchemeRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -1661,6 +1692,7 @@ impl<'a> GetProjectNotificationSchemeRequest<'a> {
 }
 
 /// Gets a permission scheme assigned with a project
+#[derive(Clone)]
 pub struct GetAssignedPermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetAssignedPermissionSchemeRequestExpand>,
@@ -1709,6 +1741,7 @@ impl<'a> GetAssignedPermissionSchemeRequest<'a> {
 }
 
 /// Assigns a permission scheme with a project
+#[derive(Clone)]
 pub struct AssignPermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<AssignPermissionSchemeRequestExpand>,
@@ -1765,6 +1798,7 @@ impl<'a> AssignPermissionSchemeRequest<'a> {
 }
 
 /// Gets a full representation of a priority scheme in JSON format used by specified project. User must be global administrator or project administrator. All project keys associated with the priority scheme will only be returned if additional query parameter is provided expand=projectKeys.
+#[derive(Clone)]
 pub struct GetAssignedPrioritySchemeRequest<'a> {
     client: &'a crate::core::Client,
     project_key_or_id: String,
@@ -1797,6 +1831,7 @@ impl<'a> GetAssignedPrioritySchemeRequest<'a> {
 }
 
 /// Assigns project with priority scheme. Priority scheme assign with migration is possible from the UI. Operation will fail if migration is needed as a result of operation eg. there are issues with priorities invalid in the destination scheme. All project keys associated with the priority scheme will only be returned if additional query parameter is provided expand=projectKeys.
+#[derive(Clone)]
 pub struct AssignPrioritySchemeRequest<'a> {
     client: &'a crate::core::Client,
     project_key_or_id: String,
@@ -1837,6 +1872,7 @@ impl<'a> AssignPrioritySchemeRequest<'a> {
 }
 
 /// Unassigns project from priority scheme. Operation will fail for defualt priority scheme, project is not found or project is not associated with provided priority scheme. All project keys associated with the priority scheme will only be returned if additional query parameter is provided expand=projectKeys.
+#[derive(Clone)]
 pub struct UnassignPrioritySchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
@@ -1874,6 +1910,7 @@ impl<'a> UnassignPrioritySchemeRequest<'a> {
 }
 
 /// Returns all security levels for the project that the current logged in user has access to. If the user does not have the Set Issue Security permission, the list will be empty.
+#[derive(Clone)]
 pub struct GetSecurityLevelsForProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_key_or_id: String,
@@ -1906,6 +1943,7 @@ impl<'a> GetSecurityLevelsForProjectRequest<'a> {
 }
 
 /// Returns the workflow scheme that is associated with requested project.
+#[derive(Clone)]
 pub struct GetWorkflowSchemeForProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_key_or_id: String,
@@ -1944,6 +1982,7 @@ impl<'a> GetWorkflowSchemeForProjectRequest<'a> {
 /// more than 100 projects is enforced. The projects are wrapped in a single response object that contains
 /// a header for use in the picker, specifically 'Showing X of Y matching projects' and the total number
 /// of matches for the query.
+#[derive(Clone)]
 pub struct SearchForProjectsRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<i64>,

@@ -343,6 +343,7 @@ impl<'a> UsersService<'a> {
 /// Return a page of users in an organization that match the supplied parameters.
 ///
 /// Use `searchTerm` for free-text search across user display names and email addresses. Use `emails` for exact-match filtering by full email addresses. `searchTerm` and `emails` are mutually exclusive. Providing both in the same request returns `400 Bad Request`. Use the `expand` field to include additional fields such as `platformRoles`, `counts.resources`, `productAccess`, and `groups` in the response.
+#[derive(Clone)]
 pub struct SearchDirectoryUsersRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -403,6 +404,7 @@ impl<'a> SearchDirectoryUsersRequest<'a> {
 ///
 /// #### Scopes
 /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:accounts:admin`
+#[derive(Clone)]
 pub struct GetUsersRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -454,6 +456,7 @@ impl<'a> GetUsersRequest<'a> {
 /// - they receive an email invitation if the `sendNotification` field is set to `true` and the `notificationText` field contains a message to include in the email invitation.
 ///
 /// **This API is only available to customers who have at least one paid subscription in their organization.**
+#[derive(Clone)]
 pub struct InviteUsersRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -504,6 +507,7 @@ impl<'a> InviteUsersRequest<'a> {
 ///
 /// #### Scopes
 /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:directories:admin`
+#[derive(Clone)]
 pub struct GetUserRoleAssignmentsRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -651,6 +655,7 @@ impl<'a> GetUserRoleAssignmentsRequest<'a> {
 }
 
 /// This API can be used to grant Platform Roles to a user.
+#[derive(Clone)]
 pub struct GrantUserAccessRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -703,6 +708,7 @@ impl<'a> GrantUserAccessRequest<'a> {
 }
 
 /// This API can be used to revoke Platform Roles from a user.
+#[derive(Clone)]
 pub struct RevokeUserAccessRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -755,6 +761,7 @@ impl<'a> RevokeUserAccessRequest<'a> {
 }
 
 /// Suspend a user’s access in a directory to remove their access to apps temporarily. You’re not billed for a user when their access is suspended. They regain their roles and group memberships when you restore their access.
+#[derive(Clone)]
 pub struct SuspendDirectoryUserRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -799,6 +806,7 @@ impl<'a> SuspendDirectoryUserRequest<'a> {
 }
 
 /// Restore a user’s access in a directory to let them access apps again. They regain their roles and group memberships from before their access was suspended. We resume billing you for this user.
+#[derive(Clone)]
 pub struct RestoreDirectoryUserRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -843,6 +851,7 @@ impl<'a> RestoreDirectoryUserRequest<'a> {
 }
 
 /// Returns detailed information about a specific user in a directory within an organization.
+#[derive(Clone)]
 pub struct GetDirectoryUserDetailsRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -888,6 +897,7 @@ impl<'a> GetDirectoryUserDetailsRequest<'a> {
 
 /// Remove a user from a directory if you don’t want them to appear in your directory or have access to your apps anymore. You’re not billed for a user once they’re removed.
 /// You must invite the user to your organization again if you want to reinstate their access to your apps. You’ll need to assign their roles and group memberships again.
+#[derive(Clone)]
 pub struct RemoveDirectoryUserRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -934,6 +944,7 @@ impl<'a> RemoveDirectoryUserRequest<'a> {
 /// Assign an organization-level role to a user. These are roles that have organization-wide privileges, like organization admin.
 ///
 /// This operation follows eventual consistency. Changes may take up to 30 seconds to be reflected after the operation is performed.
+#[derive(Clone)]
 pub struct AssignOrganizationRoleRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -988,6 +999,7 @@ impl<'a> AssignOrganizationRoleRequest<'a> {
 /// Remove an organization-level role from a user. These are roles that have organization-wide privileges, like organization admin.
 ///
 /// This operation follows eventual consistency. Changes may take up to 30 seconds to be reflected after the operation is performed.
+#[derive(Clone)]
 pub struct RevokeOrganizationRoleRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -1042,6 +1054,7 @@ impl<'a> RevokeOrganizationRoleRequest<'a> {
 /// Returns a count of users in an organization that match the supplied parameters. By default, users in all your directories and all your managed accounts are counted (including managed accounts that aren’t in a directory).
 ///
 /// To count users in a directory only, use the `directoryIds` field. To count your managed accounts, regardless if they’re in a directory or not, use the `claimStatus` field.
+#[derive(Clone)]
 pub struct GetDirectoryUsersCountRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -1288,6 +1301,7 @@ impl<'a> GetDirectoryUsersCountRequest<'a> {
 ///
 /// #### Scopes
 /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:directories:admin`
+#[derive(Clone)]
 pub struct GetUserStatsRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -1333,6 +1347,7 @@ impl<'a> GetUserStatsRequest<'a> {
 /// - If the user has not accessed a product, the `product_access` response field will be empty.
 ///
 /// Learn the fastest way to call the API with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/organization/user-last-active-dates/).
+#[derive(Clone)]
 pub struct GetUserLastActiveDatesRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -1390,6 +1405,7 @@ impl<'a> GetUserLastActiveDatesRequest<'a> {
 ///
 /// #### Scopes
 /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:directories:admin`
+#[derive(Clone)]
 pub struct GetDirectoryUsersRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,

@@ -29,6 +29,7 @@ impl<'a> IconsService<'a> {
 }
 
 /// Load a single icon by id
+#[derive(Clone)]
 pub struct GetIconRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -61,6 +62,7 @@ impl<'a> GetIconRequest<'a> {
 }
 
 /// Load a single icon PNG by id
+#[derive(Clone)]
 pub struct GetIconImageRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -107,6 +109,7 @@ impl<'a> GetIconImageRequest<'a> {
 }
 
 /// Return all global icons i.e. icons not associated with a particular object schema
+#[derive(Clone)]
 pub struct FindGlobalIconsRequest<'a> {
     client: &'a crate::core::Client,
 }

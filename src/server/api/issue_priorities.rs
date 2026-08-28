@@ -29,6 +29,7 @@ impl<'a> IssuePrioritiesService<'a> {
 }
 
 /// Returns a list of all issue priorities
+#[derive(Clone)]
 pub struct GetPrioritiesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -57,6 +58,7 @@ impl<'a> GetPrioritiesRequest<'a> {
 }
 
 /// Returns a page with list of issue priorities whose names (or their translations) match query
+#[derive(Clone)]
 pub struct GetPrioritiesPaginatedRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<i64>,
@@ -138,6 +140,7 @@ impl<'a> GetPrioritiesPaginatedRequest<'a> {
 }
 
 /// Returns an issue priority
+#[derive(Clone)]
 pub struct GetPriorityRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

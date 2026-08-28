@@ -55,6 +55,7 @@ impl<'a> AuditRecordsService<'a> {
 ///  *  created or or before a date and time.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetAuditRecordsRequest<'a> {
     client: &'a crate::core::Client,
     offset: Option<i64>,

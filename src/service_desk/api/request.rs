@@ -303,6 +303,7 @@ impl<'a> RequestService<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the specified service desk.
 ///
 /// **Response limitations**: For customers, the list returned will include request they created (or were created on their behalf) or are participating in only.
+#[derive(Clone)]
 pub struct GetCustomerRequestsRequest<'a> {
     client: &'a crate::core::Client,
     search_term: Option<String>,
@@ -517,6 +518,7 @@ impl<'a> GetCustomerRequestsRequest<'a> {
 /// `requestFieldValues` is a map of Jira field IDs and their values. See [Field input formats](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#fieldformats), for details of each field's JSON semantics and the values they can take.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to create requests in the specified service desk.
+#[derive(Clone)]
 pub struct CreateCustomerRequestRequest<'a> {
     client: &'a crate::core::Client,
     request_create: RequestCreate,
@@ -560,6 +562,7 @@ impl<'a> CreateCustomerRequestRequest<'a> {
 /// The response is intentionally verbose and structured so that it can be consumed by automated agents (for example an LLM repairing an invalid payload): every failure carries a machine-readable location (field id / form entity) and a human-readable reason. A valid payload returns HTTP 200 with `valid: true`; an invalid payload returns HTTP 400 with `valid: false` together with the field, form and general validation errors.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to create requests in the specified service desk.
+#[derive(Clone)]
 pub struct ValidateCustomerRequestRequest<'a> {
     client: &'a crate::core::Client,
     request_create: RequestCreate,
@@ -605,6 +608,7 @@ impl<'a> ValidateCustomerRequestRequest<'a> {
 /// **Response limitations**: For customers, only a request they created, was created on their behalf, or they are participating in will be returned.
 ///
 /// **Note:** `requestFieldValues` does not include hidden fields. To get a list of request type fields that includes hidden fields, see [/rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/field](https://developer.atlassian.com/cloud/jira/service-desk/rest/api-group-servicedesk/#api-rest-servicedeskapi-servicedesk-servicedeskid-requesttype-requesttypeid-field-get)
+#[derive(Clone)]
 pub struct GetCustomerRequestByIdOrKeyRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -663,6 +667,7 @@ impl<'a> GetCustomerRequestByIdOrKeyRequest<'a> {
 /// This method returns all approvals on a customer request.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
+#[derive(Clone)]
 pub struct GetApprovalsRequest<'a> {
     client: &'a crate::core::Client,
     start: Option<i64>,
@@ -726,6 +731,7 @@ impl<'a> GetApprovalsRequest<'a> {
 /// This method returns an approval. Use this method to determine the status of an approval and the list of approvers.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
+#[derive(Clone)]
 pub struct GetApprovalByIdRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -765,6 +771,7 @@ impl<'a> GetApprovalByIdRequest<'a> {
 /// This method enables a user to **Approve** or **Decline** an approval on a customer request. The approval is assumed to be owned by the user making the call.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: User is assigned to the approval request.
+#[derive(Clone)]
 pub struct AnswerApprovalRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -819,6 +826,7 @@ impl<'a> AnswerApprovalRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
 ///
 /// **Response limitations**: Customers will only get a list of public attachments.
+#[derive(Clone)]
 pub struct GetAttachmentsForRequestRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -867,6 +875,7 @@ impl<'a> GetAttachmentsForRequestRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to add an attachment.
 ///
 /// **Request limitations**: Customers can set public visibility only.
+#[derive(Clone)]
 pub struct CreateCommentWithAttachmentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -921,6 +930,7 @@ impl<'a> CreateCommentWithAttachmentRequest<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct GetAttachmentContentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -965,6 +975,7 @@ impl<'a> GetAttachmentContentRequest<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct GetAttachmentThumbnailRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1006,6 +1017,7 @@ impl<'a> GetAttachmentThumbnailRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
 ///
 /// **Response limitations**: Customers are returned public comments only.
+#[derive(Clone)]
 pub struct GetRequestCommentsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1118,6 +1130,7 @@ impl<'a> GetRequestCommentsRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: User has Add Comments permission.
 ///
 /// **Request limitations**: Customers can set comments to public visibility only.
+#[derive(Clone)]
 pub struct CreateRequestCommentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1162,6 +1175,7 @@ impl<'a> CreateRequestCommentRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
 ///
 /// **Response limitations**: Customers can only view public comments on requests where they are the reporter or a participant whereas agents can see both internal and public comments.
+#[derive(Clone)]
 pub struct GetRequestCommentByIdRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1217,6 +1231,7 @@ impl<'a> GetRequestCommentByIdRequest<'a> {
 /// This method returns the notification subscription status of the user making the request. Use this method to determine if the user is subscribed to a customer request's notifications.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
+#[derive(Clone)]
 pub struct GetSubscriptionStatusRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1254,6 +1269,7 @@ impl<'a> GetSubscriptionStatusRequest<'a> {
 /// This method subscribes the user to receiving notifications from a customer request.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
+#[derive(Clone)]
 pub struct SubscribeRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1291,6 +1307,7 @@ impl<'a> SubscribeRequest<'a> {
 /// This method unsubscribes the user from notifications from a customer request.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
+#[derive(Clone)]
 pub struct UnsubscribeRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1328,6 +1345,7 @@ impl<'a> UnsubscribeRequest<'a> {
 /// This method returns a list of all the participants on a customer request.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
+#[derive(Clone)]
 pub struct GetRequestParticipantsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1393,6 +1411,7 @@ impl<'a> GetRequestParticipantsRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to manage participants on the customer request.
 ///
 /// Note, participants can be added when creating a customer request using the [request](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-request-post) resource, by defining the participants in the `requestParticipants` field.
+#[derive(Clone)]
 pub struct AddRequestParticipantsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1442,6 +1461,7 @@ impl<'a> AddRequestParticipantsRequest<'a> {
 /// This method removes participants from a customer request.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to manage participants on the customer request.
+#[derive(Clone)]
 pub struct RemoveRequestParticipantsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1494,6 +1514,7 @@ impl<'a> RemoveRequestParticipantsRequest<'a> {
 ///
 ///  *  Agent for the Service Desk containing the queried customer request, AND
 ///  *  Browse Projects permission on the project containing the customer request, including any restrictions imposed by issue security schemes or custom permission schemes on the specific issue.
+#[derive(Clone)]
 pub struct GetSlaInformationRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1557,6 +1578,7 @@ impl<'a> GetSlaInformationRequest<'a> {
 ///
 ///  *  Agent for the Service Desk containing the queried customer request, AND
 ///  *  Browse Projects permission on the project containing the customer request, including any restrictions imposed by issue security schemes or custom permission schemes on the specific issue.
+#[derive(Clone)]
 pub struct GetSlaInformationByIdRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1596,6 +1618,7 @@ impl<'a> GetSlaInformationByIdRequest<'a> {
 /// This method returns a list of all the statuses a customer Request has achieved. A status represents the state of an issue in its workflow. An issue can have one active status only. The list returns the status history in chronological order, most recent (current) status first.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
+#[derive(Clone)]
 pub struct GetCustomerRequestStatusRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1656,6 +1679,7 @@ impl<'a> GetCustomerRequestStatusRequest<'a> {
 /// This method returns a list of transitions, the workflow processes that moves a customer request from one status to another, that the user can perform on a request. Use this method to provide a user with a list if the actions they can take on a customer request.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
+#[derive(Clone)]
 pub struct GetCustomerTransitionsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1719,6 +1743,7 @@ impl<'a> GetCustomerTransitionsRequest<'a> {
 /// This method performs a customer transition for a given request and transition. An optional comment can be included to provide a reason for the transition.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: The user must be able to view the request and have the Transition Issues permission. If a comment is passed the user must have the Add Comments permission.
+#[derive(Clone)]
 pub struct PerformCustomerTransitionRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,

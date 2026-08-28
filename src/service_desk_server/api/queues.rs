@@ -94,6 +94,7 @@ impl<'a> QueuesService<'a> {
 /// **Permissions:**
 ///
 /// The calling user must be an agent of the given service project.
+#[derive(Clone)]
 pub struct GetQueuesRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -172,6 +173,7 @@ impl<'a> GetQueuesRequest<'a> {
 /// **Permissions:**
 ///
 /// The calling user must have permission to create a queue, i.e. they must be an admin of the service project that the queue belongs to.
+#[derive(Clone)]
 pub struct CreateQueueRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -226,6 +228,7 @@ impl<'a> CreateQueueRequest<'a> {
 /// **Permissions:**
 ///
 /// The calling user must be an agent of the given service project.
+#[derive(Clone)]
 pub struct GetQueueRequest<'a> {
     client: &'a crate::core::Client,
     queue_id: String,
@@ -280,6 +283,7 @@ impl<'a> GetQueueRequest<'a> {
 /// **Permissions:**
 ///
 /// The calling user must have permission to update a queue, i.e. they must be an admin of the service project that the queue belongs to.
+#[derive(Clone)]
 pub struct UpdateQueueRequest<'a> {
     client: &'a crate::core::Client,
     queue_id: String,
@@ -336,6 +340,7 @@ impl<'a> UpdateQueueRequest<'a> {
 /// **Permissions:**
 ///
 /// The calling user must have permission to delete the queue, i.e. they must be an admin of the service project that the queue belongs to.
+#[derive(Clone)]
 pub struct DeleteQueueRequest<'a> {
     client: &'a crate::core::Client,
     queue_id: String,
@@ -378,6 +383,7 @@ impl<'a> DeleteQueueRequest<'a> {
 /// **Note:**
 /// The total number of issues across all pages that can be returned using paginated search is limited to the maxResultWindow, which is defined by the underlying search engine.
 /// The current value is returned in the `maxResultWindow` property of the response. If not set, it means there is no limit.
+#[derive(Clone)]
 pub struct GetIssuesInQueueRequest<'a> {
     client: &'a crate::core::Client,
     queue_id: String,
@@ -445,6 +451,7 @@ impl<'a> GetIssuesInQueueRequest<'a> {
 /// **Permissions:**
 ///
 /// The calling user must have permission to reorder the queue, i.e. they must be an admin of the service project that the queue belongs to.
+#[derive(Clone)]
 pub struct ReorderQueuesRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,

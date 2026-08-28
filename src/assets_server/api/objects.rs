@@ -109,6 +109,7 @@ impl<'a> ObjectsService<'a> {
 }
 
 /// Retrieve archived objects.
+#[derive(Clone)]
 pub struct GetArchivedObjectsRequest<'a> {
     client: &'a crate::core::Client,
     object_schema_id: Option<String>,
@@ -238,6 +239,7 @@ impl<'a> GetArchivedObjectsRequest<'a> {
 }
 
 /// Archive the referenced object.
+#[derive(Clone)]
 pub struct ArchiveObjectRequest<'a> {
     client: &'a crate::core::Client,
     object_identifier: String,
@@ -270,6 +272,7 @@ impl<'a> ArchiveObjectRequest<'a> {
 }
 
 /// Bulk archive objects of an object type by filter.
+#[derive(Clone)]
 pub struct ArchiveObjectsByFilterRequest<'a> {
     client: &'a crate::core::Client,
     type_id: Option<String>,
@@ -329,6 +332,7 @@ impl<'a> ArchiveObjectsByFilterRequest<'a> {
 }
 
 /// Bulk archive objects across object schemas by object keys asynchronously.
+#[derive(Clone)]
 pub struct ArchiveObjectsByKeysRequest<'a> {
     client: &'a crate::core::Client,
     body: Option<Vec<String>>,
@@ -371,6 +375,7 @@ impl<'a> ArchiveObjectsByKeysRequest<'a> {
 }
 
 /// Restore the referenced object.
+#[derive(Clone)]
 pub struct RestoreObjectRequest<'a> {
     client: &'a crate::core::Client,
     object_identifier: String,
@@ -403,6 +408,7 @@ impl<'a> RestoreObjectRequest<'a> {
 }
 
 /// Bulk restore objects by archive search filter.
+#[derive(Clone)]
 pub struct RestoreObjectsByFilterRequest<'a> {
     client: &'a crate::core::Client,
     object_schema_id: Option<String>,
@@ -506,6 +512,7 @@ impl<'a> RestoreObjectsByFilterRequest<'a> {
 }
 
 /// Bulk restore objects by object ids.
+#[derive(Clone)]
 pub struct RestoreObjectsByIdsRequest<'a> {
     client: &'a crate::core::Client,
     body: Option<Vec<i64>>,
@@ -547,6 +554,7 @@ impl<'a> RestoreObjectsByIdsRequest<'a> {
 }
 
 /// Bulk restore objects across object schemas by object keys asynchronously.
+#[derive(Clone)]
 pub struct RestoreObjectsByKeysRequest<'a> {
     client: &'a crate::core::Client,
     body: Option<Vec<String>>,
@@ -588,6 +596,7 @@ impl<'a> RestoreObjectsByKeysRequest<'a> {
 }
 
 /// Set the import source for all objects matching the given IQL criteria.
+#[derive(Clone)]
 pub struct BulkSetObjectImportSourceRequest<'a> {
     client: &'a crate::core::Client,
     body: Option<std::collections::HashMap<String, serde_json::Value>>,
@@ -629,6 +638,7 @@ impl<'a> BulkSetObjectImportSourceRequest<'a> {
 }
 
 /// Get the current import source ID for an object.
+#[derive(Clone)]
 pub struct GetObjectImportSourceRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -661,6 +671,7 @@ impl<'a> GetObjectImportSourceRequest<'a> {
 }
 
 /// Clear the import source association for an object.
+#[derive(Clone)]
 pub struct ClearObjectImportSourceRequest<'a> {
     client: &'a crate::core::Client,
     previous_name: Option<String>,
@@ -705,6 +716,7 @@ impl<'a> ClearObjectImportSourceRequest<'a> {
 }
 
 /// Create a new object in Assets.
+#[derive(Clone)]
 pub struct CreateObjectRequest<'a> {
     client: &'a crate::core::Client,
     asset_object_in: Option<AssetObjectIn>,
@@ -749,6 +761,7 @@ impl<'a> CreateObjectRequest<'a> {
 }
 
 /// Get an object.
+#[derive(Clone)]
 pub struct LoadObjectRequest<'a> {
     client: &'a crate::core::Client,
     xoauth_requestor_id: Option<String>,
@@ -819,6 +832,7 @@ impl<'a> LoadObjectRequest<'a> {
 }
 
 /// Update an existing object in Assets.
+#[derive(Clone)]
 pub struct UpdateObjectRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -866,6 +880,7 @@ impl<'a> UpdateObjectRequest<'a> {
 }
 
 /// Delete the referenced object.
+#[derive(Clone)]
 pub struct DeleteObjectRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -898,6 +913,7 @@ impl<'a> DeleteObjectRequest<'a> {
 }
 
 /// Retrieve a list of objects based on an AQL query.
+#[derive(Clone)]
 pub struct FindObjectRequest<'a> {
     client: &'a crate::core::Client,
     object_iql_filter_param: Option<ObjectIQLFilterParam>,
@@ -944,6 +960,7 @@ impl<'a> FindObjectRequest<'a> {
 }
 
 /// Get all attributes for the given object.
+#[derive(Clone)]
 pub struct FindObjectAttributesRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -976,6 +993,7 @@ impl<'a> FindObjectAttributesRequest<'a> {
 }
 
 /// Retrieve the history entries for this object.
+#[derive(Clone)]
 pub struct FindObjectHistoryRequest<'a> {
     client: &'a crate::core::Client,
     asc: Option<bool>,
@@ -1046,6 +1064,7 @@ impl<'a> FindObjectHistoryRequest<'a> {
 }
 
 /// Find all inbound references for an object.
+#[derive(Clone)]
 pub struct FindObjectReferenceInfoRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

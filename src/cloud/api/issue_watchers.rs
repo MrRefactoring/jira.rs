@@ -74,6 +74,7 @@ impl<'a> IssueWatchersService<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct GetIsWatchingIssueBulkRequest<'a> {
     client: &'a crate::core::Client,
     issue_list: IssueList,
@@ -121,6 +122,7 @@ impl<'a> GetIsWatchingIssueBulkRequest<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is ini
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  To see details of users on the watchlist other than themselves, *View voters and watchers* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+#[derive(Clone)]
 pub struct GetIssueWatchersRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -161,6 +163,7 @@ impl<'a> GetIssueWatchersRequest<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  To add users other than themselves to the watchlist, *Manage watcher list* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+#[derive(Clone)]
 pub struct AddWatcherRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -204,6 +207,7 @@ impl<'a> AddWatcherRequest<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  To remove users other than themselves from the watchlist, *Manage watcher list* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+#[derive(Clone)]
 pub struct RemoveWatcherRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,

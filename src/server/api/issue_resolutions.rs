@@ -29,6 +29,7 @@ impl<'a> IssueResolutionsService<'a> {
 }
 
 /// Returns a list of all resolutions.
+#[derive(Clone)]
 pub struct GetResolutionsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -57,6 +58,7 @@ impl<'a> GetResolutionsRequest<'a> {
 }
 
 /// Returns paginated list of filtered resolutions.
+#[derive(Clone)]
 pub struct GetPaginatedResolutionsRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<i64>,
@@ -125,6 +127,7 @@ impl<'a> GetPaginatedResolutionsRequest<'a> {
 }
 
 /// Returns a resolution.
+#[derive(Clone)]
 pub struct GetResolutionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

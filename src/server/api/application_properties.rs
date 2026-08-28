@@ -33,6 +33,7 @@ impl<'a> ApplicationPropertiesService<'a> {
 }
 
 /// Returns an application property.
+#[derive(Clone)]
 pub struct GetApplicationPropertiesRequest<'a> {
     client: &'a crate::core::Client,
     permission_level: Option<String>,
@@ -104,6 +105,7 @@ impl<'a> GetApplicationPropertiesRequest<'a> {
 }
 
 /// Returns the properties that are displayed on the "General Configuration > Advanced Settings" page.
+#[derive(Clone)]
 pub struct GetAdvancedSettingsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -135,6 +137,7 @@ impl<'a> GetAdvancedSettingsRequest<'a> {
 }
 
 /// Update an application property via PUT. The "value" field present in the PUT will override the existing value.
+#[derive(Clone)]
 pub struct SetPropertyViaRestfulTableRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

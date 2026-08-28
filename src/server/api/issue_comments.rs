@@ -47,6 +47,7 @@ impl<'a> IssueCommentsService<'a> {
 }
 
 /// Returns the keys of all properties for the comment identified by the key or by the id.
+#[derive(Clone)]
 pub struct GetCommentPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     comment_id: String,
@@ -79,6 +80,7 @@ impl<'a> GetCommentPropertyKeysRequest<'a> {
 }
 
 /// Returns the value of the property with a given key from the comment identified by the key or by the id. The user who retrieves the property is required to have permissions to read the comment.
+#[derive(Clone)]
 pub struct GetCommentPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -116,6 +118,7 @@ impl<'a> GetCommentPropertyRequest<'a> {
 }
 
 /// Sets the value of the specified comment's property.
+#[derive(Clone)]
 pub struct SetCommentPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -161,6 +164,7 @@ impl<'a> SetCommentPropertyRequest<'a> {
 }
 
 /// Removes the property from the comment identified by the key or by the id. Ths user removing the property is required to have permissions to administer the comment.
+#[derive(Clone)]
 pub struct DeleteCommentPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,

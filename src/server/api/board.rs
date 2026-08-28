@@ -260,6 +260,7 @@ impl<'a> BoardService<'a> {
 }
 
 /// Returns all boards. This only includes boards that the user has permission to view.
+#[derive(Clone)]
 pub struct GetAllBoardsRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<i64>,
@@ -360,6 +361,7 @@ impl<'a> GetAllBoardsRequest<'a> {
 /// - If you want to create a new project with an associated board, use the JIRA platform REST API. For more information, see the Create project method. The projectTypeKey for software boards must be 'software' and the projectTemplateKey must be either com.pyxis.greenhopper.jira:gh-kanban-template or com.pyxis.greenhopper.jira:gh-scrum-template.
 /// - You can create a filter using the JIRA REST API. For more information, see the Create filter method.
 /// - If you do not ORDER BY the Rank field for the filter of your board, you will not be able to reorder issues on the board.
+#[derive(Clone)]
 pub struct CreateBoardRequest<'a> {
     client: &'a crate::core::Client,
     board_create: BoardCreate,
@@ -396,6 +398,7 @@ impl<'a> CreateBoardRequest<'a> {
 }
 
 /// Returns a single board, for a given board Id.
+#[derive(Clone)]
 pub struct GetBoardRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -428,6 +431,7 @@ impl<'a> GetBoardRequest<'a> {
 }
 
 /// Deletes the board.
+#[derive(Clone)]
 pub struct DeleteBoardRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -460,6 +464,7 @@ impl<'a> DeleteBoardRequest<'a> {
 }
 
 /// Returns all issues from a board's backlog, for a given board Id.
+#[derive(Clone)]
 pub struct GetIssuesForBacklogRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -594,6 +599,7 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
 /// Note, estimates for an issue can be updated by a PUT /rest/api/2/issue/{issueIdOrKey} request, however the fields must be on the screen.
 /// "timeoriginalestimate" field will never be on the screen, so in order to update it "originalEstimate" in "timetracking" field should be updated.
 /// - ranking - Contains information about custom field used for ranking in the given board.
+#[derive(Clone)]
 pub struct GetBoardConfigurationRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -626,6 +632,7 @@ impl<'a> GetBoardConfigurationRequest<'a> {
 }
 
 /// Returns all epics from the board, for the given board Id. This only includes epics that the user has permission to view. Note, if the user does not have permission to view the board, no epics will be returned at all.
+#[derive(Clone)]
 pub struct GetEpicsRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<i64>,
@@ -697,6 +704,7 @@ impl<'a> GetEpicsRequest<'a> {
 }
 
 /// Returns all issues that do not belong to any epic on a board, for a given board Id.
+#[derive(Clone)]
 pub struct GetIssuesWithoutEpicForBoardRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetIssuesWithoutEpicForBoardRequestExpand>,
@@ -816,6 +824,7 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
 }
 
 /// Returns all issues that belong to an epic on the board, for the given epic Id and the board Id.
+#[derive(Clone)]
 pub struct GetIssuesForBoardEpicRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetIssuesForBoardEpicRequestExpand>,
@@ -937,6 +946,7 @@ impl<'a> GetIssuesForBoardEpicRequest<'a> {
 }
 
 /// Returns all issues from a board, for a given board Id. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
+#[derive(Clone)]
 pub struct GetIssuesForBoardRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -1056,6 +1066,7 @@ impl<'a> GetIssuesForBoardRequest<'a> {
 }
 
 /// Returns all projects that are associated with the board, for the given board Id. A project is associated with a board only if the board filter explicitly filters issues by the project and guaranties that all issues will come for one of those projects e.g. board's filter with "project in (PR-1, PR-1) OR reporter = admin" jql Projects are returned only if user can browse all projects that are associated with the board. Note, if the user does not have permission to view the board, no projects will be returned at all. Returned projects are ordered by the name.
+#[derive(Clone)]
 pub struct GetProjectsRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<i64>,
@@ -1114,6 +1125,7 @@ impl<'a> GetProjectsRequest<'a> {
 }
 
 /// Returns the keys of all properties for the board identified by the id. The user who retrieves the property keys is required to have permissions to view the board.
+#[derive(Clone)]
 pub struct GetBoardPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -1146,6 +1158,7 @@ impl<'a> GetBoardPropertyKeysRequest<'a> {
 }
 
 /// Returns the value of the property with a given key from the board identified by the provided id. The user who retrieves the property is required to have permissions to view the board.
+#[derive(Clone)]
 pub struct GetBoardPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -1183,6 +1196,7 @@ impl<'a> GetBoardPropertyRequest<'a> {
 }
 
 /// Sets the value of the specified board's property. You can use this resource to store a custom data against the board identified by the id. The user who stores the data is required to have permissions to modify the board.
+#[derive(Clone)]
 pub struct SetBoardPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -1228,6 +1242,7 @@ impl<'a> SetBoardPropertyRequest<'a> {
 }
 
 /// Removes the property from the board identified by the id. Ths user removing the property is required to have permissions to modify the board.
+#[derive(Clone)]
 pub struct DeleteBoardPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -1265,6 +1280,7 @@ impl<'a> DeleteBoardPropertyRequest<'a> {
 }
 
 /// Returns the value of the setting for refined velocity chart
+#[derive(Clone)]
 pub struct GetRefinedVelocityRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -1297,6 +1313,7 @@ impl<'a> GetRefinedVelocityRequest<'a> {
 }
 
 /// Sets the value of the specified board's refined velocity setting.
+#[derive(Clone)]
 pub struct SetRefinedVelocityRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -1337,6 +1354,7 @@ impl<'a> SetRefinedVelocityRequest<'a> {
 }
 
 /// Returns all sprints from a board, for a given board Id. This only includes sprints that the user has permission to view.
+#[derive(Clone)]
 pub struct GetAllSprintsRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<i64>,
@@ -1408,6 +1426,7 @@ impl<'a> GetAllSprintsRequest<'a> {
 }
 
 /// Get all issues you have access to that belong to the sprint from the board. Issue returned from this resource contains additional fields like: sprint, closedSprints, flagged and epic. Issues are returned ordered by rank. JQL order has higher priority than default rank.
+#[derive(Clone)]
 pub struct GetIssuesForBoardSprintRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,
@@ -1529,6 +1548,7 @@ impl<'a> GetIssuesForBoardSprintRequest<'a> {
 }
 
 /// Returns all versions from a board, for a given board Id. This only includes versions that the user has permission to view. Note, if the user does not have permission to view the board, no versions will be returned at all. Returned versions are ordered by the name of the project from which they belong and then by sequence defined by user.
+#[derive(Clone)]
 pub struct GetAllVersionsRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<i64>,

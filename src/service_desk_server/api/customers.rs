@@ -38,6 +38,7 @@ impl<'a> CustomersService<'a> {
 /// This operation does not cause invitation email to be sent to the newly created customer.
 ///
 /// Jira administrator global permission is required to create a customer.
+#[derive(Clone)]
 pub struct CreateCustomerRequest<'a> {
     client: &'a crate::core::Client,
     customer_create: Option<CustomerCreate>,
@@ -84,6 +85,7 @@ impl<'a> CreateCustomerRequest<'a> {
 /// Adds one or more existing customers to the given service project. If you need to create a customer, see Create customer.
 ///
 /// Administer project permission is required, or agents if public signups and invites are enabled for the service project.)
+#[derive(Clone)]
 pub struct AddCustomersRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,

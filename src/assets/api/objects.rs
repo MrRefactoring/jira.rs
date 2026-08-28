@@ -62,6 +62,7 @@ impl<'a> ObjectsService<'a> {
 }
 
 /// Load one object
+#[derive(Clone)]
 pub struct LoadObjectRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -94,6 +95,7 @@ impl<'a> LoadObjectRequest<'a> {
 }
 
 /// Update an existing object in Assets
+#[derive(Clone)]
 pub struct UpdateObjectRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -134,6 +136,7 @@ impl<'a> UpdateObjectRequest<'a> {
 }
 
 /// Delete the referenced object
+#[derive(Clone)]
 pub struct DeleteObjectRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -166,6 +169,7 @@ impl<'a> DeleteObjectRequest<'a> {
 }
 
 /// List all attributes for the given object
+#[derive(Clone)]
 pub struct FindObjectAttributesRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -198,6 +202,7 @@ impl<'a> FindObjectAttributesRequest<'a> {
 }
 
 /// Retrieve the history entries for this object
+#[derive(Clone)]
 pub struct FindObjectHistoryRequest<'a> {
     client: &'a crate::core::Client,
     asc: Option<bool>,
@@ -243,6 +248,7 @@ impl<'a> FindObjectHistoryRequest<'a> {
 }
 
 /// Find all references for an object
+#[derive(Clone)]
 pub struct FindObjectReferenceInfoRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -275,6 +281,7 @@ impl<'a> FindObjectReferenceInfoRequest<'a> {
 }
 
 /// Create a new object in Assets
+#[derive(Clone)]
 pub struct CreateObjectRequest<'a> {
     client: &'a crate::core::Client,
     asset_object_in: AssetObjectIn,
@@ -311,6 +318,7 @@ impl<'a> CreateObjectRequest<'a> {
 }
 
 /// Fetch Objects by AQL
+#[derive(Clone)]
 pub struct FindObjectsByAqlRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -386,6 +394,7 @@ impl<'a> FindObjectsByAqlRequest<'a> {
 }
 
 /// This API provides the total count of objects that match a specified AQL query. Please note that this operation may incur performance latency.
+#[derive(Clone)]
 pub struct CountObjectsByAqlRequest<'a> {
     client: &'a crate::core::Client,
     object_aql_total_count_params: ObjectAQLTotalCountParams,

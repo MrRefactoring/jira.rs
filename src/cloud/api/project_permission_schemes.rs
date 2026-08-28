@@ -118,6 +118,7 @@ impl<'a> ProjectPermissionSchemesService<'a> {
 /// Returns the [issue security scheme](https://confluence.atlassian.com/x/J4lKLg) associated with the project.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or the *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+#[derive(Clone)]
 pub struct GetProjectIssueSecuritySchemeRequest<'a> {
     client: &'a crate::core::Client,
     project_key_or_id: String,
@@ -155,6 +156,7 @@ impl<'a> GetProjectIssueSecuritySchemeRequest<'a> {
 /// Gets the [permission scheme](https://confluence.atlassian.com/x/yodKLg) associated with the project.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+#[derive(Clone)]
 pub struct GetAssignedPermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     project_key_or_id: String,
@@ -212,6 +214,7 @@ impl<'a> GetAssignedPermissionSchemeRequest<'a> {
 /// Assigns a permission scheme with a project. See [Managing project permissions](https://confluence.atlassian.com/x/yodKLg) for more information about permission schemes.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg)
+#[derive(Clone)]
 pub struct AssignPermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     project_key_or_id: String,
@@ -279,6 +282,7 @@ impl<'a> AssignPermissionSchemeRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [global permission](https://confluence.atlassian.com/x/x4dKLg) for the project, however, issue security levels are only returned for authenticated user with *Set Issue Security* [global permission](https://confluence.atlassian.com/x/x4dKLg) for the project.
+#[derive(Clone)]
 pub struct GetSecurityLevelsForProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_key_or_id: String,

@@ -67,6 +67,7 @@ impl<'a> IssueService<'a> {
 /// This operation may fail for some issues, although this will be rare. In that case the 207 status code is returned for the whole response and detailed information regarding each issue is available in the response body.
 ///
 /// If rankCustomFieldId is not defined, the default rank field will be used.
+#[derive(Clone)]
 pub struct RankIssuesRequest<'a> {
     client: &'a crate::core::Client,
     issue_rank_request: IssueRankRequest,
@@ -104,6 +105,7 @@ impl<'a> RankIssuesRequest<'a> {
 }
 
 /// Returns a single issue, for a given issue ID or issue key. Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
+#[derive(Clone)]
 pub struct GetIssueRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -182,6 +184,7 @@ impl<'a> GetIssueRequest<'a> {
 /// Original time internally stores and returns the estimation as a number of seconds.
 ///
 /// The field used for estimation on the given board can be obtained from [board configuration resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#agile/1.0/board-getConfiguration). More information about the field are returned by [edit meta resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-issue-getEditIssueMeta) or [field resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-field-get).
+#[derive(Clone)]
 pub struct GetIssueEstimationForBoardRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -233,6 +236,7 @@ impl<'a> GetIssueEstimationForBoardRequest<'a> {
 /// Original time tracking estimation field accepts estimation in formats like "1w", "2d", "3h", "20m" or number which represent number of minutes. However, internally the field stores and returns the estimation as a number of seconds.
 ///
 /// The field used for estimation on the given board can be obtained from [board configuration resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#agile/1.0/board-getConfiguration). More information about the field are returned by [edit meta resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-issue-issueIdOrKey-editmeta-get) or [field resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-field-get).
+#[derive(Clone)]
 pub struct EstimateIssueForBoardRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,

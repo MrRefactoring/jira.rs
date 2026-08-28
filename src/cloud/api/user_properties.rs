@@ -73,6 +73,7 @@ impl<'a> UserPropertiesService<'a> {
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to access the property keys on any user.
 ///  *  Access to Jira, to access the calling user's property keys.
+#[derive(Clone)]
 pub struct GetUserPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     account_id: Option<String>,
@@ -122,6 +123,7 @@ impl<'a> GetUserPropertyKeysRequest<'a> {
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to get a property from any user.
 ///  *  Access to Jira, to get a property from the calling user's record.
+#[derive(Clone)]
 pub struct GetUserPropertyRequest<'a> {
     client: &'a crate::core::Client,
     account_id: Option<String>,
@@ -174,6 +176,7 @@ impl<'a> GetUserPropertyRequest<'a> {
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set a property on any user.
 ///  *  Access to Jira, to set a property on the calling user's record.
+#[derive(Clone)]
 pub struct SetUserPropertyRequest<'a> {
     client: &'a crate::core::Client,
     account_id: Option<String>,
@@ -233,6 +236,7 @@ impl<'a> SetUserPropertyRequest<'a> {
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to delete a property from any user.
 ///  *  Access to Jira, to delete a property from the calling user's record.
+#[derive(Clone)]
 pub struct DeleteUserPropertyRequest<'a> {
     client: &'a crate::core::Client,
     account_id: Option<String>,

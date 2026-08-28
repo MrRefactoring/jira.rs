@@ -259,6 +259,7 @@ impl<'a> BuildsService<'a> {
 ///
 /// In the case of multiple builds being submitted in one request, each is validated individually prior to
 /// submission. Details of which build failed submission (if any) are available in the response object.
+#[derive(Clone)]
 pub struct SubmitBuildsRequest<'a> {
     client: &'a crate::core::Client,
     properties: Option<std::collections::HashMap<String, serde_json::Value>>,
@@ -344,6 +345,7 @@ impl<'a> SubmitBuildsRequest<'a> {
 ///
 /// Deletion is performed asynchronously. The `getBuildByKey` operation can be used to confirm that data has been
 /// deleted successfully (if needed).
+#[derive(Clone)]
 pub struct DeleteBuildsByPropertyRequest<'a> {
     client: &'a crate::core::Client,
     account_id: String,
@@ -393,6 +395,7 @@ impl<'a> DeleteBuildsByPropertyRequest<'a> {
 /// Retrieve the currently stored build data for the given `pipelineId` and `buildNumber` combination.
 ///
 /// The result will be what is currently stored, ignoring any pending updates or deletes.
+#[derive(Clone)]
 pub struct GetBuildByKeyRequest<'a> {
     client: &'a crate::core::Client,
     pipeline_id: String,
@@ -433,6 +436,7 @@ impl<'a> GetBuildByKeyRequest<'a> {
 ///
 /// Deletion is performed asynchronously. The `getBuildByKey` operation can be used to confirm that data has been
 /// deleted successfully (if needed).
+#[derive(Clone)]
 pub struct DeleteBuildByKeyRequest<'a> {
     client: &'a crate::core::Client,
     pipeline_id: String,

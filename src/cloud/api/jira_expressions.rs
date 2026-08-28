@@ -101,6 +101,7 @@ impl<'a> JiraExpressionsService<'a> {
 /// Learn more about Jira expressions in the [documentation](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required**: None.
+#[derive(Clone)]
 pub struct AnalyseExpressionRequest<'a> {
     client: &'a crate::core::Client,
     check: Option<AnalyseExpressionRequestCheck>,
@@ -183,6 +184,7 @@ impl<'a> AnalyseExpressionRequest<'a> {
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required**: None. However, an expression may return different results for different users depending on their permissions. For example, different users may see different comments on the same issue.
 /// Permission to access Jira Software is required to access Jira Software context variables (`board` and `sprint`) or fields (for example, `issue.sprint`).
+#[derive(Clone)]
 pub struct EvaluateJSISJiraExpressionRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<EvaluateJSISJiraExpressionRequestExpand>,

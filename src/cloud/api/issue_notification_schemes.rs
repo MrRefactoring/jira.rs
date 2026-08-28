@@ -124,6 +124,7 @@ impl<'a> IssueNotificationSchemesService<'a> {
 /// *Note that you should allow for events without recipients to appear in responses.*
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira, however, the user must have permission to administer at least one project associated with a notification scheme for it to be returned.
+#[derive(Clone)]
 pub struct GetNotificationSchemesRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<String>,
@@ -240,6 +241,7 @@ impl<'a> GetNotificationSchemesRequest<'a> {
 /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) mapping of project that have notification scheme assigned. You can provide either one or multiple notification scheme IDs or project IDs to filter by. If you don't provide any, this will return a list of all mappings. Note that only company-managed (classic) projects are supported. This is because team-managed projects don't have a concept of a default notification scheme. The mappings are ordered by projectId.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct GetNotificationSchemeToProjectMappingsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<String>,
@@ -325,6 +327,7 @@ impl<'a> GetNotificationSchemeToProjectMappingsRequest<'a> {
 /// Returns a [notification scheme](https://confluence.atlassian.com/x/8YdKLg), including the list of events and the recipients who will receive notifications for those events.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira, however, the user must have permission to administer at least one project associated with the notification scheme.
+#[derive(Clone)]
 pub struct GetNotificationSchemeRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -381,6 +384,7 @@ impl<'a> GetNotificationSchemeRequest<'a> {
 /// *Deprecated: The notification type `EmailAddress` is no longer supported in Cloud. Refer to the [changelog](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-1031) for more details.*
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct AddNotificationsRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -427,6 +431,7 @@ impl<'a> AddNotificationsRequest<'a> {
 /// Removes a notification from a notification scheme.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct RemoveNotificationFromNotificationSchemeRequest<'a> {
     client: &'a crate::core::Client,
     notification_scheme_id: String,

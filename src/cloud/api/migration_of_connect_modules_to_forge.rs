@@ -64,6 +64,7 @@ impl<'a> MigrationOfConnectModulesToForgeService<'a> {
 /// [Jira modules > Jira Custom Fields](https://developer.atlassian.com/platform/adopting-forge-from-connect/migrate-jira-custom-fields/).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect and Forge apps can make this request.
+#[derive(Clone)]
 pub struct FetchMigrationTaskRequest<'a> {
     client: &'a crate::core::Client,
     connect_key: String,
@@ -115,6 +116,7 @@ impl<'a> FetchMigrationTaskRequest<'a> {
 /// [Jira modules > Jira Custom Fields](https://developer.atlassian.com/platform/adopting-forge-from-connect/migrate-jira-custom-fields/).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect and Forge apps can make this request.
+#[derive(Clone)]
 pub struct SubmitTaskRequest<'a> {
     client: &'a crate::core::Client,
     connect_key: String,

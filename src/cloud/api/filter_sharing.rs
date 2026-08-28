@@ -80,6 +80,7 @@ impl<'a> FilterSharingService<'a> {
 /// Returns the default sharing settings for new filters and dashboards for a user.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct GetDefaultShareScopeRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -113,6 +114,7 @@ impl<'a> GetDefaultShareScopeRequest<'a> {
 /// Sets the default sharing for new filters and dashboards for a user.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct SetDefaultShareScopeRequest<'a> {
     client: &'a crate::core::Client,
     default_share_scope: DefaultShareScope,
@@ -162,6 +164,7 @@ impl<'a> SetDefaultShareScopeRequest<'a> {
 ///  *  filters shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
 ///  *  filters shared with a public project.
 ///  *  filters shared with the public.
+#[derive(Clone)]
 pub struct GetSharePermissionsRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -198,6 +201,7 @@ impl<'a> GetSharePermissionsRequest<'a> {
 /// Be aware that this operation uses different objects for updating share permissions compared to [Update filter](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-put).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Share dashboards and filters* [global permission](https://confluence.atlassian.com/x/x4dKLg) and the user must own the filter.
+#[derive(Clone)]
 pub struct AddSharePermissionRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -248,6 +252,7 @@ impl<'a> AddSharePermissionRequest<'a> {
 ///  *  filters shared with a private project that the user has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for.
 ///  *  filters shared with a public project.
 ///  *  filters shared with the public.
+#[derive(Clone)]
 pub struct GetSharePermissionRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -283,6 +288,7 @@ impl<'a> GetSharePermissionRequest<'a> {
 /// Deletes a share permission from a filter.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira and the user must own the filter.
+#[derive(Clone)]
 pub struct DeleteSharePermissionRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,

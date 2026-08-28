@@ -51,6 +51,7 @@ impl<'a> SCIMLinksService<'a> {
 }
 
 /// Get SCIM Links for a Atlassian Account ID (AAID).
+#[derive(Clone)]
 pub struct GetScimLinksRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -88,6 +89,7 @@ impl<'a> GetScimLinksRequest<'a> {
 }
 
 /// Get SCIM Links for an email address in an organization.
+#[derive(Clone)]
 pub struct GetScimLinksByEmailRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -135,6 +137,7 @@ impl<'a> GetScimLinksByEmailRequest<'a> {
 }
 
 /// Unlinks a SCIM user from their Atlassian account without deleting the user.
+#[derive(Clone)]
 pub struct UnlinkScimUserRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -188,6 +191,7 @@ impl<'a> UnlinkScimUserRequest<'a> {
 /// You will have to completely reprovision the user to their respective groups after deletion.
 ///
 /// Explore more about [updating managed SCIM email addresses](https://developer.atlassian.com/cloud/admin/user-provisioning/email-change/).
+#[derive(Clone)]
 pub struct DeleteProvisioningRecordRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,

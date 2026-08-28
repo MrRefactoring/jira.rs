@@ -216,6 +216,7 @@ impl<'a> IssueCommentsService<'a> {
 ///  *  has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the comment.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  If the comment has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
 pub struct GetCommentsByIdsRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetCommentsByIdsRequestExpand>,
@@ -277,6 +278,7 @@ impl<'a> GetCommentsByIdsRequest<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the comment.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  If the comment has visibility restrictions, belongs to the group or has the role visibility is role visibility is restricted to.
+#[derive(Clone)]
 pub struct GetCommentsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -375,6 +377,7 @@ impl<'a> GetCommentsRequest<'a> {
 ///
 ///  *  *Browse projects* and *Add comments* [ project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue containing the comment is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct AddCommentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -464,6 +467,7 @@ impl<'a> AddCommentRequest<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the comment.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  If the comment has visibility restrictions, the user belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
 pub struct GetCommentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -525,6 +529,7 @@ impl<'a> GetCommentRequest<'a> {
 ///  *  If the comment has visibility restrictions, the user belongs to the group or has the role visibility is restricted to.
 ///
 /// **WARNING:** Child comments inherit visibility from their parent comment. Attempting to update a child comment's visibility will result in a 400 (Bad Request) error.
+#[derive(Clone)]
 pub struct UpdateCommentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -649,6 +654,7 @@ impl<'a> UpdateCommentRequest<'a> {
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  *Delete all comments*[ project permission](https://confluence.atlassian.com/x/yodKLg) to delete any comment or *Delete own comments* to delete comment created by the user,
 ///  *  If the comment has visibility restrictions, the user belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
 pub struct DeleteCommentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,

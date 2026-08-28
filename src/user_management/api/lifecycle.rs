@@ -62,6 +62,7 @@ impl<'a> LifecycleService<'a> {
 
 /// Deactivate (block) the specified user account from logging into Atlassian. The permission to make use of this resource is exposed by the `lifecycle.enablement` privilege.
 /// You can optionally set a message associated with the block. If none is supplied, a default message will be used.
+#[derive(Clone)]
 pub struct DeactivateUserRequest<'a> {
     client: &'a crate::core::Client,
     account_id: AccountId,
@@ -116,6 +117,7 @@ impl<'a> DeactivateUserRequest<'a> {
 /// the account was incorrectly blocked, please contact [Atlassian Support](https://support.atlassian.com/contact).
 ///
 /// User accounts that have been deleted need the deletion to be canceled before reactivating.
+#[derive(Clone)]
 pub struct ActivateUserRequest<'a> {
     client: &'a crate::core::Client,
     account_id: AccountId,
@@ -161,6 +163,7 @@ impl<'a> ActivateUserRequest<'a> {
 /// Learn the fastest way to get the paramaters and delete account with a detailed [tutorial](https://developer.atlassian.com/cloud/admin/user-management/delete-managed-account/#delete-account).
 ///
 /// The permission to make use of this resource is exposed by the `lifecycle.delete` privilege. Learn more about [Get user management permissions API](https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-manage/#api-users-account-id-manage-get) to manage the specified user.
+#[derive(Clone)]
 pub struct DeleteAccountRequest<'a> {
     client: &'a crate::core::Client,
     account_id: AccountId,
@@ -200,6 +203,7 @@ impl<'a> DeleteAccountRequest<'a> {
 ///  - You can cancel the deletion within the 14-day grace period of deleting a managed account. After that the account is permanently deleted.
 ///
 ///  The permission to make use of this resource is exposed by the `lifecycle.delete` privilege. Learn more about [Get user management permissions API](https://developer.atlassian.com/cloud/admin/user-management/rest/api-group-manage/#api-users-account-id-manage-get) to manage the specified user.
+#[derive(Clone)]
 pub struct CancelAccountDeletionRequest<'a> {
     client: &'a crate::core::Client,
     account_id: AccountId,

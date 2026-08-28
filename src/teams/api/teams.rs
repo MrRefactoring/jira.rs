@@ -75,6 +75,7 @@ impl<'a> TeamsService<'a> {
 }
 
 /// This returns a list of all teams contained under an organization. This may be used as an option to export teams data within your organization.
+#[derive(Clone)]
 pub struct QueryTeamsRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -147,6 +148,7 @@ impl<'a> QueryTeamsRequest<'a> {
 }
 
 /// Creates a team, and adds the requesting user as the initial member.
+#[derive(Clone)]
 pub struct CreateTeamRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -190,6 +192,7 @@ impl<'a> CreateTeamRequest<'a> {
     }
 }
 
+#[derive(Clone)]
 pub struct ArchiveTeamsRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -236,6 +239,7 @@ impl<'a> ArchiveTeamsRequest<'a> {
     }
 }
 
+#[derive(Clone)]
 pub struct UnarchiveTeamsRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -282,6 +286,7 @@ impl<'a> UnarchiveTeamsRequest<'a> {
     }
 }
 
+#[derive(Clone)]
 pub struct GetTeamRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -332,6 +337,7 @@ impl<'a> GetTeamRequest<'a> {
     }
 }
 
+#[derive(Clone)]
 pub struct DeleteTeamRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -369,6 +375,7 @@ impl<'a> DeleteTeamRequest<'a> {
 }
 
 /// This will only update the fields that get passed in and leave the rest as unmodified.
+#[derive(Clone)]
 pub struct UpdateTeamRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -418,6 +425,7 @@ impl<'a> UpdateTeamRequest<'a> {
     }
 }
 
+#[derive(Clone)]
 pub struct RestoreTeamRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -455,6 +463,7 @@ impl<'a> RestoreTeamRequest<'a> {
 }
 
 /// This updates the cover photo of the team. The cover photo must be a valid image file.
+#[derive(Clone)]
 pub struct UploadAndSetTeamCoverPhotoRequest<'a> {
     client: &'a crate::core::Client,
     team_id: String,

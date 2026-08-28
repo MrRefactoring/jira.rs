@@ -298,6 +298,7 @@ impl<'a> FeatureFlagsService<'a> {
 /// Submissions are performed asynchronously. Submitted data will eventually be available in Jira; most updates are available within a short period of time, but may take some time during peak load and/or maintenance times. The getFeatureFlagById operation can be used to confirm that data has been stored successfully (if needed).
 ///
 /// In the case of multiple Feature Flags being submitted in one request, each is validated individually prior to submission. Details of which Feature Flags failed submission (if any) are available in the response object.
+#[derive(Clone)]
 pub struct SubmitFeatureFlagsRequest<'a> {
     client: &'a crate::core::Client,
     properties: Option<std::collections::HashMap<String, serde_json::Value>>,
@@ -376,6 +377,7 @@ impl<'a> SubmitFeatureFlagsRequest<'a> {
 /// e.g. DELETE /bulkByProperties?accountId=account-123&createdBy=user-456
 ///
 /// Deletion is performed asynchronously. The getFeatureFlagById operation can be used to confirm that data has been deleted successfully (if needed).
+#[derive(Clone)]
 pub struct DeleteFeatureFlagsByPropertyRequest<'a> {
     client: &'a crate::core::Client,
     account_id: String,
@@ -425,6 +427,7 @@ impl<'a> DeleteFeatureFlagsByPropertyRequest<'a> {
 /// Retrieve the currently stored Feature Flag data for the given ID.
 ///
 /// The result will be what is currently stored, ignoring any pending updates or deletes.
+#[derive(Clone)]
 pub struct GetFeatureFlagByIdRequest<'a> {
     client: &'a crate::core::Client,
     feature_flag_id: String,
@@ -459,6 +462,7 @@ impl<'a> GetFeatureFlagByIdRequest<'a> {
 /// Delete the Feature Flag data currently stored for the given ID.
 ///
 /// Deletion is performed asynchronously. The getFeatureFlagById operation can be used to confirm that data has been deleted successfully (if needed).
+#[derive(Clone)]
 pub struct DeleteFeatureFlagByIdRequest<'a> {
     client: &'a crate::core::Client,
     feature_flag_id: String,

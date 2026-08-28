@@ -29,6 +29,7 @@ impl<'a> MyselfService<'a> {
 }
 
 /// Returns currently logged user. This resource cannot be accessed anonymously
+#[derive(Clone)]
 pub struct GetCurrentUserRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -57,6 +58,7 @@ impl<'a> GetCurrentUserRequest<'a> {
 }
 
 /// Modify currently logged user. The 'value' fields present will override the existing value. Fields skipped in request will not be changed. Only email and display name can be change that way. Requires user password.
+#[derive(Clone)]
 pub struct UpdateCurrentUserRequest<'a> {
     client: &'a crate::core::Client,
     user_write: UserWrite,
@@ -93,6 +95,7 @@ impl<'a> UpdateCurrentUserRequest<'a> {
 }
 
 /// Modify caller password.
+#[derive(Clone)]
 pub struct ChangeMyPasswordRequest<'a> {
     client: &'a crate::core::Client,
     password: Password,

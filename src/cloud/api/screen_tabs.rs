@@ -62,6 +62,7 @@ impl<'a> ScreenTabsService<'a> {
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 ///  *  *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) when the project key is specified, providing that the screen is associated with the project through a Screen Scheme and Issue Type Screen Scheme.
+#[derive(Clone)]
 pub struct GetAllScreenTabsRequest<'a> {
     client: &'a crate::core::Client,
     screen_id: i64,
@@ -109,6 +110,7 @@ impl<'a> GetAllScreenTabsRequest<'a> {
 /// Creates a tab for a screen.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct AddScreenTabRequest<'a> {
     client: &'a crate::core::Client,
     screen_id: i64,
@@ -151,6 +153,7 @@ impl<'a> AddScreenTabRequest<'a> {
 /// Updates the name of a screen tab.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct RenameScreenTabRequest<'a> {
     client: &'a crate::core::Client,
     screen_id: i64,
@@ -194,6 +197,7 @@ impl<'a> RenameScreenTabRequest<'a> {
 /// Deletes a screen tab.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeleteScreenTabRequest<'a> {
     client: &'a crate::core::Client,
     screen_id: i64,
@@ -229,6 +233,7 @@ impl<'a> DeleteScreenTabRequest<'a> {
 /// Moves a screen tab.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct MoveScreenTabRequest<'a> {
     client: &'a crate::core::Client,
     screen_id: i64,

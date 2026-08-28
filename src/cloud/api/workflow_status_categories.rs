@@ -30,6 +30,7 @@ impl<'a> WorkflowStatusCategoriesService<'a> {
 /// Returns a list of all status categories.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct GetStatusCategoriesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -60,6 +61,7 @@ impl<'a> GetStatusCategoriesRequest<'a> {
 /// Returns a status category. Status categories provided a mechanism for categorizing [statuses](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-status/#api-rest-api-3-status-idOrName-get).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct GetStatusCategoryRequest<'a> {
     client: &'a crate::core::Client,
     id_or_key: String,

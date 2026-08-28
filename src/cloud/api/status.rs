@@ -108,6 +108,7 @@ impl<'a> StatusService<'a> {
 ///
 ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
 ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
+#[derive(Clone)]
 pub struct GetStatusesByIdRequest<'a> {
     client: &'a crate::core::Client,
     id: Vec<String>,
@@ -144,6 +145,7 @@ impl<'a> GetStatusesByIdRequest<'a> {
 ///
 ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
 ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
+#[derive(Clone)]
 pub struct CreateStatusesRequest<'a> {
     client: &'a crate::core::Client,
     status_create_request: StatusCreateRequest,
@@ -185,6 +187,7 @@ impl<'a> CreateStatusesRequest<'a> {
 ///
 ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
 ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
+#[derive(Clone)]
 pub struct UpdateStatusesRequest<'a> {
     client: &'a crate::core::Client,
     status_update_request: StatusUpdateRequest,
@@ -226,6 +229,7 @@ impl<'a> UpdateStatusesRequest<'a> {
 ///
 ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
 ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
+#[derive(Clone)]
 pub struct DeleteStatusesByIdRequest<'a> {
     client: &'a crate::core::Client,
     id: Vec<String>,
@@ -264,6 +268,7 @@ impl<'a> DeleteStatusesByIdRequest<'a> {
 ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
 ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
 ///  *  *Browse projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
+#[derive(Clone)]
 pub struct GetStatusesByNameRequest<'a> {
     client: &'a crate::core::Client,
     name: Vec<String>,
@@ -314,6 +319,7 @@ impl<'a> GetStatusesByNameRequest<'a> {
 ///
 ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
 ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
+#[derive(Clone)]
 pub struct SearchRequest2<'a> {
     client: &'a crate::core::Client,
     project_id: Option<String>,
@@ -429,6 +435,7 @@ impl<'a> SearchRequest2<'a> {
 }
 
 /// Returns a page of issue types in a project using a given status.
+#[derive(Clone)]
 pub struct GetProjectIssueTypeUsagesForStatusRequest<'a> {
     client: &'a crate::core::Client,
     status_id: String,
@@ -498,6 +505,7 @@ impl<'a> GetProjectIssueTypeUsagesForStatusRequest<'a> {
 }
 
 /// Returns a page of projects using a given status.
+#[derive(Clone)]
 pub struct GetProjectUsagesForStatusRequest<'a> {
     client: &'a crate::core::Client,
     status_id: String,
@@ -556,6 +564,7 @@ impl<'a> GetProjectUsagesForStatusRequest<'a> {
 }
 
 /// Returns a page of workflows using a given status.
+#[derive(Clone)]
 pub struct GetWorkflowUsagesForStatusRequest<'a> {
     client: &'a crate::core::Client,
     status_id: String,

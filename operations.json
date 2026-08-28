@@ -3567,13 +3567,13 @@
     "surface": "cloud",
     "method": "GET",
     "path": "/rest/api/3/search/jql",
-    "operation": "searchAndReconsileIssuesUsingJql"
+    "operation": "searchIssues"
   },
   {
     "surface": "cloud",
     "method": "POST",
     "path": "/rest/api/3/search/jql",
-    "operation": "searchAndReconsileIssuesUsingJqlPost"
+    "operation": "searchIssuesPost"
   },
   {
     "surface": "cloud",

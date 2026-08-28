@@ -32,6 +32,7 @@ impl<'a> ManageService<'a> {
 }
 
 /// Returns the set of permissions you have for managing the specified Atlassian account
+#[derive(Clone)]
 pub struct GetManagementPermissionsRequest<'a> {
     client: &'a crate::core::Client,
     account_id: AccountId,

@@ -247,6 +247,7 @@ impl<'a> UsersService<'a> {
 }
 
 /// Returns a user.
+#[derive(Clone)]
 pub struct GetUserRequest<'a> {
     client: &'a crate::core::Client,
     include_deleted: Option<bool>,
@@ -314,6 +315,7 @@ impl<'a> GetUserRequest<'a> {
 }
 
 /// Create user. By default created user will not be notified with email. If password field is not set then password will be randomly generated.
+#[derive(Clone)]
 pub struct CreateUserRequest<'a> {
     client: &'a crate::core::Client,
     user_write: UserWrite,
@@ -350,6 +352,7 @@ impl<'a> CreateUserRequest<'a> {
 }
 
 /// Modify user. The 'value' fields present will override the existing value. Fields skipped in request will not be changed.
+#[derive(Clone)]
 pub struct UpdateUserRequest<'a> {
     client: &'a crate::core::Client,
     key: Option<String>,
@@ -407,6 +410,7 @@ impl<'a> UpdateUserRequest<'a> {
 }
 
 /// Removes user and its references (like project roles associations, watches, history). Note: user references will not be removed if multiple User Directories are used and there is a user with the same name existing in another directory (shadowing user).
+#[derive(Clone)]
 pub struct RemoveUserRequest<'a> {
     client: &'a crate::core::Client,
     key: Option<String>,
@@ -461,6 +465,7 @@ impl<'a> RemoveUserRequest<'a> {
 }
 
 /// Returns available accessibility personal settings along with `enabled` property that indicates the currently logged-in user preference.
+#[derive(Clone)]
 pub struct GetA11yPersonalSettingsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -492,6 +497,7 @@ impl<'a> GetA11yPersonalSettingsRequest<'a> {
 }
 
 /// Validates user anonymization process.
+#[derive(Clone)]
 pub struct ValidateUserAnonymizationRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -547,6 +553,7 @@ impl<'a> ValidateUserAnonymizationRequest<'a> {
 }
 
 /// Schedules a user anonymization process. Requires system admin permission.
+#[derive(Clone)]
 pub struct ScheduleUserAnonymizationRequest<'a> {
     client: &'a crate::core::Client,
     user_anonymization_request: UserAnonymizationRequest,
@@ -584,6 +591,7 @@ impl<'a> ScheduleUserAnonymizationRequest<'a> {
 }
 
 /// Returns information about a user anonymization operation progress.
+#[derive(Clone)]
 pub struct GetUserAnonymizationProgressRequest<'a> {
     client: &'a crate::core::Client,
     task_id: Option<i64>,
@@ -628,6 +636,7 @@ impl<'a> GetUserAnonymizationProgressRequest<'a> {
 }
 
 /// Validates user anonymization re-run process.
+#[derive(Clone)]
 pub struct ValidateUserAnonymizationRerunRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -711,6 +720,7 @@ impl<'a> ValidateUserAnonymizationRerunRequest<'a> {
 }
 
 /// Schedules a user anonymization process. Requires system admin permission.
+#[derive(Clone)]
 pub struct ScheduleUserAnonymizationRerunRequest<'a> {
     client: &'a crate::core::Client,
     user_anonymization_rerun_request: UserAnonymizationRerunRequest,
@@ -750,6 +760,7 @@ impl<'a> ScheduleUserAnonymizationRerunRequest<'a> {
 }
 
 /// Removes stale user anonymization task, for scenarios when the node that was executing it is no longer alive. Use it only after making sure that the parent node of the task is actually down, and not just having connectivity issues.
+#[derive(Clone)]
 pub struct UnlockAnonymizationRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -781,6 +792,7 @@ impl<'a> UnlockAnonymizationRequest<'a> {
 }
 
 /// Add user to given application. Admin permission will be required to perform this operation.
+#[derive(Clone)]
 pub struct AddUserToApplicationRequest<'a> {
     client: &'a crate::core::Client,
     application_key: Option<String>,
@@ -836,6 +848,7 @@ impl<'a> AddUserToApplicationRequest<'a> {
 }
 
 /// Remove user from given application. Admin permission will be required to perform this operation.
+#[derive(Clone)]
 pub struct RemoveUserFromApplicationRequest<'a> {
     client: &'a crate::core::Client,
     application_key: Option<String>,
@@ -891,6 +904,7 @@ impl<'a> RemoveUserFromApplicationRequest<'a> {
 }
 
 /// Returns a list of users that match the search string and can be assigned issues for all the given projects.
+#[derive(Clone)]
 pub struct FindBulkAssignableUsersRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<i64>,
@@ -961,6 +975,7 @@ impl<'a> FindBulkAssignableUsersRequest<'a> {
 }
 
 /// Returns a list of users that match the search string. This resource cannot be accessed anonymously. Please note that this resource should be called with an issue key when a list of assignable users is retrieved. For create only a project key should be supplied. The list of assignable users may be incorrect if it's called with the project key for editing.
+#[derive(Clone)]
 pub struct FindAssignableUsersRequest<'a> {
     client: &'a crate::core::Client,
     issue_key: Option<String>,
@@ -1053,6 +1068,7 @@ impl<'a> FindAssignableUsersRequest<'a> {
 }
 
 /// Converts temporary avatar into a real avatar
+#[derive(Clone)]
 pub struct CreateUserAvatarFromTemporaryRequest<'a> {
     client: &'a crate::core::Client,
     username: Option<String>,
@@ -1103,6 +1119,7 @@ impl<'a> CreateUserAvatarFromTemporaryRequest<'a> {
 }
 
 /// Updates the avatar for the user.
+#[derive(Clone)]
 pub struct UpdateUserAvatarRequest<'a> {
     client: &'a crate::core::Client,
     username: Option<String>,
@@ -1158,6 +1175,7 @@ impl<'a> UpdateUserAvatarRequest<'a> {
 /// curl -c cookiejar.txt -X POST -u admin:admin -H "X-Atlassian-Token: no-check" \
 ///   -F "avatar=@mynewavatar.png;type=image/png" \
 ///   '<http://localhost:8090/jira/rest/api/2/user/avatar/temporary?username=admin>'
+#[derive(Clone)]
 pub struct StoreTemporaryUserAvatarUsingMultiPartRequest<'a> {
     client: &'a crate::core::Client,
     username: Option<String>,
@@ -1217,6 +1235,7 @@ impl<'a> StoreTemporaryUserAvatarUsingMultiPartRequest<'a> {
 }
 
 /// Deletes avatar
+#[derive(Clone)]
 pub struct DeleteUserAvatarRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -1262,6 +1281,7 @@ impl<'a> DeleteUserAvatarRequest<'a> {
 }
 
 /// Returns all avatars which are visible for the currently logged in user.
+#[derive(Clone)]
 pub struct GetAllUserAvatarsRequest<'a> {
     client: &'a crate::core::Client,
     username: Option<String>,
@@ -1304,6 +1324,7 @@ impl<'a> GetAllUserAvatarsRequest<'a> {
 }
 
 /// Returns the default columns for the given user. Admin permission will be required to get columns for a user other than the currently logged in user.
+#[derive(Clone)]
 pub struct DefaultColumnsRequest<'a> {
     client: &'a crate::core::Client,
     username: Option<String>,
@@ -1346,6 +1367,7 @@ impl<'a> DefaultColumnsRequest<'a> {
 }
 
 /// Sets the default columns for the given user. Admin permission will be required to get columns for a user other than the currently logged in user.
+#[derive(Clone)]
 pub struct SetColumnsUrlEncodedRequest<'a> {
     client: &'a crate::core::Client,
     username: Option<String>,
@@ -1405,6 +1427,7 @@ impl<'a> SetColumnsUrlEncodedRequest<'a> {
 }
 
 /// Reset the default columns for the given user to the system default. Admin permission will be required to get columns for a user other than the currently logged in user.
+#[derive(Clone)]
 pub struct ResetUserColumnsRequest<'a> {
     client: &'a crate::core::Client,
     username: Option<String>,
@@ -1454,6 +1477,7 @@ impl<'a> ResetUserColumnsRequest<'a> {
 /// is added, removed, enabled, disabled, or synchronized.
 /// A System Administrator can also flush the cache manually.
 /// Related JAC ticket: <https://jira.atlassian.com/browse/JRASERVER-68797>
+#[derive(Clone)]
 pub struct GetDuplicatedUsersCountRequest<'a> {
     client: &'a crate::core::Client,
     flush: Option<bool>,
@@ -1502,6 +1526,7 @@ impl<'a> GetDuplicatedUsersCountRequest<'a> {
 /// is added, removed, enabled, disabled, or synchronized.
 /// A System Administrator can also flush the cache manually.
 /// Related JAC ticket: <https://jira.atlassian.com/browse/JRASERVER-68797>
+#[derive(Clone)]
 pub struct GetDuplicatedUsersMappingRequest<'a> {
     client: &'a crate::core::Client,
     flush: Option<bool>,
@@ -1554,6 +1579,7 @@ impl<'a> GetDuplicatedUsersMappingRequest<'a> {
 ///
 ///
 /// Available since Jira Data Center 11.0, and in 10.3 LTS.
+#[derive(Clone)]
 pub struct GetUserListRequest<'a> {
     client: &'a crate::core::Client,
     cursor: Option<i64>,
@@ -1608,6 +1634,7 @@ impl<'a> GetUserListRequest<'a> {
 }
 
 /// Modify user password.
+#[derive(Clone)]
 pub struct ChangeUserPasswordRequest<'a> {
     client: &'a crate::core::Client,
     key: Option<String>,
@@ -1671,6 +1698,7 @@ impl<'a> ChangeUserPasswordRequest<'a> {
 }
 
 /// Returns a list of users matching query with highlighting.
+#[derive(Clone)]
 pub struct FindUsersForPickerRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<i64>,
@@ -1752,6 +1780,7 @@ impl<'a> FindUsersForPickerRequest<'a> {
 }
 
 /// Returns the keys of all properties for the user identified by the key or by the id.
+#[derive(Clone)]
 pub struct GetUserPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     user_key: Option<String>,
@@ -1807,6 +1836,7 @@ impl<'a> GetUserPropertyKeysRequest<'a> {
 }
 
 /// Returns the value of the property with a given key from the user identified by the key or by the id.
+#[derive(Clone)]
 pub struct GetUserPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -1867,6 +1897,7 @@ impl<'a> GetUserPropertyRequest<'a> {
 /// Sets the value of the specified user's property.
 /// You can use this resource to store a custom data against the user identified by the key or by the id. The user
 /// who stores the data is required to have permissions to administer the user.
+#[derive(Clone)]
 pub struct SetUserPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -1932,6 +1963,7 @@ impl<'a> SetUserPropertyRequest<'a> {
 }
 
 /// Removes the property from the user identified by the key or by the id. The user who removes the property is required to have permissions to administer the user.
+#[derive(Clone)]
 pub struct DeleteUserPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -1990,6 +2022,7 @@ impl<'a> DeleteUserPropertyRequest<'a> {
 }
 
 /// Finds users.
+#[derive(Clone)]
 pub struct FindUsersRequest<'a> {
     client: &'a crate::core::Client,
     include_inactive: Option<bool>,
@@ -2084,6 +2117,7 @@ impl<'a> FindUsersRequest<'a> {
 }
 
 /// Invalidates session of given user.
+#[derive(Clone)]
 pub struct DeleteSessionRequest<'a> {
     client: &'a crate::core::Client,
     username: String,
@@ -2116,6 +2150,7 @@ impl<'a> DeleteSessionRequest<'a> {
 }
 
 /// Returns a list of active users that match the search string. This resource cannot be accessed anonymously and requires the Browse Users global permission. Given an issue key this resource will provide a list of users that match the search string and have the browse issue permission for the issue provided.
+#[derive(Clone)]
 pub struct FindUsersWithBrowsePermissionRequest<'a> {
     client: &'a crate::core::Client,
     project_key: Option<String>,

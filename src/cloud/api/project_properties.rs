@@ -69,6 +69,7 @@ impl<'a> ProjectPropertiesService<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+#[derive(Clone)]
 pub struct GetProjectPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -105,6 +106,7 @@ impl<'a> GetProjectPropertyKeysRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the property.
+#[derive(Clone)]
 pub struct GetProjectPropertyRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -152,6 +154,7 @@ impl<'a> GetProjectPropertyRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project in which the property is created.
+#[derive(Clone)]
 pub struct SetProjectPropertyRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -201,6 +204,7 @@ impl<'a> SetProjectPropertyRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the property.
+#[derive(Clone)]
 pub struct DeleteProjectPropertyRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,

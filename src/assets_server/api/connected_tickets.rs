@@ -19,6 +19,7 @@ impl<'a> ConnectedTicketsService<'a> {
 }
 
 /// Retrieve all tickets connected to the specified object.
+#[derive(Clone)]
 pub struct FindObjectTicketsRequest<'a> {
     client: &'a crate::core::Client,
     filter_id: Option<String>,

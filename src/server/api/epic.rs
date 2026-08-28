@@ -106,6 +106,7 @@ impl<'a> EpicService<'a> {
 }
 
 /// Returns all issues that do not belong to any epic. This only includes issues that the user has permission to view. Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
+#[derive(Clone)]
 pub struct GetIssuesWithoutEpicRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetIssuesWithoutEpicRequestExpand>,
@@ -213,6 +214,7 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
 }
 
 /// Removes issues from epics. The user needs to have the edit issue permission for all issue they want to remove from epics. The maximum number of issues that can be moved in one operation is 50.
+#[derive(Clone)]
 pub struct RemoveIssuesFromEpicRequest<'a> {
     client: &'a crate::core::Client,
     issue_assign_request: IssueAssignRequest,
@@ -250,6 +252,7 @@ impl<'a> RemoveIssuesFromEpicRequest<'a> {
 }
 
 /// Returns the epic for a given epic Id. This epic will only be returned if the user has permission to view it.
+#[derive(Clone)]
 pub struct GetEpicRequest<'a> {
     client: &'a crate::core::Client,
     epic_id_or_key: String,
@@ -282,6 +285,7 @@ impl<'a> GetEpicRequest<'a> {
 }
 
 /// Performs a partial update of the epic. A partial update means that fields not present in the request JSON will not be updated. Valid values for color are color_1 to color_9.
+#[derive(Clone)]
 pub struct PartiallyUpdateEpicRequest<'a> {
     client: &'a crate::core::Client,
     epic_id_or_key: String,
@@ -322,6 +326,7 @@ impl<'a> PartiallyUpdateEpicRequest<'a> {
 }
 
 /// Returns all issues that belong to the epic, for the given epic Id. This only includes issues that the user has permission to view. Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
+#[derive(Clone)]
 pub struct GetIssuesForEpicRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetIssuesForEpicRequestExpand>,
@@ -441,6 +446,7 @@ impl<'a> GetIssuesForEpicRequest<'a> {
 }
 
 /// Moves issues to an epic, for a given epic id. Issues can be only in a single epic at the same time. That means that already assigned issues to an epic, will not be assigned to the previous epic anymore. The user needs to have the edit issue permission for all issue they want to move and to the epic. The maximum number of issues that can be moved in one operation is 50.
+#[derive(Clone)]
 pub struct MoveIssuesToEpicRequest<'a> {
     client: &'a crate::core::Client,
     epic_id_or_key: String,
@@ -485,6 +491,7 @@ impl<'a> MoveIssuesToEpicRequest<'a> {
 }
 
 /// Moves (ranks) an epic before or after a given epic. If rankCustomFieldId is not defined, the default rank field will be used.
+#[derive(Clone)]
 pub struct RankEpicsRequest<'a> {
     client: &'a crate::core::Client,
     epic_id_or_key: String,

@@ -180,6 +180,7 @@ impl<'a> IssueTypeSchemesService<'a> {
 /// Only issue type schemes used in classic projects are returned.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetAllIssueTypeSchemesRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -295,6 +296,7 @@ impl<'a> GetAllIssueTypeSchemesRequest<'a> {
 /// Creates an issue type scheme.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct CreateIssueTypeSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_scheme_details: IssueTypeSchemeDetails,
@@ -336,6 +338,7 @@ impl<'a> CreateIssueTypeSchemeRequest<'a> {
 /// Only issue type scheme items used in classic projects are returned.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetIssueTypeSchemesMappingRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -408,6 +411,7 @@ impl<'a> GetIssueTypeSchemesMappingRequest<'a> {
 /// Only issue type schemes used in classic projects are returned.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetIssueTypeSchemeForProjectsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -472,6 +476,7 @@ impl<'a> GetIssueTypeSchemeForProjectsRequest<'a> {
 /// Issue type schemes can only be assigned to classic projects.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct AssignIssueTypeSchemeToProjectRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_scheme_project_association: IssueTypeSchemeProjectAssociation,
@@ -514,6 +519,7 @@ impl<'a> AssignIssueTypeSchemeToProjectRequest<'a> {
 /// Updates an issue type scheme.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct UpdateIssueTypeSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_scheme_id: i64,
@@ -564,6 +570,7 @@ impl<'a> UpdateIssueTypeSchemeRequest<'a> {
 /// A validation error will be returned if the specified scheme is associated with one or more projects. Use [Get issue type scheme API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-get) (with the projects expand, and id query parameter) to get a list of projects. Then, use [Assign issue type scheme to project API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-project-put) to associate all projects to another scheme before deleting.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeleteIssueTypeSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_scheme_id: i64,
@@ -602,6 +609,7 @@ impl<'a> DeleteIssueTypeSchemeRequest<'a> {
 /// If any of the issue types exist in the issue type scheme, the operation fails and no issue types are added.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct AddIssueTypesToIssueTypeSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_scheme_id: i64,
@@ -650,6 +658,7 @@ impl<'a> AddIssueTypesToIssueTypeSchemeRequest<'a> {
 ///  *  the issue type in `after` must not be in the issue type list.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct ReorderIssueTypesInIssueTypeSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_scheme_id: i64,
@@ -702,6 +711,7 @@ impl<'a> ReorderIssueTypesInIssueTypeSchemeRequest<'a> {
 ///  *  the last standard issue type from an issue type scheme.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct RemoveIssueTypeFromIssueTypeSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_scheme_id: i64,

@@ -59,6 +59,7 @@ impl<'a> WebhooksService<'a> {
 }
 
 /// Returns the webhooks registered in this instance. Requires administrator permission.
+#[derive(Clone)]
 pub struct GetWebhooksRequest<'a> {
     client: &'a crate::core::Client,
     event: Option<String>,
@@ -138,6 +139,7 @@ impl<'a> GetWebhooksRequest<'a> {
 }
 
 /// Registers a webhook. Requires administrator permission.
+#[derive(Clone)]
 pub struct CreateWebhookRequest<'a> {
     client: &'a crate::core::Client,
     webhook_input: WebhookInput,
@@ -175,6 +177,7 @@ impl<'a> CreateWebhookRequest<'a> {
 }
 
 /// Returns a registered webhook. Requires administrator permission.
+#[derive(Clone)]
 pub struct GetWebhookRequest<'a> {
     client: &'a crate::core::Client,
     webhook_id: i64,
@@ -207,6 +210,7 @@ impl<'a> GetWebhookRequest<'a> {
 }
 
 /// Replaces a registered webhook. Requires administrator permission.
+#[derive(Clone)]
 pub struct UpdateWebhookRequest<'a> {
     client: &'a crate::core::Client,
     webhook_id: i64,
@@ -247,6 +251,7 @@ impl<'a> UpdateWebhookRequest<'a> {
 }
 
 /// Unregisters a webhook. Requires administrator permission.
+#[derive(Clone)]
 pub struct DeleteWebhookRequest<'a> {
     client: &'a crate::core::Client,
     webhook_id: i64,
@@ -279,6 +284,7 @@ impl<'a> DeleteWebhookRequest<'a> {
 }
 
 /// Returns how a webhook has been delivering. Requires administrator permission.
+#[derive(Clone)]
 pub struct GetWebhookStatisticsRequest<'a> {
     client: &'a crate::core::Client,
     webhook_id: i64,
@@ -311,6 +317,7 @@ impl<'a> GetWebhookStatisticsRequest<'a> {
 }
 
 /// Returns the delivery statistics of a webhook, one entry per event it delivers. Requires administrator permission.
+#[derive(Clone)]
 pub struct GetWebhookStatisticsSummaryRequest<'a> {
     client: &'a crate::core::Client,
     webhook_id: i64,
@@ -343,6 +350,7 @@ impl<'a> GetWebhookStatisticsSummaryRequest<'a> {
 }
 
 /// Returns the transitions a webhook has been through. Requires administrator permission. The shape of an entry is not described here: an instance that has never delivered a webhook answers with an empty list, and guessing what a populated one holds would be worse than leaving it to the caller.
+#[derive(Clone)]
 pub struct GetWebhookTransitionsRequest<'a> {
     client: &'a crate::core::Client,
     webhook_id: i64,
@@ -375,6 +383,7 @@ impl<'a> GetWebhookTransitionsRequest<'a> {
 }
 
 /// Returns the most recent delivery of a webhook. Requires administrator permission. Until the webhook has been delivered once Jira answers 204 and this resolves to `undefined`; the 204 is deliberately not declared, because declaring it is what makes the whole call type as `void` and hides the body that does arrive.
+#[derive(Clone)]
 pub struct GetLatestWebhookInvocationRequest<'a> {
     client: &'a crate::core::Client,
     webhook_id: i64,

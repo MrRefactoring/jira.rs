@@ -29,6 +29,7 @@ impl<'a> WorkflowStatusesService<'a> {
 }
 
 /// Returns a list of all statuses
+#[derive(Clone)]
 pub struct GetStatusesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -57,6 +58,7 @@ impl<'a> GetStatusesRequest<'a> {
 }
 
 /// Returns paginated list of filtered statuses
+#[derive(Clone)]
 pub struct GetPaginatedStatusesRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_ids: Option<Vec<String>>,
@@ -151,6 +153,7 @@ impl<'a> GetPaginatedStatusesRequest<'a> {
 }
 
 /// Returns a full representation of the Status having the given id or name.
+#[derive(Clone)]
 pub struct GetStatusRequest<'a> {
     client: &'a crate::core::Client,
     id_or_name: String,

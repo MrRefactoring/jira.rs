@@ -64,6 +64,7 @@ impl<'a> IssueLinkTypesService<'a> {
 }
 
 /// Returns a list of available issue link types, if issue linking is enabled.
+#[derive(Clone)]
 pub struct GetIssueLinkTypesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -92,6 +93,7 @@ impl<'a> GetIssueLinkTypesRequest<'a> {
 }
 
 /// Create a new issue link type.
+#[derive(Clone)]
 pub struct CreateIssueLinkTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_link_type_json: IssueLinkTypeJson,
@@ -131,6 +133,7 @@ impl<'a> CreateIssueLinkTypeRequest<'a> {
 /// Resets the order of issue link types alphabetically.
 ///
 /// Available since Jira Data Center 10.4.
+#[derive(Clone)]
 pub struct ResetOrderRequest<'a> {
     client: &'a crate::core::Client,
     issue_link_type_reset_order_request: IssueLinkTypeResetOrderRequest,
@@ -171,6 +174,7 @@ impl<'a> ResetOrderRequest<'a> {
 }
 
 /// Returns for a given issue link type id all information about this issue link type.
+#[derive(Clone)]
 pub struct GetIssueLinkTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_link_type_id: String,
@@ -203,6 +207,7 @@ impl<'a> GetIssueLinkTypeRequest<'a> {
 }
 
 /// Update the specified issue link type.
+#[derive(Clone)]
 pub struct UpdateIssueLinkTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_link_type_id: String,
@@ -247,6 +252,7 @@ impl<'a> UpdateIssueLinkTypeRequest<'a> {
 }
 
 /// Delete the specified issue link type.
+#[derive(Clone)]
 pub struct DeleteIssueLinkTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_link_type_id: String,
@@ -281,6 +287,7 @@ impl<'a> DeleteIssueLinkTypeRequest<'a> {
 /// Moves the issue link type to a new position within the list.
 ///
 /// Available since Jira Data Center 10.4.
+#[derive(Clone)]
 pub struct MoveIssueLinkTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_link_type_id: String,

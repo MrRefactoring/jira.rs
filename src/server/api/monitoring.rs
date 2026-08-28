@@ -60,6 +60,7 @@ impl<'a> MonitoringService<'a> {
 }
 
 /// Checks if App Monitoring is enabled
+#[derive(Clone)]
 pub struct IsAppMonitoringEnabledRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -88,6 +89,7 @@ impl<'a> IsAppMonitoringEnabledRequest<'a> {
 }
 
 /// Enables or disables App Monitoring
+#[derive(Clone)]
 pub struct SetAppMonitoringEnabledRequest<'a> {
     client: &'a crate::core::Client,
     app_monitoring_rest_entity: AppMonitoringRestEntity,
@@ -125,6 +127,7 @@ impl<'a> SetAppMonitoringEnabledRequest<'a> {
 }
 
 /// Checks if IPD Monitoring is enabled
+#[derive(Clone)]
 pub struct IsIpdMonitoringEnabledRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -153,6 +156,7 @@ impl<'a> IsIpdMonitoringEnabledRequest<'a> {
 }
 
 /// Enables or disables IPD Monitoring
+#[derive(Clone)]
 pub struct SetIpdMonitoringEnabledRequest<'a> {
     client: &'a crate::core::Client,
     ipd_monitoring_rest_entity: IpdMonitoringRestEntity,
@@ -190,6 +194,7 @@ impl<'a> SetIpdMonitoringEnabledRequest<'a> {
 }
 
 /// Checks if JMX metrics are being exposed
+#[derive(Clone)]
 pub struct AreMetricsExposedRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -221,6 +226,7 @@ impl<'a> AreMetricsExposedRequest<'a> {
 }
 
 /// Gets the available JMX metrics
+#[derive(Clone)]
 pub struct GetAvailableMetricsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -252,6 +258,7 @@ impl<'a> GetAvailableMetricsRequest<'a> {
 }
 
 /// Starts exposing JMX metrics
+#[derive(Clone)]
 pub struct StartRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -283,6 +290,7 @@ impl<'a> StartRequest<'a> {
 }
 
 /// Stops exposing JMX metrics
+#[derive(Clone)]
 pub struct StopRequest<'a> {
     client: &'a crate::core::Client,
 }

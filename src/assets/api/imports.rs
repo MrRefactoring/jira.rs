@@ -19,6 +19,7 @@ impl<'a> ImportsService<'a> {
 }
 
 /// Start configured imports. To see an ongoing import see the Progress resource
+#[derive(Clone)]
 pub struct StartImportRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

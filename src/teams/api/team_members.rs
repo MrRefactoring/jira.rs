@@ -39,6 +39,7 @@ impl<'a> TeamMembersService<'a> {
 }
 
 /// Returns a set of account IDs who are members of the team, alongside a pagination cursor to retrieve the next page (if available).
+#[derive(Clone)]
 pub struct FetchMembersRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -105,6 +106,7 @@ impl<'a> FetchMembersRequest<'a> {
 }
 
 /// The account IDs specified will be added to the team.
+#[derive(Clone)]
 pub struct AddMembersRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -155,6 +157,7 @@ impl<'a> AddMembersRequest<'a> {
 }
 
 /// The account IDs specified will be removed from the team.
+#[derive(Clone)]
 pub struct RemoveMembersRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,

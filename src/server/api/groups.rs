@@ -48,6 +48,7 @@ impl<'a> GroupsService<'a> {
 }
 
 /// Creates a group by given group parameter
+#[derive(Clone)]
 pub struct CreateGroupRequest<'a> {
     client: &'a crate::core::Client,
     add_group: Option<AddGroup>,
@@ -91,6 +92,7 @@ impl<'a> CreateGroupRequest<'a> {
 }
 
 /// Deletes a group by given group parameter
+#[derive(Clone)]
 pub struct RemoveGroupRequest<'a> {
     client: &'a crate::core::Client,
     groupname: String,
@@ -135,6 +137,7 @@ impl<'a> RemoveGroupRequest<'a> {
 }
 
 /// Returns a paginated list of users who are members of the specified group and its subgroups
+#[derive(Clone)]
 pub struct GetUsersFromGroupRequest<'a> {
     client: &'a crate::core::Client,
     include_inactive_users: Option<String>,
@@ -206,6 +209,7 @@ impl<'a> GetUsersFromGroupRequest<'a> {
 }
 
 /// Adds given user to a group
+#[derive(Clone)]
 pub struct AddUserToGroupRequest<'a> {
     client: &'a crate::core::Client,
     groupname: String,
@@ -253,6 +257,7 @@ impl<'a> AddUserToGroupRequest<'a> {
 }
 
 /// Removes given user from a group
+#[derive(Clone)]
 pub struct RemoveUserFromGroupRequest<'a> {
     client: &'a crate::core::Client,
     groupname: String,
@@ -288,6 +293,7 @@ impl<'a> RemoveUserFromGroupRequest<'a> {
 }
 
 /// Returns groups with substrings matching a given query
+#[derive(Clone)]
 pub struct FindGroupsRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<String>,

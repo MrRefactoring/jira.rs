@@ -97,6 +97,7 @@ impl<'a> RequestTypesService<'a> {
 /// In addition, the following information about the current user's permissions for the request type is returned:
 /// * `canRaiseOnBehalfOf` field - Returns true, if the user has permission to raise requests on behalf of customers. Otherwise, returns false.
 /// * `canAddRequestParticipants` field - Returns true, if the user can add request participants. Otherwise, returns false.
+#[derive(Clone)]
 pub struct GetRequestTypeFieldsRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -138,6 +139,7 @@ impl<'a> GetRequestTypeFieldsRequest<'a> {
 }
 
 /// Returns all request type groups from a service project, for a given service project Id. The groups will be in the same order as the order in which they appear on the customer portal
+#[derive(Clone)]
 pub struct GetRequestTypeGroupsRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -199,6 +201,7 @@ impl<'a> GetRequestTypeGroupsRequest<'a> {
 }
 
 /// Returns all request types from a service project, for a given service project Id.
+#[derive(Clone)]
 pub struct GetRequestTypesRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -309,6 +312,7 @@ impl<'a> GetRequestTypesRequest<'a> {
 ///  **Permissions:**
 ///
 /// The calling user must be a project administrator for the service project project.
+#[derive(Clone)]
 pub struct CreateRequestTypeRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -365,6 +369,7 @@ impl<'a> CreateRequestTypeRequest<'a> {
 ///  **Permissions:**
 ///
 /// The calling user must be a project administrator for the service project project.
+#[derive(Clone)]
 pub struct UpdateRequestTypeRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -415,6 +420,7 @@ impl<'a> UpdateRequestTypeRequest<'a> {
 }
 
 /// Returns a request type for a given request type Id.
+#[derive(Clone)]
 pub struct GetRequestTypeByIdRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -480,6 +486,7 @@ impl<'a> GetRequestTypeByIdRequest<'a> {
 ///  **Permissions:**
 ///
 /// The calling user must be a project administrator for the service project project.
+#[derive(Clone)]
 pub struct DeleteRequestTypeRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,

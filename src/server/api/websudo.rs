@@ -17,6 +17,7 @@ impl<'a> WebsudoService<'a> {
 }
 
 /// This method invalidates the any current WebSudo session.
+#[derive(Clone)]
 pub struct ReleaseRequest<'a> {
     client: &'a crate::core::Client,
     body: Option<String>,

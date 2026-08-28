@@ -42,6 +42,7 @@ impl<'a> SchemasService<'a> {
 /// Get all SCIM features metadata of your organization.
 ///
 /// **Note:** This API does not support filtering, pagination, or sorting.
+#[derive(Clone)]
 pub struct GetSchemasRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
@@ -76,6 +77,7 @@ impl<'a> GetSchemasRequest<'a> {
 /// Get the user schemas from the SCIM provider.
 ///
 /// **Note:** This API does not support filtering, pagination, or sorting.
+#[derive(Clone)]
 pub struct GetUserSchemasRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
@@ -113,6 +115,7 @@ impl<'a> GetUserSchemasRequest<'a> {
 /// Get the group schemas from the SCIM provider.
 ///
 /// **Note:** This API does not support filtering, pagination, or sorting.
+#[derive(Clone)]
 pub struct GetGroupSchemasRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
@@ -150,6 +153,7 @@ impl<'a> GetGroupSchemasRequest<'a> {
 /// Get the user enterprise extension schemas from the SCIM provider.
 ///
 /// **Note:** This API does not support filtering, pagination, or sorting.
+#[derive(Clone)]
 pub struct GetExtensionUserSchemasRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,

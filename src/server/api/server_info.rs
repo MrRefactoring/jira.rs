@@ -19,6 +19,7 @@ impl<'a> ServerInfoService<'a> {
 }
 
 /// Returns general information about the current Jira server.
+#[derive(Clone)]
 pub struct GetServerInfoRequest<'a> {
     client: &'a crate::core::Client,
 }

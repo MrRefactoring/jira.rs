@@ -97,6 +97,7 @@ impl<'a> IssueWorklogPropertiesService<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
 pub struct GetWorklogPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -142,6 +143,7 @@ impl<'a> GetWorklogPropertyKeysRequest<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
 pub struct GetWorklogPropertyRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -202,6 +204,7 @@ impl<'a> GetWorklogPropertyRequest<'a> {
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  *Edit all worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg) to update any worklog or *Edit own worklogs* to update worklogs created by the user.
 ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
 pub struct SetWorklogPropertyRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -264,6 +267,7 @@ impl<'a> SetWorklogPropertyRequest<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
 pub struct DeleteWorklogPropertyRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,

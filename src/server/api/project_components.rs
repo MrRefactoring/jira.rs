@@ -44,6 +44,7 @@ impl<'a> ProjectComponentsService<'a> {
 }
 
 /// Create a component via POST.
+#[derive(Clone)]
 pub struct CreateComponentRequest<'a> {
     client: &'a crate::core::Client,
     component: Option<Component>,
@@ -87,6 +88,7 @@ impl<'a> CreateComponentRequest<'a> {
 }
 
 /// Returns paginated list of filtered active components
+#[derive(Clone)]
 pub struct GetPaginatedComponentsRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<String>,
@@ -168,6 +170,7 @@ impl<'a> GetPaginatedComponentsRequest<'a> {
 }
 
 /// Returns a project component.
+#[derive(Clone)]
 pub struct GetComponentRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -200,6 +203,7 @@ impl<'a> GetComponentRequest<'a> {
 }
 
 /// Modify a component via PUT. Any fields present in the PUT will override existing values. As a convenience, if a field is not present, it is silently ignored.
+#[derive(Clone)]
 pub struct UpdateComponentRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -242,6 +246,7 @@ impl<'a> UpdateComponentRequest<'a> {
 }
 
 /// Delete a project component.
+#[derive(Clone)]
 pub struct DeleteComponentRequest<'a> {
     client: &'a crate::core::Client,
     move_issues_to: Option<String>,
@@ -287,6 +292,7 @@ impl<'a> DeleteComponentRequest<'a> {
 }
 
 /// Returns counts of issues related to this component.
+#[derive(Clone)]
 pub struct GetComponentRelatedIssuesRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

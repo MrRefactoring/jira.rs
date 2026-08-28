@@ -41,6 +41,7 @@ impl<'a> IssueNavigatorSettingsService<'a> {
 /// Returns the default issue navigator columns.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetIssueNavigatorDefaultColumnsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -80,6 +81,7 @@ impl<'a> GetIssueNavigatorDefaultColumnsRequest<'a> {
 /// A navigable field is one that can be used as a column on the issue navigator. Find details of navigable issue columns using [Get fields](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-get).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct SetIssueNavigatorDefaultColumnsRequest<'a> {
     client: &'a crate::core::Client,
     column_request_body: ColumnRequestBody,

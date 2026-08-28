@@ -24,6 +24,7 @@ impl<'a> CommentsService<'a> {
 }
 
 /// Add a comment to an object.
+#[derive(Clone)]
 pub struct CreateCommentRequest<'a> {
     client: &'a crate::core::Client,
     comment: Option<Comment>,
@@ -68,6 +69,7 @@ impl<'a> CreateCommentRequest<'a> {
 }
 
 /// Get the comments for an object by object ID.
+#[derive(Clone)]
 pub struct GetCommentsRequest<'a> {
     client: &'a crate::core::Client,
     asc: Option<String>,

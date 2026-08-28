@@ -40,6 +40,7 @@ impl<'a> RequestTypePermissionsService<'a> {
 
 /// Returns the permissions for a customer request type for a given request type ID.
 /// These permissions control who can create the customer request. The entities that can be granted permissions are users, groups, and organizations.
+#[derive(Clone)]
 pub struct GetPermissionsByRequestTypeIdRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -81,6 +82,7 @@ impl<'a> GetPermissionsByRequestTypeIdRequest<'a> {
 }
 
 /// Upsert the permissions for a customer request type. This operation will overwrite any existing permissions.
+#[derive(Clone)]
 pub struct UpsertRequestTypePermissionRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,

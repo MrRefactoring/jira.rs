@@ -25,6 +25,7 @@ impl<'a> DirectoryService<'a> {
 ///
 /// #### Scopes
 /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:directories:admin`
+#[derive(Clone)]
 pub struct GetDirectoriesForOrgRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,

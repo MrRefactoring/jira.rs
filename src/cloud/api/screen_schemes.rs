@@ -87,6 +87,7 @@ impl<'a> ScreenSchemesService<'a> {
 /// Only screen schemes used in classic projects are returned.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetScreenSchemesRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -199,6 +200,7 @@ impl<'a> GetScreenSchemesRequest<'a> {
 /// Creates a screen scheme.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct CreateScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     screen_scheme_details: ScreenSchemeDetails,
@@ -238,6 +240,7 @@ impl<'a> CreateScreenSchemeRequest<'a> {
 /// Updates a screen scheme. Only screen schemes used in classic projects can be updated.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct UpdateScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     screen_scheme_id: String,
@@ -286,6 +289,7 @@ impl<'a> UpdateScreenSchemeRequest<'a> {
 /// Only screens schemes used in classic projects can be deleted.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeleteScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     screen_scheme_id: String,

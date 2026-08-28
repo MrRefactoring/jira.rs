@@ -27,6 +27,7 @@ impl<'a> ProgressService<'a> {
 /// Get progress of ongoing tasks
 /// Retrieve the progress of the most recent reindex task `/progress/category/insight-reindex/reindex`
 /// Retrieve the progress of an import task `/progress/category/imports/{id}`.
+#[derive(Clone)]
 pub struct GetProgressForCategoryAndResourceIdRequest<'a> {
     client: &'a crate::core::Client,
     resourceid: String,

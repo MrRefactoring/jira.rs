@@ -24,6 +24,7 @@ impl<'a> PermissionsService<'a> {
 }
 
 /// Returns all permissions in the system and whether the currently logged in user has them. You can optionally provide a specific context to get permissions for (projectKey OR projectId OR issueKey OR issueId)
+#[derive(Clone)]
 pub struct GetPermissionsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id: Option<String>,
@@ -105,6 +106,7 @@ impl<'a> GetPermissionsRequest<'a> {
 }
 
 /// Returns all permissions that are present in the Jira instance - Global, Project and the global ones added by plugins
+#[derive(Clone)]
 pub struct GetAllPermissionsRequest<'a> {
     client: &'a crate::core::Client,
 }

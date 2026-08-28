@@ -55,6 +55,7 @@ impl<'a> IssueCustomFieldConfigurationAppsService<'a> {
 /// Otherwise, all configurations are returned.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the Forge app that provided the custom field type.
+#[derive(Clone)]
 pub struct GetCustomFieldConfigurationRequest<'a> {
     client: &'a crate::core::Client,
     field_id_or_key: String,
@@ -193,6 +194,7 @@ impl<'a> GetCustomFieldConfigurationRequest<'a> {
 /// Update the configuration for contexts of a custom field of a [type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/) created by a [Forge app](https://developer.atlassian.com/platform/forge/).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the Forge app that created the custom field type.
+#[derive(Clone)]
 pub struct UpdateCustomFieldConfigurationRequest<'a> {
     client: &'a crate::core::Client,
     field_id_or_key: String,

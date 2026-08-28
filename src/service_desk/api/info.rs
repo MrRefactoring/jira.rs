@@ -23,6 +23,7 @@ impl<'a> InfoService<'a> {
 /// This method retrieves information about the Jira Service Management instance such as software version, builds, and related links.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: None, the user does not need to be logged in.
+#[derive(Clone)]
 pub struct GetInfoRequest<'a> {
     client: &'a crate::core::Client,
 }

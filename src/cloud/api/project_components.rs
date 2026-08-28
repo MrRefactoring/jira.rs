@@ -158,6 +158,7 @@ impl<'a> ProjectComponentsService<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+#[derive(Clone)]
 pub struct FindComponentsForProjectsRequest<'a> {
     client: &'a crate::core::Client,
     project_ids_or_keys: Option<Vec<String>>,
@@ -258,6 +259,7 @@ impl<'a> FindComponentsForProjectsRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project in which the component is created or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct CreateComponentRequest<'a> {
     client: &'a crate::core::Client,
     project_component: ProjectComponent,
@@ -298,6 +300,7 @@ impl<'a> CreateComponentRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for project containing the component.
+#[derive(Clone)]
 pub struct GetComponentRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -334,6 +337,7 @@ impl<'a> GetComponentRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the component or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct UpdateComponentRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -373,6 +377,7 @@ impl<'a> UpdateComponentRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the component or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeleteComponentRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -427,6 +432,7 @@ impl<'a> DeleteComponentRequest<'a> {
 ///  *  **Granular**: `read:field:jira`, `read:project.component:jira`
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetComponentRelatedIssuesRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -465,6 +471,7 @@ impl<'a> GetComponentRelatedIssuesRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+#[derive(Clone)]
 pub struct GetProjectComponentsPaginatedRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -581,6 +588,7 @@ impl<'a> GetProjectComponentsPaginatedRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+#[derive(Clone)]
 pub struct GetProjectComponentsRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,

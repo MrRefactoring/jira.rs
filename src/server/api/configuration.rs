@@ -19,6 +19,7 @@ impl<'a> ConfigurationService<'a> {
 }
 
 /// Returns the information if the optional features in Jira are enabled or disabled. If the time tracking is enabled, it also returns the detailed information about time tracking configuration.
+#[derive(Clone)]
 pub struct GetConfigurationRequest<'a> {
     client: &'a crate::core::Client,
 }

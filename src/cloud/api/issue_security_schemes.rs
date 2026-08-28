@@ -33,6 +33,7 @@ impl<'a> IssueSecuritySchemesService<'a> {
 /// Returns all [issue security schemes](https://confluence.atlassian.com/x/J4lKLg).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetIssueSecuritySchemesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -67,6 +68,7 @@ impl<'a> GetIssueSecuritySchemesRequest<'a> {
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 ///  *  *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project that uses the requested issue security scheme.
+#[derive(Clone)]
 pub struct GetIssueSecuritySchemeRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,

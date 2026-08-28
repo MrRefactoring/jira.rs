@@ -137,6 +137,7 @@ impl<'a> CustomerRequestsService<'a> {
 /// **Permissions:**
 ///
 /// Only comments that the calling user can see are returned.
+#[derive(Clone)]
 pub struct GetRequestCommentsRequest<'a> {
     client: &'a crate::core::Client,
     internal: Option<String>,
@@ -225,6 +226,7 @@ impl<'a> GetRequestCommentsRequest<'a> {
 /// **Permissions:**
 ///
 /// Setting comment visibility depends on the calling user's permissions. For example, Agents can create either public or internal comments, Unlicensed users can only create internal comments, and Customers can only create public comments.
+#[derive(Clone)]
 pub struct CreateRequestCommentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -276,6 +278,7 @@ impl<'a> CreateRequestCommentRequest<'a> {
 /// **Permissions:**
 ///
 /// The calling user must have permission to view the comment. For example, customers can only view public comments on requests where they are the reporter or a participant whereas agents can see both internal and public comments.
+#[derive(Clone)]
 pub struct GetRequestCommentByIdRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -319,6 +322,7 @@ impl<'a> GetRequestCommentByIdRequest<'a> {
 /// **Note:**
 /// The total number of issues across all pages that can be returned using paginated search is limited to the maxResultWindow, which is defined by the underlying search engine.
 /// The current value is returned in the `maxResultWindow` property of the response. If not set, it means there is no limit.
+#[derive(Clone)]
 pub struct GetMyCustomerRequestsRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -479,6 +483,7 @@ impl<'a> GetMyCustomerRequestsRequest<'a> {
 ///     * `raiseOnBehalfOf` field - Not available to users who only have the Service Desk Customer permission.
 ///     * `requestParticipants` field - Not available to users who only have the Service Desk Customer permission or if the feature is turned off for customers.
 /// * Schema of `requestFieldValues` field is a map of Jira's field's ID and its value, which are JSON ready objects. The object value will be interpreted with JSON semantics according to the specific field requirements. So a simple field like summary or number customer field might take String / Integer while other fields like Multi User Picker will take a more complex object that has JSON semantics. Refer to [Field input formats](https://developer.atlassian.com/server/jira-servicedesk/rest/intro#fieldformats) reference on what field types take what values.
+#[derive(Clone)]
 pub struct CreateCustomerRequestRequest<'a> {
     client: &'a crate::core::Client,
     request_create: Option<RequestCreate>,
@@ -523,6 +528,7 @@ impl<'a> CreateCustomerRequestRequest<'a> {
 }
 
 /// Returns the customer request for a given request Id/key.
+#[derive(Clone)]
 pub struct GetCustomerRequestByIdOrKeyRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -573,6 +579,7 @@ impl<'a> GetCustomerRequestByIdOrKeyRequest<'a> {
 }
 
 /// Returns all users participating in a customer request, for a given request Id/key.
+#[derive(Clone)]
 pub struct GetRequestParticipantsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -640,6 +647,7 @@ impl<'a> GetRequestParticipantsRequest<'a> {
 /// **Permissions:**
 ///
 /// The calling user must have permission to manage participants for this customer request.
+#[derive(Clone)]
 pub struct AddRequestParticipantsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -726,6 +734,7 @@ impl<'a> AddRequestParticipantsRequest<'a> {
 /// **Permissions:**
 ///
 /// The calling user must have permission to manage participants for this customer request.
+#[derive(Clone)]
 pub struct RemoveRequestParticipantsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -812,6 +821,7 @@ impl<'a> RemoveRequestParticipantsRequest<'a> {
 /// **Permissions:**
 ///
 /// The calling user must be an agent.
+#[derive(Clone)]
 pub struct GetSlaInformationRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -874,6 +884,7 @@ impl<'a> GetSlaInformationRequest<'a> {
 /// **Permissions:**
 ///
 /// The calling user must be an agent.
+#[derive(Clone)]
 pub struct GetSlaInformationByIdRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -915,6 +926,7 @@ impl<'a> GetSlaInformationByIdRequest<'a> {
 }
 
 /// Returns the status transitions for a customer request for a given request Id/key. The status transitions are returned in chronological order.
+#[derive(Clone)]
 pub struct GetCustomerRequestStatusRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,

@@ -185,6 +185,7 @@ impl<'a> DevopsComponentsService<'a> {
 ///
 /// Only Connect apps that define the `jiraDevOpsComponentProvider` module can access this resource.
 /// This resource requires the 'WRITE' scope for Connect apps.
+#[derive(Clone)]
 pub struct SubmitComponentsRequest<'a> {
     client: &'a crate::core::Client,
     properties: Option<std::collections::HashMap<String, serde_json::Value>>,
@@ -272,6 +273,7 @@ impl<'a> SubmitComponentsRequest<'a> {
 ///
 /// Only Connect apps that define the `jiraDevOpsComponentProvider` module can access this resource.
 /// This resource requires the 'DELETE' scope for Connect apps.
+#[derive(Clone)]
 pub struct DeleteComponentsByPropertyRequest<'a> {
     client: &'a crate::core::Client,
     account_id: String,
@@ -324,6 +326,7 @@ impl<'a> DeleteComponentsByPropertyRequest<'a> {
 ///
 /// Only Connect apps that define the `jiraDevOpsComponentProvider` module can access this resource.
 /// This resource requires the 'READ' scope for Connect apps.
+#[derive(Clone)]
 pub struct GetComponentByIdRequest<'a> {
     client: &'a crate::core::Client,
     component_id: String,
@@ -364,6 +367,7 @@ impl<'a> GetComponentByIdRequest<'a> {
 ///
 /// Only Connect apps that define the `jiraDevOpsComponentProvider` module can access this resource.
 /// This resource requires the 'DELETE' scope for Connect apps.
+#[derive(Clone)]
 pub struct DeleteComponentByIdRequest<'a> {
     client: &'a crate::core::Client,
     component_id: String,

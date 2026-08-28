@@ -46,6 +46,7 @@ impl<'a> PrioritySchemesService<'a> {
 }
 
 /// Returns all priority schemes. All project keys associated with the priority scheme will only be returned if additional query parameter is provided `expand=schemes.projectKeys`
+#[derive(Clone)]
 pub struct GetPrioritySchemesRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<i64>,
@@ -101,6 +102,7 @@ impl<'a> GetPrioritySchemesRequest<'a> {
 }
 
 /// Creates new priority scheme.
+#[derive(Clone)]
 pub struct CreatePrioritySchemeRequest<'a> {
     client: &'a crate::core::Client,
     priority_scheme_update: PrioritySchemeUpdate,
@@ -138,6 +140,7 @@ impl<'a> CreatePrioritySchemeRequest<'a> {
 }
 
 /// Gets a full representation of a priority scheme in JSON format.
+#[derive(Clone)]
 pub struct GetPrioritySchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
@@ -170,6 +173,7 @@ impl<'a> GetPrioritySchemeRequest<'a> {
 }
 
 /// Updates a priority scheme. Update will be rejected if issue migration would be needed as a result of scheme update. Priority scheme update with migration is possible from the UI.
+#[derive(Clone)]
 pub struct UpdatePrioritySchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
@@ -210,6 +214,7 @@ impl<'a> UpdatePrioritySchemeRequest<'a> {
 }
 
 /// Deletes a priority scheme. All projects using deleted scheme will use default priority scheme afterwards.
+#[derive(Clone)]
 pub struct DeletePrioritySchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,

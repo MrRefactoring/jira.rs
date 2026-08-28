@@ -32,6 +32,7 @@ impl<'a> ServiceDeskOrganizationsService<'a> {
 }
 
 /// Returns all organizations within a service project for a given service project id.
+#[derive(Clone)]
 pub struct GetServiceDeskOrganizationsRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -93,6 +94,7 @@ impl<'a> GetServiceDeskOrganizationsRequest<'a> {
 }
 
 /// Adds an organization to a service project for a given service project id and organization id.
+#[derive(Clone)]
 pub struct AddOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -143,6 +145,7 @@ impl<'a> AddOrganizationRequest<'a> {
 }
 
 /// Removes an organization from a service project for a given service project id and organization id.
+#[derive(Clone)]
 pub struct RemoveOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,

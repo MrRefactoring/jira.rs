@@ -129,6 +129,7 @@ impl<'a> ProjectVersionsService<'a> {
 }
 
 /// Retrieve paginated collection of versions matching given query optionally filtered by given project IDs.
+#[derive(Clone)]
 pub struct GetPaginatedVersionsRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<i64>,
@@ -209,6 +210,7 @@ impl<'a> GetPaginatedVersionsRequest<'a> {
 }
 
 /// Creates a version.
+#[derive(Clone)]
 pub struct CreateVersionRequest<'a> {
     client: &'a crate::core::Client,
     version: Version,
@@ -245,6 +247,7 @@ impl<'a> CreateVersionRequest<'a> {
 }
 
 /// Returns the remote version links for a given global ID.
+#[derive(Clone)]
 pub struct GetRemoteVersionLinksRequest<'a> {
     client: &'a crate::core::Client,
     global_id: Option<String>,
@@ -287,6 +290,7 @@ impl<'a> GetRemoteVersionLinksRequest<'a> {
 }
 
 /// Returns a version.
+#[derive(Clone)]
 pub struct GetVersionRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -331,6 +335,7 @@ impl<'a> GetVersionRequest<'a> {
 }
 
 /// Updates a version.
+#[derive(Clone)]
 pub struct UpdateVersionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -366,6 +371,7 @@ impl<'a> UpdateVersionRequest<'a> {
 }
 
 /// Merge versions
+#[derive(Clone)]
 pub struct MergeRequest<'a> {
     client: &'a crate::core::Client,
     move_issues_to: String,
@@ -406,6 +412,7 @@ impl<'a> MergeRequest<'a> {
 /// The move version bean has 2 alternative field value pairs:
 /// - position: An absolute position, which may have a value of 'First', 'Last', 'Earlier' or 'Later'
 /// - after: A version to place this version after.  The value should be the self link of another version
+#[derive(Clone)]
 pub struct MoveVersionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -446,6 +453,7 @@ impl<'a> MoveVersionRequest<'a> {
 }
 
 /// Returns a bean containing the number of fixed in and affected issues for the given version.
+#[derive(Clone)]
 pub struct GetVersionRelatedIssuesRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -478,6 +486,7 @@ impl<'a> GetVersionRelatedIssuesRequest<'a> {
 }
 
 /// Delete a project version, removed values will be replaced with ones specified by the parameters.
+#[derive(Clone)]
 pub struct DeleteVersionAndSwapRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -522,6 +531,7 @@ impl<'a> DeleteVersionAndSwapRequest<'a> {
 }
 
 /// Returns the number of unresolved issues for the given version
+#[derive(Clone)]
 pub struct GetVersionUnresolvedIssuesRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -554,6 +564,7 @@ impl<'a> GetVersionUnresolvedIssuesRequest<'a> {
 }
 
 /// Returns the remote version links associated with the given version ID.
+#[derive(Clone)]
 pub struct GetRemoteVersionLinksByVersionIdRequest<'a> {
     client: &'a crate::core::Client,
     version_id: String,
@@ -586,6 +597,7 @@ impl<'a> GetRemoteVersionLinksByVersionIdRequest<'a> {
 }
 
 /// Create a remote version link via POST. The link's global ID will be taken from the JSON payload if provided; otherwise, it will be generated.
+#[derive(Clone)]
 pub struct CreateOrUpdateRemoteVersionLinkRequest<'a> {
     client: &'a crate::core::Client,
     version_id: String,
@@ -630,6 +642,7 @@ impl<'a> CreateOrUpdateRemoteVersionLinkRequest<'a> {
 }
 
 /// Delete all remote version links for a given version ID.
+#[derive(Clone)]
 pub struct DeleteRemoteVersionLinksByVersionIdRequest<'a> {
     client: &'a crate::core::Client,
     version_id: String,
@@ -662,6 +675,7 @@ impl<'a> DeleteRemoteVersionLinksByVersionIdRequest<'a> {
 }
 
 /// Returns the remote version link associated with the given version ID and global ID.
+#[derive(Clone)]
 pub struct GetRemoteVersionLinkRequest<'a> {
     client: &'a crate::core::Client,
     version_id: String,
@@ -699,6 +713,7 @@ impl<'a> GetRemoteVersionLinkRequest<'a> {
 }
 
 /// Create a remote version link via POST using the provided global ID.
+#[derive(Clone)]
 pub struct CreateOrUpdateRemoteVersionLinkByGlobalIdRequest<'a> {
     client: &'a crate::core::Client,
     version_id: String,
@@ -749,6 +764,7 @@ impl<'a> CreateOrUpdateRemoteVersionLinkByGlobalIdRequest<'a> {
 }
 
 /// Delete a specific remote version link with the given version ID and global ID.
+#[derive(Clone)]
 pub struct DeleteRemoteVersionLinkRequest<'a> {
     client: &'a crate::core::Client,
     version_id: String,

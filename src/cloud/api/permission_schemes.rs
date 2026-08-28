@@ -485,6 +485,7 @@ impl<'a> PermissionSchemesService<'a> {
 ///  *  `WORK_ON_ISSUES`
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct GetAllPermissionSchemesRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetAllPermissionSchemesRequestExpand>,
@@ -536,6 +537,7 @@ impl<'a> GetAllPermissionSchemesRequest<'a> {
 /// Creates a new permission scheme. You can create a permission scheme with or without defining a set of permission grants.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct CreatePermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<CreatePermissionSchemeRequestExpand>,
@@ -590,6 +592,7 @@ impl<'a> CreatePermissionSchemeRequest<'a> {
 /// Returns a permission scheme.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct GetPermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
@@ -652,6 +655,7 @@ impl<'a> GetPermissionSchemeRequest<'a> {
 /// See [About permission schemes and grants](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#about-permission-schemes-and-grants) for more details.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct UpdatePermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
@@ -709,6 +713,7 @@ impl<'a> UpdatePermissionSchemeRequest<'a> {
 /// Deletes a permission scheme.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeletePermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
@@ -743,6 +748,7 @@ impl<'a> DeletePermissionSchemeRequest<'a> {
 /// Returns all permission grants for a permission scheme.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct GetPermissionSchemeGrantsRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
@@ -797,6 +803,7 @@ impl<'a> GetPermissionSchemeGrantsRequest<'a> {
 /// Creates a permission grant in a permission scheme.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct CreatePermissionGrantRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
@@ -859,6 +866,7 @@ impl<'a> CreatePermissionGrantRequest<'a> {
 /// Returns a permission grant.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct GetPermissionSchemeGrantRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
@@ -914,6 +922,7 @@ impl<'a> GetPermissionSchemeGrantRequest<'a> {
 /// Deletes a permission grant from a permission scheme. See [About permission schemes and grants](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#about-permission-schemes-and-grants) for more details.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeletePermissionSchemeEntityRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,

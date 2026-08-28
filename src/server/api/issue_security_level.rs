@@ -19,6 +19,7 @@ impl<'a> IssueSecurityLevelService<'a> {
 }
 
 /// Returns a full representation of the security level that has the given id.
+#[derive(Clone)]
 pub struct GetIssuesecuritylevelRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

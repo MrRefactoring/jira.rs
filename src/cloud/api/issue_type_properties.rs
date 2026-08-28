@@ -77,6 +77,7 @@ impl<'a> IssueTypePropertiesService<'a> {
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) to get the property keys of any issue type.
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) to get the property keys of any issue types associated with the projects the user has permission to browse.
+#[derive(Clone)]
 pub struct GetIssueTypePropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_id: String,
@@ -116,6 +117,7 @@ impl<'a> GetIssueTypePropertyKeysRequest<'a> {
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) to get the details of any issue type.
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) to get the details of any issue types associated with the projects the user has permission to browse.
+#[derive(Clone)]
 pub struct GetIssueTypePropertyRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_id: String,
@@ -157,6 +159,7 @@ impl<'a> GetIssueTypePropertyRequest<'a> {
 /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct SetIssueTypePropertyRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_id: String,
@@ -204,6 +207,7 @@ impl<'a> SetIssueTypePropertyRequest<'a> {
 /// Deletes the [issue type property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeleteIssueTypePropertyRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_id: String,

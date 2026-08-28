@@ -87,6 +87,7 @@ impl<'a> EpicService<'a> {
 }
 
 /// Removes issues from epics. The user needs to have the edit issue permission for all issue they want to remove from epics. The maximum number of issues that can be moved in one operation is 50. **Note:** This operation does not work for epics in next-gen projects. Instead, update the issue using `{ fields: { parent: {} } }`
+#[derive(Clone)]
 pub struct RemoveIssuesFromEpicRequest<'a> {
     client: &'a crate::core::Client,
     issues: Vec<String>,
@@ -123,6 +124,7 @@ impl<'a> RemoveIssuesFromEpicRequest<'a> {
 }
 
 /// Returns all issues that do not belong to any epic. Result pagination is token based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Issues returned from this resource include Software project fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank. **Note:** If you are querying a Team Managed project, do not use this operation. Instead, search for issues that don't belong to an epic by using the [Search for issues using JQL enhanced search](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-jql-get) operation in the Jira platform REST API. Build your JQL query using the `parent is empty` clause. For more information on the `parent` JQL field, see [Advanced searching](https://confluence.atlassian.com/x/dAiiLQ#Advancedsearching-fieldsreference-Parent).
+#[derive(Clone)]
 pub struct GetIssuesWithoutEpicRequest<'a> {
     client: &'a crate::core::Client,
     next_page_token: Option<String>,
@@ -258,6 +260,7 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
 }
 
 /// Returns the epic for a given epic ID. This epic will only be returned if the user has permission to view it. **Note:** This operation does not work for epics in next-gen projects.
+#[derive(Clone)]
 pub struct GetEpicRequest<'a> {
     client: &'a crate::core::Client,
     epic_id_or_key: String,
@@ -290,6 +293,7 @@ impl<'a> GetEpicRequest<'a> {
 }
 
 /// Performs a partial update of the epic. A partial update means that fields not present in the request JSON will not be updated. Valid values for color are `color_1` to `color_9`. **Note:** This operation does not work for epics in next-gen projects.
+#[derive(Clone)]
 pub struct PartiallyUpdateEpicRequest<'a> {
     client: &'a crate::core::Client,
     epic_id_or_key: String,
@@ -330,6 +334,7 @@ impl<'a> PartiallyUpdateEpicRequest<'a> {
 }
 
 /// Moves issues to an epic, for a given epic id. Issues can be only in a single epic at the same time. That means that already assigned issues to an epic, will not be assigned to the previous epic anymore. The user needs to have the edit issue permission for all issue they want to move and to the epic. The maximum number of issues that can be moved in one operation is 50. **Note:** This operation does not work for epics in next-gen projects.
+#[derive(Clone)]
 pub struct MoveIssuesToEpicRequest<'a> {
     client: &'a crate::core::Client,
     epic_id_or_key: String,
@@ -378,6 +383,7 @@ impl<'a> MoveIssuesToEpicRequest<'a> {
 }
 
 /// Returns all issues that belong to the epic, for the given epic ID. Result pagination is token based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Issues returned from this resource include Software project fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank. **Note:** If you are querying a Team Managed project, do not use this operation. Instead, search for issues that belong to an epic by using the [Search for issues using JQL enhanced search](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-jql-get) operation in the Jira platform REST API. Build your JQL query using the `parent` clause. For more information on the `parent` JQL field, see [Advanced searching](https://confluence.atlassian.com/x/dAiiLQ#Advancedsearching-fieldsreference-Parent).
+#[derive(Clone)]
 pub struct GetIssuesForEpicRequest<'a> {
     client: &'a crate::core::Client,
     epic_id_or_key: String,
@@ -521,6 +527,7 @@ impl<'a> GetIssuesForEpicRequest<'a> {
 /// If rankCustomFieldId is not defined, the default rank field will be used.
 ///
 /// **Note:** This operation does not work for epics in next-gen projects.
+#[derive(Clone)]
 pub struct RankEpicsRequest<'a> {
     client: &'a crate::core::Client,
     epic_id_or_key: String,

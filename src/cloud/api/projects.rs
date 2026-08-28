@@ -397,6 +397,7 @@ impl<'a> ProjectsService<'a> {
 /// To determine which features are installed, go to **Jira settings** > **Apps** > **Manage apps** and review the System Apps list. To add Jira Software or Jira Service Management into a JIRA instance, use **Jira settings** > **Apps** > **Finding new apps**. For more information, see [ Managing add-ons](https://confluence.atlassian.com/x/S31NLg).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct CreateProjectRequest2<'a> {
     client: &'a crate::core::Client,
     assignee_type: Option<CreateProjectRequest2AssigneeType>,
@@ -652,6 +653,7 @@ impl<'a> CreateProjectRequest2<'a> {
 ///  *  *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
 ///  *  *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct SearchProjectsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -901,6 +903,7 @@ impl<'a> SearchProjectsRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+#[derive(Clone)]
 pub struct GetProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -969,6 +972,7 @@ impl<'a> GetProjectRequest<'a> {
 /// All parameters are optional in the body of the request. Schemes will only be updated if they are included in the request, any omitted schemes will be left unchanged.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). is only needed when changing the schemes or project key. Otherwise you will only need *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg)
+#[derive(Clone)]
 pub struct UpdateProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -1035,6 +1039,7 @@ impl<'a> UpdateProjectRequest<'a> {
 /// You can't delete a project if it's archived. To delete an archived project, restore the project and then delete it. To restore a project, use the Jira UI.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeleteProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -1082,6 +1087,7 @@ impl<'a> DeleteProjectRequest<'a> {
 /// Archives a project. You can't delete a project if it's archived. To delete an archived project, restore the project and then delete it. To restore a project, use the Jira UI.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct ArchiveProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -1118,6 +1124,7 @@ impl<'a> ArchiveProjectRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+#[derive(Clone)]
 pub struct GetAllStatusesRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -1158,6 +1165,7 @@ impl<'a> GetAllStatusesRequest<'a> {
 ///  *  *Subtask* at level -1 (optional). This issue type enables level 0 issue types to be broken down into components. Issues based on a level -1 issue type must have a parent issue.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+#[derive(Clone)]
 pub struct GetHierarchyRequest<'a> {
     client: &'a crate::core::Client,
     project_id: i64,
@@ -1192,6 +1200,7 @@ impl<'a> GetHierarchyRequest<'a> {
 /// Gets a [notification scheme](https://confluence.atlassian.com/x/8YdKLg) associated with the project.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+#[derive(Clone)]
 pub struct GetNotificationSchemeForProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_key_or_id: String,

@@ -86,6 +86,7 @@ impl<'a> IssueTypeSchemesService<'a> {
 }
 
 /// Returns a list of all issue type schemes visible to the user. All issue types associated with the scheme will only be returned if an additional query parameter is provided: expand=schemes.issueTypes. Similarly, the default issue type associated with the scheme (if one exists) will only be returned if an additional query parameter is provided: expand=schemes.defaultIssueType. Note that both query parameters can be used together: expand=schemes.issueTypes,schemes.defaultIssueType.
+#[derive(Clone)]
 pub struct GetAllIssueTypeSchemesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -115,6 +116,7 @@ impl<'a> GetAllIssueTypeSchemesRequest<'a> {
 }
 
 /// Creates an issue type scheme from a JSON representation
+#[derive(Clone)]
 pub struct CreateIssueTypeSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_scheme_create_update: IssueTypeSchemeCreateUpdate,
@@ -152,6 +154,7 @@ impl<'a> CreateIssueTypeSchemeRequest<'a> {
 }
 
 /// Returns a full representation of the issue type scheme that has the given id
+#[derive(Clone)]
 pub struct GetIssueTypeSchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: String,
@@ -184,6 +187,7 @@ impl<'a> GetIssueTypeSchemeRequest<'a> {
 }
 
 /// Updates the specified issue type scheme from a JSON representation
+#[derive(Clone)]
 pub struct UpdateIssueTypeSchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: String,
@@ -228,6 +232,7 @@ impl<'a> UpdateIssueTypeSchemeRequest<'a> {
 }
 
 /// Deletes the specified issue type scheme. Any projects associated with this IssueTypeScheme will be automatically associated with the global default IssueTypeScheme.
+#[derive(Clone)]
 pub struct DeleteIssueTypeSchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: String,
@@ -260,6 +265,7 @@ impl<'a> DeleteIssueTypeSchemeRequest<'a> {
 }
 
 /// For the specified issue type scheme, returns all of the associated projects
+#[derive(Clone)]
 pub struct GetAssociatedProjectsRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -304,6 +310,7 @@ impl<'a> GetAssociatedProjectsRequest<'a> {
 }
 
 /// Adds additional projects to those already associated with the specified issue type scheme
+#[derive(Clone)]
 pub struct AddProjectAssociationsToSchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: String,
@@ -348,6 +355,7 @@ impl<'a> AddProjectAssociationsToSchemeRequest<'a> {
 }
 
 /// Associates the given projects with the specified issue type scheme
+#[derive(Clone)]
 pub struct SetProjectAssociationsForSchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: String,
@@ -392,6 +400,7 @@ impl<'a> SetProjectAssociationsForSchemeRequest<'a> {
 }
 
 /// Removes all project associations for the specified issue type scheme
+#[derive(Clone)]
 pub struct RemoveAllProjectAssociationsRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: String,
@@ -424,6 +433,7 @@ impl<'a> RemoveAllProjectAssociationsRequest<'a> {
 }
 
 /// For the specified issue type scheme, removes the given project association
+#[derive(Clone)]
 pub struct RemoveProjectAssociationRequest<'a> {
     client: &'a crate::core::Client,
     proj_id_or_key: String,

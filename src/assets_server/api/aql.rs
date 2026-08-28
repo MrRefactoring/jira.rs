@@ -19,6 +19,7 @@ impl<'a> AqlService<'a> {
 }
 
 /// Find objects using AQL.
+#[derive(Clone)]
 pub struct FindObjectsRequest<'a> {
     client: &'a crate::core::Client,
     include_attributes_deep: Option<String>,

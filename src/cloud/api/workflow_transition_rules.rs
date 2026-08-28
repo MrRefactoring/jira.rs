@@ -109,6 +109,7 @@ impl<'a> WorkflowTransitionRulesService<'a> {
 /// Due to server-side optimizations, workflows with an empty list of rules may be returned; these workflows can be ignored.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only [Connect](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps) or [Forge](https://developer.atlassian.com/cloud/jira/platform/index/#forge-apps) apps can use this operation.
+#[derive(Clone)]
 pub struct GetWorkflowTransitionRuleConfigurationsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -263,6 +264,7 @@ impl<'a> GetWorkflowTransitionRuleConfigurationsRequest<'a> {
 /// **Note:** The `draft` parameter in the request body WorkflowId is deprecated and will be removed from this API on [November 2, 2026](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-3147).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only [Connect](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps) or [Forge](https://developer.atlassian.com/cloud/jira/platform/index/#forge-apps) apps can use this operation.
+#[derive(Clone)]
 pub struct UpdateWorkflowTransitionRuleConfigurationsRequest<'a> {
     client: &'a crate::core::Client,
     workflow_transition_rules_update: WorkflowTransitionRulesUpdate,
@@ -310,6 +312,7 @@ impl<'a> UpdateWorkflowTransitionRuleConfigurationsRequest<'a> {
 /// **Note:** The `draft` parameter in the request body WorkflowId is deprecated and will be removed from this API on [November 2, 2026](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-3147).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect apps can use this operation.
+#[derive(Clone)]
 pub struct DeleteWorkflowTransitionRuleConfigurationsRequest<'a> {
     client: &'a crate::core::Client,
     workflows_with_transition_rules_details: WorkflowsWithTransitionRulesDetails,

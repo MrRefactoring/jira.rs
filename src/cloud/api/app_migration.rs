@@ -63,6 +63,7 @@ impl<'a> AppMigrationService<'a> {
 /// The values of up to 200 custom fields can be updated.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect apps can make this request
+#[derive(Clone)]
 pub struct UpdateIssueFieldsRequest<'a> {
     client: &'a crate::core::Client,
     atlassian_transfer_id: String,
@@ -109,6 +110,7 @@ impl<'a> UpdateIssueFieldsRequest<'a> {
 }
 
 /// Updates the values of multiple entity properties for an object, up to 50 updates per request. This operation is for use by Connect apps during app migration.
+#[derive(Clone)]
 pub struct UpdateEntityPropertiesValueRequest<'a> {
     client: &'a crate::core::Client,
     atlassian_transfer_id: String,
@@ -160,6 +162,7 @@ impl<'a> UpdateEntityPropertiesValueRequest<'a> {
 }
 
 /// Returns configurations for workflow transition rules migrated from server to cloud and owned by the calling Connect app.
+#[derive(Clone)]
 pub struct WorkflowRuleSearchRequest<'a> {
     client: &'a crate::core::Client,
     atlassian_transfer_id: String,

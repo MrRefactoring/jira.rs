@@ -106,6 +106,7 @@ impl<'a> IssueTypesService<'a> {
 ///  *  if the user has the *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for one or more projects, the issue types associated with the projects the user has permission to browse are returned.
 ///  *  if the user is anonymous then they will be able to access projects with the *Browse projects* for anonymous users
 ///  *  if the user authentication is incorrect they will fall back to anonymous
+#[derive(Clone)]
 pub struct GetIssueAllTypesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -136,6 +137,7 @@ impl<'a> GetIssueAllTypesRequest<'a> {
 /// Creates an issue type.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct CreateIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_create: IssueTypeCreate,
@@ -176,6 +178,7 @@ impl<'a> CreateIssueTypeRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) in a project the issue type is associated with or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -210,6 +213,7 @@ impl<'a> GetIssueTypeRequest<'a> {
 /// Updates the issue type.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct UpdateIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -252,6 +256,7 @@ impl<'a> UpdateIssueTypeRequest<'a> {
 /// Deletes the issue type. If the issue type is in use, all uses are updated with the alternative issue type (`alternativeIssueTypeId`). A list of alternative issue types are obtained from the [Get alternative issue types](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issuetype/#api-rest-api-3-issuetype-id-alternatives-get) resource.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeleteIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -301,6 +306,7 @@ impl<'a> DeleteIssueTypeRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetAlternativeIssueTypesRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -349,6 +355,7 @@ impl<'a> GetAlternativeIssueTypesRequest<'a> {
 /// After creating the avatar, use [ Update issue type](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issuetype/#api-rest-api-3-issuetype-id-put) to set it as the issue type's displayed avatar.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct CreateIssueTypeAvatarRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

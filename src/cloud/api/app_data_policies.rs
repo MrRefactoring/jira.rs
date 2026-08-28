@@ -36,6 +36,7 @@ impl<'a> AppDataPoliciesService<'a> {
 }
 
 /// Returns data policy for the workspace.
+#[derive(Clone)]
 pub struct GetPolicyRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -64,6 +65,7 @@ impl<'a> GetPolicyRequest<'a> {
 }
 
 /// Returns data policies for the projects specified in the request.
+#[derive(Clone)]
 pub struct GetPoliciesRequest<'a> {
     client: &'a crate::core::Client,
     ids: Option<GetPoliciesRequestIds>,

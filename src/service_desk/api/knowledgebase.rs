@@ -27,6 +27,7 @@ impl<'a> KnowledgebaseService<'a> {
 /// Returns articles which match the given query string across all service desks.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the [customer portal](https://confluence.atlassian.com/servicedeskcloud/configuring-the-customer-portal-732528918.html).
+#[derive(Clone)]
 pub struct GetArticlesRequest<'a> {
     client: &'a crate::core::Client,
     query: String,
@@ -116,6 +117,7 @@ impl<'a> GetArticlesRequest<'a> {
     }
 }
 
+#[derive(Clone)]
 pub struct ViewArticleRequest<'a> {
     client: &'a crate::core::Client,
     page_id: i64,

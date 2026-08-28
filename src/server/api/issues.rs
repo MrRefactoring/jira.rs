@@ -456,6 +456,7 @@ impl<'a> IssuesService<'a> {
 }
 
 /// Moves (ranks) issues before or after a given issue. At most 50 issues may be ranked at once. This operation may fail for some issues, although this will be rare. In that case the 207 status code is returned for the whole response and detailed information regarding each issue is available in the response body. If rankCustomFieldId is not defined, the default rank field will be used.
+#[derive(Clone)]
 pub struct RankIssuesRequest<'a> {
     client: &'a crate::core::Client,
     issue_rank_request: IssueRankRequest,
@@ -493,6 +494,7 @@ impl<'a> RankIssuesRequest<'a> {
 }
 
 /// Returns a single issue, for a given issue Id or issue key. Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
+#[derive(Clone)]
 pub struct GetAgileIssueRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetAgileIssueRequestExpand>,
@@ -567,6 +569,7 @@ impl<'a> GetAgileIssueRequest<'a> {
 /// Original time internally stores and returns the estimation as a number of seconds.
 /// The field used for estimation on the given board can be obtained from board configuration resource.
 /// More information about the field are returned by edit meta resource or field resource.
+#[derive(Clone)]
 pub struct GetIssueEstimationForBoardRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -617,6 +620,7 @@ impl<'a> GetIssueEstimationForBoardRequest<'a> {
 /// However, internally the field stores and returns the estimation as a number of seconds.
 /// The field used for estimation on the given board can be obtained from [board configuration resource](https://developer.atlassian.com/server/jira/platform/rest/v11003/intro#agile/1.0/board-getConfiguration).
 /// More information about the field are returned by edit meta resource or field resource.
+#[derive(Clone)]
 pub struct EstimateIssueForBoardRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -678,6 +682,7 @@ impl<'a> EstimateIssueForBoardRequest<'a> {
 /// - you must provide a parent field in the issue create request containing the id or key of the parent issue.
 /// The updateHistory param adds the project that this issue is created in, to the current user's project history, if set to true (by default, the project history is not updated).
 /// You can view the project history in the Jira application, via the Projects dropdown.
+#[derive(Clone)]
 pub struct CreateIssueRequest<'a> {
     client: &'a crate::core::Client,
     update_history: Option<bool>,
@@ -733,6 +738,7 @@ impl<'a> CreateIssueRequest<'a> {
 }
 
 /// Archives a list of issues.
+#[derive(Clone)]
 pub struct ArchiveIssuesRequest<'a> {
     client: &'a crate::core::Client,
     notify_users: Option<String>,
@@ -788,6 +794,7 @@ impl<'a> ArchiveIssuesRequest<'a> {
 
 /// Creates issues or sub-tasks from a JSON representation. Creates many issues in one bulk operation.
 /// Creating a sub-task is similar to creating a regular issue. More details can be found in createIssue section.
+#[derive(Clone)]
 pub struct CreateIssuesRequest<'a> {
     client: &'a crate::core::Client,
     issues_update: Option<IssuesUpdate>,
@@ -832,6 +839,7 @@ impl<'a> CreateIssuesRequest<'a> {
 }
 
 /// Returns the metadata for issue types used for creating issues. Data will not be returned if the user does not have permission to create issues in that project.
+#[derive(Clone)]
 pub struct GetCreateIssueMetaProjectIssueTypesRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -893,6 +901,7 @@ impl<'a> GetCreateIssueMetaProjectIssueTypesRequest<'a> {
 }
 
 /// Returns the metadata for issue types used for creating issues. Data will not be returned if the user does not have permission to create issues in that project.
+#[derive(Clone)]
 pub struct GetCreateIssueMetaFieldsRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_id: String,
@@ -966,6 +975,7 @@ impl<'a> GetCreateIssueMetaFieldsRequest<'a> {
 }
 
 /// Get issue picker resource
+#[derive(Clone)]
 pub struct GetIssuePickerResourceRequest<'a> {
     client: &'a crate::core::Client,
     current_project_id: Option<String>,
@@ -1083,6 +1093,7 @@ impl<'a> GetIssuePickerResourceRequest<'a> {
 /// Create reciprocal remote issue link from a JSON representation. Jira will create two issue links, source -> target and target -> source.
 ///
 /// Available since Jira Data Center 10.7.
+#[derive(Clone)]
 pub struct CreateReciprocalRemoteIssueLinkRequest<'a> {
     client: &'a crate::core::Client,
     remote_reciprocal_issue_link_create_request: Option<RemoteReciprocalIssueLinkCreateRequest>,
@@ -1174,6 +1185,7 @@ impl<'a> CreateReciprocalRemoteIssueLinkRequest<'a> {
 /// The greatest number always represents the most recent version. It is recommended that the most recent version is used.
 /// version for these fields which provide a more recent REST representation.
 /// After including versionedRepresentations "fields" field become hidden.
+#[derive(Clone)]
 pub struct GetIssueRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -1265,6 +1277,7 @@ impl<'a> GetIssueRequest<'a> {
 }
 
 /// Edits an issue from a JSON representation. The issue can either be updated by setting explicit the field value(s) or by using an operation to change the field value.
+#[derive(Clone)]
 pub struct EditIssueRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1325,6 +1338,7 @@ impl<'a> EditIssueRequest<'a> {
 }
 
 /// Deletes an issue. If the issue has subtasks you must set the parameter deleteSubtasks=true to delete the issue. You cannot delete an issue without its subtasks also being deleted.
+#[derive(Clone)]
 pub struct DeleteIssueRequest<'a> {
     client: &'a crate::core::Client,
     delete_subtasks: Option<String>,
@@ -1370,6 +1384,7 @@ impl<'a> DeleteIssueRequest<'a> {
 }
 
 /// Archives an issue.
+#[derive(Clone)]
 pub struct ArchiveIssueRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1415,6 +1430,7 @@ impl<'a> ArchiveIssueRequest<'a> {
 }
 
 /// Assign an issue to a user.
+#[derive(Clone)]
 pub struct AssignRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1468,6 +1484,7 @@ impl<'a> AssignRequest<'a> {
 /// The name of the multipart/form-data parameter that contains attachments must be file.
 /// A simple example to upload a file called "myfile.txt" to issue TEST-123:
 /// curl -D- -u admin:admin -X POST -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt" <http://myhost/rest/api/2/issue/TEST-123/attachments>
+#[derive(Clone)]
 pub struct AddAttachmentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1526,6 +1543,7 @@ impl<'a> AddAttachmentRequest<'a> {
 }
 
 /// Returns all comments for an issue. Results can be ordered by the 'created' field which means the date a comment was added.
+#[derive(Clone)]
 pub struct GetCommentsRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -1617,6 +1635,7 @@ impl<'a> GetCommentsRequest<'a> {
 }
 
 /// Adds a new comment to an issue.
+#[derive(Clone)]
 pub struct AddCommentRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -1677,6 +1696,7 @@ impl<'a> AddCommentRequest<'a> {
 }
 
 /// Returns a single comment.
+#[derive(Clone)]
 pub struct GetCommentRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -1727,6 +1747,7 @@ impl<'a> GetCommentRequest<'a> {
 }
 
 /// Updates an existing comment using its JSON representation.
+#[derive(Clone)]
 pub struct UpdateCommentRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
@@ -1787,6 +1808,7 @@ impl<'a> UpdateCommentRequest<'a> {
 }
 
 /// Deletes an existing comment.
+#[derive(Clone)]
 pub struct DeleteCommentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1824,6 +1846,7 @@ impl<'a> DeleteCommentRequest<'a> {
 }
 
 /// Pins a comment to the top of the comment list.
+#[derive(Clone)]
 pub struct SetPinCommentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1869,6 +1892,7 @@ impl<'a> SetPinCommentRequest<'a> {
 }
 
 /// Returns the meta data for editing an issue. The fields in the editmeta correspond to the fields in the edit screen for the issue. Fields not in the screen will not be in the editmeta.
+#[derive(Clone)]
 pub struct GetEditIssueMetaRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1901,6 +1925,7 @@ impl<'a> GetEditIssueMetaRequest<'a> {
 }
 
 /// Sends a notification (email) to the list or recipients defined in the request.
+#[derive(Clone)]
 pub struct NotifyRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1948,6 +1973,7 @@ impl<'a> NotifyRequest<'a> {
 }
 
 /// Returns all pinned to the issue comments.
+#[derive(Clone)]
 pub struct GetPinnedCommentsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1980,6 +2006,7 @@ impl<'a> GetPinnedCommentsRequest<'a> {
 }
 
 /// Returns the keys of all properties for the issue identified by the key or by the id.
+#[derive(Clone)]
 pub struct GetIssuePropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -2012,6 +2039,7 @@ impl<'a> GetIssuePropertyKeysRequest<'a> {
 }
 
 /// Returns the value of the property with a given key from the issue identified by the key or by the id.
+#[derive(Clone)]
 pub struct GetIssuePropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -2053,6 +2081,7 @@ impl<'a> GetIssuePropertyRequest<'a> {
 }
 
 /// Sets the value of the specified issue's property.
+#[derive(Clone)]
 pub struct SetIssuePropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -2098,6 +2127,7 @@ impl<'a> SetIssuePropertyRequest<'a> {
 }
 
 /// Removes the property from the issue identified by the key or by the id.
+#[derive(Clone)]
 pub struct DeleteIssuePropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -2139,6 +2169,7 @@ impl<'a> DeleteIssuePropertyRequest<'a> {
 }
 
 /// Get remote issue links for an issue.
+#[derive(Clone)]
 pub struct GetRemoteIssueLinksRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -2184,6 +2215,7 @@ impl<'a> GetRemoteIssueLinksRequest<'a> {
 }
 
 /// Creates or updates a remote issue link from a JSON representation. If a globalId is provided and a remote issue link exists with that globalId, the remote issue link is updated. Otherwise, the remote issue link is created.
+#[derive(Clone)]
 pub struct CreateOrUpdateRemoteIssueLinkRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -2231,6 +2263,7 @@ impl<'a> CreateOrUpdateRemoteIssueLinkRequest<'a> {
 }
 
 /// Delete the remote issue link with the given global id on the issue.
+#[derive(Clone)]
 pub struct DeleteRemoteIssueLinkByGlobalIdRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -2266,6 +2299,7 @@ impl<'a> DeleteRemoteIssueLinkByGlobalIdRequest<'a> {
 }
 
 /// Get a remote issue link by its id.
+#[derive(Clone)]
 pub struct GetRemoteIssueLinkByIdRequest<'a> {
     client: &'a crate::core::Client,
     link_id: String,
@@ -2303,6 +2337,7 @@ impl<'a> GetRemoteIssueLinkByIdRequest<'a> {
 }
 
 /// Updates a remote issue link from a JSON representation. Any fields not provided are set to null.
+#[derive(Clone)]
 pub struct UpdateRemoteIssueLinkRequest<'a> {
     client: &'a crate::core::Client,
     link_id: String,
@@ -2360,6 +2395,7 @@ impl<'a> UpdateRemoteIssueLinkRequest<'a> {
 }
 
 /// Delete the remote issue link with the given id on the issue.
+#[derive(Clone)]
 pub struct DeleteRemoteIssueLinkByIdRequest<'a> {
     client: &'a crate::core::Client,
     link_id: String,
@@ -2397,6 +2433,7 @@ impl<'a> DeleteRemoteIssueLinkByIdRequest<'a> {
 }
 
 /// Restores an archived issue.
+#[derive(Clone)]
 pub struct RestoreIssueRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -2442,6 +2479,7 @@ impl<'a> RestoreIssueRequest<'a> {
 }
 
 /// Returns an issue's subtask list
+#[derive(Clone)]
 pub struct GetSubTasksRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -2474,6 +2512,7 @@ impl<'a> GetSubTasksRequest<'a> {
 }
 
 /// Checks if a subtask can be moved
+#[derive(Clone)]
 pub struct CanMoveSubTaskRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -2506,6 +2545,7 @@ impl<'a> CanMoveSubTaskRequest<'a> {
 }
 
 /// Reorders an issue's subtasks by moving the subtask at index 'from' to index 'to'.
+#[derive(Clone)]
 pub struct MoveSubTasksRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -2553,6 +2593,7 @@ impl<'a> MoveSubTasksRequest<'a> {
 /// Fields will only be returned if `expand=transitions.fields`.
 /// The fields in the metadata correspond to the fields in the transition screen for that transition.
 /// Fields not in the screen will not be in the metadata.
+#[derive(Clone)]
 pub struct GetTransitionsRequest<'a> {
     client: &'a crate::core::Client,
     transition_id: Option<String>,
@@ -2603,6 +2644,7 @@ impl<'a> GetTransitionsRequest<'a> {
 /// If a field is not configured to appear on the transition screen, then it will not be in the transition metadata, and a field validation error will occur if it is submitted.
 /// The updateHistory param adds the issues retrieved by this method to the current user's issue history, if set to true (by default, the issue history does not include issues retrieved via the REST API).
 /// You can view the issue history in the Jira application, via the Issues dropdown or by using the lastViewed JQL field in an issue search.
+#[derive(Clone)]
 pub struct DoTransitionRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -2650,6 +2692,7 @@ impl<'a> DoTransitionRequest<'a> {
 }
 
 /// A REST sub-resource representing the voters on the issue.
+#[derive(Clone)]
 pub struct GetVotesRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -2682,6 +2725,7 @@ impl<'a> GetVotesRequest<'a> {
 }
 
 /// Adds voter (currently logged user) to particular ticket. You need to be logged in to use this method.
+#[derive(Clone)]
 pub struct AddVoteRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -2714,6 +2758,7 @@ impl<'a> AddVoteRequest<'a> {
 }
 
 /// Remove your vote from an issue.
+#[derive(Clone)]
 pub struct RemoveVoteRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -2746,6 +2791,7 @@ impl<'a> RemoveVoteRequest<'a> {
 }
 
 /// Returns the list of watchers for the issue with the given key.
+#[derive(Clone)]
 pub struct GetIssueWatchersRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -2778,6 +2824,7 @@ impl<'a> GetIssueWatchersRequest<'a> {
 }
 
 /// Adds a user to an issue's watcher list.
+#[derive(Clone)]
 pub struct AddWatcherRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -2833,6 +2880,7 @@ impl<'a> AddWatcherRequest<'a> {
 }
 
 /// Removes a user from an issue's watcher list.
+#[derive(Clone)]
 pub struct RemoveWatcherRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -2890,6 +2938,7 @@ impl<'a> RemoveWatcherRequest<'a> {
 }
 
 /// Returns all work logs for an issue. Work logs won't be returned if the Log work field is hidden for the project.
+#[derive(Clone)]
 pub struct GetIssueWorklogRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -2922,6 +2971,7 @@ impl<'a> GetIssueWorklogRequest<'a> {
 }
 
 /// Adds a new worklog entry to an issue.
+#[derive(Clone)]
 pub struct AddWorklogRequest<'a> {
     client: &'a crate::core::Client,
     new_estimate: Option<String>,
@@ -3015,6 +3065,7 @@ impl<'a> AddWorklogRequest<'a> {
 }
 
 /// Returns a specific worklog. The work log won't be returned if the Log work field is hidden for the project.
+#[derive(Clone)]
 pub struct GetWorklogRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -3056,6 +3107,7 @@ impl<'a> GetWorklogRequest<'a> {
 /// - Either timeSpent or timeSpentSeconds can be set.
 /// - Fields which are not set will not be updated.
 /// - For a request to be valid, it has to have at least one field change.
+#[derive(Clone)]
 pub struct UpdateWorklogRequest<'a> {
     client: &'a crate::core::Client,
     new_estimate: Option<String>,
@@ -3136,6 +3188,7 @@ impl<'a> UpdateWorklogRequest<'a> {
 }
 
 /// Deletes an existing worklog entry.
+#[derive(Clone)]
 pub struct DeleteWorklogRequest<'a> {
     client: &'a crate::core::Client,
     new_estimate: Option<String>,

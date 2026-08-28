@@ -15,7 +15,7 @@ use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue
 /// Runs the query until the index has caught up with it, and hands back what it matched.
 async fn search(jql: &str, fields: Option<&str>) -> Vec<Issue> {
     poll_until("the issue to be indexed", || async {
-        let mut request = cloud().issue_search().search_and_reconsile_issues_using_jql().jql(jql);
+        let mut request = cloud().issue_search().search_issues().jql(jql);
 
         if let Some(field) = fields {
             request = request.fields([field]);
@@ -75,7 +75,7 @@ async fn pages_with_a_token_rather_than_an_offset() {
 
     let first_page = cloud()
         .issue_search()
-        .search_and_reconsile_issues_using_jql()
+        .search_issues()
         .jql(jql.as_str())
         .max_results(1)
         .send()
@@ -87,7 +87,7 @@ async fn pages_with_a_token_rather_than_an_offset() {
     if let Some(token) = first_page.next_page_token.clone() {
         let second_page = cloud()
             .issue_search()
-            .search_and_reconsile_issues_using_jql()
+            .search_issues()
             .jql(jql.as_str())
             .max_results(1)
             .next_page_token(token)
@@ -186,7 +186,7 @@ async fn suggests_issues_through_the_picker() {
 async fn accepts_bare_words_as_a_text_search_rather_than_rejecting_them() {
     let page = cloud()
         .issue_search()
-        .search_and_reconsile_issues_using_jql()
+        .search_issues()
         .jql("this is not jql")
         .send()
         .await
@@ -200,7 +200,7 @@ async fn accepts_bare_words_as_a_text_search_rather_than_rejecting_them() {
 async fn rejects_genuinely_malformed_jql_with_a_typed_400() {
     let error = cloud()
         .issue_search()
-        .search_and_reconsile_issues_using_jql()
+        .search_issues()
         .jql("project = \"unterminated")
         .send()
         .await
@@ -215,7 +215,7 @@ async fn rejects_genuinely_malformed_jql_with_a_typed_400() {
 async fn answers_an_unmatched_query_with_an_empty_result_rather_than_an_error() {
     let page = cloud()
         .issue_search()
-        .search_and_reconsile_issues_using_jql()
+        .search_issues()
         .jql(format!("project = {TEST_PROJECT_KEY} AND summary ~ \"nothingmatchesthisatall\""))
         .send()
         .await

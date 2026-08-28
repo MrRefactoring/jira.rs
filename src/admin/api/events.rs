@@ -87,6 +87,7 @@ impl<'a> EventsService<'a> {
 ///
 /// #### Scopes
 /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:events:admin`
+#[derive(Clone)]
 pub struct GetEventsRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -267,6 +268,7 @@ impl<'a> GetEventsRequest<'a> {
 ///
 /// #### Scopes
 /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:events:admin`
+#[derive(Clone)]
 pub struct PollEventsRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -367,6 +369,7 @@ impl<'a> PollEventsRequest<'a> {
 ///
 /// #### Scopes
 /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:events:admin`
+#[derive(Clone)]
 pub struct GetEventByIdRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -407,6 +410,7 @@ impl<'a> GetEventByIdRequest<'a> {
 ///
 /// #### Scopes
 /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:events:admin`
+#[derive(Clone)]
 pub struct GetEventActionsRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,

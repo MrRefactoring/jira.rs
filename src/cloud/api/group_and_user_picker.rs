@@ -90,6 +90,7 @@ impl<'a> GroupAndUserPickerService<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/yodKLg).
+#[derive(Clone)]
 pub struct FindUsersAndGroupsRequest<'a> {
     client: &'a crate::core::Client,
     query: String,

@@ -19,6 +19,7 @@ impl<'a> LicenseValidatorService<'a> {
 }
 
 /// Validates a Jira license
+#[derive(Clone)]
 pub struct ValidateRequest<'a> {
     client: &'a crate::core::Client,
     body: String,

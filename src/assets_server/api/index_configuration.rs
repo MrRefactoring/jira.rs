@@ -39,6 +39,7 @@ impl<'a> IndexConfigurationService<'a> {
 }
 
 /// Check the integrity of the index.
+#[derive(Clone)]
 pub struct CheckIndexIntegrityRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -70,6 +71,7 @@ impl<'a> CheckIndexIntegrityRequest<'a> {
 }
 
 /// Get the path to the current Assets Index.
+#[derive(Clone)]
 pub struct GetIndexPathRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -99,6 +101,7 @@ impl<'a> GetIndexPathRequest<'a> {
 }
 
 /// Persist the current Assets Index to a file on disk.
+#[derive(Clone)]
 pub struct PersistIndexToFileRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -128,6 +131,7 @@ impl<'a> PersistIndexToFileRequest<'a> {
 }
 
 /// Start an asynchronous reindex of the Assets Index for the current node.
+#[derive(Clone)]
 pub struct StartReindexCurrentNodeRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -159,6 +163,7 @@ impl<'a> StartReindexCurrentNodeRequest<'a> {
 }
 
 /// Start an asynchronous reindex of the Assets Index for the entire cluster.
+#[derive(Clone)]
 pub struct StartReindexInsightRequest<'a> {
     client: &'a crate::core::Client,
     clean: Option<String>,

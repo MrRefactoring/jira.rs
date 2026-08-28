@@ -19,6 +19,7 @@ impl<'a> AnalyticsService<'a> {
 }
 
 /// Get the shape of the data held in each schema.
+#[derive(Clone)]
 pub struct GetSchemaAnalyticsRequest<'a> {
     client: &'a crate::core::Client,
 }

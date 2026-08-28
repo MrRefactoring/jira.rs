@@ -789,6 +789,7 @@ impl<'a> WorkflowsService<'a> {
 ///
 ///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
 ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
+#[derive(Clone)]
 pub struct ReadWorkflowFromHistoryRequest<'a> {
     client: &'a crate::core::Client,
     workflow_history_read_request: WorkflowHistoryReadRequest,
@@ -833,6 +834,7 @@ impl<'a> ReadWorkflowFromHistoryRequest<'a> {
 ///
 ///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
 ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
+#[derive(Clone)]
 pub struct ListWorkflowHistoryRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<ListWorkflowHistoryRequestExpand>,
@@ -894,6 +896,7 @@ impl<'a> ListWorkflowHistoryRequest<'a> {
 ///  *  associated with any draft workflow scheme.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeleteInactiveWorkflowRequest<'a> {
     client: &'a crate::core::Client,
     entity_id: String,
@@ -926,6 +929,7 @@ impl<'a> DeleteInactiveWorkflowRequest<'a> {
 }
 
 /// Returns a page of issue types using a given workflow within a project.
+#[derive(Clone)]
 pub struct GetWorkflowProjectIssueTypeUsagesRequest<'a> {
     client: &'a crate::core::Client,
     workflow_id: String,
@@ -989,6 +993,7 @@ impl<'a> GetWorkflowProjectIssueTypeUsagesRequest<'a> {
 }
 
 /// Returns a page of projects using a given workflow.
+#[derive(Clone)]
 pub struct GetProjectUsagesForWorkflowRequest<'a> {
     client: &'a crate::core::Client,
     workflow_id: String,
@@ -1047,6 +1052,7 @@ impl<'a> GetProjectUsagesForWorkflowRequest<'a> {
 }
 
 /// Returns a page of workflow schemes using a given workflow.
+#[derive(Clone)]
 pub struct GetWorkflowSchemeUsagesForWorkflowRequest<'a> {
     client: &'a crate::core::Client,
     workflow_id: String,
@@ -1110,6 +1116,7 @@ impl<'a> GetWorkflowSchemeUsagesForWorkflowRequest<'a> {
 ///
 ///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
 ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
+#[derive(Clone)]
 pub struct ReadWorkflowsRequest<'a> {
     client: &'a crate::core::Client,
     workflow_read_request: WorkflowReadRequest,
@@ -1699,6 +1706,7 @@ impl<'a> ReadWorkflowsRequest<'a> {
 ///  *  `id` the ID of the Forge rule
 ///  *  `disabled` determine if the Forge app is disabled. Allowed values: `true`, `false`.
 ///  *  `tag` additional tags for the Forge app
+#[derive(Clone)]
 pub struct WorkflowCapabilitiesRequest<'a> {
     client: &'a crate::core::Client,
     workflow_id: Option<String>,
@@ -1769,6 +1777,7 @@ impl<'a> WorkflowCapabilitiesRequest<'a> {
 ///
 ///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
 ///  *  *Administer projects* project permissions to create project-scoped workflows
+#[derive(Clone)]
 pub struct CreateWorkflowsRequest<'a> {
     client: &'a crate::core::Client,
     workflow_create_request: WorkflowCreateRequest,
@@ -1811,6 +1820,7 @@ impl<'a> CreateWorkflowsRequest<'a> {
 ///
 ///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
 ///  *  *Administer projects* project permissions to create project-scoped workflows
+#[derive(Clone)]
 pub struct ValidateCreateWorkflowsRequest<'a> {
     client: &'a crate::core::Client,
     workflow_create_validate_request: WorkflowCreateValidateRequest,
@@ -1850,6 +1860,7 @@ impl<'a> ValidateCreateWorkflowsRequest<'a> {
 }
 
 /// Get the user's default workflow editor. This can be either the new editor or the legacy editor.
+#[derive(Clone)]
 pub struct GetDefaultEditorRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -1883,6 +1894,7 @@ impl<'a> GetDefaultEditorRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions
+#[derive(Clone)]
 pub struct ReadWorkflowPreviewsRequest<'a> {
     client: &'a crate::core::Client,
     workflow_preview_request: WorkflowPreviewRequest,
@@ -1925,6 +1937,7 @@ impl<'a> ReadWorkflowPreviewsRequest<'a> {
 ///
 ///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
 ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
+#[derive(Clone)]
 pub struct SearchWorkflowsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -2079,6 +2092,7 @@ impl<'a> SearchWorkflowsRequest<'a> {
 ///
 ///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
 ///  *  *Administer projects* project permissions to create project-scoped workflows
+#[derive(Clone)]
 pub struct UpdateWorkflowsRequest<'a> {
     client: &'a crate::core::Client,
     workflow_update_request: WorkflowUpdateRequest,
@@ -2121,6 +2135,7 @@ impl<'a> UpdateWorkflowsRequest<'a> {
 ///
 ///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
 ///  *  *Administer projects* project permissions to create project-scoped workflows
+#[derive(Clone)]
 pub struct ValidateUpdateWorkflowsRequest<'a> {
     client: &'a crate::core::Client,
     workflow_update_validate_request: WorkflowUpdateValidateRequest,

@@ -277,6 +277,7 @@ impl<'a> ProjectVersionsService<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+#[derive(Clone)]
 pub struct GetProjectVersionsPaginatedRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -411,6 +412,7 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+#[derive(Clone)]
 pub struct GetProjectVersionsRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -460,6 +462,7 @@ impl<'a> GetProjectVersionsRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project the version is added to.
+#[derive(Clone)]
 pub struct CreateVersionRequest<'a> {
     client: &'a crate::core::Client,
     version: Version,
@@ -500,6 +503,7 @@ impl<'a> CreateVersionRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the version.
+#[derive(Clone)]
 pub struct GetVersionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -554,6 +558,7 @@ impl<'a> GetVersionRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
+#[derive(Clone)]
 pub struct UpdateVersionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -595,6 +600,7 @@ impl<'a> UpdateVersionRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
+#[derive(Clone)]
 pub struct MergeVersionsRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -636,6 +642,7 @@ impl<'a> MergeVersionsRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* project permission for the project that contains the version.
+#[derive(Clone)]
 pub struct MoveVersionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -684,6 +691,7 @@ impl<'a> MoveVersionRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* project permission for the project that contains the version.
+#[derive(Clone)]
 pub struct GetVersionRelatedIssuesRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -720,6 +728,7 @@ impl<'a> GetVersionRelatedIssuesRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the version.
+#[derive(Clone)]
 pub struct GetRelatedWorkRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -756,6 +765,7 @@ impl<'a> GetRelatedWorkRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Resolve issues:* and *Edit issues* [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html) for the project that contains the version.
+#[derive(Clone)]
 pub struct CreateRelatedWorkRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -800,6 +810,7 @@ impl<'a> CreateRelatedWorkRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Resolve issues:* and *Edit issues* [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html) for the project that contains the version.
+#[derive(Clone)]
 pub struct UpdateRelatedWorkRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -846,6 +857,7 @@ impl<'a> UpdateRelatedWorkRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
+#[derive(Clone)]
 pub struct DeleteAndReplaceVersionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -894,6 +906,7 @@ impl<'a> DeleteAndReplaceVersionRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* project permission for the project that contains the version.
+#[derive(Clone)]
 pub struct GetVersionUnresolvedIssuesRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -930,6 +943,7 @@ impl<'a> GetVersionUnresolvedIssuesRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Resolve issues:* and *Edit issues* [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html) for the project that contains the version.
+#[derive(Clone)]
 pub struct DeleteRelatedWorkRequest<'a> {
     client: &'a crate::core::Client,
     version_id: String,

@@ -109,6 +109,7 @@ impl<'a> AppPropertiesService<'a> {
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
 /// Additionally, Forge apps can access Connect app properties (stored against the same `app.connect.key`).
+#[derive(Clone)]
 pub struct GetAddonPropertiesRequest<'a> {
     client: &'a crate::core::Client,
     addon_key: String,
@@ -149,6 +150,7 @@ impl<'a> GetAddonPropertiesRequest<'a> {
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
 /// Additionally, Forge apps can access Connect app properties (stored against the same `app.connect.key`).
+#[derive(Clone)]
 pub struct GetAddonPropertyRequest<'a> {
     client: &'a crate::core::Client,
     addon_key: String,
@@ -191,6 +193,7 @@ impl<'a> GetAddonPropertyRequest<'a> {
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
 /// Additionally, Forge apps can access Connect app properties (stored against the same `app.connect.key`).
+#[derive(Clone)]
 pub struct PutAddonPropertyRequest<'a> {
     client: &'a crate::core::Client,
     addon_key: String,
@@ -239,6 +242,7 @@ impl<'a> PutAddonPropertyRequest<'a> {
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
 /// Additionally, Forge apps can access Connect app properties (stored against the same `app.connect.key`).
+#[derive(Clone)]
 pub struct DeleteAddonPropertyRequest<'a> {
     client: &'a crate::core::Client,
     addon_key: String,
@@ -278,6 +282,7 @@ impl<'a> DeleteAddonPropertyRequest<'a> {
 /// Returns all property keys for the Forge app.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
+#[derive(Clone)]
 pub struct GetForgeAppPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -309,6 +314,7 @@ impl<'a> GetForgeAppPropertyKeysRequest<'a> {
 /// Returns the value of a Forge app's property.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
+#[derive(Clone)]
 pub struct GetForgeAppPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -352,6 +358,7 @@ impl<'a> GetForgeAppPropertyRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
 ///
 /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+#[derive(Clone)]
 pub struct PutForgeAppPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -395,6 +402,7 @@ impl<'a> PutForgeAppPropertyRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
 ///
 /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+#[derive(Clone)]
 pub struct DeleteForgeAppPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,

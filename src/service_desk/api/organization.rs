@@ -170,6 +170,7 @@ impl<'a> OrganizationService<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Any. However, to fetch organizations based on `accountId` the user must have a Service Desk agent license.
 ///
 /// **Response limitations**: If the user is a customer, only those organizations of which the customer is a member are listed.
+#[derive(Clone)]
 pub struct GetOrganizationsRequest<'a> {
     client: &'a crate::core::Client,
     start: Option<i64>,
@@ -240,6 +241,7 @@ impl<'a> GetOrganizationsRequest<'a> {
 /// This method creates an organization by passing the name of the organization.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Service desk administrator or agent. Note: Permission to create organizations can be switched to users with the Jira administrator permission, using the **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)** feature.
+#[derive(Clone)]
 pub struct CreateOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     organization_create: OrganizationCreate,
@@ -283,6 +285,7 @@ impl<'a> CreateOrganizationRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Any
 ///
 /// **Response limitations**: Customers can only retrieve organization of which they are members.
+#[derive(Clone)]
 pub struct GetOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     organization_id: i64,
@@ -317,6 +320,7 @@ impl<'a> GetOrganizationRequest<'a> {
 /// This method deletes an organization. Note that the organization is deleted regardless of other associations it may have. For example, associations with service desks.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Jira administrator.
+#[derive(Clone)]
 pub struct DeleteOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     organization_id: i64,
@@ -355,6 +359,7 @@ impl<'a> DeleteOrganizationRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Any
 ///
 /// **Response limitations**: Customers can only access properties of organizations of which they are members.
+#[derive(Clone)]
 pub struct GetPropertiesKeysRequest<'a> {
     client: &'a crate::core::Client,
     organization_id: String,
@@ -396,6 +401,7 @@ impl<'a> GetPropertiesKeysRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Any
 ///
 /// **Response limitations**: Customers can only access properties of organizations of which they are members.
+#[derive(Clone)]
 pub struct GetPropertyRequest<'a> {
     client: &'a crate::core::Client,
     organization_id: String,
@@ -443,6 +449,7 @@ impl<'a> GetPropertyRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Service Desk Administrator or Agent.
 ///
 /// Note: Permission to manage organizations can be switched to users with the Jira administrator permission, using the **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)** feature.
+#[derive(Clone)]
 pub struct SetPropertyRequest<'a> {
     client: &'a crate::core::Client,
     organization_id: String,
@@ -494,6 +501,7 @@ impl<'a> SetPropertyRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Service Desk Administrator or Agent.
 ///
 /// Note: Permission to manage organizations can be switched to users with the Jira administrator permission, using the **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)** feature.
+#[derive(Clone)]
 pub struct DeletePropertyRequest<'a> {
     client: &'a crate::core::Client,
     organization_id: String,
@@ -537,6 +545,7 @@ impl<'a> DeletePropertyRequest<'a> {
 /// This method returns all the users associated with an organization. Use this method where you want to provide a list of users for an organization or determine if a user is associated with an organization.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Service desk administrator or agent.
+#[derive(Clone)]
 pub struct GetUsersInOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     organization_id: i64,
@@ -597,6 +606,7 @@ impl<'a> GetUsersInOrganizationRequest<'a> {
 /// This method adds users to an organization.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Service desk administrator or agent. Note: Permission to add users to an organization can be switched to users with the Jira administrator permission, using the **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)** feature.
+#[derive(Clone)]
 pub struct AddUsersToOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     organization_id: i64,
@@ -634,6 +644,7 @@ impl<'a> AddUsersToOrganizationRequest<'a> {
 /// This method removes users from an organization.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Service desk administrator or agent. Note: Permission to delete users from an organization can be switched to users with the Jira administrator permission, using the **[Organization management](https://confluence.atlassian.com/servicedeskcloud/setting-up-service-desk-users-732528877.html#Settingupservicedeskusers-manageorgsManageorganizations)** feature.
+#[derive(Clone)]
 pub struct RemoveUsersFromOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     organization_id: i64,
@@ -671,6 +682,7 @@ impl<'a> RemoveUsersFromOrganizationRequest<'a> {
 /// This method returns a list of all organizations associated with a service desk.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Service desk's agent.
+#[derive(Clone)]
 pub struct GetServiceDeskOrganizationsRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -747,6 +759,7 @@ impl<'a> GetServiceDeskOrganizationsRequest<'a> {
 /// This method adds an organization to a service desk. If the organization ID is already associated with the service desk, no change is made and the resource returns a 204 success code.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Service desk's agent.
+#[derive(Clone)]
 pub struct AddOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -791,6 +804,7 @@ impl<'a> AddOrganizationRequest<'a> {
 /// This method removes an organization from a service desk. If the organization ID does not match an organization associated with the service desk, no change is made and the resource returns a 204 success code.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Service desk's agent.
+#[derive(Clone)]
 pub struct RemoveOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,

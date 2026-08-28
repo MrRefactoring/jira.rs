@@ -236,6 +236,7 @@ impl<'a> GroupsService<'a> {
 /// Return a page of groups in an organization that match the supplied parameters.
 ///
 /// Use `searchTerm` for free-text search across group names. Filter by IDs, role assignments, resources, members, or specific group identifiers using the corresponding request fields. Use the `expand` field to include additional fields such as `counts.resources` and `counts.users` in the response.
+#[derive(Clone)]
 pub struct SearchDirectoryGroupsRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -296,6 +297,7 @@ impl<'a> SearchDirectoryGroupsRequest<'a> {
 ///
 /// #### Scopes
 /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:groups:admin`
+#[derive(Clone)]
 pub struct GetGroupRoleAssignmentsRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -443,6 +445,7 @@ impl<'a> GetGroupRoleAssignmentsRequest<'a> {
 }
 
 /// Assign a role to a group to assign all members the same role.
+#[derive(Clone)]
 pub struct GrantGroupAccessRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -506,6 +509,7 @@ impl<'a> GrantGroupAccessRequest<'a> {
 }
 
 /// Revoke a role from a group to remove access to an app from all members. A member can still access the app if they’re in another group that grants access to the same app.
+#[derive(Clone)]
 pub struct RevokeGroupAccessRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -575,6 +579,7 @@ impl<'a> RevokeGroupAccessRequest<'a> {
 /// You can’t add a user to a group synced from an identity provider. Manage this group in your identity provider instead.
 ///
 /// You can’t add a user to a group if you’ve exceeded your user limit for an app that the group grants access to. Increase your user limit or suspend another user from the app first.
+#[derive(Clone)]
 pub struct AddUserToGroupRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -633,6 +638,7 @@ impl<'a> AddUserToGroupRequest<'a> {
 }
 
 /// Remove a user from a group. This removes any app access and permissions granted by this group, but the user may still be in other groups that grant the same app access and permissions.
+#[derive(Clone)]
 pub struct RemoveUserFromGroupRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -686,6 +692,7 @@ impl<'a> RemoveUserFromGroupRequest<'a> {
 }
 
 /// Returns the details of a group.
+#[derive(Clone)]
 pub struct GetGroupRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -730,6 +737,7 @@ impl<'a> GetGroupRequest<'a> {
 }
 
 /// Delete a group from a directory if you don’t need this group anymore. This removes any app access and permissions granted by this group from all members. A member can still access an app if they’re in another group that grants access to the same app.
+#[derive(Clone)]
 pub struct DeleteGroupRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -774,6 +782,7 @@ impl<'a> DeleteGroupRequest<'a> {
 }
 
 /// Returns the count of groups in an organization that match the supplied parameters.
+#[derive(Clone)]
 pub struct GetGroupsCountRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -924,6 +933,7 @@ impl<'a> GetGroupsCountRequest<'a> {
 }
 
 /// Returns group stats for the organization.
+#[derive(Clone)]
 pub struct GetGroupsStatsRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -966,6 +976,7 @@ impl<'a> GetGroupsStatsRequest<'a> {
 ///
 /// #### Scopes
 /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:groups:admin`
+#[derive(Clone)]
 pub struct GetGroupsRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -1172,6 +1183,7 @@ impl<'a> GetGroupsRequest<'a> {
 }
 
 /// Create a group in a directory to manage app access and permissions for multiple users together.
+#[derive(Clone)]
 pub struct CreateGroupRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,

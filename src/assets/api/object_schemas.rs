@@ -58,6 +58,7 @@ impl<'a> ObjectSchemasService<'a> {
 }
 
 /// Resource to find object schemas in Assets
+#[derive(Clone)]
 pub struct FindSchemasRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -125,6 +126,7 @@ impl<'a> FindSchemasRequest<'a> {
 }
 
 /// Create a new object schema
+#[derive(Clone)]
 pub struct CreateSchemaRequest<'a> {
     client: &'a crate::core::Client,
     object_schema_in: ObjectSchemaIn,
@@ -161,6 +163,7 @@ impl<'a> CreateSchemaRequest<'a> {
 }
 
 /// Find a schema by id
+#[derive(Clone)]
 pub struct LoadSchemaRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -193,6 +196,7 @@ impl<'a> LoadSchemaRequest<'a> {
 }
 
 /// Update an object schema
+#[derive(Clone)]
 pub struct UpdateSchemaRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -233,6 +237,7 @@ impl<'a> UpdateSchemaRequest<'a> {
 }
 
 /// Delete a schema
+#[derive(Clone)]
 pub struct DeleteSchemaRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -265,6 +270,7 @@ impl<'a> DeleteSchemaRequest<'a> {
 }
 
 /// Find all object type attributes for this object schema
+#[derive(Clone)]
 pub struct FindSchemaAttributesRequest<'a> {
     client: &'a crate::core::Client,
     only_value_editable: Option<bool>,
@@ -336,6 +342,7 @@ impl<'a> FindSchemaAttributesRequest<'a> {
 }
 
 /// Find all object types for this object schema
+#[derive(Clone)]
 pub struct FindSchemaObjectTypesRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -381,6 +388,7 @@ impl<'a> FindSchemaObjectTypesRequest<'a> {
 }
 
 /// Find all object types for this object schema
+#[derive(Clone)]
 pub struct FindSchemaObjectTypesFlatRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

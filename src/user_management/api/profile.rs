@@ -28,6 +28,7 @@ impl<'a> ProfileService<'a> {
 }
 
 /// Returns information about a single Atlassian account by ID
+#[derive(Clone)]
 pub struct GetProfileRequest<'a> {
     client: &'a crate::core::Client,
     account_id: AccountId,
@@ -60,6 +61,7 @@ impl<'a> GetProfileRequest<'a> {
 }
 
 /// Updates fields in a user account. The `profile.write` privilege details which fields you can change.
+#[derive(Clone)]
 pub struct UpdateProfileRequest<'a> {
     client: &'a crate::core::Client,
     account_id: AccountId,

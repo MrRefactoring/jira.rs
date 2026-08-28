@@ -85,6 +85,7 @@ impl<'a> ScreensService<'a> {
 /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of the screens a field is used in.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetScreensForFieldRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -158,6 +159,7 @@ impl<'a> GetScreensForFieldRequest<'a> {
 /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of all screens or those specified by one or more screen IDs.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetScreensRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -269,6 +271,7 @@ impl<'a> GetScreensRequest<'a> {
 /// Adds a field to the default tab of the default screen.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct AddFieldToDefaultScreenRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -303,6 +306,7 @@ impl<'a> AddFieldToDefaultScreenRequest<'a> {
 /// Returns the fields that can be added to a tab on a screen.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetAvailableScreenFieldsRequest<'a> {
     client: &'a crate::core::Client,
     screen_id: i64,

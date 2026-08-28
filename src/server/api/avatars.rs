@@ -53,6 +53,7 @@ impl<'a> AvatarsService<'a> {
 }
 
 /// Returns all system avatars of the given type.
+#[derive(Clone)]
 pub struct GetAllSystemAvatarsRequest<'a> {
     client: &'a crate::core::Client,
     r#type: String,
@@ -85,6 +86,7 @@ impl<'a> GetAllSystemAvatarsRequest<'a> {
 }
 
 /// Returns a list of all avatars
+#[derive(Clone)]
 pub struct GetAvatarsRequest<'a> {
     client: &'a crate::core::Client,
     r#type: String,
@@ -122,6 +124,7 @@ impl<'a> GetAvatarsRequest<'a> {
 }
 
 /// Creates avatar from temporary
+#[derive(Clone)]
 pub struct CreateAvatarFromTemporaryRequest<'a> {
     client: &'a crate::core::Client,
     r#type: String,
@@ -174,6 +177,7 @@ impl<'a> CreateAvatarFromTemporaryRequest<'a> {
 }
 
 /// Deletes avatar
+#[derive(Clone)]
 pub struct DeleteAvatarRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -218,6 +222,7 @@ impl<'a> DeleteAvatarRequest<'a> {
 }
 
 /// Creates temporary avatar
+#[derive(Clone)]
 pub struct StoreTemporaryAvatarUsingMultiPartRequest<'a> {
     client: &'a crate::core::Client,
     r#type: String,

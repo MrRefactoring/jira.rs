@@ -40,6 +40,7 @@ impl<'a> ServiceProviderConfigurationService<'a> {
 
 /// Get different types of resources available on a SCIM service provider (e.g., Users and Groups).
 /// **Note:** This API does not support filtering, pagination, or sorting.
+#[derive(Clone)]
 pub struct GetResourceTypesRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
@@ -74,6 +75,7 @@ impl<'a> GetResourceTypesRequest<'a> {
 /// Retrieves user resource types from the SCIM service provider.
 ///
 /// **Note:** This API does not support filtering, pagination, or sorting.
+#[derive(Clone)]
 pub struct GetUserResourceTypeRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
@@ -108,6 +110,7 @@ impl<'a> GetUserResourceTypeRequest<'a> {
 /// Retrieves group resource type of this SCIM service provider.
 ///
 /// **Note:** This API does not support filtering, pagination, or sorting.
+#[derive(Clone)]
 pub struct GetGroupResourceTypeRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
@@ -142,6 +145,7 @@ impl<'a> GetGroupResourceTypeRequest<'a> {
 /// Get metadata about the supported SCIM features. This is a service provider configuration  endpoint providing supported SCIM features.
 ///
 /// **Note:** This API does not support filtering, pagination, or sorting.
+#[derive(Clone)]
 pub struct GetServiceProviderConfigRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,

@@ -19,6 +19,7 @@ impl<'a> IssueCustomFieldOptionsService<'a> {
 }
 
 /// Returns a full representation of the Custom Field Option that has the given id.
+#[derive(Clone)]
 pub struct GetCustomFieldOptionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

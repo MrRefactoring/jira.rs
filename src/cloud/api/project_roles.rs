@@ -123,6 +123,7 @@ impl<'a> ProjectRolesService<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for any project on the site or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetProjectRolesRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -161,6 +162,7 @@ impl<'a> GetProjectRolesRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -215,6 +217,7 @@ impl<'a> GetProjectRoleRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+#[derive(Clone)]
 pub struct GetProjectRoleDetailsRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -310,6 +313,7 @@ impl<'a> GetProjectRoleDetailsRequest<'a> {
 ///  *  Actors: Users and groups that are associated with a project role for a project, which may differ from the default actors. This enables you to assign a user to different roles in different projects.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetAllProjectRolesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -342,6 +346,7 @@ impl<'a> GetAllProjectRolesRequest<'a> {
 /// *Note that although a new project role is available to all projects upon creation, any default actors that are associated with the project role are not added to projects that existed prior to the role being created.*<
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct CreateProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     create_update_role_request: CreateUpdateRoleRequest,
@@ -380,6 +385,7 @@ impl<'a> CreateProjectRoleRequest<'a> {
 /// Gets the project role details and the default actors associated with the role. The list of default actors is sorted by display name.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetProjectRoleByIdRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -413,6 +419,7 @@ impl<'a> GetProjectRoleByIdRequest<'a> {
 /// You cannot update both the name and description at the same time using this operation. If you send a request with a name and a description only the name is updated.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct PartialUpdateProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -453,6 +460,7 @@ impl<'a> PartialUpdateProjectRoleRequest<'a> {
 /// Updates the project role's name and description. You must include both a name and a description in the request.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct FullyUpdateProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -493,6 +501,7 @@ impl<'a> FullyUpdateProjectRoleRequest<'a> {
 /// Deletes a project role. You must specify a replacement project role if you wish to delete a project role that is in use.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeleteProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,

@@ -141,6 +141,7 @@ impl<'a> GroupsService<'a> {
 }
 
 /// Gets the details of a group based on the id.
+#[derive(Clone)]
 pub struct GetGroupRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
@@ -178,6 +179,7 @@ impl<'a> GetGroupRequest<'a> {
 }
 
 /// Updates the details of a group with its unique ID.
+#[derive(Clone)]
 pub struct ReplaceGroupRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
@@ -231,6 +233,7 @@ impl<'a> ReplaceGroupRequest<'a> {
 ///  **Note**: Deleting a synced group from your identity provider will delete the group from your organization's directory and associated sites.
 ///  1. If this group is used for allocating product license (granting role in a product), then members of this group may lose access to corresponding product after group deletion.
 ///  2. If this group is used to grant permissions in product, then members of this group may lose their permissions in the corresponding product.
+#[derive(Clone)]
 pub struct DeleteGroupRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
@@ -350,6 +353,7 @@ impl<'a> DeleteGroupRequest<'a> {
 ///    }
 /// }
 /// ```text
+#[derive(Clone)]
 pub struct PatchGroupRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
@@ -402,6 +406,7 @@ impl<'a> PatchGroupRequest<'a> {
 /// Get groups from the directory. Filter the groups by name supported with a single exact match (`eq`) against the `displayName` attribute.
 ///
 /// **Note**: While this API enables pagination, sorting functionality is not supported.
+#[derive(Clone)]
 pub struct GetGroupsRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
@@ -475,6 +480,7 @@ impl<'a> GetGroupsRequest<'a> {
 /// Creates a read-only group in the organization's directory. You can only edit groups from your identity provider.
 ///
 /// **Note:** An attempt to create a group with an existing name will fail with a 409 (Conflict) error.
+#[derive(Clone)]
 pub struct CreateGroupRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,

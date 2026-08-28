@@ -19,6 +19,7 @@ impl<'a> ObjectAttributesService<'a> {
 }
 
 /// Create a new attribute for a given object.
+#[derive(Clone)]
 pub struct CreateObjectAttributeRequest<'a> {
     client: &'a crate::core::Client,
     include_type_attribute: Option<String>,

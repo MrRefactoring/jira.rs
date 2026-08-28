@@ -34,6 +34,7 @@ impl<'a> ApplicationRolesService<'a> {
 }
 
 /// Returns all application roles in the system.
+#[derive(Clone)]
 pub struct GetAllRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -63,6 +64,7 @@ impl<'a> GetAllRequest<'a> {
 }
 
 /// Updates the ApplicationRoles with the passed data if the version hash is the same as the server. Only the groups and default groups setting of the role may be updated. Requests to change the key or the name of the role will be silently ignored. It is acceptable to pass only the roles that are updated as roles that are present in the server but not in data to update with, will not be deleted.
+#[derive(Clone)]
 pub struct PutBulkRequest<'a> {
     client: &'a crate::core::Client,
     if_match: Option<String>,
@@ -119,6 +121,7 @@ impl<'a> PutBulkRequest<'a> {
 }
 
 /// Returns the ApplicationRole with passed key if it exists.
+#[derive(Clone)]
 pub struct GetApplicationRoleRequest<'a> {
     client: &'a crate::core::Client,
     key: String,
@@ -151,6 +154,7 @@ impl<'a> GetApplicationRoleRequest<'a> {
 }
 
 /// Updates the ApplicationRole with the passed data. Only the groups and default groups setting of the role may be updated. Requests to change the key or the name of the role will be silently ignored.
+#[derive(Clone)]
 pub struct UpdateApplicationRoleRequest<'a> {
     client: &'a crate::core::Client,
     if_match: Option<String>,

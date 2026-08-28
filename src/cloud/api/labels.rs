@@ -19,6 +19,7 @@ impl<'a> LabelsService<'a> {
 }
 
 /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of labels.
+#[derive(Clone)]
 pub struct GetAllLabelsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,

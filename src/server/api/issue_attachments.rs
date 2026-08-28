@@ -39,6 +39,7 @@ impl<'a> IssueAttachmentsService<'a> {
 }
 
 /// Returns the meta information for an attachments, specifically if they are enabled and the maximum upload size allowed.
+#[derive(Clone)]
 pub struct GetAttachmentMetaRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -68,6 +69,7 @@ impl<'a> GetAttachmentMetaRequest<'a> {
 }
 
 /// Returns the meta-data for an attachment, including the URI of the actual attached file.
+#[derive(Clone)]
 pub struct GetAttachmentRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -100,6 +102,7 @@ impl<'a> GetAttachmentRequest<'a> {
 }
 
 /// Remove an attachment from an issue.
+#[derive(Clone)]
 pub struct RemoveAttachmentRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -132,6 +135,7 @@ impl<'a> RemoveAttachmentRequest<'a> {
 }
 
 /// Tries to expand an attachment. Output is human-readable and subject to change.
+#[derive(Clone)]
 pub struct ExpandForHumansRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -164,6 +168,7 @@ impl<'a> ExpandForHumansRequest<'a> {
 }
 
 /// Tries to expand an attachment. Output is raw and should be backwards-compatible through the course of time.
+#[derive(Clone)]
 pub struct ExpandForMachinesRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

@@ -19,6 +19,7 @@ impl<'a> BacklogService<'a> {
 }
 
 /// Move issues to the backlog. This operation is equivalent to remove future and active sprints from a given set of issues. At most 50 issues may be moved at once.
+#[derive(Clone)]
 pub struct MoveIssuesToBacklogRequest<'a> {
     client: &'a crate::core::Client,
     issue_assign_request: IssueAssignRequest,

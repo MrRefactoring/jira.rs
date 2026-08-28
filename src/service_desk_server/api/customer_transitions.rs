@@ -36,6 +36,7 @@ impl<'a> CustomerTransitionsService<'a> {
 ///  **Permissions:**
 ///
 ///  The calling user must be able to view the request.
+#[derive(Clone)]
 pub struct GetCustomerTransitionsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -98,6 +99,7 @@ impl<'a> GetCustomerTransitionsRequest<'a> {
 
 /// Perform a customer transition for a given request and transition ID.  An optional comment can be included to provide a reason for the transition.**Permissions:**
 ///  The calling user must be able to view the request and have the Transition Issues permission.If an additional comment is passed the calling user must also have the Add Comments permission.
+#[derive(Clone)]
 pub struct PerformCustomerTransitionRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,

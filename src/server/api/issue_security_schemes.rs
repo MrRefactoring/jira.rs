@@ -24,6 +24,7 @@ impl<'a> IssueSecuritySchemesService<'a> {
 }
 
 /// Returns all issue security schemes that are defined.
+#[derive(Clone)]
 pub struct GetIssueSecuritySchemesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -53,6 +54,7 @@ impl<'a> GetIssueSecuritySchemesRequest<'a> {
 }
 
 /// Returns the issue security scheme along with that are defined.
+#[derive(Clone)]
 pub struct GetIssueSecuritySchemeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

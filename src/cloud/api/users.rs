@@ -139,6 +139,7 @@ impl<'a> UsersService<'a> {
 /// Privacy controls are applied to the response based on the user's preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetUserRequest<'a> {
     client: &'a crate::core::Client,
     account_id: Option<String>,
@@ -202,6 +203,7 @@ impl<'a> GetUserRequest<'a> {
 /// If the user exists and has access to Jira, the operation returns a 201 status. If the user exists but does not have access to Jira & no new jira-products are requested, the operation returns a 400 status.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). The caller has to be an **organization admin**.
+#[derive(Clone)]
 pub struct CreateUserRequest<'a> {
     client: &'a crate::core::Client,
     new_user_details: NewUserDetails,
@@ -240,6 +242,7 @@ impl<'a> CreateUserRequest<'a> {
 /// Deletes a user. If the operation completes successfully then the user is removed from Jira's user base. This operation does not delete the user's Atlassian account.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, membership of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+#[derive(Clone)]
 pub struct RemoveUserRequest<'a> {
     client: &'a crate::core::Client,
     account_id: String,
@@ -276,6 +279,7 @@ impl<'a> RemoveUserRequest<'a> {
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLgl), to get the column details for any user.
 ///  *  Permission to access Jira, to get the calling user's column details.
+#[derive(Clone)]
 pub struct GetUserDefaultColumnsRequest<'a> {
     client: &'a crate::core::Client,
     account_id: Option<String>,
@@ -327,6 +331,7 @@ impl<'a> GetUserDefaultColumnsRequest<'a> {
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the columns on any user.
 ///  *  Permission to access Jira, to set the calling user's columns.
+#[derive(Clone)]
 pub struct SetUserColumnsRequest<'a> {
     client: &'a crate::core::Client,
     account_id: Option<String>,
@@ -382,6 +387,7 @@ impl<'a> SetUserColumnsRequest<'a> {
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the columns on any user.
 ///  *  Permission to access Jira, to set the calling user's columns.
+#[derive(Clone)]
 pub struct ResetUserColumnsRequest<'a> {
     client: &'a crate::core::Client,
     account_id: Option<String>,
@@ -424,6 +430,7 @@ impl<'a> ResetUserColumnsRequest<'a> {
 }
 
 /// Returns a user's email address regardless of the user's profile visibility settings. For Connect apps, this API is only available to apps approved by Atlassian, according to these [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603). For Forge apps, this API only supports access via asApp() requests.
+#[derive(Clone)]
 pub struct GetUserEmailRequest<'a> {
     client: &'a crate::core::Client,
     account_id: String,
@@ -455,6 +462,7 @@ impl<'a> GetUserEmailRequest<'a> {
 }
 
 /// Returns a user's email address regardless of the user's profile visibility settings. For Connect apps, this API is only available to apps approved by Atlassian, according to these [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603). For Forge apps, this API only supports access via asApp() requests.
+#[derive(Clone)]
 pub struct GetUserEmailBulkRequest<'a> {
     client: &'a crate::core::Client,
     account_id: Vec<String>,
@@ -489,6 +497,7 @@ impl<'a> GetUserEmailBulkRequest<'a> {
 /// Returns the groups to which a user belongs.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetUserGroupsRequest<'a> {
     client: &'a crate::core::Client,
     account_id: String,
@@ -525,6 +534,7 @@ impl<'a> GetUserGroupsRequest<'a> {
 /// Privacy controls are applied to the response based on the users' preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetAllUsersDefaultRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -595,6 +605,7 @@ impl<'a> GetAllUsersDefaultRequest<'a> {
 /// Privacy controls are applied to the response based on the users' preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetAllUsersRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,

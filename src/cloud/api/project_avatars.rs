@@ -86,6 +86,7 @@ impl<'a> ProjectAvatarsService<'a> {
 /// Use [Load project avatar](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-avatar2-post) to store avatars against the project, before using this operation to set the displayed avatar.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+#[derive(Clone)]
 pub struct UpdateProjectAvatarRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -128,6 +129,7 @@ impl<'a> UpdateProjectAvatarRequest<'a> {
 /// Deletes a custom avatar from a project. Note that system avatars cannot be deleted.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+#[derive(Clone)]
 pub struct DeleteProjectAvatarRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -191,6 +193,7 @@ impl<'a> DeleteProjectAvatarRequest<'a> {
 /// After creating the avatar use [Set project avatar](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-avatar-put) to set it as the project's displayed avatar.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+#[derive(Clone)]
 pub struct CreateProjectAvatarRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -294,6 +297,7 @@ impl<'a> CreateProjectAvatarRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+#[derive(Clone)]
 pub struct GetAllProjectAvatarsRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,

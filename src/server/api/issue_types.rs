@@ -116,6 +116,7 @@ impl<'a> IssueTypesService<'a> {
 }
 
 /// Returns a list of all issue types visible to the user
+#[derive(Clone)]
 pub struct GetIssueAllTypesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -144,6 +145,7 @@ impl<'a> GetIssueAllTypesRequest<'a> {
 }
 
 /// Creates an issue type from a JSON representation and adds the issue newly created issue type to the default issue type scheme.
+#[derive(Clone)]
 pub struct CreateIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_create: IssueTypeCreate,
@@ -180,6 +182,7 @@ impl<'a> CreateIssueTypeRequest<'a> {
 }
 
 /// Returns paginated list of filtered issue types
+#[derive(Clone)]
 pub struct GetPaginatedIssueTypesRequest<'a> {
     client: &'a crate::core::Client,
     x_requested_with: Option<String>,
@@ -273,6 +276,7 @@ impl<'a> GetPaginatedIssueTypesRequest<'a> {
 }
 
 /// Returns a full representation of the issue type that has the given id.
+#[derive(Clone)]
 pub struct GetIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -305,6 +309,7 @@ impl<'a> GetIssueTypeRequest<'a> {
 }
 
 /// Updates the specified issue type from a JSON representation.
+#[derive(Clone)]
 pub struct UpdateIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -345,6 +350,7 @@ impl<'a> UpdateIssueTypeRequest<'a> {
 }
 
 /// Deletes the specified issue type. If the issue type has any associated issues, these issues will be migrated to the alternative issue type specified in the parameter.
+#[derive(Clone)]
 pub struct DeleteIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -390,6 +396,7 @@ impl<'a> DeleteIssueTypeRequest<'a> {
 }
 
 /// Returns a list of all alternative issue types for the given issue type id.
+#[derive(Clone)]
 pub struct GetAlternativeIssueTypesRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -422,6 +429,7 @@ impl<'a> GetAlternativeIssueTypesRequest<'a> {
 }
 
 /// Converts temporary avatar into a real avatar
+#[derive(Clone)]
 pub struct CreateIssueTypeAvatarFromTemporaryRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -471,6 +479,7 @@ impl<'a> CreateIssueTypeAvatarFromTemporaryRequest<'a> {
 /// curl -c cookiejar.txt -X POST -u admin:admin -H "X-Atlassian-Token: no-check" \
 ///   -F "avatar=@mynewavatar.png;type=image/png" \
 ///   '<http://localhost:8090/jira/rest/api/2/issuetype/1/avatar/temporary>'
+#[derive(Clone)]
 pub struct StoreTemporaryIssueTypeAvatarUsingMultiPartRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -524,6 +533,7 @@ impl<'a> StoreTemporaryIssueTypeAvatarUsingMultiPartRequest<'a> {
 }
 
 /// Returns the keys of all properties for the issue type identified by the id
+#[derive(Clone)]
 pub struct GetIssueTypePropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_id: String,
@@ -556,6 +566,7 @@ impl<'a> GetIssueTypePropertyKeysRequest<'a> {
 }
 
 /// Returns the value of the property with a given key from the issue type identified by the id
+#[derive(Clone)]
 pub struct GetIssueTypePropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -593,6 +604,7 @@ impl<'a> GetIssueTypePropertyRequest<'a> {
 }
 
 /// Sets the value of the specified issue type's property
+#[derive(Clone)]
 pub struct SetIssueTypePropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -638,6 +650,7 @@ impl<'a> SetIssueTypePropertyRequest<'a> {
 }
 
 /// Removes the property from the issue type identified by the id
+#[derive(Clone)]
 pub struct DeleteIssueTypePropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,

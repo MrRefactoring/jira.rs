@@ -116,6 +116,7 @@ impl<'a> PermissionsService<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetMyPermissionsRequest<'a> {
     client: &'a crate::core::Client,
     project_key: Option<String>,
@@ -265,6 +266,7 @@ impl<'a> GetMyPermissionsRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetAllPermissionsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -314,6 +316,7 @@ impl<'a> GetAllPermissionsRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) to check the permissions for other users, otherwise none. However, Connect apps can make a call from the app server to the product to obtain permission details for any user, without admin permission. This Connect app ability doesn't apply to calls made using AP.request() in a browser.
+#[derive(Clone)]
 pub struct GetBulkPermissionsRequest<'a> {
     client: &'a crate::core::Client,
     bulk_permissions_request: BulkPermissionsRequest,
@@ -355,6 +358,7 @@ impl<'a> GetBulkPermissionsRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetPermittedProjectsRequest<'a> {
     client: &'a crate::core::Client,
     permissions_keys: PermissionsKeys,

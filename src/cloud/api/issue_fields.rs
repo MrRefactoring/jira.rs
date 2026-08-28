@@ -204,6 +204,7 @@ impl<'a> IssueFieldsService<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetFieldsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -234,6 +235,7 @@ impl<'a> GetFieldsRequest<'a> {
 /// Creates a custom field.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct CreateCustomFieldRequest2<'a> {
     client: &'a crate::core::Client,
     custom_field_definition: CustomFieldDefinition,
@@ -279,6 +281,7 @@ impl<'a> CreateCustomFieldRequest2<'a> {
 /// Use `type` must be set to `custom` to show custom fields only.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct GetFieldsPaginatedRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -439,6 +442,7 @@ impl<'a> GetFieldsPaginatedRequest<'a> {
 /// Only custom fields can be queried, `type` must be set to `custom`.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetTrashedFieldsPaginatedRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -550,6 +554,7 @@ impl<'a> GetTrashedFieldsPaginatedRequest<'a> {
 /// Updates a custom field.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct UpdateCustomFieldRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -598,6 +603,7 @@ impl<'a> UpdateCustomFieldRequest<'a> {
 /// This operation is [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `location` link in the response to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeleteCustomFieldRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -632,6 +638,7 @@ impl<'a> DeleteCustomFieldRequest<'a> {
 /// Restores a custom field from trash. See [Edit or delete a custom field](https://confluence.atlassian.com/x/Z44fOw) for more information on trashing and deleting custom fields.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct RestoreCustomFieldRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -666,6 +673,7 @@ impl<'a> RestoreCustomFieldRequest<'a> {
 /// Moves a custom field to trash. See [Edit or delete a custom field](https://confluence.atlassian.com/x/Z44fOw) for more information on trashing and deleting custom fields.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct TrashCustomFieldRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

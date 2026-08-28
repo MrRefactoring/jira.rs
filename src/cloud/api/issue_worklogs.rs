@@ -299,6 +299,7 @@ impl<'a> IssueWorklogsService<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
 pub struct GetIssueWorklogRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -413,6 +414,7 @@ impl<'a> GetIssueWorklogRequest<'a> {
 ///
 ///  *  *Browse projects* and *Work on issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct AddWorklogRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -585,6 +587,7 @@ impl<'a> AddWorklogRequest<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
 pub struct GetWorklogRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -648,6 +651,7 @@ impl<'a> GetWorklogRequest<'a> {
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  *Edit all worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg) to update any worklog or *Edit own worklogs* to update worklogs created by the user.
 ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
 pub struct UpdateWorklogRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -811,6 +815,7 @@ impl<'a> UpdateWorklogRequest<'a> {
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  *Delete all worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg) to delete any worklog or *Delete own worklogs* to delete worklogs created by the user,
 ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
 pub struct DeleteWorklogRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -933,6 +938,7 @@ impl<'a> DeleteWorklogRequest<'a> {
 /// This resource does not return worklogs deleted during the minute preceding the request.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct GetIdsOfWorklogsDeletedSinceRequest<'a> {
     client: &'a crate::core::Client,
     since: Option<i64>,
@@ -982,6 +988,7 @@ impl<'a> GetIdsOfWorklogsDeletedSinceRequest<'a> {
 ///
 ///  *  the worklog is set as *Viewable by All Users*.
 ///  *  the user is a member of a project role or group with permission to view the worklog.
+#[derive(Clone)]
 pub struct GetWorklogsForIdsRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetWorklogsForIdsRequestExpand>,
@@ -1041,6 +1048,7 @@ impl<'a> GetWorklogsForIdsRequest<'a> {
 ///
 ///  *  the worklog is set as *Viewable by All Users*.
 ///  *  the user is a member of a project role or group with permission to view the worklog.
+#[derive(Clone)]
 pub struct GetIdsOfWorklogsModifiedSinceRequest<'a> {
     client: &'a crate::core::Client,
     since: Option<i64>,

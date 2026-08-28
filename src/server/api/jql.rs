@@ -24,6 +24,7 @@ impl<'a> JQLService<'a> {
 }
 
 /// Returns the auto complete data required for JQL searches
+#[derive(Clone)]
 pub struct GetAutoCompleteRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -53,6 +54,7 @@ impl<'a> GetAutoCompleteRequest<'a> {
 }
 
 /// Returns auto complete suggestions for JQL search
+#[derive(Clone)]
 pub struct GetFieldAutoCompleteForQueryStringRequest<'a> {
     client: &'a crate::core::Client,
     predicate_value: Option<String>,

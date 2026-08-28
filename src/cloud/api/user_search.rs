@@ -186,6 +186,7 @@ impl<'a> UserSearchService<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for each project specified in `projectKeys`.
+#[derive(Clone)]
 pub struct FindBulkAssignableUsersRequest<'a> {
     client: &'a crate::core::Client,
     query: Option<String>,
@@ -284,6 +285,7 @@ impl<'a> FindBulkAssignableUsersRequest<'a> {
 /// Privacy controls are applied to the response based on the users' preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Assign issues* [project permission](https://confluence.atlassian.com/x/yodKLg)
+#[derive(Clone)]
 pub struct FindAssignableUsersRequest<'a> {
     client: &'a crate::core::Client,
     query: Option<String>,
@@ -496,6 +498,7 @@ impl<'a> FindAssignableUsersRequest<'a> {
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to get users for any project.
 ///  *  *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project, to get users for that project.
+#[derive(Clone)]
 pub struct FindUsersWithAllPermissionsRequest<'a> {
     client: &'a crate::core::Client,
     query: Option<String>,
@@ -623,6 +626,7 @@ impl<'a> FindUsersWithAllPermissionsRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg). Anonymous calls and calls by users without the required permission return search results for an exact name match only.
+#[derive(Clone)]
 pub struct FindUsersForPickerRequest<'a> {
     client: &'a crate::core::Client,
     query: String,
@@ -734,6 +738,7 @@ impl<'a> FindUsersForPickerRequest<'a> {
 /// Privacy controls are applied to the response based on the users' preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg). Anonymous calls or calls by users without the required permission return empty search results.
+#[derive(Clone)]
 pub struct FindUsersRequest<'a> {
     client: &'a crate::core::Client,
     query: Option<String>,
@@ -867,6 +872,7 @@ impl<'a> FindUsersRequest<'a> {
 /// The list of issues can be extended as needed, as in *(PROJ-1, PROJ-2, ... PROJ-n)*. Statements can be combined using the `AND` and `OR` operators to form more complex queries. For example:
 ///
 /// `is assignee of PROJ AND [propertyKey].entity.property.path is "property value"`
+#[derive(Clone)]
 pub struct FindUsersByQueryRequest<'a> {
     client: &'a crate::core::Client,
     query: String,
@@ -944,6 +950,7 @@ impl<'a> FindUsersByQueryRequest<'a> {
 /// The list of issues can be extended as needed, as in *(PROJ-1, PROJ-2, ... PROJ-n)*. Statements can be combined using the `AND` and `OR` operators to form more complex queries. For example:
 ///
 /// `is assignee of PROJ AND [propertyKey].entity.property.path is "property value"`
+#[derive(Clone)]
 pub struct FindUserKeysByQueryRequest<'a> {
     client: &'a crate::core::Client,
     query: String,
@@ -1018,6 +1025,7 @@ impl<'a> FindUserKeysByQueryRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg). Anonymous calls and calls by users without the required permission return empty search results.
+#[derive(Clone)]
 pub struct FindUsersWithBrowsePermissionRequest<'a> {
     client: &'a crate::core::Client,
     query: Option<String>,

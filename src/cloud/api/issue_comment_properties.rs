@@ -83,6 +83,7 @@ impl<'a> IssueCommentPropertiesService<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  If the comment has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
 pub struct GetCommentPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     comment_id: String,
@@ -123,6 +124,7 @@ impl<'a> GetCommentPropertyKeysRequest<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  If the comment has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
 pub struct GetCommentPropertyRequest<'a> {
     client: &'a crate::core::Client,
     comment_id: String,
@@ -167,6 +169,7 @@ impl<'a> GetCommentPropertyRequest<'a> {
 ///
 ///  *  *Edit All Comments* [project permission](https://confluence.atlassian.com/x/yodKLg) to create or update the value of a property on any comment.
 ///  *  *Edit Own Comments* [project permission](https://confluence.atlassian.com/x/yodKLg) to create or update the value of a property on a comment created by the user.
+#[derive(Clone)]
 pub struct SetCommentPropertyRequest<'a> {
     client: &'a crate::core::Client,
     comment_id: String,
@@ -217,6 +220,7 @@ impl<'a> SetCommentPropertyRequest<'a> {
 ///
 ///  *  *Edit All Comments* [project permission](https://confluence.atlassian.com/x/yodKLg) to delete a property from any comment.
 ///  *  *Edit Own Comments* [project permission](https://confluence.atlassian.com/x/yodKLg) to delete a property from a comment created by the user.
+#[derive(Clone)]
 pub struct DeleteCommentPropertyRequest<'a> {
     client: &'a crate::core::Client,
     comment_id: String,

@@ -46,6 +46,7 @@ impl<'a> ApprovalsService<'a> {
 }
 
 /// Returns an approval for a given approval ID.
+#[derive(Clone)]
 pub struct GetApprovalByIdRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -87,6 +88,7 @@ impl<'a> GetApprovalByIdRequest<'a> {
 }
 
 /// Answer a pending approval.
+#[derive(Clone)]
 pub struct AnswerApprovalRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -148,6 +150,7 @@ impl<'a> AnswerApprovalRequest<'a> {
 }
 
 /// Returns approval comment config for a given approval ID.
+#[derive(Clone)]
 pub struct GetApprovalCommentConfigRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -189,6 +192,7 @@ impl<'a> GetApprovalCommentConfigRequest<'a> {
 }
 
 /// Returns all approvals on a request, for a given request Id/key.
+#[derive(Clone)]
 pub struct GetApprovalsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,

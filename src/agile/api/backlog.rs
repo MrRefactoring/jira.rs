@@ -32,6 +32,7 @@ impl<'a> BacklogService<'a> {
 
 /// Move issues to the backlog.
 /// This operation is equivalent to remove future and active sprints from a given set of issues. At most 50 issues may be moved at once.
+#[derive(Clone)]
 pub struct MoveIssuesToBacklogRequest<'a> {
     client: &'a crate::core::Client,
     issues: Vec<String>,
@@ -69,6 +70,7 @@ impl<'a> MoveIssuesToBacklogRequest<'a> {
 
 /// Move issues to the backlog of a particular board (if they are already on that board).
 /// This operation is equivalent to remove future and active sprints from a given set of issues if the board has sprints If the board does not have sprints this will put the issues back into the backlog from the board. At most 50 issues may be moved at once.
+#[derive(Clone)]
 pub struct MoveIssuesToBacklogForBoardRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,

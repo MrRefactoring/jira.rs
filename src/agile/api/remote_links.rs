@@ -213,6 +213,7 @@ impl<'a> RemoteLinksService<'a> {
 ///
 /// In the case of multiple Remote Links being submitted in one request, each is validated individually prior to
 /// submission. Details of which Remote LInk failed submission (if any) are available in the response object.
+#[derive(Clone)]
 pub struct SubmitRemoteLinksRequest<'a> {
     client: &'a crate::core::Client,
     properties: Option<std::collections::HashMap<String, serde_json::Value>>,
@@ -296,6 +297,7 @@ impl<'a> SubmitRemoteLinksRequest<'a> {
 ///
 /// Deletion is performed asynchronously. The `getRemoteLinkById` operation can be used to confirm that data has been
 /// deleted successfully (if needed).
+#[derive(Clone)]
 pub struct DeleteRemoteLinksByPropertyRequest<'a> {
     client: &'a crate::core::Client,
     params: Option<std::collections::HashMap<String, serde_json::Value>>,
@@ -351,6 +353,7 @@ impl<'a> DeleteRemoteLinksByPropertyRequest<'a> {
 /// Retrieve the currently stored Remote Link data for the given ID.
 ///
 /// The result will be what is currently stored, ignoring any pending updates or deletes.
+#[derive(Clone)]
 pub struct GetRemoteLinkByIdRequest<'a> {
     client: &'a crate::core::Client,
     remote_link_id: String,
@@ -386,6 +389,7 @@ impl<'a> GetRemoteLinkByIdRequest<'a> {
 ///
 /// Deletion is performed asynchronously. The `getRemoteLinkById` operation can be used to confirm that data has been
 /// deleted successfully (if needed).
+#[derive(Clone)]
 pub struct DeleteRemoteLinkByIdRequest<'a> {
     client: &'a crate::core::Client,
     remote_link_id: String,

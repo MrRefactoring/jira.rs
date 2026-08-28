@@ -51,6 +51,7 @@ impl<'a> ProjectCategoriesService<'a> {
 /// Returns all project categories.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct GetAllProjectCategoriesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -82,6 +83,7 @@ impl<'a> GetAllProjectCategoriesRequest<'a> {
 /// Creates a project category.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct CreateProjectCategoryRequest<'a> {
     client: &'a crate::core::Client,
     project_category: ProjectCategory,
@@ -121,6 +123,7 @@ impl<'a> CreateProjectCategoryRequest<'a> {
 /// Returns a project category.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct GetProjectCategoryByIdRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -155,6 +158,7 @@ impl<'a> GetProjectCategoryByIdRequest<'a> {
 /// Updates a project category.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct UpdateProjectCategoryRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -192,6 +196,7 @@ impl<'a> UpdateProjectCategoryRequest<'a> {
 /// Deletes a project category.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct RemoveProjectCategoryRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,

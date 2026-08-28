@@ -37,6 +37,7 @@ impl<'a> DomainsService<'a> {
 ///
 /// #### Scopes
 /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:domains:admin`
+#[derive(Clone)]
 pub struct GetDomainsRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
@@ -85,6 +86,7 @@ impl<'a> GetDomainsRequest<'a> {
 ///
 /// #### Scopes
 /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:domains:admin`
+#[derive(Clone)]
 pub struct GetDomainByIdRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,

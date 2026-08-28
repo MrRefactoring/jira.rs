@@ -333,6 +333,7 @@ impl<'a> SecurityInformationService<'a> {
 }
 
 /// Insert Security Workspace IDs to establish a relationship between them and the Jira site the app is installed on. If a relationship between the workspace ID and Jira already exists then the workspace ID will be ignored and Jira will process the rest of the entries.
+#[derive(Clone)]
 pub struct SubmitWorkspacesRequest<'a> {
     client: &'a crate::core::Client,
     workspace_ids: Vec<String>,
@@ -373,6 +374,7 @@ impl<'a> SubmitWorkspacesRequest<'a> {
 /// Bulk delete all linked Security Workspaces that match the given request.
 ///
 /// e.g. DELETE /bulk?workspaceIds=111-222-333,444-555-666
+#[derive(Clone)]
 pub struct DeleteLinkedWorkspacesRequest<'a> {
     client: &'a crate::core::Client,
     workspace_ids: DeleteLinkedWorkspacesRequestWorkspaceIds,
@@ -411,6 +413,7 @@ impl<'a> DeleteLinkedWorkspacesRequest<'a> {
 /// Retrieve all Security Workspaces linked with the Jira site.
 ///
 /// The result will be what is currently stored, ignoring any pending updates or deletes.
+#[derive(Clone)]
 pub struct GetLinkedWorkspacesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -442,6 +445,7 @@ impl<'a> GetLinkedWorkspacesRequest<'a> {
 /// Retrieve a specific Security Workspace linked to the Jira site for the given workspace ID.
 ///
 /// The result will be what is currently stored, ignoring any pending updates or deletes.
+#[derive(Clone)]
 pub struct GetLinkedWorkspaceByIdRequest<'a> {
     client: &'a crate::core::Client,
     workspace_id: String,
@@ -482,6 +486,7 @@ impl<'a> GetLinkedWorkspaceByIdRequest<'a> {
 /// In the case of multiple Vulnerabilities being submitted in one request, each is validated individually prior to submission. Details of Vulnerabilities that failed submission (if any) are available in the response object.
 ///
 /// A maximum of 1000 vulnerabilities can be submitted in one request.
+#[derive(Clone)]
 pub struct SubmitVulnerabilitiesRequest<'a> {
     client: &'a crate::core::Client,
     operation_type: Option<SubmitVulnerabilitiesRequestOperationType>,
@@ -579,6 +584,7 @@ impl<'a> SubmitVulnerabilitiesRequest<'a> {
 /// e.g. DELETE /bulkByProperties?accountId=account-123&createdBy=user-456
 ///
 /// Deletion is performed asynchronously. The GET vulnerability endpoint can be used to confirm that data has been deleted successfully (if needed).
+#[derive(Clone)]
 pub struct DeleteVulnerabilitiesByPropertyRequest<'a> {
     client: &'a crate::core::Client,
     account_id: String,
@@ -628,6 +634,7 @@ impl<'a> DeleteVulnerabilitiesByPropertyRequest<'a> {
 /// Retrieve the currently stored Vulnerability data for the given ID.
 ///
 /// The result will be what is currently stored, ignoring any pending updates or deletes.
+#[derive(Clone)]
 pub struct GetVulnerabilityByIdRequest<'a> {
     client: &'a crate::core::Client,
     vulnerability_id: String,
@@ -662,6 +669,7 @@ impl<'a> GetVulnerabilityByIdRequest<'a> {
 /// Delete the Vulnerability data currently stored for the given ID.
 ///
 /// Deletion is performed asynchronously. The GET vulnerability endpoint can be used to confirm that data has been deleted successfully (if needed).
+#[derive(Clone)]
 pub struct DeleteVulnerabilityByIdRequest<'a> {
     client: &'a crate::core::Client,
     vulnerability_id: String,

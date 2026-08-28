@@ -24,6 +24,7 @@ impl<'a> UpgradeService<'a> {
 }
 
 /// Returns the result of the last upgrade task.
+#[derive(Clone)]
 pub struct GetUpgradeResultRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -52,6 +53,7 @@ impl<'a> GetUpgradeResultRequest<'a> {
 }
 
 /// Runs any pending delayed upgrade tasks. Need Admin permissions to do this.
+#[derive(Clone)]
 pub struct RunUpgradesNowRequest<'a> {
     client: &'a crate::core::Client,
 }

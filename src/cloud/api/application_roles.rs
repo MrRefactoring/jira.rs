@@ -30,6 +30,7 @@ impl<'a> ApplicationRolesService<'a> {
 /// Returns all application roles. In Jira, application roles are managed using the [Application access configuration](https://confluence.atlassian.com/x/3YxjL) page.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetAllApplicationRolesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -61,6 +62,7 @@ impl<'a> GetAllApplicationRolesRequest<'a> {
 /// Returns an application role.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetApplicationRoleRequest<'a> {
     client: &'a crate::core::Client,
     key: String,

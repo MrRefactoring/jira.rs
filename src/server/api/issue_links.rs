@@ -29,6 +29,7 @@ impl<'a> IssueLinksService<'a> {
 }
 
 /// Creates an issue link between two issues.
+#[derive(Clone)]
 pub struct LinkIssuesRequest<'a> {
     client: &'a crate::core::Client,
     link_issue_request_json: LinkIssueRequestJson,
@@ -65,6 +66,7 @@ impl<'a> LinkIssuesRequest<'a> {
 }
 
 /// Returns an issue link with the specified id.
+#[derive(Clone)]
 pub struct GetIssueLinkRequest<'a> {
     client: &'a crate::core::Client,
     link_id: String,
@@ -97,6 +99,7 @@ impl<'a> GetIssueLinkRequest<'a> {
 }
 
 /// Deletes an issue link with the specified id.
+#[derive(Clone)]
 pub struct DeleteIssueLinkRequest<'a> {
     client: &'a crate::core::Client,
     link_id: String,

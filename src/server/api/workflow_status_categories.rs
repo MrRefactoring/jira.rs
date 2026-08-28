@@ -24,6 +24,7 @@ impl<'a> WorkflowStatusCategoriesService<'a> {
 }
 
 /// Returns a list of all status categories
+#[derive(Clone)]
 pub struct GetStatusCategoriesRequest<'a> {
     client: &'a crate::core::Client,
     request: Option<String>,
@@ -79,6 +80,7 @@ impl<'a> GetStatusCategoriesRequest<'a> {
 }
 
 /// Returns a full representation of the StatusCategory having the given id or key
+#[derive(Clone)]
 pub struct GetStatusCategoryRequest<'a> {
     client: &'a crate::core::Client,
     id_or_key: String,

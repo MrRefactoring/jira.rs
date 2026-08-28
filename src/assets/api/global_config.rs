@@ -23,6 +23,7 @@ impl<'a> GlobalConfigService<'a> {
 }
 
 /// Update general configuration for object schema
+#[derive(Clone)]
 pub struct UpdateGlobalConfigurationRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

@@ -29,6 +29,7 @@ impl<'a> PortalsService<'a> {
 }
 
 /// Get a portal with the specified ID.
+#[derive(Clone)]
 pub struct GetPortalRequest<'a> {
     client: &'a crate::core::Client,
     portal_id: String,
@@ -61,6 +62,7 @@ impl<'a> GetPortalRequest<'a> {
 }
 
 /// Get a portal for the project by key.
+#[derive(Clone)]
 pub struct GetPortalByProjectKeyRequest<'a> {
     client: &'a crate::core::Client,
     project_key: String,
@@ -93,6 +95,7 @@ impl<'a> GetPortalByProjectKeyRequest<'a> {
 }
 
 /// Get all portals. Returns a maximum of 50 portals per page.
+#[derive(Clone)]
 pub struct GetPortalsRequest<'a> {
     client: &'a crate::core::Client,
     start: Option<f64>,

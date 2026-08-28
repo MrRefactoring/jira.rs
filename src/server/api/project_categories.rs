@@ -39,6 +39,7 @@ impl<'a> ProjectCategoriesService<'a> {
 }
 
 /// Returns all project categories
+#[derive(Clone)]
 pub struct GetAllProjectCategoriesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -68,6 +69,7 @@ impl<'a> GetAllProjectCategoriesRequest<'a> {
 }
 
 /// Create a project category.
+#[derive(Clone)]
 pub struct CreateProjectCategoryRequest<'a> {
     client: &'a crate::core::Client,
     project_category: ProjectCategory,
@@ -105,6 +107,7 @@ impl<'a> CreateProjectCategoryRequest<'a> {
 }
 
 /// Returns a full representation of the project category that has the given id.
+#[derive(Clone)]
 pub struct GetProjectCategoryByIdRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -137,6 +140,7 @@ impl<'a> GetProjectCategoryByIdRequest<'a> {
 }
 
 /// Modify a project category.
+#[derive(Clone)]
 pub struct UpdateProjectCategoryRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -172,6 +176,7 @@ impl<'a> UpdateProjectCategoryRequest<'a> {
 }
 
 /// Delete a project category.
+#[derive(Clone)]
 pub struct RemoveProjectCategoryRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,

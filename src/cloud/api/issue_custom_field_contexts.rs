@@ -184,6 +184,7 @@ impl<'a> IssueCustomFieldContextsService<'a> {
 ///  *  By defining `isGlobalContext`, limit the list of contexts return to either those that apply to all projects (global contexts) (true) or those that apply to only a subset of projects (false).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). *Edit Workflow* [edit workflow permission](https://support.atlassian.com/jira-cloud-administration/docs/permissions-for-company-managed-projects/#Edit-Workflows)
+#[derive(Clone)]
 pub struct GetContextsForFieldRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -293,6 +294,7 @@ impl<'a> GetContextsForFieldRequest<'a> {
 /// If `projectIds` is empty, a global context is created. A global context is one that applies to all project. If `issueTypeIds` is empty, the context applies to all issue types.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct CreateCustomFieldContextRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -345,6 +347,7 @@ impl<'a> CreateCustomFieldContextRequest<'a> {
 /// The value object on each entry is the same polymorphic `CustomFieldContextDefaultValueBean` exposed by the deprecated `GET /defaultValue` endpoint - its concrete subtype depends on the custom field's type (see the list of supported types on that endpoint).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetContextDefaultValuesRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -438,6 +441,7 @@ impl<'a> GetContextDefaultValuesRequest<'a> {
 /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of context to issue type mappings for a custom field. Mappings are returned for all contexts or a list of contexts. Mappings are ordered first by context ID and then by issue type ID.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetIssueTypeMappingsForContextsRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -517,6 +521,7 @@ impl<'a> GetIssueTypeMappingsForContextsRequest<'a> {
 /// The order of the returned values is the same as provided in the request.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetCustomFieldContextsForProjectsAndIssueTypesRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -591,6 +596,7 @@ impl<'a> GetCustomFieldContextsForProjectsAndIssueTypesRequest<'a> {
 /// **Note:** Jira is adding support for multiple field contexts per project. On sites where this is enabled, a custom field can have more than one context associated with the same project, so this operation can return several mappings that share the same `projectId`, each with a different `contextId`. Do not assume that a project appears at most once in the response. See [CHANGE-3082](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-3082) for more details.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetProjectContextMappingRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -664,6 +670,7 @@ impl<'a> GetProjectContextMappingRequest<'a> {
 /// Updates a [ custom field context](https://confluence.atlassian.com/adminjiracloud/what-are-custom-field-contexts-991923859.html).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct UpdateCustomFieldContextRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -718,6 +725,7 @@ impl<'a> UpdateCustomFieldContextRequest<'a> {
 /// This API will not allow removing the global context from April 2026. Instead, an HTTP 400 response will be returned. See [CHANGE-3019](https://developer.atlassian.com/changelog/#CHANGE-3019)
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct DeleteCustomFieldContextRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -763,6 +771,7 @@ impl<'a> DeleteCustomFieldContextRequest<'a> {
 /// This API will not allow adding issue types to the global context from April 2026. Instead, an HTTP 400 response will be returned. See [CHANGE-3019](https://developer.atlassian.com/changelog/#CHANGE-3019)
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct AddIssueTypesToContextRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -817,6 +826,7 @@ impl<'a> AddIssueTypesToContextRequest<'a> {
 /// A custom field context without any issue types applies to all issue types.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct RemoveIssueTypesFromContextRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -873,6 +883,7 @@ impl<'a> RemoveIssueTypesFromContextRequest<'a> {
 /// This API will not allow adding projects to the global context from April 2026. Instead, an HTTP 400 response will be returned. See [CHANGE-3019](https://developer.atlassian.com/changelog/#CHANGE-3019)
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct AssignProjectsToCustomFieldContextRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -929,6 +940,7 @@ impl<'a> AssignProjectsToCustomFieldContextRequest<'a> {
 /// If any project in the request is not assigned to the context, or the operation would result in two global contexts for the field, the operation fails.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct RemoveCustomFieldContextFromProjectsRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,

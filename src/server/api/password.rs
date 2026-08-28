@@ -48,6 +48,7 @@ impl<'a> PasswordService<'a> {
 }
 
 /// Returns the list of requirements for the current password policy. For example, "The password must have at least 10 characters.", "The password must not be similar to the user's name or email address.", etc.
+#[derive(Clone)]
 pub struct GetPasswordPolicyRequest<'a> {
     client: &'a crate::core::Client,
     has_old_password: Option<bool>,
@@ -97,6 +98,7 @@ impl<'a> GetPasswordPolicyRequest<'a> {
 /// The username and new password must be not empty to perform the validation.
 /// Note, this method will help you validate against the policy only. It won't check any other validations that might be performed
 /// when creating a new user, e.g. checking whether a user with the same name already exists.
+#[derive(Clone)]
 pub struct PolicyCheckCreateUserRequest<'a> {
     client: &'a crate::core::Client,
     password_policy_create_user: PasswordPolicyCreateUser,
@@ -142,6 +144,7 @@ impl<'a> PolicyCheckCreateUserRequest<'a> {
 /// The user must exist and the username and new password must be not empty, to perform the validation.
 /// Note, this method will help you validate against the policy only. It won't check any other validations that might be performed
 /// when submitting a password change/reset request, e.g. verifying whether the old password is valid.
+#[derive(Clone)]
 pub struct PolicyCheckUpdateUserRequest<'a> {
     client: &'a crate::core::Client,
     password_policy_update_user: PasswordPolicyUpdateUser,

@@ -36,6 +36,7 @@ impl<'a> ProjectEmailService<'a> {
 /// Returns the [project's sender email address](https://confluence.atlassian.com/x/dolKLg).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+#[derive(Clone)]
 pub struct GetProjectEmailRequest<'a> {
     client: &'a crate::core::Client,
     project_id: i64,
@@ -72,6 +73,7 @@ impl<'a> GetProjectEmailRequest<'a> {
 /// If `emailAddress` is an empty string, the default email address is restored.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
+#[derive(Clone)]
 pub struct UpdateProjectEmailRequest<'a> {
     client: &'a crate::core::Client,
     project_id: i64,

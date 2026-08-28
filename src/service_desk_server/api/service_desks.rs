@@ -24,6 +24,7 @@ impl<'a> ServiceDesksService<'a> {
 }
 
 /// Returns the service project for a given service project Id.
+#[derive(Clone)]
 pub struct GetServiceDeskByIdRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -56,6 +57,7 @@ impl<'a> GetServiceDeskByIdRequest<'a> {
 }
 
 /// Returns all service projects in the Jira Service Management application with the option to include archived service projects.
+#[derive(Clone)]
 pub struct GetServiceDesksRequest<'a> {
     client: &'a crate::core::Client,
     include_archived: Option<String>,

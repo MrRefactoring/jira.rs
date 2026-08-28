@@ -313,6 +313,7 @@ impl<'a> BoardService<'a> {
 /// **Deprecation notice:** The required OAuth 2.0 scopes will be updated on February 15, 2024.
 ///
 ///  *  `read:board-scope:jira-software`, `read:project:jira`
+#[derive(Clone)]
 pub struct GetAllBoardsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -536,6 +537,7 @@ impl<'a> GetAllBoardsRequest<'a> {
 ///  *  If you want to create a new project with an associated board, use the [Jira platform REST API](https://docs.atlassian.com/jira/REST/latest). For more information, see the [Create project](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-project-post) method. The `projectTypeKey` for software boards must be 'software' and the `projectTemplateKey` must be either `com.pyxis.greenhopper.jira:gh-kanban-template` or `com.pyxis.greenhopper.jira:gh-scrum-template`.
 ///  *  You can create a filter using the [Jira REST API](https://docs.atlassian.com/jira/REST/latest). For more information, see the [Create filter](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-filter-post) method.
 ///  *  If you do not ORDER BY the Rank field for the filter of your board, you will not be able to reorder issues on the board.
+#[derive(Clone)]
 pub struct CreateBoardRequest<'a> {
     client: &'a crate::core::Client,
     board_create: BoardCreate,
@@ -572,6 +574,7 @@ impl<'a> CreateBoardRequest<'a> {
 }
 
 /// Returns any boards which use the provided filter id. This method can be executed by users without a valid software license in order to find which boards are using a particular filter.
+#[derive(Clone)]
 pub struct GetBoardByFilterIdRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -630,6 +633,7 @@ impl<'a> GetBoardByFilterIdRequest<'a> {
 }
 
 /// Returns the board for the given board ID. This board will only be returned if the user has permission to view it. Admins without the view permission will see the board as a private one, so will see only a subset of the board's data (board location for instance).
+#[derive(Clone)]
 pub struct GetBoardRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -662,6 +666,7 @@ impl<'a> GetBoardRequest<'a> {
 }
 
 /// Deletes the board. Admin without the view permission can still remove the board.
+#[derive(Clone)]
 pub struct DeleteBoardRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -694,6 +699,7 @@ impl<'a> DeleteBoardRequest<'a> {
 }
 
 /// Returns all issues from the board's backlog, for the given board ID. Result pagination is token based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. The backlog contains incomplete issues that are not assigned to any future or active sprint. Issues returned from this resource include Software project fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
+#[derive(Clone)]
 pub struct GetIssuesForBacklogRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -833,6 +839,7 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
 }
 
 /// Returns the approximate count of all issues from the board's backlog, for the given board ID. This is equivalent to counting the issues on all pages returned by [Get issues for backlog enhanced](https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-rest-software-1-0-board-boardid-backlog-get). Recent updates might not be immediately visible in the returned output. This only includes issues that the user has permission to view.
+#[derive(Clone)]
 pub struct GetApproximateIssueCountForBacklogRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -887,6 +894,7 @@ impl<'a> GetApproximateIssueCountForBacklogRequest<'a> {
 ///  *  `columnConfig` \- The column configuration lists the columns for the board, in the order defined in the column configuration. For each column, it shows the issue status mapping as well as the constraint type (Valid values: none, issueCount, issueCountExclSubs) for the min/max number of issues. Note, the last column with statuses mapped to it is treated as the "Done" column, which means that issues in that column will be marked as already completed.
 ///  *  `estimation` (Scrum only) - Contains information about type of estimation used for the board. Valid values: none, issueCount, field. If the estimation type is "field", the ID and display name of the field used for estimation is also returned. Note, estimates for an issue can be updated by a PUT /rest/api/3/issue/{issueIdOrKey} request, however the fields must be on the screen. "timeoriginalestimate" field will never be on the screen, so in order to update it "originalEstimate" in "timetracking" field should be updated.
 ///  *  `ranking` \- Contains information about custom field used for ranking in the given board.
+#[derive(Clone)]
 pub struct GetConfigurationRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -919,6 +927,7 @@ impl<'a> GetConfigurationRequest<'a> {
 }
 
 /// Returns all epics from the board, for the given board ID. This only includes epics that the user has permission to view. Note, if the user does not have permission to view the board, no epics will be returned at all.
+#[derive(Clone)]
 pub struct GetEpicsRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -990,6 +999,7 @@ impl<'a> GetEpicsRequest<'a> {
 }
 
 /// Returns all issues that do not belong to any epic on a board, for a given board ID. Result pagination is token based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. Issues returned from this resource include Software project fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
+#[derive(Clone)]
 pub struct GetIssuesWithoutEpicForBoardRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -1129,6 +1139,7 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
 }
 
 /// Returns all issues that belong to an epic on the board, for the given epic ID and the board ID. Result pagination is token based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. Issues returned from this resource include Software project fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
+#[derive(Clone)]
 pub struct GetBoardIssuesForEpicRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -1269,6 +1280,7 @@ impl<'a> GetBoardIssuesForEpicRequest<'a> {
     }
 }
 
+#[derive(Clone)]
 pub struct GetFeaturesForBoardRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -1300,6 +1312,7 @@ impl<'a> GetFeaturesForBoardRequest<'a> {
     }
 }
 
+#[derive(Clone)]
 pub struct ToggleFeaturesRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -1336,6 +1349,7 @@ impl<'a> ToggleFeaturesRequest<'a> {
 
 /// Move issues from the backog to the board (if they are already in the backlog of that board).
 /// This operation either moves an issue(s) onto a board from the backlog (by adding it to the issueList for the board) Or transitions the issue(s) to the first column for a kanban board with backlog. At most 50 issues may be moved at once.
+#[derive(Clone)]
 pub struct MoveIssuesToBoardRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -1376,6 +1390,7 @@ impl<'a> MoveIssuesToBoardRequest<'a> {
 }
 
 /// Returns all issues from a board, for a given board ID. Result pagination is token based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. An issue belongs to the board if its status is mapped to the board's column. Epic issues do not belong to scrum boards. Issues returned from this resource include Software project fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
+#[derive(Clone)]
 pub struct GetIssuesForBoardRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -1515,6 +1530,7 @@ impl<'a> GetIssuesForBoardRequest<'a> {
 }
 
 /// Returns the approximate count of all issues from a board, for a given board ID. This is equivalent to counting the issues on all pages returned by [Get issues for board enhanced](https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-rest-software-1-0-board-boardid-issue-get). Recent updates might not be immediately visible in the returned output. This only includes issues that the user has permission to view.
+#[derive(Clone)]
 pub struct GetApproximateIssueCountForBoardRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -1566,6 +1582,7 @@ impl<'a> GetApproximateIssueCountForBoardRequest<'a> {
 /// The board filter contains reference the project only if JQL query guarantees that returned issues will be returned from the project set defined in JQL. For instance the query `project in (ABC, BCD) AND reporter = admin` have reference to ABC and BCD projects but query `project in (ABC, BCD) OR reporter = admin` doesn't have reference to any project.
 ///
 /// An issue belongs to the board if its status is mapped to the board's column. Epic issues do not belongs to the scrum boards.
+#[derive(Clone)]
 pub struct GetProjectsRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -1628,6 +1645,7 @@ impl<'a> GetProjectsRequest<'a> {
 /// A project is associated with a board if the board filter contains reference the project.
 ///
 /// The board filter contains reference the project only if JQL query guarantees that returned issues will be returned from the project set defined in JQL. For instance the query `project in (ABC, BCD) AND reporter = admin` have reference to ABC and BCD projects but query `project in (ABC, BCD) OR reporter = admin` doesn't have reference to any project.
+#[derive(Clone)]
 pub struct GetProjectsFullRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -1660,6 +1678,7 @@ impl<'a> GetProjectsFullRequest<'a> {
 }
 
 /// Returns the keys of all properties for the board identified by the id. The user who retrieves the property keys is required to have permissions to view the board.
+#[derive(Clone)]
 pub struct GetBoardPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     board_id: String,
@@ -1692,6 +1711,7 @@ impl<'a> GetBoardPropertyKeysRequest<'a> {
 }
 
 /// Returns the value of the property with a given key from the board identified by the provided id. The user who retrieves the property is required to have permissions to view the board.
+#[derive(Clone)]
 pub struct GetBoardPropertyRequest<'a> {
     client: &'a crate::core::Client,
     board_id: String,
@@ -1731,6 +1751,7 @@ impl<'a> GetBoardPropertyRequest<'a> {
 /// Sets the value of the specified board's property.
 ///
 /// You can use this resource to store a custom data against the board identified by the id. The user who stores the data is required to have permissions to modify the board.
+#[derive(Clone)]
 pub struct SetBoardPropertyRequest<'a> {
     client: &'a crate::core::Client,
     board_id: String,
@@ -1776,6 +1797,7 @@ impl<'a> SetBoardPropertyRequest<'a> {
 }
 
 /// Removes the property from the board identified by the id. Ths user removing the property is required to have permissions to modify the board.
+#[derive(Clone)]
 pub struct DeleteBoardPropertyRequest<'a> {
     client: &'a crate::core::Client,
     board_id: String,
@@ -1813,6 +1835,7 @@ impl<'a> DeleteBoardPropertyRequest<'a> {
 }
 
 /// Returns all quick filters from a board, for a given board ID.
+#[derive(Clone)]
 pub struct GetAllQuickFiltersRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -1871,6 +1894,7 @@ impl<'a> GetAllQuickFiltersRequest<'a> {
 }
 
 /// Returns the quick filter for a given quick filter ID. The quick filter will only be returned if the user can view the board that the quick filter belongs to.
+#[derive(Clone)]
 pub struct GetQuickFilterRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -1903,6 +1927,7 @@ impl<'a> GetQuickFilterRequest<'a> {
     }
 }
 
+#[derive(Clone)]
 pub struct GetReportsForBoardRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -1935,6 +1960,7 @@ impl<'a> GetReportsForBoardRequest<'a> {
 }
 
 /// Returns all sprints from a board, for a given board ID. This only includes sprints that the user has permission to view.
+#[derive(Clone)]
 pub struct GetAllSprintsRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -2006,6 +2032,7 @@ impl<'a> GetAllSprintsRequest<'a> {
 }
 
 /// Get all issues you have access to that belong to the sprint from the board. Result pagination is token-based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. Issues returned from this resource contains additional fields like: sprint, closedSprints, flagged, and epic. Issues are returned ordered by rank. JQL order has higher priority than default rank.
+#[derive(Clone)]
 pub struct GetBoardIssuesForSprintRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
@@ -2147,6 +2174,7 @@ impl<'a> GetBoardIssuesForSprintRequest<'a> {
 }
 
 /// Returns all versions from a board, for a given board ID. This only includes versions that the user has permission to view. Note, if the user does not have permission to view the board, no versions will be returned at all. Returned versions are ordered by the name of the project from which they belong and then by sequence defined by user.
+#[derive(Clone)]
 pub struct GetAllVersionsRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,

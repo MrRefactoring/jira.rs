@@ -19,6 +19,7 @@ impl<'a> ProgressService<'a> {
 }
 
 /// Show ongoing import process
+#[derive(Clone)]
 pub struct GetImportProgressRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

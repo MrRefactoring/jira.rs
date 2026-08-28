@@ -142,6 +142,7 @@ impl<'a> SprintService<'a> {
 }
 
 /// Creates a future sprint. Sprint name and origin board id are required. Start and end date are optional. Notes: The sprint name is trimmed. Only Jira administrators can create synced sprints.
+#[derive(Clone)]
 pub struct CreateSprintRequest<'a> {
     client: &'a crate::core::Client,
     sprint_create: SprintCreate,
@@ -179,6 +180,7 @@ impl<'a> CreateSprintRequest<'a> {
 }
 
 /// Sets the Synced flag to false for all sprints in the provided list.
+#[derive(Clone)]
 pub struct UnmapSprintsRequest<'a> {
     client: &'a crate::core::Client,
     unmap_sprints: UnmapSprints,
@@ -216,6 +218,7 @@ impl<'a> UnmapSprintsRequest<'a> {
 }
 
 /// Sets the Synced flag to false for all sprints on this Jira instance. This operation is intended for cleanup only. It is highly destructive and not reversible. Use with caution.
+#[derive(Clone)]
 pub struct UnmapAllSprintsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -245,6 +248,7 @@ impl<'a> UnmapAllSprintsRequest<'a> {
 }
 
 /// Returns a single sprint, for a given sprint Id. The sprint will only be returned if the user can view the board that the sprint was created on, or view at least one of the issues in the sprint.
+#[derive(Clone)]
 pub struct GetSprintRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,
@@ -288,6 +292,7 @@ impl<'a> GetSprintRequest<'a> {
 /// - The completeDate field cannot be updated manually.
 /// - Sprint goal can be removed by updating it's value to empty string
 /// - Only Jira administrators can edit dates on sprints that are marked as synced.
+#[derive(Clone)]
 pub struct PartiallyUpdateSprintRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,
@@ -339,6 +344,7 @@ impl<'a> PartiallyUpdateSprintRequest<'a> {
 /// - Other changes to state are not allowed.
 /// - The completeDate field cannot be updated manually.
 /// - Only Jira administrators can edit dates on sprints that are marked as synced.
+#[derive(Clone)]
 pub struct UpdateSprintRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,
@@ -379,6 +385,7 @@ impl<'a> UpdateSprintRequest<'a> {
 }
 
 /// Deletes a sprint. Once a sprint is deleted, all issues in the sprint will be moved to the backlog. To delete a synced sprint, you must unsync it first.
+#[derive(Clone)]
 pub struct DeleteSprintRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,
@@ -411,6 +418,7 @@ impl<'a> DeleteSprintRequest<'a> {
 }
 
 /// Returns all issues in a sprint, for a given sprint Id. This only includes issues that the user has permission to view. By default, the returned issues are ordered by rank.
+#[derive(Clone)]
 pub struct GetIssuesForSprintRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,
@@ -530,6 +538,7 @@ impl<'a> GetIssuesForSprintRequest<'a> {
 }
 
 /// Moves issues to a sprint, for a given sprint Id. Issues can only be moved to open or active sprints. The maximum number of issues that can be moved in one operation is 50.
+#[derive(Clone)]
 pub struct MoveIssuesToSprintRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,
@@ -570,6 +579,7 @@ impl<'a> MoveIssuesToSprintRequest<'a> {
 }
 
 /// Returns the keys of all properties for the sprint identified by the id. The user who retrieves the property keys is required to have permissions to view the sprint.
+#[derive(Clone)]
 pub struct GetSprintPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,
@@ -602,6 +612,7 @@ impl<'a> GetSprintPropertyKeysRequest<'a> {
 }
 
 /// Returns the value of the property with a given key from the sprint identified by the provided id. The user who retrieves the property is required to have permissions to view the sprint.
+#[derive(Clone)]
 pub struct GetSprintPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -639,6 +650,7 @@ impl<'a> GetSprintPropertyRequest<'a> {
 }
 
 /// Sets the value of the specified sprint's property. You can use this resource to store a custom data against the sprint identified by the id. The user who stores the data is required to have permissions to modify the sprint.
+#[derive(Clone)]
 pub struct SetSprintPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -684,6 +696,7 @@ impl<'a> SetSprintPropertyRequest<'a> {
 }
 
 /// Removes the property from the sprint identified by the id. Ths user removing the property is required to have permissions to modify the sprint.
+#[derive(Clone)]
 pub struct DeleteSprintPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -721,6 +734,7 @@ impl<'a> DeleteSprintPropertyRequest<'a> {
 }
 
 /// Swap the position of the sprint with the second sprint.
+#[derive(Clone)]
 pub struct SwapSprintRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,

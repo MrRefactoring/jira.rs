@@ -30,6 +30,7 @@ impl<'a> IssuePanelsService<'a> {
 /// The operation runs asynchronously. The response includes a task ID - use the [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) endpoint to check progress.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct BulkPinUnpinProjectsAsyncRequest<'a> {
     client: &'a crate::core::Client,
     forge_panel_project_pin_request: ForgePanelProjectPinRequest,

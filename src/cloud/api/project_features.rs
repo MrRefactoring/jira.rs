@@ -29,6 +29,7 @@ impl<'a> ProjectFeaturesService<'a> {
 }
 
 /// Returns the list of features for a project.
+#[derive(Clone)]
 pub struct GetFeaturesForProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -61,6 +62,7 @@ impl<'a> GetFeaturesForProjectRequest<'a> {
 }
 
 /// Sets the state of a project feature.
+#[derive(Clone)]
 pub struct ToggleFeatureForProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,

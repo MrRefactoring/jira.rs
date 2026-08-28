@@ -233,6 +233,7 @@ impl<'a> DeploymentsService<'a> {
 /// Submissions are processed asynchronously. Submitted data will eventually be available in Jira. Most updates are available within a short period of time, but may take some time during peak load and/or maintenance times. The `getDeploymentByKey` operation can be used to confirm that data has been stored successfully (if needed).
 ///
 /// In the case of multiple deployments being submitted in one request, each is validated individually prior to submission. Details of which deployments failed submission (if any) are available in the response object.
+#[derive(Clone)]
 pub struct SubmitDeploymentsRequest<'a> {
     client: &'a crate::core::Client,
     properties: Option<std::collections::HashMap<String, serde_json::Value>>,
@@ -312,6 +313,7 @@ impl<'a> SubmitDeploymentsRequest<'a> {
 /// Example operation: DELETE /bulkByProperties?accountId=account-123&createdBy=user-456
 ///
 /// Deletion is performed asynchronously. The `getDeploymentByKey` operation can be used to confirm that data has been deleted successfully (if needed).
+#[derive(Clone)]
 pub struct DeleteDeploymentsByPropertyRequest<'a> {
     client: &'a crate::core::Client,
     account_id: String,
@@ -361,6 +363,7 @@ impl<'a> DeleteDeploymentsByPropertyRequest<'a> {
 /// Retrieve the currently stored deployment data for the given `pipelineId`, `environmentId` and `deploymentSequenceNumber` combination.
 ///
 /// The result will be what is currently stored, ignoring any pending updates or deletes.
+#[derive(Clone)]
 pub struct GetDeploymentByKeyRequest<'a> {
     client: &'a crate::core::Client,
     pipeline_id: String,
@@ -412,6 +415,7 @@ impl<'a> GetDeploymentByKeyRequest<'a> {
 /// Delete the currently stored deployment data for the given `pipelineId`, `environmentId` and `deploymentSequenceNumber` combination.
 ///
 /// Deletion is performed asynchronously. The `getDeploymentByKey` operation can be used to confirm that data has been deleted successfully (if needed).
+#[derive(Clone)]
 pub struct DeleteDeploymentByKeyRequest<'a> {
     client: &'a crate::core::Client,
     pipeline_id: String,
@@ -462,6 +466,7 @@ impl<'a> DeleteDeploymentByKeyRequest<'a> {
 
 /// Retrieve the  Deployment gating status for the given `pipelineId + environmentId + deploymentSequenceNumber` combination.
 /// Only apps that define the `jiraDeploymentInfoProvider` module can access this resource. This resource requires the 'READ' scope.
+#[derive(Clone)]
 pub struct GetDeploymentGatingStatusByKeyRequest<'a> {
     client: &'a crate::core::Client,
     pipeline_id: String,

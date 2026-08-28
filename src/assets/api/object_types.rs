@@ -52,6 +52,7 @@ impl<'a> ObjectTypesService<'a> {
 }
 
 /// Find an object type by id
+#[derive(Clone)]
 pub struct LoadObjectTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -84,6 +85,7 @@ impl<'a> LoadObjectTypeRequest<'a> {
 }
 
 /// Update an existing object type
+#[derive(Clone)]
 pub struct UpdateObjectTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -124,6 +126,7 @@ impl<'a> UpdateObjectTypeRequest<'a> {
 }
 
 /// Delete an object type
+#[derive(Clone)]
 pub struct DeleteObjectTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -156,6 +159,7 @@ impl<'a> DeleteObjectTypeRequest<'a> {
 }
 
 /// Find all attributes for this object type
+#[derive(Clone)]
 pub struct FindObjectTypeAttributesRequest<'a> {
     client: &'a crate::core::Client,
     only_value_editable: Option<bool>,
@@ -284,6 +288,7 @@ impl<'a> FindObjectTypeAttributesRequest<'a> {
 }
 
 /// Change position of this object type
+#[derive(Clone)]
 pub struct ChangeObjectTypePositionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -324,6 +329,7 @@ impl<'a> ChangeObjectTypePositionRequest<'a> {
 }
 
 /// Create a new object type
+#[derive(Clone)]
 pub struct CreateObjectTypeRequest<'a> {
     client: &'a crate::core::Client,
     object_type_in: ObjectTypeIn,

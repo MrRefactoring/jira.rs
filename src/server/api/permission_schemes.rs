@@ -163,6 +163,7 @@ impl<'a> PermissionSchemesService<'a> {
 }
 
 /// Returns a list of all permission schemes. By default only shortened beans are returned. If you want to include permissions of all the schemes, then specify the permissions expand parameter. Permissions will be included also if you specify any other expand parameter.
+#[derive(Clone)]
 pub struct GetPermissionSchemesRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetPermissionSchemesRequestExpand>,
@@ -205,6 +206,7 @@ impl<'a> GetPermissionSchemesRequest<'a> {
 }
 
 /// Create a new permission scheme. This method can create schemes with a defined permission set, or without.
+#[derive(Clone)]
 pub struct CreatePermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<CreatePermissionSchemeRequestExpand>,
@@ -257,6 +259,7 @@ impl<'a> CreatePermissionSchemeRequest<'a> {
 }
 
 /// Returns the attribute for a permission scheme specified by permission scheme id and attribute key.
+#[derive(Clone)]
 pub struct GetSchemeAttributeRequest<'a> {
     client: &'a crate::core::Client,
     permission_scheme_id: i64,
@@ -294,6 +297,7 @@ impl<'a> GetSchemeAttributeRequest<'a> {
 }
 
 /// Updates or inserts the attribute for a permission scheme specified by permission scheme id. The attribute consists of the key and the value. The value will be converted to Boolean using Boolean#valueOf.
+#[derive(Clone)]
 pub struct SetSchemeAttributeRequest<'a> {
     client: &'a crate::core::Client,
     permission_scheme_id: i64,
@@ -343,6 +347,7 @@ impl<'a> SetSchemeAttributeRequest<'a> {
 }
 
 /// Returns a permission scheme identified by the given id.
+#[derive(Clone)]
 pub struct GetPermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetPermissionSchemeRequestExpand>,
@@ -388,6 +393,7 @@ impl<'a> GetPermissionSchemeRequest<'a> {
 }
 
 /// Updates a permission scheme. If the permissions list is present then it will be set in the permission scheme, which basically means it will overwrite any permission grants that existed in the permission scheme. Sending an empty list will remove all permission grants from the permission scheme. To update just the name and description, do not send permissions list at all. To add or remove a single permission grant instead of updating the whole list at once use the {schemeId}/permission/ resource.
+#[derive(Clone)]
 pub struct UpdatePermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<UpdatePermissionSchemeRequestExpand>,
@@ -443,6 +449,7 @@ impl<'a> UpdatePermissionSchemeRequest<'a> {
 }
 
 /// Deletes a permission scheme identified by the given id.
+#[derive(Clone)]
 pub struct DeletePermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
@@ -475,6 +482,7 @@ impl<'a> DeletePermissionSchemeRequest<'a> {
 }
 
 /// Returns all permission grants of the given permission scheme.
+#[derive(Clone)]
 pub struct GetPermissionSchemeGrantsRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetPermissionSchemeGrantsRequestExpand>,
@@ -520,6 +528,7 @@ impl<'a> GetPermissionSchemeGrantsRequest<'a> {
 }
 
 /// Creates a permission grant in a permission scheme.
+#[derive(Clone)]
 pub struct CreatePermissionGrantRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<CreatePermissionGrantRequestExpand>,
@@ -580,6 +589,7 @@ impl<'a> CreatePermissionGrantRequest<'a> {
 }
 
 /// Returns a permission grant identified by the given id.
+#[derive(Clone)]
 pub struct GetPermissionSchemeGrantRequest<'a> {
     client: &'a crate::core::Client,
     permission_id: i64,
@@ -626,6 +636,7 @@ impl<'a> GetPermissionSchemeGrantRequest<'a> {
 }
 
 /// Deletes a permission grant from a permission scheme.
+#[derive(Clone)]
 pub struct DeletePermissionSchemeEntityRequest<'a> {
     client: &'a crate::core::Client,
     permission_id: i64,

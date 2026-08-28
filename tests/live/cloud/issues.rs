@@ -73,7 +73,7 @@ async fn finds_the_issue_through_jql_once_indexing_catches_up() {
     let found = poll_until("the issue to be indexed", || async {
         let page = cloud()
             .issue_search()
-            .search_and_reconsile_issues_using_jql()
+            .search_issues()
             .jql(format!("key = {}", issue.key))
             .max_results(1)
             .send()

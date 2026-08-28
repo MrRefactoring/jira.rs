@@ -352,6 +352,7 @@ impl<'a> IssuesService<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the projects that the issues are in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issues.
+#[derive(Clone)]
 pub struct GetBulkChangelogsRequest<'a> {
     client: &'a crate::core::Client,
     bulk_changelog_request: BulkChangelogRequest,
@@ -400,6 +401,7 @@ impl<'a> GetBulkChangelogsRequest<'a> {
 /// In a next-gen project any issue may be made a child providing that the parent and child are members of the same project.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* and *Create issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project in which the issue or subtask is created.
+#[derive(Clone)]
 pub struct CreateIssueRequest<'a> {
     client: &'a crate::core::Client,
     update_history: Option<bool>,
@@ -471,6 +473,7 @@ impl<'a> CreateIssueRequest<'a> {
 ///  *  `parent` the must contain the ID or key of the parent issue.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* and *Create issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project in which each issue or subtask is created.
+#[derive(Clone)]
 pub struct CreateIssuesRequest<'a> {
     client: &'a crate::core::Client,
     issues_update: IssuesUpdate,
@@ -528,6 +531,7 @@ impl<'a> CreateIssuesRequest<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct BulkFetchIssuesRequest<'a> {
     client: &'a crate::core::Client,
     bulk_fetch_issue_request: BulkFetchIssueRequest,
@@ -569,6 +573,7 @@ impl<'a> BulkFetchIssuesRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Create issues* [project permission](https://confluence.atlassian.com/x/yodKLg) in the requested projects.
+#[derive(Clone)]
 pub struct GetCreateIssueMetaIssueTypesRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -634,6 +639,7 @@ impl<'a> GetCreateIssueMetaIssueTypesRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Create issues* [project permission](https://confluence.atlassian.com/x/yodKLg) in the requested projects.
+#[derive(Clone)]
 pub struct GetCreateIssueMetaIssueTypeIdRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -716,6 +722,7 @@ impl<'a> GetCreateIssueMetaIssueTypeIdRequest<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct GetIssueRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -883,6 +890,7 @@ impl<'a> GetIssueRequest<'a> {
 ///
 ///  *  *Browse projects* and *Edit issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct EditIssueRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1012,6 +1020,7 @@ impl<'a> EditIssueRequest<'a> {
 ///
 ///  *  *Browse projects* and *Delete issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct DeleteIssueRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1069,6 +1078,7 @@ impl<'a> DeleteIssueRequest<'a> {
 ///
 ///  *  *Browse Projects* and *Assign Issues* [ project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct AssignIssueRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1116,6 +1126,7 @@ impl<'a> AssignIssueRequest<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct GetChangeLogsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1181,6 +1192,7 @@ impl<'a> GetChangeLogsRequest<'a> {
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct GetChangeLogsByIdsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1253,6 +1265,7 @@ impl<'a> GetChangeLogsByIdsRequest<'a> {
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///
 /// Note: For any fields to be editable the user must have the *Edit issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the issue.
+#[derive(Clone)]
 pub struct GetEditIssueMetaRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1323,6 +1336,7 @@ impl<'a> GetEditIssueMetaRequest<'a> {
 ///
 ///  *  *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct NotifyRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1374,6 +1388,7 @@ impl<'a> NotifyRequest<'a> {
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///
 /// However, if the user does not have the *Transition issues* [ project permission](https://confluence.atlassian.com/x/yodKLg) the response will not list any transitions.
+#[derive(Clone)]
 pub struct GetTransitionsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1492,6 +1507,7 @@ impl<'a> GetTransitionsRequest<'a> {
 ///
 ///  *  *Browse projects* and *Transition issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct DoTransitionRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,

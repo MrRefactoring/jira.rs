@@ -33,6 +33,7 @@ impl<'a> AnnouncementBannerService<'a> {
 /// Returns the current announcement banner configuration.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct GetBannerRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -64,6 +65,7 @@ impl<'a> GetBannerRequest<'a> {
 /// Updates the announcement banner configuration.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
 pub struct SetBannerRequest<'a> {
     client: &'a crate::core::Client,
     announcement_banner_configuration_update: AnnouncementBannerConfigurationUpdate,

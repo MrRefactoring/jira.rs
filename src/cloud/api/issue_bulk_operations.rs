@@ -173,6 +173,7 @@ impl<'a> IssueBulkOperationsService<'a> {
 ///  *  Delete [issues permission](https://support.atlassian.com/jira-cloud-administration/docs/permissions-for-company-managed-projects/#Delete-issues/) in all projects that contain the selected issues.
 ///  *  Browse [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) in all projects that contain the selected issues.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct SubmitBulkDeleteRequest<'a> {
     client: &'a crate::core::Client,
     issue_bulk_delete_payload: IssueBulkDeletePayload,
@@ -217,6 +218,7 @@ impl<'a> SubmitBulkDeleteRequest<'a> {
 ///  *  Browse [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) in all projects that contain the selected issues.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
 ///  *  Depending on the field, any field-specific permissions required to edit it.
+#[derive(Clone)]
 pub struct GetBulkEditableFieldsRequest<'a> {
     client: &'a crate::core::Client,
     issue_ids_or_keys: String,
@@ -303,6 +305,7 @@ impl<'a> GetBulkEditableFieldsRequest<'a> {
 ///  *  Browse [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) in all projects that contain the selected issues.
 ///  *  Edit [issues permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) in all projects that contain the selected issues.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct SubmitBulkEditRequest<'a> {
     client: &'a crate::core::Client,
     issue_bulk_edit_payload: IssueBulkEditPayload,
@@ -370,6 +373,7 @@ impl<'a> SubmitBulkEditRequest<'a> {
 ///  *  Create [issues permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) in destination projects.
 ///  *  Browse [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) in destination projects, if moving subtasks only.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct SubmitBulkMoveRequest<'a> {
     client: &'a crate::core::Client,
     issue_bulk_move_payload: IssueBulkMovePayload,
@@ -418,6 +422,7 @@ impl<'a> SubmitBulkMoveRequest<'a> {
 ///  *  Transition [issues permission](https://support.atlassian.com/jira-cloud-administration/docs/permissions-for-company-managed-projects/#Transition-issues/) in all projects that contain the selected issues.
 ///  *  Browse [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) in all projects that contain the selected issues.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct GetAvailableTransitionsRequest<'a> {
     client: &'a crate::core::Client,
     issue_ids_or_keys: String,
@@ -485,6 +490,7 @@ impl<'a> GetAvailableTransitionsRequest<'a> {
 ///  *  Transition [issues permission](https://support.atlassian.com/jira-cloud-administration/docs/permissions-for-company-managed-projects/#Transition-issues/) in all projects that contain the selected issues.
 ///  *  Browse [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) in all projects that contain the selected issues.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct SubmitBulkTransitionRequest<'a> {
     client: &'a crate::core::Client,
     issue_bulk_transition_payload: IssueBulkTransitionPayload,
@@ -528,6 +534,7 @@ impl<'a> SubmitBulkTransitionRequest<'a> {
 ///  *  Global bulk change [permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-global-permissions/).
 ///  *  Browse [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) in all projects that contain the selected issues.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct SubmitBulkUnwatchRequest<'a> {
     client: &'a crate::core::Client,
     issue_bulk_watch_or_unwatch_payload: IssueBulkWatchOrUnwatchPayload,
@@ -574,6 +581,7 @@ impl<'a> SubmitBulkUnwatchRequest<'a> {
 ///  *  Global bulk change [permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-global-permissions/).
 ///  *  Browse [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) in all projects that contain the selected issues.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
 pub struct SubmitBulkWatchRequest<'a> {
     client: &'a crate::core::Client,
     issue_bulk_watch_or_unwatch_payload: IssueBulkWatchOrUnwatchPayload,
@@ -628,6 +636,7 @@ impl<'a> SubmitBulkWatchRequest<'a> {
 ///    {"processedAccessibleIssues":\[10001,10002\],"created":1709189449954,"progressPercent":100,"started":1709189450154,"status":"COMPLETE","submittedBy":{"accountId":"5b10a2844c20165700ede21g"},"invalidOrInaccessibleIssueCount":0,"taskId":"10000","totalIssueCount":2,"updated":1709189450354}
 ///
 /// **Note:** You can view task progress for up to 14 days from creation.
+#[derive(Clone)]
 pub struct GetBulkOperationProgressRequest<'a> {
     client: &'a crate::core::Client,
     task_id: String,

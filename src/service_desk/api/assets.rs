@@ -29,6 +29,7 @@ impl<'a> AssetsService<'a> {
 /// Returns a list of Assets workspace IDs. Include a workspace ID in the path to access the [Assets REST APIs](https://developer.atlassian.com/cloud/assets/rest).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Any
+#[derive(Clone)]
 pub struct GetAssetsWorkspacesRequest<'a> {
     client: &'a crate::core::Client,
     start: Option<i64>,
@@ -86,6 +87,7 @@ impl<'a> GetAssetsWorkspacesRequest<'a> {
 }
 
 /// This endpoint is deprecated, please use /assets/workspace/.
+#[derive(Clone)]
 pub struct GetInsightWorkspacesRequest<'a> {
     client: &'a crate::core::Client,
     start: Option<i64>,

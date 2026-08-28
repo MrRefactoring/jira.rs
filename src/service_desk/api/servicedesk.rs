@@ -167,6 +167,7 @@ impl<'a> ServicedeskService<'a> {
 /// **Note:** This method will be slow if the instance has hundreds of service desks. If you want to fetch a single service desk by its ID, use [/rest/servicedeskapi/servicedesk/{serviceDeskId}](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-rest-servicedeskapi-servicedesk-servicedeskid-get) instead.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Any
+#[derive(Clone)]
 pub struct GetServiceDesksRequest<'a> {
     client: &'a crate::core::Client,
     start: Option<i64>,
@@ -224,6 +225,7 @@ impl<'a> GetServiceDesksRequest<'a> {
 /// This method returns a service desk. Use this method to get service desk details whenever your application component is passed a service desk ID but needs to display other service desk details.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the Service Desk. For example, being the Service Desk's Administrator or one of its Agents or Users.
+#[derive(Clone)]
 pub struct GetServiceDeskByIdRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -270,6 +272,7 @@ impl<'a> GetServiceDeskByIdRequest<'a> {
 ///    curl -D- -u customer:customer -X POST -H "X-ExperimentalApi: opt-in" -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt" <https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10001/attachTemporaryFile>
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to add attachments in this Service Desk.
+#[derive(Clone)]
 pub struct AttachTemporaryFileRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -314,6 +317,7 @@ impl<'a> AttachTemporaryFileRequest<'a> {
 /// Adds one or more customers to a service desk. If any of the passed customers are associated with the service desk, no changes will be made for those customers and the resource returns a 204 success code.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Service desk administrator
+#[derive(Clone)]
 pub struct AddCustomersRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -367,6 +371,7 @@ impl<'a> AddCustomersRequest<'a> {
 /// No user permission checks are performed; `null` is passed as the acting user to bypass the permission check in the underlying service.
 ///
 /// If any of the passed customers are already associated with the service desk, no changes will be made for those customers and the resource returns a 204 success code.
+#[derive(Clone)]
 pub struct AddCustomersSkippingPermissionCheckRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -416,6 +421,7 @@ impl<'a> AddCustomersSkippingPermissionCheckRequest<'a> {
 /// Returns articles which match the given query and belong to the knowledge base linked to the service desk.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the service desk.
+#[derive(Clone)]
 pub struct GetServiceDeskArticlesRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -531,6 +537,7 @@ impl<'a> GetServiceDeskArticlesRequest<'a> {
 /// This method returns the queues in a service desk. To include a customer request count for each queue (in the `issueCount` field) in the response, set the query parameter `includeCount` to true (its default is false).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: service desk's Agent.
+#[derive(Clone)]
 pub struct GetQueuesRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -607,6 +614,7 @@ impl<'a> GetQueuesRequest<'a> {
 /// This method returns a specific queues in a service desk. To include a customer request count for the queue (in the `issueCount` field) in the response, set the query parameter `includeCount` to true (its default is false).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: service desk's Agent.
+#[derive(Clone)]
 pub struct GetQueueRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -659,6 +667,7 @@ impl<'a> GetQueueRequest<'a> {
 /// This method returns the customer requests in a queue. Only fields that the queue is configured to show are returned. For example, if a queue is configured to show description and due date, then only those two fields are returned for each customer request in the queue.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Service desk's agent.
+#[derive(Clone)]
 pub struct GetIssuesInQueueRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -729,6 +738,7 @@ impl<'a> GetIssuesInQueueRequest<'a> {
 /// **Note:** This API by default will filter out request types hidden in the portal (i.e. request types without groups and request types where a user doesn't have permission) when `searchQuery` is provided, unless `includeHiddenRequestTypesInSearch` is set to true. Restricted request types will not be returned for those who aren't admins.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the service desk.
+#[derive(Clone)]
 pub struct GetRequestTypesRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -871,6 +881,7 @@ impl<'a> GetRequestTypesRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the service desk.
+#[derive(Clone)]
 pub struct GetRequestTypeByIdRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -931,6 +942,7 @@ impl<'a> GetRequestTypeByIdRequest<'a> {
 ///  *  `canAddRequestParticipants` returns `true` if the user can add customer request participants. Otherwise, returns `false`.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the Service Desk. However, hidden fields would be visible to only Service desk's Administrator.
+#[derive(Clone)]
 pub struct GetRequestTypeFieldsRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
@@ -983,6 +995,7 @@ impl<'a> GetRequestTypeFieldsRequest<'a> {
 /// This method returns a service desk's customer request type groups. Jira Service Management administrators can arrange the customer request type groups in an arbitrary order for display on the customer portal; the groups are returned in this order.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the service desk.
+#[derive(Clone)]
 pub struct GetRequestTypeGroupsRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,

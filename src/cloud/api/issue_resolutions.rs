@@ -23,6 +23,7 @@ impl<'a> IssueResolutionsService<'a> {
 /// Returns an issue resolution value.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct GetResolutionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

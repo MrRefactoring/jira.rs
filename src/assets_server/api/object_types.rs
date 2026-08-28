@@ -44,6 +44,7 @@ impl<'a> ObjectTypesService<'a> {
 }
 
 /// Change the position of an object type in the object type hierarchy tree.
+#[derive(Clone)]
 pub struct ChangeOrderObjectTypeRequest<'a> {
     client: &'a crate::core::Client,
     affected_id: String,
@@ -91,6 +92,7 @@ impl<'a> ChangeOrderObjectTypeRequest<'a> {
 }
 
 /// Create a new object type.
+#[derive(Clone)]
 pub struct CreateObjectTypeRequest<'a> {
     client: &'a crate::core::Client,
     object_type_in: Option<ObjectTypeIn>,
@@ -135,6 +137,7 @@ impl<'a> CreateObjectTypeRequest<'a> {
 }
 
 /// Get a single object type.
+#[derive(Clone)]
 pub struct LoadObjectTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -167,6 +170,7 @@ impl<'a> LoadObjectTypeRequest<'a> {
 }
 
 /// Update an existing object type.
+#[derive(Clone)]
 pub struct UpdateObjectTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -209,6 +213,7 @@ impl<'a> UpdateObjectTypeRequest<'a> {
 }
 
 /// Delete an object type.
+#[derive(Clone)]
 pub struct DeleteObjectTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -241,6 +246,7 @@ impl<'a> DeleteObjectTypeRequest<'a> {
 }
 
 /// Find all object type attributes for this object type.
+#[derive(Clone)]
 pub struct FindObjectTypeAttributesRequest<'a> {
     client: &'a crate::core::Client,
     order_by_required: Option<String>,

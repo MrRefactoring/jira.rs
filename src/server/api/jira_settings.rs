@@ -29,6 +29,7 @@ impl<'a> JiraSettingsService<'a> {
 }
 
 /// Sets the base URL that is configured for this Jira instance.
+#[derive(Clone)]
 pub struct SetBaseURLRequest<'a> {
     client: &'a crate::core::Client,
     body: Option<String>,
@@ -68,6 +69,7 @@ impl<'a> SetBaseURLRequest<'a> {
 }
 
 /// Returns the default system columns for issue navigator. Admin permission will be required.
+#[derive(Clone)]
 pub struct GetIssueNavigatorDefaultColumnsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -97,6 +99,7 @@ impl<'a> GetIssueNavigatorDefaultColumnsRequest<'a> {
 }
 
 /// Sets the default system columns for issue navigator. Admin permission will be required.
+#[derive(Clone)]
 pub struct SetIssueNavigatorDefaultColumnsFormRequest<'a> {
     client: &'a crate::core::Client,
     columns: Option<Vec<String>>,

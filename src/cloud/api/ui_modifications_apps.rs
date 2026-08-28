@@ -125,6 +125,7 @@ impl<'a> UIModificationsAppsService<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 ///
 /// The new `read:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+#[derive(Clone)]
 pub struct GetUiModificationsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -221,6 +222,7 @@ impl<'a> GetUiModificationsRequest<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for one or more projects, if the UI modification is created with contexts.
 ///
 /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+#[derive(Clone)]
 pub struct CreateUiModificationRequest<'a> {
     client: &'a crate::core::Client,
     create_ui_modification_details: CreateUiModificationDetails,
@@ -283,6 +285,7 @@ impl<'a> CreateUiModificationRequest<'a> {
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for one or more projects, if the UI modification is created with contexts.
 ///
 /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+#[derive(Clone)]
 pub struct UpdateUiModificationRequest<'a> {
     client: &'a crate::core::Client,
     ui_modification_id: String,
@@ -331,6 +334,7 @@ impl<'a> UpdateUiModificationRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 ///
 /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+#[derive(Clone)]
 pub struct DeleteUiModificationRequest<'a> {
     client: &'a crate::core::Client,
     ui_modification_id: String,

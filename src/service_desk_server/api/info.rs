@@ -19,6 +19,7 @@ impl<'a> InfoService<'a> {
 }
 
 /// Returns runtime information about Jira Service Management. You do not need to be logged in to use this method.
+#[derive(Clone)]
 pub struct GetInfoRequest<'a> {
     client: &'a crate::core::Client,
 }

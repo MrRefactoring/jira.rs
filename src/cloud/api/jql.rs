@@ -101,6 +101,7 @@ impl<'a> JQLService<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetAutoCompleteRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -136,6 +137,7 @@ impl<'a> GetAutoCompleteRequest<'a> {
 /// It can also return the collapsed field for custom fields. Collapsed fields enable searches to be performed across all fields with the same name and of the same field type. For example, the collapsed field `Component - Component[Dropdown]` enables dropdown fields `Component - cf[10061]` and `Component - cf[10062]` to be searched simultaneously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetAutoCompletePostRequest<'a> {
     client: &'a crate::core::Client,
     search_auto_complete_filter: SearchAutoCompleteFilter,
@@ -184,6 +186,7 @@ impl<'a> GetAutoCompletePostRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetFieldAutoCompleteForQueryStringRequest<'a> {
     client: &'a crate::core::Client,
     field_name: Option<String>,
@@ -273,6 +276,7 @@ impl<'a> GetFieldAutoCompleteForQueryStringRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct ParseJqlQueriesRequest<'a> {
     client: &'a crate::core::Client,
     validation: ParseJqlQueriesRequestValidation,
@@ -320,6 +324,7 @@ impl<'a> ParseJqlQueriesRequest<'a> {
 /// You may wish to use this operation if your system stores JQL queries and you want to make them GDPR-compliant. For more information about GDPR-related changes, see the [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/).
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct MigrateQueriesRequest<'a> {
     client: &'a crate::core::Client,
     jql_personal_data_migration_request: JQLPersonalDataMigrationRequest,

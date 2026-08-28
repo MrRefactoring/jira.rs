@@ -39,6 +39,7 @@ impl<'a> IssueFieldsService<'a> {
 }
 
 /// Returns a list of Custom Fields in the given range.
+#[derive(Clone)]
 pub struct GetCustomFieldsRequest<'a> {
     client: &'a crate::core::Client,
     sort_column: Option<String>,
@@ -196,6 +197,7 @@ impl<'a> GetCustomFieldsRequest<'a> {
 }
 
 /// Deletes custom fields in bulk.
+#[derive(Clone)]
 pub struct BulkDeleteCustomFieldsRequest<'a> {
     client: &'a crate::core::Client,
     ids: String,
@@ -228,6 +230,7 @@ impl<'a> BulkDeleteCustomFieldsRequest<'a> {
 }
 
 /// Returns custom field's options defined in a given context composed of projects and issue types.
+#[derive(Clone)]
 pub struct GetCustomFieldOptionsRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<String>,
@@ -361,6 +364,7 @@ impl<'a> GetCustomFieldOptionsRequest<'a> {
 }
 
 /// Returns a list of all fields, both System and Custom
+#[derive(Clone)]
 pub struct GetFieldsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -389,6 +393,7 @@ impl<'a> GetFieldsRequest<'a> {
 }
 
 /// Creates a custom field using a definition
+#[derive(Clone)]
 pub struct CreateCustomFieldRequest<'a> {
     client: &'a crate::core::Client,
     custom_field_definition_json: Option<CustomFieldDefinitionJson>,

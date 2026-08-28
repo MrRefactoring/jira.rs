@@ -24,6 +24,7 @@ impl<'a> ReferenceTypesService<'a> {
 }
 
 /// Get reference type
+#[derive(Clone)]
 pub struct FindReferenceTypesRequest<'a> {
     client: &'a crate::core::Client,
     object_schema_id: Option<String>,
@@ -78,6 +79,7 @@ impl<'a> FindReferenceTypesRequest<'a> {
 }
 
 /// Update a reference type
+#[derive(Clone)]
 pub struct CreateReferenceTypeRequest<'a> {
     client: &'a crate::core::Client,
     reference_type_in: ReferenceTypeIn,

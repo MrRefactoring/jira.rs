@@ -62,6 +62,7 @@ impl<'a> OrganizationsService<'a> {
 }
 
 /// Returns all the users of a specified organization.
+#[derive(Clone)]
 pub struct GetUsersInOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     organization_id: String,
@@ -123,6 +124,7 @@ impl<'a> GetUsersInOrganizationRequest<'a> {
 }
 
 /// Adds users to an organization.
+#[derive(Clone)]
 pub struct AddUsersToOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     organization_id: String,
@@ -173,6 +175,7 @@ impl<'a> AddUsersToOrganizationRequest<'a> {
 }
 
 /// Removes users from an organization.
+#[derive(Clone)]
 pub struct RemoveUsersFromOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     organization_id: String,
@@ -223,6 +226,7 @@ impl<'a> RemoveUsersFromOrganizationRequest<'a> {
 }
 
 /// Preview the cleanup of empty organizations, with the same support parameters.
+#[derive(Clone)]
 pub struct PreviewCleanUpOrganizationsRequest<'a> {
     client: &'a crate::core::Client,
     delete_detached_organizations: Option<String>,
@@ -287,6 +291,7 @@ impl<'a> PreviewCleanUpOrganizationsRequest<'a> {
 }
 
 /// Deletes empty organizations, optionally delete organizations that have no active users, or are not attached to any projects.
+#[derive(Clone)]
 pub struct CleanUpOrganizationsRequest<'a> {
     client: &'a crate::core::Client,
     delete_detached_organizations: Option<String>,
@@ -349,6 +354,7 @@ impl<'a> CleanUpOrganizationsRequest<'a> {
 }
 
 /// Returns a list of organizations in the Jira instance.If the user is not an agent, the resource returns a list of organizations the user is a member of.
+#[derive(Clone)]
 pub struct GetOrganizationsRequest<'a> {
     client: &'a crate::core::Client,
     start: Option<f64>,
@@ -404,6 +410,7 @@ impl<'a> GetOrganizationsRequest<'a> {
 }
 
 /// To create an organization Jira administrator global permission or agent permission is required depending on the settings
+#[derive(Clone)]
 pub struct CreateOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     organization_create: Option<OrganizationCreate>,
@@ -448,6 +455,7 @@ impl<'a> CreateOrganizationRequest<'a> {
 }
 
 /// Returns an organization for a given organization ID.
+#[derive(Clone)]
 pub struct GetOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     organization_id: String,
@@ -480,6 +488,7 @@ impl<'a> GetOrganizationRequest<'a> {
 }
 
 /// Deletes an organization for a given organization ID.
+#[derive(Clone)]
 pub struct DeleteOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     organization_id: String,

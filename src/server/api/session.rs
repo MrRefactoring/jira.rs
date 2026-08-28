@@ -29,6 +29,7 @@ impl<'a> SessionService<'a> {
 }
 
 /// Returns information about the currently authenticated user's session. If the caller is not authenticated they will get a 401 Unauthorized status code.
+#[derive(Clone)]
 pub struct CurrentUserRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -57,6 +58,7 @@ impl<'a> CurrentUserRequest<'a> {
 }
 
 /// Creates a new session for a user in Jira. Once a session has been successfully created it can be used to access any of Jira's remote APIs and also the web UI by passing the appropriate HTTP Cookie header. Note that it is generally preferrable to use HTTP BASIC authentication with the REST API. However, this resource may be used to mimic the behaviour of Jira's log-in page (e.g. to display log-in errors to a user).
+#[derive(Clone)]
 pub struct LoginRequest<'a> {
     client: &'a crate::core::Client,
     auth_params: AuthParams,
@@ -93,6 +95,7 @@ impl<'a> LoginRequest<'a> {
 }
 
 /// Logs the current user out of Jira, destroying the existing session, if any.
+#[derive(Clone)]
 pub struct LogoutRequest<'a> {
     client: &'a crate::core::Client,
 }

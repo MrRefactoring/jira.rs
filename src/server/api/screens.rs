@@ -85,6 +85,7 @@ impl<'a> ScreensService<'a> {
 }
 
 /// Adds field or custom field to the default tab.
+#[derive(Clone)]
 pub struct GetAllScreensRequest<'a> {
     client: &'a crate::core::Client,
     search: Option<String>,
@@ -161,6 +162,7 @@ impl<'a> GetAllScreensRequest<'a> {
 }
 
 /// Moves field on the given tab.
+#[derive(Clone)]
 pub struct AddFieldToDefaultScreenRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -193,6 +195,7 @@ impl<'a> AddFieldToDefaultScreenRequest<'a> {
 }
 
 /// Gets available fields for screen. i.e ones that haven't already been added.
+#[derive(Clone)]
 pub struct GetFieldsToAddRequest<'a> {
     client: &'a crate::core::Client,
     screen_id: i64,
@@ -225,6 +228,7 @@ impl<'a> GetFieldsToAddRequest<'a> {
 }
 
 /// Returns a list of all tabs for the given screen.
+#[derive(Clone)]
 pub struct GetAllTabsRequest<'a> {
     client: &'a crate::core::Client,
     screen_id: i64,
@@ -270,6 +274,7 @@ impl<'a> GetAllTabsRequest<'a> {
 }
 
 /// Creates tab for given screen.
+#[derive(Clone)]
 pub struct AddTabRequest<'a> {
     client: &'a crate::core::Client,
     screen_id: i64,
@@ -317,6 +322,7 @@ impl<'a> AddTabRequest<'a> {
 }
 
 /// Renames tab on given screen.
+#[derive(Clone)]
 pub struct RenameTabRequest<'a> {
     client: &'a crate::core::Client,
     tab_id: i64,
@@ -365,6 +371,7 @@ impl<'a> RenameTabRequest<'a> {
 }
 
 /// Deletes tab from given screen.
+#[derive(Clone)]
 pub struct DeleteTabRequest<'a> {
     client: &'a crate::core::Client,
     tab_id: i64,
@@ -398,6 +405,7 @@ impl<'a> DeleteTabRequest<'a> {
 }
 
 /// Gets all fields for a given tab.
+#[derive(Clone)]
 pub struct GetAllFieldsRequest<'a> {
     client: &'a crate::core::Client,
     tab_id: i64,
@@ -444,6 +452,7 @@ impl<'a> GetAllFieldsRequest<'a> {
 }
 
 /// Adds field to the given tab.
+#[derive(Clone)]
 pub struct AddFieldRequest<'a> {
     client: &'a crate::core::Client,
     tab_id: i64,
@@ -492,6 +501,7 @@ impl<'a> AddFieldRequest<'a> {
 }
 
 /// Removes field from given tab.
+#[derive(Clone)]
 pub struct RemoveFieldRequest<'a> {
     client: &'a crate::core::Client,
     tab_id: i64,
@@ -531,6 +541,7 @@ impl<'a> RemoveFieldRequest<'a> {
 }
 
 /// Moves field on the given tab.
+#[derive(Clone)]
 pub struct MoveFieldRequest<'a> {
     client: &'a crate::core::Client,
     tab_id: i64,
@@ -585,6 +596,7 @@ impl<'a> MoveFieldRequest<'a> {
 }
 
 /// Update 'showWhenEmptyIndicator' for given field on screen.
+#[derive(Clone)]
 pub struct UpdateShowWhenEmptyIndicatorRequest<'a> {
     client: &'a crate::core::Client,
     tab_id: i64,
@@ -632,6 +644,7 @@ impl<'a> UpdateShowWhenEmptyIndicatorRequest<'a> {
 }
 
 /// Moves tab position.
+#[derive(Clone)]
 pub struct MoveTabRequest<'a> {
     client: &'a crate::core::Client,
     tab_id: i64,

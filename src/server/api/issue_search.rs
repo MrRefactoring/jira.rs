@@ -94,6 +94,7 @@ impl<'a> IssueSearchService<'a> {
 /// in to this resources.
 /// For instance, to expand the changelog for all the issues on the search result, it is necessary to
 /// specify changelog as one of the values to expand.
+#[derive(Clone)]
 pub struct SearchRequest2<'a> {
     client: &'a crate::core::Client,
     expand: Option<SearchRequest2Expand>,
@@ -200,6 +201,7 @@ impl<'a> SearchRequest2<'a> {
 }
 
 /// Performs a search using JQL.
+#[derive(Clone)]
 pub struct SearchUsingSearchRequestRequest<'a> {
     client: &'a crate::core::Client,
     search_request: SearchRequest,
@@ -236,6 +238,7 @@ impl<'a> SearchUsingSearchRequestRequest<'a> {
 }
 
 /// Available since Jira Data Center 11.3.
+#[derive(Clone)]
 pub struct GetErrorRequest<'a> {
     client: &'a crate::core::Client,
 }

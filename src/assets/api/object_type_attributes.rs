@@ -38,6 +38,7 @@ impl<'a> ObjectTypeAttributesService<'a> {
 }
 
 /// Create a new attribute on the given object type
+#[derive(Clone)]
 pub struct CreateObjectTypeAttributeRequest<'a> {
     client: &'a crate::core::Client,
     object_type_id: String,
@@ -82,6 +83,7 @@ impl<'a> CreateObjectTypeAttributeRequest<'a> {
 }
 
 /// Update an existing object type attribute
+#[derive(Clone)]
 pub struct UpdateObjectTypeAttributeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -132,6 +134,7 @@ impl<'a> UpdateObjectTypeAttributeRequest<'a> {
 }
 
 /// Delete an existing object type attribute
+#[derive(Clone)]
 pub struct DeleteObjectTypeAttributeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,

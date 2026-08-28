@@ -17,6 +17,7 @@ impl<'a> QrCodeService<'a> {
 }
 
 /// Get a QR code for an object.
+#[derive(Clone)]
 pub struct GetObjectQrCodeRequest<'a> {
     client: &'a crate::core::Client,
     size: Option<String>,

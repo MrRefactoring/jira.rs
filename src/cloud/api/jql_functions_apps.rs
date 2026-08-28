@@ -97,6 +97,7 @@ impl<'a> JQLFunctionsAppsService<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** This API is only accessible to apps and apps can only inspect their own functions.
 ///
 /// The new `read:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+#[derive(Clone)]
 pub struct GetPrecomputationsRequest<'a> {
     client: &'a crate::core::Client,
     function_key: Option<Vec<String>>,
@@ -192,6 +193,7 @@ impl<'a> GetPrecomputationsRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** An API for apps to update their own precomputations.
 ///
 /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+#[derive(Clone)]
 pub struct UpdatePrecomputationsRequest<'a> {
     client: &'a crate::core::Client,
     skip_not_found_precomputations: Option<bool>,
@@ -252,6 +254,7 @@ impl<'a> UpdatePrecomputationsRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** This API is only accessible to apps and apps can only inspect their own functions.
 ///
 /// The new `read:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+#[derive(Clone)]
 pub struct GetPrecomputationsByIDRequest<'a> {
     client: &'a crate::core::Client,
     order_by: Option<GetPrecomputationsByIDRequestOrderBy>,

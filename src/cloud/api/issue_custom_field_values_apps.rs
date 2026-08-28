@@ -49,6 +49,7 @@ impl<'a> IssueCustomFieldValuesAppsService<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only the app that owns the custom field or custom field type can update its values with this operation.
 ///
 /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+#[derive(Clone)]
 pub struct UpdateMultipleCustomFieldValuesRequest<'a> {
     client: &'a crate::core::Client,
     generate_changelog: Option<bool>,
@@ -126,6 +127,7 @@ impl<'a> UpdateMultipleCustomFieldValuesRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only the app that owns the custom field or custom field type can update its values with this operation.
 ///
 /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+#[derive(Clone)]
 pub struct UpdateCustomFieldValueRequest<'a> {
     client: &'a crate::core::Client,
     field_id_or_key: String,

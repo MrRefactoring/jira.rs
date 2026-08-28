@@ -132,6 +132,7 @@ impl<'a> MyselfService<'a> {
 /// Use [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch) from the user management REST API to manage timezone and locale instead.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct GetPreferenceRequest<'a> {
     client: &'a crate::core::Client,
     key: String,
@@ -186,6 +187,7 @@ impl<'a> GetPreferenceRequest<'a> {
 /// Use [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch) from the user management REST API to manage timezone and locale instead.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct SetPreferenceRequest<'a> {
     client: &'a crate::core::Client,
     key: String,
@@ -230,6 +232,7 @@ impl<'a> SetPreferenceRequest<'a> {
 /// Use [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch) from the user management REST API to manage timezone and locale instead.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct RemovePreferenceRequest<'a> {
     client: &'a crate::core::Client,
     key: String,
@@ -268,6 +271,7 @@ impl<'a> RemovePreferenceRequest<'a> {
 /// This operation can be accessed anonymously.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
 pub struct GetLocaleRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -299,6 +303,7 @@ impl<'a> GetLocaleRequest<'a> {
 /// Returns details for the current user.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
 pub struct GetCurrentUserRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetCurrentUserRequestExpand>,

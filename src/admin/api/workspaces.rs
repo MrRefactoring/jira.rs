@@ -33,6 +33,7 @@ impl<'a> WorkspacesService<'a> {
 ///
 /// #### Scopes
 /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:workspaces:admin`
+#[derive(Clone)]
 pub struct QueryWorkspacesRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,

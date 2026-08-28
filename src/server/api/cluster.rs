@@ -54,6 +54,7 @@ impl<'a> ClusterService<'a> {
 }
 
 /// Delete the node from the cluster if state of node is OFFLINE.
+#[derive(Clone)]
 pub struct DeleteNodeRequest<'a> {
     client: &'a crate::core::Client,
     node_id: String,
@@ -86,6 +87,7 @@ impl<'a> DeleteNodeRequest<'a> {
 }
 
 /// Change the node's state to offline if the node is reporting as active, but is not alive.
+#[derive(Clone)]
 pub struct ChangeNodeStateToOfflineRequest<'a> {
     client: &'a crate::core::Client,
     node_id: String,
@@ -118,6 +120,7 @@ impl<'a> ChangeNodeStateToOfflineRequest<'a> {
 }
 
 /// Returns all nodes in cluster.
+#[derive(Clone)]
 pub struct GetAllNodesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -146,6 +149,7 @@ impl<'a> GetAllNodesRequest<'a> {
 }
 
 /// Approves the cluster upgrade.
+#[derive(Clone)]
 pub struct ApproveUpgradeRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -175,6 +179,7 @@ impl<'a> ApproveUpgradeRequest<'a> {
 }
 
 /// Cancels the ongoing cluster upgrade.
+#[derive(Clone)]
 pub struct CancelUpgradeRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -204,6 +209,7 @@ impl<'a> CancelUpgradeRequest<'a> {
 }
 
 /// Retries the cluster upgrade.
+#[derive(Clone)]
 pub struct AcknowledgeErrorsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -235,6 +241,7 @@ impl<'a> AcknowledgeErrorsRequest<'a> {
 }
 
 /// Starts the cluster upgrade.
+#[derive(Clone)]
 pub struct SetReadyToUpgradeRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -264,6 +271,7 @@ impl<'a> SetReadyToUpgradeRequest<'a> {
 }
 
 /// Returns the current state of the cluster upgrade.
+#[derive(Clone)]
 pub struct GetStateRequest<'a> {
     client: &'a crate::core::Client,
 }
