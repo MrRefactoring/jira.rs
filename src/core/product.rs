@@ -1,5 +1,3 @@
-pub const PACKAGE_NAME: &str = env!("CARGO_PKG_NAME");
-
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// The Atlassian gateway slug, as in `https://api.atlassian.com/ex/<slug>/{cloudId}`.

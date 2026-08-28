@@ -11,30 +11,41 @@ pub mod coverage;
 mod auth;
 mod body;
 mod client;
+#[cfg(feature = "chrono")]
+mod datetime;
 mod error;
 mod mime;
 mod multipart;
 pub mod oauth;
 mod open_enum;
+mod path;
 mod product;
 mod query;
 mod retry;
 mod tenant_context;
+#[cfg(not(feature = "chrono"))]
 mod timestamp;
 
 pub use auth::{Auth, BoxFuture, OAuth2Config, OAuth2ServerConfig, TokenProvider, TokenRefreshHook};
 pub use body::Body;
 pub use client::{AuthRefresher, Client, ClientBuilder, RequestBuilder, RequestConfig};
+#[cfg(feature = "chrono")]
+pub use datetime::parse as parse_datetime;
+#[cfg(feature = "chrono")]
+pub(crate) use datetime::{deserialize_datetime, serialize_datetime};
 pub use error::{
     ApiErrorDetails, ApiErrorKind, Error, OAuthErrorDetails, Result, SchemaMismatchIssue, SchemaMismatchReport,
-    TRANSIENT_HTTP_STATUSES, create_api_error, is_transient_status, parse_retry_after,
 };
-pub use mime::{DEFAULT_MIME_TYPE, mime_type_for};
+pub use mime::mime_type_for;
 pub use multipart::{Attachment, MultipartBody};
-pub use product::{GATEWAY_SLUG, PACKAGE_NAME, USER_AGENT, VERSION};
-pub use query::{QueryValue, build_url_with_search_params, header_value};
+pub(crate) use path::encode_path_segment;
+pub use product::{USER_AGENT, VERSION};
+pub use query::QueryValue;
+#[allow(unused_imports)]
+pub(crate) use query::header_value;
 pub use retry::{RetryConfig, RetryOptions, with_retry};
 pub use tenant_context::{TenantContext, get_tenant_context};
-pub use timestamp::{deserialize_required_timestamp, deserialize_timestamp};
+#[cfg(not(feature = "chrono"))]
+pub(crate) use timestamp::{deserialize_required_timestamp, deserialize_timestamp};
 
 pub use reqwest::Method;
