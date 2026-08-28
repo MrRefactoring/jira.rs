@@ -9,6 +9,8 @@
 //! `fields`, search answers with ids and nothing else.
 
 use jira::cloud::{Issue, IssuesAndJQLQueries, JQLCountRequest};
+use jira::futures_util::TryStreamExt;
+use jira::jql::field;
 
 use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, poll_until, test_name};
 
@@ -222,4 +224,66 @@ async fn answers_an_unmatched_query_with_an_empty_result_rather_than_an_error() 
         .expect("a query matching nothing is still a valid query");
 
     assert!(page.issues.unwrap_or_default().is_empty(), "nothing matched, so nothing is returned");
+}
+
+/// The builder puts a value into a query without letting it become part of the query.
+///
+/// A summary carrying a quotation mark is the case a `format!`-built query cannot survive: the mark closes the
+/// literal early and Jira answers 400 for a query it cannot parse. What is asserted here is that the request is
+/// accepted at all — the escaping is the subject, and the site is the only thing that can judge it.
+#[tokio::test]
+#[ignore = "live: needs a Jira site"]
+async fn a_quotation_mark_in_a_value_reaches_jira_as_a_value() {
+    let mut tracker = ResourceTracker::new();
+    let summary = format!(r#"{} say "hello""#, test_name("quoted"));
+    let issue = create_test_issue(&mut tracker, Some(&summary)).await;
+
+    let by_key = cloud()
+        .issue_search()
+        .search_issues()
+        .jql(field("key").eq(issue.key.as_str()).and(field("summary").contains(&summary)))
+        .fields(["summary"])
+        .send()
+        .await
+        .expect("a query carrying a quotation mark is parsed rather than rejected");
+
+    assert!(by_key.issues.is_some(), "the query ran, whether or not the index has caught up");
+
+    tracker.cleanup().await;
+}
+
+/// The token loop, walked by the crate rather than by the caller.
+#[tokio::test]
+#[ignore = "live: needs a Jira site"]
+async fn a_stream_walks_every_page_of_a_search() {
+    let mut tracker = ResourceTracker::new();
+    let first = create_test_issue(&mut tracker, Some(&test_name("streamed one"))).await;
+    let second = create_test_issue(&mut tracker, Some(&test_name("streamed two"))).await;
+
+    search(&format!("key = {}", first.key), None).await;
+    search(&format!("key = {}", second.key), None).await;
+
+    let query = field("key").is_in([first.key.as_str(), second.key.as_str()]).order_by("key");
+    let mut issues = cloud()
+        .issue_search()
+        .search_issues()
+        .jql(query)
+        // One issue per page, so a stream that stops at the first page cannot pass this.
+        .max_results(1)
+        .fields(["summary"])
+        .stream();
+    let mut keys = Vec::new();
+
+    while let Some(issue) = issues.try_next().await.expect("every page of the stream is readable") {
+        keys.push(issue.key.expect("a searched issue carries its key"));
+    }
+
+    keys.sort();
+
+    let mut expected = vec![first.key.clone(), second.key.clone()];
+    expected.sort();
+
+    assert_eq!(keys, expected, "the stream ends at the last page rather than at the first");
+
+    tracker.cleanup().await;
 }

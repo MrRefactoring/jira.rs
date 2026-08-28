@@ -21,6 +21,11 @@
 
 pub mod core;
 
+pub mod jql;
+
+#[cfg(feature = "cloud")]
+mod paging;
+
 #[cfg(feature = "admin")]
 #[cfg_attr(docsrs, doc(cfg(feature = "admin")))]
 pub mod admin;
@@ -81,3 +86,11 @@ pub use crate::core::{
 /// `reqwest::Client`, and [`Error::Network`] carries a `reqwest::Error` — and without this a caller who depends on
 /// `reqwest` themselves has to match the version by hand to pass one in.
 pub use reqwest;
+
+/// The stream machinery [`cloud::SearchIssuesRequest::stream`] answers with.
+///
+/// Its `TryStreamExt` is what reads a stream, and the trait has to be in scope to be used, so re-exporting it saves
+/// a caller a dependency they would otherwise have to add and keep in step with this one.
+#[cfg(feature = "cloud")]
+#[cfg_attr(docsrs, doc(cfg(feature = "cloud")))]
+pub use futures_util;
