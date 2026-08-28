@@ -9,6 +9,7 @@ pub mod client;
 pub mod entitlement;
 pub mod env;
 pub mod fixtures;
+pub mod moment;
 pub mod naming;
 pub mod poll;
 pub mod resources;
@@ -21,6 +22,7 @@ pub use fixtures::{
     TEST_ISSUE_TYPE, TEST_PROJECT_KEY, TestBoard, await_agile_visibility, create_issue_with, create_test_board,
     create_test_issue, document_of, scrum_board,
 };
+pub use moment::{rendered, rendered_option};
 pub use naming::{RESOURCE_MARKER, project_key, run_id, run_suffix, test_name};
 pub use poll::{await_readable, await_refused, poll_until};
 pub use resources::ResourceTracker;

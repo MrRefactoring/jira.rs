@@ -12,7 +12,8 @@ use jira::cloud::{
 };
 
 use crate::harness::{
-    ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, create_test_issue, document_of, poll_until, test_name,
+    ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, create_test_issue, document_of, poll_until,
+    rendered_option, test_name,
 };
 
 fn comment_of(text: &str) -> CommentInput {
@@ -89,10 +90,10 @@ async fn walks_a_comment_through_its_lifecycle() {
     assert_eq!(body.r#type, DocumentType::Doc);
     assert!((body.version - 1.0).abs() < f64::EPSILON, "the body is version 1 ADF, got {}", body.version);
 
-    let created_at = created.created.clone().expect("a comment carries a creation timestamp");
+    let created_at = rendered_option(&created.created).expect("a comment carries a creation timestamp");
 
     assert!(created_at.contains('T'), "a timestamp is an ISO 8601 instant: {created_at}");
-    assert_eq!(created.updated.as_deref(), Some(created_at.as_str()), "a fresh comment was never updated");
+    assert_eq!(rendered_option(&created.updated), Some(created_at.clone()), "a fresh comment was never updated");
 
     let fetched = cloud()
         .issue_comments()
@@ -114,7 +115,7 @@ async fn walks_a_comment_through_its_lifecycle() {
     assert!(body_text(&edited).contains("edited comment"), "{}", body_text(&edited));
     assert!(!body_text(&edited).contains("first comment"), "an update replaces the body rather than appending to it");
     // Timestamps within one response carry the same UTC offset, so lexicographic order is chronological order.
-    assert!(edited.updated.as_deref() > Some(created_at.as_str()), "the edit moves `updated` past `created`");
+    assert!(rendered_option(&edited.updated) > Some(created_at), "the edit moves `updated` past `created`");
 
     cloud().issue_comments().delete_comment(&issue.key, &comment_id).send().await.expect("the comment can be deleted");
 

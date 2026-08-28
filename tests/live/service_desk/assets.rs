@@ -39,6 +39,7 @@ async fn answers_the_assets_workspace_lookup_or_refuses_typed() {
 /// parser.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
+#[allow(deprecated, reason = "the point of the case is that the retired path still answers with a typed error")]
 async fn refuses_the_retired_insight_path_with_a_typed_error_whatever_the_body() {
     let error = match service_desk().assets().get_insight_workspaces().limit(1).send().await {
         Ok(page) => {

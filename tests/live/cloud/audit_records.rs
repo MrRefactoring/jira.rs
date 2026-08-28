@@ -1,4 +1,4 @@
-use crate::harness::{cloud, is_not_entitled};
+use crate::harness::{cloud, is_not_entitled, rendered_option};
 
 /// The audit records API, administrator-gated.
 ///
@@ -26,7 +26,7 @@ async fn returns_audit_records_for_an_administrator_each_fully_typed() {
         assert!(record.summary.as_ref().is_some_and(|summary| !summary.is_empty()), "a record carries a summary");
         assert!(record.category.as_ref().is_some_and(|category| !category.is_empty()), "a record carries a category");
 
-        let created = record.created.as_deref().expect("a record carries the moment it was written");
+        let created = rendered_option(&record.created).expect("a record carries the moment it was written");
 
         assert!(created.contains('T'), "a creation timestamp is ISO 8601: {created}");
     }
@@ -98,7 +98,7 @@ async fn narrows_the_window_with_from() {
     let page =
         cloud().audit_records().get_audit_records().limit(10).send().await.expect("an administrator reads the log");
 
-    let Some(newest) = page.records.iter().flatten().next().and_then(|record| record.created.clone()) else {
+    let Some(newest) = page.records.iter().flatten().next().and_then(|record| rendered_option(&record.created)) else {
         assert_eq!(page.total, Some(0), "a log with no records says so rather than hiding them");
 
         return;
@@ -114,9 +114,9 @@ async fn narrows_the_window_with_from() {
         .expect("a timestamp the log emitted is a timestamp the log accepts");
 
     for record in narrowed.records.iter().flatten() {
-        let created = record.created.as_deref().expect("a record carries the moment it was written");
+        let created = rendered_option(&record.created).expect("a record carries the moment it was written");
 
-        assert!(created >= newest.as_str(), "the window excludes what predates it: {created} is before {newest}");
+        assert!(created >= newest, "the window excludes what predates it: {created} is before {newest}");
     }
 }
 

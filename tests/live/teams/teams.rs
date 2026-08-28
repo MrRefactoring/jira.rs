@@ -18,6 +18,7 @@ use crate::harness::{ResourceTracker, await_readable, await_refused, org_id, pol
 /// not scoped to a project and no issue sweep will ever collect it. So the teardown is registered the moment the team
 /// exists, and it treats `410 Gone` as success — a team the test deleted itself answers that rather than `404`, and
 /// the tracker would otherwise report a resource that is demonstrably absent as leaked.
+#[allow(deprecated, reason = "`site_id` is required by the payload and deprecated only in its documentation")]
 async fn create_team(tracker: &mut ResourceTracker, org: &str, label: &str) -> TeamResponseWithMembers {
     let team = teams()
         .teams()

@@ -2,7 +2,7 @@
 //! most callers make, and the cheapest place to catch a broken base URL, a broken auth header, or a schema that has
 //! drifted from what Cloud actually sends.
 
-use crate::harness::{cloud, require_live_env};
+use crate::harness::{cloud, rendered, require_live_env};
 
 /// Whether the value is a timestamp with real field values rather than merely a string of the right shape.
 fn parses_as_a_date(value: &str) -> bool {
@@ -39,8 +39,8 @@ async fn returns_the_site_identity_typed_as_server_information_declares() {
 async fn reports_a_build_date_and_server_time_that_parse_as_real_dates() {
     let info = cloud().server_info().get_server_info().send().await.expect("the site names itself");
 
-    let build_date = info.build_date.expect("a site reports when it was built");
-    let server_time = info.server_time.expect("a site reports its own clock");
+    let build_date = info.build_date.as_ref().map(rendered).expect("a site reports when it was built");
+    let server_time = info.server_time.as_ref().map(rendered).expect("a site reports its own clock");
 
     assert!(parses_as_a_date(&build_date), "the build date is a date: {build_date}");
     assert!(parses_as_a_date(&server_time), "the server time is a date: {server_time}");

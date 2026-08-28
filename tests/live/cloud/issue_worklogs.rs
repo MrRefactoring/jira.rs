@@ -9,7 +9,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use jira::cloud::{Worklog, WorklogIdsRequest, WorklogInput, WorklogInputComment};
 
 use crate::harness::{
-    ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, create_test_issue, document_of, poll_until, test_name,
+    ResourceTracker, TEST_PROJECT_KEY, await_refused, cloud, create_test_issue, document_of, poll_until,
+    rendered_option, test_name,
 };
 
 fn worklog_of(time_spent: &str, comment: Option<&str>) -> WorklogInput {
@@ -90,7 +91,7 @@ async fn walks_a_worklog_through_its_lifecycle() {
         "a worklog carries the account that logged it",
     );
     assert!(
-        created.started.as_deref().is_some_and(|started| started.contains('T')),
+        rendered_option(&created.started).is_some_and(|started| started.contains('T')),
         "a worklog starts at an ISO 8601 instant: {:?}",
         created.started,
     );

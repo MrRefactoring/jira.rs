@@ -9,7 +9,9 @@
 
 use jira::core::Attachment;
 
-use crate::harness::{ResourceTracker, await_readable, await_refused, cloud, create_test_issue, test_name};
+use crate::harness::{
+    ResourceTracker, await_readable, await_refused, cloud, create_test_issue, rendered_option, test_name,
+};
 
 /// Deliberately multibyte: a size measured in characters rather than bytes would not match.
 const TEXT: &str = "attachment body — с кириллицей и эмодзи 🎯";
@@ -155,7 +157,7 @@ async fn walks_an_attachment_through_its_lifecycle() {
     assert_eq!(metadata.id, Some(attachment_id.parse().expect("an attachment id is a number")));
     assert_eq!(metadata.filename.as_deref(), Some("note.txt"));
     assert!(
-        metadata.created.as_deref().is_some_and(|created| created.contains('T') && created.len() >= 20),
+        rendered_option(&metadata.created).is_some_and(|created| created.contains('T') && created.len() >= 20),
         "a stored attachment carries a timestamp: {:?}",
         metadata.created,
     );
