@@ -196,6 +196,21 @@ types, so almost nobody wants all of them.
 | `user-management` / `user-provisioning` | User management and SCIM provisioning |
 | `webhooks` | Event and payload types, and the signature check that says a delivery came from Jira |
 
+One feature changes what the types look like rather than which of them exist:
+
+| Feature | What it changes |
+|---|---|
+| `chrono` | Every `date-time` field becomes `Option<chrono::DateTime<Utc>>` instead of the text it arrived as |
+
+It is off by default, and deliberately so. Turning it on changes the type of a field, and two crates that both depend
+on this one do not get to disagree about that: cargo unifies their features, so enabling it anywhere enables it
+everywhere in the build. Leave it off in a library and let the application decide.
+
+The field is optional even where the specification says the value is always there. Reading a timestamp can fail — the
+spelling Atlassian documents is not RFC 3339, and the bulk queue answers epoch milliseconds where the document
+promises a string — and a value the reader does not recognise becomes `None` rather than failing the response around
+it. Without the feature the text is kept exactly as it arrived, whatever it says.
+
 Two more are instruments rather than surfaces. They exist for this crate's own runs against a live site, and cost
 nothing when they are off:
 
