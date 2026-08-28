@@ -11,12 +11,34 @@ crate::open_enum! {
 }
 
 /// Attributes of this object
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PollingEventModelAttributes {
     /// The date and time of the event.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub time: Option<chrono::DateTime<chrono::Utc>>,
+    /// The date and time of the event.
+    #[cfg(not(feature = "chrono"))]
     #[serde(deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub time: String,
     /// The date and time the event was processed.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "processedAt",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub processed_at: Option<chrono::DateTime<chrono::Utc>>,
+    /// The date and time the event was processed.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "processedAt", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub processed_at: String,
     /// The kind of event. Complete list see `event-actions` API.
@@ -31,7 +53,8 @@ pub struct PollingEventModelAttributes {
     pub location: Option<EventLocationModel>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PollingEventModel {
     /// Unique identifier of the event
     pub id: String,

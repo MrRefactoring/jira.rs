@@ -11,7 +11,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct RequestType {
     /// List of items that can be expanded in the response by specifying the expand query parameter.
     #[serde(rename = "_expands", default, skip_serializing_if = "Option::is_none")]

@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of an operation to perform on a field.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FieldUpdateOperation {
     /// The value to add to the field.
     #[serde(default, skip_serializing_if = "Option::is_none")]

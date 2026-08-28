@@ -20,7 +20,8 @@ crate::open_enum! {
 }
 
 /// Details related to the gating status
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetDeploymentGatingStatusByKeyDetails {
     /// The type of the gating status details.
     pub r#type: GetDeploymentGatingStatusByKeyDetailsType,
@@ -33,7 +34,8 @@ pub struct GetDeploymentGatingStatusByKeyDetails {
 }
 
 /// The current gating status for the given Deployment.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetDeploymentGatingStatusByKey {
     /// This is the identifier for the Deployment.
     #[serde(rename = "deploymentSequenceNumber", default, skip_serializing_if = "Option::is_none")]
@@ -45,6 +47,17 @@ pub struct GetDeploymentGatingStatusByKey {
     #[serde(rename = "environmentId", default, skip_serializing_if = "Option::is_none")]
     pub environment_id: Option<String>,
     /// Time the deployment gating status was updated.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "updatedTimestamp",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub updated_timestamp: Option<chrono::DateTime<chrono::Utc>>,
+    /// Time the deployment gating status was updated.
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "updatedTimestamp",
         default,

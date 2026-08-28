@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Request bean for bulk changelog retrieval
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct BulkChangelogRequest {
     /// List of field IDs to filter changelogs
     #[serde(rename = "fieldIds", default, skip_serializing_if = "Option::is_none")]

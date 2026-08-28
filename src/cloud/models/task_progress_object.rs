@@ -16,7 +16,8 @@ crate::open_enum! {
 }
 
 /// Details about a task.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct TaskProgressObject {
     /// The description of the task.
     #[serde(default, skip_serializing_if = "Option::is_none")]

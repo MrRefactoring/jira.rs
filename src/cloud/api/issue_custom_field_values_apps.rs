@@ -16,7 +16,7 @@ impl<'a> IssueCustomFieldValuesAppsService<'a> {
     ///
     /// Apps can only perform this operation on [custom fields](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field/) and [custom field types](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/) declared in their own manifests.
     ///
-    /// **[Permissions](#permissions) required:** Only the app that owns the custom field or custom field type can update its values with this operation.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only the app that owns the custom field or custom field type can update its values with this operation.
     ///
     /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
     pub fn update_multiple_custom_field_values(
@@ -30,7 +30,7 @@ impl<'a> IssueCustomFieldValuesAppsService<'a> {
     ///
     /// Apps can only perform this operation on [custom fields](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field/) and [custom field types](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/) declared in their own manifests.
     ///
-    /// **[Permissions](#permissions) required:** Only the app that owns the custom field or custom field type can update its values with this operation.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only the app that owns the custom field or custom field type can update its values with this operation.
     ///
     /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
     pub fn update_custom_field_value(
@@ -46,7 +46,7 @@ impl<'a> IssueCustomFieldValuesAppsService<'a> {
 ///
 /// Apps can only perform this operation on [custom fields](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field/) and [custom field types](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/) declared in their own manifests.
 ///
-/// **[Permissions](#permissions) required:** Only the app that owns the custom field or custom field type can update its values with this operation.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only the app that owns the custom field or custom field type can update its values with this operation.
 ///
 /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
 pub struct UpdateMultipleCustomFieldValuesRequest<'a> {
@@ -123,7 +123,7 @@ impl<'a> UpdateMultipleCustomFieldValuesRequest<'a> {
 ///
 /// Apps can only perform this operation on [custom fields](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field/) and [custom field types](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/) declared in their own manifests.
 ///
-/// **[Permissions](#permissions) required:** Only the app that owns the custom field or custom field type can update its values with this operation.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only the app that owns the custom field or custom field type can update its values with this operation.
 ///
 /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
 pub struct UpdateCustomFieldValueRequest<'a> {
@@ -169,7 +169,7 @@ impl<'a> UpdateCustomFieldValueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/app/field/{}/value", self.field_id_or_key),
+            format!("/rest/api/3/app/field/{}/value", crate::core::encode_path_segment(&self.field_id_or_key)),
         );
 
         if let Some(value) = &self.generate_changelog {

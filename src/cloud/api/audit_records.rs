@@ -30,7 +30,7 @@ impl<'a> AuditRecordsService<'a> {
     ///  *  created on or after a date and time.
     ///  *  created or or before a date and time.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_audit_records(&self) -> GetAuditRecordsRequest<'a> {
         GetAuditRecordsRequest::new(self.client)
     }
@@ -54,7 +54,7 @@ impl<'a> AuditRecordsService<'a> {
 ///  *  created on or after a date and time.
 ///  *  created or or before a date and time.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetAuditRecordsRequest<'a> {
     client: &'a crate::core::Client,
     offset: Option<i64>,

@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Container for a list of webhook IDs.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ContainerForWebhookIDs {
     /// A list of webhook IDs.
     #[serde(rename = "webhookIds")]

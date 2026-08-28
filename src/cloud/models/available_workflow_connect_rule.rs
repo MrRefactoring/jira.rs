@@ -13,7 +13,8 @@ crate::open_enum! {
 }
 
 /// The Connect provided ecosystem rules available.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AvailableWorkflowConnectRule {
     /// The add-on providing the rule.
     #[serde(rename = "addonKey", default, skip_serializing_if = "Option::is_none")]

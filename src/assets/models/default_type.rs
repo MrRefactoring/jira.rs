@@ -17,7 +17,8 @@ use serde::{Deserialize, Serialize};
 /// | 9 | Textarea |
 /// | 10 | Select |
 /// | 11 | IP Address |
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct DefaultType {
     pub id: i64,
     pub name: String,

@@ -14,22 +14,22 @@ impl<'a> ProjectRolesService<'a> {
 
     /// Returns a list of [project roles](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-roles/) for the project returning the name and self URL for each role.
     ///
-    /// Note that all project roles are shared with all projects in Jira Cloud. See [Get all project roles](#api-rest-api-3-role-get) for more information.
+    /// Note that all project roles are shared with all projects in Jira Cloud. See [Get all project roles](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-role/#api-rest-api-3-role-get) for more information.
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for any project on the site or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for any project on the site or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_project_roles(&self, project_id_or_key: impl Into<String>) -> GetProjectRolesRequest<'a> {
         GetProjectRolesRequest::new(self.client, project_id_or_key)
     }
 
     /// Returns a project role's details and actors associated with the project. The list of actors is sorted by display name.
     ///
-    /// To check whether a user belongs to a role based on their group memberships, use [Get user](#api-rest-api-3-user-get) with the `groups` expand parameter selected. Then check whether the user keys and groups match with the actors returned for the project.
+    /// To check whether a user belongs to a role based on their group memberships, use [Get user](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-user/#api-rest-api-3-user-get) with the `groups` expand parameter selected. Then check whether the user keys and groups match with the actors returned for the project.
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_project_role(&self, project_id_or_key: impl Into<String>, id: i64) -> GetProjectRoleRequest<'a> {
         GetProjectRoleRequest::new(self.client, project_id_or_key, id)
     }
@@ -38,7 +38,7 @@ impl<'a> ProjectRolesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
     pub fn get_project_role_details(&self, project_id_or_key: impl Into<String>) -> GetProjectRoleDetailsRequest<'a> {
         GetProjectRoleDetailsRequest::new(self.client, project_id_or_key)
     }
@@ -49,7 +49,7 @@ impl<'a> ProjectRolesService<'a> {
     ///
     /// [Project roles](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-roles/) are a flexible way to to associate users and groups with projects. In Jira Cloud, the list of project roles is shared globally with all projects, but each project can have a different set of actors associated with it (unlike groups, which have the same membership throughout all Jira applications).
     ///
-    /// Project roles are used in [permission schemes](#api-rest-api-3-permissionscheme-get), [email notification schemes](#api-rest-api-3-notificationscheme-get), [issue security levels](#api-rest-api-3-issuesecurityschemes-get), [comment visibility](#api-rest-api-3-comment-list-post), and workflow conditions.
+    /// Project roles are used in [permission schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-get), [email notification schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-notification-schemes/#api-rest-api-3-notificationscheme-get), [issue security levels](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-security-schemes/#api-rest-api-3-issuesecurityschemes-get), [comment visibility](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-comment/#api-rest-api-3-comment-list-post), and workflow conditions.
     ///
     /// #### Members and actors ####
     ///
@@ -60,16 +60,16 @@ impl<'a> ProjectRolesService<'a> {
     ///  *  Default actors: Users and groups that are assigned to the project role for all newly created projects. The default actors can be removed at the project level later if desired.
     ///  *  Actors: Users and groups that are associated with a project role for a project, which may differ from the default actors. This enables you to assign a user to different roles in different projects.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_all_project_roles(&self) -> GetAllProjectRolesRequest<'a> {
         GetAllProjectRolesRequest::new(self.client)
     }
 
-    /// Creates a new project role with no [default actors](#api-rest-api-3-resolution-get). You can use the [Add default actors to project role](#api-rest-api-3-role-id-actors-post) operation to add default actors to the project role after creating it.
+    /// Creates a new project role with no [default actors](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-resolution/#api-rest-api-3-resolution-get). You can use the [Add default actors to project role](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-role/#api-rest-api-3-role-id-actors-post) operation to add default actors to the project role after creating it.
     ///
     /// *Note that although a new project role is available to all projects upon creation, any default actors that are associated with the project role are not added to projects that existed prior to the role being created.*<
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn create_project_role(
         &self,
         create_update_role_request: CreateUpdateRoleRequest,
@@ -79,7 +79,7 @@ impl<'a> ProjectRolesService<'a> {
 
     /// Gets the project role details and the default actors associated with the role. The list of default actors is sorted by display name.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_project_role_by_id(&self, id: i64) -> GetProjectRoleByIdRequest<'a> {
         GetProjectRoleByIdRequest::new(self.client, id)
     }
@@ -88,7 +88,7 @@ impl<'a> ProjectRolesService<'a> {
     ///
     /// You cannot update both the name and description at the same time using this operation. If you send a request with a name and a description only the name is updated.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn partial_update_project_role(
         &self,
         id: i64,
@@ -99,7 +99,7 @@ impl<'a> ProjectRolesService<'a> {
 
     /// Updates the project role's name and description. You must include both a name and a description in the request.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn fully_update_project_role(
         &self,
         id: i64,
@@ -110,7 +110,7 @@ impl<'a> ProjectRolesService<'a> {
 
     /// Deletes a project role. You must specify a replacement project role if you wish to delete a project role that is in use.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_project_role(&self, id: i64) -> DeleteProjectRoleRequest<'a> {
         DeleteProjectRoleRequest::new(self.client, id)
     }
@@ -118,11 +118,11 @@ impl<'a> ProjectRolesService<'a> {
 
 /// Returns a list of [project roles](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-roles/) for the project returning the name and self URL for each role.
 ///
-/// Note that all project roles are shared with all projects in Jira Cloud. See [Get all project roles](#api-rest-api-3-role-get) for more information.
+/// Note that all project roles are shared with all projects in Jira Cloud. See [Get all project roles](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-role/#api-rest-api-3-role-get) for more information.
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for any project on the site or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for any project on the site or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetProjectRolesRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -137,7 +137,7 @@ impl<'a> GetProjectRolesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}/role", self.project_id_or_key),
+            format!("/rest/api/3/project/{}/role", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         Ok(config)
@@ -156,11 +156,11 @@ impl<'a> GetProjectRolesRequest<'a> {
 
 /// Returns a project role's details and actors associated with the project. The list of actors is sorted by display name.
 ///
-/// To check whether a user belongs to a role based on their group memberships, use [Get user](#api-rest-api-3-user-get) with the `groups` expand parameter selected. Then check whether the user keys and groups match with the actors returned for the project.
+/// To check whether a user belongs to a role based on their group memberships, use [Get user](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-user/#api-rest-api-3-user-get) with the `groups` expand parameter selected. Then check whether the user keys and groups match with the actors returned for the project.
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -185,7 +185,11 @@ impl<'a> GetProjectRoleRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}/role/{}", self.project_id_or_key, self.id),
+            format!(
+                "/rest/api/3/project/{}/role/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                self.id
+            ),
         );
 
         if let Some(value) = &self.exclude_inactive_users {
@@ -210,7 +214,7 @@ impl<'a> GetProjectRoleRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
 pub struct GetProjectRoleDetailsRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -257,7 +261,7 @@ impl<'a> GetProjectRoleDetailsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}/roledetails", self.project_id_or_key),
+            format!("/rest/api/3/project/{}/roledetails", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         if let Some(value) = &self.current_member {
@@ -294,7 +298,7 @@ impl<'a> GetProjectRoleDetailsRequest<'a> {
 ///
 /// [Project roles](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-roles/) are a flexible way to to associate users and groups with projects. In Jira Cloud, the list of project roles is shared globally with all projects, but each project can have a different set of actors associated with it (unlike groups, which have the same membership throughout all Jira applications).
 ///
-/// Project roles are used in [permission schemes](#api-rest-api-3-permissionscheme-get), [email notification schemes](#api-rest-api-3-notificationscheme-get), [issue security levels](#api-rest-api-3-issuesecurityschemes-get), [comment visibility](#api-rest-api-3-comment-list-post), and workflow conditions.
+/// Project roles are used in [permission schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-get), [email notification schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-notification-schemes/#api-rest-api-3-notificationscheme-get), [issue security levels](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-security-schemes/#api-rest-api-3-issuesecurityschemes-get), [comment visibility](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-comment/#api-rest-api-3-comment-list-post), and workflow conditions.
 ///
 /// #### Members and actors ####
 ///
@@ -305,7 +309,7 @@ impl<'a> GetProjectRoleDetailsRequest<'a> {
 ///  *  Default actors: Users and groups that are assigned to the project role for all newly created projects. The default actors can be removed at the project level later if desired.
 ///  *  Actors: Users and groups that are associated with a project role for a project, which may differ from the default actors. This enables you to assign a user to different roles in different projects.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetAllProjectRolesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -333,11 +337,11 @@ impl<'a> GetAllProjectRolesRequest<'a> {
     }
 }
 
-/// Creates a new project role with no [default actors](#api-rest-api-3-resolution-get). You can use the [Add default actors to project role](#api-rest-api-3-role-id-actors-post) operation to add default actors to the project role after creating it.
+/// Creates a new project role with no [default actors](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-resolution/#api-rest-api-3-resolution-get). You can use the [Add default actors to project role](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-role/#api-rest-api-3-role-id-actors-post) operation to add default actors to the project role after creating it.
 ///
 /// *Note that although a new project role is available to all projects upon creation, any default actors that are associated with the project role are not added to projects that existed prior to the role being created.*<
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct CreateProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     create_update_role_request: CreateUpdateRoleRequest,
@@ -375,7 +379,7 @@ impl<'a> CreateProjectRoleRequest<'a> {
 
 /// Gets the project role details and the default actors associated with the role. The list of default actors is sorted by display name.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetProjectRoleByIdRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -408,7 +412,7 @@ impl<'a> GetProjectRoleByIdRequest<'a> {
 ///
 /// You cannot update both the name and description at the same time using this operation. If you send a request with a name and a description only the name is updated.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct PartialUpdateProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -448,7 +452,7 @@ impl<'a> PartialUpdateProjectRoleRequest<'a> {
 
 /// Updates the project role's name and description. You must include both a name and a description in the request.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct FullyUpdateProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -488,7 +492,7 @@ impl<'a> FullyUpdateProjectRoleRequest<'a> {
 
 /// Deletes a project role. You must specify a replacement project role if you wish to delete a project role that is in use.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,

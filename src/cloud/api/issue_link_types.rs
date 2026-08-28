@@ -18,7 +18,7 @@ impl<'a> IssueLinkTypesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project in the site.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project in the site.
     pub fn get_issue_link_types(&self) -> GetIssueLinkTypesRequest<'a> {
         GetIssueLinkTypesRequest::new(self.client)
     }
@@ -27,7 +27,7 @@ impl<'a> IssueLinkTypesService<'a> {
     ///
     /// To use this operation, the site must have [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn create_issue_link_type(&self, issue_link_type: IssueLinkType) -> CreateIssueLinkTypeRequest<'a> {
         CreateIssueLinkTypeRequest::new(self.client, issue_link_type)
     }
@@ -38,7 +38,7 @@ impl<'a> IssueLinkTypesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project in the site.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project in the site.
     pub fn get_issue_link_type(&self, issue_link_type_id: impl Into<String>) -> GetIssueLinkTypeRequest<'a> {
         GetIssueLinkTypeRequest::new(self.client, issue_link_type_id)
     }
@@ -47,7 +47,7 @@ impl<'a> IssueLinkTypesService<'a> {
     ///
     /// To use this operation, the site must have [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn update_issue_link_type(
         &self,
         issue_link_type_id: impl Into<String>,
@@ -60,7 +60,7 @@ impl<'a> IssueLinkTypesService<'a> {
     ///
     /// To use this operation, the site must have [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_issue_link_type(&self, issue_link_type_id: impl Into<String>) -> DeleteIssueLinkTypeRequest<'a> {
         DeleteIssueLinkTypeRequest::new(self.client, issue_link_type_id)
     }
@@ -72,7 +72,7 @@ impl<'a> IssueLinkTypesService<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project in the site.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project in the site.
 pub struct GetIssueLinkTypesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -104,7 +104,7 @@ impl<'a> GetIssueLinkTypesRequest<'a> {
 ///
 /// To use this operation, the site must have [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct CreateIssueLinkTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_link_type: IssueLinkType,
@@ -147,7 +147,7 @@ impl<'a> CreateIssueLinkTypeRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project in the site.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project in the site.
 pub struct GetIssueLinkTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_link_type_id: String,
@@ -162,7 +162,7 @@ impl<'a> GetIssueLinkTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/issueLinkType/{}", self.issue_link_type_id),
+            format!("/rest/api/3/issueLinkType/{}", crate::core::encode_path_segment(&self.issue_link_type_id)),
         );
 
         Ok(config)
@@ -183,7 +183,7 @@ impl<'a> GetIssueLinkTypeRequest<'a> {
 ///
 /// To use this operation, the site must have [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct UpdateIssueLinkTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_link_type_id: String,
@@ -203,7 +203,7 @@ impl<'a> UpdateIssueLinkTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/issueLinkType/{}", self.issue_link_type_id),
+            format!("/rest/api/3/issueLinkType/{}", crate::core::encode_path_segment(&self.issue_link_type_id)),
         );
 
         let body = match serde_json::to_value(&self.issue_link_type)? {
@@ -231,7 +231,7 @@ impl<'a> UpdateIssueLinkTypeRequest<'a> {
 ///
 /// To use this operation, the site must have [issue linking](https://confluence.atlassian.com/x/yoXKM) enabled.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteIssueLinkTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_link_type_id: String,
@@ -246,7 +246,7 @@ impl<'a> DeleteIssueLinkTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/issueLinkType/{}", self.issue_link_type_id),
+            format!("/rest/api/3/issueLinkType/{}", crate::core::encode_path_segment(&self.issue_link_type_id)),
         );
 
         Ok(config)

@@ -16,7 +16,7 @@ crate::open_enum! {
 }
 
 /// The payload for creating a board
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct BoardPayload {
     /// Takes in a JQL string to create a new filter. If no value is provided, it'll default to a JQL filter for the project creating
     #[serde(rename = "boardFilterJQL", default, skip_serializing_if = "Option::is_none")]

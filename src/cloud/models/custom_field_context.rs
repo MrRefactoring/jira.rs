@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The details of a custom field context.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContext {
     /// The description of the context.
     pub description: String,

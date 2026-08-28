@@ -175,7 +175,10 @@ impl<'a> GetImportSourceRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(crate::core::Method::GET, format!("/importsource/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/importsource/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -220,7 +223,7 @@ impl<'a> SubmitSchemaAndMappingRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/importsource/{}/mapping", self.import_source_id),
+            format!("/importsource/{}/mapping", crate::core::encode_path_segment(&self.import_source_id)),
         );
 
         if let Some(value) = &self.r#async {
@@ -280,7 +283,7 @@ impl<'a> UpdateSchemaAndMappingRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PATCH,
-            format!("/importsource/{}/mapping", self.import_source_id),
+            format!("/importsource/{}/mapping", crate::core::encode_path_segment(&self.import_source_id)),
         );
 
         if let Some(value) = &self.r#async {
@@ -328,7 +331,11 @@ impl<'a> GetSchemaAndMappingProgressRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/importsource/{}/mapping/progress/{}", self.import_source_id, self.resource_id),
+            format!(
+                "/importsource/{}/mapping/progress/{}",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.resource_id)
+            ),
         );
 
         Ok(config)
@@ -360,7 +367,7 @@ impl<'a> GetImportConfigurationStatusRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/importsource/{}/configstatus", self.import_source_id),
+            format!("/importsource/{}/configstatus", crate::core::encode_path_segment(&self.import_source_id)),
         );
 
         Ok(config)
@@ -392,7 +399,7 @@ impl<'a> GetSchemaAndMappingRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/importsource/{}/schema-and-mapping", self.import_source_id),
+            format!("/importsource/{}/schema-and-mapping", crate::core::encode_path_segment(&self.import_source_id)),
         );
 
         Ok(config)
@@ -424,7 +431,7 @@ impl<'a> StartImportExecutionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/importsource/{}/executions", self.import_source_id),
+            format!("/importsource/{}/executions", crate::core::encode_path_segment(&self.import_source_id)),
         );
 
         Ok(config)
@@ -461,7 +468,11 @@ impl<'a> CancelImportExecutionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/importsource/{}/executions/{}", self.import_source_id, self.import_execution_id),
+            format!(
+                "/importsource/{}/executions/{}",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.import_execution_id)
+            ),
         );
 
         Ok(config)
@@ -511,7 +522,11 @@ impl<'a> SubmitImportExecutionProgressRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/importsource/{}/executions/{}/progress", self.import_source_id, self.import_execution_id),
+            format!(
+                "/importsource/{}/executions/{}/progress",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.import_execution_id)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -563,7 +578,11 @@ impl<'a> SubmitImportExecutionDataRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/importsource/{}/executions/{}/data", self.import_source_id, self.import_execution_id),
+            format!(
+                "/importsource/{}/executions/{}/data",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.import_execution_id)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -602,7 +621,11 @@ impl<'a> GetImportExecutionStatusRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/importsource/{}/executions/{}/status", self.import_source_id, self.import_execution_id),
+            format!(
+                "/importsource/{}/executions/{}/status",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.import_execution_id)
+            ),
         );
 
         Ok(config)
@@ -634,7 +657,7 @@ impl<'a> GetLatestImportExecutionStatusRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/importsource/{}/executions/status", self.import_source_id),
+            format!("/importsource/{}/executions/status", crate::core::encode_path_segment(&self.import_source_id)),
         );
 
         Ok(config)
@@ -679,7 +702,11 @@ impl<'a> CreateFailedImportHistoryRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/importsource/{}/executions/{}/history/failed", self.import_source_id, self.execution_id),
+            format!(
+                "/importsource/{}/executions/{}/history/failed",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.execution_id)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -713,7 +740,7 @@ impl<'a> GenerateImportSourceTokenRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/importsource/{}/token", self.import_source_id),
+            format!("/importsource/{}/token", crate::core::encode_path_segment(&self.import_source_id)),
         );
 
         Ok(config)
@@ -745,7 +772,7 @@ impl<'a> GetImportScheduleLinksRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/importsource/{}/schedule", self.import_source_id),
+            format!("/importsource/{}/schedule", crate::core::encode_path_segment(&self.import_source_id)),
         );
 
         Ok(config)
@@ -782,7 +809,7 @@ impl<'a> CreateImportScheduleRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/importsource/{}/importschedule", self.import_source_id),
+            format!("/importsource/{}/importschedule", crate::core::encode_path_segment(&self.import_source_id)),
         );
 
         let body = match serde_json::to_value(&self.import_schedule_request)? {
@@ -826,7 +853,11 @@ impl<'a> GetImportScheduleRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/importsource/{}/importschedule/{}", self.import_source_id, self.import_schedule_id),
+            format!(
+                "/importsource/{}/importschedule/{}",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.import_schedule_id)
+            ),
         );
 
         Ok(config)
@@ -870,7 +901,11 @@ impl<'a> UpdateImportScheduleRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/importsource/{}/importschedule/{}", self.import_source_id, self.import_schedule_id),
+            format!(
+                "/importsource/{}/importschedule/{}",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.import_schedule_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.import_schedule_request)? {
@@ -914,7 +949,11 @@ impl<'a> DeleteImportScheduleRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/importsource/{}/importschedule/{}", self.import_source_id, self.import_schedule_id),
+            format!(
+                "/importsource/{}/importschedule/{}",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.import_schedule_id)
+            ),
         );
 
         Ok(config)

@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Bulk operation filter details.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueFilterForBulkPropertyDelete {
     /// The value of properties to perform the bulk operation on.
     #[serde(rename = "currentValue", default, skip_serializing_if = "Option::is_none")]

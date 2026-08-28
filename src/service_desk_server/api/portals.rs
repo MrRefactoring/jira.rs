@@ -43,7 +43,7 @@ impl<'a> GetPortalRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/portals/{}", self.portal_id),
+            format!("/rest/servicedeskapi/portals/{}", crate::core::encode_path_segment(&self.portal_id)),
         );
 
         Ok(config)
@@ -75,7 +75,7 @@ impl<'a> GetPortalByProjectKeyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/portals/project/{}", self.project_key),
+            format!("/rest/servicedeskapi/portals/project/{}", crate::core::encode_path_segment(&self.project_key)),
         );
 
         Ok(config)

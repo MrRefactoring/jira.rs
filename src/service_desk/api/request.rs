@@ -16,7 +16,7 @@ impl<'a> RequestService<'a> {
     ///
     /// The returned customer requests are ordered chronologically by the latest activity on each request. For example, the latest status transition or comment.
     ///
-    /// **[Permissions](#permissions) required**: Permission to access the specified service desk.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the specified service desk.
     ///
     /// **Response limitations**: For customers, the list returned will include request they created (or were created on their behalf) or are participating in only.
     pub fn get_customer_requests(&self) -> GetCustomerRequestsRequest<'a> {
@@ -25,38 +25,38 @@ impl<'a> RequestService<'a> {
 
     /// This method creates a customer request in a service desk.
     ///
-    /// The JSON request must include the service desk and customer request type, as well as any fields that are required for the request type. A list of the fields required by a customer request type can be obtained using [servicedesk/\{serviceDeskId\}/requesttype/\{requestTypeId\}/field](#api-servicedesk-serviceDeskId-requesttype-requestTypeId-field-get).
+    /// The JSON request must include the service desk and customer request type, as well as any fields that are required for the request type. A list of the fields required by a customer request type can be obtained using [servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/field](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-servicedesk-serviceDeskId-requesttype-requestTypeId-field-get).
     ///
     /// The fields required for a customer request type depend on the user's permissions:
     ///
     ///  *  `raiseOnBehalfOf` is not available to Users who have the customer permission only.
     ///  *  `requestParticipants` is not available to Users who have the customer permission only or if the feature is turned off for customers.
     ///
-    /// `requestFieldValues` is a map of Jira field IDs and their values. See [Field input formats](#fieldformats), for details of each field's JSON semantics and the values they can take.
+    /// `requestFieldValues` is a map of Jira field IDs and their values. See [Field input formats](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#fieldformats), for details of each field's JSON semantics and the values they can take.
     ///
-    /// **[Permissions](#permissions) required**: Permission to create requests in the specified service desk.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to create requests in the specified service desk.
     pub fn create_customer_request(&self, request_create: RequestCreate) -> CreateCustomerRequestRequest<'a> {
         CreateCustomerRequestRequest::new(self.client, request_create)
     }
 
     /// Validates a customer request payload without creating (persisting) a request.
     ///
-    /// This endpoint runs exactly the same structural and semantic validations as [Create customer request](#api-request-post) \\u2014 including ProForma form validation \\u2014 but performs **no mutation**: no issue is created and no side effects (attachments, comments, analytics) run.
+    /// This endpoint runs exactly the same structural and semantic validations as [Create customer request](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-request-post) — including ProForma form validation — but performs **no mutation**: no issue is created and no side effects (attachments, comments, analytics) run.
     ///
-    /// The response is intentionally verbose and structured so that it can be consumed by automated agents (for example an LLM repairing an invalid payload): every failure carries a machine-readable location (field id / form entity) and a human-readable reason. A valid payload returns HTTP 200 with \{@code valid: true\}; an invalid payload returns HTTP 400 with \{@code valid: false\} together with the field, form and general validation errors.
+    /// The response is intentionally verbose and structured so that it can be consumed by automated agents (for example an LLM repairing an invalid payload): every failure carries a machine-readable location (field id / form entity) and a human-readable reason. A valid payload returns HTTP 200 with `valid: true`; an invalid payload returns HTTP 400 with `valid: false` together with the field, form and general validation errors.
     ///
-    /// **[Permissions](#permissions) required**: Permission to create requests in the specified service desk.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to create requests in the specified service desk.
     pub fn validate_customer_request(&self, request_create: RequestCreate) -> ValidateCustomerRequestRequest<'a> {
         ValidateCustomerRequestRequest::new(self.client, request_create)
     }
 
     /// This method returns a customer request.
     ///
-    /// **[Permissions](#permissions) required**: Permission to access the specified service desk.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the specified service desk.
     ///
     /// **Response limitations**: For customers, only a request they created, was created on their behalf, or they are participating in will be returned.
     ///
-    /// **Note:** `requestFieldValues` does not include hidden fields. To get a list of request type fields that includes hidden fields, see [/rest/servicedeskapi/servicedesk/\{serviceDeskId\}/requesttype/\{requestTypeId\}/field](https://developer.atlassian.com/cloud/jira/service-desk/rest/api-group-servicedesk/#api-rest-servicedeskapi-servicedesk-servicedeskid-requesttype-requesttypeid-field-get)
+    /// **Note:** `requestFieldValues` does not include hidden fields. To get a list of request type fields that includes hidden fields, see [/rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/field](https://developer.atlassian.com/cloud/jira/service-desk/rest/api-group-servicedesk/#api-rest-servicedeskapi-servicedesk-servicedeskid-requesttype-requesttypeid-field-get)
     pub fn get_customer_request_by_id_or_key(
         &self,
         issue_id_or_key: impl Into<String>,
@@ -66,14 +66,14 @@ impl<'a> RequestService<'a> {
 
     /// This method returns all approvals on a customer request.
     ///
-    /// **[Permissions](#permissions) required**: Permission to view the customer request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
     pub fn get_approvals(&self, issue_id_or_key: impl Into<String>) -> GetApprovalsRequest<'a> {
         GetApprovalsRequest::new(self.client, issue_id_or_key)
     }
 
     /// This method returns an approval. Use this method to determine the status of an approval and the list of approvers.
     ///
-    /// **[Permissions](#permissions) required**: Permission to view the customer request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
     pub fn get_approval_by_id(
         &self,
         issue_id_or_key: impl Into<String>,
@@ -84,7 +84,7 @@ impl<'a> RequestService<'a> {
 
     /// This method enables a user to **Approve** or **Decline** an approval on a customer request. The approval is assumed to be owned by the user making the call.
     ///
-    /// **[Permissions](#permissions) required**: User is assigned to the approval request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: User is assigned to the approval request.
     pub fn answer_approval(
         &self,
         issue_id_or_key: impl Into<String>,
@@ -96,7 +96,7 @@ impl<'a> RequestService<'a> {
 
     /// This method returns all the attachments for a customer requests.
     ///
-    /// **[Permissions](#permissions) required**: Permission to view the customer request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
     ///
     /// **Response limitations**: Customers will only get a list of public attachments.
     pub fn get_attachments_for_request(
@@ -108,12 +108,12 @@ impl<'a> RequestService<'a> {
         GetAttachmentsForRequestRequest::new(self.client, issue_id_or_key, start, limit)
     }
 
-    /// This method creates a comment on a customer request using one or more attachment files (uploaded using [servicedeskapi/servicedesk/\{serviceDeskId\}/attachTemporaryFile](https://developer.atlassian.com/cloud/jira/service-desk/rest/api-group-servicedesk/#api-rest-servicedeskapi-servicedesk-servicedeskid-attachtemporaryfile-post)), with the visibility set by `public`. See
+    /// This method creates a comment on a customer request using one or more attachment files (uploaded using [servicedeskapi/servicedesk/{serviceDeskId}/attachTemporaryFile](https://developer.atlassian.com/cloud/jira/service-desk/rest/api-group-servicedesk/#api-rest-servicedeskapi-servicedesk-servicedeskid-attachtemporaryfile-post)), with the visibility set by `public`. See
     ///
-    ///  *  GET [servicedeskapi/request/\{issueIdOrKey\}/attachment](./#api-rest-servicedeskapi-request-issueidorkey-attachment-get)
-    ///  *  GET [servicedeskapi/request/\{issueIdOrKey\}/comment/\{commentId\}/attachment](./#api-rest-servicedeskapi-request-issueidorkey-comment-commentid-attachment-get)
+    ///  *  GET [servicedeskapi/request/{issueIdOrKey}/attachment](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-rest-servicedeskapi-request-issueidorkey-attachment-get)
+    ///  *  GET [servicedeskapi/request/{issueIdOrKey}/comment/{commentId}/attachment](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-rest-servicedeskapi-request-issueidorkey-comment-commentid-attachment-get)
     ///
-    /// **[Permissions](#permissions) required**: Permission to add an attachment.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to add an attachment.
     ///
     /// **Request limitations**: Customers can set public visibility only.
     pub fn create_comment_with_attachment(
@@ -126,9 +126,9 @@ impl<'a> RequestService<'a> {
 
     /// Returns the contents of an attachment.
     ///
-    /// To return a thumbnail of the attachment, use [servicedeskapi/request/\{issueIdOrKey\}/attachment/\{attachmentId\}/thumbnail](./#api-rest-servicedeskapi-request-issueidorkey-attachment-attachmentid-thumbnail-get).
+    /// To return a thumbnail of the attachment, use [servicedeskapi/request/{issueIdOrKey}/attachment/{attachmentId}/thumbnail](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-rest-servicedeskapi-request-issueidorkey-attachment-attachmentid-thumbnail-get).
     ///
-    /// **[Permissions](#permissions) required:** For the issue containing the attachment:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required:** For the issue containing the attachment:
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -142,9 +142,9 @@ impl<'a> RequestService<'a> {
 
     /// Returns the thumbnail of an attachment.
     ///
-    /// To return the attachment contents, use [servicedeskapi/request/\{issueIdOrKey\}/attachment/\{attachmentId\}](#api-rest-servicedeskapi-request-issueidorkey-attachment-attachmentid-get).
+    /// To return the attachment contents, use [servicedeskapi/request/{issueIdOrKey}/attachment/{attachmentId}](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-rest-servicedeskapi-request-issueidorkey-attachment-attachmentid-get).
     ///
-    /// **[Permissions](#permissions) required:** For the issue containing the attachment:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required:** For the issue containing the attachment:
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -158,7 +158,7 @@ impl<'a> RequestService<'a> {
 
     /// This method returns all comments on a customer request. No permissions error is provided if, for example, the user doesn't have access to the service desk or request, the method simply returns an empty response.
     ///
-    /// **[Permissions](#permissions) required**: Permission to view the customer request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
     ///
     /// **Response limitations**: Customers are returned public comments only.
     pub fn get_request_comments(&self, issue_id_or_key: impl Into<String>) -> GetRequestCommentsRequest<'a> {
@@ -167,7 +167,7 @@ impl<'a> RequestService<'a> {
 
     /// This method creates a public or private (internal) comment on a customer request, with the comment visibility set by `public`. The user recorded as the author of the comment.
     ///
-    /// **[Permissions](#permissions) required**: User has Add Comments permission.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: User has Add Comments permission.
     ///
     /// **Request limitations**: Customers can set comments to public visibility only.
     pub fn create_request_comment(
@@ -180,7 +180,7 @@ impl<'a> RequestService<'a> {
 
     /// This method returns details of a customer request's comment.
     ///
-    /// **[Permissions](#permissions) required**: Permission to view the customer request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
     ///
     /// **Response limitations**: Customers can only view public comments on requests where they are the reporter or a participant whereas agents can see both internal and public comments.
     pub fn get_request_comment_by_id(
@@ -193,37 +193,37 @@ impl<'a> RequestService<'a> {
 
     /// This method returns the notification subscription status of the user making the request. Use this method to determine if the user is subscribed to a customer request's notifications.
     ///
-    /// **[Permissions](#permissions) required**: Permission to view the customer request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
     pub fn get_subscription_status(&self, issue_id_or_key: impl Into<String>) -> GetSubscriptionStatusRequest<'a> {
         GetSubscriptionStatusRequest::new(self.client, issue_id_or_key)
     }
 
     /// This method subscribes the user to receiving notifications from a customer request.
     ///
-    /// **[Permissions](#permissions) required**: Permission to view the customer request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
     pub fn subscribe(&self, issue_id_or_key: impl Into<String>) -> SubscribeRequest<'a> {
         SubscribeRequest::new(self.client, issue_id_or_key)
     }
 
     /// This method unsubscribes the user from notifications from a customer request.
     ///
-    /// **[Permissions](#permissions) required**: Permission to view the customer request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
     pub fn unsubscribe(&self, issue_id_or_key: impl Into<String>) -> UnsubscribeRequest<'a> {
         UnsubscribeRequest::new(self.client, issue_id_or_key)
     }
 
     /// This method returns a list of all the participants on a customer request.
     ///
-    /// **[Permissions](#permissions) required**: Permission to view the customer request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
     pub fn get_request_participants(&self, issue_id_or_key: impl Into<String>) -> GetRequestParticipantsRequest<'a> {
         GetRequestParticipantsRequest::new(self.client, issue_id_or_key)
     }
 
     /// This method adds participants to a customer request.
     ///
-    /// **[Permissions](#permissions) required**: Permission to manage participants on the customer request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to manage participants on the customer request.
     ///
-    /// Note, participants can be added when creating a customer request using the [request](#api-request-post) resource, by defining the participants in the `requestParticipants` field.
+    /// Note, participants can be added when creating a customer request using the [request](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-request-post) resource, by defining the participants in the `requestParticipants` field.
     pub fn add_request_participants(
         &self,
         issue_id_or_key: impl Into<String>,
@@ -234,7 +234,7 @@ impl<'a> RequestService<'a> {
 
     /// This method removes participants from a customer request.
     ///
-    /// **[Permissions](#permissions) required**: Permission to manage participants on the customer request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to manage participants on the customer request.
     pub fn remove_request_participants(
         &self,
         issue_id_or_key: impl Into<String>,
@@ -245,7 +245,7 @@ impl<'a> RequestService<'a> {
 
     /// This method returns all the SLA records on a customer request. A customer request can have zero or more SLAs. Each SLA can have recordings for zero or more "completed cycles" and zero or 1 "ongoing cycle". Each cycle includes information on when it started and stopped, and whether it breached the SLA goal.
     ///
-    /// **[Permissions](#permissions) required**:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**:
     ///
     ///  *  Agent for the Service Desk containing the queried customer request, AND
     ///  *  Browse Projects permission on the project containing the customer request, including any restrictions imposed by issue security schemes or custom permission schemes on the specific issue.
@@ -255,7 +255,7 @@ impl<'a> RequestService<'a> {
 
     /// This method returns the details for an SLA on a customer request.
     ///
-    /// **[Permissions](#permissions) required**:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**:
     ///
     ///  *  Agent for the Service Desk containing the queried customer request, AND
     ///  *  Browse Projects permission on the project containing the customer request, including any restrictions imposed by issue security schemes or custom permission schemes on the specific issue.
@@ -269,7 +269,7 @@ impl<'a> RequestService<'a> {
 
     /// This method returns a list of all the statuses a customer Request has achieved. A status represents the state of an issue in its workflow. An issue can have one active status only. The list returns the status history in chronological order, most recent (current) status first.
     ///
-    /// **[Permissions](#permissions) required**: Permission to view the customer request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
     pub fn get_customer_request_status(
         &self,
         issue_id_or_key: impl Into<String>,
@@ -279,14 +279,14 @@ impl<'a> RequestService<'a> {
 
     /// This method returns a list of transitions, the workflow processes that moves a customer request from one status to another, that the user can perform on a request. Use this method to provide a user with a list if the actions they can take on a customer request.
     ///
-    /// **[Permissions](#permissions) required**: Permission to view the customer request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
     pub fn get_customer_transitions(&self, issue_id_or_key: impl Into<String>) -> GetCustomerTransitionsRequest<'a> {
         GetCustomerTransitionsRequest::new(self.client, issue_id_or_key)
     }
 
     /// This method performs a customer transition for a given request and transition. An optional comment can be included to provide a reason for the transition.
     ///
-    /// **[Permissions](#permissions) required**: The user must be able to view the request and have the Transition Issues permission. If a comment is passed the user must have the Add Comments permission.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: The user must be able to view the request and have the Transition Issues permission. If a comment is passed the user must have the Add Comments permission.
     pub fn perform_customer_transition(
         &self,
         issue_id_or_key: impl Into<String>,
@@ -300,7 +300,7 @@ impl<'a> RequestService<'a> {
 ///
 /// The returned customer requests are ordered chronologically by the latest activity on each request. For example, the latest status transition or comment.
 ///
-/// **[Permissions](#permissions) required**: Permission to access the specified service desk.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the specified service desk.
 ///
 /// **Response limitations**: For customers, the list returned will include request they created (or were created on their behalf) or are participating in only.
 pub struct GetCustomerRequestsRequest<'a> {
@@ -352,6 +352,9 @@ impl<'a> GetCustomerRequestsRequest<'a> {
     ///  *  `ALL_REQUESTS` returns all customer requests. **Deprecated and will be removed, as the returned requests may change if more values are added in the future. Instead, explicitly list the desired filtering strategies.**
     ///
     /// Multiple values of the query parameter are supported. For example, `requestOwnership=OWNED_REQUESTS&requestOwnership=PARTICIPATED_REQUESTS` will only return customer requests where the user is the creator or a participant. If not specified, filtering defaults to `OWNED_REQUESTS`, `PARTICIPATED_REQUESTS`, and `ALL_ORGANIZATIONS`.
+    #[deprecated(
+        note = "**Deprecated and will be removed, as the returned requests may change if more values are added in the future."
+    )]
     #[must_use]
     pub fn request_ownership(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
         self.request_ownership = Some(value.into_iter().map(Into::into).collect());
@@ -427,7 +430,7 @@ impl<'a> GetCustomerRequestsRequest<'a> {
         self
     }
 
-    /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
+    /// The starting index of the returned objects. Base index: 0. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
     #[must_use]
     pub fn start(mut self, value: i64) -> Self {
         self.start = Some(value);
@@ -435,7 +438,7 @@ impl<'a> GetCustomerRequestsRequest<'a> {
         self
     }
 
-    /// The maximum number of items to return per page. Default: 50. See the [Pagination](#pagination) section for more details.
+    /// The maximum number of items to return per page. Default: 50. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
     #[must_use]
     pub fn limit(mut self, value: i64) -> Self {
         self.limit = Some(value);
@@ -504,16 +507,16 @@ impl<'a> GetCustomerRequestsRequest<'a> {
 
 /// This method creates a customer request in a service desk.
 ///
-/// The JSON request must include the service desk and customer request type, as well as any fields that are required for the request type. A list of the fields required by a customer request type can be obtained using [servicedesk/\{serviceDeskId\}/requesttype/\{requestTypeId\}/field](#api-servicedesk-serviceDeskId-requesttype-requestTypeId-field-get).
+/// The JSON request must include the service desk and customer request type, as well as any fields that are required for the request type. A list of the fields required by a customer request type can be obtained using [servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/field](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-servicedesk-serviceDeskId-requesttype-requestTypeId-field-get).
 ///
 /// The fields required for a customer request type depend on the user's permissions:
 ///
 ///  *  `raiseOnBehalfOf` is not available to Users who have the customer permission only.
 ///  *  `requestParticipants` is not available to Users who have the customer permission only or if the feature is turned off for customers.
 ///
-/// `requestFieldValues` is a map of Jira field IDs and their values. See [Field input formats](#fieldformats), for details of each field's JSON semantics and the values they can take.
+/// `requestFieldValues` is a map of Jira field IDs and their values. See [Field input formats](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#fieldformats), for details of each field's JSON semantics and the values they can take.
 ///
-/// **[Permissions](#permissions) required**: Permission to create requests in the specified service desk.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to create requests in the specified service desk.
 pub struct CreateCustomerRequestRequest<'a> {
     client: &'a crate::core::Client,
     request_create: RequestCreate,
@@ -552,11 +555,11 @@ impl<'a> CreateCustomerRequestRequest<'a> {
 
 /// Validates a customer request payload without creating (persisting) a request.
 ///
-/// This endpoint runs exactly the same structural and semantic validations as [Create customer request](#api-request-post) \\u2014 including ProForma form validation \\u2014 but performs **no mutation**: no issue is created and no side effects (attachments, comments, analytics) run.
+/// This endpoint runs exactly the same structural and semantic validations as [Create customer request](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-request-post) — including ProForma form validation — but performs **no mutation**: no issue is created and no side effects (attachments, comments, analytics) run.
 ///
-/// The response is intentionally verbose and structured so that it can be consumed by automated agents (for example an LLM repairing an invalid payload): every failure carries a machine-readable location (field id / form entity) and a human-readable reason. A valid payload returns HTTP 200 with \{@code valid: true\}; an invalid payload returns HTTP 400 with \{@code valid: false\} together with the field, form and general validation errors.
+/// The response is intentionally verbose and structured so that it can be consumed by automated agents (for example an LLM repairing an invalid payload): every failure carries a machine-readable location (field id / form entity) and a human-readable reason. A valid payload returns HTTP 200 with `valid: true`; an invalid payload returns HTTP 400 with `valid: false` together with the field, form and general validation errors.
 ///
-/// **[Permissions](#permissions) required**: Permission to create requests in the specified service desk.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to create requests in the specified service desk.
 pub struct ValidateCustomerRequestRequest<'a> {
     client: &'a crate::core::Client,
     request_create: RequestCreate,
@@ -597,11 +600,11 @@ impl<'a> ValidateCustomerRequestRequest<'a> {
 
 /// This method returns a customer request.
 ///
-/// **[Permissions](#permissions) required**: Permission to access the specified service desk.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the specified service desk.
 ///
 /// **Response limitations**: For customers, only a request they created, was created on their behalf, or they are participating in will be returned.
 ///
-/// **Note:** `requestFieldValues` does not include hidden fields. To get a list of request type fields that includes hidden fields, see [/rest/servicedeskapi/servicedesk/\{serviceDeskId\}/requesttype/\{requestTypeId\}/field](https://developer.atlassian.com/cloud/jira/service-desk/rest/api-group-servicedesk/#api-rest-servicedeskapi-servicedesk-servicedeskid-requesttype-requesttypeid-field-get)
+/// **Note:** `requestFieldValues` does not include hidden fields. To get a list of request type fields that includes hidden fields, see [/rest/servicedeskapi/servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/field](https://developer.atlassian.com/cloud/jira/service-desk/rest/api-group-servicedesk/#api-rest-servicedeskapi-servicedesk-servicedeskid-requesttype-requesttypeid-field-get)
 pub struct GetCustomerRequestByIdOrKeyRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -636,7 +639,7 @@ impl<'a> GetCustomerRequestByIdOrKeyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}", self.issue_id_or_key),
+            format!("/rest/servicedeskapi/request/{}", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.expand {
@@ -659,7 +662,7 @@ impl<'a> GetCustomerRequestByIdOrKeyRequest<'a> {
 
 /// This method returns all approvals on a customer request.
 ///
-/// **[Permissions](#permissions) required**: Permission to view the customer request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
 pub struct GetApprovalsRequest<'a> {
     client: &'a crate::core::Client,
     start: Option<i64>,
@@ -672,7 +675,7 @@ impl<'a> GetApprovalsRequest<'a> {
         Self { client, issue_id_or_key: issue_id_or_key.into(), start: None, limit: None }
     }
 
-    /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
+    /// The starting index of the returned objects. Base index: 0. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
     #[must_use]
     pub fn start(mut self, value: i64) -> Self {
         self.start = Some(value);
@@ -680,7 +683,7 @@ impl<'a> GetApprovalsRequest<'a> {
         self
     }
 
-    /// The maximum number of approvals to return per page. Default: 50. See the [Pagination](#pagination) section for more details.
+    /// The maximum number of approvals to return per page. Default: 50. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
     #[must_use]
     pub fn limit(mut self, value: i64) -> Self {
         self.limit = Some(value);
@@ -692,7 +695,10 @@ impl<'a> GetApprovalsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/approval", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/approval",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         if let Some(value) = &self.start {
@@ -719,7 +725,7 @@ impl<'a> GetApprovalsRequest<'a> {
 
 /// This method returns an approval. Use this method to determine the status of an approval and the list of approvers.
 ///
-/// **[Permissions](#permissions) required**: Permission to view the customer request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
 pub struct GetApprovalByIdRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -735,7 +741,11 @@ impl<'a> GetApprovalByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/approval/{}", self.issue_id_or_key, self.approval_id),
+            format!(
+                "/rest/servicedeskapi/request/{}/approval/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                self.approval_id
+            ),
         );
 
         Ok(config)
@@ -754,7 +764,7 @@ impl<'a> GetApprovalByIdRequest<'a> {
 
 /// This method enables a user to **Approve** or **Decline** an approval on a customer request. The approval is assumed to be owned by the user making the call.
 ///
-/// **[Permissions](#permissions) required**: User is assigned to the approval request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: User is assigned to the approval request.
 pub struct AnswerApprovalRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -776,7 +786,11 @@ impl<'a> AnswerApprovalRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/request/{}/approval/{}", self.issue_id_or_key, self.approval_id),
+            format!(
+                "/rest/servicedeskapi/request/{}/approval/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                self.approval_id
+            ),
         );
 
         let body = match serde_json::to_value(&self.approval_decision_request)? {
@@ -802,7 +816,7 @@ impl<'a> AnswerApprovalRequest<'a> {
 
 /// This method returns all the attachments for a customer requests.
 ///
-/// **[Permissions](#permissions) required**: Permission to view the customer request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
 ///
 /// **Response limitations**: Customers will only get a list of public attachments.
 pub struct GetAttachmentsForRequestRequest<'a> {
@@ -821,7 +835,10 @@ impl<'a> GetAttachmentsForRequestRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/attachment", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/attachment",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(self.start.to_string())));
@@ -842,12 +859,12 @@ impl<'a> GetAttachmentsForRequestRequest<'a> {
     }
 }
 
-/// This method creates a comment on a customer request using one or more attachment files (uploaded using [servicedeskapi/servicedesk/\{serviceDeskId\}/attachTemporaryFile](https://developer.atlassian.com/cloud/jira/service-desk/rest/api-group-servicedesk/#api-rest-servicedeskapi-servicedesk-servicedeskid-attachtemporaryfile-post)), with the visibility set by `public`. See
+/// This method creates a comment on a customer request using one or more attachment files (uploaded using [servicedeskapi/servicedesk/{serviceDeskId}/attachTemporaryFile](https://developer.atlassian.com/cloud/jira/service-desk/rest/api-group-servicedesk/#api-rest-servicedeskapi-servicedesk-servicedeskid-attachtemporaryfile-post)), with the visibility set by `public`. See
 ///
-///  *  GET [servicedeskapi/request/\{issueIdOrKey\}/attachment](./#api-rest-servicedeskapi-request-issueidorkey-attachment-get)
-///  *  GET [servicedeskapi/request/\{issueIdOrKey\}/comment/\{commentId\}/attachment](./#api-rest-servicedeskapi-request-issueidorkey-comment-commentid-attachment-get)
+///  *  GET [servicedeskapi/request/{issueIdOrKey}/attachment](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-rest-servicedeskapi-request-issueidorkey-attachment-get)
+///  *  GET [servicedeskapi/request/{issueIdOrKey}/comment/{commentId}/attachment](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-rest-servicedeskapi-request-issueidorkey-comment-commentid-attachment-get)
 ///
-/// **[Permissions](#permissions) required**: Permission to add an attachment.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to add an attachment.
 ///
 /// **Request limitations**: Customers can set public visibility only.
 pub struct CreateCommentWithAttachmentRequest<'a> {
@@ -869,7 +886,10 @@ impl<'a> CreateCommentWithAttachmentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/request/{}/attachment", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/attachment",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         let body = match serde_json::to_value(&self.attachment_create)? {
@@ -895,9 +915,9 @@ impl<'a> CreateCommentWithAttachmentRequest<'a> {
 
 /// Returns the contents of an attachment.
 ///
-/// To return a thumbnail of the attachment, use [servicedeskapi/request/\{issueIdOrKey\}/attachment/\{attachmentId\}/thumbnail](./#api-rest-servicedeskapi-request-issueidorkey-attachment-attachmentid-thumbnail-get).
+/// To return a thumbnail of the attachment, use [servicedeskapi/request/{issueIdOrKey}/attachment/{attachmentId}/thumbnail](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-rest-servicedeskapi-request-issueidorkey-attachment-attachmentid-thumbnail-get).
 ///
-/// **[Permissions](#permissions) required:** For the issue containing the attachment:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required:** For the issue containing the attachment:
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -916,7 +936,11 @@ impl<'a> GetAttachmentContentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/attachment/{}", self.issue_id_or_key, self.attachment_id),
+            format!(
+                "/rest/servicedeskapi/request/{}/attachment/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                self.attachment_id
+            ),
         );
 
         Ok(config)
@@ -935,9 +959,9 @@ impl<'a> GetAttachmentContentRequest<'a> {
 
 /// Returns the thumbnail of an attachment.
 ///
-/// To return the attachment contents, use [servicedeskapi/request/\{issueIdOrKey\}/attachment/\{attachmentId\}](#api-rest-servicedeskapi-request-issueidorkey-attachment-attachmentid-get).
+/// To return the attachment contents, use [servicedeskapi/request/{issueIdOrKey}/attachment/{attachmentId}](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-rest-servicedeskapi-request-issueidorkey-attachment-attachmentid-get).
 ///
-/// **[Permissions](#permissions) required:** For the issue containing the attachment:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required:** For the issue containing the attachment:
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -958,7 +982,8 @@ impl<'a> GetAttachmentThumbnailRequest<'a> {
             crate::core::Method::GET,
             format!(
                 "/rest/servicedeskapi/request/{}/attachment/{}/thumbnail",
-                self.issue_id_or_key, self.attachment_id
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                self.attachment_id
             ),
         );
 
@@ -978,7 +1003,7 @@ impl<'a> GetAttachmentThumbnailRequest<'a> {
 
 /// This method returns all comments on a customer request. No permissions error is provided if, for example, the user doesn't have access to the service desk or request, the method simply returns an empty response.
 ///
-/// **[Permissions](#permissions) required**: Permission to view the customer request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
 ///
 /// **Response limitations**: Customers are returned public comments only.
 pub struct GetRequestCommentsRequest<'a> {
@@ -1022,7 +1047,7 @@ impl<'a> GetRequestCommentsRequest<'a> {
 
     /// A multi-value parameter indicating which properties of the comment to expand:
     ///
-    ///  *  `attachment` returns the attachment details, if any, for each comment. (If you want to get all attachments for a request, use [servicedeskapi/request/\{issueIdOrKey\}/attachment](#api-request-issueIdOrKey-attachment-get).)
+    ///  *  `attachment` returns the attachment details, if any, for each comment. (If you want to get all attachments for a request, use [servicedeskapi/request/{issueIdOrKey}/attachment](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-request-issueIdOrKey-attachment-get).)
     ///  *  `renderedBody` (Experimental) returns the rendered body in HTML format (in addition to the raw body) for each comment.
     #[must_use]
     pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
@@ -1031,7 +1056,7 @@ impl<'a> GetRequestCommentsRequest<'a> {
         self
     }
 
-    /// The starting index of the returned comments. Base index: 0. See the [Pagination](#pagination) section for more details.
+    /// The starting index of the returned comments. Base index: 0. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
     #[must_use]
     pub fn start(mut self, value: i64) -> Self {
         self.start = Some(value);
@@ -1039,7 +1064,7 @@ impl<'a> GetRequestCommentsRequest<'a> {
         self
     }
 
-    /// The maximum number of comments to return per page. Default: 50. See the [Pagination](#pagination) section for more details.
+    /// The maximum number of comments to return per page. Default: 50. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
     #[must_use]
     pub fn limit(mut self, value: i64) -> Self {
         self.limit = Some(value);
@@ -1051,7 +1076,7 @@ impl<'a> GetRequestCommentsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/comment", self.issue_id_or_key),
+            format!("/rest/servicedeskapi/request/{}/comment", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.public {
@@ -1090,7 +1115,7 @@ impl<'a> GetRequestCommentsRequest<'a> {
 
 /// This method creates a public or private (internal) comment on a customer request, with the comment visibility set by `public`. The user recorded as the author of the comment.
 ///
-/// **[Permissions](#permissions) required**: User has Add Comments permission.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: User has Add Comments permission.
 ///
 /// **Request limitations**: Customers can set comments to public visibility only.
 pub struct CreateRequestCommentRequest<'a> {
@@ -1108,7 +1133,7 @@ impl<'a> CreateRequestCommentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/request/{}/comment", self.issue_id_or_key),
+            format!("/rest/servicedeskapi/request/{}/comment", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.comment_create)? {
@@ -1134,7 +1159,7 @@ impl<'a> CreateRequestCommentRequest<'a> {
 
 /// This method returns details of a customer request's comment.
 ///
-/// **[Permissions](#permissions) required**: Permission to view the customer request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
 ///
 /// **Response limitations**: Customers can only view public comments on requests where they are the reporter or a participant whereas agents can see both internal and public comments.
 pub struct GetRequestCommentByIdRequest<'a> {
@@ -1151,7 +1176,7 @@ impl<'a> GetRequestCommentByIdRequest<'a> {
 
     /// A multi-value parameter indicating which properties of the comment to expand:
     ///
-    ///  *  `attachment` returns the attachment details, if any, for the comment. (If you want to get all attachments for a request, use [servicedeskapi/request/\{issueIdOrKey\}/attachment](#api-request-issueIdOrKey-attachment-get).)
+    ///  *  `attachment` returns the attachment details, if any, for the comment. (If you want to get all attachments for a request, use [servicedeskapi/request/{issueIdOrKey}/attachment](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-request-issueIdOrKey-attachment-get).)
     ///  *  `renderedBody` (Experimental) returns the rendered body in HTML format (in addition to the raw body) of the comment.
     #[must_use]
     pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
@@ -1164,7 +1189,11 @@ impl<'a> GetRequestCommentByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/comment/{}", self.issue_id_or_key, self.comment_id),
+            format!(
+                "/rest/servicedeskapi/request/{}/comment/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                self.comment_id
+            ),
         );
 
         if let Some(value) = &self.expand {
@@ -1187,7 +1216,7 @@ impl<'a> GetRequestCommentByIdRequest<'a> {
 
 /// This method returns the notification subscription status of the user making the request. Use this method to determine if the user is subscribed to a customer request's notifications.
 ///
-/// **[Permissions](#permissions) required**: Permission to view the customer request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
 pub struct GetSubscriptionStatusRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1202,7 +1231,10 @@ impl<'a> GetSubscriptionStatusRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/notification", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/notification",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         Ok(config)
@@ -1221,7 +1253,7 @@ impl<'a> GetSubscriptionStatusRequest<'a> {
 
 /// This method subscribes the user to receiving notifications from a customer request.
 ///
-/// **[Permissions](#permissions) required**: Permission to view the customer request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
 pub struct SubscribeRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1236,7 +1268,10 @@ impl<'a> SubscribeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/servicedeskapi/request/{}/notification", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/notification",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         Ok(config)
@@ -1255,7 +1290,7 @@ impl<'a> SubscribeRequest<'a> {
 
 /// This method unsubscribes the user from notifications from a customer request.
 ///
-/// **[Permissions](#permissions) required**: Permission to view the customer request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
 pub struct UnsubscribeRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1270,7 +1305,10 @@ impl<'a> UnsubscribeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/servicedeskapi/request/{}/notification", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/notification",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         Ok(config)
@@ -1289,7 +1327,7 @@ impl<'a> UnsubscribeRequest<'a> {
 
 /// This method returns a list of all the participants on a customer request.
 ///
-/// **[Permissions](#permissions) required**: Permission to view the customer request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
 pub struct GetRequestParticipantsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1302,7 +1340,7 @@ impl<'a> GetRequestParticipantsRequest<'a> {
         Self { client, issue_id_or_key: issue_id_or_key.into(), start: None, limit: None }
     }
 
-    /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
+    /// The starting index of the returned objects. Base index: 0. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
     #[must_use]
     pub fn start(mut self, value: i64) -> Self {
         self.start = Some(value);
@@ -1310,7 +1348,7 @@ impl<'a> GetRequestParticipantsRequest<'a> {
         self
     }
 
-    /// The maximum number of request types to return per page. Default: 50. See the [Pagination](#pagination) section for more details.
+    /// The maximum number of request types to return per page. Default: 50. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
     #[must_use]
     pub fn limit(mut self, value: i64) -> Self {
         self.limit = Some(value);
@@ -1322,7 +1360,10 @@ impl<'a> GetRequestParticipantsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/participant", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/participant",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         if let Some(value) = &self.start {
@@ -1349,9 +1390,9 @@ impl<'a> GetRequestParticipantsRequest<'a> {
 
 /// This method adds participants to a customer request.
 ///
-/// **[Permissions](#permissions) required**: Permission to manage participants on the customer request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to manage participants on the customer request.
 ///
-/// Note, participants can be added when creating a customer request using the [request](#api-request-post) resource, by defining the participants in the `requestParticipants` field.
+/// Note, participants can be added when creating a customer request using the [request](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-request-post) resource, by defining the participants in the `requestParticipants` field.
 pub struct AddRequestParticipantsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1371,7 +1412,10 @@ impl<'a> AddRequestParticipantsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/request/{}/participant", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/participant",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         let body = match serde_json::to_value(&self.request_participant_update)? {
@@ -1397,7 +1441,7 @@ impl<'a> AddRequestParticipantsRequest<'a> {
 
 /// This method removes participants from a customer request.
 ///
-/// **[Permissions](#permissions) required**: Permission to manage participants on the customer request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to manage participants on the customer request.
 pub struct RemoveRequestParticipantsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1417,7 +1461,10 @@ impl<'a> RemoveRequestParticipantsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/servicedeskapi/request/{}/participant", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/participant",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         let body = match serde_json::to_value(&self.request_participant_update)? {
@@ -1443,7 +1490,7 @@ impl<'a> RemoveRequestParticipantsRequest<'a> {
 
 /// This method returns all the SLA records on a customer request. A customer request can have zero or more SLAs. Each SLA can have recordings for zero or more "completed cycles" and zero or 1 "ongoing cycle". Each cycle includes information on when it started and stopped, and whether it breached the SLA goal.
 ///
-/// **[Permissions](#permissions) required**:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**:
 ///
 ///  *  Agent for the Service Desk containing the queried customer request, AND
 ///  *  Browse Projects permission on the project containing the customer request, including any restrictions imposed by issue security schemes or custom permission schemes on the specific issue.
@@ -1459,7 +1506,7 @@ impl<'a> GetSlaInformationRequest<'a> {
         Self { client, issue_id_or_key: issue_id_or_key.into(), start: None, limit: None }
     }
 
-    /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
+    /// The starting index of the returned objects. Base index: 0. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
     #[must_use]
     pub fn start(mut self, value: i64) -> Self {
         self.start = Some(value);
@@ -1467,7 +1514,7 @@ impl<'a> GetSlaInformationRequest<'a> {
         self
     }
 
-    /// The maximum number of request types to return per page. Default: 50. See the [Pagination](#pagination) section for more details.
+    /// The maximum number of request types to return per page. Default: 50. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
     #[must_use]
     pub fn limit(mut self, value: i64) -> Self {
         self.limit = Some(value);
@@ -1479,7 +1526,7 @@ impl<'a> GetSlaInformationRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/sla", self.issue_id_or_key),
+            format!("/rest/servicedeskapi/request/{}/sla", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.start {
@@ -1506,7 +1553,7 @@ impl<'a> GetSlaInformationRequest<'a> {
 
 /// This method returns the details for an SLA on a customer request.
 ///
-/// **[Permissions](#permissions) required**:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**:
 ///
 ///  *  Agent for the Service Desk containing the queried customer request, AND
 ///  *  Browse Projects permission on the project containing the customer request, including any restrictions imposed by issue security schemes or custom permission schemes on the specific issue.
@@ -1525,7 +1572,11 @@ impl<'a> GetSlaInformationByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/sla/{}", self.issue_id_or_key, self.sla_metric_id),
+            format!(
+                "/rest/servicedeskapi/request/{}/sla/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                self.sla_metric_id
+            ),
         );
 
         Ok(config)
@@ -1544,7 +1595,7 @@ impl<'a> GetSlaInformationByIdRequest<'a> {
 
 /// This method returns a list of all the statuses a customer Request has achieved. A status represents the state of an issue in its workflow. An issue can have one active status only. The list returns the status history in chronological order, most recent (current) status first.
 ///
-/// **[Permissions](#permissions) required**: Permission to view the customer request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
 pub struct GetCustomerRequestStatusRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1557,7 +1608,7 @@ impl<'a> GetCustomerRequestStatusRequest<'a> {
         Self { client, issue_id_or_key: issue_id_or_key.into(), start: None, limit: None }
     }
 
-    /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
+    /// The starting index of the returned objects. Base index: 0. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
     #[must_use]
     pub fn start(mut self, value: i64) -> Self {
         self.start = Some(value);
@@ -1565,7 +1616,7 @@ impl<'a> GetCustomerRequestStatusRequest<'a> {
         self
     }
 
-    /// The maximum number of items to return per page. Default: 50. See the [Pagination](#pagination) section for more details.
+    /// The maximum number of items to return per page. Default: 50. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
     #[must_use]
     pub fn limit(mut self, value: i64) -> Self {
         self.limit = Some(value);
@@ -1577,7 +1628,7 @@ impl<'a> GetCustomerRequestStatusRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/status", self.issue_id_or_key),
+            format!("/rest/servicedeskapi/request/{}/status", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.start {
@@ -1604,7 +1655,7 @@ impl<'a> GetCustomerRequestStatusRequest<'a> {
 
 /// This method returns a list of transitions, the workflow processes that moves a customer request from one status to another, that the user can perform on a request. Use this method to provide a user with a list if the actions they can take on a customer request.
 ///
-/// **[Permissions](#permissions) required**: Permission to view the customer request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the customer request.
 pub struct GetCustomerTransitionsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1617,7 +1668,7 @@ impl<'a> GetCustomerTransitionsRequest<'a> {
         Self { client, issue_id_or_key: issue_id_or_key.into(), start: None, limit: None }
     }
 
-    /// The starting index of the returned objects. Base index: 0. See the [Pagination](#pagination) section for more details.
+    /// The starting index of the returned objects. Base index: 0. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
     #[must_use]
     pub fn start(mut self, value: i64) -> Self {
         self.start = Some(value);
@@ -1625,7 +1676,7 @@ impl<'a> GetCustomerTransitionsRequest<'a> {
         self
     }
 
-    /// The maximum number of items to return per page. Default: 50. See the [Pagination](#pagination) section for more details.
+    /// The maximum number of items to return per page. Default: 50. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
     #[must_use]
     pub fn limit(mut self, value: i64) -> Self {
         self.limit = Some(value);
@@ -1637,7 +1688,10 @@ impl<'a> GetCustomerTransitionsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/transition", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/transition",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         if let Some(value) = &self.start {
@@ -1664,7 +1718,7 @@ impl<'a> GetCustomerTransitionsRequest<'a> {
 
 /// This method performs a customer transition for a given request and transition. An optional comment can be included to provide a reason for the transition.
 ///
-/// **[Permissions](#permissions) required**: The user must be able to view the request and have the Transition Issues permission. If a comment is passed the user must have the Add Comments permission.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: The user must be able to view the request and have the Transition Issues permission. If a comment is passed the user must have the Add Comments permission.
 pub struct PerformCustomerTransitionRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -1684,7 +1738,10 @@ impl<'a> PerformCustomerTransitionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/request/{}/transition", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/transition",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         let body = match serde_json::to_value(&self.customer_transition_execution)? {

@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Project search results for field association scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FieldAssociationSchemeProjectSearchResult {
     #[serde(rename = "avatarUrls", default, skip_serializing_if = "Option::is_none")]
     pub avatar_urls: Option<std::collections::HashMap<String, serde_json::Value>>,

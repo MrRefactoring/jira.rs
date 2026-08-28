@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Attributes of this object.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EventActionModelAttributes {
     /// Display name of the event action.
     #[serde(rename = "displayName")]
@@ -15,7 +16,8 @@ pub struct EventActionModelAttributes {
     pub group_display_names: Option<Vec<String>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EventActionModel {
     /// Unique identifier of the event action object.
     pub id: String,

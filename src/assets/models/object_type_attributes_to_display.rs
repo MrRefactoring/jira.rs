@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Identifies attributes to be displayed
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ObjectTypeAttributesToDisplay {
     /// The identifier of the object type attributes to be displayed
     #[serde(rename = "attributesToDisplayIds")]

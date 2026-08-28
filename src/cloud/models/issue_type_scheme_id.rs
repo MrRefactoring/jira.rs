@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The ID of an issue type scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueTypeSchemeID {
     /// The ID of the issue type scheme.
     #[serde(rename = "issueTypeSchemeId")]

@@ -3,7 +3,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct MultidirectoryInviteApiRequest {
     /// Email addresses of the people you want to invite.
     pub emails: Vec<String>,

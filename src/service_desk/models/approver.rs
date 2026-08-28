@@ -12,7 +12,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Approver {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub approver: Option<User>,

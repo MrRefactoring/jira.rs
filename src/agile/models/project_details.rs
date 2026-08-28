@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ProjectDetailsAvatarUrls {
     /// The URL of the item's 16x16 pixel avatar.
     #[serde(rename = "16x16", default, skip_serializing_if = "Option::is_none")]
@@ -19,7 +20,8 @@ pub struct ProjectDetailsAvatarUrls {
 }
 
 /// A project category.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ProjectDetailsProjectCategory {
     /// The name of the project category.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -47,7 +49,8 @@ crate::open_enum! {
 }
 
 /// Details about a project.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ProjectDetails {
     #[serde(rename = "avatarUrls", default, skip_serializing_if = "Option::is_none")]
     pub avatar_urls: Option<ProjectDetailsAvatarUrls>,

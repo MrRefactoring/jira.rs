@@ -15,7 +15,7 @@ crate::open_enum! {
 }
 
 /// A list of custom field details.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ConnectCustomFieldValue {
     /// The type of custom field.
     #[serde(rename = "_type")]

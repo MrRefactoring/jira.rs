@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// List of changelogs that belong to single issue
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueChangeLog {
     /// List of changelogs that belongs to given issueId.
     #[serde(rename = "changeHistories", default, skip_serializing_if = "Option::is_none")]

@@ -13,7 +13,7 @@ crate::open_enum! {
 }
 
 /// Defines the payload to configure the field scheme for a project. See [Field schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-field-schemes/#api-group-field-schemes).
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct FieldSchemePayload {
     /// The description of the field scheme
     #[serde(default, skip_serializing_if = "Option::is_none")]

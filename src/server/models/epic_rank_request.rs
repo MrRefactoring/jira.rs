@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EpicRankRequest {
     #[serde(rename = "rankAfterEpic", default, skip_serializing_if = "Option::is_none")]
     pub rank_after_epic: Option<String>,

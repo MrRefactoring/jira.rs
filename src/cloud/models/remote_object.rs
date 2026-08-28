@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The linked item.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RemoteObject {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub icon: Option<Icon>,

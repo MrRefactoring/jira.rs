@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 /// Filters results to boards of the specified type. Valid values: scrum, kanban.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetAllBoardsRequestType {
@@ -15,7 +15,7 @@ pub enum GetAllBoardsRequestType {
 }
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForBacklogRequestFields {
@@ -26,7 +26,7 @@ pub enum GetIssuesForBacklogRequestFields {
 }
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesWithoutEpicForBoardRequestExpand {
@@ -37,7 +37,7 @@ pub enum GetIssuesWithoutEpicForBoardRequestExpand {
 }
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesWithoutEpicForBoardRequestFields {
@@ -48,7 +48,7 @@ pub enum GetIssuesWithoutEpicForBoardRequestFields {
 }
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForBoardEpicRequestExpand {
@@ -59,7 +59,7 @@ pub enum GetIssuesForBoardEpicRequestExpand {
 }
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForBoardEpicRequestFields {
@@ -70,7 +70,7 @@ pub enum GetIssuesForBoardEpicRequestFields {
 }
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForBoardRequestFields {
@@ -81,7 +81,7 @@ pub enum GetIssuesForBoardRequestFields {
 }
 
 /// Filters results to sprints in specified states. Valid values: future, active, closed. You can define multiple states separated by commas, e.g. state=active,closed
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetAllSprintsRequestState {
@@ -92,7 +92,7 @@ pub enum GetAllSprintsRequestState {
 }
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForBoardSprintRequestExpand {
@@ -103,7 +103,7 @@ pub enum GetIssuesForBoardSprintRequestExpand {
 }
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForBoardSprintRequestFields {
@@ -1161,7 +1161,11 @@ impl<'a> GetBoardPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/agile/1.0/board/{}/properties/{}", self.board_id, self.property_key),
+            format!(
+                "/rest/agile/1.0/board/{}/properties/{}",
+                self.board_id,
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)
@@ -1200,7 +1204,11 @@ impl<'a> SetBoardPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/agile/1.0/board/{}/properties/{}", self.board_id, self.property_key),
+            format!(
+                "/rest/agile/1.0/board/{}/properties/{}",
+                self.board_id,
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -1235,7 +1243,11 @@ impl<'a> DeleteBoardPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/agile/1.0/board/{}/properties/{}", self.board_id, self.property_key),
+            format!(
+                "/rest/agile/1.0/board/{}/properties/{}",
+                self.board_id,
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)

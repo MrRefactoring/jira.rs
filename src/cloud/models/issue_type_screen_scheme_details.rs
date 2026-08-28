@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The details of an issue type screen scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueTypeScreenSchemeDetails {
     /// The description of the issue type screen scheme. The maximum length is 255 characters.
     #[serde(default, skip_serializing_if = "Option::is_none")]

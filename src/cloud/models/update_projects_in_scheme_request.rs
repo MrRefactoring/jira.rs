@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Update projects in a scheme
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct UpdateProjectsInSchemeRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub add: Option<PrioritySchemeChangesWithoutMappings>,

@@ -113,7 +113,7 @@ impl<'a> GetPoliciesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v1/orgs/{}/policies", self.org_id),
+            format!("/admin/v1/orgs/{}/policies", crate::core::encode_path_segment(&self.org_id)),
         );
 
         if let Some(value) = &self.cursor {
@@ -161,7 +161,7 @@ impl<'a> CreatePolicyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/admin/v1/orgs/{}/policies", self.org_id),
+            format!("/admin/v1/orgs/{}/policies", crate::core::encode_path_segment(&self.org_id)),
         );
 
         let body = match serde_json::to_value(&self.policy_create_input)? {
@@ -201,7 +201,11 @@ impl<'a> GetPolicyByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v1/orgs/{}/policies/{}", self.org_id, self.policy_id),
+            format!(
+                "/admin/v1/orgs/{}/policies/{}",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.policy_id)
+            ),
         );
 
         Ok(config)
@@ -242,7 +246,11 @@ impl<'a> UpdatePolicyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/admin/v1/orgs/{}/policies/{}", self.org_id, self.policy_id),
+            format!(
+                "/admin/v1/orgs/{}/policies/{}",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.policy_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.policy_update_input)? {
@@ -282,7 +290,11 @@ impl<'a> DeletePolicyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/admin/v1/orgs/{}/policies/{}", self.org_id, self.policy_id),
+            format!(
+                "/admin/v1/orgs/{}/policies/{}",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.policy_id)
+            ),
         );
 
         Ok(config)
@@ -323,7 +335,11 @@ impl<'a> AddResourceToPolicyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/admin/v1/orgs/{}/policies/{}/resources", self.org_id, self.policy_id),
+            format!(
+                "/admin/v1/orgs/{}/policies/{}/resources",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.policy_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.resource_input)? {
@@ -383,7 +399,12 @@ impl<'a> UpdatePolicyResourceRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/admin/v1/orgs/{}/policies/{}/resources/{}", self.org_id, self.policy_id, self.resource_id),
+            format!(
+                "/admin/v1/orgs/{}/policies/{}/resources/{}",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.policy_id),
+                crate::core::encode_path_segment(&self.resource_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.resource_update_input)? {
@@ -429,7 +450,12 @@ impl<'a> DeletePolicyResourceRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/admin/v1/orgs/{}/policies/{}/resources/{}", self.org_id, self.policy_id, self.resource_id),
+            format!(
+                "/admin/v1/orgs/{}/policies/{}/resources/{}",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.policy_id),
+                crate::core::encode_path_segment(&self.resource_id)
+            ),
         );
 
         Ok(config)
@@ -462,7 +488,11 @@ impl<'a> ValidatePolicyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v1/orgs/{}/policies/{}/validate", self.org_id, self.policy_id),
+            format!(
+                "/admin/v1/orgs/{}/policies/{}/validate",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.policy_id)
+            ),
         );
 
         Ok(config)

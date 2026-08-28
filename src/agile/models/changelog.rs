@@ -3,7 +3,8 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ChangelogAuthorAvatarUrls {
     /// The URL of the item's 16x16 pixel avatar.
     #[serde(rename = "16x16", default, skip_serializing_if = "Option::is_none")]
@@ -24,7 +25,8 @@ pub struct ChangelogAuthorAvatarUrls {
 ///  *  User record deleted from Atlassian: This occurs as the result of a right to be forgotten request. In this case, `displayName` provides an indication and other parameters have default values or are blank (for example, email is blank).
 ///  *  User record corrupted: This occurs as a results of events such as a server import and can only happen to deleted users. In this case, `accountId` returns *unknown* and all other parameters have fallback values.
 ///  *  User record unavailable: This usually occurs due to an internal service outage. In this case, all parameters have fallback values.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ChangelogAuthor {
     /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
     #[serde(rename = "accountId", default, skip_serializing_if = "Option::is_none")]
@@ -52,7 +54,8 @@ pub struct ChangelogAuthor {
 }
 
 /// Details of user or system associated with a issue history metadata item.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ChangelogHistoryMetadataActor {
     /// The URL to an avatar for the user or system associated with a history record.
     #[serde(rename = "avatarUrl", default, skip_serializing_if = "Option::is_none")]
@@ -75,7 +78,8 @@ pub struct ChangelogHistoryMetadataActor {
 }
 
 /// Details of user or system associated with a issue history metadata item.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ChangelogHistoryMetadataCause {
     /// The URL to an avatar for the user or system associated with a history record.
     #[serde(rename = "avatarUrl", default, skip_serializing_if = "Option::is_none")]
@@ -98,7 +102,8 @@ pub struct ChangelogHistoryMetadataCause {
 }
 
 /// Details of user or system associated with a issue history metadata item.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ChangelogHistoryMetadataGenerator {
     /// The URL to an avatar for the user or system associated with a history record.
     #[serde(rename = "avatarUrl", default, skip_serializing_if = "Option::is_none")]
@@ -121,7 +126,8 @@ pub struct ChangelogHistoryMetadataGenerator {
 }
 
 /// Details of issue history metadata.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ChangelogHistoryMetadata {
     /// The activity described in the history record.
     #[serde(rename = "activityDescription", default, skip_serializing_if = "Option::is_none")]
@@ -159,7 +165,8 @@ pub struct ChangelogHistoryMetadata {
 }
 
 /// A log of changes made to issue fields. Changelogs related to workflow associations are currently being deprecated.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Changelog {
     /// User details permitted by the user's Atlassian Account privacy settings. However, be aware of these exceptions:
     ///
@@ -169,6 +176,16 @@ pub struct Changelog {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub author: Option<ChangelogAuthor>,
     /// The date on which the change took place.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created: Option<chrono::DateTime<chrono::Utc>>,
+    /// The date on which the change took place.
+    #[cfg(not(feature = "chrono"))]
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
     /// Details of issue history metadata.

@@ -20,7 +20,7 @@ crate::open_enum! {
 }
 
 /// Defines the payload to configure the issue layout item for a project.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueLayoutItemPayload {
     #[serde(rename = "itemKey", default, skip_serializing_if = "Option::is_none")]
     pub item_key: Option<ProjectCreateResourceIdentifier>,

@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The specified workflow version read from history.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowHistoryReadResponseDTO {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub statuses: Option<Vec<WorkflowDocumentStatusDTO>>,

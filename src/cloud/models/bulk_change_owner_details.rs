@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Details for changing owners of shareable entities
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct BulkChangeOwnerDetails {
     /// Whether the name is fixed automatically if it's duplicated after changing owner.
     #[serde(rename = "autofixName")]

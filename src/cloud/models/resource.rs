@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Resource {
     #[serde(rename = "contentAsByteArray", default, skip_serializing_if = "Option::is_none")]
     pub content_as_byte_array: Option<Vec<String>>,

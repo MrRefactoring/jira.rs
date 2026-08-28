@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// An operand that is a user-provided value.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ValueOperand {
     /// Encoded value, which can be used directly in a JQL query.
     #[serde(rename = "encodedValue", default, skip_serializing_if = "Option::is_none")]

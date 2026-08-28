@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct RequestTypePermissionCheckResponse {
     /// List of request type IDs for which the user has permission to administer.
     #[serde(rename = "canAdminister", default, skip_serializing_if = "Option::is_none")]

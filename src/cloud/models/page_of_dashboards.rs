@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A page containing dashboard details.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PageOfDashboards {
     /// List of dashboards.
     #[serde(default, skip_serializing_if = "Option::is_none")]

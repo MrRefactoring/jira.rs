@@ -33,7 +33,7 @@ crate::open_enum! {
 }
 
 /// Rule of the Policy
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum PolicyModelAttributesRule {
@@ -44,7 +44,8 @@ pub enum PolicyModelAttributesRule {
 }
 
 /// Attributes of this object
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PolicyModelAttributes {
     /// Type of this Policy
     pub r#type: PolicyModelAttributesType,
@@ -74,7 +75,8 @@ pub struct PolicyModelAttributes {
     pub updated_at: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PolicyModel {
     /// Unique identifier of the Policy
     pub id: String,

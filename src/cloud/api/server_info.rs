@@ -16,7 +16,7 @@ impl<'a> ServerInfoService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_server_info(&self) -> GetServerInfoRequest<'a> {
         GetServerInfoRequest::new(self.client)
     }
@@ -26,7 +26,7 @@ impl<'a> ServerInfoService<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetServerInfoRequest<'a> {
     client: &'a crate::core::Client,
 }

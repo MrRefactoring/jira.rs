@@ -3,7 +3,7 @@
 use super::super::models::*;
 
 crate::open_enum! {
-    /// [Order](#ordering) the results by a field:
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
     ///
     ///  *  `description` Sorts by the component description.
     ///  *  `name` Sorts by component name.
@@ -18,7 +18,7 @@ crate::open_enum! {
 }
 
 crate::open_enum! {
-    /// [Order](#ordering) the results by a field:
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
     ///
     ///  *  `description` Sorts by the component description.
     ///  *  `issueCount` Sorts by the count of issues associated with the component.
@@ -68,11 +68,11 @@ impl<'a> ProjectComponentsService<'a> {
         Self { client }
     }
 
-    /// Returns a [paginated](#pagination) list of all components in a project, including global (Compass) components when applicable.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of all components in a project, including global (Compass) components when applicable.
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
     pub fn find_components_for_projects(&self) -> FindComponentsForProjectsRequest<'a> {
         FindComponentsForProjectsRequest::new(self.client)
     }
@@ -81,7 +81,7 @@ impl<'a> ProjectComponentsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project in which the component is created or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project in which the component is created or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn create_component(&self, project_component: ProjectComponent) -> CreateComponentRequest<'a> {
         CreateComponentRequest::new(self.client, project_component)
     }
@@ -90,7 +90,7 @@ impl<'a> ProjectComponentsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for project containing the component.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for project containing the component.
     pub fn get_component(&self, id: impl Into<String>) -> GetComponentRequest<'a> {
         GetComponentRequest::new(self.client, id)
     }
@@ -99,7 +99,7 @@ impl<'a> ProjectComponentsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the component or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the component or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn update_component(&self, id: impl Into<String>, body: ProjectComponent) -> UpdateComponentRequest<'a> {
         UpdateComponentRequest::new(self.client, id, body)
     }
@@ -108,7 +108,7 @@ impl<'a> ProjectComponentsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the component or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the component or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_component(&self, id: impl Into<String>) -> DeleteComponentRequest<'a> {
         DeleteComponentRequest::new(self.client, id)
     }
@@ -122,18 +122,18 @@ impl<'a> ProjectComponentsService<'a> {
     ///  *  **Classic**: `read:jira-work`
     ///  *  **Granular**: `read:field:jira`, `read:project.component:jira`
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_component_related_issues(&self, id: impl Into<String>) -> GetComponentRelatedIssuesRequest<'a> {
         GetComponentRelatedIssuesRequest::new(self.client, id)
     }
 
-    /// Returns a [paginated](#pagination) list of all components in a project. See the [Get project components](#api-rest-api-3-project-projectIdOrKey-components-get) resource if you want to get a full list of versions without pagination.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of all components in a project. See the [Get project components](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-components-get) resource if you want to get a full list of versions without pagination.
     ///
     /// If your project uses Compass components, this API will return a list of Compass components that are linked to issues in that project.
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
     pub fn get_project_components_paginated(
         &self,
         project_id_or_key: impl Into<String>,
@@ -141,23 +141,23 @@ impl<'a> ProjectComponentsService<'a> {
         GetProjectComponentsPaginatedRequest::new(self.client, project_id_or_key)
     }
 
-    /// Returns all components in a project. See the [Get project components paginated](#api-rest-api-3-project-projectIdOrKey-component-get) resource if you want to get a full list of components with pagination.
+    /// Returns all components in a project. See the [Get project components paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-component-get) resource if you want to get a full list of components with pagination.
     ///
     /// If your project uses Compass components, this API will return a paginated list of Compass components that are linked to issues in that project.
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
     pub fn get_project_components(&self, project_id_or_key: impl Into<String>) -> GetProjectComponentsRequest<'a> {
         GetProjectComponentsRequest::new(self.client, project_id_or_key)
     }
 }
 
-/// Returns a [paginated](#pagination) list of all components in a project, including global (Compass) components when applicable.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of all components in a project, including global (Compass) components when applicable.
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
 pub struct FindComponentsForProjectsRequest<'a> {
     client: &'a crate::core::Client,
     project_ids_or_keys: Option<Vec<String>>,
@@ -196,7 +196,7 @@ impl<'a> FindComponentsForProjectsRequest<'a> {
         self
     }
 
-    /// [Order](#ordering) the results by a field:
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
     ///
     ///  *  `description` Sorts by the component description.
     ///  *  `name` Sorts by component name.
@@ -257,7 +257,7 @@ impl<'a> FindComponentsForProjectsRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project in which the component is created or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project in which the component is created or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct CreateComponentRequest<'a> {
     client: &'a crate::core::Client,
     project_component: ProjectComponent,
@@ -297,7 +297,7 @@ impl<'a> CreateComponentRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for project containing the component.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for project containing the component.
 pub struct GetComponentRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -310,8 +310,10 @@ impl<'a> GetComponentRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/3/component/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/component/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -331,7 +333,7 @@ impl<'a> GetComponentRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the component or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the component or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct UpdateComponentRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -345,8 +347,10 @@ impl<'a> UpdateComponentRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/rest/api/3/component/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/3/component/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
 
@@ -368,7 +372,7 @@ impl<'a> UpdateComponentRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the component or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the component or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteComponentRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -390,8 +394,10 @@ impl<'a> DeleteComponentRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/rest/api/3/component/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/3/component/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         if let Some(value) = &self.move_issues_to {
             config.query.push(("moveIssuesTo".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
@@ -420,7 +426,7 @@ impl<'a> DeleteComponentRequest<'a> {
 ///  *  **Classic**: `read:jira-work`
 ///  *  **Granular**: `read:field:jira`, `read:project.component:jira`
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetComponentRelatedIssuesRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -435,7 +441,7 @@ impl<'a> GetComponentRelatedIssuesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/component/{}/relatedIssueCounts", self.id),
+            format!("/rest/api/3/component/{}/relatedIssueCounts", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -452,13 +458,13 @@ impl<'a> GetComponentRelatedIssuesRequest<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of all components in a project. See the [Get project components](#api-rest-api-3-project-projectIdOrKey-components-get) resource if you want to get a full list of versions without pagination.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of all components in a project. See the [Get project components](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-components-get) resource if you want to get a full list of versions without pagination.
 ///
 /// If your project uses Compass components, this API will return a list of Compass components that are linked to issues in that project.
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
 pub struct GetProjectComponentsPaginatedRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -498,7 +504,7 @@ impl<'a> GetProjectComponentsPaginatedRequest<'a> {
         self
     }
 
-    /// [Order](#ordering) the results by a field:
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
     ///
     ///  *  `description` Sorts by the component description.
     ///  *  `issueCount` Sorts by the count of issues associated with the component.
@@ -531,7 +537,7 @@ impl<'a> GetProjectComponentsPaginatedRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}/component", self.project_id_or_key),
+            format!("/rest/api/3/project/{}/component", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         if let Some(value) = &self.start_at {
@@ -568,13 +574,13 @@ impl<'a> GetProjectComponentsPaginatedRequest<'a> {
     }
 }
 
-/// Returns all components in a project. See the [Get project components paginated](#api-rest-api-3-project-projectIdOrKey-component-get) resource if you want to get a full list of components with pagination.
+/// Returns all components in a project. See the [Get project components paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-component-get) resource if you want to get a full list of components with pagination.
 ///
 /// If your project uses Compass components, this API will return a paginated list of Compass components that are linked to issues in that project.
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
 pub struct GetProjectComponentsRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -598,7 +604,7 @@ impl<'a> GetProjectComponentsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}/components", self.project_id_or_key),
+            format!("/rest/api/3/project/{}/components", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         if let Some(value) = &self.component_source {

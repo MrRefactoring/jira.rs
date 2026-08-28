@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// An issue suggested for use in the issue picker auto-completion.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SuggestedIssue {
     /// The ID of the issue.
     #[serde(default, skip_serializing_if = "Option::is_none")]

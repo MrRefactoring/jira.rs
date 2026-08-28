@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// A list of issue IDs and the value to update a custom field to.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct CustomFieldValueUpdate {
     /// The list of issue IDs.
     #[serde(rename = "issueIds")]

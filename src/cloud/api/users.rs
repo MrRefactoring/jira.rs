@@ -10,11 +10,11 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about users in the response. This parameter accepts a comma-separated list. Expand options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about users in the response. This parameter accepts a comma-separated list. Expand options include:
 ///
 ///  *  `groups` includes all groups and nested groups to which the user belongs.
 ///  *  `applicationRoles` includes details of all the applications to which the user has access.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetUserRequestExpand {
@@ -38,7 +38,7 @@ impl<'a> UsersService<'a> {
     ///
     /// Privacy controls are applied to the response based on the user's preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
     ///
-    /// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_user(&self) -> GetUserRequest<'a> {
         GetUserRequest::new(self.client)
     }
@@ -49,21 +49,21 @@ impl<'a> UsersService<'a> {
     ///
     /// If the user exists and has access to Jira, the operation returns a 201 status. If the user exists but does not have access to Jira & no new jira-products are requested, the operation returns a 400 status.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). The caller has to be an **organization admin**.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). The caller has to be an **organization admin**.
     pub fn create_user(&self, new_user_details: NewUserDetails) -> CreateUserRequest<'a> {
         CreateUserRequest::new(self.client, new_user_details)
     }
 
     /// Deletes a user. If the operation completes successfully then the user is removed from Jira's user base. This operation does not delete the user's Atlassian account.
     ///
-    /// **[Permissions](#permissions) required:** Site administration (that is, membership of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, membership of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
     pub fn remove_user(&self, account_id: impl Into<String>) -> RemoveUserRequest<'a> {
         RemoveUserRequest::new(self.client, account_id)
     }
 
     /// Returns the default [issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the user. If `accountId` is not passed in the request, the calling user's details are returned.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLgl), to get the column details for any user.
     ///  *  Permission to access Jira, to get the calling user's column details.
@@ -77,7 +77,7 @@ impl<'a> UsersService<'a> {
     ///
     /// `curl -X PUT -d columns=summary -d columns=description https://your-domain.atlassian.net/rest/api/3/user/columns?accountId=5b10ac8d82e05b22cc7d4ef5'`
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the columns on any user.
     ///  *  Permission to access Jira, to set the calling user's columns.
@@ -87,7 +87,7 @@ impl<'a> UsersService<'a> {
 
     /// Resets the default [ issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the user to the system default. If `accountId` is not passed, the calling user's default columns are reset.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the columns on any user.
     ///  *  Permission to access Jira, to set the calling user's columns.
@@ -110,7 +110,7 @@ impl<'a> UsersService<'a> {
 
     /// Returns the groups to which a user belongs.
     ///
-    /// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_user_groups(&self, account_id: impl Into<String>) -> GetUserGroupsRequest<'a> {
         GetUserGroupsRequest::new(self.client, account_id)
     }
@@ -119,7 +119,7 @@ impl<'a> UsersService<'a> {
     ///
     /// Privacy controls are applied to the response based on the users' preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
     ///
-    /// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_all_users_default(&self) -> GetAllUsersDefaultRequest<'a> {
         GetAllUsersDefaultRequest::new(self.client)
     }
@@ -128,7 +128,7 @@ impl<'a> UsersService<'a> {
     ///
     /// Privacy controls are applied to the response based on the users' preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
     ///
-    /// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_all_users(&self) -> GetAllUsersRequest<'a> {
         GetAllUsersRequest::new(self.client)
     }
@@ -138,7 +138,7 @@ impl<'a> UsersService<'a> {
 ///
 /// Privacy controls are applied to the response based on the user's preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
 ///
-/// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetUserRequest<'a> {
     client: &'a crate::core::Client,
     account_id: Option<String>,
@@ -158,7 +158,7 @@ impl<'a> GetUserRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) to include additional information about users in the response. This parameter accepts a comma-separated list. Expand options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about users in the response. This parameter accepts a comma-separated list. Expand options include:
     ///
     ///  *  `groups` includes all groups and nested groups to which the user belongs.
     ///  *  `applicationRoles` includes details of all the applications to which the user has access.
@@ -201,7 +201,7 @@ impl<'a> GetUserRequest<'a> {
 ///
 /// If the user exists and has access to Jira, the operation returns a 201 status. If the user exists but does not have access to Jira & no new jira-products are requested, the operation returns a 400 status.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). The caller has to be an **organization admin**.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). The caller has to be an **organization admin**.
 pub struct CreateUserRequest<'a> {
     client: &'a crate::core::Client,
     new_user_details: NewUserDetails,
@@ -239,7 +239,7 @@ impl<'a> CreateUserRequest<'a> {
 
 /// Deletes a user. If the operation completes successfully then the user is removed from Jira's user base. This operation does not delete the user's Atlassian account.
 ///
-/// **[Permissions](#permissions) required:** Site administration (that is, membership of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, membership of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
 pub struct RemoveUserRequest<'a> {
     client: &'a crate::core::Client,
     account_id: String,
@@ -272,7 +272,7 @@ impl<'a> RemoveUserRequest<'a> {
 
 /// Returns the default [issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the user. If `accountId` is not passed in the request, the calling user's details are returned.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLgl), to get the column details for any user.
 ///  *  Permission to access Jira, to get the calling user's column details.
@@ -323,7 +323,7 @@ impl<'a> GetUserDefaultColumnsRequest<'a> {
 ///
 /// `curl -X PUT -d columns=summary -d columns=description https://your-domain.atlassian.net/rest/api/3/user/columns?accountId=5b10ac8d82e05b22cc7d4ef5'`
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the columns on any user.
 ///  *  Permission to access Jira, to set the calling user's columns.
@@ -378,7 +378,7 @@ impl<'a> SetUserColumnsRequest<'a> {
 
 /// Resets the default [ issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the user to the system default. If `accountId` is not passed, the calling user's default columns are reset.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the columns on any user.
 ///  *  Permission to access Jira, to set the calling user's columns.
@@ -488,7 +488,7 @@ impl<'a> GetUserEmailBulkRequest<'a> {
 
 /// Returns the groups to which a user belongs.
 ///
-/// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetUserGroupsRequest<'a> {
     client: &'a crate::core::Client,
     account_id: String,
@@ -524,7 +524,7 @@ impl<'a> GetUserGroupsRequest<'a> {
 ///
 /// Privacy controls are applied to the response based on the users' preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
 ///
-/// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetAllUsersDefaultRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -594,7 +594,7 @@ impl<'a> GetAllUsersDefaultRequest<'a> {
 ///
 /// Privacy controls are applied to the response based on the users' preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
 ///
-/// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetAllUsersRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,

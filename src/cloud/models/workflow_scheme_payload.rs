@@ -12,8 +12,8 @@ crate::open_enum! {
     }
 }
 
-/// The payload for creating a workflow scheme. See <https://www.atlassian.com/software/jira/guides/workflows/overview\#what-is-a-jira-workflow-scheme>
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+/// The payload for creating a workflow scheme. See <https://www.atlassian.com/software/jira/guides/workflows/overview#what-is-a-jira-workflow-scheme>
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct WorkflowSchemePayload {
     #[serde(rename = "defaultWorkflow", default, skip_serializing_if = "Option::is_none")]
     pub default_workflow: Option<ProjectCreateResourceIdentifier>,

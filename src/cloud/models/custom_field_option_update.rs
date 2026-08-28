@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of a custom field option for a context.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct CustomFieldOptionUpdate {
     /// Whether the option is disabled.
     #[serde(default, skip_serializing_if = "Option::is_none")]

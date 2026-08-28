@@ -61,7 +61,7 @@ impl<'a> GetCommentPropertyKeysRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/comment/{}/properties", self.comment_id),
+            format!("/rest/api/2/comment/{}/properties", crate::core::encode_path_segment(&self.comment_id)),
         );
 
         Ok(config)
@@ -94,7 +94,11 @@ impl<'a> GetCommentPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/comment/{}/properties/{}", self.comment_id, self.property_key),
+            format!(
+                "/rest/api/2/comment/{}/properties/{}",
+                crate::core::encode_path_segment(&self.comment_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)
@@ -133,7 +137,11 @@ impl<'a> SetCommentPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/comment/{}/properties/{}", self.comment_id, self.property_key),
+            format!(
+                "/rest/api/2/comment/{}/properties/{}",
+                crate::core::encode_path_segment(&self.comment_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -168,7 +176,11 @@ impl<'a> DeleteCommentPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/comment/{}/properties/{}", self.comment_id, self.property_key),
+            format!(
+                "/rest/api/2/comment/{}/properties/{}",
+                crate::core::encode_path_segment(&self.comment_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)

@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// SCIM group
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ScimGroup {
     /// SCIM schemas that define the attributes present in the current JSON structure. This ia a required field  during user creation or modification.
     #[serde(default, skip_serializing_if = "Option::is_none")]

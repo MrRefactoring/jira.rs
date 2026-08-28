@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of workflow transition rules.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowRulesSearchDetails {
     /// List of workflow rule IDs that do not belong to the workflow or can not be found.
     #[serde(rename = "invalidRules", default, skip_serializing_if = "Option::is_none")]

@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// The ID of a screen scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct UpdateDefaultScreenScheme {
     /// The ID of the screen scheme.
     #[serde(rename = "screenSchemeId")]

@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// List issues archived within a specified date range.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct DateRangeFilterRequest {
     /// List issues archived after a specified date, passed in the YYYY-MM-DD format.
     #[serde(rename = "dateAfter")]

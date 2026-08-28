@@ -15,7 +15,8 @@ crate::open_enum! {
 }
 
 /// Authentication used by the actor
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EventActorModelAuth {
     /// The type of authentication used by the actor
     #[serde(rename = "authType")]
@@ -29,7 +30,8 @@ pub struct EventActorModelAuth {
 }
 
 /// The user the actor is acting on behalf of
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EventActorModelOnBehalfOf {
     /// Id of the user the actor is acting on behalf of
     pub id: String,
@@ -42,7 +44,8 @@ pub struct EventActorModelOnBehalfOf {
 }
 
 /// The app that triggered the action
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EventActorModelApp {
     /// Unique identifier of the app
     pub id: String,
@@ -55,7 +58,8 @@ pub struct EventActorModelApp {
 }
 
 /// The entity that performed the action
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EventActorModel {
     /// Id of the Actor
     pub id: String,

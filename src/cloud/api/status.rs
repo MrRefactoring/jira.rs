@@ -14,7 +14,7 @@ impl<'a> StatusService<'a> {
 
     /// Returns a list of the statuses specified by one or more status IDs.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
     ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
@@ -24,7 +24,7 @@ impl<'a> StatusService<'a> {
 
     /// Creates statuses for a global or project scope.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
     ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
@@ -34,7 +34,7 @@ impl<'a> StatusService<'a> {
 
     /// Updates statuses by ID.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
     ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
@@ -44,7 +44,7 @@ impl<'a> StatusService<'a> {
 
     /// Deletes statuses by ID.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
     ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
@@ -57,7 +57,7 @@ impl<'a> StatusService<'a> {
 
     /// Returns a list of the statuses specified by one or more status names.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
     ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
@@ -71,7 +71,7 @@ impl<'a> StatusService<'a> {
 
     /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/#pagination) list of statuses that match a search on name or project.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
     ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
@@ -104,7 +104,7 @@ impl<'a> StatusService<'a> {
 
 /// Returns a list of the statuses specified by one or more status IDs.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
 ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
@@ -140,7 +140,7 @@ impl<'a> GetStatusesByIdRequest<'a> {
 
 /// Creates statuses for a global or project scope.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
 ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
@@ -181,7 +181,7 @@ impl<'a> CreateStatusesRequest<'a> {
 
 /// Updates statuses by ID.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
 ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
@@ -222,7 +222,7 @@ impl<'a> UpdateStatusesRequest<'a> {
 
 /// Deletes statuses by ID.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
 ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
@@ -259,7 +259,7 @@ impl<'a> DeleteStatusesByIdRequest<'a> {
 
 /// Returns a list of the statuses specified by one or more status names.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
 ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
@@ -310,7 +310,7 @@ impl<'a> GetStatusesByNameRequest<'a> {
 
 /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/#pagination) list of statuses that match a search on name or project.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
 ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
@@ -468,7 +468,11 @@ impl<'a> GetProjectIssueTypeUsagesForStatusRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/statuses/{}/project/{}/issueTypeUsages", self.status_id, self.project_id),
+            format!(
+                "/rest/api/3/statuses/{}/project/{}/issueTypeUsages",
+                crate::core::encode_path_segment(&self.status_id),
+                crate::core::encode_path_segment(&self.project_id)
+            ),
         );
 
         if let Some(value) = &self.next_page_token {
@@ -526,7 +530,7 @@ impl<'a> GetProjectUsagesForStatusRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/statuses/{}/projectUsages", self.status_id),
+            format!("/rest/api/3/statuses/{}/projectUsages", crate::core::encode_path_segment(&self.status_id)),
         );
 
         if let Some(value) = &self.next_page_token {
@@ -584,7 +588,7 @@ impl<'a> GetWorkflowUsagesForStatusRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/statuses/{}/workflowUsages", self.status_id),
+            format!("/rest/api/3/statuses/{}/workflowUsages", crate::core::encode_path_segment(&self.status_id)),
         );
 
         if let Some(value) = &self.next_page_token {

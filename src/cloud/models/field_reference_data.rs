@@ -35,7 +35,8 @@ crate::open_enum! {
 }
 
 /// Details of a field that can be used in advanced searches.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FieldReferenceData {
     /// Whether the field provide auto-complete suggestions.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -44,9 +45,11 @@ pub struct FieldReferenceData {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cfid: Option<String>,
     /// Whether this field has been deprecated.
+    #[deprecated(note = "Whether this field has been deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub deprecated: Option<FieldReferenceDataDeprecated>,
     /// The searcher key of the field, only passed when the field is deprecated.
+    #[deprecated(note = "The searcher key of the field, only passed when the field is deprecated.")]
     #[serde(rename = "deprecatedSearcherKey", default, skip_serializing_if = "Option::is_none")]
     pub deprecated_searcher_key: Option<String>,
     /// The display name contains the following:

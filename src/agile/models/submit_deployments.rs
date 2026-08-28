@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Fields that uniquely reference a deployment.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SubmitDeploymentsAcceptedDeployments {
     /// The identifier of a pipeline, must be unique for the provider.
     #[serde(rename = "pipelineId")]
@@ -18,7 +19,8 @@ pub struct SubmitDeploymentsAcceptedDeployments {
 }
 
 /// Fields that uniquely reference a deployment.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SubmitDeploymentsRejectedDeploymentsKey {
     /// The identifier of a pipeline, must be unique for the provider.
     #[serde(rename = "pipelineId")]
@@ -32,7 +34,8 @@ pub struct SubmitDeploymentsRejectedDeploymentsKey {
 }
 
 /// A message supplied in the case of an error.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SubmitDeploymentsRejectedDeploymentsErrors {
     /// A human-readable message describing the error.
     pub message: String,
@@ -44,7 +47,8 @@ pub struct SubmitDeploymentsRejectedDeploymentsErrors {
 /// A deployment that has not been accepted for submission, usually due to a problem with the request data.
 ///
 /// The object is comprised of the key of the rejected deployment and the corresponding error messages.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SubmitDeploymentsRejectedDeployments {
     /// Fields that uniquely reference a deployment.
     pub key: SubmitDeploymentsRejectedDeploymentsKey,
@@ -52,7 +56,7 @@ pub struct SubmitDeploymentsRejectedDeployments {
     pub errors: Vec<SubmitDeploymentsRejectedDeploymentsErrors>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitDeploymentsUnknownAssociations {
@@ -64,7 +68,8 @@ pub enum SubmitDeploymentsUnknownAssociations {
 }
 
 /// The result of a successful submitDeployments request.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SubmitDeployments {
     /// The keys of deployments that have been accepted for submission. A deployment key is a composite key that consists of `pipelineId`, `environmentId` and `deploymentSequenceNumber`.
     ///

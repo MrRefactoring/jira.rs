@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct JiraVersionField {
     #[serde(rename = "versionId", default, skip_serializing_if = "Option::is_none")]
     pub version_id: Option<String>,

@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The version details of the workflow.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowDocumentVersion {
     /// The version UUID.
     #[serde(default, skip_serializing_if = "Option::is_none")]

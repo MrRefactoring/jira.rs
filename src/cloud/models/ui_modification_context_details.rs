@@ -31,7 +31,7 @@ crate::open_enum! {
 }
 
 /// The details of a UI modification's context, which define where to activate the UI modification.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct UiModificationContextDetails {
     /// The ID of the UI modification context.
     #[serde(default, skip_serializing_if = "Option::is_none")]

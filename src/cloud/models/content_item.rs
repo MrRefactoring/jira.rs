@@ -16,7 +16,7 @@ crate::open_enum! {
 }
 
 /// Represents the content to redact
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContentItem {
     /// The ID of the content entity.
     ///

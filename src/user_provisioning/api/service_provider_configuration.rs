@@ -54,7 +54,7 @@ impl<'a> GetResourceTypesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/scim/directory/{}/ResourceTypes", self.directory_id),
+            format!("/scim/directory/{}/ResourceTypes", crate::core::encode_path_segment(&self.directory_id)),
         );
 
         Ok(config)
@@ -88,7 +88,7 @@ impl<'a> GetUserResourceTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/scim/directory/{}/ResourceTypes/User", self.directory_id),
+            format!("/scim/directory/{}/ResourceTypes/User", crate::core::encode_path_segment(&self.directory_id)),
         );
 
         Ok(config)
@@ -122,7 +122,7 @@ impl<'a> GetGroupResourceTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/scim/directory/{}/ResourceTypes/Group", self.directory_id),
+            format!("/scim/directory/{}/ResourceTypes/Group", crate::core::encode_path_segment(&self.directory_id)),
         );
 
         Ok(config)
@@ -156,7 +156,7 @@ impl<'a> GetServiceProviderConfigRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/scim/directory/{}/ServiceProviderConfig", self.directory_id),
+            format!("/scim/directory/{}/ServiceProviderConfig", crate::core::encode_path_segment(&self.directory_id)),
         );
 
         Ok(config)

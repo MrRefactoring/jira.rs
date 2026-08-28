@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The identifiers for a project.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ProjectIdentifier {
     /// The ID of the project.
     #[serde(default, skip_serializing_if = "Option::is_none")]

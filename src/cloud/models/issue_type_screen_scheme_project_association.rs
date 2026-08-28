@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Associated issue type screen scheme and project.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueTypeScreenSchemeProjectAssociation {
     /// The ID of the issue type screen scheme.
     #[serde(rename = "issueTypeScreenSchemeId", default, skip_serializing_if = "Option::is_none")]

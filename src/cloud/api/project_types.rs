@@ -36,7 +36,7 @@ impl<'a> ProjectTypesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_all_project_types(&self) -> GetAllProjectTypesRequest<'a> {
         GetAllProjectTypesRequest::new(self.client)
     }
@@ -50,7 +50,7 @@ impl<'a> ProjectTypesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_project_type_by_key(
         &self,
         project_type_key: impl Into<GetProjectTypeByKeyRequestProjectTypeKey>,
@@ -60,7 +60,7 @@ impl<'a> ProjectTypesService<'a> {
 
     /// Returns a [project type](https://confluence.atlassian.com/x/Var1Nw) if it is accessible to the user.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_accessible_project_type_by_key(
         &self,
         project_type_key: impl Into<GetAccessibleProjectTypeByKeyRequestProjectTypeKey>,
@@ -73,7 +73,7 @@ impl<'a> ProjectTypesService<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetAllProjectTypesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -134,7 +134,7 @@ impl<'a> GetAllAccessibleProjectTypesRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetProjectTypeByKeyRequest<'a> {
     client: &'a crate::core::Client,
     project_type_key: GetProjectTypeByKeyRequestProjectTypeKey,
@@ -152,7 +152,7 @@ impl<'a> GetProjectTypeByKeyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/type/{}", self.project_type_key),
+            format!("/rest/api/3/project/type/{}", crate::core::encode_path_segment(self.project_type_key.as_str())),
         );
 
         Ok(config)
@@ -171,7 +171,7 @@ impl<'a> GetProjectTypeByKeyRequest<'a> {
 
 /// Returns a [project type](https://confluence.atlassian.com/x/Var1Nw) if it is accessible to the user.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetAccessibleProjectTypeByKeyRequest<'a> {
     client: &'a crate::core::Client,
     project_type_key: GetAccessibleProjectTypeByKeyRequestProjectTypeKey,
@@ -189,7 +189,10 @@ impl<'a> GetAccessibleProjectTypeByKeyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/type/{}/accessible", self.project_type_key),
+            format!(
+                "/rest/api/3/project/type/{}/accessible",
+                crate::core::encode_path_segment(self.project_type_key.as_str())
+            ),
         );
 
         Ok(config)

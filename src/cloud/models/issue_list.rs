@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// A list of issue IDs.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueList {
     /// The list of issue IDs.
     #[serde(rename = "issueIds")]

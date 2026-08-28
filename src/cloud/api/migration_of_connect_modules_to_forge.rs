@@ -23,7 +23,7 @@ impl<'a> MigrationOfConnectModulesToForgeService<'a> {
     /// For more details, see
     /// [Jira modules > Jira Custom Fields](https://developer.atlassian.com/platform/adopting-forge-from-connect/migrate-jira-custom-fields/).
     ///
-    /// **[Permissions](#permissions) required:** Only Connect and Forge apps can make this request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect and Forge apps can make this request.
     pub fn fetch_migration_task(
         &self,
         connect_key: impl Into<String>,
@@ -42,7 +42,7 @@ impl<'a> MigrationOfConnectModulesToForgeService<'a> {
     /// For more details, see
     /// [Jira modules > Jira Custom Fields](https://developer.atlassian.com/platform/adopting-forge-from-connect/migrate-jira-custom-fields/).
     ///
-    /// **[Permissions](#permissions) required:** Only Connect and Forge apps can make this request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect and Forge apps can make this request.
     pub fn submit_task(
         &self,
         connect_key: impl Into<String>,
@@ -63,7 +63,7 @@ impl<'a> MigrationOfConnectModulesToForgeService<'a> {
 /// For more details, see
 /// [Jira modules > Jira Custom Fields](https://developer.atlassian.com/platform/adopting-forge-from-connect/migrate-jira-custom-fields/).
 ///
-/// **[Permissions](#permissions) required:** Only Connect and Forge apps can make this request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect and Forge apps can make this request.
 pub struct FetchMigrationTaskRequest<'a> {
     client: &'a crate::core::Client,
     connect_key: String,
@@ -83,7 +83,11 @@ impl<'a> FetchMigrationTaskRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/atlassian-connect/1/migration/{}/{}/task", self.connect_key, self.jira_issue_fields_key),
+            format!(
+                "/rest/atlassian-connect/1/migration/{}/{}/task",
+                crate::core::encode_path_segment(&self.connect_key),
+                crate::core::encode_path_segment(&self.jira_issue_fields_key)
+            ),
         );
 
         Ok(config)
@@ -110,7 +114,7 @@ impl<'a> FetchMigrationTaskRequest<'a> {
 /// For more details, see
 /// [Jira modules > Jira Custom Fields](https://developer.atlassian.com/platform/adopting-forge-from-connect/migrate-jira-custom-fields/).
 ///
-/// **[Permissions](#permissions) required:** Only Connect and Forge apps can make this request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect and Forge apps can make this request.
 pub struct SubmitTaskRequest<'a> {
     client: &'a crate::core::Client,
     connect_key: String,
@@ -144,7 +148,11 @@ impl<'a> SubmitTaskRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/atlassian-connect/1/migration/{}/{}/task", self.connect_key, self.jira_issue_fields_key),
+            format!(
+                "/rest/atlassian-connect/1/migration/{}/{}/task",
+                crate::core::encode_path_segment(&self.connect_key),
+                crate::core::encode_path_segment(&self.jira_issue_fields_key)
+            ),
         );
 
         if let Some(value) = &self.retrigger_completed_migration {

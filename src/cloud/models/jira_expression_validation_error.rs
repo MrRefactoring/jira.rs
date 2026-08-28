@@ -15,7 +15,8 @@ crate::open_enum! {
 ///
 ///  *  `line` and `column`
 ///  *  `expression`
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct JiraExpressionValidationError {
     /// The text column in which the error occurred.
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -165,7 +165,7 @@ impl<'a> GetStatusRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/status/{}", self.id_or_name),
+            format!("/rest/api/2/status/{}", crate::core::encode_path_segment(&self.id_or_name)),
         );
 
         Ok(config)

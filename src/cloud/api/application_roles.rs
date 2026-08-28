@@ -14,14 +14,14 @@ impl<'a> ApplicationRolesService<'a> {
 
     /// Returns all application roles. In Jira, application roles are managed using the [Application access configuration](https://confluence.atlassian.com/x/3YxjL) page.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_all_application_roles(&self) -> GetAllApplicationRolesRequest<'a> {
         GetAllApplicationRolesRequest::new(self.client)
     }
 
     /// Returns an application role.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_application_role(&self, key: impl Into<String>) -> GetApplicationRoleRequest<'a> {
         GetApplicationRoleRequest::new(self.client, key)
     }
@@ -29,7 +29,7 @@ impl<'a> ApplicationRolesService<'a> {
 
 /// Returns all application roles. In Jira, application roles are managed using the [Application access configuration](https://confluence.atlassian.com/x/3YxjL) page.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetAllApplicationRolesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -60,7 +60,7 @@ impl<'a> GetAllApplicationRolesRequest<'a> {
 
 /// Returns an application role.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetApplicationRoleRequest<'a> {
     client: &'a crate::core::Client,
     key: String,
@@ -75,7 +75,7 @@ impl<'a> GetApplicationRoleRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/applicationrole/{}", self.key),
+            format!("/rest/api/3/applicationrole/{}", crate::core::encode_path_segment(&self.key)),
         );
 
         Ok(config)

@@ -11,7 +11,8 @@ crate::open_enum! {
 }
 
 /// Identifies an individual commit in a repository.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EntityAssociationValuesValue {
     /// The hash for the Commit.
     #[serde(rename = "commitHash")]
@@ -22,13 +23,14 @@ pub struct EntityAssociationValuesValue {
 }
 
 /// Identifies an individual repository.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EntityAssociationValuesValue2 {
     #[serde(rename = "repositoryId")]
     pub repository_id: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum EntityAssociationValues {
@@ -39,7 +41,8 @@ pub enum EntityAssociationValues {
 }
 
 /// An association type referencing another entity
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EntityAssociation {
     /// Defines the association type. Currently supported entities can be found in this field's value enums list.
     #[serde(rename = "associationType")]

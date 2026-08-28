@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details about the configuration of Jira.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Configuration {
     /// Whether the ability to add attachments to issues is enabled.
     #[serde(rename = "attachmentsEnabled", default, skip_serializing_if = "Option::is_none")]

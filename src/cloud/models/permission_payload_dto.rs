@@ -13,7 +13,7 @@ crate::open_enum! {
 }
 
 /// The payload to create a permission scheme
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct PermissionPayloadDTO {
     /// Configuration to generate addon role. Default is false if null. Only applies to GLOBAL-scoped permission scheme
     #[serde(rename = "addAddonRole", default, skip_serializing_if = "Option::is_none")]

@@ -12,7 +12,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetPlanResponse {
     /// The cross-project releases included in the plan.
     #[serde(rename = "crossProjectReleases", default, skip_serializing_if = "Option::is_none")]

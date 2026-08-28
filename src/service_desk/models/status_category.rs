@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// A status category.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct StatusCategory {
     /// The name of the color used to represent the status category.
     #[serde(rename = "colorName", default, skip_serializing_if = "Option::is_none")]

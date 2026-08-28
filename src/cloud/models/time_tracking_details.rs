@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Time tracking details.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct TimeTrackingDetails {
     /// The original estimate of time needed for this issue in readable format.
     #[serde(rename = "originalEstimate", default, skip_serializing_if = "Option::is_none")]

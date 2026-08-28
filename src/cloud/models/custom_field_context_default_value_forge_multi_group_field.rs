@@ -9,7 +9,8 @@ pub enum CustomFieldContextDefaultValueForgeMultiGroupFieldType {
 }
 
 /// The default value for a Forge collection of groups custom field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueForgeMultiGroupField {
     /// The ID of the context.
     #[serde(rename = "contextId")]

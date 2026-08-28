@@ -42,7 +42,11 @@ impl<'a> GetProgressForCategoryAndResourceIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/assets/1.0/progress/category/{}/{}", self.category, self.resourceid),
+            format!(
+                "/rest/assets/1.0/progress/category/{}/{}",
+                crate::core::encode_path_segment(&self.category),
+                crate::core::encode_path_segment(&self.resourceid)
+            ),
         );
 
         Ok(config)

@@ -11,7 +11,8 @@ crate::open_enum! {
 }
 
 /// The default parameters to apply to the field across all work types in the specified schemes, may be null if only work type-specific updates are needed
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FieldsSchemeItemParameter {
     /// The custom description for the field, null to preserve current description
     #[serde(default, skip_serializing_if = "Option::is_none")]

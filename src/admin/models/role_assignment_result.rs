@@ -10,7 +10,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct RoleAssignmentResult {
     /// The resource ARI for the product which the role assignment was attempted.
     #[serde(default, skip_serializing_if = "Option::is_none")]

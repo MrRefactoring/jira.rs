@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The number of objects associated with the group.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GroupCounts {
     /// The number of users that belong to the group.
     #[serde(default, skip_serializing_if = "Option::is_none")]

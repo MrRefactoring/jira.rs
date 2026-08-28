@@ -10,7 +10,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetPermissionHolderResponse {
     /// The permission holder type. This is "Group" or "AccountId".
     pub r#type: GetPermissionHolderResponseType,

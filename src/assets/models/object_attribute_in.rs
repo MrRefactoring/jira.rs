@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Object attribute used for creating and updating
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ObjectAttributeIn {
     /// The type of the attribute. The type decides how this value should be interpreted
     #[serde(rename = "objectTypeAttributeId")]

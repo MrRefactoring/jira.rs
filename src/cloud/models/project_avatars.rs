@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// List of project avatars.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ProjectAvatars {
     /// List of avatars added to Jira. These avatars may be deleted.
     #[serde(default, skip_serializing_if = "Option::is_none")]

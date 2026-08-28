@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
-    /// [Order](#ordering) the results by a field:
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
     ///
     ///  *  `name` Sorts by issue type screen scheme name.
     ///  *  `id` Sorts by issue type screen scheme ID.
@@ -24,8 +24,8 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information in the response. This parameter accepts `projects` that, for each issue type screen schemes, returns information about the projects the issue type screen scheme is assigned to.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts `projects` that, for each issue type screen schemes, returns information about the projects the issue type screen scheme is assigned to.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssueTypeScreenSchemesRequestExpand {
@@ -45,18 +45,18 @@ impl<'a> IssueTypeScreenSchemesService<'a> {
         Self { client }
     }
 
-    /// Returns a [paginated](#pagination) list of issue type screen schemes.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of issue type screen schemes.
     ///
     /// Only issue type screen schemes used in classic projects are returned.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_issue_type_screen_schemes(&self) -> GetIssueTypeScreenSchemesRequest<'a> {
         GetIssueTypeScreenSchemesRequest::new(self.client)
     }
 
     /// Creates an issue type screen scheme.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn create_issue_type_screen_scheme(
         &self,
         issue_type_screen_scheme_details: IssueTypeScreenSchemeDetails,
@@ -64,20 +64,20 @@ impl<'a> IssueTypeScreenSchemesService<'a> {
         CreateIssueTypeScreenSchemeRequest::new(self.client, issue_type_screen_scheme_details)
     }
 
-    /// Returns a [paginated](#pagination) list of issue type screen scheme items.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of issue type screen scheme items.
     ///
     /// Only issue type screen schemes used in classic projects are returned.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_issue_type_screen_scheme_mappings(&self) -> GetIssueTypeScreenSchemeMappingsRequest<'a> {
         GetIssueTypeScreenSchemeMappingsRequest::new(self.client)
     }
 
-    /// Returns a [paginated](#pagination) list of issue type screen schemes and, for each issue type screen scheme, a list of the projects that use it.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of issue type screen schemes and, for each issue type screen scheme, a list of the projects that use it.
     ///
     /// Only issue type screen schemes used in classic projects are returned.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_issue_type_screen_scheme_project_associations(
         &self,
         project_id: impl IntoIterator<Item = i64>,
@@ -89,7 +89,7 @@ impl<'a> IssueTypeScreenSchemesService<'a> {
     ///
     /// Issue type screen schemes can only be assigned to classic projects.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn assign_issue_type_screen_scheme_to_project(
         &self,
         issue_type_screen_scheme_project_association: IssueTypeScreenSchemeProjectAssociation,
@@ -99,7 +99,7 @@ impl<'a> IssueTypeScreenSchemesService<'a> {
 
     /// Updates an issue type screen scheme.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn update_issue_type_screen_scheme(
         &self,
         issue_type_screen_scheme_id: impl Into<String>,
@@ -114,7 +114,7 @@ impl<'a> IssueTypeScreenSchemesService<'a> {
 
     /// Deletes an issue type screen scheme.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_issue_type_screen_scheme(
         &self,
         issue_type_screen_scheme_id: impl Into<String>,
@@ -124,7 +124,7 @@ impl<'a> IssueTypeScreenSchemesService<'a> {
 
     /// Appends issue type to screen scheme mappings to an issue type screen scheme.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn append_mappings_for_issue_type_screen_scheme(
         &self,
         issue_type_screen_scheme_id: impl Into<String>,
@@ -139,7 +139,7 @@ impl<'a> IssueTypeScreenSchemesService<'a> {
 
     /// Updates the default screen scheme of an issue type screen scheme. The default screen scheme is used for all unmapped issue types.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn update_default_screen_scheme(
         &self,
         issue_type_screen_scheme_id: impl Into<String>,
@@ -150,7 +150,7 @@ impl<'a> IssueTypeScreenSchemesService<'a> {
 
     /// Removes issue type to screen scheme mappings from an issue type screen scheme.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn remove_mappings_from_issue_type_screen_scheme(
         &self,
         issue_type_screen_scheme_id: impl Into<String>,
@@ -159,11 +159,11 @@ impl<'a> IssueTypeScreenSchemesService<'a> {
         RemoveMappingsFromIssueTypeScreenSchemeRequest::new(self.client, issue_type_screen_scheme_id, issue_type_ids)
     }
 
-    /// Returns a [paginated](#pagination) list of projects associated with an issue type screen scheme.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of projects associated with an issue type screen scheme.
     ///
     /// Only company-managed projects associated with an issue type screen scheme are returned.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_projects_for_issue_type_screen_scheme(
         &self,
         issue_type_screen_scheme_id: i64,
@@ -172,11 +172,11 @@ impl<'a> IssueTypeScreenSchemesService<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of issue type screen schemes.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of issue type screen schemes.
 ///
 /// Only issue type screen schemes used in classic projects are returned.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetIssueTypeScreenSchemesRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -224,7 +224,7 @@ impl<'a> GetIssueTypeScreenSchemesRequest<'a> {
         self
     }
 
-    /// [Order](#ordering) the results by a field:
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
     ///
     ///  *  `name` Sorts by issue type screen scheme name.
     ///  *  `id` Sorts by issue type screen scheme ID.
@@ -235,7 +235,7 @@ impl<'a> GetIssueTypeScreenSchemesRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) to include additional information in the response. This parameter accepts `projects` that, for each issue type screen schemes, returns information about the projects the issue type screen scheme is assigned to.
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts `projects` that, for each issue type screen schemes, returns information about the projects the issue type screen scheme is assigned to.
     #[must_use]
     pub fn expand(mut self, value: GetIssueTypeScreenSchemesRequestExpand) -> Self {
         self.expand = Some(value);
@@ -288,7 +288,7 @@ impl<'a> GetIssueTypeScreenSchemesRequest<'a> {
 
 /// Creates an issue type screen scheme.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct CreateIssueTypeScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_screen_scheme_details: IssueTypeScreenSchemeDetails,
@@ -325,11 +325,11 @@ impl<'a> CreateIssueTypeScreenSchemeRequest<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of issue type screen scheme items.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of issue type screen scheme items.
 ///
 /// Only issue type screen schemes used in classic projects are returned.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetIssueTypeScreenSchemeMappingsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -401,11 +401,11 @@ impl<'a> GetIssueTypeScreenSchemeMappingsRequest<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of issue type screen schemes and, for each issue type screen scheme, a list of the projects that use it.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of issue type screen schemes and, for each issue type screen scheme, a list of the projects that use it.
 ///
 /// Only issue type screen schemes used in classic projects are returned.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetIssueTypeScreenSchemeProjectAssociationsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -469,7 +469,7 @@ impl<'a> GetIssueTypeScreenSchemeProjectAssociationsRequest<'a> {
 ///
 /// Issue type screen schemes can only be assigned to classic projects.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct AssignIssueTypeScreenSchemeToProjectRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_screen_scheme_project_association: IssueTypeScreenSchemeProjectAssociation,
@@ -513,7 +513,7 @@ impl<'a> AssignIssueTypeScreenSchemeToProjectRequest<'a> {
 
 /// Updates an issue type screen scheme.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct UpdateIssueTypeScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_screen_scheme_id: String,
@@ -537,7 +537,10 @@ impl<'a> UpdateIssueTypeScreenSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/issuetypescreenscheme/{}", self.issue_type_screen_scheme_id),
+            format!(
+                "/rest/api/3/issuetypescreenscheme/{}",
+                crate::core::encode_path_segment(&self.issue_type_screen_scheme_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.issue_type_screen_scheme_update_details)? {
@@ -563,7 +566,7 @@ impl<'a> UpdateIssueTypeScreenSchemeRequest<'a> {
 
 /// Deletes an issue type screen scheme.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteIssueTypeScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_screen_scheme_id: String,
@@ -578,7 +581,10 @@ impl<'a> DeleteIssueTypeScreenSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/issuetypescreenscheme/{}", self.issue_type_screen_scheme_id),
+            format!(
+                "/rest/api/3/issuetypescreenscheme/{}",
+                crate::core::encode_path_segment(&self.issue_type_screen_scheme_id)
+            ),
         );
 
         Ok(config)
@@ -597,7 +603,7 @@ impl<'a> DeleteIssueTypeScreenSchemeRequest<'a> {
 
 /// Appends issue type to screen scheme mappings to an issue type screen scheme.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct AppendMappingsForIssueTypeScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_screen_scheme_id: String,
@@ -621,7 +627,10 @@ impl<'a> AppendMappingsForIssueTypeScreenSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/issuetypescreenscheme/{}/mapping", self.issue_type_screen_scheme_id),
+            format!(
+                "/rest/api/3/issuetypescreenscheme/{}/mapping",
+                crate::core::encode_path_segment(&self.issue_type_screen_scheme_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.issue_type_screen_scheme_mapping_details)? {
@@ -647,7 +656,7 @@ impl<'a> AppendMappingsForIssueTypeScreenSchemeRequest<'a> {
 
 /// Updates the default screen scheme of an issue type screen scheme. The default screen scheme is used for all unmapped issue types.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct UpdateDefaultScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_screen_scheme_id: String,
@@ -667,7 +676,10 @@ impl<'a> UpdateDefaultScreenSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/issuetypescreenscheme/{}/mapping/default", self.issue_type_screen_scheme_id),
+            format!(
+                "/rest/api/3/issuetypescreenscheme/{}/mapping/default",
+                crate::core::encode_path_segment(&self.issue_type_screen_scheme_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.update_default_screen_scheme)? {
@@ -693,7 +705,7 @@ impl<'a> UpdateDefaultScreenSchemeRequest<'a> {
 
 /// Removes issue type to screen scheme mappings from an issue type screen scheme.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct RemoveMappingsFromIssueTypeScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_screen_scheme_id: String,
@@ -713,7 +725,10 @@ impl<'a> RemoveMappingsFromIssueTypeScreenSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/3/issuetypescreenscheme/{}/mapping/remove", self.issue_type_screen_scheme_id),
+            format!(
+                "/rest/api/3/issuetypescreenscheme/{}/mapping/remove",
+                crate::core::encode_path_segment(&self.issue_type_screen_scheme_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.issue_type_ids)? {
@@ -737,11 +752,11 @@ impl<'a> RemoveMappingsFromIssueTypeScreenSchemeRequest<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of projects associated with an issue type screen scheme.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of projects associated with an issue type screen scheme.
 ///
 /// Only company-managed projects associated with an issue type screen scheme are returned.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetProjectsForIssueTypeScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_screen_scheme_id: i64,

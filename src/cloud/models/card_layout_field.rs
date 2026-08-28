@@ -10,7 +10,7 @@ crate::open_enum! {
 }
 
 /// Card layout settings of the board
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct CardLayoutField {
     #[serde(rename = "fieldId", default, skip_serializing_if = "Option::is_none")]
     pub field_id: Option<String>,

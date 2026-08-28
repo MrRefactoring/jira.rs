@@ -14,9 +14,9 @@ impl<'a> ProjectAvatarsService<'a> {
 
     /// Sets the avatar displayed for a project.
     ///
-    /// Use [Load project avatar](#api-rest-api-3-project-projectIdOrKey-avatar2-post) to store avatars against the project, before using this operation to set the displayed avatar.
+    /// Use [Load project avatar](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-avatar2-post) to store avatars against the project, before using this operation to set the displayed avatar.
     ///
-    /// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
     pub fn update_project_avatar(
         &self,
         project_id_or_key: impl Into<String>,
@@ -27,7 +27,7 @@ impl<'a> ProjectAvatarsService<'a> {
 
     /// Deletes a custom avatar from a project. Note that system avatars cannot be deleted.
     ///
-    /// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
     pub fn delete_project_avatar(
         &self,
         project_id_or_key: impl Into<String>,
@@ -40,7 +40,7 @@ impl<'a> ProjectAvatarsService<'a> {
     ///
     /// Specify the avatar's local file location in the body of the request. Also, include the following headers:
     ///
-    ///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the request, for more information see [Special Headers](#special-request-headers).
+    ///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the request, for more information see [Special Headers](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#special-request-headers).
     ///  *  `Content-Type: image/image type` Valid image types are JPEG, GIF, or PNG.
     ///
     /// For example:
@@ -60,9 +60,9 @@ impl<'a> ProjectAvatarsService<'a> {
     ///
     /// The cropped image is then used to create avatars of 16x16, 24x24, 32x32, and 48x48 in size.
     ///
-    /// After creating the avatar use [Set project avatar](#api-rest-api-3-project-projectIdOrKey-avatar-put) to set it as the project's displayed avatar.
+    /// After creating the avatar use [Set project avatar](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-avatar-put) to set it as the project's displayed avatar.
     ///
-    /// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
     pub fn create_project_avatar(
         &self,
         project_id_or_key: impl Into<String>,
@@ -75,7 +75,7 @@ impl<'a> ProjectAvatarsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
     pub fn get_all_project_avatars(&self, project_id_or_key: impl Into<String>) -> GetAllProjectAvatarsRequest<'a> {
         GetAllProjectAvatarsRequest::new(self.client, project_id_or_key)
     }
@@ -83,9 +83,9 @@ impl<'a> ProjectAvatarsService<'a> {
 
 /// Sets the avatar displayed for a project.
 ///
-/// Use [Load project avatar](#api-rest-api-3-project-projectIdOrKey-avatar2-post) to store avatars against the project, before using this operation to set the displayed avatar.
+/// Use [Load project avatar](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-avatar2-post) to store avatars against the project, before using this operation to set the displayed avatar.
 ///
-/// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
 pub struct UpdateProjectAvatarRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -101,7 +101,7 @@ impl<'a> UpdateProjectAvatarRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/project/{}/avatar", self.project_id_or_key),
+            format!("/rest/api/3/project/{}/avatar", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.avatar)? {
@@ -127,7 +127,7 @@ impl<'a> UpdateProjectAvatarRequest<'a> {
 
 /// Deletes a custom avatar from a project. Note that system avatars cannot be deleted.
 ///
-/// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
 pub struct DeleteProjectAvatarRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -143,7 +143,11 @@ impl<'a> DeleteProjectAvatarRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/project/{}/avatar/{}", self.project_id_or_key, self.id),
+            format!(
+                "/rest/api/3/project/{}/avatar/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                self.id
+            ),
         );
 
         Ok(config)
@@ -164,7 +168,7 @@ impl<'a> DeleteProjectAvatarRequest<'a> {
 ///
 /// Specify the avatar's local file location in the body of the request. Also, include the following headers:
 ///
-///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the request, for more information see [Special Headers](#special-request-headers).
+///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the request, for more information see [Special Headers](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#special-request-headers).
 ///  *  `Content-Type: image/image type` Valid image types are JPEG, GIF, or PNG.
 ///
 /// For example:
@@ -184,9 +188,9 @@ impl<'a> DeleteProjectAvatarRequest<'a> {
 ///
 /// The cropped image is then used to create avatars of 16x16, 24x24, 32x32, and 48x48 in size.
 ///
-/// After creating the avatar use [Set project avatar](#api-rest-api-3-project-projectIdOrKey-avatar-put) to set it as the project's displayed avatar.
+/// After creating the avatar use [Set project avatar](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-avatar-put) to set it as the project's displayed avatar.
 ///
-/// **[Permissions](#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
 pub struct CreateProjectAvatarRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -250,7 +254,7 @@ impl<'a> CreateProjectAvatarRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/3/project/{}/avatar2", self.project_id_or_key),
+            format!("/rest/api/3/project/{}/avatar2", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         if let Some(value) = &self.x {
@@ -289,7 +293,7 @@ impl<'a> CreateProjectAvatarRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
 pub struct GetAllProjectAvatarsRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -304,7 +308,7 @@ impl<'a> GetAllProjectAvatarsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}/avatars", self.project_id_or_key),
+            format!("/rest/api/3/project/{}/avatars", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         Ok(config)

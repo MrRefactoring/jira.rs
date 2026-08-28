@@ -32,7 +32,7 @@ crate::open_enum! {
 }
 
 /// Information about tests that were executed during a build.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitBuildsRequestBuildsTestInfo {
     /// The total number of tests considered during a build.
     #[serde(rename = "totalNumber")]
@@ -49,7 +49,7 @@ pub struct SubmitBuildsRequestBuildsTestInfo {
 }
 
 /// Details about the commit the build was run against.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitBuildsRequestBuildsReferencesCommit {
     /// The ID of the commit. E.g. for a Git repository this would be the SHA1 hash.
     pub id: String,
@@ -64,7 +64,7 @@ pub struct SubmitBuildsRequestBuildsReferencesCommit {
 }
 
 /// Details about the ref the build was run on.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitBuildsRequestBuildsReferencesRef {
     /// The name of the ref the build ran on
     pub name: String,
@@ -81,7 +81,7 @@ pub struct SubmitBuildsRequestBuildsReferencesRef {
 ///
 /// Used to provide a richer user experience by enabling us to associate builds from your system with e.g.
 /// branches / commits / tags etc. supplied by another app in the Jira UI.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitBuildsRequestBuildsReferences {
     /// Details about the commit the build was run against.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -92,7 +92,7 @@ pub struct SubmitBuildsRequestBuildsReferences {
 }
 
 /// Data related to a single build
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SubmitBuildsRequestBuilds {
     /// The schema version used for this data.
     ///
@@ -147,6 +147,17 @@ pub struct SubmitBuildsRequestBuilds {
     /// * `unknown` - The build is in an unknown state.
     pub state: SubmitBuildsRequestBuildsState,
     /// The last-updated timestamp to present to the user as a summary of the state of the build.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user as a summary of the state of the build.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// The Jira issue keys or IDs to associate the build with.
@@ -163,7 +174,7 @@ pub struct SubmitBuildsRequestBuilds {
 /// Information about the provider. This is useful for auditing, logging, debugging,
 /// and other internal uses. It is not considered private information. Hence, it may not contain personally
 /// identifiable information.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitBuildsRequestProviderMetadata {
     /// An optional name of the source of the builds data.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -397,7 +408,11 @@ impl<'a> GetBuildByKeyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/builds/0.1/pipelines/{}/builds/{}", self.pipeline_id, self.build_number),
+            format!(
+                "/rest/builds/0.1/pipelines/{}/builds/{}",
+                crate::core::encode_path_segment(&self.pipeline_id),
+                self.build_number
+            ),
         );
 
         Ok(config)
@@ -433,7 +448,11 @@ impl<'a> DeleteBuildByKeyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/builds/0.1/pipelines/{}/builds/{}", self.pipeline_id, self.build_number),
+            format!(
+                "/rest/builds/0.1/pipelines/{}/builds/{}",
+                crate::core::encode_path_segment(&self.pipeline_id),
+                self.build_number
+            ),
         );
 
         Ok(config)

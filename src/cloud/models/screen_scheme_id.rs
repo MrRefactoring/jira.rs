@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The ID of a screen scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ScreenSchemeId {
     /// The ID of the screen scheme.
     pub id: i64,

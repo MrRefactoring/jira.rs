@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of the users and groups to receive the notification.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct NotificationRecipients {
     /// Whether the notification should be sent to the issue's assignees.
     #[serde(default, skip_serializing_if = "Option::is_none")]

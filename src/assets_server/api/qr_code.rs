@@ -40,7 +40,7 @@ impl<'a> GetObjectQrCodeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/assets/1.0/qrcode/object/{}/code.png", self.id),
+            format!("/rest/assets/1.0/qrcode/object/{}/code.png", crate::core::encode_path_segment(&self.id)),
         );
 
         if let Some(value) = &self.size {

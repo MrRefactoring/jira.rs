@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of an issue remote link.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct RemoteIssueLink {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub application: Option<Application>,

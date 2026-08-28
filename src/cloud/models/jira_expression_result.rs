@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The result of evaluating a Jira expression.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct JiraExpressionResult {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub meta: Option<JiraExpressionEvaluationMetaData>,

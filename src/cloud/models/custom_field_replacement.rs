@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Details about the replacement for a deleted version.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct CustomFieldReplacement {
     /// The ID of the custom field in which to replace the version number.
     #[serde(rename = "customFieldId", default, skip_serializing_if = "Option::is_none")]

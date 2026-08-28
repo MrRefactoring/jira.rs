@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Details about the mapping from a status to a new status for an issue type.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StatusMapping {
     /// The ID of the issue type.
     #[serde(rename = "issueTypeId")]

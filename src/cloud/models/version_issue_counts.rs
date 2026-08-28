@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Various counts of issues within a version.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct VersionIssueCounts {
     /// List of custom fields using the version.
     #[serde(rename = "customFieldUsage", default, skip_serializing_if = "Option::is_none")]

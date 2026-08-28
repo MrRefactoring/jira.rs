@@ -3,7 +3,8 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EventPageMeta {
     /// Value for the next cursor
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -27,7 +28,8 @@ pub struct EventPageMeta {
     pub total: Option<i64>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EventPage {
     /// 0 or more values of Event are returned
     #[serde(default, skip_serializing_if = "Option::is_none")]

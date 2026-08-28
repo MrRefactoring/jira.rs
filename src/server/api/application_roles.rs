@@ -133,7 +133,7 @@ impl<'a> GetApplicationRoleRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/applicationrole/{}", self.key),
+            format!("/rest/api/2/applicationrole/{}", crate::core::encode_path_segment(&self.key)),
         );
 
         Ok(config)
@@ -190,7 +190,7 @@ impl<'a> UpdateApplicationRoleRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/applicationrole/{}", self.key),
+            format!("/rest/api/2/applicationrole/{}", crate::core::encode_path_segment(&self.key)),
         );
 
         if let Some(value) = &self.if_match {

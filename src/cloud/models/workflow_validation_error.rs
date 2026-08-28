@@ -28,7 +28,8 @@ crate::open_enum! {
 }
 
 /// The details about a workflow validation error.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowValidationError {
     /// Additional details about the validation error.
     #[serde(rename = "additionalDetails", default, skip_serializing_if = "Option::is_none")]

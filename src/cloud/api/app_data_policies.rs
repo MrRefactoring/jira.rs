@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 /// A list of project identifiers. This parameter accepts a comma-separated list.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetPoliciesRequestIds {

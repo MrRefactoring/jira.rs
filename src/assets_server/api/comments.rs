@@ -91,7 +91,7 @@ impl<'a> GetCommentsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/assets/1.0/comment/object/{}", self.object_id),
+            format!("/rest/assets/1.0/comment/object/{}", crate::core::encode_path_segment(&self.object_id)),
         );
 
         if let Some(value) = &self.asc {

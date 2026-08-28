@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Field association scheme field search results.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FieldAssociationSchemeFieldSearchResult {
     #[serde(rename = "allowedOperations", default, skip_serializing_if = "Option::is_none")]
     pub allowed_operations: Option<Vec<String>>,

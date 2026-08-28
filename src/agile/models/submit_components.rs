@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The result of a successful submitDevopsComponents request.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SubmitComponents {
     /// The IDs of Components that have been accepted for submission.
     ///

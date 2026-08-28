@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// A list of the issues matched to a JQL query or details of errors encountered during matching.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueMatchesForJQL {
     /// A list of errors.
     pub errors: Vec<String>,

@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ServiceDeskCustomer {
     /// List of users, specified by account IDs, to add to or remove from a service desk.
     #[serde(rename = "accountIds", default, skip_serializing_if = "Option::is_none")]

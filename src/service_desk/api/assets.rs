@@ -14,12 +14,13 @@ impl<'a> AssetsService<'a> {
 
     /// Returns a list of Assets workspace IDs. Include a workspace ID in the path to access the [Assets REST APIs](https://developer.atlassian.com/cloud/assets/rest).
     ///
-    /// **[Permissions](#permissions) required**: Any
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Any
     pub fn get_assets_workspaces(&self) -> GetAssetsWorkspacesRequest<'a> {
         GetAssetsWorkspacesRequest::new(self.client)
     }
 
     /// This endpoint is deprecated, please use /assets/workspace/.
+    #[deprecated(note = "This endpoint is deprecated, please use /assets/workspace/.")]
     pub fn get_insight_workspaces(&self) -> GetInsightWorkspacesRequest<'a> {
         GetInsightWorkspacesRequest::new(self.client)
     }
@@ -27,7 +28,7 @@ impl<'a> AssetsService<'a> {
 
 /// Returns a list of Assets workspace IDs. Include a workspace ID in the path to access the [Assets REST APIs](https://developer.atlassian.com/cloud/assets/rest).
 ///
-/// **[Permissions](#permissions) required**: Any
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Any
 pub struct GetAssetsWorkspacesRequest<'a> {
     client: &'a crate::core::Client,
     start: Option<i64>,
@@ -39,7 +40,7 @@ impl<'a> GetAssetsWorkspacesRequest<'a> {
         Self { client, start: None, limit: None }
     }
 
-    /// The starting index of the returned workspace IDs. Base index: 0 See the [Pagination](#pagination) section for more details.
+    /// The starting index of the returned workspace IDs. Base index: 0 See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
     #[must_use]
     pub fn start(mut self, value: i64) -> Self {
         self.start = Some(value);
@@ -47,7 +48,7 @@ impl<'a> GetAssetsWorkspacesRequest<'a> {
         self
     }
 
-    /// The maximum number of workspace IDs to return per page. Default: 50 See the [Pagination](#pagination) section for more details.
+    /// The maximum number of workspace IDs to return per page. Default: 50 See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
     #[must_use]
     pub fn limit(mut self, value: i64) -> Self {
         self.limit = Some(value);

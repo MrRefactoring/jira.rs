@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Details about an issue security scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SecuritySchemeWithProjects {
     /// The default level ID of the issue security scheme.
     #[serde(rename = "defaultLevel", default, skip_serializing_if = "Option::is_none")]

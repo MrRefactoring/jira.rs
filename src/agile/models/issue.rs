@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A page of changelogs.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueChangelog {
     /// The list of changelogs.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -21,14 +22,16 @@ pub struct IssueChangelog {
 }
 
 /// A list of editable field details.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueEditmeta {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub fields: Option<std::collections::HashMap<String, serde_json::Value>>,
 }
 
 /// Details about an issue.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Issue {
     /// A page of changelogs.
     #[serde(default, skip_serializing_if = "Option::is_none")]

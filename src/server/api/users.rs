@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 /// the keys of the projects we are finding assignable users for, comma-separated
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum FindBulkAssignableUsersRequestProjectKeys {
@@ -1839,7 +1839,7 @@ impl<'a> GetUserPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/user/properties/{}", self.property_key),
+            format!("/rest/api/2/user/properties/{}", crate::core::encode_path_segment(&self.property_key)),
         );
 
         if let Some(value) = &self.user_key {
@@ -1904,7 +1904,7 @@ impl<'a> SetUserPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/user/properties/{}", self.property_key),
+            format!("/rest/api/2/user/properties/{}", crate::core::encode_path_segment(&self.property_key)),
         );
 
         if let Some(value) = &self.user_key {
@@ -1964,7 +1964,7 @@ impl<'a> DeleteUserPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/user/properties/{}", self.property_key),
+            format!("/rest/api/2/user/properties/{}", crate::core::encode_path_segment(&self.property_key)),
         );
 
         if let Some(value) = &self.user_key {
@@ -2098,7 +2098,7 @@ impl<'a> DeleteSessionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/user/session/{}", self.username),
+            format!("/rest/api/2/user/session/{}", crate::core::encode_path_segment(&self.username)),
         );
 
         Ok(config)

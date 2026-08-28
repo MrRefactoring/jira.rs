@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// The user details.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct NewUserDetails {
     /// The email address for the user.
     #[serde(rename = "emailAddress")]

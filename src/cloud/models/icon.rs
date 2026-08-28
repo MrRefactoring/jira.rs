@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 ///
 ///  *  for a status icon, no status icon displays in Jira.
 ///  *  for the remote object icon, the default link icon displays in Jira.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct Icon {
     /// The URL of the tooltip, used only for a status icon. If not set, the status icon in Jira is not clickable.
     #[serde(default, skip_serializing_if = "Option::is_none")]

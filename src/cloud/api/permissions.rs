@@ -3,8 +3,8 @@
 use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
-/// A list of permission keys. (Required) This parameter accepts a comma-separated list. To get the list of available permissions, use [Get all permissions](#api-rest-api-3-permissions-get).
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// A list of permission keys. (Required) This parameter accepts a comma-separated list. To get the list of available permissions, use [Get all permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetMyPermissionsRequestPermissions {
@@ -41,7 +41,7 @@ impl<'a> PermissionsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_my_permissions(&self) -> GetMyPermissionsRequest<'a> {
         GetMyPermissionsRequest::new(self.client)
     }
@@ -54,7 +54,7 @@ impl<'a> PermissionsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_all_permissions(&self) -> GetAllPermissionsRequest<'a> {
         GetAllPermissionsRequest::new(self.client)
     }
@@ -80,7 +80,7 @@ impl<'a> PermissionsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) to check the permissions for other users, otherwise none. However, Connect apps can make a call from the app server to the product to obtain permission details for any user, without admin permission. This Connect app ability doesn't apply to calls made using AP.request() in a browser.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) to check the permissions for other users, otherwise none. However, Connect apps can make a call from the app server to the product to obtain permission details for any user, without admin permission. This Connect app ability doesn't apply to calls made using AP.request() in a browser.
     pub fn get_bulk_permissions(
         &self,
         bulk_permissions_request: BulkPermissionsRequest,
@@ -92,7 +92,7 @@ impl<'a> PermissionsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_permitted_projects(&self, permissions_keys: PermissionsKeys) -> GetPermittedProjectsRequest<'a> {
         GetPermittedProjectsRequest::new(self.client, permissions_keys)
     }
@@ -115,7 +115,7 @@ impl<'a> PermissionsService<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetMyPermissionsRequest<'a> {
     client: &'a crate::core::Client,
     project_key: Option<String>,
@@ -175,7 +175,7 @@ impl<'a> GetMyPermissionsRequest<'a> {
         self
     }
 
-    /// A list of permission keys. (Required) This parameter accepts a comma-separated list. To get the list of available permissions, use [Get all permissions](#api-rest-api-3-permissions-get).
+    /// A list of permission keys. (Required) This parameter accepts a comma-separated list. To get the list of available permissions, use [Get all permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get).
     #[must_use]
     pub fn permissions(mut self, value: GetMyPermissionsRequestPermissions) -> Self {
         self.permissions = Some(value);
@@ -264,7 +264,7 @@ impl<'a> GetMyPermissionsRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetAllPermissionsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -313,7 +313,7 @@ impl<'a> GetAllPermissionsRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) to check the permissions for other users, otherwise none. However, Connect apps can make a call from the app server to the product to obtain permission details for any user, without admin permission. This Connect app ability doesn't apply to calls made using AP.request() in a browser.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) to check the permissions for other users, otherwise none. However, Connect apps can make a call from the app server to the product to obtain permission details for any user, without admin permission. This Connect app ability doesn't apply to calls made using AP.request() in a browser.
 pub struct GetBulkPermissionsRequest<'a> {
     client: &'a crate::core::Client,
     bulk_permissions_request: BulkPermissionsRequest,
@@ -354,7 +354,7 @@ impl<'a> GetBulkPermissionsRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetPermittedProjectsRequest<'a> {
     client: &'a crate::core::Client,
     permissions_keys: PermissionsKeys,

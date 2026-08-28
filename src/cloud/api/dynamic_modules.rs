@@ -14,21 +14,21 @@ impl<'a> DynamicModulesService<'a> {
 
     /// Returns all modules registered dynamically by the calling app.
     ///
-    /// **[Permissions](#permissions) required:** Only Connect apps can make this request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect apps can make this request.
     pub fn get_modules(&self) -> GetModulesRequest<'a> {
         GetModulesRequest::new(self.client)
     }
 
     /// Registers a list of modules.
     ///
-    /// **[Permissions](#permissions) required:** Only Connect apps can make this request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect apps can make this request.
     pub fn register_modules(&self, connect_modules: ConnectModules) -> RegisterModulesRequest<'a> {
         RegisterModulesRequest::new(self.client, connect_modules)
     }
 
     /// Remove all or a list of modules registered by the calling app.
     ///
-    /// **[Permissions](#permissions) required:** Only Connect apps can make this request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect apps can make this request.
     pub fn remove_modules(&self) -> RemoveModulesRequest<'a> {
         RemoveModulesRequest::new(self.client)
     }
@@ -36,7 +36,7 @@ impl<'a> DynamicModulesService<'a> {
 
 /// Returns all modules registered dynamically by the calling app.
 ///
-/// **[Permissions](#permissions) required:** Only Connect apps can make this request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect apps can make this request.
 pub struct GetModulesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -69,7 +69,7 @@ impl<'a> GetModulesRequest<'a> {
 
 /// Registers a list of modules.
 ///
-/// **[Permissions](#permissions) required:** Only Connect apps can make this request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect apps can make this request.
 pub struct RegisterModulesRequest<'a> {
     client: &'a crate::core::Client,
     connect_modules: ConnectModules,
@@ -110,7 +110,7 @@ impl<'a> RegisterModulesRequest<'a> {
 
 /// Remove all or a list of modules registered by the calling app.
 ///
-/// **[Permissions](#permissions) required:** Only Connect apps can make this request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect apps can make this request.
 pub struct RemoveModulesRequest<'a> {
     client: &'a crate::core::Client,
     module_key: Option<Vec<String>>,

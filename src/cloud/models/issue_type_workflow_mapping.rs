@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Details about the mapping between an issue type and a workflow.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueTypeWorkflowMapping {
     /// The ID of the issue type. Not required if updating the issue type-workflow mapping.
     #[serde(rename = "issueType", default, skip_serializing_if = "Option::is_none")]

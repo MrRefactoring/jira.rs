@@ -14,16 +14,16 @@ impl<'a> JiraSettingsService<'a> {
 
     /// Returns all application properties or an application property.
     ///
-    /// If you specify a value for the `key` parameter, then an application property is returned as an object (not in an array). Otherwise, an array of all editable application properties is returned. See [Set application property](#api-rest-api-3-application-properties-id-put) for descriptions of editable properties.
+    /// If you specify a value for the `key` parameter, then an application property is returned as an object (not in an array). Otherwise, an array of all editable application properties is returned. See [Set application property](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-application/#api-rest-api-3-application-properties-id-put) for descriptions of editable properties.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_application_property(&self) -> GetApplicationPropertyRequest<'a> {
         GetApplicationPropertyRequest::new(self.client)
     }
 
     /// Returns the application properties that are accessible on the *Advanced Settings* page. To navigate to the *Advanced Settings* page in Jira, choose the Jira icon > **Jira settings** > **System**, **General Configuration** and then click **Advanced Settings** (in the upper right).
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_advanced_settings(&self) -> GetAdvancedSettingsRequest<'a> {
         GetAdvancedSettingsRequest::new(self.client)
     }
@@ -79,7 +79,7 @@ impl<'a> JiraSettingsService<'a> {
     ///
     /// *Note: Be careful when changing [application properties and advanced settings](https://confluence.atlassian.com/x/vYXKM).*
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn set_application_property(
         &self,
         id: impl Into<String>,
@@ -90,7 +90,7 @@ impl<'a> JiraSettingsService<'a> {
 
     /// Returns the [global settings](https://confluence.atlassian.com/x/qYXKM) in Jira. These settings determine whether optional features (for example, subtasks, time tracking, and others) are enabled. If time tracking is enabled, this operation also returns the time tracking configuration.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_configuration(&self) -> GetConfigurationRequest<'a> {
         GetConfigurationRequest::new(self.client)
     }
@@ -98,9 +98,9 @@ impl<'a> JiraSettingsService<'a> {
 
 /// Returns all application properties or an application property.
 ///
-/// If you specify a value for the `key` parameter, then an application property is returned as an object (not in an array). Otherwise, an array of all editable application properties is returned. See [Set application property](#api-rest-api-3-application-properties-id-put) for descriptions of editable properties.
+/// If you specify a value for the `key` parameter, then an application property is returned as an object (not in an array). Otherwise, an array of all editable application properties is returned. See [Set application property](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-application/#api-rest-api-3-application-properties-id-put) for descriptions of editable properties.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetApplicationPropertyRequest<'a> {
     client: &'a crate::core::Client,
     key: Option<String>,
@@ -170,7 +170,7 @@ impl<'a> GetApplicationPropertyRequest<'a> {
 
 /// Returns the application properties that are accessible on the *Advanced Settings* page. To navigate to the *Advanced Settings* page in Jira, choose the Jira icon > **Jira settings** > **System**, **General Configuration** and then click **Advanced Settings** (in the upper right).
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetAdvancedSettingsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -252,7 +252,7 @@ impl<'a> GetAdvancedSettingsRequest<'a> {
 ///
 /// *Note: Be careful when changing [application properties and advanced settings](https://confluence.atlassian.com/x/vYXKM).*
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct SetApplicationPropertyRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -268,7 +268,7 @@ impl<'a> SetApplicationPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/application-properties/{}", self.id),
+            format!("/rest/api/3/application-properties/{}", crate::core::encode_path_segment(&self.id)),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -289,7 +289,7 @@ impl<'a> SetApplicationPropertyRequest<'a> {
 
 /// Returns the [global settings](https://confluence.atlassian.com/x/qYXKM) in Jira. These settings determine whether optional features (for example, subtasks, time tracking, and others) are enabled. If time tracking is enabled, this operation also returns the time tracking configuration.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetConfigurationRequest<'a> {
     client: &'a crate::core::Client,
 }

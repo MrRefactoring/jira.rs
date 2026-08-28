@@ -9,7 +9,8 @@ pub enum CustomFieldContextDefaultValueDateTimeType {
 }
 
 /// The default value for a date time custom field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueDateTime {
     /// The ID of the context.
     #[serde(rename = "contextId")]

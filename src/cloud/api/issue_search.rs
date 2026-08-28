@@ -16,7 +16,7 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about issues in the response. Note that, unlike the majority of instances where `expand` is specified, `expand` is defined as a comma-delimited string of values. The expand options are:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about issues in the response. Note that, unlike the majority of instances where `expand` is specified, `expand` is defined as a comma-delimited string of values. The expand options are:
 ///
 ///  *  `renderedFields` Returns field values rendered in HTML format.
 ///  *  `names` Returns the display name of each field.
@@ -28,7 +28,7 @@ crate::open_enum! {
 ///  *  `versionedRepresentations` Instead of `fields`, returns `versionedRepresentations` a JSON array containing each version of a field's value, with the highest numbered item representing the most recent version.
 ///
 /// Examples: `"names,changelog"` Returns the display name of each field as well as a list of recent updates to an issue.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SearchAndReconsileIssuesUsingJqlRequestExpand {
@@ -57,14 +57,14 @@ impl<'a> IssueSearchService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_issue_picker_resource(&self) -> GetIssuePickerResourceRequest<'a> {
         GetIssuePickerResourceRequest::new(self.client)
     }
 
     /// Checks whether one or more issues would be returned by one or more JQL queries.
     ///
-    /// **[Permissions](#permissions) required:** None, however, issues are only matched against JQL queries where the user has:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None, however, issues are only matched against JQL queries where the user has:
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -76,7 +76,7 @@ impl<'a> IssueSearchService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** Issues are included in the response where the user has:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Issues are included in the response where the user has:
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -86,9 +86,9 @@ impl<'a> IssueSearchService<'a> {
 
     /// Searches for issues using [JQL](https://confluence.atlassian.com/x/egORLQ). Recent updates might not be immediately visible in the returned search results. If you need [read-after-write](https://developer.atlassian.com/cloud/jira/platform/search-and-reconcile/) consistency, you can utilize the `reconcileIssues` parameter to ensure stronger consistency assurances. This operation can be accessed anonymously.
     ///
-    /// If the JQL query expression is too large to be encoded as a query parameter, use the [POST](#api-rest-api-3-search-post) version of this resource.
+    /// If the JQL query expression is too large to be encoded as a query parameter, use the [POST](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-search/#api-rest-api-3-search-post) version of this resource.
     ///
-    /// **[Permissions](#permissions) required:** Issues are included in the response where the user has:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Issues are included in the response where the user has:
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -98,7 +98,7 @@ impl<'a> IssueSearchService<'a> {
 
     /// Searches for issues using [JQL](https://confluence.atlassian.com/x/egORLQ). Recent updates might not be immediately visible in the returned search results. If you need [read-after-write](https://developer.atlassian.com/cloud/jira/platform/search-and-reconcile/) consistency, you can utilize the `reconcileIssues` parameter to ensure stronger consistency assurances. This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** Issues are included in the response where the user has:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Issues are included in the response where the user has:
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -119,7 +119,7 @@ impl<'a> IssueSearchService<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetIssuePickerResourceRequest<'a> {
     client: &'a crate::core::Client,
     query: Option<String>,
@@ -236,7 +236,7 @@ impl<'a> GetIssuePickerResourceRequest<'a> {
 
 /// Checks whether one or more issues would be returned by one or more JQL queries.
 ///
-/// **[Permissions](#permissions) required:** None, however, issues are only matched against JQL queries where the user has:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None, however, issues are only matched against JQL queries where the user has:
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -279,7 +279,7 @@ impl<'a> MatchIssuesRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** Issues are included in the response where the user has:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Issues are included in the response where the user has:
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -323,9 +323,9 @@ impl<'a> CountIssuesRequest<'a> {
 
 /// Searches for issues using [JQL](https://confluence.atlassian.com/x/egORLQ). Recent updates might not be immediately visible in the returned search results. If you need [read-after-write](https://developer.atlassian.com/cloud/jira/platform/search-and-reconcile/) consistency, you can utilize the `reconcileIssues` parameter to ensure stronger consistency assurances. This operation can be accessed anonymously.
 ///
-/// If the JQL query expression is too large to be encoded as a query parameter, use the [POST](#api-rest-api-3-search-post) version of this resource.
+/// If the JQL query expression is too large to be encoded as a query parameter, use the [POST](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-search/#api-rest-api-3-search-post) version of this resource.
 ///
-/// **[Permissions](#permissions) required:** Issues are included in the response where the user has:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Issues are included in the response where the user has:
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -406,7 +406,7 @@ impl<'a> SearchAndReconsileIssuesUsingJqlRequest<'a> {
     ///
     /// Multiple `fields` parameters can be included in a request.
     ///
-    /// Note: By default, this resource returns IDs only. This differs from [GET issue](#api-rest-api-3-issue-issueIdOrKey-get) where the default is all fields.
+    /// Note: By default, this resource returns IDs only. This differs from [GET issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueIdOrKey-get) where the default is all fields.
     #[must_use]
     pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
         self.fields = Some(value.into_iter().map(Into::into).collect());
@@ -414,7 +414,7 @@ impl<'a> SearchAndReconsileIssuesUsingJqlRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) to include additional information about issues in the response. Note that, unlike the majority of instances where `expand` is specified, `expand` is defined as a comma-delimited string of values. The expand options are:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about issues in the response. Note that, unlike the majority of instances where `expand` is specified, `expand` is defined as a comma-delimited string of values. The expand options are:
     ///
     ///  *  `renderedFields` Returns field values rendered in HTML format.
     ///  *  `names` Returns the display name of each field.
@@ -521,7 +521,7 @@ impl<'a> SearchAndReconsileIssuesUsingJqlRequest<'a> {
 
 /// Searches for issues using [JQL](https://confluence.atlassian.com/x/egORLQ). Recent updates might not be immediately visible in the returned search results. If you need [read-after-write](https://developer.atlassian.com/cloud/jira/platform/search-and-reconcile/) consistency, you can utilize the `reconcileIssues` parameter to ensure stronger consistency assurances. This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** Issues are included in the response where the user has:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Issues are included in the response where the user has:
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.

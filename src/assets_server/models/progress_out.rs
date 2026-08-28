@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ProgressOut {
     #[serde(rename = "progressInPercent", default, skip_serializing_if = "Option::is_none")]
     pub progress_in_percent: Option<i64>,
@@ -34,6 +35,16 @@ pub struct ProgressOut {
     pub result_message: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub actor: Option<String>,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "startDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub start_date: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "startDate",
         default,
@@ -41,6 +52,16 @@ pub struct ProgressOut {
         deserialize_with = "crate::core::deserialize_timestamp"
     )]
     pub start_date: Option<String>,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "finishedDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub finished_date: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "finishedDate",
         default,
@@ -48,6 +69,16 @@ pub struct ProgressOut {
         deserialize_with = "crate::core::deserialize_timestamp"
     )]
     pub finished_date: Option<String>,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "estimatedFinishDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub estimated_finish_date: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "estimatedFinishDate",
         default,

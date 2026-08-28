@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Trigger configuration for workflow transitions.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PreviewTrigger {
     /// The ID of the trigger.
     #[serde(default, skip_serializing_if = "Option::is_none")]

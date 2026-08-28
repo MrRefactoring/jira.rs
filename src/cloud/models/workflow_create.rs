@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The details of the workflows to create.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct WorkflowCreate {
     /// The description of the workflow to create.
     #[serde(default, skip_serializing_if = "Option::is_none")]

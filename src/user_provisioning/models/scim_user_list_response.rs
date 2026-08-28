@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// SCIM user list response
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ScimUserListResponse {
     /// SCIM schemas that define list of response.
     #[serde(default, skip_serializing_if = "Option::is_none")]

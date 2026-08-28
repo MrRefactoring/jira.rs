@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The description of the page of issues loaded by the provided JQL query.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssuesJqlMetaData {
     /// The number of issues that were loaded in this evaluation.
     pub count: i64,

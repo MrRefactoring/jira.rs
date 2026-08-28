@@ -14,7 +14,7 @@ impl<'a> IssueResolutionsService<'a> {
 
     /// Returns an issue resolution value.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_resolution(&self, id: impl Into<String>) -> GetResolutionRequest<'a> {
         GetResolutionRequest::new(self.client, id)
     }
@@ -22,7 +22,7 @@ impl<'a> IssueResolutionsService<'a> {
 
 /// Returns an issue resolution value.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetResolutionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -35,8 +35,10 @@ impl<'a> GetResolutionRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/3/resolution/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/resolution/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }

@@ -11,7 +11,8 @@ crate::open_enum! {
 }
 
 /// Attributes of this object
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct OrgModelAttributes {
     /// Name of this Org
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -19,7 +20,8 @@ pub struct OrgModelAttributes {
 }
 
 /// Link to the related Domains of the Org
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct OrgModelRelationshipsDomains {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub links: Option<LinkRelatedModel>,
@@ -28,7 +30,8 @@ pub struct OrgModelRelationshipsDomains {
 }
 
 /// Link to the related Users of the Org
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct OrgModelRelationshipsUsers {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub links: Option<LinkRelatedModel>,
@@ -37,7 +40,8 @@ pub struct OrgModelRelationshipsUsers {
 }
 
 /// Relationships of this object
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct OrgModelRelationships {
     /// Link to the related Domains of the Org
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -47,7 +51,8 @@ pub struct OrgModelRelationships {
     pub users: Option<OrgModelRelationshipsUsers>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct OrgModel {
     /// Unique identifier of the Org
     pub id: String,

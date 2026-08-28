@@ -78,7 +78,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct MultiDirectoryUserSearchRequestSortBy {
     /// The name of the field to sort the results by.
     pub field: MultiDirectoryUserSearchRequestSortByField,
@@ -86,7 +87,7 @@ pub struct MultiDirectoryUserSearchRequestSortBy {
     pub direction: MultiDirectoryUserSearchRequestSortByDirection,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct MultiDirectoryUserSearchRequest {
     /// Sets the starting point for the page of results to return.
     #[serde(default, skip_serializing_if = "Option::is_none")]

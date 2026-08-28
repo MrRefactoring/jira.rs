@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// An issue priority with sequence information.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PriorityWithSequence {
     /// The description of the issue priority.
     #[serde(default, skip_serializing_if = "Option::is_none")]

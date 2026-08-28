@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetForgeAppPropertyKeysKeys {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
@@ -10,7 +11,8 @@ pub struct GetForgeAppPropertyKeysKeys {
     pub self_: Option<String>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetForgeAppPropertyKeys {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub keys: Option<Vec<GetForgeAppPropertyKeysKeys>>,

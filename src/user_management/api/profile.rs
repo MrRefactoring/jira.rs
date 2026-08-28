@@ -42,7 +42,7 @@ impl<'a> GetProfileRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/users/{}/manage/profile", self.account_id),
+            format!("/users/{}/manage/profile", crate::core::encode_path_segment(&self.account_id)),
         );
 
         Ok(config)
@@ -79,7 +79,7 @@ impl<'a> UpdateProfileRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PATCH,
-            format!("/users/{}/manage/profile", self.account_id),
+            format!("/users/{}/manage/profile", crate::core::encode_path_segment(&self.account_id)),
         );
 
         let body = match serde_json::to_value(&self.atlassian_account_user)? {

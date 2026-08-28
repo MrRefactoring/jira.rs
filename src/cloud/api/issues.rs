@@ -15,7 +15,7 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about the issues in the response. This parameter accepts a comma-separated list. Expand options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about the issues in the response. This parameter accepts a comma-separated list. Expand options include:
 ///
 ///  *  `renderedFields` Returns field values rendered in HTML format.
 ///  *  `names` Returns the display name of each field.
@@ -24,7 +24,7 @@ crate::open_enum! {
 ///  *  `editmeta` Returns information about how each field can be edited.
 ///  *  `changelog` Returns a list of recent updates to an issue, sorted by date, starting from the most recent.
 ///  *  `versionedRepresentations` Returns a JSON array for each version of a field's value, with the highest number representing the most recent version. Note: When included in the request, the `fields` parameter is ignored.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssueRequestExpand {
@@ -48,8 +48,8 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about transitions in the response. This parameter accepts `transitions.fields`, which returns information about the fields in the transition screen for each transition. Fields hidden from the screen are not returned. Use this information to populate the `fields` and `update` fields in [Transition issue](#api-rest-api-3-issue-issueIdOrKey-transitions-post).
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about transitions in the response. This parameter accepts `transitions.fields`, which returns information about the fields in the transition screen for each transition. Fields hidden from the screen are not returned. Use this information to populate the `fields` and `update` fields in [Transition issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueIdOrKey-transitions-post).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetTransitionsRequestExpand {
@@ -75,7 +75,7 @@ impl<'a> IssuesService<'a> {
     ///
     /// Issues are identified by their ID or key, and optionally changelogs can be filtered by their field IDs. You can request the changelogs of up to 1000 issues and can filter them by up to 10 field IDs.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the projects that the issues are in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issues.
@@ -85,30 +85,30 @@ impl<'a> IssuesService<'a> {
 
     /// Creates an issue or, where the option to create subtasks is enabled in Jira, a subtask. A transition may be applied, to move the issue or subtask to a workflow step other than the default start step, and issue properties set.
     ///
-    /// The content of the issue or subtask is defined using `update` and `fields`. The fields that can be set in the issue or subtask are determined using the [ Get create issue metadata](#api-rest-api-3-issue-createmeta-get). These are the same fields that appear on the issue's create screen. Note that the `description`, `environment`, and any `textarea` type custom fields (multi-line text fields) take Atlassian Document Format content. Single line custom fields (`textfield`) accept a string and don't handle Atlassian Document Format content.
+    /// The content of the issue or subtask is defined using `update` and `fields`. The fields that can be set in the issue or subtask are determined using the [ Get create issue metadata](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-createmeta-get). These are the same fields that appear on the issue's create screen. Note that the `description`, `environment`, and any `textarea` type custom fields (multi-line text fields) take Atlassian Document Format content. Single line custom fields (`textfield`) accept a string and don't handle Atlassian Document Format content.
     ///
     /// Creating a subtask differs from creating an issue as follows:
     ///
-    ///  *  `issueType` must be set to a subtask issue type (use [ Get create issue metadata](#api-rest-api-3-issue-createmeta-get) to find subtask issue types).
+    ///  *  `issueType` must be set to a subtask issue type (use [ Get create issue metadata](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-createmeta-get) to find subtask issue types).
     ///  *  `parent` must contain the ID or key of the parent issue.
     ///
     /// In a next-gen project any issue may be made a child providing that the parent and child are members of the same project.
     ///
-    /// **[Permissions](#permissions) required:** *Browse projects* and *Create issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project in which the issue or subtask is created.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* and *Create issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project in which the issue or subtask is created.
     pub fn create_issue(&self, issue_update_details: IssueUpdateDetails) -> CreateIssueRequest<'a> {
         CreateIssueRequest::new(self.client, issue_update_details)
     }
 
     /// Creates upto **50** issues and, where the option to create subtasks is enabled in Jira, subtasks. Transitions may be applied, to move the issues or subtasks to a workflow step other than the default start step, and issue properties set.
     ///
-    /// The content of each issue or subtask is defined using `update` and `fields`. The fields that can be set in the issue or subtask are determined using the [ Get create issue metadata](#api-rest-api-3-issue-createmeta-get). These are the same fields that appear on the issues' create screens. Note that the `description`, `environment`, and any `textarea` type custom fields (multi-line text fields) take Atlassian Document Format content. Single line custom fields (`textfield`) accept a string and don't handle Atlassian Document Format content.
+    /// The content of each issue or subtask is defined using `update` and `fields`. The fields that can be set in the issue or subtask are determined using the [ Get create issue metadata](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-createmeta-get). These are the same fields that appear on the issues' create screens. Note that the `description`, `environment`, and any `textarea` type custom fields (multi-line text fields) take Atlassian Document Format content. Single line custom fields (`textfield`) accept a string and don't handle Atlassian Document Format content.
     ///
     /// Creating a subtask differs from creating an issue as follows:
     ///
-    ///  *  `issueType` must be set to a subtask issue type (use [ Get create issue metadata](#api-rest-api-3-issue-createmeta-get) to find subtask issue types).
+    ///  *  `issueType` must be set to a subtask issue type (use [ Get create issue metadata](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-createmeta-get) to find subtask issue types).
     ///  *  `parent` the must contain the ID or key of the parent issue.
     ///
-    /// **[Permissions](#permissions) required:** *Browse projects* and *Create issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project in which each issue or subtask is created.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* and *Create issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project in which each issue or subtask is created.
     pub fn create_issues(&self, issues_update: IssuesUpdate) -> CreateIssuesRequest<'a> {
         CreateIssuesRequest::new(self.client, issues_update)
     }
@@ -130,7 +130,7 @@ impl<'a> IssuesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** Issues are included in the response where the user has:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Issues are included in the response where the user has:
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -138,11 +138,11 @@ impl<'a> IssuesService<'a> {
         BulkFetchIssuesRequest::new(self.client, bulk_fetch_issue_request)
     }
 
-    /// Returns a page of issue type metadata for a specified project. Use the information to populate the requests in [ Create issue](#api-rest-api-3-issue-post) and [Create issues](#api-rest-api-3-issue-bulk-post).
+    /// Returns a page of issue type metadata for a specified project. Use the information to populate the requests in [ Create issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post) and [Create issues](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-bulk-post).
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Create issues* [project permission](https://confluence.atlassian.com/x/yodKLg) in the requested projects.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Create issues* [project permission](https://confluence.atlassian.com/x/yodKLg) in the requested projects.
     pub fn get_create_issue_meta_issue_types(
         &self,
         project_id_or_key: impl Into<String>,
@@ -150,11 +150,11 @@ impl<'a> IssuesService<'a> {
         GetCreateIssueMetaIssueTypesRequest::new(self.client, project_id_or_key)
     }
 
-    /// Returns a page of field metadata for a specified project and issuetype id. Use the information to populate the requests in [ Create issue](#api-rest-api-3-issue-post) and [Create issues](#api-rest-api-3-issue-bulk-post).
+    /// Returns a page of field metadata for a specified project and issuetype id. Use the information to populate the requests in [ Create issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post) and [Create issues](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-bulk-post).
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Create issues* [project permission](https://confluence.atlassian.com/x/yodKLg) in the requested projects.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Create issues* [project permission](https://confluence.atlassian.com/x/yodKLg) in the requested projects.
     pub fn get_create_issue_meta_issue_type_id(
         &self,
         project_id_or_key: impl Into<String>,
@@ -169,7 +169,7 @@ impl<'a> IssuesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -177,9 +177,9 @@ impl<'a> IssuesService<'a> {
         GetIssueRequest::new(self.client, issue_id_or_key)
     }
 
-    /// Edits an issue. Issue properties may be updated as part of the edit. Please note that issue transition is not supported and is ignored here. To transition an issue, please use [Transition issue](#api-rest-api-3-issue-issueIdOrKey-transitions-post).
+    /// Edits an issue. Issue properties may be updated as part of the edit. Please note that issue transition is not supported and is ignored here. To transition an issue, please use [Transition issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueIdOrKey-transitions-post).
     ///
-    /// The edits to the issue's fields are defined using `update` and `fields`. The fields that can be edited are determined using [ Get edit issue metadata](#api-rest-api-3-issue-issueIdOrKey-editmeta-get).
+    /// The edits to the issue's fields are defined using `update` and `fields`. The fields that can be edited are determined using [ Get edit issue metadata](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueIdOrKey-editmeta-get).
     ///
     /// **Note:** This endpoint doesn't check screen configurations to determine if a field is editable. For more context, see the [Deprecation of override screen security](https://community.developer.atlassian.com/t/deprecation-of-override-screen-security/97153) announcement.
     ///
@@ -189,7 +189,7 @@ impl<'a> IssuesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* and *Edit issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -207,7 +207,7 @@ impl<'a> IssuesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* and *Delete issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -224,7 +224,7 @@ impl<'a> IssuesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse Projects* and *Assign Issues* [ project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -236,11 +236,11 @@ impl<'a> IssuesService<'a> {
         AssignIssueRequest::new(self.client, issue_id_or_key, dashboard_user)
     }
 
-    /// Returns a [paginated](#pagination) list of all changelogs for an issue sorted by date, starting from the oldest.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of all changelogs for an issue sorted by date, starting from the oldest.
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -252,7 +252,7 @@ impl<'a> IssuesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -264,7 +264,7 @@ impl<'a> IssuesService<'a> {
         GetChangeLogsByIdsRequest::new(self.client, issue_id_or_key, issue_changelog_ids)
     }
 
-    /// Returns the edit screen fields for an issue that are visible to and editable by the user. Use the information to populate the requests in [Edit issue](#api-rest-api-3-issue-issueIdOrKey-put).
+    /// Returns the edit screen fields for an issue that are visible to and editable by the user. Use the information to populate the requests in [Edit issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueIdOrKey-put).
     ///
     /// This endpoint will check for these conditions:
     ///
@@ -287,7 +287,7 @@ impl<'a> IssuesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -299,7 +299,7 @@ impl<'a> IssuesService<'a> {
 
     /// Creates an email notification for an issue and adds it to the mail queue.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -313,7 +313,7 @@ impl<'a> IssuesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required: A list or transition is returned only when the user has:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required: A list or transition is returned only when the user has:**
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -325,11 +325,11 @@ impl<'a> IssuesService<'a> {
 
     /// Performs an issue transition and, if the transition has a screen, updates the fields from the transition screen.
     ///
-    /// sortByCategory To update the fields on the transition screen, specify the fields in the `fields` or `update` parameters in the request body. Get details about the fields using [ Get transitions](#api-rest-api-3-issue-issueIdOrKey-transitions-get) with the `transitions.fields` expand.
+    /// sortByCategory To update the fields on the transition screen, specify the fields in the `fields` or `update` parameters in the request body. Get details about the fields using [ Get transitions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueIdOrKey-transitions-get) with the `transitions.fields` expand.
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* and *Transition issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -348,7 +348,7 @@ impl<'a> IssuesService<'a> {
 ///
 /// Issues are identified by their ID or key, and optionally changelogs can be filtered by their field IDs. You can request the changelogs of up to 1000 issues and can filter them by up to 10 field IDs.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the projects that the issues are in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issues.
@@ -390,16 +390,16 @@ impl<'a> GetBulkChangelogsRequest<'a> {
 
 /// Creates an issue or, where the option to create subtasks is enabled in Jira, a subtask. A transition may be applied, to move the issue or subtask to a workflow step other than the default start step, and issue properties set.
 ///
-/// The content of the issue or subtask is defined using `update` and `fields`. The fields that can be set in the issue or subtask are determined using the [ Get create issue metadata](#api-rest-api-3-issue-createmeta-get). These are the same fields that appear on the issue's create screen. Note that the `description`, `environment`, and any `textarea` type custom fields (multi-line text fields) take Atlassian Document Format content. Single line custom fields (`textfield`) accept a string and don't handle Atlassian Document Format content.
+/// The content of the issue or subtask is defined using `update` and `fields`. The fields that can be set in the issue or subtask are determined using the [ Get create issue metadata](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-createmeta-get). These are the same fields that appear on the issue's create screen. Note that the `description`, `environment`, and any `textarea` type custom fields (multi-line text fields) take Atlassian Document Format content. Single line custom fields (`textfield`) accept a string and don't handle Atlassian Document Format content.
 ///
 /// Creating a subtask differs from creating an issue as follows:
 ///
-///  *  `issueType` must be set to a subtask issue type (use [ Get create issue metadata](#api-rest-api-3-issue-createmeta-get) to find subtask issue types).
+///  *  `issueType` must be set to a subtask issue type (use [ Get create issue metadata](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-createmeta-get) to find subtask issue types).
 ///  *  `parent` must contain the ID or key of the parent issue.
 ///
 /// In a next-gen project any issue may be made a child providing that the parent and child are members of the same project.
 ///
-/// **[Permissions](#permissions) required:** *Browse projects* and *Create issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project in which the issue or subtask is created.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* and *Create issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project in which the issue or subtask is created.
 pub struct CreateIssueRequest<'a> {
     client: &'a crate::core::Client,
     update_history: Option<bool>,
@@ -463,14 +463,14 @@ impl<'a> CreateIssueRequest<'a> {
 
 /// Creates upto **50** issues and, where the option to create subtasks is enabled in Jira, subtasks. Transitions may be applied, to move the issues or subtasks to a workflow step other than the default start step, and issue properties set.
 ///
-/// The content of each issue or subtask is defined using `update` and `fields`. The fields that can be set in the issue or subtask are determined using the [ Get create issue metadata](#api-rest-api-3-issue-createmeta-get). These are the same fields that appear on the issues' create screens. Note that the `description`, `environment`, and any `textarea` type custom fields (multi-line text fields) take Atlassian Document Format content. Single line custom fields (`textfield`) accept a string and don't handle Atlassian Document Format content.
+/// The content of each issue or subtask is defined using `update` and `fields`. The fields that can be set in the issue or subtask are determined using the [ Get create issue metadata](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-createmeta-get). These are the same fields that appear on the issues' create screens. Note that the `description`, `environment`, and any `textarea` type custom fields (multi-line text fields) take Atlassian Document Format content. Single line custom fields (`textfield`) accept a string and don't handle Atlassian Document Format content.
 ///
 /// Creating a subtask differs from creating an issue as follows:
 ///
-///  *  `issueType` must be set to a subtask issue type (use [ Get create issue metadata](#api-rest-api-3-issue-createmeta-get) to find subtask issue types).
+///  *  `issueType` must be set to a subtask issue type (use [ Get create issue metadata](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-createmeta-get) to find subtask issue types).
 ///  *  `parent` the must contain the ID or key of the parent issue.
 ///
-/// **[Permissions](#permissions) required:** *Browse projects* and *Create issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project in which each issue or subtask is created.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* and *Create issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project in which each issue or subtask is created.
 pub struct CreateIssuesRequest<'a> {
     client: &'a crate::core::Client,
     issues_update: IssuesUpdate,
@@ -524,7 +524,7 @@ impl<'a> CreateIssuesRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** Issues are included in the response where the user has:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Issues are included in the response where the user has:
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -564,11 +564,11 @@ impl<'a> BulkFetchIssuesRequest<'a> {
     }
 }
 
-/// Returns a page of issue type metadata for a specified project. Use the information to populate the requests in [ Create issue](#api-rest-api-3-issue-post) and [Create issues](#api-rest-api-3-issue-bulk-post).
+/// Returns a page of issue type metadata for a specified project. Use the information to populate the requests in [ Create issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post) and [Create issues](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-bulk-post).
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Create issues* [project permission](https://confluence.atlassian.com/x/yodKLg) in the requested projects.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Create issues* [project permission](https://confluence.atlassian.com/x/yodKLg) in the requested projects.
 pub struct GetCreateIssueMetaIssueTypesRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -601,7 +601,10 @@ impl<'a> GetCreateIssueMetaIssueTypesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/issue/createmeta/{}/issuetypes", self.project_id_or_key),
+            format!(
+                "/rest/api/3/issue/createmeta/{}/issuetypes",
+                crate::core::encode_path_segment(&self.project_id_or_key)
+            ),
         );
 
         if let Some(value) = &self.start_at {
@@ -626,11 +629,11 @@ impl<'a> GetCreateIssueMetaIssueTypesRequest<'a> {
     }
 }
 
-/// Returns a page of field metadata for a specified project and issuetype id. Use the information to populate the requests in [ Create issue](#api-rest-api-3-issue-post) and [Create issues](#api-rest-api-3-issue-bulk-post).
+/// Returns a page of field metadata for a specified project and issuetype id. Use the information to populate the requests in [ Create issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-post) and [Create issues](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-bulk-post).
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Create issues* [project permission](https://confluence.atlassian.com/x/yodKLg) in the requested projects.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Create issues* [project permission](https://confluence.atlassian.com/x/yodKLg) in the requested projects.
 pub struct GetCreateIssueMetaIssueTypeIdRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -674,7 +677,11 @@ impl<'a> GetCreateIssueMetaIssueTypeIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/issue/createmeta/{}/issuetypes/{}", self.project_id_or_key, self.issue_type_id),
+            format!(
+                "/rest/api/3/issue/createmeta/{}/issuetypes/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                crate::core::encode_path_segment(&self.issue_type_id)
+            ),
         );
 
         if let Some(value) = &self.start_at {
@@ -705,7 +712,7 @@ impl<'a> GetCreateIssueMetaIssueTypeIdRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -748,7 +755,7 @@ impl<'a> GetIssueRequest<'a> {
     ///
     /// This parameter may be specified multiple times. For example, `fields=field1,field2& fields=field3`.
     ///
-    /// Note: All fields are returned by default. This differs from [Search for issues using JQL (GET)](#api-rest-api-3-search-get) and [Search for issues using JQL (POST)](#api-rest-api-3-search-post) where the default is all navigable fields.
+    /// Note: All fields are returned by default. This differs from [Search for issues using JQL (GET)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-search/#api-rest-api-3-search-get) and [Search for issues using JQL (POST)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-search/#api-rest-api-3-search-post) where the default is all navigable fields.
     #[must_use]
     pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
         self.fields = Some(value.into_iter().map(Into::into).collect());
@@ -764,7 +771,7 @@ impl<'a> GetIssueRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) to include additional information about the issues in the response. This parameter accepts a comma-separated list. Expand options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about the issues in the response. This parameter accepts a comma-separated list. Expand options include:
     ///
     ///  *  `renderedFields` Returns field values rendered in HTML format.
     ///  *  `names` Returns the display name of each field.
@@ -799,7 +806,7 @@ impl<'a> GetIssueRequest<'a> {
         self
     }
 
-    /// Whether the project in which the issue is created is added to the user's **Recently viewed** project list, as shown under **Projects** in Jira. This also populates the [JQL issues search](#api-rest-api-3-search-get) `lastViewed` field.
+    /// Whether the project in which the issue is created is added to the user's **Recently viewed** project list, as shown under **Projects** in Jira. This also populates the [JQL issues search](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-search/#api-rest-api-3-search-get) `lastViewed` field.
     #[must_use]
     pub fn update_history(mut self, value: bool) -> Self {
         self.update_history = Some(value);
@@ -819,7 +826,7 @@ impl<'a> GetIssueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/issue/{}", self.issue_id_or_key),
+            format!("/rest/api/3/issue/{}", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.fields {
@@ -860,9 +867,9 @@ impl<'a> GetIssueRequest<'a> {
     }
 }
 
-/// Edits an issue. Issue properties may be updated as part of the edit. Please note that issue transition is not supported and is ignored here. To transition an issue, please use [Transition issue](#api-rest-api-3-issue-issueIdOrKey-transitions-post).
+/// Edits an issue. Issue properties may be updated as part of the edit. Please note that issue transition is not supported and is ignored here. To transition an issue, please use [Transition issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueIdOrKey-transitions-post).
 ///
-/// The edits to the issue's fields are defined using `update` and `fields`. The fields that can be edited are determined using [ Get edit issue metadata](#api-rest-api-3-issue-issueIdOrKey-editmeta-get).
+/// The edits to the issue's fields are defined using `update` and `fields`. The fields that can be edited are determined using [ Get edit issue metadata](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueIdOrKey-editmeta-get).
 ///
 /// **Note:** This endpoint doesn't check screen configurations to determine if a field is editable. For more context, see the [Deprecation of override screen security](https://community.developer.atlassian.com/t/deprecation-of-override-screen-security/97153) announcement.
 ///
@@ -872,7 +879,7 @@ impl<'a> GetIssueRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* and *Edit issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -929,7 +936,7 @@ impl<'a> EditIssueRequest<'a> {
         self
     }
 
-    /// Whether the response should contain the issue with fields edited in this request. The returned issue will have the same format as in the [Get issue API](#api-rest-api-3-issue-issueidorkey-get).
+    /// Whether the response should contain the issue with fields edited in this request. The returned issue will have the same format as in the [Get issue API](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueidorkey-get).
     #[must_use]
     pub fn return_issue(mut self, value: bool) -> Self {
         self.return_issue = Some(value);
@@ -949,7 +956,7 @@ impl<'a> EditIssueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/issue/{}", self.issue_id_or_key),
+            format!("/rest/api/3/issue/{}", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.notify_users {
@@ -1001,7 +1008,7 @@ impl<'a> EditIssueRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* and *Delete issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -1028,7 +1035,7 @@ impl<'a> DeleteIssueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/issue/{}", self.issue_id_or_key),
+            format!("/rest/api/3/issue/{}", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.delete_subtasks {
@@ -1058,7 +1065,7 @@ impl<'a> DeleteIssueRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse Projects* and *Assign Issues* [ project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -1077,7 +1084,7 @@ impl<'a> AssignIssueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/issue/{}/assignee", self.issue_id_or_key),
+            format!("/rest/api/3/issue/{}/assignee", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.dashboard_user)? {
@@ -1101,11 +1108,11 @@ impl<'a> AssignIssueRequest<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of all changelogs for an issue sorted by date, starting from the oldest.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of all changelogs for an issue sorted by date, starting from the oldest.
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -1141,7 +1148,7 @@ impl<'a> GetChangeLogsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/issue/{}/changelog", self.issue_id_or_key),
+            format!("/rest/api/3/issue/{}/changelog", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.start_at {
@@ -1170,7 +1177,7 @@ impl<'a> GetChangeLogsRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -1193,7 +1200,7 @@ impl<'a> GetChangeLogsByIdsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/3/issue/{}/changelog/list", self.issue_id_or_key),
+            format!("/rest/api/3/issue/{}/changelog/list", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.issue_changelog_ids)? {
@@ -1217,7 +1224,7 @@ impl<'a> GetChangeLogsByIdsRequest<'a> {
     }
 }
 
-/// Returns the edit screen fields for an issue that are visible to and editable by the user. Use the information to populate the requests in [Edit issue](#api-rest-api-3-issue-issueIdOrKey-put).
+/// Returns the edit screen fields for an issue that are visible to and editable by the user. Use the information to populate the requests in [Edit issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueIdOrKey-put).
 ///
 /// This endpoint will check for these conditions:
 ///
@@ -1240,7 +1247,7 @@ impl<'a> GetChangeLogsByIdsRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -1283,7 +1290,7 @@ impl<'a> GetEditIssueMetaRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/issue/{}/editmeta", self.issue_id_or_key),
+            format!("/rest/api/3/issue/{}/editmeta", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.override_screen_security {
@@ -1312,7 +1319,7 @@ impl<'a> GetEditIssueMetaRequest<'a> {
 
 /// Creates an email notification for an issue and adds it to the mail queue.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -1331,7 +1338,7 @@ impl<'a> NotifyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/3/issue/{}/notify", self.issue_id_or_key),
+            format!("/rest/api/3/issue/{}/notify", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.notification)? {
@@ -1361,7 +1368,7 @@ impl<'a> NotifyRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required: A list or transition is returned only when the user has:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required: A list or transition is returned only when the user has:**
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -1390,7 +1397,7 @@ impl<'a> GetTransitionsRequest<'a> {
         }
     }
 
-    /// Use [expand](#expansion) to include additional information about transitions in the response. This parameter accepts `transitions.fields`, which returns information about the fields in the transition screen for each transition. Fields hidden from the screen are not returned. Use this information to populate the `fields` and `update` fields in [Transition issue](#api-rest-api-3-issue-issueIdOrKey-transitions-post).
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about transitions in the response. This parameter accepts `transitions.fields`, which returns information about the fields in the transition screen for each transition. Fields hidden from the screen are not returned. Use this information to populate the `fields` and `update` fields in [Transition issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueIdOrKey-transitions-post).
     #[must_use]
     pub fn expand(mut self, value: GetTransitionsRequestExpand) -> Self {
         self.expand = Some(value);
@@ -1434,7 +1441,7 @@ impl<'a> GetTransitionsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/issue/{}/transitions", self.issue_id_or_key),
+            format!("/rest/api/3/issue/{}/transitions", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.expand {
@@ -1477,11 +1484,11 @@ impl<'a> GetTransitionsRequest<'a> {
 
 /// Performs an issue transition and, if the transition has a screen, updates the fields from the transition screen.
 ///
-/// sortByCategory To update the fields on the transition screen, specify the fields in the `fields` or `update` parameters in the request body. Get details about the fields using [ Get transitions](#api-rest-api-3-issue-issueIdOrKey-transitions-get) with the `transitions.fields` expand.
+/// sortByCategory To update the fields on the transition screen, specify the fields in the `fields` or `update` parameters in the request body. Get details about the fields using [ Get transitions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueIdOrKey-transitions-get) with the `transitions.fields` expand.
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* and *Transition issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -1504,7 +1511,7 @@ impl<'a> DoTransitionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/3/issue/{}/transitions", self.issue_id_or_key),
+            format!("/rest/api/3/issue/{}/transitions", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.issue_update_details)? {

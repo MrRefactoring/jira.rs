@@ -12,7 +12,8 @@ crate::open_enum! {
 }
 
 /// The request details to generate template from a project
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SaveProjectTemplateRequest {
     /// The ID of the target project
     #[serde(rename = "projectId", default, skip_serializing_if = "Option::is_none")]

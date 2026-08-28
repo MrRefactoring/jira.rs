@@ -66,7 +66,7 @@ impl<'a> ChangeOrderObjectTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/assets/1.0/objecttype/{}/position", self.affected_id),
+            format!("/rest/assets/1.0/objecttype/{}/position", crate::core::encode_path_segment(&self.affected_id)),
         );
 
         let body = match serde_json::to_value(&self.js_tree_position)? {
@@ -149,7 +149,7 @@ impl<'a> LoadObjectTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/assets/1.0/objecttype/{}", self.id),
+            format!("/rest/assets/1.0/objecttype/{}", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -189,7 +189,7 @@ impl<'a> UpdateObjectTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/assets/1.0/objecttype/{}", self.id),
+            format!("/rest/assets/1.0/objecttype/{}", crate::core::encode_path_segment(&self.id)),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -223,7 +223,7 @@ impl<'a> DeleteObjectTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/assets/1.0/objecttype/{}", self.id),
+            format!("/rest/assets/1.0/objecttype/{}", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -328,7 +328,7 @@ impl<'a> FindObjectTypeAttributesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/assets/1.0/objecttype/{}/attributes", self.id),
+            format!("/rest/assets/1.0/objecttype/{}/attributes", crate::core::encode_path_segment(&self.id)),
         );
 
         if let Some(value) = &self.order_by_required {

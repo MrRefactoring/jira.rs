@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A paginated list of users sharing the filter. This includes users that are members of the groups or can browse the projects that the filter is shared with.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct UserList {
     /// The index of the last item returned on the page.
     #[serde(rename = "end-index", default, skip_serializing_if = "Option::is_none")]

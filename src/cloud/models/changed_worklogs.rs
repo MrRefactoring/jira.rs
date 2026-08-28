@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// List of changed worklogs.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ChangedWorklogs {
     #[serde(rename = "lastPage", default, skip_serializing_if = "Option::is_none")]
     pub last_page: Option<bool>,

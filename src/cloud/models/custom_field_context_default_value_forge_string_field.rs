@@ -9,7 +9,8 @@ pub enum CustomFieldContextDefaultValueForgeStringFieldType {
 }
 
 /// The default text for a Forge string custom field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueForgeStringField {
     /// The ID of the context.
     #[serde(rename = "contextId")]

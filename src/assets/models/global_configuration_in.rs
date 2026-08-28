@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GlobalConfigurationIn {
     #[serde(rename = "allowOtherObjectSchema", default, skip_serializing_if = "Option::is_none")]
     pub allow_other_object_schema: Option<bool>,

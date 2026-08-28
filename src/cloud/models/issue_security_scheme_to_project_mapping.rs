@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Details about an project using security scheme mapping.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueSecuritySchemeToProjectMapping {
     #[serde(rename = "issueSecuritySchemeId", default, skip_serializing_if = "Option::is_none")]
     pub issue_security_scheme_id: Option<String>,

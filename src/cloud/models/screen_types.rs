@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// The IDs of the screens for the screen types of the screen scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ScreenTypes {
     /// The ID of the create screen.
     #[serde(default, skip_serializing_if = "Option::is_none")]

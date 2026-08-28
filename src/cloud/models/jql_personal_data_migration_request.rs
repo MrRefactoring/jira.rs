@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// The JQL queries to be converted.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct JQLPersonalDataMigrationRequest {
     /// A list of queries with user identifiers. Maximum of 100 queries.
     #[serde(rename = "queryStrings", default, skip_serializing_if = "Option::is_none")]

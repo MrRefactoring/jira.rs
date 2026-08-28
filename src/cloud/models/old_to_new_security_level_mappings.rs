@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct OldToNewSecurityLevelMappings {
     /// The new issue security level ID. Providing null will clear the assigned old level from issues.
     #[serde(rename = "newLevelId")]

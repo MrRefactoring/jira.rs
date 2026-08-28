@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// The input attribute values
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ObjectAttributeValueIn {
     /// | Type (of the object type attribute)        | Description |
     /// | ------------------------------------------ | ----------- |

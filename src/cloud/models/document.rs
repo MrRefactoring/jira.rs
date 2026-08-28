@@ -9,7 +9,7 @@ crate::open_enum! {
 }
 
 /// A document in [Atlassian Document Format](https://developer.atlassian.com/cloud/jira/platform/apis/document/structure/).
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Document {
     pub r#type: DocumentType,
     pub version: f64,

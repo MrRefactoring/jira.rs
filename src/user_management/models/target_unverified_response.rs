@@ -9,7 +9,8 @@ crate::open_enum! {
 }
 
 /// Cannot manage an unverified target account
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct TargetUnverifiedResponse {
     pub key: TargetUnverifiedResponseKey,
 }

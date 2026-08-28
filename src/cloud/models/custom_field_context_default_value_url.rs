@@ -9,7 +9,8 @@ pub enum CustomFieldContextDefaultValueURLType {
 }
 
 /// The default value for a URL custom field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueURL {
     /// The ID of the context.
     #[serde(rename = "contextId")]

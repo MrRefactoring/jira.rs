@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Operations allowed on a workflow
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowOperations {
     /// Whether the workflow can be deleted.
     #[serde(rename = "canDelete")]

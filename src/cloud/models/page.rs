@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// A page of items.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Page<T> {
     /// Whether this is the last page.
     #[serde(rename = "isLast")]

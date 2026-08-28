@@ -3,7 +3,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum EventObjectModelLinks {
@@ -13,7 +13,8 @@ pub enum EventObjectModelLinks {
     Other(serde_json::Value),
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EventObjectModel {
     /// Unique identifier of the event object
     pub id: String,

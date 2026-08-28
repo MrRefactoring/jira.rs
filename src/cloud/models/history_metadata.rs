@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of issue history metadata.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct HistoryMetadata {
     /// The activity described in the history record.
     #[serde(rename = "activityDescription", default, skip_serializing_if = "Option::is_none")]

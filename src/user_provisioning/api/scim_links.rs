@@ -66,7 +66,11 @@ impl<'a> GetScimLinksRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/user-provisioning/v1/org/{}/user/{}/get-scim-links", self.org_id, self.aa_id),
+            format!(
+                "/admin/user-provisioning/v1/org/{}/user/{}/get-scim-links",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.aa_id)
+            ),
         );
 
         Ok(config)
@@ -103,7 +107,10 @@ impl<'a> GetScimLinksByEmailRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/admin/user-provisioning/v1/org/{}/get-scim-links-for-email", self.org_id),
+            format!(
+                "/admin/user-provisioning/v1/org/{}/get-scim-links-for-email",
+                crate::core::encode_path_segment(&self.org_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.get_scim_links_for_email_request)? {
@@ -156,7 +163,9 @@ impl<'a> UnlinkScimUserRequest<'a> {
             crate::core::Method::PATCH,
             format!(
                 "/admin/user-provisioning/v1/org/{}/scimDirectoryId/{}/scimUserId/{}/unlink",
-                self.org_id, self.scim_directory_id, self.scim_user_id
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.scim_directory_id),
+                crate::core::encode_path_segment(&self.scim_user_id)
             ),
         );
 
@@ -194,7 +203,11 @@ impl<'a> DeleteProvisioningRecordRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/admin/user-provisioning/v1/org/{}/user/{}/onlyDeleteUserInDB", self.org_id, self.aa_id),
+            format!(
+                "/admin/user-provisioning/v1/org/{}/user/{}/onlyDeleteUserInDB",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.aa_id)
+            ),
         );
 
         Ok(config)

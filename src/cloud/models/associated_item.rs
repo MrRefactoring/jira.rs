@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of an item associated with the changed record.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AssociatedItem {
     /// The ID of the associated record.
     #[serde(default, skip_serializing_if = "Option::is_none")]

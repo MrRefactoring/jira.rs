@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Issue types associated with the workflow for a project.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowProjectIssueTypeUsageDTO {
     #[serde(rename = "issueTypes", default, skip_serializing_if = "Option::is_none")]
     pub issue_types: Option<WorkflowProjectIssueTypeUsagePage>,

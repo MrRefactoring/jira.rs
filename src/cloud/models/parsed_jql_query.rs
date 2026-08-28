@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of a parsed JQL query.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ParsedJqlQuery {
     /// The list of syntax or validation errors.
     #[serde(default, skip_serializing_if = "Option::is_none")]

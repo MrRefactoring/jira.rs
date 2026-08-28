@@ -60,7 +60,7 @@ impl<'a> GetQueueSettingsOnProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/admin/queues/{}", self.project_key),
+            format!("/rest/servicedeskapi/admin/queues/{}", crate::core::encode_path_segment(&self.project_key)),
         );
 
         Ok(config)
@@ -141,7 +141,10 @@ impl<'a> SetShouldQueuesIncludeCountOnProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/servicedeskapi/admin/queues/{}/include-count", self.project_key),
+            format!(
+                "/rest/servicedeskapi/admin/queues/{}/include-count",
+                crate::core::encode_path_segment(&self.project_key)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(self.body)?));
@@ -224,7 +227,10 @@ impl<'a> SetShouldQueuesUseCountCacheOnProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/servicedeskapi/admin/queues/{}/cache-count", self.project_key),
+            format!(
+                "/rest/servicedeskapi/admin/queues/{}/cache-count",
+                crate::core::encode_path_segment(&self.project_key)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(self.body)?));

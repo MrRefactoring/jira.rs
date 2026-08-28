@@ -38,7 +38,8 @@ crate::open_enum! {
 }
 
 /// Data related to a specific component in a specific workspace that is affected by incidents.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetComponentById {
     /// The DevOpsComponentData schema version used for this devops component data.
     ///
@@ -76,6 +77,19 @@ pub struct GetComponentById {
     /// The last-updated timestamp to present to the user the last time the DevOps Component was updated.
     ///
     /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user the last time the DevOps Component was updated.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
 }

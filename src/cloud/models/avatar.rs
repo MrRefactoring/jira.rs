@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of an avatar.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct Avatar {
     /// The file name of the avatar icon. Returned for system avatars.
     #[serde(rename = "fileName", default, skip_serializing_if = "Option::is_none")]

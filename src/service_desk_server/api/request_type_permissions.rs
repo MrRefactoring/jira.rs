@@ -61,7 +61,8 @@ impl<'a> GetPermissionsByRequestTypeIdRequest<'a> {
             crate::core::Method::GET,
             format!(
                 "/rest/servicedeskapi/servicedesk/{}/requesttype/{}/permission",
-                self.service_desk_id, self.request_type_id
+                crate::core::encode_path_segment(&self.service_desk_id),
+                crate::core::encode_path_segment(&self.request_type_id)
             ),
         );
 
@@ -108,7 +109,8 @@ impl<'a> UpsertRequestTypePermissionRequest<'a> {
             crate::core::Method::PUT,
             format!(
                 "/rest/servicedeskapi/servicedesk/{}/requesttype/{}/permission",
-                self.service_desk_id, self.request_type_id
+                crate::core::encode_path_segment(&self.service_desk_id),
+                crate::core::encode_path_segment(&self.request_type_id)
             ),
         );
 

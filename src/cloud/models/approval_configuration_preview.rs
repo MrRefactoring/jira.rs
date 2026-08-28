@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Approval configuration.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ApprovalConfigurationPreview {
     /// The active approval configuration.
     #[serde(default, skip_serializing_if = "Option::is_none")]

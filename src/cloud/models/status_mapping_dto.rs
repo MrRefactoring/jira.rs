@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The mapping of old to new status ID for a specific project and issue type.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StatusMappingDTO {
     /// The issue type for the status mapping.
     #[serde(rename = "issueTypeId")]

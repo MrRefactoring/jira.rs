@@ -3,7 +3,8 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ServletContextClassLoaderDefinedPackages {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -27,7 +28,8 @@ pub struct ServletContextClassLoaderDefinedPackages {
     pub sealed: Option<bool>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ServletContextClassLoaderParentDefinedPackages {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -51,7 +53,8 @@ pub struct ServletContextClassLoaderParentDefinedPackages {
     pub sealed: Option<bool>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ServletContextClassLoaderParentUnnamedModuleDescriptor {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub automatic: Option<bool>,
@@ -59,7 +62,8 @@ pub struct ServletContextClassLoaderParentUnnamedModuleDescriptor {
     pub open: Option<bool>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ServletContextClassLoaderParentUnnamedModule {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub annotations: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
@@ -79,7 +83,8 @@ pub struct ServletContextClassLoaderParentUnnamedModule {
     pub packages: Option<Vec<String>>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ServletContextClassLoaderParent {
     #[serde(rename = "defaultAssertionStatus", default, skip_serializing_if = "Option::is_none")]
     pub default_assertion_status: Option<bool>,
@@ -93,7 +98,8 @@ pub struct ServletContextClassLoaderParent {
     pub unnamed_module: Option<ServletContextClassLoaderParentUnnamedModule>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ServletContextClassLoaderUnnamedModuleDescriptor {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub automatic: Option<bool>,
@@ -101,7 +107,8 @@ pub struct ServletContextClassLoaderUnnamedModuleDescriptor {
     pub open: Option<bool>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ServletContextClassLoaderUnnamedModule {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub annotations: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
@@ -121,7 +128,8 @@ pub struct ServletContextClassLoaderUnnamedModule {
     pub packages: Option<Vec<String>>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ServletContextClassLoader {
     #[serde(rename = "defaultAssertionStatus", default, skip_serializing_if = "Option::is_none")]
     pub default_assertion_status: Option<bool>,
@@ -161,7 +169,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ServletContext {
     #[serde(rename = "attributeNames", default, skip_serializing_if = "Option::is_none")]
     pub attribute_names: Option<std::collections::HashMap<String, serde_json::Value>>,

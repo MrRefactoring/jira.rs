@@ -14,16 +14,16 @@ impl<'a> CustomerService<'a> {
 
     /// This method adds a customer to the Jira Service Management instance by passing a JSON file including an email address and display name. The display name does not need to be unique. The record's identifiers, `name` and `key`, are automatically generated from the request details.
     ///
-    /// **[Permissions](#permissions) required**: Jira Administrator Global permission
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Jira Administrator Global permission
     pub fn create_customer(&self, customer_create: CustomerCreate) -> CreateCustomerRequest<'a> {
         CreateCustomerRequest::new(self.client, customer_create)
     }
 
     /// Creates a customer account on behalf of jsd-nutmeg.
     ///
-    /// This endpoint is restricted to jsd-nutmeg via ASAP authentication. It provides the same capability as the public \{@code POST /servicedeskapi/customer\} endpoint, but does not require a User Context Token (UCT) or Connect app user \\u2014 authorization is enforced entirely via the ASAP token.
+    /// This endpoint is restricted to jsd-nutmeg via ASAP authentication. It provides the same capability as the public `POST /servicedeskapi/customer` endpoint, but does not require a User Context Token (UCT) or Connect app user — authorization is enforced entirely via the ASAP token.
     ///
-    /// No user permission checks are performed; \{@code null\} is passed as the acting user to bypass the permission check in the underlying service.
+    /// No user permission checks are performed; `null` is passed as the acting user to bypass the permission check in the underlying service.
     pub fn create_customer_skipping_permission_check(
         &self,
         customer_create: CustomerCreate,
@@ -33,7 +33,7 @@ impl<'a> CustomerService<'a> {
 
     /// This method revokes portal-only access for a particular user, removing their ability to log in to the Jira Service Management customer portal as a portal-only user. After revocation, the user cannot submit or view requests through the portal.
     ///
-    /// **[Permissions](#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
     pub fn revoke_portal_only_access_for_user(
         &self,
         account_id: impl Into<String>,
@@ -44,7 +44,7 @@ impl<'a> CustomerService<'a> {
 
 /// This method adds a customer to the Jira Service Management instance by passing a JSON file including an email address and display name. The display name does not need to be unique. The record's identifiers, `name` and `key`, are automatically generated from the request details.
 ///
-/// **[Permissions](#permissions) required**: Jira Administrator Global permission
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Jira Administrator Global permission
 pub struct CreateCustomerRequest<'a> {
     client: &'a crate::core::Client,
     strict_conflict_status_code: Option<bool>,
@@ -98,9 +98,9 @@ impl<'a> CreateCustomerRequest<'a> {
 
 /// Creates a customer account on behalf of jsd-nutmeg.
 ///
-/// This endpoint is restricted to jsd-nutmeg via ASAP authentication. It provides the same capability as the public \{@code POST /servicedeskapi/customer\} endpoint, but does not require a User Context Token (UCT) or Connect app user \\u2014 authorization is enforced entirely via the ASAP token.
+/// This endpoint is restricted to jsd-nutmeg via ASAP authentication. It provides the same capability as the public `POST /servicedeskapi/customer` endpoint, but does not require a User Context Token (UCT) or Connect app user — authorization is enforced entirely via the ASAP token.
 ///
-/// No user permission checks are performed; \{@code null\} is passed as the acting user to bypass the permission check in the underlying service.
+/// No user permission checks are performed; `null` is passed as the acting user to bypass the permission check in the underlying service.
 pub struct CreateCustomerSkippingPermissionCheckRequest<'a> {
     client: &'a crate::core::Client,
     strict_conflict_status_code: Option<bool>,
@@ -112,7 +112,7 @@ impl<'a> CreateCustomerSkippingPermissionCheckRequest<'a> {
         Self { client, customer_create, strict_conflict_status_code: None }
     }
 
-    /// Optional boolean flag; when \{@code true\}, returns 409 Conflict for duplicate email instead of the default 400.
+    /// Optional boolean flag; when `true`, returns 409 Conflict for duplicate email instead of the default 400.
     #[must_use]
     pub fn strict_conflict_status_code(mut self, value: bool) -> Self {
         self.strict_conflict_status_code = Some(value);
@@ -156,7 +156,7 @@ impl<'a> CreateCustomerSkippingPermissionCheckRequest<'a> {
 
 /// This method revokes portal-only access for a particular user, removing their ability to log in to the Jira Service Management customer portal as a portal-only user. After revocation, the user cannot submit or view requests through the portal.
 ///
-/// **[Permissions](#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
 pub struct RevokePortalOnlyAccessForUserRequest<'a> {
     client: &'a crate::core::Client,
     account_id: String,
@@ -171,7 +171,10 @@ impl<'a> RevokePortalOnlyAccessForUserRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/servicedeskapi/customer/user/{}/revoke-portal-only-access", self.account_id),
+            format!(
+                "/rest/servicedeskapi/customer/user/{}/revoke-portal-only-access",
+                crate::core::encode_path_segment(&self.account_id)
+            ),
         );
 
         Ok(config)

@@ -180,8 +180,10 @@ impl<'a> GetComponentRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/2/component/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/2/component/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -218,8 +220,10 @@ impl<'a> UpdateComponentRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/rest/api/2/component/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/2/component/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
 
@@ -259,8 +263,10 @@ impl<'a> DeleteComponentRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/rest/api/2/component/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/2/component/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         if let Some(value) = &self.move_issues_to {
             config.query.push(("moveIssuesTo".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
@@ -295,7 +301,7 @@ impl<'a> GetComponentRelatedIssuesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/component/{}/relatedIssueCounts", self.id),
+            format!("/rest/api/2/component/{}/relatedIssueCounts", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)

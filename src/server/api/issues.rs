@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetAgileIssueRequestExpand {
@@ -15,7 +15,7 @@ pub enum GetAgileIssueRequestExpand {
 }
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetAgileIssueRequestFields {
@@ -60,7 +60,7 @@ impl<'a> IssuesService<'a> {
     /// Note that this resource changes the estimation field of the issue regardless of appearance the field on the screen.
     /// Original time tracking estimation field accepts estimation in formats like "1w", "2d", "3h", "20m" or number which represent number of minutes.
     /// However, internally the field stores and returns the estimation as a number of seconds.
-    /// The field used for estimation on the given board can be obtained from [board configuration resource](#agile/1.0/board-getConfiguration).
+    /// The field used for estimation on the given board can be obtained from [board configuration resource](https://developer.atlassian.com/server/jira/platform/rest/v11003/intro#agile/1.0/board-getConfiguration).
     /// More information about the field are returned by edit meta resource or field resource.
     pub fn estimate_issue_for_board(
         &self,
@@ -138,14 +138,14 @@ impl<'a> IssuesService<'a> {
     /// - -comment - include everything except comments (the default is *all for get-issue)
     /// - *all,-comment - include everything except comments
     ///
-    /// The {@code properties} param is similar to {@code fields} and specifies a comma-separated list of issue
-    /// properties to include. Unlike {@code fields}, properties are not included by default. To include them all
-    /// send {@code ?properties=*all}. You can also include only specified properties or exclude some properties
+    /// The `properties` param is similar to `fields` and specifies a comma-separated list of issue
+    /// properties to include. Unlike `fields`, properties are not included by default. To include them all
+    /// send `?properties=*all`. You can also include only specified properties or exclude some properties
     /// with a minus (-) sign.
     ///
-    /// - {@code *all} - include all properties
-    /// - {@code *all, -prop1} - include all properties except {@code prop1}
-    /// - {@code prop1, prop1} - include {@code prop1} and {@code prop2} properties
+    /// - `*all` - include all properties
+    /// - `*all, -prop1` - include all properties except `prop1`
+    /// - `prop1, prop1` - include `prop1` and `prop2` properties
     ///
     /// Jira will attempt to identify the issue by the issueIdOrKey path parameter. This can be an issue id,
     /// or an issue key. If the issue cannot be found via an exact match, Jira will also look for the issue in a case-insensitive way,
@@ -534,7 +534,7 @@ impl<'a> GetAgileIssueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/agile/1.0/issue/{}", self.issue_id_or_key),
+            format!("/rest/agile/1.0/issue/{}", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.expand {
@@ -590,7 +590,7 @@ impl<'a> GetIssueEstimationForBoardRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/agile/1.0/issue/{}/estimation", self.issue_id_or_key),
+            format!("/rest/agile/1.0/issue/{}/estimation", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.board_id {
@@ -615,7 +615,7 @@ impl<'a> GetIssueEstimationForBoardRequest<'a> {
 /// Note that this resource changes the estimation field of the issue regardless of appearance the field on the screen.
 /// Original time tracking estimation field accepts estimation in formats like "1w", "2d", "3h", "20m" or number which represent number of minutes.
 /// However, internally the field stores and returns the estimation as a number of seconds.
-/// The field used for estimation on the given board can be obtained from [board configuration resource](#agile/1.0/board-getConfiguration).
+/// The field used for estimation on the given board can be obtained from [board configuration resource](https://developer.atlassian.com/server/jira/platform/rest/v11003/intro#agile/1.0/board-getConfiguration).
 /// More information about the field are returned by edit meta resource or field resource.
 pub struct EstimateIssueForBoardRequest<'a> {
     client: &'a crate::core::Client,
@@ -641,7 +641,7 @@ impl<'a> EstimateIssueForBoardRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/agile/1.0/issue/{}/estimation", self.issue_id_or_key),
+            format!("/rest/agile/1.0/issue/{}/estimation", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.board_id {
@@ -864,7 +864,10 @@ impl<'a> GetCreateIssueMetaProjectIssueTypesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/createmeta/{}/issuetypes", self.project_id_or_key),
+            format!(
+                "/rest/api/2/issue/createmeta/{}/issuetypes",
+                crate::core::encode_path_segment(&self.project_id_or_key)
+            ),
         );
 
         if let Some(value) = &self.max_results {
@@ -933,7 +936,11 @@ impl<'a> GetCreateIssueMetaFieldsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/createmeta/{}/issuetypes/{}", self.project_id_or_key, self.issue_type_id),
+            format!(
+                "/rest/api/2/issue/createmeta/{}/issuetypes/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                crate::core::encode_path_segment(&self.issue_type_id)
+            ),
         );
 
         if let Some(value) = &self.max_results {
@@ -1139,14 +1146,14 @@ impl<'a> CreateReciprocalRemoteIssueLinkRequest<'a> {
 /// - -comment - include everything except comments (the default is *all for get-issue)
 /// - *all,-comment - include everything except comments
 ///
-/// The {@code properties} param is similar to {@code fields} and specifies a comma-separated list of issue
-/// properties to include. Unlike {@code fields}, properties are not included by default. To include them all
-/// send {@code ?properties=*all}. You can also include only specified properties or exclude some properties
+/// The `properties` param is similar to `fields` and specifies a comma-separated list of issue
+/// properties to include. Unlike `fields`, properties are not included by default. To include them all
+/// send `?properties=*all`. You can also include only specified properties or exclude some properties
 /// with a minus (-) sign.
 ///
-/// - {@code *all} - include all properties
-/// - {@code *all, -prop1} - include all properties except {@code prop1}
-/// - {@code prop1, prop1} - include {@code prop1} and {@code prop2} properties
+/// - `*all` - include all properties
+/// - `*all, -prop1` - include all properties except `prop1`
+/// - `prop1, prop1` - include `prop1` and `prop2` properties
 ///
 /// Jira will attempt to identify the issue by the issueIdOrKey path parameter. This can be an issue id,
 /// or an issue key. If the issue cannot be found via an exact match, Jira will also look for the issue in a case-insensitive way,
@@ -1224,7 +1231,7 @@ impl<'a> GetIssueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.expand {
@@ -1289,7 +1296,7 @@ impl<'a> EditIssueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/issue/{}", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.notify_users {
@@ -1341,7 +1348,7 @@ impl<'a> DeleteIssueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/issue/{}", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.delete_subtasks {
@@ -1386,7 +1393,7 @@ impl<'a> ArchiveIssueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/issue/{}/archive", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/archive", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.notify_users {
@@ -1430,7 +1437,7 @@ impl<'a> AssignRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/issue/{}/assignee", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/assignee", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.user)? {
@@ -1494,7 +1501,7 @@ impl<'a> AddAttachmentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/issue/{}/attachments", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/attachments", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
@@ -1576,7 +1583,7 @@ impl<'a> GetCommentsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/comment", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/comment", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.expand {
@@ -1641,7 +1648,7 @@ impl<'a> AddCommentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/issue/{}/comment", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/comment", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.expand {
@@ -1694,7 +1701,11 @@ impl<'a> GetCommentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/comment/{}", self.issue_id_or_key, self.id),
+            format!(
+                "/rest/api/2/issue/{}/comment/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         if let Some(value) = &self.expand {
@@ -1748,7 +1759,11 @@ impl<'a> UpdateCommentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/issue/{}/comment/{}", self.issue_id_or_key, self.id),
+            format!(
+                "/rest/api/2/issue/{}/comment/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         if let Some(value) = &self.expand {
@@ -1787,7 +1802,11 @@ impl<'a> DeleteCommentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/issue/{}/comment/{}", self.issue_id_or_key, self.id),
+            format!(
+                "/rest/api/2/issue/{}/comment/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         Ok(config)
@@ -1826,7 +1845,11 @@ impl<'a> SetPinCommentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/issue/{}/comment/{}/pin", self.issue_id_or_key, self.id),
+            format!(
+                "/rest/api/2/issue/{}/comment/{}/pin",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(self.body)?));
@@ -1860,7 +1883,7 @@ impl<'a> GetEditIssueMetaRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/editmeta", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/editmeta", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         Ok(config)
@@ -1900,7 +1923,7 @@ impl<'a> NotifyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/issue/{}/notify", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/notify", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.notification_json)? {
@@ -1939,7 +1962,7 @@ impl<'a> GetPinnedCommentsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/pinned-comments", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/pinned-comments", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         Ok(config)
@@ -1971,7 +1994,7 @@ impl<'a> GetIssuePropertyKeysRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/properties", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/properties", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         Ok(config)
@@ -2008,7 +2031,11 @@ impl<'a> GetIssuePropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/properties/{}", self.issue_id_or_key, self.property_key),
+            format!(
+                "/rest/api/2/issue/{}/properties/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)
@@ -2047,7 +2074,11 @@ impl<'a> SetIssuePropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/issue/{}/properties/{}", self.issue_id_or_key, self.property_key),
+            format!(
+                "/rest/api/2/issue/{}/properties/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -2086,7 +2117,11 @@ impl<'a> DeleteIssuePropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/issue/{}/properties/{}", self.issue_id_or_key, self.property_key),
+            format!(
+                "/rest/api/2/issue/{}/properties/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)
@@ -2127,7 +2162,7 @@ impl<'a> GetRemoteIssueLinksRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/remotelink", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/remotelink", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.global_id {
@@ -2171,7 +2206,7 @@ impl<'a> CreateOrUpdateRemoteIssueLinkRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/issue/{}/remotelink", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/remotelink", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.remote_issue_link_create_or_update_request)? {
@@ -2211,7 +2246,7 @@ impl<'a> DeleteRemoteIssueLinkByGlobalIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/issue/{}/remotelink", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/remotelink", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         config.query.push(("globalId".to_owned(), crate::core::QueryValue::Scalar(self.global_id.clone())));
@@ -2246,7 +2281,11 @@ impl<'a> GetRemoteIssueLinkByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/remotelink/{}", self.issue_id_or_key, self.link_id),
+            format!(
+                "/rest/api/2/issue/{}/remotelink/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.link_id)
+            ),
         );
 
         Ok(config)
@@ -2292,7 +2331,11 @@ impl<'a> UpdateRemoteIssueLinkRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/issue/{}/remotelink/{}", self.issue_id_or_key, self.link_id),
+            format!(
+                "/rest/api/2/issue/{}/remotelink/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.link_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.remote_issue_link_create_or_update_request)? {
@@ -2332,7 +2375,11 @@ impl<'a> DeleteRemoteIssueLinkByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/issue/{}/remotelink/{}", self.issue_id_or_key, self.link_id),
+            format!(
+                "/rest/api/2/issue/{}/remotelink/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.link_id)
+            ),
         );
 
         Ok(config)
@@ -2373,7 +2420,7 @@ impl<'a> RestoreIssueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/issue/{}/restore", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/restore", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.notify_users {
@@ -2409,7 +2456,7 @@ impl<'a> GetSubTasksRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/subtask", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/subtask", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         Ok(config)
@@ -2441,7 +2488,7 @@ impl<'a> CanMoveSubTaskRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/subtask/move", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/subtask/move", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         Ok(config)
@@ -2478,7 +2525,7 @@ impl<'a> MoveSubTasksRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/issue/{}/subtask/move", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/subtask/move", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.issue_sub_task_move_position)? {
@@ -2529,7 +2576,7 @@ impl<'a> GetTransitionsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/transitions", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/transitions", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.transition_id {
@@ -2578,7 +2625,7 @@ impl<'a> DoTransitionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/issue/{}/transitions", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/transitions", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.issue_update)? {
@@ -2617,7 +2664,7 @@ impl<'a> GetVotesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/votes", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/votes", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         Ok(config)
@@ -2649,7 +2696,7 @@ impl<'a> AddVoteRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/issue/{}/votes", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/votes", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         Ok(config)
@@ -2681,7 +2728,7 @@ impl<'a> RemoveVoteRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/issue/{}/votes", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/votes", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         Ok(config)
@@ -2713,7 +2760,7 @@ impl<'a> GetIssueWatchersRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/watchers", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/watchers", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         Ok(config)
@@ -2762,7 +2809,7 @@ impl<'a> AddWatcherRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/issue/{}/watchers", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/watchers", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.user_name {
@@ -2817,7 +2864,7 @@ impl<'a> RemoveWatcherRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/issue/{}/watchers", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/watchers", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.user_name {
@@ -2857,7 +2904,7 @@ impl<'a> GetIssueWorklogRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/worklog", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/worklog", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         Ok(config)
@@ -2931,7 +2978,7 @@ impl<'a> AddWorklogRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/issue/{}/worklog", self.issue_id_or_key),
+            format!("/rest/api/2/issue/{}/worklog", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.new_estimate {
@@ -2983,7 +3030,11 @@ impl<'a> GetWorklogRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/worklog/{}", self.issue_id_or_key, self.id),
+            format!(
+                "/rest/api/2/issue/{}/worklog/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         Ok(config)
@@ -3053,7 +3104,11 @@ impl<'a> UpdateWorklogRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/issue/{}/worklog/{}", self.issue_id_or_key, self.id),
+            format!(
+                "/rest/api/2/issue/{}/worklog/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         if let Some(value) = &self.new_estimate {
@@ -3130,7 +3185,11 @@ impl<'a> DeleteWorklogRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/issue/{}/worklog/{}", self.issue_id_or_key, self.id),
+            format!(
+                "/rest/api/2/issue/{}/worklog/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         if let Some(value) = &self.new_estimate {

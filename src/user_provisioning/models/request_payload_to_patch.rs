@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Request object to patch a scim user
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RequestPayloadToPatch {
     /// SCIM patch schemas.
     #[serde(default, skip_serializing_if = "Option::is_none")]

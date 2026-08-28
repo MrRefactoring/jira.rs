@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The screen scheme for an issue type.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueTypeScreenSchemeItem {
     /// The ID of the issue type or *default*. Only issue types used in classic projects are accepted. When creating an issue screen scheme, an entry for *default* must be provided and defines the mapping for all issue types without a screen scheme. Otherwise, a *default* entry can't be provided.
     #[serde(rename = "issueTypeId")]

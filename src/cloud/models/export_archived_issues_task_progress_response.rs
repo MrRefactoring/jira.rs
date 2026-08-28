@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The response for status request for a running/completed export task.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ExportArchivedIssuesTaskProgressResponse {
     #[serde(rename = "fileUrl", default, skip_serializing_if = "Option::is_none")]
     pub file_url: Option<String>,
@@ -13,6 +14,16 @@ pub struct ExportArchivedIssuesTaskProgressResponse {
     pub progress: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "submittedTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub submitted_time: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "submittedTime",
         default,

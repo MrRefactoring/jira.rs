@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A type of issue suggested for use in auto-completion.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssuePickerSuggestionsIssueType {
     /// The ID of the type of issues suggested for use in auto-completion.
     #[serde(default, skip_serializing_if = "Option::is_none")]

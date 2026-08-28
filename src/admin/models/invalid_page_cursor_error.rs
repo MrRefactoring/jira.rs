@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Invalid page cursor
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct InvalidPageCursorError {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub errors: Option<Vec<Option<ApplicationError>>>,

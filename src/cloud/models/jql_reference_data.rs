@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Lists of JQL reference data.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct JQLReferenceData {
     /// List of JQL query reserved words.
     #[serde(rename = "jqlReservedWords", default, skip_serializing_if = "Option::is_none")]

@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct BulkTransitionSubmitInput {
     /// List of all the issue IDs or keys that are to be bulk transitioned.
     #[serde(rename = "selectedIssueIdsOrKeys")]

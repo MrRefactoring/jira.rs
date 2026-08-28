@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A reference to the location of the error. This will be null if the error does not refer to a specific element.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowElementReference {
     /// A property key.
     #[serde(rename = "propertyKey", default, skip_serializing_if = "Option::is_none")]

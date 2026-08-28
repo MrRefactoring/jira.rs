@@ -16,14 +16,14 @@ impl<'a> IssuePrioritiesService<'a> {
     ///
     /// **Deprecation notice:** The `iconUrl` parameter was sunset on 16th Mar 2025, and replaced with `avatarId`. See [CHANGE-1525](https://developer.atlassian.com/changelog/#CHANGE-1525).
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn create_priority(&self, create_priority_details: CreatePriorityDetails) -> CreatePriorityRequest<'a> {
         CreatePriorityRequest::new(self.client, create_priority_details)
     }
 
     /// Sets default issue priority.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn set_default_priority(
         &self,
         set_default_priority_request: SetDefaultPriorityRequest,
@@ -33,12 +33,12 @@ impl<'a> IssuePrioritiesService<'a> {
 
     /// Changes the order of issue priorities.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn move_priorities(&self, reorder_issue_priorities: ReorderIssuePriorities) -> MovePrioritiesRequest<'a> {
         MovePrioritiesRequest::new(self.client, reorder_issue_priorities)
     }
 
-    /// Returns a [paginated](#pagination) list of priorities. The list can contain all priorities or a subset determined by any combination of these criteria:
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of priorities. The list can contain all priorities or a subset determined by any combination of these criteria:
     ///
     ///  *  a list of priority IDs. Any invalid priority IDs are ignored.
     ///  *  a list of project IDs. Only priorities that are available in these projects will be returned. Any invalid project IDs are ignored.
@@ -48,14 +48,14 @@ impl<'a> IssuePrioritiesService<'a> {
     ///
     /// **Deprecation notice:** The `isDefault` property of priorities is deprecated and will be removed at a later date. See [CHANGE-1655](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-1655).
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn search_priorities(&self) -> SearchPrioritiesRequest<'a> {
         SearchPrioritiesRequest::new(self.client)
     }
 
-    /// Returns an issue priority. To fetch multiple priorities at once, use [Search priorities](#api-rest-api-3-priority-search-get) instead.
+    /// Returns an issue priority. To fetch multiple priorities at once, use [Search priorities](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-priority/#api-rest-api-3-priority-search-get) instead.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_priority(&self, id: impl Into<String>) -> GetPriorityRequest<'a> {
         GetPriorityRequest::new(self.client, id)
     }
@@ -66,7 +66,7 @@ impl<'a> IssuePrioritiesService<'a> {
     ///
     /// **Deprecation notice:** The `iconUrl` parameter was sunset on 16th Mar 2025, and replaced with `avatarId`. See [CHANGE-1525](https://developer.atlassian.com/changelog/#CHANGE-1525).
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn update_priority(
         &self,
         id: impl Into<String>,
@@ -77,9 +77,9 @@ impl<'a> IssuePrioritiesService<'a> {
 
     /// Deletes an issue priority.
     ///
-    /// This operation is [asynchronous](#async). Follow the `location` link in the response to determine the status of the task and use [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+    /// This operation is [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `location` link in the response to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_priority(&self, id: impl Into<String>) -> DeletePriorityRequest<'a> {
         DeletePriorityRequest::new(self.client, id)
     }
@@ -89,7 +89,7 @@ impl<'a> IssuePrioritiesService<'a> {
 ///
 /// **Deprecation notice:** The `iconUrl` parameter was sunset on 16th Mar 2025, and replaced with `avatarId`. See [CHANGE-1525](https://developer.atlassian.com/changelog/#CHANGE-1525).
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct CreatePriorityRequest<'a> {
     client: &'a crate::core::Client,
     create_priority_details: CreatePriorityDetails,
@@ -127,7 +127,7 @@ impl<'a> CreatePriorityRequest<'a> {
 
 /// Sets default issue priority.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct SetDefaultPriorityRequest2<'a> {
     client: &'a crate::core::Client,
     set_default_priority_request: SetDefaultPriorityRequest,
@@ -166,7 +166,7 @@ impl<'a> SetDefaultPriorityRequest2<'a> {
 
 /// Changes the order of issue priorities.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct MovePrioritiesRequest<'a> {
     client: &'a crate::core::Client,
     reorder_issue_priorities: ReorderIssuePriorities,
@@ -203,7 +203,7 @@ impl<'a> MovePrioritiesRequest<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of priorities. The list can contain all priorities or a subset determined by any combination of these criteria:
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of priorities. The list can contain all priorities or a subset determined by any combination of these criteria:
 ///
 ///  *  a list of priority IDs. Any invalid priority IDs are ignored.
 ///  *  a list of project IDs. Only priorities that are available in these projects will be returned. Any invalid project IDs are ignored.
@@ -213,7 +213,7 @@ impl<'a> MovePrioritiesRequest<'a> {
 ///
 /// **Deprecation notice:** The `isDefault` property of priorities is deprecated and will be removed at a later date. See [CHANGE-1655](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-1655).
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct SearchPrioritiesRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<String>,
@@ -342,9 +342,9 @@ impl<'a> SearchPrioritiesRequest<'a> {
     }
 }
 
-/// Returns an issue priority. To fetch multiple priorities at once, use [Search priorities](#api-rest-api-3-priority-search-get) instead.
+/// Returns an issue priority. To fetch multiple priorities at once, use [Search priorities](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-priority/#api-rest-api-3-priority-search-get) instead.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetPriorityRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -357,8 +357,10 @@ impl<'a> GetPriorityRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/3/priority/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/priority/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -380,7 +382,7 @@ impl<'a> GetPriorityRequest<'a> {
 ///
 /// **Deprecation notice:** The `iconUrl` parameter was sunset on 16th Mar 2025, and replaced with `avatarId`. See [CHANGE-1525](https://developer.atlassian.com/changelog/#CHANGE-1525).
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct UpdatePriorityRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -398,8 +400,10 @@ impl<'a> UpdatePriorityRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/rest/api/3/priority/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/3/priority/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         let body = match serde_json::to_value(&self.update_priority_details)? {
             serde_json::Value::Object(object) => object,
@@ -424,9 +428,9 @@ impl<'a> UpdatePriorityRequest<'a> {
 
 /// Deletes an issue priority.
 ///
-/// This operation is [asynchronous](#async). Follow the `location` link in the response to determine the status of the task and use [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+/// This operation is [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `location` link in the response to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeletePriorityRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -439,8 +443,10 @@ impl<'a> DeletePriorityRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/rest/api/3/priority/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/3/priority/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }

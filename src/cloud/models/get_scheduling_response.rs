@@ -29,7 +29,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetSchedulingResponse {
     /// The dependencies for the plan. This is "Sequential" or "Concurrent".
     pub dependencies: GetSchedulingResponseDependencies,

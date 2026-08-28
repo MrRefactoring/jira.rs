@@ -13,7 +13,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ServletRequestLocale {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub country: Option<String>,
@@ -45,7 +46,8 @@ pub struct ServletRequestLocale {
     pub variant: Option<String>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ServletRequest {
     #[serde(rename = "asyncContext", default, skip_serializing_if = "Option::is_none")]
     pub async_context: Option<Box<AsyncContext>>,

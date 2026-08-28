@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A page of workflow schemes.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowSchemeUsagePage {
     /// Token for the next page of issue type usages.
     #[serde(rename = "nextPageToken", default, skip_serializing_if = "Option::is_none")]

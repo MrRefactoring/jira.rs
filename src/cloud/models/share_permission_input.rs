@@ -21,7 +21,7 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SharePermissionInput {
     /// The user account ID that the filter is shared with. For a request, specify the `accountId` property for the user.
     #[serde(rename = "accountId", default, skip_serializing_if = "Option::is_none")]

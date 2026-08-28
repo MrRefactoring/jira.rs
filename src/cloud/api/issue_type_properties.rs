@@ -16,7 +16,7 @@ impl<'a> IssueTypePropertiesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) to get the property keys of any issue type.
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) to get the property keys of any issue types associated with the projects the user has permission to browse.
@@ -31,7 +31,7 @@ impl<'a> IssueTypePropertiesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) to get the details of any issue type.
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) to get the details of any issue types associated with the projects the user has permission to browse.
@@ -47,7 +47,7 @@ impl<'a> IssueTypePropertiesService<'a> {
     ///
     /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn set_issue_type_property(
         &self,
         issue_type_id: impl Into<String>,
@@ -59,7 +59,7 @@ impl<'a> IssueTypePropertiesService<'a> {
 
     /// Deletes the [issue type property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties).
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_issue_type_property(
         &self,
         issue_type_id: impl Into<String>,
@@ -73,7 +73,7 @@ impl<'a> IssueTypePropertiesService<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) to get the property keys of any issue type.
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) to get the property keys of any issue types associated with the projects the user has permission to browse.
@@ -91,7 +91,7 @@ impl<'a> GetIssueTypePropertyKeysRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/issuetype/{}/properties", self.issue_type_id),
+            format!("/rest/api/3/issuetype/{}/properties", crate::core::encode_path_segment(&self.issue_type_id)),
         );
 
         Ok(config)
@@ -112,7 +112,7 @@ impl<'a> GetIssueTypePropertyKeysRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) to get the details of any issue type.
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) to get the details of any issue types associated with the projects the user has permission to browse.
@@ -131,7 +131,11 @@ impl<'a> GetIssueTypePropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/issuetype/{}/properties/{}", self.issue_type_id, self.property_key),
+            format!(
+                "/rest/api/3/issuetype/{}/properties/{}",
+                crate::core::encode_path_segment(&self.issue_type_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)
@@ -152,7 +156,7 @@ impl<'a> GetIssueTypePropertyRequest<'a> {
 ///
 /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct SetIssueTypePropertyRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_id: String,
@@ -174,7 +178,11 @@ impl<'a> SetIssueTypePropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/issuetype/{}/properties/{}", self.issue_type_id, self.property_key),
+            format!(
+                "/rest/api/3/issuetype/{}/properties/{}",
+                crate::core::encode_path_segment(&self.issue_type_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -195,7 +203,7 @@ impl<'a> SetIssueTypePropertyRequest<'a> {
 
 /// Deletes the [issue type property](https://developer.atlassian.com/cloud/jira/platform/storing-data-without-a-database/#a-id-jira-entity-properties-a-jira-entity-properties).
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteIssueTypePropertyRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_id: String,
@@ -211,7 +219,11 @@ impl<'a> DeleteIssueTypePropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/issuetype/{}/properties/{}", self.issue_type_id, self.property_key),
+            format!(
+                "/rest/api/3/issuetype/{}/properties/{}",
+                crate::core::encode_path_segment(&self.issue_type_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)

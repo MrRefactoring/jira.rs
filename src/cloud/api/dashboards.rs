@@ -15,7 +15,7 @@ crate::open_enum! {
 }
 
 crate::open_enum! {
-    /// [Order](#ordering) the results by a field:
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
     ///
     ///  *  `description` Sorts by dashboard description. Note that this sort works independently of whether the expand to display the description field is in use.
     ///  *  `favourite_count` Sorts by dashboard popularity.
@@ -67,7 +67,7 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about dashboard in the response. This parameter accepts a comma-separated list. Expand options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about dashboard in the response. This parameter accepts a comma-separated list. Expand options include:
 ///
 ///  *  `description` Returns the description of the dashboard.
 ///  *  `owner` Returns the owner of the dashboard.
@@ -77,7 +77,7 @@ crate::open_enum! {
 ///  *  `sharePermissions` Returns details of the share permissions defined for the dashboard.
 ///  *  `editPermissions` Returns details of the edit permissions defined for the dashboard.
 ///  *  `isWritable` Returns whether the current user has permission to edit the dashboard.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetDashboardsPaginatedRequestExpand {
@@ -101,16 +101,16 @@ impl<'a> DashboardsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_all_dashboards(&self) -> GetAllDashboardsRequest<'a> {
         GetAllDashboardsRequest::new(self.client)
     }
 
-    /// Returns a [paginated](#pagination) list of dashboards. This operation is similar to [Get dashboards](#api-rest-api-3-dashboard-get) except that the results can be refined to include dashboards that have specific attributes. For example, dashboards with a particular name. When multiple attributes are specified only filters matching all attributes are returned.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of dashboards. This operation is similar to [Get dashboards](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboard/#api-rest-api-3-dashboard-get) except that the results can be refined to include dashboards that have specific attributes. For example, dashboards with a particular name. When multiple attributes are specified only filters matching all attributes are returned.
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** The following dashboards that match the query parameters are returned:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** The following dashboards that match the query parameters are returned:
     ///
     ///  *  Dashboards owned by the user. Not returned for anonymous users.
     ///  *  Dashboards shared with a group that the user is a member of. Not returned for anonymous users.
@@ -125,7 +125,7 @@ impl<'a> DashboardsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** The user must have read permission of the dashboard or have the dashboard shared with them.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** The user must have read permission of the dashboard or have the dashboard shared with them.
     pub fn get_dashboard_item_property_keys(
         &self,
         dashboard_id: impl Into<String>,
@@ -144,7 +144,7 @@ impl<'a> DashboardsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** The user must have read permission of the dashboard or have the dashboard shared with them.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** The user must have read permission of the dashboard or have the dashboard shared with them.
     pub fn get_dashboard_item_property(
         &self,
         dashboard_id: impl Into<String>,
@@ -166,7 +166,7 @@ impl<'a> DashboardsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** The user must have edit permisson of the dashboard.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** The user must have edit permisson of the dashboard.
     pub fn set_dashboard_item_property(
         &self,
         dashboard_id: impl Into<String>,
@@ -181,7 +181,7 @@ impl<'a> DashboardsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** The user must have edit permission of the dashboard.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** The user must have edit permission of the dashboard.
     pub fn delete_dashboard_item_property(
         &self,
         dashboard_id: impl Into<String>,
@@ -195,7 +195,7 @@ impl<'a> DashboardsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     ///
     /// However, to get a dashboard, the dashboard must be shared with the user or the user must own it. Note, users with the *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) are considered owners of the System dashboard. The System dashboard is considered to be shared with all other users.
     pub fn get_dashboard(&self, id: impl Into<String>) -> GetDashboardRequest<'a> {
@@ -207,7 +207,7 @@ impl<'a> DashboardsService<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetAllDashboardsRequest<'a> {
     client: &'a crate::core::Client,
     filter: Option<GetAllDashboardsRequestFilter>,
@@ -277,11 +277,11 @@ impl<'a> GetAllDashboardsRequest<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of dashboards. This operation is similar to [Get dashboards](#api-rest-api-3-dashboard-get) except that the results can be refined to include dashboards that have specific attributes. For example, dashboards with a particular name. When multiple attributes are specified only filters matching all attributes are returned.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of dashboards. This operation is similar to [Get dashboards](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-dashboard/#api-rest-api-3-dashboard-get) except that the results can be refined to include dashboards that have specific attributes. For example, dashboards with a particular name. When multiple attributes are specified only filters matching all attributes are returned.
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** The following dashboards that match the query parameters are returned:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** The following dashboards that match the query parameters are returned:
 ///
 ///  *  Dashboards owned by the user. Not returned for anonymous users.
 ///  *  Dashboards shared with a group that the user is a member of. Not returned for anonymous users.
@@ -359,7 +359,7 @@ impl<'a> GetDashboardsPaginatedRequest<'a> {
         self
     }
 
-    /// [Order](#ordering) the results by a field:
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
     ///
     ///  *  `description` Sorts by dashboard description. Note that this sort works independently of whether the expand to display the description field is in use.
     ///  *  `favourite_count` Sorts by dashboard popularity.
@@ -398,7 +398,7 @@ impl<'a> GetDashboardsPaginatedRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) to include additional information about dashboard in the response. This parameter accepts a comma-separated list. Expand options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about dashboard in the response. This parameter accepts a comma-separated list. Expand options include:
     ///
     ///  *  `description` Returns the description of the dashboard.
     ///  *  `owner` Returns the owner of the dashboard.
@@ -478,7 +478,7 @@ impl<'a> GetDashboardsPaginatedRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** The user must have read permission of the dashboard or have the dashboard shared with them.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** The user must have read permission of the dashboard or have the dashboard shared with them.
 pub struct GetDashboardItemPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     dashboard_id: String,
@@ -494,7 +494,11 @@ impl<'a> GetDashboardItemPropertyKeysRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/dashboard/{}/items/{}/properties", self.dashboard_id, self.item_id),
+            format!(
+                "/rest/api/3/dashboard/{}/items/{}/properties",
+                crate::core::encode_path_segment(&self.dashboard_id),
+                crate::core::encode_path_segment(&self.item_id)
+            ),
         );
 
         Ok(config)
@@ -521,7 +525,7 @@ impl<'a> GetDashboardItemPropertyKeysRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** The user must have read permission of the dashboard or have the dashboard shared with them.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** The user must have read permission of the dashboard or have the dashboard shared with them.
 pub struct GetDashboardItemPropertyRequest<'a> {
     client: &'a crate::core::Client,
     dashboard_id: String,
@@ -545,7 +549,9 @@ impl<'a> GetDashboardItemPropertyRequest<'a> {
             crate::core::Method::GET,
             format!(
                 "/rest/api/3/dashboard/{}/items/{}/properties/{}",
-                self.dashboard_id, self.item_id, self.property_key
+                crate::core::encode_path_segment(&self.dashboard_id),
+                crate::core::encode_path_segment(&self.item_id),
+                crate::core::encode_path_segment(&self.property_key)
             ),
         );
 
@@ -575,7 +581,7 @@ impl<'a> GetDashboardItemPropertyRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** The user must have edit permisson of the dashboard.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** The user must have edit permisson of the dashboard.
 pub struct SetDashboardItemPropertyRequest<'a> {
     client: &'a crate::core::Client,
     dashboard_id: String,
@@ -607,7 +613,9 @@ impl<'a> SetDashboardItemPropertyRequest<'a> {
             crate::core::Method::PUT,
             format!(
                 "/rest/api/3/dashboard/{}/items/{}/properties/{}",
-                self.dashboard_id, self.item_id, self.property_key
+                crate::core::encode_path_segment(&self.dashboard_id),
+                crate::core::encode_path_segment(&self.item_id),
+                crate::core::encode_path_segment(&self.property_key)
             ),
         );
 
@@ -631,7 +639,7 @@ impl<'a> SetDashboardItemPropertyRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** The user must have edit permission of the dashboard.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** The user must have edit permission of the dashboard.
 pub struct DeleteDashboardItemPropertyRequest<'a> {
     client: &'a crate::core::Client,
     dashboard_id: String,
@@ -655,7 +663,9 @@ impl<'a> DeleteDashboardItemPropertyRequest<'a> {
             crate::core::Method::DELETE,
             format!(
                 "/rest/api/3/dashboard/{}/items/{}/properties/{}",
-                self.dashboard_id, self.item_id, self.property_key
+                crate::core::encode_path_segment(&self.dashboard_id),
+                crate::core::encode_path_segment(&self.item_id),
+                crate::core::encode_path_segment(&self.property_key)
             ),
         );
 
@@ -677,7 +687,7 @@ impl<'a> DeleteDashboardItemPropertyRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 ///
 /// However, to get a dashboard, the dashboard must be shared with the user or the user must own it. Note, users with the *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) are considered owners of the System dashboard. The System dashboard is considered to be shared with all other users.
 pub struct GetDashboardRequest<'a> {
@@ -692,8 +702,10 @@ impl<'a> GetDashboardRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/3/dashboard/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/dashboard/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }

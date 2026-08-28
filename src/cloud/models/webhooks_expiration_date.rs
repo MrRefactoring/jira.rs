@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The date the refreshed webhooks expire.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WebhooksExpirationDate {
     /// The expiration date of all the refreshed webhooks.
     #[serde(rename = "expirationDate")]

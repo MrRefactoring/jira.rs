@@ -9,7 +9,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ForbiddenActionResponse {
     pub key: ForbiddenActionResponseKey,
     pub context: ManageabilityUnallowed,

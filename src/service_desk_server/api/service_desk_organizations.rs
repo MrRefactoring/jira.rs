@@ -64,7 +64,10 @@ impl<'a> GetServiceDeskOrganizationsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/servicedesk/{}/organization", self.service_desk_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/organization",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
         );
 
         if let Some(value) = &self.start {
@@ -112,7 +115,10 @@ impl<'a> AddOrganizationRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/servicedesk/{}/organization", self.service_desk_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/organization",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.organization_service_desk_update)? {
@@ -159,7 +165,10 @@ impl<'a> RemoveOrganizationRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/servicedeskapi/servicedesk/{}/organization", self.service_desk_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/organization",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.organization_service_desk_update)? {

@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Project and issue type context for workflow queries made using issue types.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ProjectIssueTypeQueryContext {
     /// The set of issue type IDs.
     #[serde(rename = "issueTypes", default, skip_serializing_if = "Option::is_none")]

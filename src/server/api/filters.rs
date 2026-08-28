@@ -3,7 +3,7 @@
 use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum CreateFilterRequestExpand {
@@ -13,7 +13,7 @@ pub enum CreateFilterRequestExpand {
     Other(serde_json::Value),
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetFavouriteFiltersRequestExpand {
@@ -23,7 +23,7 @@ pub enum GetFavouriteFiltersRequestExpand {
     Other(serde_json::Value),
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetFilterRequestExpand {
@@ -33,7 +33,7 @@ pub enum GetFilterRequestExpand {
     Other(serde_json::Value),
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum EditFilterRequestExpand {
@@ -326,8 +326,10 @@ impl<'a> GetFilterRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/2/filter/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/2/filter/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         if let Some(value) = &self.expand {
             config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
@@ -376,8 +378,10 @@ impl<'a> EditFilterRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/rest/api/2/filter/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/2/filter/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         if let Some(value) = &self.expand {
             config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
@@ -412,8 +416,10 @@ impl<'a> DeleteFilterRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/rest/api/2/filter/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/2/filter/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -444,7 +450,7 @@ impl<'a> GetFilterColumnsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/filter/{}/columns", self.id),
+            format!("/rest/api/2/filter/{}/columns", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -484,7 +490,7 @@ impl<'a> SetColumnsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/filter/{}/columns", self.id),
+            format!("/rest/api/2/filter/{}/columns", crate::core::encode_path_segment(&self.id)),
         );
 
         let mut body = serde_json::Map::new();
@@ -524,7 +530,7 @@ impl<'a> ResetColumnsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/filter/{}/columns", self.id),
+            format!("/rest/api/2/filter/{}/columns", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -556,7 +562,7 @@ impl<'a> GetSharePermissionsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/filter/{}/permission", self.id),
+            format!("/rest/api/2/filter/{}/permission", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -596,7 +602,7 @@ impl<'a> AddSharePermissionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/filter/{}/permission", self.id),
+            format!("/rest/api/2/filter/{}/permission", crate::core::encode_path_segment(&self.id)),
         );
 
         let body = match serde_json::to_value(&self.share_permission_input)? {
@@ -636,7 +642,11 @@ impl<'a> GetSharePermissionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/filter/{}/permission/{}", self.id, self.permission_id),
+            format!(
+                "/rest/api/2/filter/{}/permission/{}",
+                crate::core::encode_path_segment(&self.id),
+                crate::core::encode_path_segment(&self.permission_id)
+            ),
         );
 
         Ok(config)
@@ -669,7 +679,11 @@ impl<'a> DeleteSharePermissionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/filter/{}/permission/{}", self.id, self.permission_id),
+            format!(
+                "/rest/api/2/filter/{}/permission/{}",
+                crate::core::encode_path_segment(&self.id),
+                crate::core::encode_path_segment(&self.permission_id)
+            ),
         );
 
         Ok(config)

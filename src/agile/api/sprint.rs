@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForSprintRequestExpand {
@@ -781,7 +781,7 @@ impl<'a> GetPropertiesKeysRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/agile/1.0/sprint/{}/properties", self.sprint_id),
+            format!("/rest/agile/1.0/sprint/{}/properties", crate::core::encode_path_segment(&self.sprint_id)),
         );
 
         Ok(config)
@@ -814,7 +814,11 @@ impl<'a> GetPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/agile/1.0/sprint/{}/properties/{}", self.sprint_id, self.property_key),
+            format!(
+                "/rest/agile/1.0/sprint/{}/properties/{}",
+                crate::core::encode_path_segment(&self.sprint_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)
@@ -855,7 +859,11 @@ impl<'a> SetPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/agile/1.0/sprint/{}/properties/{}", self.sprint_id, self.property_key),
+            format!(
+                "/rest/agile/1.0/sprint/{}/properties/{}",
+                crate::core::encode_path_segment(&self.sprint_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.property_value)?));
@@ -890,7 +898,11 @@ impl<'a> DeletePropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/agile/1.0/sprint/{}/properties/{}", self.sprint_id, self.property_key),
+            format!(
+                "/rest/agile/1.0/sprint/{}/properties/{}",
+                crate::core::encode_path_segment(&self.sprint_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)

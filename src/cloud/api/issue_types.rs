@@ -16,7 +16,7 @@ impl<'a> IssueTypesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** Issue types are only returned as follows:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Issue types are only returned as follows:
     ///
     ///  *  if the user has the *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), all issue types are returned.
     ///  *  if the user has the *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for one or more projects, the issue types associated with the projects the user has permission to browse are returned.
@@ -28,7 +28,7 @@ impl<'a> IssueTypesService<'a> {
 
     /// Creates an issue type.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn create_issue_type(&self, issue_type_create: IssueTypeCreate) -> CreateIssueTypeRequest<'a> {
         CreateIssueTypeRequest::new(self.client, issue_type_create)
     }
@@ -37,14 +37,14 @@ impl<'a> IssueTypesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) in a project the issue type is associated with or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) in a project the issue type is associated with or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_issue_type(&self, id: impl Into<String>) -> GetIssueTypeRequest<'a> {
         GetIssueTypeRequest::new(self.client, id)
     }
 
     /// Updates the issue type.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn update_issue_type(
         &self,
         id: impl Into<String>,
@@ -53,9 +53,9 @@ impl<'a> IssueTypesService<'a> {
         UpdateIssueTypeRequest::new(self.client, id, issue_type_update)
     }
 
-    /// Deletes the issue type. If the issue type is in use, all uses are updated with the alternative issue type (`alternativeIssueTypeId`). A list of alternative issue types are obtained from the [Get alternative issue types](#api-rest-api-3-issuetype-id-alternatives-get) resource.
+    /// Deletes the issue type. If the issue type is in use, all uses are updated with the alternative issue type (`alternativeIssueTypeId`). A list of alternative issue types are obtained from the [Get alternative issue types](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issuetype/#api-rest-api-3-issuetype-id-alternatives-get) resource.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_issue_type(&self, id: impl Into<String>) -> DeleteIssueTypeRequest<'a> {
         DeleteIssueTypeRequest::new(self.client, id)
     }
@@ -64,7 +64,7 @@ impl<'a> IssueTypesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_alternative_issue_types(&self, id: impl Into<String>) -> GetAlternativeIssueTypesRequest<'a> {
         GetAlternativeIssueTypesRequest::new(self.client, id)
     }
@@ -73,7 +73,7 @@ impl<'a> IssueTypesService<'a> {
     ///
     /// Specify the avatar's local file location in the body of the request. Also, include the following headers:
     ///
-    ///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the request, for more information see [Special Headers](#special-request-headers).
+    ///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the request, for more information see [Special Headers](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#special-request-headers).
     ///  *  `Content-Type: image/image type` Valid image types are JPEG, GIF, or PNG.
     ///
     /// For example:
@@ -83,9 +83,9 @@ impl<'a> IssueTypesService<'a> {
     ///
     /// The cropped image is then used to create avatars of 16x16, 24x24, 32x32, and 48x48 in size.
     ///
-    /// After creating the avatar, use [ Update issue type](#api-rest-api-3-issuetype-id-put) to set it as the issue type's displayed avatar.
+    /// After creating the avatar, use [ Update issue type](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issuetype/#api-rest-api-3-issuetype-id-put) to set it as the issue type's displayed avatar.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn create_issue_type_avatar(
         &self,
         id: impl Into<String>,
@@ -100,7 +100,7 @@ impl<'a> IssueTypesService<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** Issue types are only returned as follows:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Issue types are only returned as follows:
 ///
 ///  *  if the user has the *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), all issue types are returned.
 ///  *  if the user has the *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for one or more projects, the issue types associated with the projects the user has permission to browse are returned.
@@ -135,7 +135,7 @@ impl<'a> GetIssueAllTypesRequest<'a> {
 
 /// Creates an issue type.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct CreateIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_create: IssueTypeCreate,
@@ -175,7 +175,7 @@ impl<'a> CreateIssueTypeRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) in a project the issue type is associated with or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) in a project the issue type is associated with or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -188,8 +188,10 @@ impl<'a> GetIssueTypeRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/3/issuetype/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/issuetype/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -207,7 +209,7 @@ impl<'a> GetIssueTypeRequest<'a> {
 
 /// Updates the issue type.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct UpdateIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -221,8 +223,10 @@ impl<'a> UpdateIssueTypeRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/rest/api/3/issuetype/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/3/issuetype/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         let body = match serde_json::to_value(&self.issue_type_update)? {
             serde_json::Value::Object(object) => object,
@@ -245,9 +249,9 @@ impl<'a> UpdateIssueTypeRequest<'a> {
     }
 }
 
-/// Deletes the issue type. If the issue type is in use, all uses are updated with the alternative issue type (`alternativeIssueTypeId`). A list of alternative issue types are obtained from the [Get alternative issue types](#api-rest-api-3-issuetype-id-alternatives-get) resource.
+/// Deletes the issue type. If the issue type is in use, all uses are updated with the alternative issue type (`alternativeIssueTypeId`). A list of alternative issue types are obtained from the [Get alternative issue types](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issuetype/#api-rest-api-3-issuetype-id-alternatives-get) resource.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -269,8 +273,10 @@ impl<'a> DeleteIssueTypeRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/rest/api/3/issuetype/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/3/issuetype/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         if let Some(value) = &self.alternative_issue_type_id {
             config.query.push(("alternativeIssueTypeId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
@@ -294,7 +300,7 @@ impl<'a> DeleteIssueTypeRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetAlternativeIssueTypesRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -309,7 +315,7 @@ impl<'a> GetAlternativeIssueTypesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/issuetype/{}/alternatives", self.id),
+            format!("/rest/api/3/issuetype/{}/alternatives", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -330,7 +336,7 @@ impl<'a> GetAlternativeIssueTypesRequest<'a> {
 ///
 /// Specify the avatar's local file location in the body of the request. Also, include the following headers:
 ///
-///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the request, for more information see [Special Headers](#special-request-headers).
+///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the request, for more information see [Special Headers](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#special-request-headers).
 ///  *  `Content-Type: image/image type` Valid image types are JPEG, GIF, or PNG.
 ///
 /// For example:
@@ -340,9 +346,9 @@ impl<'a> GetAlternativeIssueTypesRequest<'a> {
 ///
 /// The cropped image is then used to create avatars of 16x16, 24x24, 32x32, and 48x48 in size.
 ///
-/// After creating the avatar, use [ Update issue type](#api-rest-api-3-issuetype-id-put) to set it as the issue type's displayed avatar.
+/// After creating the avatar, use [ Update issue type](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issuetype/#api-rest-api-3-issuetype-id-put) to set it as the issue type's displayed avatar.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct CreateIssueTypeAvatarRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -386,7 +392,7 @@ impl<'a> CreateIssueTypeAvatarRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/3/issuetype/{}/avatar2", self.id),
+            format!("/rest/api/3/issuetype/{}/avatar2", crate::core::encode_path_segment(&self.id)),
         );
 
         if let Some(value) = &self.x {

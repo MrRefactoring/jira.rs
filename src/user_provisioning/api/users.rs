@@ -104,7 +104,11 @@ impl<'a> GetUserRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/scim/directory/{}/Users/{}", self.directory_id, self.user_id),
+            format!(
+                "/scim/directory/{}/Users/{}",
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.user_id)
+            ),
         );
 
         if let Some(value) = &self.attributes {
@@ -176,7 +180,11 @@ impl<'a> ReplaceUserRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/scim/directory/{}/Users/{}", self.directory_id, self.user_id),
+            format!(
+                "/scim/directory/{}/Users/{}",
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.user_id)
+            ),
         );
 
         if let Some(value) = &self.attributes {
@@ -228,7 +236,11 @@ impl<'a> DeleteUserRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/scim/directory/{}/Users/{}", self.directory_id, self.user_id),
+            format!(
+                "/scim/directory/{}/Users/{}",
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.user_id)
+            ),
         );
 
         Ok(config)
@@ -292,7 +304,11 @@ impl<'a> PatchUserRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PATCH,
-            format!("/scim/directory/{}/Users/{}", self.directory_id, self.user_id),
+            format!(
+                "/scim/directory/{}/Users/{}",
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.user_id)
+            ),
         );
 
         if let Some(value) = &self.attributes {
@@ -394,7 +410,7 @@ impl<'a> GetUsersRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/scim/directory/{}/Users", self.directory_id),
+            format!("/scim/directory/{}/Users", crate::core::encode_path_segment(&self.directory_id)),
         );
 
         if let Some(value) = &self.attributes {
@@ -470,7 +486,7 @@ impl<'a> CreateUserRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/scim/directory/{}/Users", self.directory_id),
+            format!("/scim/directory/{}/Users", crate::core::encode_path_segment(&self.directory_id)),
         );
 
         if let Some(value) = &self.attributes {

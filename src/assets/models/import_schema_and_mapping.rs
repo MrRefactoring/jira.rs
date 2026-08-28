@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Object schema and mapping configuration for an external import.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ImportSchemaAndMapping {
     /// Object schema and status schema configuration for the import.
     #[serde(default, skip_serializing_if = "Option::is_none")]

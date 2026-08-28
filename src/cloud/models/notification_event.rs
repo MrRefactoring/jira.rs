@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Details about a notification event.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct NotificationEvent {
     /// The description of the event.
     #[serde(default, skip_serializing_if = "Option::is_none")]

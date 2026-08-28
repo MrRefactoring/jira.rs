@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of a dashboard.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Dashboard {
     /// The automatic refresh interval for the dashboard in milliseconds.
     #[serde(rename = "automaticRefreshMs", default, skip_serializing_if = "Option::is_none")]

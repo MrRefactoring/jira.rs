@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Representing a history event
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ObjectHistory {
     /// Who performed the operation
     pub actor: User,
@@ -17,6 +18,15 @@ pub struct ObjectHistory {
     #[serde(rename = "newValue", default, skip_serializing_if = "Option::is_none")]
     pub new_value: Option<String>,
     pub r#type: i64,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
     #[serde(deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub created: String,
     #[serde(rename = "objectId")]

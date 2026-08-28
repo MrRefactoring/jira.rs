@@ -13,7 +13,8 @@ crate::open_enum! {
 }
 
 /// The Atlassian provided system rules available.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AvailableWorkflowSystemRule {
     /// The rule description.
     pub description: String,

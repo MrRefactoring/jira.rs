@@ -12,7 +12,8 @@ crate::open_enum! {
 }
 
 /// A group label.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GroupLabel {
     /// The group label name.
     #[serde(default, skip_serializing_if = "Option::is_none")]

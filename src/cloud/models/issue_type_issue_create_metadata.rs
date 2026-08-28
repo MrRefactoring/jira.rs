@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of the issue creation metadata for an issue type.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueTypeIssueCreateMetadata {
     /// The ID of the issue type's avatar.
     #[serde(rename = "avatarId", default, skip_serializing_if = "Option::is_none")]

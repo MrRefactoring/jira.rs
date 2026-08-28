@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EmailTemplateTypesEmailTypes {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
@@ -20,7 +21,8 @@ pub struct EmailTemplateTypesEmailTypes {
     pub active: Option<bool>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EmailTemplateTypes {
     #[serde(rename = "userEmailAddress", default, skip_serializing_if = "Option::is_none")]
     pub user_email_address: Option<String>,

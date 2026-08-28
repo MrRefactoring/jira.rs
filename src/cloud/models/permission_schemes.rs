@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// List of all permission schemes.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PermissionSchemes {
     /// Permission schemes list.
     #[serde(rename = "permissionSchemes", default, skip_serializing_if = "Option::is_none")]

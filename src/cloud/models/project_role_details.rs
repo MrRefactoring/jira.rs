@@ -13,7 +13,8 @@ crate::open_enum! {
 }
 
 /// Details about a project role.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ProjectRoleDetails {
     /// Whether this role is the admin role for the project.
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct JiraExpressionsComplexityValue {
     /// The maximum allowed complexity. The evaluation will fail if this value is exceeded.
     pub limit: i64,

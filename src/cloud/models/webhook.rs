@@ -28,7 +28,8 @@ crate::open_enum! {
 }
 
 /// A webhook.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Webhook {
     /// The Jira events that trigger the webhook.
     pub events: Vec<WebhookEvents>,

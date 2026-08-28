@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Link information for workflow transitions.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct TransitionLink {
     /// The from port number.
     #[serde(rename = "fromPort", default, skip_serializing_if = "Option::is_none")]

@@ -202,8 +202,10 @@ impl<'a> GetEventsRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/admin/v1/orgs/{}/events", self.org_id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/admin/v1/orgs/{}/events", crate::core::encode_path_segment(&self.org_id)),
+        );
 
         if let Some(value) = &self.cursor {
             config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
@@ -324,7 +326,7 @@ impl<'a> PollEventsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v1/orgs/{}/events-stream", self.org_id),
+            format!("/admin/v1/orgs/{}/events-stream", crate::core::encode_path_segment(&self.org_id)),
         );
 
         if let Some(value) = &self.cursor {
@@ -380,7 +382,11 @@ impl<'a> GetEventByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v1/orgs/{}/events/{}", self.org_id, self.event_id),
+            format!(
+                "/admin/v1/orgs/{}/events/{}",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.event_id)
+            ),
         );
 
         Ok(config)
@@ -415,7 +421,7 @@ impl<'a> GetEventActionsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v1/orgs/{}/event-actions", self.org_id),
+            format!("/admin/v1/orgs/{}/event-actions", crate::core::encode_path_segment(&self.org_id)),
         );
 
         Ok(config)

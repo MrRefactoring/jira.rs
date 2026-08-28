@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomField {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -20,6 +21,16 @@ pub struct CustomField {
     pub issue_type_ids: Option<Vec<String>>,
     #[serde(rename = "issuesWithValue", default, skip_serializing_if = "Option::is_none")]
     pub issues_with_value: Option<i64>,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastValueUpdate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_value_update: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "lastValueUpdate",
         default,

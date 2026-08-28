@@ -93,7 +93,7 @@ impl<'a> GetStatusCategoryRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/statuscategory/{}", self.id_or_key),
+            format!("/rest/api/2/statuscategory/{}", crate::core::encode_path_segment(&self.id_or_key)),
         );
 
         Ok(config)

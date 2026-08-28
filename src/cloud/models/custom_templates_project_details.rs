@@ -23,7 +23,7 @@ crate::open_enum! {
 }
 
 /// Project Details
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct CustomTemplatesProjectDetails {
     /// The access level of the project. Only used by team-managed project
     #[serde(rename = "accessLevel", default, skip_serializing_if = "Option::is_none")]
@@ -34,10 +34,10 @@ pub struct CustomTemplatesProjectDetails {
     /// The default assignee when creating issues in the project
     #[serde(rename = "assigneeType", default, skip_serializing_if = "Option::is_none")]
     pub assignee_type: Option<CustomTemplatesProjectDetailsAssigneeType>,
-    /// The ID of the project's avatar. Use the \[Get project avatars\](\#api-rest-api-3-project-projectIdOrKey-avatar-get) operation to list the available avatars in a project.
+    /// The ID of the project's avatar. Use the [Get project avatars](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-avatar-get) operation to list the available avatars in a project.
     #[serde(rename = "avatarId", default, skip_serializing_if = "Option::is_none")]
     pub avatar_id: Option<i64>,
-    /// The ID of the project's category. A complete list of category IDs is found using the [Get all project categories](#api-rest-api-3-projectCategory-get) operation.
+    /// The ID of the project's category. A complete list of category IDs is found using the [Get all project categories](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-category/#api-rest-api-3-projectCategory-get) operation.
     #[serde(rename = "categoryId", default, skip_serializing_if = "Option::is_none")]
     pub category_id: Option<i64>,
     /// Brief description of the project

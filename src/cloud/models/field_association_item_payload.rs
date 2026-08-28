@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Defines the payload for the field association scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct FieldAssociationItemPayload {
     /// The description of the field association item
     #[serde(default, skip_serializing_if = "Option::is_none")]

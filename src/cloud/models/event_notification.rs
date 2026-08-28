@@ -22,7 +22,8 @@ crate::open_enum! {
 }
 
 /// Details about a notification associated with an event.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EventNotification {
     /// The email address.
     #[serde(rename = "emailAddress", default, skip_serializing_if = "Option::is_none")]

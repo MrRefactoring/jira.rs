@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of a workflow.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct JiraWorkflow {
     /// The creation date of the workflow.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -30,7 +31,7 @@ pub struct JiraWorkflow {
     /// The statuses referenced in this workflow.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub statuses: Option<Vec<WorkflowReferenceStatus>>,
-    /// If there is a current [asynchronous task](#async-operations) operation for this workflow.
+    /// If there is a current [asynchronous task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async-operations) operation for this workflow.
     #[serde(rename = "taskId", default, skip_serializing_if = "Option::is_none")]
     pub task_id: Option<String>,
     /// The transitions of the workflow.

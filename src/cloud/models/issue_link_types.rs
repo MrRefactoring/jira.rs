@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A list of issue link type beans.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueLinkTypes {
     /// The issue link type bean.
     #[serde(rename = "issueLinkTypes", default, skip_serializing_if = "Option::is_none")]

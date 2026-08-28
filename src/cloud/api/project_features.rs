@@ -43,7 +43,7 @@ impl<'a> GetFeaturesForProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}/features", self.project_id_or_key),
+            format!("/rest/api/3/project/{}/features", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         Ok(config)
@@ -87,7 +87,11 @@ impl<'a> ToggleFeatureForProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/project/{}/features/{}", self.project_id_or_key, self.feature_key),
+            format!(
+                "/rest/api/3/project/{}/features/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                crate::core::encode_path_segment(&self.feature_key)
+            ),
         );
 
         let body = match serde_json::to_value(&self.project_feature_state)? {

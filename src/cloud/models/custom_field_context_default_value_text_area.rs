@@ -9,7 +9,8 @@ pub enum CustomFieldContextDefaultValueTextAreaType {
 }
 
 /// The default text for a text area custom field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueTextArea {
     /// The ID of the context.
     #[serde(rename = "contextId")]

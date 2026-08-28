@@ -4,11 +4,13 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The statuses referenced in the workflow.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowReferenceStatus {
     #[serde(rename = "approvalConfiguration", default, skip_serializing_if = "Option::is_none")]
     pub approval_configuration: Option<ApprovalConfiguration>,
     /// Indicates if the status is deprecated.
+    #[deprecated(note = "Indicates if the status is deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub deprecated: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

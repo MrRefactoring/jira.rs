@@ -18,7 +18,7 @@ crate::open_enum! {
 }
 
 /// Single sort specification for groups.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GroupSortBy {
     /// Field with which to sort results.
     pub field: GroupSortByField,

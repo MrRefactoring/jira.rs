@@ -14,11 +14,11 @@ impl<'a> IssueAttachmentsService<'a> {
 
     /// Returns the contents of an attachment. A `Range` header can be set to define a range of bytes within the attachment to download. See the [HTTP Range header standard](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Range) for details.
     ///
-    /// To return a thumbnail of the attachment, use [Get attachment thumbnail](#api-rest-api-3-attachment-thumbnail-id-get).
+    /// To return a thumbnail of the attachment, use [Get attachment thumbnail](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-attachment/#api-rest-api-3-attachment-thumbnail-id-get).
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** For the issue containing the attachment:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** For the issue containing the attachment:
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -33,18 +33,18 @@ impl<'a> IssueAttachmentsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_attachment_meta(&self) -> GetAttachmentMetaRequest<'a> {
         GetAttachmentMetaRequest::new(self.client)
     }
 
     /// Returns the thumbnail of an attachment.
     ///
-    /// To return the attachment contents, use [Get attachment content](#api-rest-api-3-attachment-content-id-get).
+    /// To return the attachment contents, use [Get attachment content](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-attachment/#api-rest-api-3-attachment-content-id-get).
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** For the issue containing the attachment:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** For the issue containing the attachment:
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -57,7 +57,7 @@ impl<'a> IssueAttachmentsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -70,7 +70,7 @@ impl<'a> IssueAttachmentsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** For the project holding the issue containing the attachment:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** For the project holding the issue containing the attachment:
     ///
     ///  *  *Delete own attachments* [project permission](https://confluence.atlassian.com/x/yodKLg) to delete an attachment created by the calling user.
     ///  *  *Delete all attachments* [project permission](https://confluence.atlassian.com/x/yodKLg) to delete an attachment created by any user.
@@ -82,7 +82,7 @@ impl<'a> IssueAttachmentsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse Projects* and *Create attachments* [ project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -97,11 +97,11 @@ impl<'a> IssueAttachmentsService<'a> {
 
 /// Returns the contents of an attachment. A `Range` header can be set to define a range of bytes within the attachment to download. See the [HTTP Range header standard](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Range) for details.
 ///
-/// To return a thumbnail of the attachment, use [Get attachment thumbnail](#api-rest-api-3-attachment-thumbnail-id-get).
+/// To return a thumbnail of the attachment, use [Get attachment thumbnail](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-attachment/#api-rest-api-3-attachment-thumbnail-id-get).
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** For the issue containing the attachment:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** For the issue containing the attachment:
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -129,7 +129,7 @@ impl<'a> GetAttachmentContentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/attachment/content/{}", self.id),
+            format!("/rest/api/3/attachment/content/{}", crate::core::encode_path_segment(&self.id)),
         );
 
         if let Some(value) = &self.redirect {
@@ -156,7 +156,7 @@ impl<'a> GetAttachmentContentRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetAttachmentMetaRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -187,11 +187,11 @@ impl<'a> GetAttachmentMetaRequest<'a> {
 
 /// Returns the thumbnail of an attachment.
 ///
-/// To return the attachment contents, use [Get attachment content](#api-rest-api-3-attachment-content-id-get).
+/// To return the attachment contents, use [Get attachment content](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-attachment/#api-rest-api-3-attachment-content-id-get).
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** For the issue containing the attachment:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** For the issue containing the attachment:
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -246,7 +246,7 @@ impl<'a> GetAttachmentThumbnailRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/attachment/thumbnail/{}", self.id),
+            format!("/rest/api/3/attachment/thumbnail/{}", crate::core::encode_path_segment(&self.id)),
         );
 
         if let Some(value) = &self.redirect {
@@ -283,7 +283,7 @@ impl<'a> GetAttachmentThumbnailRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -300,8 +300,10 @@ impl<'a> GetAttachmentRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/3/attachment/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/attachment/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -321,7 +323,7 @@ impl<'a> GetAttachmentRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** For the project holding the issue containing the attachment:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** For the project holding the issue containing the attachment:
 ///
 ///  *  *Delete own attachments* [project permission](https://confluence.atlassian.com/x/yodKLg) to delete an attachment created by the calling user.
 ///  *  *Delete all attachments* [project permission](https://confluence.atlassian.com/x/yodKLg) to delete an attachment created by any user.
@@ -337,8 +339,10 @@ impl<'a> RemoveAttachmentRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/rest/api/3/attachment/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/3/attachment/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -358,7 +362,7 @@ impl<'a> RemoveAttachmentRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse Projects* and *Create attachments* [ project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -395,7 +399,7 @@ impl<'a> AddAttachmentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/3/issue/{}/attachments", self.issue_id_or_key),
+            format!("/rest/api/3/issue/{}/attachments", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));

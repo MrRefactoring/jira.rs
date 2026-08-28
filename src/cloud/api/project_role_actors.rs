@@ -14,11 +14,11 @@ impl<'a> ProjectRoleActorsService<'a> {
 
     /// Adds actors to a project role for the project.
     ///
-    /// To replace all actors for the project, use [Set actors for project role](#api-rest-api-3-project-projectIdOrKey-role-id-put).
+    /// To replace all actors for the project, use [Set actors for project role](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-role-id-put).
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn add_actor_users(
         &self,
         project_id_or_key: impl Into<String>,
@@ -30,9 +30,9 @@ impl<'a> ProjectRoleActorsService<'a> {
 
     /// Sets the actors for a project role for a project, replacing all existing actors.
     ///
-    /// To add actors to the project without overwriting the existing list, use [Add actors to project role](#api-rest-api-3-project-projectIdOrKey-role-id-post).
+    /// To add actors to the project without overwriting the existing list, use [Add actors to project role](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-role-id-post).
     ///
-    /// **[Permissions](#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn set_actors(
         &self,
         project_id_or_key: impl Into<String>,
@@ -44,27 +44,27 @@ impl<'a> ProjectRoleActorsService<'a> {
 
     /// Deletes actors from a project role for the project.
     ///
-    /// To remove default actors from the project role, use [Delete default actors from project role](#api-rest-api-3-role-id-actors-delete).
+    /// To remove default actors from the project role, use [Delete default actors from project role](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-role/#api-rest-api-3-role-id-actors-delete).
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_actor(&self, project_id_or_key: impl Into<String>, id: i64) -> DeleteActorRequest<'a> {
         DeleteActorRequest::new(self.client, project_id_or_key, id)
     }
 
-    /// Returns the [default actors](#api-rest-api-3-resolution-get) for the project role.
+    /// Returns the [default actors](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-resolution/#api-rest-api-3-resolution-get) for the project role.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_project_role_actors_for_role(&self, id: i64) -> GetProjectRoleActorsForRoleRequest<'a> {
         GetProjectRoleActorsForRoleRequest::new(self.client, id)
     }
 
-    /// Adds [default actors](#api-rest-api-3-resolution-get) to a role. You may add groups or users, but you cannot add groups and users in the same request.
+    /// Adds [default actors](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-resolution/#api-rest-api-3-resolution-get) to a role. You may add groups or users, but you cannot add groups and users in the same request.
     ///
     /// Changing a project role's default actors does not affect project role members for projects already created.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn add_project_role_actors_to_role(
         &self,
         id: i64,
@@ -73,11 +73,11 @@ impl<'a> ProjectRoleActorsService<'a> {
         AddProjectRoleActorsToRoleRequest::new(self.client, id, actor_input)
     }
 
-    /// Deletes the [default actors](#api-rest-api-3-resolution-get) from a project role. You may delete a group or user, but you cannot delete a group and a user in the same request.
+    /// Deletes the [default actors](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-resolution/#api-rest-api-3-resolution-get) from a project role. You may delete a group or user, but you cannot delete a group and a user in the same request.
     ///
     /// Changing a project role's default actors does not affect project role members for projects already created.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_project_role_actors_from_role(&self, id: i64) -> DeleteProjectRoleActorsFromRoleRequest<'a> {
         DeleteProjectRoleActorsFromRoleRequest::new(self.client, id)
     }
@@ -85,11 +85,11 @@ impl<'a> ProjectRoleActorsService<'a> {
 
 /// Adds actors to a project role for the project.
 ///
-/// To replace all actors for the project, use [Set actors for project role](#api-rest-api-3-project-projectIdOrKey-role-id-put).
+/// To replace all actors for the project, use [Set actors for project role](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-role-id-put).
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct AddActorUsersRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -111,7 +111,11 @@ impl<'a> AddActorUsersRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/3/project/{}/role/{}", self.project_id_or_key, self.id),
+            format!(
+                "/rest/api/3/project/{}/role/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                self.id
+            ),
         );
 
         let body = match serde_json::to_value(&self.actors_map)? {
@@ -137,9 +141,9 @@ impl<'a> AddActorUsersRequest<'a> {
 
 /// Sets the actors for a project role for a project, replacing all existing actors.
 ///
-/// To add actors to the project without overwriting the existing list, use [Add actors to project role](#api-rest-api-3-project-projectIdOrKey-role-id-post).
+/// To add actors to the project without overwriting the existing list, use [Add actors to project role](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-role-id-post).
 ///
-/// **[Permissions](#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct SetActorsRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -161,7 +165,11 @@ impl<'a> SetActorsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/project/{}/role/{}", self.project_id_or_key, self.id),
+            format!(
+                "/rest/api/3/project/{}/role/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                self.id
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -182,11 +190,11 @@ impl<'a> SetActorsRequest<'a> {
 
 /// Deletes actors from a project role for the project.
 ///
-/// To remove default actors from the project role, use [Delete default actors from project role](#api-rest-api-3-role-id-actors-delete).
+/// To remove default actors from the project role, use [Delete default actors from project role](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-role/#api-rest-api-3-role-id-actors-delete).
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project or *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteActorRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -229,7 +237,11 @@ impl<'a> DeleteActorRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/project/{}/role/{}", self.project_id_or_key, self.id),
+            format!(
+                "/rest/api/3/project/{}/role/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                self.id
+            ),
         );
 
         if let Some(value) = &self.user {
@@ -258,9 +270,9 @@ impl<'a> DeleteActorRequest<'a> {
     }
 }
 
-/// Returns the [default actors](#api-rest-api-3-resolution-get) for the project role.
+/// Returns the [default actors](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-resolution/#api-rest-api-3-resolution-get) for the project role.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetProjectRoleActorsForRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -290,11 +302,11 @@ impl<'a> GetProjectRoleActorsForRoleRequest<'a> {
     }
 }
 
-/// Adds [default actors](#api-rest-api-3-resolution-get) to a role. You may add groups or users, but you cannot add groups and users in the same request.
+/// Adds [default actors](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-resolution/#api-rest-api-3-resolution-get) to a role. You may add groups or users, but you cannot add groups and users in the same request.
 ///
 /// Changing a project role's default actors does not affect project role members for projects already created.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct AddProjectRoleActorsToRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -332,11 +344,11 @@ impl<'a> AddProjectRoleActorsToRoleRequest<'a> {
     }
 }
 
-/// Deletes the [default actors](#api-rest-api-3-resolution-get) from a project role. You may delete a group or user, but you cannot delete a group and a user in the same request.
+/// Deletes the [default actors](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-resolution/#api-rest-api-3-resolution-get) from a project role. You may delete a group or user, but you cannot delete a group and a user in the same request.
 ///
 /// Changing a project role's default actors does not affect project role members for projects already created.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteProjectRoleActorsFromRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,

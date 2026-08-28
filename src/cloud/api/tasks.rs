@@ -12,7 +12,7 @@ impl<'a> TasksService<'a> {
         Self { client }
     }
 
-    /// Returns the status of a [long-running asynchronous task](#async).
+    /// Returns the status of a [long-running asynchronous task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async).
     ///
     /// When a task has finished, this operation returns the JSON blob applicable to the task. See the documentation of the operation that created the task for details. Task details are not permanently retained. As of September 2019, details are retained for 14 days although this period may change without notice.
     ///
@@ -20,7 +20,7 @@ impl<'a> TasksService<'a> {
     ///
     ///  *  `read:jira-work`
     ///
-    /// **[Permissions](#permissions) required:** either of:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** either of:
     ///
     ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     ///  *  Creator of the task.
@@ -29,7 +29,7 @@ impl<'a> TasksService<'a> {
     }
 }
 
-/// Returns the status of a [long-running asynchronous task](#async).
+/// Returns the status of a [long-running asynchronous task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async).
 ///
 /// When a task has finished, this operation returns the JSON blob applicable to the task. See the documentation of the operation that created the task for details. Task details are not permanently retained. As of September 2019, details are retained for 14 days although this period may change without notice.
 ///
@@ -37,7 +37,7 @@ impl<'a> TasksService<'a> {
 ///
 ///  *  `read:jira-work`
 ///
-/// **[Permissions](#permissions) required:** either of:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** either of:
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 ///  *  Creator of the task.
@@ -53,8 +53,10 @@ impl<'a> GetTaskRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/3/task/{}", self.task_id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/task/{}", crate::core::encode_path_segment(&self.task_id)),
+        );
 
         Ok(config)
     }

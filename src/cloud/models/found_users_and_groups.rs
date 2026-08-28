@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// List of users and groups found in a search.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FoundUsersAndGroups {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub groups: Option<FoundGroups>,

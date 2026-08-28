@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Response bean for field scheme parameter update operations.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct UpdateFieldSchemeParametersResponse {
     pub results: Vec<UpdateFieldSchemeParametersPartialFailure>,
 }

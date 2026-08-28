@@ -3,10 +3,11 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-/// Defines the payload for the field layouts. See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/\#api-group-issue-field-configurations>" + fieldlayout is what users would see as "Field Configuration" in Jira's UI - <https://support.atlassian.com/jira-cloud-administration/docs/manage-issue-field-configurations/>
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+/// Defines the payload for the field layouts. See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-group-issue-field-configurations>" + fieldlayout is what users would see as "Field Configuration" in Jira's UI - <https://support.atlassian.com/jira-cloud-administration/docs/manage-issue-field-configurations/>
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FieldLayoutPayload {
-    /// The field layout configuration. See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/\#api-rest-api-3-fieldconfiguration-post>
+    /// The field layout configuration. See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/#api-rest-api-3-fieldconfiguration-post>
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub configuration: Option<Vec<FieldLayoutConfiguration>>,
     /// The description of the field layout

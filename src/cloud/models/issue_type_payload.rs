@@ -13,9 +13,9 @@ crate::open_enum! {
 }
 
 /// The payload for creating an issue type
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueTypePayload {
-    /// The avatar ID of the issue type. Go to <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-avatars/\#api-rest-api-3-avatar-type-system-get> to choose an avatarId existing in Jira
+    /// The avatar ID of the issue type. Go to <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-avatars/#api-rest-api-3-avatar-type-system-get> to choose an avatarId existing in Jira
     #[serde(rename = "avatarId", default, skip_serializing_if = "Option::is_none")]
     pub avatar_id: Option<i64>,
     /// The description of the issue type

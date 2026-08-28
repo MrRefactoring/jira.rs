@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Metadata for an archive (for example a zip) and its contents.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AttachmentArchiveMetadataReadable {
     /// The list of the items included in the archive.
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -3,7 +3,8 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Opsbar {
     #[serde(rename = "linkGroups", default, skip_serializing_if = "Option::is_none")]
     pub link_groups: Option<Vec<Box<LinkGroup>>>,

@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The hierarchy of issue types within a project.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ProjectIssueTypeHierarchy {
     /// Details of an issue type hierarchy level.
     #[serde(default, skip_serializing_if = "Option::is_none")]

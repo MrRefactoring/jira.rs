@@ -11,7 +11,7 @@ crate::open_enum! {
 }
 
 /// An ordered list of custom field option IDs and information on where to move them.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct OrderOfCustomFieldOptions {
     /// The ID of the custom field option or cascading option to place the moved options after. Required if `position` isn't provided.
     #[serde(default, skip_serializing_if = "Option::is_none")]

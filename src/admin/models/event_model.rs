@@ -11,9 +11,20 @@ crate::open_enum! {
 }
 
 /// Attributes of this object
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EventModelAttributes {
     /// The date and time of the event
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub time: Option<chrono::DateTime<chrono::Utc>>,
+    /// The date and time of the event
+    #[cfg(not(feature = "chrono"))]
     #[serde(deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub time: String,
     /// Kind of Event. Complete list see `event-actions` API.
@@ -28,7 +39,8 @@ pub struct EventModelAttributes {
     pub location: Option<EventLocationModel>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct EventModel {
     /// Unique identifier of the Event
     pub id: String,

@@ -22,7 +22,7 @@ crate::open_enum! {
 }
 
 /// Details of the time tracking configuration.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TimeTrackingConfiguration {
     /// The default unit of time applied to logged time.
     #[serde(rename = "defaultUnit")]

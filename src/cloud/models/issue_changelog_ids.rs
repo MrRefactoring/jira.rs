@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// A list of changelog IDs.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueChangelogIds {
     /// The list of changelog IDs.
     #[serde(rename = "changelogIds")]

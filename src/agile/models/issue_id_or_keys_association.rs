@@ -11,7 +11,8 @@ crate::open_enum! {
 }
 
 /// An association type referencing issues in Jira.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueIdOrKeysAssociation {
     /// Defines the association type.
     #[serde(rename = "associationType")]

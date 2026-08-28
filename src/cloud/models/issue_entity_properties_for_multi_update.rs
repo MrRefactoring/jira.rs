@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// An issue ID with entity property values. See [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/) for more information.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueEntityPropertiesForMultiUpdate {
     /// The ID of the issue.
     #[serde(rename = "issueID", default, skip_serializing_if = "Option::is_none")]

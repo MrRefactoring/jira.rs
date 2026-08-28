@@ -16,7 +16,7 @@ impl<'a> ProjectPropertiesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
     pub fn get_project_property_keys(&self, project_id_or_key: impl Into<String>) -> GetProjectPropertyKeysRequest<'a> {
         GetProjectPropertyKeysRequest::new(self.client, project_id_or_key)
     }
@@ -25,7 +25,7 @@ impl<'a> ProjectPropertiesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the property.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the property.
     pub fn get_project_property(
         &self,
         project_id_or_key: impl Into<String>,
@@ -40,7 +40,7 @@ impl<'a> ProjectPropertiesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project in which the property is created.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project in which the property is created.
     pub fn set_project_property(
         &self,
         project_id_or_key: impl Into<String>,
@@ -54,7 +54,7 @@ impl<'a> ProjectPropertiesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the property.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the property.
     pub fn delete_project_property(
         &self,
         project_id_or_key: impl Into<String>,
@@ -68,7 +68,7 @@ impl<'a> ProjectPropertiesService<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
 pub struct GetProjectPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -83,7 +83,7 @@ impl<'a> GetProjectPropertyKeysRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}/properties", self.project_id_or_key),
+            format!("/rest/api/3/project/{}/properties", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         Ok(config)
@@ -104,7 +104,7 @@ impl<'a> GetProjectPropertyKeysRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the property.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the property.
 pub struct GetProjectPropertyRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -124,7 +124,11 @@ impl<'a> GetProjectPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}/properties/{}", self.project_id_or_key, self.property_key),
+            format!(
+                "/rest/api/3/project/{}/properties/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)
@@ -147,7 +151,7 @@ impl<'a> GetProjectPropertyRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project in which the property is created.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project in which the property is created.
 pub struct SetProjectPropertyRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -169,7 +173,11 @@ impl<'a> SetProjectPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/project/{}/properties/{}", self.project_id_or_key, self.property_key),
+            format!(
+                "/rest/api/3/project/{}/properties/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -192,7 +200,7 @@ impl<'a> SetProjectPropertyRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the property.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the property.
 pub struct DeleteProjectPropertyRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -212,7 +220,11 @@ impl<'a> DeleteProjectPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/project/{}/properties/{}", self.project_id_or_key, self.property_key),
+            format!(
+                "/rest/api/3/project/{}/properties/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)

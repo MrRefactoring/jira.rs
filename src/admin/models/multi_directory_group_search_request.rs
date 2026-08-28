@@ -15,7 +15,7 @@ crate::open_enum! {
 /// The request body is optional — sending an empty body returns the first page of all groups in the directory.
 ///
 /// Use `expand` to include additional count fields. Other count toggles are not exposed on this endpoint; the `expand` array is the only way to request `counts.resources` or `counts.users`.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct MultiDirectoryGroupSearchRequest {
     /// Sets the starting point for the page of results to return.
     #[serde(default, skip_serializing_if = "Option::is_none")]

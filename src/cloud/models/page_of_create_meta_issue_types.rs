@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A page of CreateMetaIssueTypes.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PageOfCreateMetaIssueTypes {
     #[serde(rename = "createMetaIssueType", default, skip_serializing_if = "Option::is_none")]
     pub create_meta_issue_type: Option<Vec<IssueTypeIssueCreateMetadata>>,

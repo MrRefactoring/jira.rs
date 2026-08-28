@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of a priority scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct UpdatePrioritySchemeRequest {
     /// The default priority of the scheme.
     #[serde(rename = "defaultPriorityId", default, skip_serializing_if = "Option::is_none")]

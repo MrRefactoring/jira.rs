@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of the contextual configuration for a custom field.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct BulkContextualConfiguration {
     /// The field configuration.
     #[serde(default, skip_serializing_if = "Option::is_none")]

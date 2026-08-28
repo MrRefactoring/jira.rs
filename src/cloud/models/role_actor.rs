@@ -12,7 +12,7 @@ crate::open_enum! {
 }
 
 /// Details about a user assigned to a project role.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RoleActor {
     #[serde(rename = "actorGroup", default, skip_serializing_if = "Option::is_none")]
     pub actor_group: Option<ProjectRoleGroup>,

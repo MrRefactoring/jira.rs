@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Number of archived/unarchived issues and list of errors that occurred during the action, if any.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueArchivalSyncResponse {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub errors: Option<Errors>,

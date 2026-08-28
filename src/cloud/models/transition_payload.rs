@@ -13,7 +13,7 @@ crate::open_enum! {
 }
 
 /// The payload for creating a transition in a workflow. Can be DIRECTED, GLOBAL, SELF-LOOPED, GLOBAL LOOPED
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct TransitionPayload {
     /// The actions that are performed when the transition is made
     #[serde(default, skip_serializing_if = "Option::is_none")]

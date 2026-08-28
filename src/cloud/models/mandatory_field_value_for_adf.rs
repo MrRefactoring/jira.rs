@@ -11,7 +11,8 @@ crate::open_enum! {
 }
 
 /// An object notation input
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct MandatoryFieldValueForADF {
     /// If `true`, will try to retain original non-null issue field values on move.
     #[serde(default, skip_serializing_if = "Option::is_none")]

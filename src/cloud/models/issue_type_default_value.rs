@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A default value associated with an issue type within a context.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueTypeDefaultValue {
     /// True when this default value applies to every issue type covered by the context (no specific issue type). Only present when true; omitted otherwise.
     #[serde(rename = "isAnyIssueType", default, skip_serializing_if = "Option::is_none")]

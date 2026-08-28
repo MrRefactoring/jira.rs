@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Rule configuration for workflow transitions.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PreviewRuleConfiguration {
     /// A transient identifier for this element, unique within this response but not guaranteed to stable across requests.
     #[serde(default, skip_serializing_if = "Option::is_none")]

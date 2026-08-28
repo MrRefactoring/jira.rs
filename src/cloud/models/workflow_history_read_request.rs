@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// A request to read a specific workflow version from history.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct WorkflowHistoryReadRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,

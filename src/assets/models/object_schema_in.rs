@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Used to create object schema
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ObjectSchemaIn {
     pub name: String,
     #[serde(rename = "objectSchemaKey")]

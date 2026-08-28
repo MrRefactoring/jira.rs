@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of a notification within a notification scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct NotificationSchemeNotificationDetails {
     /// The notification type, e.g `CurrentAssignee`, `Group`, `EmailAddress`.
     #[serde(rename = "notificationType")]

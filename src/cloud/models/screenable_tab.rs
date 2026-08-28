@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// A screen tab.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ScreenableTab {
     /// The ID of the screen tab.
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -36,7 +36,7 @@ crate::open_enum! {
 }
 
 /// Whether to include counts of different objects associated with the group.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetGroupsRequestCounts {
     /// Whether to include the number of resources associated with the group.
     #[serde(rename = "includeResources", default, skip_serializing_if = "Option::is_none")]
@@ -61,7 +61,7 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetGroupsRequestSortBy {
     /// The name of the field to sort the results by.
     pub field: GetGroupsRequestSortByField,
@@ -215,6 +215,9 @@ impl<'a> GroupsService<'a> {
     ///
     /// #### Scopes
     /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:groups:admin`
+    #[deprecated(
+        note = "**This API is deprecated and will no longer work after June 30, 2027.** Use the [Search for groups in an organization endpoint](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-groups/#api-v2-orgs-orgid-directories-directoryid-groups-search-post) instead."
+    )]
     pub fn get_groups(&self, org_id: impl Into<String>, directory_id: impl Into<String>) -> GetGroupsRequest<'a> {
         GetGroupsRequest::new(self.client, org_id, directory_id)
     }
@@ -261,7 +264,11 @@ impl<'a> SearchDirectoryGroupsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/admin/v2/orgs/{}/directories/{}/groups/search", self.org_id, self.directory_id),
+            format!(
+                "/admin/v2/orgs/{}/directories/{}/groups/search",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.multi_directory_group_search_request)? {
@@ -391,7 +398,9 @@ impl<'a> GetGroupRoleAssignmentsRequest<'a> {
             crate::core::Method::GET,
             format!(
                 "/admin/v2/orgs/{}/directories/{}/groups/{}/role-assignments",
-                self.org_id, self.directory_id, self.group_id
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.group_id)
             ),
         );
 
@@ -468,7 +477,9 @@ impl<'a> GrantGroupAccessRequest<'a> {
             crate::core::Method::POST,
             format!(
                 "/admin/v2/orgs/{}/directories/{}/groups/{}/role-assignments/assign",
-                self.org_id, self.directory_id, self.group_id
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.group_id)
             ),
         );
 
@@ -529,7 +540,9 @@ impl<'a> RevokeGroupAccessRequest<'a> {
             crate::core::Method::POST,
             format!(
                 "/admin/v2/orgs/{}/directories/{}/groups/{}/role-assignments/revoke",
-                self.org_id, self.directory_id, self.group_id
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.group_id)
             ),
         );
 
@@ -593,7 +606,9 @@ impl<'a> AddUserToGroupRequest<'a> {
             crate::core::Method::POST,
             format!(
                 "/admin/v2/orgs/{}/directories/{}/groups/{}/memberships",
-                self.org_id, self.directory_id, self.group_id
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.group_id)
             ),
         );
 
@@ -649,7 +664,10 @@ impl<'a> RemoveUserFromGroupRequest<'a> {
             crate::core::Method::DELETE,
             format!(
                 "/admin/v2/orgs/{}/directories/{}/groups/{}/memberships/{}",
-                self.org_id, self.directory_id, self.group_id, self.account_id
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.group_id),
+                crate::core::encode_path_segment(&self.account_id)
             ),
         );
 
@@ -689,7 +707,12 @@ impl<'a> GetGroupRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v2/orgs/{}/directories/{}/groups/{}", self.org_id, self.directory_id, self.group_id),
+            format!(
+                "/admin/v2/orgs/{}/directories/{}/groups/{}",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.group_id)
+            ),
         );
 
         Ok(config)
@@ -728,7 +751,12 @@ impl<'a> DeleteGroupRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/admin/v2/orgs/{}/directories/{}/groups/{}", self.org_id, self.directory_id, self.group_id),
+            format!(
+                "/admin/v2/orgs/{}/directories/{}/groups/{}",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.group_id)
+            ),
         );
 
         Ok(config)
@@ -846,7 +874,11 @@ impl<'a> GetGroupsCountRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v2/orgs/{}/directories/{}/groups/count", self.org_id, self.directory_id),
+            format!(
+                "/admin/v2/orgs/{}/directories/{}/groups/count",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id)
+            ),
         );
 
         if let Some(value) = &self.directory_ids {
@@ -907,7 +939,11 @@ impl<'a> GetGroupsStatsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v2/orgs/{}/directories/{}/groups/stats", self.org_id, self.directory_id),
+            format!(
+                "/admin/v2/orgs/{}/directories/{}/groups/stats",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id)
+            ),
         );
 
         Ok(config)
@@ -1070,7 +1106,11 @@ impl<'a> GetGroupsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v2/orgs/{}/directories/{}/groups", self.org_id, self.directory_id),
+            format!(
+                "/admin/v2/orgs/{}/directories/{}/groups",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id)
+            ),
         );
 
         if let Some(value) = &self.cursor {
@@ -1162,7 +1202,11 @@ impl<'a> CreateGroupRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/admin/v2/orgs/{}/directories/{}/groups", self.org_id, self.directory_id),
+            format!(
+                "/admin/v2/orgs/{}/directories/{}/groups",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id)
+            ),
         );
 
         let mut body = serde_json::Map::new();

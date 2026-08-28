@@ -14,23 +14,23 @@ impl<'a> GroupsService<'a> {
 
     /// Creates a group.
     ///
-    /// **[Permissions](#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
     pub fn create_group(&self, add_group: AddGroup) -> CreateGroupRequest<'a> {
         CreateGroupRequest::new(self.client, add_group)
     }
 
     /// Deletes a group.
     ///
-    /// **[Permissions](#permissions) required:** Site administration (that is, member of the *site-admin* strategic [group](https://confluence.atlassian.com/x/24xjL)).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, member of the *site-admin* strategic [group](https://confluence.atlassian.com/x/24xjL)).
     pub fn remove_group(&self) -> RemoveGroupRequest<'a> {
         RemoveGroupRequest::new(self.client)
     }
 
-    /// Returns a [paginated](#pagination) list of all users in a group.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of all users in a group.
     ///
     /// Note that users are ordered by username, however the username is not returned in the results due to privacy reasons.
     ///
-    /// **[Permissions](#permissions) required:** either of:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** either of:
     ///
     ///  *  *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
@@ -40,14 +40,14 @@ impl<'a> GroupsService<'a> {
 
     /// Adds a user to a group.
     ///
-    /// **[Permissions](#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
     pub fn add_user_to_group(&self, update_user_to_group: UpdateUserToGroup) -> AddUserToGroupRequest<'a> {
         AddUserToGroupRequest::new(self.client, update_user_to_group)
     }
 
     /// Removes a user from a group.
     ///
-    /// **[Permissions](#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
     pub fn remove_user_from_group(&self, account_id: impl Into<String>) -> RemoveUserFromGroupRequest<'a> {
         RemoveUserFromGroupRequest::new(self.client, account_id)
     }
@@ -60,7 +60,7 @@ impl<'a> GroupsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg). Anonymous calls and calls by users without the required permission return an empty list.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg). Anonymous calls and calls by users without the required permission return an empty list.
     ///
     /// *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg). Without this permission, calls where query is not an exact match to an existing group will return an empty list.
     pub fn find_groups(&self) -> FindGroupsRequest<'a> {
@@ -70,7 +70,7 @@ impl<'a> GroupsService<'a> {
 
 /// Creates a group.
 ///
-/// **[Permissions](#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
 pub struct CreateGroupRequest<'a> {
     client: &'a crate::core::Client,
     add_group: AddGroup,
@@ -108,7 +108,7 @@ impl<'a> CreateGroupRequest<'a> {
 
 /// Deletes a group.
 ///
-/// **[Permissions](#permissions) required:** Site administration (that is, member of the *site-admin* strategic [group](https://confluence.atlassian.com/x/24xjL)).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, member of the *site-admin* strategic [group](https://confluence.atlassian.com/x/24xjL)).
 pub struct RemoveGroupRequest<'a> {
     client: &'a crate::core::Client,
     groupname: Option<String>,
@@ -188,11 +188,11 @@ impl<'a> RemoveGroupRequest<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of all users in a group.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of all users in a group.
 ///
 /// Note that users are ordered by username, however the username is not returned in the results due to privacy reasons.
 ///
-/// **[Permissions](#permissions) required:** either of:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** either of:
 ///
 ///  *  *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
@@ -299,7 +299,7 @@ impl<'a> GetUsersFromGroupRequest<'a> {
 
 /// Adds a user to a group.
 ///
-/// **[Permissions](#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
 pub struct AddUserToGroupRequest<'a> {
     client: &'a crate::core::Client,
     groupname: Option<String>,
@@ -365,7 +365,7 @@ impl<'a> AddUserToGroupRequest<'a> {
 
 /// Removes a user from a group.
 ///
-/// **[Permissions](#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, member of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
 pub struct RemoveUserFromGroupRequest<'a> {
     client: &'a crate::core::Client,
     groupname: Option<String>,
@@ -432,7 +432,7 @@ impl<'a> RemoveUserFromGroupRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg). Anonymous calls and calls by users without the required permission return an empty list.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg). Anonymous calls and calls by users without the required permission return an empty list.
 ///
 /// *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg). Without this permission, calls where query is not an exact match to an existing group will return an empty list.
 pub struct FindGroupsRequest<'a> {

@@ -11,7 +11,7 @@ crate::open_enum! {
 }
 
 /// An ordered list of issue type IDs and information about where to move them.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct OrderOfIssueTypes {
     /// The ID of the issue type to place the moved issue types after. Required if `position` isn't provided.
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -74,7 +74,10 @@ impl<'a> LoadObjectRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(crate::core::Method::GET, format!("/object/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/object/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -104,7 +107,10 @@ impl<'a> UpdateObjectRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/object/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/object/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         let body = match serde_json::to_value(&self.asset_object_in)? {
             serde_json::Value::Object(object) => object,
@@ -140,7 +146,10 @@ impl<'a> DeleteObjectRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/object/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/object/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -169,8 +178,10 @@ impl<'a> FindObjectAttributesRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/object/{}/attributes", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/object/{}/attributes", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -208,8 +219,10 @@ impl<'a> FindObjectHistoryRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/object/{}/history", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/object/{}/history", crate::core::encode_path_segment(&self.id)),
+        );
 
         if let Some(value) = &self.asc {
             config.query.push(("asc".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
@@ -242,8 +255,10 @@ impl<'a> FindObjectReferenceInfoRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/object/{}/referenceinfo", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/object/{}/referenceinfo", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }

@@ -17,7 +17,8 @@ crate::open_enum! {
 /// Only one of 'percentage', 'text', or 'rules' should be provided. They will be used in that order if multiple are present.
 ///
 /// This information may be presented to the user in the UI.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetFeatureFlagByIdSummaryStatusRollout {
     /// If the Feature Flag rollout is a simple percentage rollout
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -31,7 +32,8 @@ pub struct GetFeatureFlagByIdSummaryStatusRollout {
 }
 
 /// Status information about a single Feature Flag.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetFeatureFlagByIdSummaryStatus {
     /// Whether the Feature Flag is enabled in the given environment (or in summary).
     ///
@@ -56,7 +58,8 @@ pub struct GetFeatureFlagByIdSummaryStatus {
 /// Providers may elect to provide information from a specific environment, or they may choose to 'roll up' information from across multiple environments - whatever makes most sense in the Provider system.
 ///
 /// This is the summary information that will be presented to the user on e.g. the Jira issue screen.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetFeatureFlagByIdSummary {
     /// A URL users can use to link to a summary view of this flag, if appropriate.
     ///
@@ -70,6 +73,21 @@ pub struct GetFeatureFlagByIdSummary {
     /// Providers may choose to supply the last-updated timestamp from a specific environment, or the 'most recent' last-updated timestamp across all environments - whatever makes sense in the Provider system.
     ///
     /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user as a summary of the state of the Feature Flag.
+    ///
+    /// Providers may choose to supply the last-updated timestamp from a specific environment, or the 'most recent' last-updated timestamp across all environments - whatever makes sense in the Provider system.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
 }
@@ -89,7 +107,8 @@ crate::open_enum! {
 /// At the simplest this must be the name of the environment.
 ///
 /// Ideally there is also type information which may be used to group data from multiple Feature Flags and other entities for visualisation in the UI.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetFeatureFlagByIdDetailsEnvironment {
     /// The name of the environment.
     pub name: String,
@@ -103,7 +122,8 @@ pub struct GetFeatureFlagByIdDetailsEnvironment {
 /// Only one of 'percentage', 'text', or 'rules' should be provided. They will be used in that order if multiple are present.
 ///
 /// This information may be presented to the user in the UI.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetFeatureFlagByIdDetailsStatusRollout {
     /// If the Feature Flag rollout is a simple percentage rollout
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -117,7 +137,8 @@ pub struct GetFeatureFlagByIdDetailsStatusRollout {
 }
 
 /// Status information about a single Feature Flag.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetFeatureFlagByIdDetailsStatus {
     /// Whether the Feature Flag is enabled in the given environment (or in summary).
     ///
@@ -138,13 +159,27 @@ pub struct GetFeatureFlagByIdDetailsStatus {
 }
 
 /// Details of a Feature Flag for a single environment.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetFeatureFlagByIdDetails {
     /// A URL users can use to link to this Feature Flag, in this environment.
     pub url: String,
     /// The last-updated timestamp for this Feature Flag, in this environment.
     ///
     /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp for this Feature Flag, in this environment.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// Details of a single environment.
@@ -158,7 +193,8 @@ pub struct GetFeatureFlagByIdDetails {
 }
 
 /// Data related to a single Feature Flag, across any Environment that the flag is present in.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetFeatureFlagById {
     /// The FeatureFlagData schema version used for this flag data.
     ///

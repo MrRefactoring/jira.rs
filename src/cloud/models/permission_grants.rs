@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// List of permission grants.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PermissionGrants {
     /// Expand options that include additional permission grant details in the response.
     #[serde(default, skip_serializing_if = "Option::is_none")]

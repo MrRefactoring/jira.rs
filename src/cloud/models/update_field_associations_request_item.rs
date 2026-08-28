@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Represents an association between a field and its operations.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct UpdateFieldAssociationsRequestItem {
     /// (optional) Work types to restrict field to. Replaces any existing work type associations for the field. If not provided, the field is associated to any work types.
     #[serde(rename = "restrictedToWorkTypes", default, skip_serializing_if = "Option::is_none")]

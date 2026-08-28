@@ -315,7 +315,7 @@ impl<'a> GetCustomFieldOptionsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/customFields/{}/options", self.custom_field_id),
+            format!("/rest/api/2/customFields/{}/options", crate::core::encode_path_segment(&self.custom_field_id)),
         );
 
         if let Some(value) = &self.max_results {

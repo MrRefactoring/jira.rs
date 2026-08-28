@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// SCIM user phone number
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ScimUserPhoneNumber {
     /// Phone number.
     #[serde(default, skip_serializing_if = "Option::is_none")]

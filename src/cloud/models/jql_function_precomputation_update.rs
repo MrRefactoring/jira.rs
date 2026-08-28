@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Precomputation id and its new value.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct JqlFunctionPrecomputationUpdate {
     /// The error message to be displayed to the user if the given function clause is no longer valid during recalculation of the precomputation.
     #[serde(default, skip_serializing_if = "Option::is_none")]

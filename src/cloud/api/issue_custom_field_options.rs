@@ -14,11 +14,11 @@ impl<'a> IssueCustomFieldOptionsService<'a> {
 
     /// Returns a custom field option. For example, an option in a select list.
     ///
-    /// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect apps.
+    /// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect apps.
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** The custom field option is returned as follows:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** The custom field option is returned as follows:
     ///
     ///  *  if the user has the *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     ///  *  if the user has the *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for at least one project the custom field is used in, and the field is visible in at least one layout the user has permission to view.
@@ -26,11 +26,11 @@ impl<'a> IssueCustomFieldOptionsService<'a> {
         GetCustomFieldOptionRequest::new(self.client, id)
     }
 
-    /// Returns a [paginated](#pagination) list of all custom field option for a context. Options are returned first then cascading options, in the order they display in Jira.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of all custom field option for a context. Options are returned first then cascading options, in the order they display in Jira.
     ///
-    /// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](#api-group-issue-custom-field-options--apps-) operations.**
+    /// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#api-group-issue-custom-field-options--apps-) operations.**
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). *Edit Workflow* [edit workflow permission](https://support.atlassian.com/jira-cloud-administration/docs/permissions-for-company-managed-projects/#Edit-Workflows)
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). *Edit Workflow* [edit workflow permission](https://support.atlassian.com/jira-cloud-administration/docs/permissions-for-company-managed-projects/#Edit-Workflows)
     pub fn get_options_for_context(
         &self,
         field_id: impl Into<String>,
@@ -43,9 +43,9 @@ impl<'a> IssueCustomFieldOptionsService<'a> {
     ///
     /// The maximum number of options that can be created per request is 1000 and each field can have a maximum of 10000 options.
     ///
-    /// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](#api-group-issue-custom-field-options--apps-) operations.**
+    /// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#api-group-issue-custom-field-options--apps-) operations.**
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn create_custom_field_option(
         &self,
         field_id: impl Into<String>,
@@ -59,9 +59,9 @@ impl<'a> IssueCustomFieldOptionsService<'a> {
     ///
     /// If any of the options are not found, no options are updated. Options where the values in the request match the current values aren't updated and aren't reported in the response.
     ///
-    /// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect apps.
+    /// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect apps.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn update_custom_field_option(
         &self,
         field_id: impl Into<String>,
@@ -73,9 +73,9 @@ impl<'a> IssueCustomFieldOptionsService<'a> {
 
     /// Changes the order of custom field options or cascading options in a context.
     ///
-    /// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](#api-group-issue-custom-field-options--apps-) operations.**
+    /// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#api-group-issue-custom-field-options--apps-) operations.**
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn reorder_custom_field_options(
         &self,
         field_id: impl Into<String>,
@@ -89,9 +89,9 @@ impl<'a> IssueCustomFieldOptionsService<'a> {
     ///
     /// Options with cascading options cannot be deleted without deleting the cascading options first.
     ///
-    /// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](#api-group-issue-custom-field-options--apps-) operations.**
+    /// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#api-group-issue-custom-field-options--apps-) operations.**
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_custom_field_option(
         &self,
         field_id: impl Into<String>,
@@ -103,9 +103,9 @@ impl<'a> IssueCustomFieldOptionsService<'a> {
 
     /// Replaces the options of a custom field.
     ///
-    /// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect or Forge apps.
+    /// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect or Forge apps.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn replace_custom_field_option(
         &self,
         field_id: impl Into<String>,
@@ -118,11 +118,11 @@ impl<'a> IssueCustomFieldOptionsService<'a> {
 
 /// Returns a custom field option. For example, an option in a select list.
 ///
-/// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect apps.
+/// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect apps.
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** The custom field option is returned as follows:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** The custom field option is returned as follows:
 ///
 ///  *  if the user has the *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 ///  *  if the user has the *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for at least one project the custom field is used in, and the field is visible in at least one layout the user has permission to view.
@@ -140,7 +140,7 @@ impl<'a> GetCustomFieldOptionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/customFieldOption/{}", self.id),
+            format!("/rest/api/3/customFieldOption/{}", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -157,11 +157,11 @@ impl<'a> GetCustomFieldOptionRequest<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of all custom field option for a context. Options are returned first then cascading options, in the order they display in Jira.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of all custom field option for a context. Options are returned first then cascading options, in the order they display in Jira.
 ///
-/// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](#api-group-issue-custom-field-options--apps-) operations.**
+/// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#api-group-issue-custom-field-options--apps-) operations.**
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). *Edit Workflow* [edit workflow permission](https://support.atlassian.com/jira-cloud-administration/docs/permissions-for-company-managed-projects/#Edit-Workflows)
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). *Edit Workflow* [edit workflow permission](https://support.atlassian.com/jira-cloud-administration/docs/permissions-for-company-managed-projects/#Edit-Workflows)
 pub struct GetOptionsForContextRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -221,7 +221,11 @@ impl<'a> GetOptionsForContextRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/field/{}/context/{}/option", self.field_id, self.context_id),
+            format!(
+                "/rest/api/3/field/{}/context/{}/option",
+                crate::core::encode_path_segment(&self.field_id),
+                self.context_id
+            ),
         );
 
         if let Some(value) = &self.option_id {
@@ -258,9 +262,9 @@ impl<'a> GetOptionsForContextRequest<'a> {
 ///
 /// The maximum number of options that can be created per request is 1000 and each field can have a maximum of 10000 options.
 ///
-/// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](#api-group-issue-custom-field-options--apps-) operations.**
+/// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#api-group-issue-custom-field-options--apps-) operations.**
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct CreateCustomFieldOptionRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -282,7 +286,11 @@ impl<'a> CreateCustomFieldOptionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/3/field/{}/context/{}/option", self.field_id, self.context_id),
+            format!(
+                "/rest/api/3/field/{}/context/{}/option",
+                crate::core::encode_path_segment(&self.field_id),
+                self.context_id
+            ),
         );
 
         let body = match serde_json::to_value(&self.bulk_custom_field_option_create_request)? {
@@ -310,9 +318,9 @@ impl<'a> CreateCustomFieldOptionRequest<'a> {
 ///
 /// If any of the options are not found, no options are updated. Options where the values in the request match the current values aren't updated and aren't reported in the response.
 ///
-/// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect apps.
+/// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect apps.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct UpdateCustomFieldOptionRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -334,7 +342,11 @@ impl<'a> UpdateCustomFieldOptionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/field/{}/context/{}/option", self.field_id, self.context_id),
+            format!(
+                "/rest/api/3/field/{}/context/{}/option",
+                crate::core::encode_path_segment(&self.field_id),
+                self.context_id
+            ),
         );
 
         let body = match serde_json::to_value(&self.bulk_custom_field_option_update_request)? {
@@ -360,9 +372,9 @@ impl<'a> UpdateCustomFieldOptionRequest<'a> {
 
 /// Changes the order of custom field options or cascading options in a context.
 ///
-/// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](#api-group-issue-custom-field-options--apps-) operations.**
+/// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#api-group-issue-custom-field-options--apps-) operations.**
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct ReorderCustomFieldOptionsRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -384,7 +396,11 @@ impl<'a> ReorderCustomFieldOptionsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/field/{}/context/{}/option/move", self.field_id, self.context_id),
+            format!(
+                "/rest/api/3/field/{}/context/{}/option/move",
+                crate::core::encode_path_segment(&self.field_id),
+                self.context_id
+            ),
         );
 
         let body = match serde_json::to_value(&self.order_of_custom_field_options)? {
@@ -412,9 +428,9 @@ impl<'a> ReorderCustomFieldOptionsRequest<'a> {
 ///
 /// Options with cascading options cannot be deleted without deleting the cascading options first.
 ///
-/// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](#api-group-issue-custom-field-options--apps-) operations.**
+/// This operation works for custom field options created in Jira or the operations from this resource. **To work with issue field select list options created for Connect apps use the [Issue custom field options (apps)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#api-group-issue-custom-field-options--apps-) operations.**
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteCustomFieldOptionRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
@@ -431,7 +447,12 @@ impl<'a> DeleteCustomFieldOptionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/field/{}/context/{}/option/{}", self.field_id, self.context_id, self.option_id),
+            format!(
+                "/rest/api/3/field/{}/context/{}/option/{}",
+                crate::core::encode_path_segment(&self.field_id),
+                self.context_id,
+                self.option_id
+            ),
         );
 
         Ok(config)
@@ -450,9 +471,9 @@ impl<'a> DeleteCustomFieldOptionRequest<'a> {
 
 /// Replaces the options of a custom field.
 ///
-/// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect or Forge apps.
+/// Note that this operation **only works for issue field select list options created in Jira or using operations from the [Issue custom field options](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#api-group-Issue-custom-field-options) resource**, it cannot be used with issue field select list options created by Connect or Forge apps.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct ReplaceCustomFieldOptionRequest<'a> {
     client: &'a crate::core::Client,
     replace_with: Option<i64>,
@@ -487,7 +508,12 @@ impl<'a> ReplaceCustomFieldOptionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/field/{}/context/{}/option/{}/issue", self.field_id, self.context_id, self.option_id),
+            format!(
+                "/rest/api/3/field/{}/context/{}/option/{}/issue",
+                crate::core::encode_path_segment(&self.field_id),
+                self.context_id,
+                self.option_id
+            ),
         );
 
         if let Some(value) = &self.replace_with {

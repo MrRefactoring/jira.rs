@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CreateMetaIssueType {
     #[serde(rename = "avatarId", default, skip_serializing_if = "Option::is_none")]
     pub avatar_id: Option<i64>,

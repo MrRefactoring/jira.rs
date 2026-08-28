@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Fields that uniquely reference a build.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SubmitBuildsAcceptedBuilds {
     /// An ID that relates a sequence of builds. Depending on your system this might be a project ID, pipeline ID,
     /// plan key etc. - whatever logical unit you use to group a sequence of builds.
@@ -22,7 +23,8 @@ pub struct SubmitBuildsAcceptedBuilds {
 }
 
 /// Fields that uniquely reference a build.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SubmitBuildsRejectedBuildsKey {
     /// An ID that relates a sequence of builds. Depending on your system this might be a project ID, pipeline ID,
     /// plan key etc. - whatever logical unit you use to group a sequence of builds.
@@ -40,7 +42,8 @@ pub struct SubmitBuildsRejectedBuildsKey {
 }
 
 /// A message supplied in the case of an error.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SubmitBuildsRejectedBuildsErrors {
     /// A human-readable message describing the error.
     pub message: String,
@@ -52,7 +55,8 @@ pub struct SubmitBuildsRejectedBuildsErrors {
 /// A build that has not been accepted for submission, usually due to a problem with the request data.
 ///
 /// The object is comprised of the key of the rejected build and the corresponding error messages.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SubmitBuildsRejectedBuilds {
     /// Fields that uniquely reference a build.
     pub key: SubmitBuildsRejectedBuildsKey,
@@ -61,7 +65,8 @@ pub struct SubmitBuildsRejectedBuilds {
 }
 
 /// The result of a successful `submitBuilds` request.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SubmitBuilds {
     /// The keys of builds that have been accepted for submission. A build key is a composite key that consists of
     /// `pipelineId` and `buildNumber`.

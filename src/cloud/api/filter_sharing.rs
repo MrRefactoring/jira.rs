@@ -14,14 +14,14 @@ impl<'a> FilterSharingService<'a> {
 
     /// Returns the default sharing settings for new filters and dashboards for a user.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_default_share_scope(&self) -> GetDefaultShareScopeRequest<'a> {
         GetDefaultShareScopeRequest::new(self.client)
     }
 
     /// Sets the default sharing for new filters and dashboards for a user.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn set_default_share_scope(&self, default_share_scope: DefaultShareScope) -> SetDefaultShareScopeRequest<'a> {
         SetDefaultShareScopeRequest::new(self.client, default_share_scope)
     }
@@ -30,7 +30,7 @@ impl<'a> FilterSharingService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None, however, share permissions are only returned for:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None, however, share permissions are only returned for:
     ///
     ///  *  filters owned by the user.
     ///  *  filters shared with a group that the user is a member of.
@@ -43,9 +43,9 @@ impl<'a> FilterSharingService<'a> {
 
     /// Add a share permissions to a filter. If you add a global share permission (one for all logged-in users or the public) it will overwrite all share permissions for the filter.
     ///
-    /// Be aware that this operation uses different objects for updating share permissions compared to [Update filter](#api-rest-api-3-filter-id-put).
+    /// Be aware that this operation uses different objects for updating share permissions compared to [Update filter](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-put).
     ///
-    /// **[Permissions](#permissions) required:** *Share dashboards and filters* [global permission](https://confluence.atlassian.com/x/x4dKLg) and the user must own the filter.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Share dashboards and filters* [global permission](https://confluence.atlassian.com/x/x4dKLg) and the user must own the filter.
     pub fn add_share_permission(
         &self,
         id: i64,
@@ -58,7 +58,7 @@ impl<'a> FilterSharingService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None, however, a share permission is only returned for:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None, however, a share permission is only returned for:
     ///
     ///  *  filters owned by the user.
     ///  *  filters shared with a group that the user is a member of.
@@ -71,7 +71,7 @@ impl<'a> FilterSharingService<'a> {
 
     /// Deletes a share permission from a filter.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira and the user must own the filter.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira and the user must own the filter.
     pub fn delete_share_permission(&self, id: i64, permission_id: i64) -> DeleteSharePermissionRequest<'a> {
         DeleteSharePermissionRequest::new(self.client, id, permission_id)
     }
@@ -79,7 +79,7 @@ impl<'a> FilterSharingService<'a> {
 
 /// Returns the default sharing settings for new filters and dashboards for a user.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetDefaultShareScopeRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -112,7 +112,7 @@ impl<'a> GetDefaultShareScopeRequest<'a> {
 
 /// Sets the default sharing for new filters and dashboards for a user.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct SetDefaultShareScopeRequest<'a> {
     client: &'a crate::core::Client,
     default_share_scope: DefaultShareScope,
@@ -155,7 +155,7 @@ impl<'a> SetDefaultShareScopeRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None, however, share permissions are only returned for:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None, however, share permissions are only returned for:
 ///
 ///  *  filters owned by the user.
 ///  *  filters shared with a group that the user is a member of.
@@ -195,9 +195,9 @@ impl<'a> GetSharePermissionsRequest<'a> {
 
 /// Add a share permissions to a filter. If you add a global share permission (one for all logged-in users or the public) it will overwrite all share permissions for the filter.
 ///
-/// Be aware that this operation uses different objects for updating share permissions compared to [Update filter](#api-rest-api-3-filter-id-put).
+/// Be aware that this operation uses different objects for updating share permissions compared to [Update filter](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-id-put).
 ///
-/// **[Permissions](#permissions) required:** *Share dashboards and filters* [global permission](https://confluence.atlassian.com/x/x4dKLg) and the user must own the filter.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Share dashboards and filters* [global permission](https://confluence.atlassian.com/x/x4dKLg) and the user must own the filter.
 pub struct AddSharePermissionRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -241,7 +241,7 @@ impl<'a> AddSharePermissionRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None, however, a share permission is only returned for:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None, however, a share permission is only returned for:
 ///
 ///  *  filters owned by the user.
 ///  *  filters shared with a group that the user is a member of.
@@ -282,7 +282,7 @@ impl<'a> GetSharePermissionRequest<'a> {
 
 /// Deletes a share permission from a filter.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira and the user must own the filter.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira and the user must own the filter.
 pub struct DeleteSharePermissionRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,

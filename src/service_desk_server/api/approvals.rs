@@ -65,7 +65,11 @@ impl<'a> GetApprovalByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/approval/{}", self.issue_id_or_key, self.approval_id),
+            format!(
+                "/rest/servicedeskapi/request/{}/approval/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.approval_id)
+            ),
         );
 
         Ok(config)
@@ -115,7 +119,11 @@ impl<'a> AnswerApprovalRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/request/{}/approval/{}", self.issue_id_or_key, self.approval_id),
+            format!(
+                "/rest/servicedeskapi/request/{}/approval/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.approval_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.approval_decision_request)? {
@@ -159,7 +167,11 @@ impl<'a> GetApprovalCommentConfigRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/approval/{}/config", self.issue_id_or_key, self.approval_id),
+            format!(
+                "/rest/servicedeskapi/request/{}/approval/{}/config",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.approval_id)
+            ),
         );
 
         Ok(config)
@@ -209,7 +221,10 @@ impl<'a> GetApprovalsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/approval", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/approval",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         if let Some(value) = &self.start {

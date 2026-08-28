@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AutoCompleteResponseVisibleFieldNames {
     pub value: String,
     #[serde(rename = "displayName")]
@@ -19,7 +20,8 @@ pub struct AutoCompleteResponseVisibleFieldNames {
     pub cfid: Option<String>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AutoCompleteResponseVisibleFunctionNames {
     pub value: String,
     #[serde(rename = "displayName")]
@@ -29,7 +31,8 @@ pub struct AutoCompleteResponseVisibleFunctionNames {
     pub is_list: Option<String>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AutoCompleteResponse {
     #[serde(rename = "jqlReservedWords", default, skip_serializing_if = "Option::is_none")]
     pub jql_reserved_words: Option<Vec<String>>,

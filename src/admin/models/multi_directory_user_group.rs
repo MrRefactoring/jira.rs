@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// A group the user is a member of within the requested directory.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct MultiDirectoryUserGroup {
     /// the unique ID of the group.
     #[serde(default, skip_serializing_if = "Option::is_none")]

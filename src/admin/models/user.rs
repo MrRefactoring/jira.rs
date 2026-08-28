@@ -21,7 +21,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct User {
     /// Unique ID of the users account. The format is \[a-zA-Z0-9_|-:\]{1,128}
     pub account_id: String,
@@ -40,6 +41,16 @@ pub struct User {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub access_billable: Option<bool>,
     /// Last active date for a user
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_active: Option<chrono::DateTime<chrono::Utc>>,
+    /// Last active date for a user
+    #[cfg(not(feature = "chrono"))]
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub last_active: Option<String>,
     /// Products which the User is using

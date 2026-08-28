@@ -97,7 +97,7 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CustomFieldDefinition {
     /// The description of the custom field, which is displayed in Jira.
     #[serde(default, skip_serializing_if = "Option::is_none")]

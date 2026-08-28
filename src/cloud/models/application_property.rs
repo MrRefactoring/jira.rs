@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of an application property.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ApplicationProperty {
     /// The allowed values, if applicable.
     #[serde(rename = "allowedValues", default, skip_serializing_if = "Option::is_none")]

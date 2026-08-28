@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The account ID of the new owner.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ChangeFilterOwner {
     /// The account ID of the new owner.
     #[serde(rename = "accountId")]

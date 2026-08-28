@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of the group membership or permissions needed to receive the notification.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct NotificationRecipientsRestrictions {
     /// List of groupId memberships required to receive the notification.
     #[serde(rename = "groupIds", default, skip_serializing_if = "Option::is_none")]

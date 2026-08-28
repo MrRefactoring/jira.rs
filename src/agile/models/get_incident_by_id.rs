@@ -26,7 +26,8 @@ crate::open_enum! {
 /// Severity information for a single Incident.
 ///
 /// This is the severity information that will be presented to the user on e.g. the Jira Incidents screen.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetIncidentByIdSeverity {
     /// The severity level of the Incident with P1 being the highest and P5 being the lowest
     pub level: GetIncidentByIdSeverityLevel,
@@ -50,7 +51,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetIncidentByIdAssociations {
     /// the type of the association being made
     #[serde(rename = "associationType", default, skip_serializing_if = "Option::is_none")]
@@ -60,7 +62,8 @@ pub struct GetIncidentByIdAssociations {
 }
 
 /// Data related to a specific incident in a specific container that the incident is present in. Must specify at least one association to a component.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetIncidentById {
     /// The IncidentData schema version used for this incident data.
     ///
@@ -92,11 +95,37 @@ pub struct GetIncidentById {
     /// The timestamp to present to the user that shows when the Incident was raised.
     ///
     /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "createdDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created_date: Option<chrono::DateTime<chrono::Utc>>,
+    /// The timestamp to present to the user that shows when the Incident was raised.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "createdDate", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub created_date: String,
     /// The last-updated timestamp to present to the user the last time the Incident was updated.
     ///
     /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user the last time the Incident was updated.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// Severity information for a single Incident.

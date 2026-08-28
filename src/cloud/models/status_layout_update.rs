@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The statuses associated with this workflow.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StatusLayoutUpdate {
     #[serde(rename = "approvalConfiguration", default, skip_serializing_if = "Option::is_none")]
     pub approval_configuration: Option<ApprovalConfiguration>,

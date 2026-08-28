@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of how to filter and list search auto complete information.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SearchAutoCompleteFilter {
     /// Include collapsed fields for fields that have non-unique names.
     #[serde(rename = "includeCollapsedFields", default, skip_serializing_if = "Option::is_none")]

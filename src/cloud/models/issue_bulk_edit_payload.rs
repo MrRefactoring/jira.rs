@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Issue Bulk Edit Payload
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueBulkEditPayload {
     #[serde(rename = "editedFieldsInput", default, skip_serializing_if = "Option::is_none")]
     pub edited_fields_input: Option<JiraIssueFields>,

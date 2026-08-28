@@ -70,7 +70,8 @@ crate::open_enum! {
 }
 
 /// Details about the project.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CreateProjectDetails {
     /// The default assignee when creating issues for this project.
     #[serde(rename = "assigneeType", default, skip_serializing_if = "Option::is_none")]
@@ -78,22 +79,22 @@ pub struct CreateProjectDetails {
     /// An integer value for the project's avatar.
     #[serde(rename = "avatarId", default, skip_serializing_if = "Option::is_none")]
     pub avatar_id: Option<i64>,
-    /// The ID of the project's category. A complete list of category IDs is found using the [Get all project categories](#api-rest-api-3-projectCategory-get) operation.
+    /// The ID of the project's category. A complete list of category IDs is found using the [Get all project categories](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-category/#api-rest-api-3-projectCategory-get) operation.
     #[serde(rename = "categoryId", default, skip_serializing_if = "Option::is_none")]
     pub category_id: Option<i64>,
     /// A brief description of the project.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// The ID of the field scheme for the project. Use the [Get field schemes](#api-rest-api-3-config-fieldschemes-get) operation to get a list of field scheme IDs. If you specify the field scheme you cannot specify the project template key.
+    /// The ID of the field scheme for the project. Use the [Get field schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-config/#api-rest-api-3-config-fieldschemes-get) operation to get a list of field scheme IDs. If you specify the field scheme you cannot specify the project template key.
     #[serde(rename = "fieldScheme", default, skip_serializing_if = "Option::is_none")]
     pub field_scheme: Option<i64>,
-    /// The ID of the issue security scheme for the project, which enables you to control who can and cannot view issues. Use the [Get issue security schemes](#api-rest-api-3-issuesecurityschemes-get) resource to get all issue security scheme IDs.
+    /// The ID of the issue security scheme for the project, which enables you to control who can and cannot view issues. Use the [Get issue security schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-security-schemes/#api-rest-api-3-issuesecurityschemes-get) resource to get all issue security scheme IDs.
     #[serde(rename = "issueSecurityScheme", default, skip_serializing_if = "Option::is_none")]
     pub issue_security_scheme: Option<i64>,
-    /// The ID of the issue type scheme for the project. Use the [Get all issue type schemes](#api-rest-api-3-issuetypescheme-get) operation to get a list of issue type scheme IDs. If you specify the issue type scheme you cannot specify the project template key.
+    /// The ID of the issue type scheme for the project. Use the [Get all issue type schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-get) operation to get a list of issue type scheme IDs. If you specify the issue type scheme you cannot specify the project template key.
     #[serde(rename = "issueTypeScheme", default, skip_serializing_if = "Option::is_none")]
     pub issue_type_scheme: Option<i64>,
-    /// The ID of the issue type screen scheme for the project. Use the [Get all issue type screen schemes](#api-rest-api-3-issuetypescreenscheme-get) operation to get a list of issue type screen scheme IDs. If you specify the issue type screen scheme you cannot specify the project template key.
+    /// The ID of the issue type screen scheme for the project. Use the [Get all issue type screen schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-get) operation to get a list of issue type screen scheme IDs. If you specify the issue type screen scheme you cannot specify the project template key.
     #[serde(rename = "issueTypeScreenScheme", default, skip_serializing_if = "Option::is_none")]
     pub issue_type_screen_scheme: Option<i64>,
     /// Project keys must be unique and start with an uppercase letter followed by one or more uppercase alphanumeric characters. The maximum length is 10 characters.
@@ -103,10 +104,10 @@ pub struct CreateProjectDetails {
     pub lead_account_id: Option<String>,
     /// The name of the project.
     pub name: String,
-    /// The ID of the notification scheme for the project. Use the [Get notification schemes](#api-rest-api-3-notificationscheme-get) resource to get a list of notification scheme IDs.
+    /// The ID of the notification scheme for the project. Use the [Get notification schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-notification-schemes/#api-rest-api-3-notificationscheme-get) resource to get a list of notification scheme IDs.
     #[serde(rename = "notificationScheme", default, skip_serializing_if = "Option::is_none")]
     pub notification_scheme: Option<i64>,
-    /// The ID of the permission scheme for the project. Use the [Get all permission schemes](#api-rest-api-3-permissionscheme-get) resource to see a list of all permission scheme IDs.
+    /// The ID of the permission scheme for the project. Use the [Get all permission schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-get) resource to see a list of all permission scheme IDs.
     #[serde(rename = "permissionScheme", default, skip_serializing_if = "Option::is_none")]
     pub permission_scheme: Option<i64>,
     /// A predefined configuration for a project. The type of the `projectTemplateKey` must match with the type of the `projectTypeKey`.
@@ -118,7 +119,7 @@ pub struct CreateProjectDetails {
     /// A link to information about this project, such as project documentation
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
-    /// The ID of the workflow scheme for the project. Use the [Get all workflow schemes](#api-rest-api-3-workflowscheme-get) operation to get a list of workflow scheme IDs. If you specify the workflow scheme you cannot specify the project template key.
+    /// The ID of the workflow scheme for the project. Use the [Get all workflow schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-schemes/#api-rest-api-3-workflowscheme-get) operation to get a list of workflow scheme IDs. If you specify the workflow scheme you cannot specify the project template key.
     #[serde(rename = "workflowScheme", default, skip_serializing_if = "Option::is_none")]
     pub workflow_scheme: Option<i64>,
 }

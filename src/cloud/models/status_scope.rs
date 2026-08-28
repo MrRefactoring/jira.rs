@@ -12,7 +12,7 @@ crate::open_enum! {
 }
 
 /// The scope of the status.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StatusScope {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub project: Option<ProjectId>,

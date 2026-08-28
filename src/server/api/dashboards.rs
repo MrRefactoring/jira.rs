@@ -146,7 +146,11 @@ impl<'a> GetDashboardItemPropertyKeysRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/dashboard/{}/items/{}/properties", self.dashboard_id, self.item_id),
+            format!(
+                "/rest/api/2/dashboard/{}/items/{}/properties",
+                crate::core::encode_path_segment(&self.dashboard_id),
+                crate::core::encode_path_segment(&self.item_id)
+            ),
         );
 
         Ok(config)
@@ -187,7 +191,9 @@ impl<'a> GetDashboardItemPropertyRequest<'a> {
             crate::core::Method::GET,
             format!(
                 "/rest/api/2/dashboard/{}/items/{}/properties/{}",
-                self.dashboard_id, self.item_id, self.property_key
+                crate::core::encode_path_segment(&self.dashboard_id),
+                crate::core::encode_path_segment(&self.item_id),
+                crate::core::encode_path_segment(&self.property_key)
             ),
         );
 
@@ -237,7 +243,9 @@ impl<'a> SetDashboardItemPropertyRequest<'a> {
             crate::core::Method::PUT,
             format!(
                 "/rest/api/2/dashboard/{}/items/{}/properties/{}",
-                self.dashboard_id, self.item_id, self.property_key
+                crate::core::encode_path_segment(&self.dashboard_id),
+                crate::core::encode_path_segment(&self.item_id),
+                crate::core::encode_path_segment(&self.property_key)
             ),
         );
 
@@ -281,7 +289,9 @@ impl<'a> DeleteDashboardItemPropertyRequest<'a> {
             crate::core::Method::DELETE,
             format!(
                 "/rest/api/2/dashboard/{}/items/{}/properties/{}",
-                self.dashboard_id, self.item_id, self.property_key
+                crate::core::encode_path_segment(&self.dashboard_id),
+                crate::core::encode_path_segment(&self.item_id),
+                crate::core::encode_path_segment(&self.property_key)
             ),
         );
 
@@ -312,8 +322,10 @@ impl<'a> GetDashboardRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/2/dashboard/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/2/dashboard/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }

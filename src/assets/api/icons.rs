@@ -41,7 +41,10 @@ impl<'a> GetIconRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(crate::core::Method::GET, format!("/icon/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/icon/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -78,8 +81,10 @@ impl<'a> GetIconImageRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/icon/{}/icon.png", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/icon/{}/icon.png", crate::core::encode_path_segment(&self.id)),
+        );
 
         if let Some(value) = &self.size {
             config.query.push(("size".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));

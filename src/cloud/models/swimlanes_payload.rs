@@ -20,7 +20,7 @@ crate::open_enum! {
 }
 
 /// The payload for customising a swimlanes on a board
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SwimlanesPayload {
     /// The custom swimlane definitions.
     #[serde(rename = "customSwimlanes", default, skip_serializing_if = "Option::is_none")]

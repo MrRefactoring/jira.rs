@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Management access for the group. This is used to determine if the group can be deleted, modified, or read.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ManagementAccess {
     /// If true, the group can be deleted.
     #[serde(default, skip_serializing_if = "Option::is_none")]

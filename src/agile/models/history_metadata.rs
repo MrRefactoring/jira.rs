@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of user or system associated with a issue history metadata item.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct HistoryMetadataActor {
     /// The URL to an avatar for the user or system associated with a history record.
     #[serde(rename = "avatarUrl", default, skip_serializing_if = "Option::is_none")]
@@ -26,7 +27,8 @@ pub struct HistoryMetadataActor {
 }
 
 /// Details of user or system associated with a issue history metadata item.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct HistoryMetadataCause {
     /// The URL to an avatar for the user or system associated with a history record.
     #[serde(rename = "avatarUrl", default, skip_serializing_if = "Option::is_none")]
@@ -49,7 +51,8 @@ pub struct HistoryMetadataCause {
 }
 
 /// Details of user or system associated with a issue history metadata item.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct HistoryMetadataGenerator {
     /// The URL to an avatar for the user or system associated with a history record.
     #[serde(rename = "avatarUrl", default, skip_serializing_if = "Option::is_none")]
@@ -72,7 +75,8 @@ pub struct HistoryMetadataGenerator {
 }
 
 /// Details of issue history metadata.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct HistoryMetadata {
     /// The activity described in the history record.
     #[serde(rename = "activityDescription", default, skip_serializing_if = "Option::is_none")]

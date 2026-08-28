@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Issue Bulk Move Payload
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueBulkMovePayload {
     /// A boolean value that indicates whether to send a bulk change notification when the issues are being moved.
     ///

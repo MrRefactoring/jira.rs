@@ -9,7 +9,8 @@ crate::open_enum! {
 }
 
 /// You are not authorized to access this resource
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ForbiddenResponse {
     pub key: ForbiddenResponseKey,
 }

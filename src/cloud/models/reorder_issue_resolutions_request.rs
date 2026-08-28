@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Change the order of issue resolutions.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ReorderIssueResolutionsRequest {
     /// The ID of the resolution. Required if `position` isn't provided.
     #[serde(default, skip_serializing_if = "Option::is_none")]

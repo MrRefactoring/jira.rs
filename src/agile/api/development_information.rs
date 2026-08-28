@@ -10,21 +10,25 @@ crate::open_enum! {
 }
 
 /// Describes the author of a particular entity
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StoreDevelopmentInformationRequestRepositoriesCommitsAuthor {
     /// Deprecated. The name of this user in a format suitable for display. Max length is 255 characters.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// The email address of the user. Used to associate the user with a Jira user. Max length is 255 characters.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
     /// Deprecated. The username of the user. Used to associate the user with a Jira user if there are multiple users for a given email. Max length is 255 characters.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
     /// Deprecated. The URL of the profile for this user. Max length is 2000 characters.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
     /// Deprecated. The URL of the avatar for this user. Max length is 2000 characters.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub avatar: Option<String>,
 }
@@ -42,7 +46,7 @@ crate::open_enum! {
 }
 
 /// Describes changes to a file
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StoreDevelopmentInformationRequestRepositoriesCommitsFiles {
     /// The path of the file. Max length is 1024 characters.
     pub path: String,
@@ -60,7 +64,7 @@ pub struct StoreDevelopmentInformationRequestRepositoriesCommitsFiles {
 }
 
 /// Represents a commit in the version control system.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StoreDevelopmentInformationRequestRepositoriesCommits {
     /// The identifier or hash of the commit. Will be used for cross entity linking. Must be unique for all commits within a repository, i.e., only one commit can have ID 'X' in repository 'Y'. But adding, e.g., a branch with ID 'X' to repository 'Y' is acceptable. Only alphanumeric characters, and '~.-_', are allowed. Max length is 1024 characters
     pub id: String,
@@ -100,21 +104,25 @@ crate::open_enum! {
 }
 
 /// Describes the author of a particular entity
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StoreDevelopmentInformationRequestRepositoriesBranchesLastCommitAuthor {
     /// Deprecated. The name of this user in a format suitable for display. Max length is 255 characters.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// The email address of the user. Used to associate the user with a Jira user. Max length is 255 characters.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
     /// Deprecated. The username of the user. Used to associate the user with a Jira user if there are multiple users for a given email. Max length is 255 characters.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
     /// Deprecated. The URL of the profile for this user. Max length is 2000 characters.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
     /// Deprecated. The URL of the avatar for this user. Max length is 2000 characters.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub avatar: Option<String>,
 }
@@ -132,7 +140,7 @@ crate::open_enum! {
 }
 
 /// Describes changes to a file
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StoreDevelopmentInformationRequestRepositoriesBranchesLastCommitFiles {
     /// The path of the file. Max length is 1024 characters.
     pub path: String,
@@ -150,7 +158,7 @@ pub struct StoreDevelopmentInformationRequestRepositoriesBranchesLastCommitFiles
 }
 
 /// Represents a commit in the version control system.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StoreDevelopmentInformationRequestRepositoriesBranchesLastCommit {
     /// The identifier or hash of the commit. Will be used for cross entity linking. Must be unique for all commits within a repository, i.e., only one commit can have ID 'X' in repository 'Y'. But adding, e.g., a branch with ID 'X' to repository 'Y' is acceptable. Only alphanumeric characters, and '~.-_', are allowed. Max length is 1024 characters
     pub id: String,
@@ -184,7 +192,7 @@ pub struct StoreDevelopmentInformationRequestRepositoriesBranchesLastCommit {
 }
 
 /// Represents a branch in the version control system
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StoreDevelopmentInformationRequestRepositoriesBranches {
     /// The ID of this entity. Will be used for cross entity linking. Must be unique by entity type within a repository, i.e., only one commit can have ID 'X' in repository 'Y'. But adding, e.g., a branch with ID 'X' to repository 'Y' is acceptable. Only alphanumeric characters, and '~.-_', are allowed. Max length is 1024 characters.
     pub id: String,
@@ -217,21 +225,25 @@ crate::open_enum! {
 }
 
 /// Describes the author of a particular entity
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StoreDevelopmentInformationRequestRepositoriesPullRequestsAuthor {
     /// Deprecated. The name of this user in a format suitable for display. Max length is 255 characters.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// The email address of the user. Used to associate the user with a Jira user. Max length is 255 characters.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
     /// Deprecated. The username of the user. Used to associate the user with a Jira user if there are multiple users for a given email. Max length is 255 characters.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
     /// Deprecated. The URL of the profile for this user. Max length is 2000 characters.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
     /// Deprecated. The URL of the avatar for this user. Max length is 2000 characters.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub avatar: Option<String>,
 }
@@ -245,18 +257,21 @@ crate::open_enum! {
 }
 
 /// The reviewer of a pull request
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StoreDevelopmentInformationRequestRepositoriesPullRequestsReviewers {
     /// Deprecated. The name of this reviewer. Max length is 255 characters.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// The approval status of this reviewer, default is UNAPPROVED.
     #[serde(rename = "approvalStatus", default, skip_serializing_if = "Option::is_none")]
     pub approval_status: Option<StoreDevelopmentInformationRequestRepositoriesPullRequestsReviewersApprovalStatus>,
     /// Deprecated. The URL of the profile for this reviewer. Max length is 2000 characters.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
     /// Deprecated. The URL of the avatar for this reviewer. Max length is 2000 characters.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub avatar: Option<String>,
     /// The email address of this reviewer. Max length is 254 characters.
@@ -268,7 +283,7 @@ pub struct StoreDevelopmentInformationRequestRepositoriesPullRequestsReviewers {
 }
 
 /// Represents a pull request
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StoreDevelopmentInformationRequestRepositoriesPullRequests {
     /// The ID of this entity. Will be used for cross entity linking. Must be unique by entity type within a repository, i.e., only one commit can have ID 'X' in repository 'Y'. But adding, e.g., a branch with ID 'X' to repository 'Y' is acceptable. Only alphanumeric characters, and '~.-_', are allowed. Max length is 1024 characters
     pub id: String,
@@ -313,7 +328,7 @@ pub struct StoreDevelopmentInformationRequestRepositoriesPullRequests {
 }
 
 /// Represents a repository, containing development information such as commits, pull requests, and branches.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StoreDevelopmentInformationRequestRepositories {
     /// The name of this repository. Max length is 255 characters.
     pub name: String,
@@ -356,7 +371,7 @@ crate::open_enum! {
 }
 
 /// Information about the provider. This is useful for auditing, logging, debugging, and other internal uses. It is not considered private information. Hence, it may not contain personally identifiable information.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StoreDevelopmentInformationRequestProviderMetadata {
     /// An optional name of the source of the development information data.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -538,7 +553,7 @@ impl<'a> GetRepositoryRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/devinfo/0.10/repository/{}", self.repository_id),
+            format!("/rest/devinfo/0.10/repository/{}", crate::core::encode_path_segment(&self.repository_id)),
         );
 
         Ok(config)
@@ -571,7 +586,7 @@ impl<'a> DeleteRepositoryRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/devinfo/0.10/repository/{}", self.repository_id),
+            format!("/rest/devinfo/0.10/repository/{}", crate::core::encode_path_segment(&self.repository_id)),
         );
 
         config.query.push((
@@ -704,7 +719,12 @@ impl<'a> DeleteEntityRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/devinfo/0.10/repository/{}/{}/{}", self.repository_id, self.entity_type, self.entity_id),
+            format!(
+                "/rest/devinfo/0.10/repository/{}/{}/{}",
+                crate::core::encode_path_segment(&self.repository_id),
+                crate::core::encode_path_segment(self.entity_type.as_str()),
+                crate::core::encode_path_segment(&self.entity_id)
+            ),
         );
 
         config.query.push((

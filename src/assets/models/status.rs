@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// An Assets status type that can be associated with objects
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Status {
     pub id: String,
     pub name: String,

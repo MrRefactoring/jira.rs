@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of an issue type.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueTypeInfo {
     /// The avatar of the issue type.
     #[serde(rename = "avatarId", default, skip_serializing_if = "Option::is_none")]

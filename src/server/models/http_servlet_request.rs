@@ -13,7 +13,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct HttpServletRequestLocale {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub country: Option<String>,
@@ -45,7 +46,8 @@ pub struct HttpServletRequestLocale {
     pub variant: Option<String>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct HttpServletRequestRequestURL {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub empty: Option<bool>,
@@ -53,13 +55,15 @@ pub struct HttpServletRequestRequestURL {
     pub length: Option<i64>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct HttpServletRequestUserPrincipal {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct HttpServletRequest {
     #[serde(rename = "asyncContext", default, skip_serializing_if = "Option::is_none")]
     pub async_context: Option<Box<AsyncContext>>,

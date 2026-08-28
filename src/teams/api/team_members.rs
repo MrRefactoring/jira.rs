@@ -53,6 +53,7 @@ impl<'a> FetchMembersRequest<'a> {
     }
 
     /// \[Optional\] The ID of the site you are fetching members for. \[Deprecated\] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
+    #[deprecated(note = "\\[Deprecated\\] Omitting siteId is deprecated.")]
     #[must_use]
     pub fn site_id(mut self, value: impl Into<String>) -> Self {
         self.site_id = Some(value.into());
@@ -71,7 +72,11 @@ impl<'a> FetchMembersRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/gateway/api/public/teams/v1/org/{}/teams/{}/members", self.org_id, self.team_id),
+            format!(
+                "/gateway/api/public/teams/v1/org/{}/teams/{}/members",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.team_id)
+            ),
         );
 
         if let Some(value) = &self.site_id {
@@ -121,7 +126,11 @@ impl<'a> AddMembersRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/gateway/api/public/teams/v1/org/{}/teams/{}/members/add", self.org_id, self.team_id),
+            format!(
+                "/gateway/api/public/teams/v1/org/{}/teams/{}/members/add",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.team_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.membership_add_payload)? {
@@ -167,7 +176,11 @@ impl<'a> RemoveMembersRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/gateway/api/public/teams/v1/org/{}/teams/{}/members/remove", self.org_id, self.team_id),
+            format!(
+                "/gateway/api/public/teams/v1/org/{}/teams/{}/members/remove",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.team_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.membership_remove_payload)? {

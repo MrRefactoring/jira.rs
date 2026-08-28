@@ -150,7 +150,7 @@ impl<'a> SetPropertyViaRestfulTableRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/application-properties/{}", self.id),
+            format!("/rest/api/2/application-properties/{}", crate::core::encode_path_segment(&self.id)),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));

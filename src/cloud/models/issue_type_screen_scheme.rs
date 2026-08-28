@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of an issue type screen scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueTypeScreenScheme {
     /// The description of the issue type screen scheme.
     #[serde(default, skip_serializing_if = "Option::is_none")]

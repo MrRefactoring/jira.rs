@@ -118,7 +118,8 @@ impl<'a> GetRequestTypeFieldsRequest<'a> {
             crate::core::Method::GET,
             format!(
                 "/rest/servicedeskapi/servicedesk/{}/requesttype/{}/field",
-                self.service_desk_id, self.request_type_id
+                crate::core::encode_path_segment(&self.service_desk_id),
+                crate::core::encode_path_segment(&self.request_type_id)
             ),
         );
 
@@ -169,7 +170,10 @@ impl<'a> GetRequestTypeGroupsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/servicedesk/{}/requesttypegroup", self.service_desk_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/requesttypegroup",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
         );
 
         if let Some(value) = &self.start {
@@ -252,7 +256,10 @@ impl<'a> GetRequestTypesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/servicedesk/{}/requesttype", self.service_desk_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/requesttype",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
         );
 
         if let Some(value) = &self.group_id {
@@ -324,7 +331,10 @@ impl<'a> CreateRequestTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/servicedesk/{}/requesttype", self.service_desk_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/requesttype",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.request_type_create)? {
@@ -377,7 +387,10 @@ impl<'a> UpdateRequestTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/servicedeskapi/servicedesk/{}/requesttype", self.service_desk_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/requesttype",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.request_type_update)? {
@@ -435,7 +448,11 @@ impl<'a> GetRequestTypeByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/servicedesk/{}/requesttype/{}", self.service_desk_id, self.request_type_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/requesttype/{}",
+                crate::core::encode_path_segment(&self.service_desk_id),
+                crate::core::encode_path_segment(&self.request_type_id)
+            ),
         );
 
         if let Some(value) = &self.restriction_status {
@@ -482,7 +499,11 @@ impl<'a> DeleteRequestTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/servicedeskapi/servicedesk/{}/requesttype/{}", self.service_desk_id, self.request_type_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/requesttype/{}",
+                crate::core::encode_path_segment(&self.service_desk_id),
+                crate::core::encode_path_segment(&self.request_type_id)
+            ),
         );
 
         Ok(config)

@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Policy Resource not found
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PolicyResourceNotFoundError {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub errors: Option<Vec<Option<ApplicationError>>>,

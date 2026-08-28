@@ -3,7 +3,8 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowSchemeReadResponse {
     #[serde(rename = "defaultWorkflow", default, skip_serializing_if = "Option::is_none")]
     pub default_workflow: Option<WorkflowMetadataRestModel>,
@@ -15,7 +16,7 @@ pub struct WorkflowSchemeReadResponse {
     /// The name of the workflow scheme.
     pub name: String,
     pub scope: WorkflowScope,
-    /// Indicates if there's an [asynchronous task](#async-operations) for this workflow scheme.
+    /// Indicates if there's an [asynchronous task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async-operations) for this workflow scheme.
     #[serde(rename = "taskId", default, skip_serializing_if = "Option::is_none")]
     pub task_id: Option<String>,
     pub version: DocumentVersion,

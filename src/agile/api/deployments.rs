@@ -3,7 +3,7 @@
 use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitDeploymentsRequestDeploymentsAssociations {
@@ -30,7 +30,7 @@ crate::open_enum! {
 /// This object models the Continuous Delivery (CD) Pipeline concept, an automated process (usually comprised of multiple stages)
 ///
 /// for getting software from version control right through to the production environment.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitDeploymentsRequestDeploymentsPipeline {
     /// The identifier of this pipeline, must be unique for the provider.
     pub id: String,
@@ -53,7 +53,7 @@ crate::open_enum! {
 }
 
 /// The environment that the deployment is present in.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SubmitDeploymentsRequestDeploymentsEnvironment {
     /// The identifier of this environment, must be unique for the provider so that it can be shared across pipelines.
     pub id: String,
@@ -66,7 +66,7 @@ pub struct SubmitDeploymentsRequestDeploymentsEnvironment {
 
 /// A command to be actioned for this Deployment
 /// - command
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitDeploymentsRequestDeploymentsCommands {
     /// The command name.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -84,7 +84,7 @@ crate::open_enum! {
 
 /// Data related to a specific deployment in a specific environment that the deployment is present in.
 /// Must specify one of `issueKeys` or `associations`.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SubmitDeploymentsRequestDeployments {
     /// This is the identifier for the deployment. It must be unique for the specified pipeline and environment. It must be a monotonically increasing number, as this is used to sequence the deployments.
     #[serde(rename = "deploymentSequenceNumber")]
@@ -103,6 +103,17 @@ pub struct SubmitDeploymentsRequestDeployments {
     /// A short description of the deployment
     pub description: String,
     /// The last-updated timestamp to present to the user as a summary of the state of the deployment.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user as a summary of the state of the deployment.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// An (optional) additional label that may be displayed with deployment information. Can be used to display version information etc. for the deployment.
@@ -132,7 +143,7 @@ pub struct SubmitDeploymentsRequestDeployments {
 /// Information about the provider. This is useful for auditing, logging, debugging,
 /// and other internal uses. It is not considered private information. Hence, it may not contain personally
 /// identifiable information.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitDeploymentsRequestProviderMetadata {
     /// An optional name of the source of the deployments data.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -378,7 +389,9 @@ impl<'a> GetDeploymentByKeyRequest<'a> {
             crate::core::Method::GET,
             format!(
                 "/rest/deployments/0.1/pipelines/{}/environments/{}/deployments/{}",
-                self.pipeline_id, self.environment_id, self.deployment_sequence_number
+                crate::core::encode_path_segment(&self.pipeline_id),
+                crate::core::encode_path_segment(&self.environment_id),
+                self.deployment_sequence_number
             ),
         );
 
@@ -427,7 +440,9 @@ impl<'a> DeleteDeploymentByKeyRequest<'a> {
             crate::core::Method::DELETE,
             format!(
                 "/rest/deployments/0.1/pipelines/{}/environments/{}/deployments/{}",
-                self.pipeline_id, self.environment_id, self.deployment_sequence_number
+                crate::core::encode_path_segment(&self.pipeline_id),
+                crate::core::encode_path_segment(&self.environment_id),
+                self.deployment_sequence_number
             ),
         );
 
@@ -475,7 +490,9 @@ impl<'a> GetDeploymentGatingStatusByKeyRequest<'a> {
             crate::core::Method::GET,
             format!(
                 "/rest/deployments/0.1/pipelines/{}/environments/{}/deployments/{}/gating-status",
-                self.pipeline_id, self.environment_id, self.deployment_sequence_number
+                crate::core::encode_path_segment(&self.pipeline_id),
+                crate::core::encode_path_segment(&self.environment_id),
+                self.deployment_sequence_number
             ),
         );
 

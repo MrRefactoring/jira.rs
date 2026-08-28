@@ -9,8 +9,8 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about worklogs in the response. This parameter accepts`properties`, which returns worklog properties.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts`properties`, which returns worklog properties.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssueWorklogRequestExpand {
@@ -41,8 +41,8 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about work logs in the response. This parameter accepts `properties`, which returns worklog properties.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about work logs in the response. This parameter accepts `properties`, which returns worklog properties.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum AddWorklogRequestExpand {
@@ -58,10 +58,10 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about work logs in the response. This parameter accepts
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about work logs in the response. This parameter accepts
 ///
 /// `properties`, which returns worklog properties.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetWorklogRequestExpand {
@@ -91,8 +91,8 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about worklogs in the response. This parameter accepts `properties`, which returns worklog properties.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties`, which returns worklog properties.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum UpdateWorklogRequestExpand {
@@ -123,8 +123,8 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetWorklogsForIdsRequestExpand {
@@ -140,8 +140,8 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIdsOfWorklogsModifiedSinceRequestExpand {
@@ -167,7 +167,7 @@ impl<'a> IssueWorklogsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** Workloads are only returned where the user has:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Workloads are only returned where the user has:
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -182,7 +182,7 @@ impl<'a> IssueWorklogsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* and *Work on issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -200,7 +200,7 @@ impl<'a> IssueWorklogsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -215,7 +215,7 @@ impl<'a> IssueWorklogsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -236,7 +236,7 @@ impl<'a> IssueWorklogsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -256,7 +256,7 @@ impl<'a> IssueWorklogsService<'a> {
     ///
     /// This resource does not return worklogs deleted during the minute preceding the request.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_ids_of_worklogs_deleted_since(&self) -> GetIdsOfWorklogsDeletedSinceRequest<'a> {
         GetIdsOfWorklogsDeletedSinceRequest::new(self.client)
     }
@@ -265,7 +265,7 @@ impl<'a> IssueWorklogsService<'a> {
     ///
     /// The returned list of worklogs is limited to 1000 items.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira, however, worklogs are only returned where either of the following is true:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira, however, worklogs are only returned where either of the following is true:
     ///
     ///  *  the worklog is set as *Viewable by All Users*.
     ///  *  the user is a member of a project role or group with permission to view the worklog.
@@ -279,7 +279,7 @@ impl<'a> IssueWorklogsService<'a> {
     ///
     /// This resource does not return worklogs updated during the minute preceding the request.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira, however, worklogs are only returned where either of the following is true:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira, however, worklogs are only returned where either of the following is true:
     ///
     ///  *  the worklog is set as *Viewable by All Users*.
     ///  *  the user is a member of a project role or group with permission to view the worklog.
@@ -294,7 +294,7 @@ impl<'a> IssueWorklogsService<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** Workloads are only returned where the user has:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Workloads are only returned where the user has:
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -354,7 +354,7 @@ impl<'a> GetIssueWorklogRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) to include additional information about worklogs in the response. This parameter accepts`properties`, which returns worklog properties.
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts`properties`, which returns worklog properties.
     #[must_use]
     pub fn expand(mut self, value: GetIssueWorklogRequestExpand) -> Self {
         self.expand = Some(value);
@@ -366,7 +366,7 @@ impl<'a> GetIssueWorklogRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/issue/{}/worklog", self.issue_id_or_key),
+            format!("/rest/api/3/issue/{}/worklog", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.start_at {
@@ -409,7 +409,7 @@ impl<'a> GetIssueWorklogRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* and *Work on issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -461,7 +461,7 @@ impl<'a> AddWorklogRequest<'a> {
         self
     }
 
-    /// The value to set as the issue's remaining time estimate, as days (\#d), hours (\#h), or minutes (\#m or \#). For example, *2d*. Required when `adjustEstimate` is `new`.
+    /// The value to set as the issue's remaining time estimate, as days (#d), hours (#h), or minutes (#m or #). For example, *2d*. Required when `adjustEstimate` is `new`.
     #[must_use]
     pub fn new_estimate(mut self, value: impl Into<String>) -> Self {
         self.new_estimate = Some(value.into());
@@ -469,7 +469,7 @@ impl<'a> AddWorklogRequest<'a> {
         self
     }
 
-    /// The amount to reduce the issue's remaining estimate by, as days (\#d), hours (\#h), or minutes (\#m). For example, *2d*. Required when `adjustEstimate` is `manual`.
+    /// The amount to reduce the issue's remaining estimate by, as days (#d), hours (#h), or minutes (#m). For example, *2d*. Required when `adjustEstimate` is `manual`.
     #[must_use]
     pub fn reduce_by(mut self, value: impl Into<String>) -> Self {
         self.reduce_by = Some(value.into());
@@ -477,7 +477,7 @@ impl<'a> AddWorklogRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) to include additional information about work logs in the response. This parameter accepts `properties`, which returns worklog properties.
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about work logs in the response. This parameter accepts `properties`, which returns worklog properties.
     #[must_use]
     pub fn expand(mut self, value: AddWorklogRequestExpand) -> Self {
         self.expand = Some(value);
@@ -497,7 +497,7 @@ impl<'a> AddWorklogRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/3/issue/{}/worklog", self.issue_id_or_key),
+            format!("/rest/api/3/issue/{}/worklog", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.notify_users {
@@ -580,7 +580,7 @@ impl<'a> AddWorklogRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -597,7 +597,7 @@ impl<'a> GetWorklogRequest<'a> {
         Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into(), expand: None }
     }
 
-    /// Use [expand](#expansion) to include additional information about work logs in the response. This parameter accepts
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about work logs in the response. This parameter accepts
     ///
     /// `properties`, which returns worklog properties.
     #[must_use]
@@ -611,7 +611,11 @@ impl<'a> GetWorklogRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/issue/{}/worklog/{}", self.issue_id_or_key, self.id),
+            format!(
+                "/rest/api/3/issue/{}/worklog/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         if let Some(value) = &self.expand {
@@ -638,7 +642,7 @@ impl<'a> GetWorklogRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -696,7 +700,7 @@ impl<'a> UpdateWorklogRequest<'a> {
         self
     }
 
-    /// The value to set as the issue's remaining time estimate, as days (\#d), hours (\#h), or minutes (\#m or \#). For example, *2d*. Required when `adjustEstimate` is `new`.
+    /// The value to set as the issue's remaining time estimate, as days (#d), hours (#h), or minutes (#m or #). For example, *2d*. Required when `adjustEstimate` is `new`.
     #[must_use]
     pub fn new_estimate(mut self, value: impl Into<String>) -> Self {
         self.new_estimate = Some(value.into());
@@ -704,7 +708,7 @@ impl<'a> UpdateWorklogRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) to include additional information about worklogs in the response. This parameter accepts `properties`, which returns worklog properties.
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties`, which returns worklog properties.
     #[must_use]
     pub fn expand(mut self, value: UpdateWorklogRequestExpand) -> Self {
         self.expand = Some(value);
@@ -724,7 +728,11 @@ impl<'a> UpdateWorklogRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/issue/{}/worklog/{}", self.issue_id_or_key, self.id),
+            format!(
+                "/rest/api/3/issue/{}/worklog/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         if let Some(value) = &self.notify_users {
@@ -797,7 +805,7 @@ impl<'a> UpdateWorklogRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -849,7 +857,7 @@ impl<'a> DeleteWorklogRequest<'a> {
         self
     }
 
-    /// The value to set as the issue's remaining time estimate, as days (\#d), hours (\#h), or minutes (\#m or \#). For example, *2d*. Required when `adjustEstimate` is `new`.
+    /// The value to set as the issue's remaining time estimate, as days (#d), hours (#h), or minutes (#m or #). For example, *2d*. Required when `adjustEstimate` is `new`.
     #[must_use]
     pub fn new_estimate(mut self, value: impl Into<String>) -> Self {
         self.new_estimate = Some(value.into());
@@ -857,7 +865,7 @@ impl<'a> DeleteWorklogRequest<'a> {
         self
     }
 
-    /// The amount to increase the issue's remaining estimate by, as days (\#d), hours (\#h), or minutes (\#m or \#). For example, *2d*. Required when `adjustEstimate` is `manual`.
+    /// The amount to increase the issue's remaining estimate by, as days (#d), hours (#h), or minutes (#m or #). For example, *2d*. Required when `adjustEstimate` is `manual`.
     #[must_use]
     pub fn increase_by(mut self, value: impl Into<String>) -> Self {
         self.increase_by = Some(value.into());
@@ -877,7 +885,11 @@ impl<'a> DeleteWorklogRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/issue/{}/worklog/{}", self.issue_id_or_key, self.id),
+            format!(
+                "/rest/api/3/issue/{}/worklog/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         if let Some(value) = &self.notify_users {
@@ -920,7 +932,7 @@ impl<'a> DeleteWorklogRequest<'a> {
 ///
 /// This resource does not return worklogs deleted during the minute preceding the request.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetIdsOfWorklogsDeletedSinceRequest<'a> {
     client: &'a crate::core::Client,
     since: Option<i64>,
@@ -966,7 +978,7 @@ impl<'a> GetIdsOfWorklogsDeletedSinceRequest<'a> {
 ///
 /// The returned list of worklogs is limited to 1000 items.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira, however, worklogs are only returned where either of the following is true:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira, however, worklogs are only returned where either of the following is true:
 ///
 ///  *  the worklog is set as *Viewable by All Users*.
 ///  *  the user is a member of a project role or group with permission to view the worklog.
@@ -981,7 +993,7 @@ impl<'a> GetWorklogsForIdsRequest<'a> {
         Self { client, worklog_ids_request, expand: None }
     }
 
-    /// Use [expand](#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
     #[must_use]
     pub fn expand(mut self, value: GetWorklogsForIdsRequestExpand) -> Self {
         self.expand = Some(value);
@@ -1025,7 +1037,7 @@ impl<'a> GetWorklogsForIdsRequest<'a> {
 ///
 /// This resource does not return worklogs updated during the minute preceding the request.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira, however, worklogs are only returned where either of the following is true:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira, however, worklogs are only returned where either of the following is true:
 ///
 ///  *  the worklog is set as *Viewable by All Users*.
 ///  *  the user is a member of a project role or group with permission to view the worklog.
@@ -1048,7 +1060,7 @@ impl<'a> GetIdsOfWorklogsModifiedSinceRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
     #[must_use]
     pub fn expand(mut self, value: GetIdsOfWorklogsModifiedSinceRequestExpand) -> Self {
         self.expand = Some(value);

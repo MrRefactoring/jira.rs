@@ -22,7 +22,7 @@ crate::open_enum! {
 ///  *  `permissions` Returns all permission grants for each permission scheme.
 ///  *  `projectRole` Returns information about the project role granted the permission.
 ///  *  `user` Returns information about the user who is granted the permission.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetAllPermissionSchemesRequestExpand {
@@ -51,7 +51,7 @@ crate::open_enum! {
 ///  *  `permissions` Returns all permission grants for each permission scheme.
 ///  *  `projectRole` Returns information about the project role granted the permission.
 ///  *  `user` Returns information about the user who is granted the permission.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum CreatePermissionSchemeRequestExpand {
@@ -80,7 +80,7 @@ crate::open_enum! {
 ///  *  `permissions` Returns all permission grants for each permission scheme.
 ///  *  `projectRole` Returns information about the project role granted the permission.
 ///  *  `user` Returns information about the user who is granted the permission.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetPermissionSchemeRequestExpand {
@@ -109,7 +109,7 @@ crate::open_enum! {
 ///  *  `permissions` Returns all permission grants for each permission scheme.
 ///  *  `projectRole` Returns information about the project role granted the permission.
 ///  *  `user` Returns information about the user who is granted the permission.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum UpdatePermissionSchemeRequestExpand {
@@ -138,7 +138,7 @@ crate::open_enum! {
 ///  *  `projectRole` Returns information about the project role granted the permission.
 ///  *  `field` Returns information about the custom field granted the permission.
 ///  *  `all` Returns all expandable information.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetPermissionSchemeGrantsRequestExpand {
@@ -167,7 +167,7 @@ crate::open_enum! {
 ///  *  `projectRole` Returns information about the project role granted the permission.
 ///  *  `field` Returns information about the custom field granted the permission.
 ///  *  `all` Returns all expandable information.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum CreatePermissionGrantRequestExpand {
@@ -196,7 +196,7 @@ crate::open_enum! {
 ///  *  `permissions` Returns all permission grants for each permission scheme.
 ///  *  `projectRole` Returns information about the project role granted the permission.
 ///  *  `user` Returns information about the user who is granted the permission.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetPermissionSchemeGrantRequestExpand {
@@ -307,21 +307,21 @@ impl<'a> PermissionSchemesService<'a> {
     ///  *  `EDIT_OWN_WORKLOGS`
     ///  *  `WORK_ON_ISSUES`
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_all_permission_schemes(&self) -> GetAllPermissionSchemesRequest<'a> {
         GetAllPermissionSchemesRequest::new(self.client)
     }
 
     /// Creates a new permission scheme. You can create a permission scheme with or without defining a set of permission grants.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn create_permission_scheme(&self, body: PermissionScheme) -> CreatePermissionSchemeRequest<'a> {
         CreatePermissionSchemeRequest::new(self.client, body)
     }
 
     /// Returns a permission scheme.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_permission_scheme(&self, scheme_id: i64) -> GetPermissionSchemeRequest<'a> {
         GetPermissionSchemeRequest::new(self.client, scheme_id)
     }
@@ -332,11 +332,11 @@ impl<'a> PermissionSchemesService<'a> {
     ///  *  If you want to update only the name and description, then do not send a permissions list in the request.
     ///  *  Sending an empty list will remove all permission grants from the permission scheme.
     ///
-    /// If you want to add or delete a permission grant instead of updating the whole list, see [Create permission grant](#api-rest-api-3-permissionscheme-schemeId-permission-post) or [Delete permission scheme entity](#api-rest-api-3-permissionscheme-schemeId-permission-permissionId-delete).
+    /// If you want to add or delete a permission grant instead of updating the whole list, see [Create permission grant](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeId-permission-post) or [Delete permission scheme entity](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeId-permission-permissionId-delete).
     ///
     /// See [About permission schemes and grants](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#about-permission-schemes-and-grants) for more details.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn update_permission_scheme(
         &self,
         scheme_id: i64,
@@ -347,21 +347,21 @@ impl<'a> PermissionSchemesService<'a> {
 
     /// Deletes a permission scheme.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_permission_scheme(&self, scheme_id: i64) -> DeletePermissionSchemeRequest<'a> {
         DeletePermissionSchemeRequest::new(self.client, scheme_id)
     }
 
     /// Returns all permission grants for a permission scheme.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_permission_scheme_grants(&self, scheme_id: i64) -> GetPermissionSchemeGrantsRequest<'a> {
         GetPermissionSchemeGrantsRequest::new(self.client, scheme_id)
     }
 
     /// Creates a permission grant in a permission scheme.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn create_permission_grant(
         &self,
         scheme_id: i64,
@@ -372,7 +372,7 @@ impl<'a> PermissionSchemesService<'a> {
 
     /// Returns a permission grant.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_permission_scheme_grant(
         &self,
         scheme_id: i64,
@@ -383,7 +383,7 @@ impl<'a> PermissionSchemesService<'a> {
 
     /// Deletes a permission grant from a permission scheme. See [About permission schemes and grants](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#about-permission-schemes-and-grants) for more details.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_permission_scheme_entity(
         &self,
         scheme_id: i64,
@@ -484,7 +484,7 @@ impl<'a> PermissionSchemesService<'a> {
 ///  *  `EDIT_OWN_WORKLOGS`
 ///  *  `WORK_ON_ISSUES`
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetAllPermissionSchemesRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetAllPermissionSchemesRequestExpand>,
@@ -535,7 +535,7 @@ impl<'a> GetAllPermissionSchemesRequest<'a> {
 
 /// Creates a new permission scheme. You can create a permission scheme with or without defining a set of permission grants.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct CreatePermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<CreatePermissionSchemeRequestExpand>,
@@ -589,7 +589,7 @@ impl<'a> CreatePermissionSchemeRequest<'a> {
 
 /// Returns a permission scheme.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetPermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
@@ -647,11 +647,11 @@ impl<'a> GetPermissionSchemeRequest<'a> {
 ///  *  If you want to update only the name and description, then do not send a permissions list in the request.
 ///  *  Sending an empty list will remove all permission grants from the permission scheme.
 ///
-/// If you want to add or delete a permission grant instead of updating the whole list, see [Create permission grant](#api-rest-api-3-permissionscheme-schemeId-permission-post) or [Delete permission scheme entity](#api-rest-api-3-permissionscheme-schemeId-permission-permissionId-delete).
+/// If you want to add or delete a permission grant instead of updating the whole list, see [Create permission grant](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeId-permission-post) or [Delete permission scheme entity](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeId-permission-permissionId-delete).
 ///
 /// See [About permission schemes and grants](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#about-permission-schemes-and-grants) for more details.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct UpdatePermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
@@ -708,7 +708,7 @@ impl<'a> UpdatePermissionSchemeRequest<'a> {
 
 /// Deletes a permission scheme.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeletePermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
@@ -742,7 +742,7 @@ impl<'a> DeletePermissionSchemeRequest<'a> {
 
 /// Returns all permission grants for a permission scheme.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetPermissionSchemeGrantsRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
@@ -796,7 +796,7 @@ impl<'a> GetPermissionSchemeGrantsRequest<'a> {
 
 /// Creates a permission grant in a permission scheme.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct CreatePermissionGrantRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
@@ -858,7 +858,7 @@ impl<'a> CreatePermissionGrantRequest<'a> {
 
 /// Returns a permission grant.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetPermissionSchemeGrantRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
@@ -913,7 +913,7 @@ impl<'a> GetPermissionSchemeGrantRequest<'a> {
 
 /// Deletes a permission grant from a permission scheme. See [About permission schemes and grants](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#about-permission-schemes-and-grants) for more details.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeletePermissionSchemeEntityRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,

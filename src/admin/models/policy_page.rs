@@ -3,7 +3,8 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PolicyPageMeta {
     /// Value for the next cursor
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -25,7 +26,8 @@ pub struct PolicyPageMeta {
     pub total: Option<i64>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PolicyPage {
     /// 0 or more values of Policy are returned
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// List of security schemes.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SecuritySchemes {
     /// List of security schemes.
     #[serde(rename = "issueSecuritySchemes", default, skip_serializing_if = "Option::is_none")]

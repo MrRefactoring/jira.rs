@@ -12,7 +12,7 @@ crate::open_enum! {
 }
 
 /// Details of the feature state.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ProjectFeatureState {
     /// The feature state.
     #[serde(default, skip_serializing_if = "Option::is_none")]

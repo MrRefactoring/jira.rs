@@ -121,7 +121,7 @@ impl<'a> GetTerminologyEntryRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/terminology/entries/{}", self.original_name),
+            format!("/rest/api/2/terminology/entries/{}", crate::core::encode_path_segment(&self.original_name)),
         );
 
         Ok(config)

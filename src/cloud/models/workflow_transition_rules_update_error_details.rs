@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of any errors encountered while updating workflow transition rules for a workflow.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowTransitionRulesUpdateErrorDetails {
     /// A list of transition rule update errors, indexed by the transition rule ID. Any transition rule that appears here wasn't updated.
     #[serde(rename = "ruleUpdateErrors")]

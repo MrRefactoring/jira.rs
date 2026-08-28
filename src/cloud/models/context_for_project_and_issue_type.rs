@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The project and issue type mapping with a matching custom field context.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ContextForProjectAndIssueType {
     /// The ID of the custom field context.
     #[serde(rename = "contextId")]

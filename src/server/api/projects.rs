@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 /// Use expand to include additional information about permission schemes in the response. This parameter accepts a comma-separated list of expandable options. Expand options include: all and field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetAssignedPermissionSchemeRequestExpand {
@@ -15,7 +15,7 @@ pub enum GetAssignedPermissionSchemeRequestExpand {
 }
 
 /// Use expand to include additional information about permission schemes in the response. This parameter accepts a comma-separated list of expandable options. Expand options include: all and field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum AssignPermissionSchemeRequestExpand {
@@ -484,7 +484,7 @@ impl<'a> GetProjectTypeByKeyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/type/{}", self.project_type_key),
+            format!("/rest/api/2/project/type/{}", crate::core::encode_path_segment(&self.project_type_key)),
         );
 
         Ok(config)
@@ -516,7 +516,7 @@ impl<'a> GetAccessibleProjectTypeByKeyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/type/{}/accessible", self.project_type_key),
+            format!("/rest/api/2/project/type/{}/accessible", crate::core::encode_path_segment(&self.project_type_key)),
         );
 
         Ok(config)
@@ -557,7 +557,7 @@ impl<'a> GetProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/{}", self.project_id_or_key),
+            format!("/rest/api/2/project/{}", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         if let Some(value) = &self.expand {
@@ -607,7 +607,7 @@ impl<'a> UpdateProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/project/{}", self.project_id_or_key),
+            format!("/rest/api/2/project/{}", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         if let Some(value) = &self.expand {
@@ -650,7 +650,7 @@ impl<'a> DeleteProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/project/{}", self.project_id_or_key),
+            format!("/rest/api/2/project/{}", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         Ok(config)
@@ -682,7 +682,7 @@ impl<'a> ArchiveProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/project/{}/archive", self.project_id_or_key),
+            format!("/rest/api/2/project/{}/archive", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         Ok(config)
@@ -722,7 +722,7 @@ impl<'a> CreateProjectAvatarFromTemporaryRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/project/{}/avatar", self.project_id_or_key),
+            format!("/rest/api/2/project/{}/avatar", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.avatar_cropping)? {
@@ -762,7 +762,7 @@ impl<'a> UpdateProjectAvatarRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/project/{}/avatar", self.project_id_or_key),
+            format!("/rest/api/2/project/{}/avatar", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.avatar)? {
@@ -822,7 +822,10 @@ impl<'a> StoreTemporaryProjectAvatarUsingMultiPartRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/project/{}/avatar/temporary", self.project_id_or_key),
+            format!(
+                "/rest/api/2/project/{}/avatar/temporary",
+                crate::core::encode_path_segment(&self.project_id_or_key)
+            ),
         );
 
         config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
@@ -862,7 +865,11 @@ impl<'a> DeleteProjectAvatarRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/project/{}/avatar/{}", self.project_id_or_key, self.id),
+            format!(
+                "/rest/api/2/project/{}/avatar/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                self.id
+            ),
         );
 
         Ok(config)
@@ -894,7 +901,7 @@ impl<'a> GetAllProjectAvatarsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/avatars", self.project_id_or_key),
+            format!("/rest/api/2/project/{}/avatars", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         Ok(config)
@@ -926,7 +933,7 @@ impl<'a> GetProjectComponentsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/components", self.project_id_or_key),
+            format!("/rest/api/2/project/{}/components", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         Ok(config)
@@ -958,7 +965,7 @@ impl<'a> GetProjectPropertyKeysRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/properties", self.project_id_or_key),
+            format!("/rest/api/2/project/{}/properties", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         Ok(config)
@@ -995,7 +1002,11 @@ impl<'a> GetProjectPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/properties/{}", self.project_id_or_key, self.property_key),
+            format!(
+                "/rest/api/2/project/{}/properties/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)
@@ -1034,7 +1045,11 @@ impl<'a> SetProjectPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/project/{}/properties/{}", self.project_id_or_key, self.property_key),
+            format!(
+                "/rest/api/2/project/{}/properties/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -1073,7 +1088,11 @@ impl<'a> DeleteProjectPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/project/{}/properties/{}", self.project_id_or_key, self.property_key),
+            format!(
+                "/rest/api/2/project/{}/properties/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)
@@ -1105,7 +1124,7 @@ impl<'a> RestoreProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/project/{}/restore", self.project_id_or_key),
+            format!("/rest/api/2/project/{}/restore", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         Ok(config)
@@ -1137,7 +1156,7 @@ impl<'a> GetProjectRolesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/role", self.project_id_or_key),
+            format!("/rest/api/2/project/{}/role", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         Ok(config)
@@ -1170,7 +1189,11 @@ impl<'a> GetProjectRoleRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/role/{}", self.project_id_or_key, self.id),
+            format!(
+                "/rest/api/2/project/{}/role/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                self.id
+            ),
         );
 
         Ok(config)
@@ -1209,7 +1232,11 @@ impl<'a> AddActorUsersRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/project/{}/role/{}", self.project_id_or_key, self.id),
+            format!(
+                "/rest/api/2/project/{}/role/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                self.id
+            ),
         );
 
         let body = match serde_json::to_value(&self.actors_map)? {
@@ -1255,7 +1282,11 @@ impl<'a> SetActorsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/project/{}/role/{}", self.project_id_or_key, self.id),
+            format!(
+                "/rest/api/2/project/{}/role/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                self.id
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -1308,7 +1339,11 @@ impl<'a> DeleteActorRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/project/{}/role/{}", self.project_id_or_key, self.id),
+            format!(
+                "/rest/api/2/project/{}/role/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                self.id
+            ),
         );
 
         if let Some(value) = &self.user {
@@ -1348,7 +1383,7 @@ impl<'a> GetAllStatusesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/statuses", self.project_id_or_key),
+            format!("/rest/api/2/project/{}/statuses", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         Ok(config)
@@ -1385,7 +1420,11 @@ impl<'a> UpdateProjectTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/project/{}/type/{}", self.project_id_or_key, self.new_project_type_key),
+            format!(
+                "/rest/api/2/project/{}/type/{}",
+                crate::core::encode_path_segment(&self.project_id_or_key),
+                crate::core::encode_path_segment(&self.new_project_type_key)
+            ),
         );
 
         Ok(config)
@@ -1460,7 +1499,7 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/version", self.project_id_or_key),
+            format!("/rest/api/2/project/{}/version", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         if let Some(value) = &self.expand {
@@ -1517,7 +1556,7 @@ impl<'a> GetProjectVersionsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/versions", self.project_id_or_key),
+            format!("/rest/api/2/project/{}/versions", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         if let Some(value) = &self.expand {
@@ -1553,7 +1592,10 @@ impl<'a> GetProjectIssueSecuritySchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/issuesecuritylevelscheme", self.project_key_or_id),
+            format!(
+                "/rest/api/2/project/{}/issuesecuritylevelscheme",
+                crate::core::encode_path_segment(&self.project_key_or_id)
+            ),
         );
 
         Ok(config)
@@ -1594,7 +1636,10 @@ impl<'a> GetProjectNotificationSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/notificationscheme", self.project_key_or_id),
+            format!(
+                "/rest/api/2/project/{}/notificationscheme",
+                crate::core::encode_path_segment(&self.project_key_or_id)
+            ),
         );
 
         if let Some(value) = &self.expand {
@@ -1639,7 +1684,10 @@ impl<'a> GetAssignedPermissionSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/permissionscheme", self.project_key_or_id),
+            format!(
+                "/rest/api/2/project/{}/permissionscheme",
+                crate::core::encode_path_segment(&self.project_key_or_id)
+            ),
         );
 
         if let Some(value) = &self.expand {
@@ -1685,7 +1733,10 @@ impl<'a> AssignPermissionSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/project/{}/permissionscheme", self.project_key_or_id),
+            format!(
+                "/rest/api/2/project/{}/permissionscheme",
+                crate::core::encode_path_segment(&self.project_key_or_id)
+            ),
         );
 
         if let Some(value) = &self.expand {
@@ -1728,7 +1779,7 @@ impl<'a> GetAssignedPrioritySchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/priorityscheme", self.project_key_or_id),
+            format!("/rest/api/2/project/{}/priorityscheme", crate::core::encode_path_segment(&self.project_key_or_id)),
         );
 
         Ok(config)
@@ -1761,7 +1812,7 @@ impl<'a> AssignPrioritySchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/project/{}/priorityscheme", self.project_key_or_id),
+            format!("/rest/api/2/project/{}/priorityscheme", crate::core::encode_path_segment(&self.project_key_or_id)),
         );
 
         let body = match serde_json::to_value(&self.id)? {
@@ -1801,7 +1852,11 @@ impl<'a> UnassignPrioritySchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/project/{}/priorityscheme/{}", self.project_key_or_id, self.scheme_id),
+            format!(
+                "/rest/api/2/project/{}/priorityscheme/{}",
+                crate::core::encode_path_segment(&self.project_key_or_id),
+                self.scheme_id
+            ),
         );
 
         Ok(config)
@@ -1833,7 +1888,7 @@ impl<'a> GetSecurityLevelsForProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/securitylevel", self.project_key_or_id),
+            format!("/rest/api/2/project/{}/securitylevel", crate::core::encode_path_segment(&self.project_key_or_id)),
         );
 
         Ok(config)
@@ -1865,7 +1920,7 @@ impl<'a> GetWorkflowSchemeForProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/workflowscheme", self.project_key_or_id),
+            format!("/rest/api/2/project/{}/workflowscheme", crate::core::encode_path_segment(&self.project_key_or_id)),
         );
 
         Ok(config)

@@ -4,13 +4,15 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The role assignment for the user.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct MultiDirectoryUserRoleAssignment {
     #[serde(rename = "resourceId", default, skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<ResourceId>,
     #[serde(rename = "resourceOwner", default, skip_serializing_if = "Option::is_none")]
     pub resource_owner: Option<ResourceOwner>,
     /// Deprecated. Use `roleAssignments` instead. The roles assigned to the resource ID.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub roles: Option<Vec<String>>,
     /// Roles grouped with their role assignment methods. This field supersedes `roles`.

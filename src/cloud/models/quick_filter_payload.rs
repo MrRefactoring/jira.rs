@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// The payload for defining quick filters
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct QuickFilterPayload {
     /// The description of the quick filter
     #[serde(default, skip_serializing_if = "Option::is_none")]

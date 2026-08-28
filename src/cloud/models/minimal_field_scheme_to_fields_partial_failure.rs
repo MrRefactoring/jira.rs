@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Minimal partial failure result when updating field scheme to fields associations.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct MinimalFieldSchemeToFieldsPartialFailure {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,

@@ -3,7 +3,8 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct JiraExpressionEvalContext {
     /// The ID of the board that is available under the `board` variable when evaluating the expression.
     #[serde(default, skip_serializing_if = "Option::is_none")]

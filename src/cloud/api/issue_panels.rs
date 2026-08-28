@@ -14,9 +14,9 @@ impl<'a> IssuePanelsService<'a> {
 
     /// Bulk pin or unpin an issue panel (added by a Forge app) to or from multiple projects.
     ///
-    /// The operation runs asynchronously. The response includes a task ID - use the [Get task](#api-rest-api-3-task-taskId-get) endpoint to check progress.
+    /// The operation runs asynchronously. The response includes a task ID - use the [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) endpoint to check progress.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn bulk_pin_unpin_projects_async(
         &self,
         forge_panel_project_pin_request: ForgePanelProjectPinRequest,
@@ -27,9 +27,9 @@ impl<'a> IssuePanelsService<'a> {
 
 /// Bulk pin or unpin an issue panel (added by a Forge app) to or from multiple projects.
 ///
-/// The operation runs asynchronously. The response includes a task ID - use the [Get task](#api-rest-api-3-task-taskId-get) endpoint to check progress.
+/// The operation runs asynchronously. The response includes a task ID - use the [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) endpoint to check progress.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct BulkPinUnpinProjectsAsyncRequest<'a> {
     client: &'a crate::core::Client,
     forge_panel_project_pin_request: ForgePanelProjectPinRequest,

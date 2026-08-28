@@ -156,7 +156,11 @@ impl<'a> GetGroupRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/scim/directory/{}/Groups/{}", self.directory_id, self.id),
+            format!(
+                "/scim/directory/{}/Groups/{}",
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         Ok(config)
@@ -197,7 +201,11 @@ impl<'a> ReplaceGroupRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/scim/directory/{}/Groups/{}", self.directory_id, self.id),
+            format!(
+                "/scim/directory/{}/Groups/{}",
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -238,7 +246,11 @@ impl<'a> DeleteGroupRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/scim/directory/{}/Groups/{}", self.directory_id, self.id),
+            format!(
+                "/scim/directory/{}/Groups/{}",
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         Ok(config)
@@ -359,7 +371,11 @@ impl<'a> PatchGroupRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PATCH,
-            format!("/scim/directory/{}/Groups/{}", self.directory_id, self.id),
+            format!(
+                "/scim/directory/{}/Groups/{}",
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.request_payload_to_patch)? {
@@ -427,7 +443,7 @@ impl<'a> GetGroupsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/scim/directory/{}/Groups", self.directory_id),
+            format!("/scim/directory/{}/Groups", crate::core::encode_path_segment(&self.directory_id)),
         );
 
         if let Some(value) = &self.filter {
@@ -481,7 +497,7 @@ impl<'a> CreateGroupRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/scim/directory/{}/Groups", self.directory_id),
+            format!("/scim/directory/{}/Groups", crate::core::encode_path_segment(&self.directory_id)),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));

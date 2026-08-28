@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of the order-by JQL clause.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct JqlQueryOrderByClause {
     /// The list of order-by clause fields and their ordering directives.
     pub fields: Vec<JqlQueryOrderByClauseElement>,

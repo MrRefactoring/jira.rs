@@ -10,7 +10,8 @@ pub enum CustomFieldContextDefaultValueForgeUserFieldType {
 }
 
 /// Defaults for a Forge user custom field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueForgeUserField {
     /// The ID of the default user.
     #[serde(rename = "accountId")]

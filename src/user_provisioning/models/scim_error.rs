@@ -19,7 +19,8 @@ crate::open_enum! {
 }
 
 /// SCIM Error
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ScimError {
     /// SCIM error schemas.
     #[serde(default, skip_serializing_if = "Option::is_none")]

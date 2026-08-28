@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The payload for the layout details for the start end of a transition
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct FromLayoutPayload {
     /// The port that the transition can be made from
     #[serde(rename = "fromPort", default, skip_serializing_if = "Option::is_none")]

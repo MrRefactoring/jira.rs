@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of the operations that can be performed on the issue.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Operations {
     /// Details of the link groups defining issue operations.
     #[serde(rename = "linkGroups", default, skip_serializing_if = "Option::is_none")]

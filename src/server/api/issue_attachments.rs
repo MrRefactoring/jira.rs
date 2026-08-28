@@ -80,8 +80,10 @@ impl<'a> GetAttachmentRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/2/attachment/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/2/attachment/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -110,8 +112,10 @@ impl<'a> RemoveAttachmentRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/rest/api/2/attachment/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/2/attachment/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -142,7 +146,7 @@ impl<'a> ExpandForHumansRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/attachment/{}/expand/human", self.id),
+            format!("/rest/api/2/attachment/{}/expand/human", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -174,7 +178,7 @@ impl<'a> ExpandForMachinesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/attachment/{}/expand/raw", self.id),
+            format!("/rest/api/2/attachment/{}/expand/raw", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)

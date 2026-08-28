@@ -20,7 +20,7 @@ crate::open_enum! {
 ///  *  `group` Returns information about the group that is granted the permission.
 ///  *  `projectRole` Returns information about the project role granted the permission.
 ///  *  `user` Returns information about the user who is granted the permission.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssueSecurityLevelMembersRequestExpand {
@@ -44,7 +44,7 @@ impl<'a> IssueSecurityLevelService<'a> {
     ///
     /// Only issue security level members in context of classic projects are returned.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_issue_security_level_members(
         &self,
         issue_security_scheme_id: i64,
@@ -54,11 +54,11 @@ impl<'a> IssueSecurityLevelService<'a> {
 
     /// Returns details of an issue security level.
     ///
-    /// Use [Get issue security scheme](#api-rest-api-3-issuesecurityschemes-id-get) to obtain the IDs of issue security levels associated with the issue security scheme.
+    /// Use [Get issue security scheme](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-security-schemes/#api-rest-api-3-issuesecurityschemes-id-get) to obtain the IDs of issue security levels associated with the issue security scheme.
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_issue_security_level(&self, id: impl Into<String>) -> GetIssueSecurityLevelRequest<'a> {
         GetIssueSecurityLevelRequest::new(self.client, id)
     }
@@ -68,7 +68,7 @@ impl<'a> IssueSecurityLevelService<'a> {
 ///
 /// Only issue security level members in context of classic projects are returned.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetIssueSecurityLevelMembersRequest<'a> {
     client: &'a crate::core::Client,
     issue_security_scheme_id: i64,
@@ -167,11 +167,11 @@ impl<'a> GetIssueSecurityLevelMembersRequest<'a> {
 
 /// Returns details of an issue security level.
 ///
-/// Use [Get issue security scheme](#api-rest-api-3-issuesecurityschemes-id-get) to obtain the IDs of issue security levels associated with the issue security scheme.
+/// Use [Get issue security scheme](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-security-schemes/#api-rest-api-3-issuesecurityschemes-id-get) to obtain the IDs of issue security levels associated with the issue security scheme.
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetIssueSecurityLevelRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -184,8 +184,10 @@ impl<'a> GetIssueSecurityLevelRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/3/securitylevel/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/securitylevel/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }

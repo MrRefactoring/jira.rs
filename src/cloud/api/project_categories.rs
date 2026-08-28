@@ -14,35 +14,35 @@ impl<'a> ProjectCategoriesService<'a> {
 
     /// Returns all project categories.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_all_project_categories(&self) -> GetAllProjectCategoriesRequest<'a> {
         GetAllProjectCategoriesRequest::new(self.client)
     }
 
     /// Creates a project category.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn create_project_category(&self, project_category: ProjectCategory) -> CreateProjectCategoryRequest<'a> {
         CreateProjectCategoryRequest::new(self.client, project_category)
     }
 
     /// Returns a project category.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_project_category_by_id(&self, id: i64) -> GetProjectCategoryByIdRequest<'a> {
         GetProjectCategoryByIdRequest::new(self.client, id)
     }
 
     /// Updates a project category.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn update_project_category(&self, id: i64, body: ProjectCategory) -> UpdateProjectCategoryRequest<'a> {
         UpdateProjectCategoryRequest::new(self.client, id, body)
     }
 
     /// Deletes a project category.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn remove_project_category(&self, id: i64) -> RemoveProjectCategoryRequest<'a> {
         RemoveProjectCategoryRequest::new(self.client, id)
     }
@@ -50,7 +50,7 @@ impl<'a> ProjectCategoriesService<'a> {
 
 /// Returns all project categories.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetAllProjectCategoriesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -81,7 +81,7 @@ impl<'a> GetAllProjectCategoriesRequest<'a> {
 
 /// Creates a project category.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct CreateProjectCategoryRequest<'a> {
     client: &'a crate::core::Client,
     project_category: ProjectCategory,
@@ -120,7 +120,7 @@ impl<'a> CreateProjectCategoryRequest<'a> {
 
 /// Returns a project category.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetProjectCategoryByIdRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -154,7 +154,7 @@ impl<'a> GetProjectCategoryByIdRequest<'a> {
 
 /// Updates a project category.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct UpdateProjectCategoryRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -191,7 +191,7 @@ impl<'a> UpdateProjectCategoryRequest<'a> {
 
 /// Deletes a project category.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct RemoveProjectCategoryRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,

@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The ID of an issue priority.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PriorityId {
     /// The ID of the issue priority.
     pub id: String,

@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// The workflow scheme read request body.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct WorkflowSchemeReadRequest {
     /// The list of project IDs to query.
     #[serde(rename = "projectIds", default, skip_serializing_if = "Option::is_none")]

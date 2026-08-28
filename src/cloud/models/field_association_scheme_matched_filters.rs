@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Matched filters for field association scheme search.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FieldAssociationSchemeMatchedFilters {
     #[serde(rename = "projectIds", default, skip_serializing_if = "Option::is_none")]
     pub project_ids: Option<Vec<i64>>,

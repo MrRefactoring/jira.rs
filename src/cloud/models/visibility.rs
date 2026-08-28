@@ -11,7 +11,7 @@ crate::open_enum! {
 }
 
 /// The group or role to which this item is visible.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct Visibility {
     /// The ID of the group or the name of the role that visibility of this item is restricted to.
     #[serde(default, skip_serializing_if = "Option::is_none")]

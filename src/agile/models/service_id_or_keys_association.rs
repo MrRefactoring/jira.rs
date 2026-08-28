@@ -10,7 +10,8 @@ crate::open_enum! {
 }
 
 /// An association type referencing service ID or keys.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ServiceIdOrKeysAssociation {
     /// Defines the association type.
     #[serde(rename = "associationType")]

@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Jira instance health check results. Deprecated and no longer returned.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct HealthCheckResult {
     /// The description of the Jira health check item.
     #[serde(default, skip_serializing_if = "Option::is_none")]

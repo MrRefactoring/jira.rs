@@ -14,14 +14,14 @@ impl<'a> AnnouncementBannerService<'a> {
 
     /// Returns the current announcement banner configuration.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_banner(&self) -> GetBannerRequest<'a> {
         GetBannerRequest::new(self.client)
     }
 
     /// Updates the announcement banner configuration.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn set_banner(
         &self,
         announcement_banner_configuration_update: AnnouncementBannerConfigurationUpdate,
@@ -32,7 +32,7 @@ impl<'a> AnnouncementBannerService<'a> {
 
 /// Returns the current announcement banner configuration.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetBannerRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -63,7 +63,7 @@ impl<'a> GetBannerRequest<'a> {
 
 /// Updates the announcement banner configuration.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct SetBannerRequest<'a> {
     client: &'a crate::core::Client,
     announcement_banner_configuration_update: AnnouncementBannerConfigurationUpdate,

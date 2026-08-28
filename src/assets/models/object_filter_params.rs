@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A filter object that is used to find a paginated result set based on an object type and an AQL query
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ObjectFilterParams {
     /// The AQL that will fetch the objects. The object type parameter will be appended implicitly to this AQL
     #[serde(rename = "qlQuery")]

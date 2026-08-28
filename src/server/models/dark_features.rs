@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct DarkFeatures {
     #[serde(rename = "siteFeatures", default, skip_serializing_if = "Option::is_none")]
     pub site_features: Option<std::collections::HashMap<String, serde_json::Value>>,

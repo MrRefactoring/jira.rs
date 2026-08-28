@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// A rule configuration.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RuleConfiguration {
     /// Whether the rule is disabled.
     #[serde(default, skip_serializing_if = "Option::is_none")]

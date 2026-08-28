@@ -9,7 +9,8 @@ pub enum CustomFieldContextDefaultValueSingleGroupPickerType {
 }
 
 /// The default value for a group picker custom field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueSingleGroupPicker {
     /// The ID of the context.
     #[serde(rename = "contextId")]

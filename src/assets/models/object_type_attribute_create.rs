@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Input entity to create an object type attribute
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ObjectTypeAttributeCreate {
     pub name: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]

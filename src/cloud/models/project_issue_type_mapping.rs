@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// The project and issue type mapping.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ProjectIssueTypeMapping {
     /// The ID of the issue type.
     #[serde(rename = "issueTypeId")]

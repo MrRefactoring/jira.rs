@@ -3,7 +3,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueUpdate {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub fields: Option<std::collections::HashMap<String, serde_json::Value>>,

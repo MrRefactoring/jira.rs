@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The specific request object for creating a project with template.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct CustomTemplateRequestDTO {
     #[serde(rename = "boardFeatures", default, skip_serializing_if = "Option::is_none")]
     pub board_features: Option<BoardFeaturesPayload>,

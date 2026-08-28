@@ -14,7 +14,7 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
 ///
 ///  *  `all` Returns all expandable information
 ///  *  `field` Returns information about any custom fields assigned to receive an event
@@ -22,7 +22,7 @@ crate::open_enum! {
 ///  *  `notificationSchemeEvents` Returns a list of event associations. This list is returned for all expandable information
 ///  *  `projectRole` Returns information about any project roles assigned to receive an event
 ///  *  `user` Returns information about any users assigned to receive an event
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetNotificationSchemesRequestExpand {
@@ -43,7 +43,7 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
 ///
 ///  *  `all` Returns all expandable information
 ///  *  `field` Returns information about any custom fields assigned to receive an event
@@ -51,7 +51,7 @@ crate::open_enum! {
 ///  *  `notificationSchemeEvents` Returns a list of event associations. This list is returned for all expandable information
 ///  *  `projectRole` Returns information about any project roles assigned to receive an event
 ///  *  `user` Returns information about any users assigned to receive an event
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetNotificationSchemeRequestExpand {
@@ -71,25 +71,25 @@ impl<'a> IssueNotificationSchemesService<'a> {
         Self { client }
     }
 
-    /// Returns a [paginated](#pagination) list of [notification schemes](https://confluence.atlassian.com/x/8YdKLg) ordered by the display name.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of [notification schemes](https://confluence.atlassian.com/x/8YdKLg) ordered by the display name.
     ///
     /// *Note that you should allow for events without recipients to appear in responses.*
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira, however, the user must have permission to administer at least one project associated with a notification scheme for it to be returned.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira, however, the user must have permission to administer at least one project associated with a notification scheme for it to be returned.
     pub fn get_notification_schemes(&self) -> GetNotificationSchemesRequest<'a> {
         GetNotificationSchemesRequest::new(self.client)
     }
 
-    /// Returns a [paginated](#pagination) mapping of project that have notification scheme assigned. You can provide either one or multiple notification scheme IDs or project IDs to filter by. If you don't provide any, this will return a list of all mappings. Note that only company-managed (classic) projects are supported. This is because team-managed projects don't have a concept of a default notification scheme. The mappings are ordered by projectId.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) mapping of project that have notification scheme assigned. You can provide either one or multiple notification scheme IDs or project IDs to filter by. If you don't provide any, this will return a list of all mappings. Note that only company-managed (classic) projects are supported. This is because team-managed projects don't have a concept of a default notification scheme. The mappings are ordered by projectId.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_notification_scheme_to_project_mappings(&self) -> GetNotificationSchemeToProjectMappingsRequest<'a> {
         GetNotificationSchemeToProjectMappingsRequest::new(self.client)
     }
 
     /// Returns a [notification scheme](https://confluence.atlassian.com/x/8YdKLg), including the list of events and the recipients who will receive notifications for those events.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira, however, the user must have permission to administer at least one project associated with the notification scheme.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira, however, the user must have permission to administer at least one project associated with the notification scheme.
     pub fn get_notification_scheme(&self, id: i64) -> GetNotificationSchemeRequest<'a> {
         GetNotificationSchemeRequest::new(self.client, id)
     }
@@ -98,7 +98,7 @@ impl<'a> IssueNotificationSchemesService<'a> {
     ///
     /// *Deprecated: The notification type `EmailAddress` is no longer supported in Cloud. Refer to the [changelog](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-1031) for more details.*
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn add_notifications(
         &self,
         id: impl Into<String>,
@@ -109,7 +109,7 @@ impl<'a> IssueNotificationSchemesService<'a> {
 
     /// Removes a notification from a notification scheme.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn remove_notification_from_notification_scheme(
         &self,
         notification_scheme_id: impl Into<String>,
@@ -119,11 +119,11 @@ impl<'a> IssueNotificationSchemesService<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of [notification schemes](https://confluence.atlassian.com/x/8YdKLg) ordered by the display name.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of [notification schemes](https://confluence.atlassian.com/x/8YdKLg) ordered by the display name.
 ///
 /// *Note that you should allow for events without recipients to appear in responses.*
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira, however, the user must have permission to administer at least one project associated with a notification scheme for it to be returned.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira, however, the user must have permission to administer at least one project associated with a notification scheme for it to be returned.
 pub struct GetNotificationSchemesRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<String>,
@@ -179,7 +179,7 @@ impl<'a> GetNotificationSchemesRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
     ///
     ///  *  `all` Returns all expandable information
     ///  *  `field` Returns information about any custom fields assigned to receive an event
@@ -237,9 +237,9 @@ impl<'a> GetNotificationSchemesRequest<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) mapping of project that have notification scheme assigned. You can provide either one or multiple notification scheme IDs or project IDs to filter by. If you don't provide any, this will return a list of all mappings. Note that only company-managed (classic) projects are supported. This is because team-managed projects don't have a concept of a default notification scheme. The mappings are ordered by projectId.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) mapping of project that have notification scheme assigned. You can provide either one or multiple notification scheme IDs or project IDs to filter by. If you don't provide any, this will return a list of all mappings. Note that only company-managed (classic) projects are supported. This is because team-managed projects don't have a concept of a default notification scheme. The mappings are ordered by projectId.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetNotificationSchemeToProjectMappingsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<String>,
@@ -324,7 +324,7 @@ impl<'a> GetNotificationSchemeToProjectMappingsRequest<'a> {
 
 /// Returns a [notification scheme](https://confluence.atlassian.com/x/8YdKLg), including the list of events and the recipients who will receive notifications for those events.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira, however, the user must have permission to administer at least one project associated with the notification scheme.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira, however, the user must have permission to administer at least one project associated with the notification scheme.
 pub struct GetNotificationSchemeRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -336,7 +336,7 @@ impl<'a> GetNotificationSchemeRequest<'a> {
         Self { client, id, expand: None }
     }
 
-    /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
     ///
     ///  *  `all` Returns all expandable information
     ///  *  `field` Returns information about any custom fields assigned to receive an event
@@ -380,7 +380,7 @@ impl<'a> GetNotificationSchemeRequest<'a> {
 ///
 /// *Deprecated: The notification type `EmailAddress` is no longer supported in Cloud. Refer to the [changelog](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-1031) for more details.*
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct AddNotificationsRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -400,7 +400,7 @@ impl<'a> AddNotificationsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/notificationscheme/{}/notification", self.id),
+            format!("/rest/api/3/notificationscheme/{}/notification", crate::core::encode_path_segment(&self.id)),
         );
 
         let body = match serde_json::to_value(&self.add_notifications_details)? {
@@ -426,7 +426,7 @@ impl<'a> AddNotificationsRequest<'a> {
 
 /// Removes a notification from a notification scheme.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct RemoveNotificationFromNotificationSchemeRequest<'a> {
     client: &'a crate::core::Client,
     notification_scheme_id: String,
@@ -448,7 +448,8 @@ impl<'a> RemoveNotificationFromNotificationSchemeRequest<'a> {
             crate::core::Method::DELETE,
             format!(
                 "/rest/api/3/notificationscheme/{}/notification/{}",
-                self.notification_scheme_id, self.notification_id
+                crate::core::encode_path_segment(&self.notification_scheme_id),
+                crate::core::encode_path_segment(&self.notification_id)
             ),
         );
 

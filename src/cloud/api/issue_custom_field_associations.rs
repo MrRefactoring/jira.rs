@@ -22,7 +22,7 @@ impl<'a> IssueCustomFieldAssociationsService<'a> {
     ///
     /// Up to 50 fields and up to 100 projects can be associated in a single request. If more fields or projects are provided a 400 response will be returned.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn create_associations(
         &self,
         field_associations_request: FieldAssociationsRequest,
@@ -38,7 +38,7 @@ impl<'a> IssueCustomFieldAssociationsService<'a> {
     ///
     /// Up to 50 fields and up to 100 projects and issue types can be unassociated in a single request. If more fields or projects are provided a 400 response will be returned.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn remove_associations(
         &self,
         field_associations_request: FieldAssociationsRequest,
@@ -57,7 +57,7 @@ impl<'a> IssueCustomFieldAssociationsService<'a> {
 ///
 /// Up to 50 fields and up to 100 projects can be associated in a single request. If more fields or projects are provided a 400 response will be returned.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct CreateAssociationsRequest<'a> {
     client: &'a crate::core::Client,
     field_associations_request: FieldAssociationsRequest,
@@ -102,7 +102,7 @@ impl<'a> CreateAssociationsRequest<'a> {
 ///
 /// Up to 50 fields and up to 100 projects and issue types can be unassociated in a single request. If more fields or projects are provided a 400 response will be returned.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct RemoveAssociationsRequest<'a> {
     client: &'a crate::core::Client,
     field_associations_request: FieldAssociationsRequest,

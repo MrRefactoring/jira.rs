@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The list of available trigger types.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AvailableWorkflowTriggerTypes {
     /// The description of the trigger rule.
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -27,11 +27,11 @@ impl<'a> JQLService<'a> {
 
     /// Returns reference data for JQL searches. This is a downloadable version of the documentation provided in [Advanced searching - fields reference](https://confluence.atlassian.com/x/gwORLQ) and [Advanced searching - functions reference](https://confluence.atlassian.com/x/hgORLQ), along with a list of JQL-reserved words. Use this information to assist with the programmatic creation of JQL queries or the validation of queries built in a custom query builder.
     ///
-    /// To filter visible field details by project or collapse non-unique fields by field type then [Get field reference data (POST)](#api-rest-api-3-jql-autocompletedata-post) can be used.
+    /// To filter visible field details by project or collapse non-unique fields by field type then [Get field reference data (POST)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-jql/#api-rest-api-3-jql-autocompletedata-post) can be used.
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_auto_complete(&self) -> GetAutoCompleteRequest<'a> {
         GetAutoCompleteRequest::new(self.client)
     }
@@ -42,7 +42,7 @@ impl<'a> JQLService<'a> {
     ///
     /// It can also return the collapsed field for custom fields. Collapsed fields enable searches to be performed across all fields with the same name and of the same field type. For example, the collapsed field `Component - Component[Dropdown]` enables dropdown fields `Component - cf[10061]` and `Component - cf[10062]` to be searched simultaneously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_auto_complete_post(
         &self,
         search_auto_complete_filter: SearchAutoCompleteFilter,
@@ -61,7 +61,7 @@ impl<'a> JQLService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_field_auto_complete_for_query_string(&self) -> GetFieldAutoCompleteForQueryStringRequest<'a> {
         GetFieldAutoCompleteForQueryStringRequest::new(self.client)
     }
@@ -72,7 +72,7 @@ impl<'a> JQLService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn parse_jql_queries(
         &self,
         validation: impl Into<ParseJqlQueriesRequestValidation>,
@@ -85,7 +85,7 @@ impl<'a> JQLService<'a> {
     ///
     /// You may wish to use this operation if your system stores JQL queries and you want to make them GDPR-compliant. For more information about GDPR-related changes, see the [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/).
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn migrate_queries(
         &self,
         jql_personal_data_migration_request: JQLPersonalDataMigrationRequest,
@@ -96,11 +96,11 @@ impl<'a> JQLService<'a> {
 
 /// Returns reference data for JQL searches. This is a downloadable version of the documentation provided in [Advanced searching - fields reference](https://confluence.atlassian.com/x/gwORLQ) and [Advanced searching - functions reference](https://confluence.atlassian.com/x/hgORLQ), along with a list of JQL-reserved words. Use this information to assist with the programmatic creation of JQL queries or the validation of queries built in a custom query builder.
 ///
-/// To filter visible field details by project or collapse non-unique fields by field type then [Get field reference data (POST)](#api-rest-api-3-jql-autocompletedata-post) can be used.
+/// To filter visible field details by project or collapse non-unique fields by field type then [Get field reference data (POST)](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-jql/#api-rest-api-3-jql-autocompletedata-post) can be used.
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetAutoCompleteRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -135,7 +135,7 @@ impl<'a> GetAutoCompleteRequest<'a> {
 ///
 /// It can also return the collapsed field for custom fields. Collapsed fields enable searches to be performed across all fields with the same name and of the same field type. For example, the collapsed field `Component - Component[Dropdown]` enables dropdown fields `Component - cf[10061]` and `Component - cf[10062]` to be searched simultaneously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetAutoCompletePostRequest<'a> {
     client: &'a crate::core::Client,
     search_auto_complete_filter: SearchAutoCompleteFilter,
@@ -183,7 +183,7 @@ impl<'a> GetAutoCompletePostRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetFieldAutoCompleteForQueryStringRequest<'a> {
     client: &'a crate::core::Client,
     field_name: Option<String>,
@@ -272,7 +272,7 @@ impl<'a> GetFieldAutoCompleteForQueryStringRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct ParseJqlQueriesRequest<'a> {
     client: &'a crate::core::Client,
     validation: ParseJqlQueriesRequestValidation,
@@ -319,7 +319,7 @@ impl<'a> ParseJqlQueriesRequest<'a> {
 ///
 /// You may wish to use this operation if your system stores JQL queries and you want to make them GDPR-compliant. For more information about GDPR-related changes, see the [migration guide](https://developer.atlassian.com/cloud/jira/platform/deprecation-notice-user-privacy-api-migration-guide/).
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct MigrateQueriesRequest<'a> {
     client: &'a crate::core::Client,
     jql_personal_data_migration_request: JQLPersonalDataMigrationRequest,

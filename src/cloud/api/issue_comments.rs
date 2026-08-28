@@ -10,11 +10,11 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about comments in the response. This parameter accepts a comma-separated list. Expand options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts a comma-separated list. Expand options include:
 ///
 ///  *  `renderedBody` Returns the comment body rendered in HTML.
 ///  *  `properties` Returns the comment's properties.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetCommentsByIdsRequestExpand {
@@ -25,7 +25,7 @@ pub enum GetCommentsByIdsRequestExpand {
 }
 
 crate::open_enum! {
-    /// [Order](#ordering) the results by a field. Accepts *created* to sort comments by their created date.
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field. Accepts *created* to sort comments by their created date.
     pub enum GetCommentsRequestOrderBy {
         Created => "created",
         CreatedDescending => "-created",
@@ -39,8 +39,8 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetCommentsRequestExpand {
@@ -56,8 +56,8 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum AddCommentRequestExpand {
@@ -73,8 +73,8 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetCommentRequestExpand {
@@ -90,8 +90,8 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum UpdateCommentRequestExpand {
@@ -111,11 +111,11 @@ impl<'a> IssueCommentsService<'a> {
         Self { client }
     }
 
-    /// Returns a [paginated](#pagination) list of comments specified by a list of comment IDs.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of comments specified by a list of comment IDs.
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** Comments are returned where the user:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Comments are returned where the user:
     ///
     ///  *  has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the comment.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -131,7 +131,7 @@ impl<'a> IssueCommentsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** Comments are included in the response where the user has:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Comments are included in the response where the user has:
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the comment.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -144,7 +144,7 @@ impl<'a> IssueCommentsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* and *Add comments* [ project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue containing the comment is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -160,7 +160,7 @@ impl<'a> IssueCommentsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the comment.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -173,7 +173,7 @@ impl<'a> IssueCommentsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue containing the comment is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -192,7 +192,7 @@ impl<'a> IssueCommentsService<'a> {
 
     /// Deletes a comment.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue containing the comment is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -207,11 +207,11 @@ impl<'a> IssueCommentsService<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of comments specified by a list of comment IDs.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of comments specified by a list of comment IDs.
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** Comments are returned where the user:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Comments are returned where the user:
 ///
 ///  *  has *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the comment.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -227,7 +227,7 @@ impl<'a> GetCommentsByIdsRequest<'a> {
         Self { client, issue_comment_list_request, expand: None }
     }
 
-    /// Use [expand](#expansion) to include additional information about comments in the response. This parameter accepts a comma-separated list. Expand options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts a comma-separated list. Expand options include:
     ///
     ///  *  `renderedBody` Returns the comment body rendered in HTML.
     ///  *  `properties` Returns the comment's properties.
@@ -272,7 +272,7 @@ impl<'a> GetCommentsByIdsRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** Comments are included in the response where the user has:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Comments are included in the response where the user has:
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the comment.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -314,7 +314,7 @@ impl<'a> GetCommentsRequest<'a> {
         self
     }
 
-    /// [Order](#ordering) the results by a field. Accepts *created* to sort comments by their created date.
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field. Accepts *created* to sort comments by their created date.
     #[must_use]
     pub fn order_by(mut self, value: impl Into<GetCommentsRequestOrderBy>) -> Self {
         self.order_by = Some(value.into());
@@ -322,7 +322,7 @@ impl<'a> GetCommentsRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
     #[must_use]
     pub fn expand(mut self, value: GetCommentsRequestExpand) -> Self {
         self.expand = Some(value);
@@ -334,7 +334,7 @@ impl<'a> GetCommentsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/issue/{}/comment", self.issue_id_or_key),
+            format!("/rest/api/3/issue/{}/comment", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.start_at {
@@ -371,7 +371,7 @@ impl<'a> GetCommentsRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* and *Add comments* [ project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue containing the comment is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -387,7 +387,7 @@ impl<'a> AddCommentRequest<'a> {
         Self { client, issue_id_or_key: issue_id_or_key.into(), comment_input, expand: None }
     }
 
-    /// Use [expand](#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
     #[must_use]
     pub fn expand(mut self, value: AddCommentRequestExpand) -> Self {
         self.expand = Some(value);
@@ -399,7 +399,7 @@ impl<'a> AddCommentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/3/issue/{}/comment", self.issue_id_or_key),
+            format!("/rest/api/3/issue/{}/comment", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.expand {
@@ -459,7 +459,7 @@ impl<'a> AddCommentRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the comment.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -476,7 +476,7 @@ impl<'a> GetCommentRequest<'a> {
         Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into(), expand: None }
     }
 
-    /// Use [expand](#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
     #[must_use]
     pub fn expand(mut self, value: GetCommentRequestExpand) -> Self {
         self.expand = Some(value);
@@ -488,7 +488,11 @@ impl<'a> GetCommentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/issue/{}/comment/{}", self.issue_id_or_key, self.id),
+            format!(
+                "/rest/api/3/issue/{}/comment/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         if let Some(value) = &self.expand {
@@ -513,7 +517,7 @@ impl<'a> GetCommentRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue containing the comment is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -565,7 +569,7 @@ impl<'a> UpdateCommentRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
     #[must_use]
     pub fn expand(mut self, value: UpdateCommentRequestExpand) -> Self {
         self.expand = Some(value);
@@ -577,7 +581,11 @@ impl<'a> UpdateCommentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/issue/{}/comment/{}", self.issue_id_or_key, self.id),
+            format!(
+                "/rest/api/3/issue/{}/comment/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         if let Some(value) = &self.notify_users {
@@ -635,7 +643,7 @@ impl<'a> UpdateCommentRequest<'a> {
 
 /// Deletes a comment.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue containing the comment is in.
 ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
@@ -656,7 +664,11 @@ impl<'a> DeleteCommentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/issue/{}/comment/{}", self.issue_id_or_key, self.id),
+            format!(
+                "/rest/api/3/issue/{}/comment/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         Ok(config)

@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// An icon.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IconBean {
     /// The URL of the tooltip, used only for a status icon.
     #[serde(default, skip_serializing_if = "Option::is_none")]

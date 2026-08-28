@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Request bean for updating field scheme parameters across multiple schemes and work types.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct UpdateFieldSchemeParametersRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub parameters: Option<FieldsSchemeItemParameter>,

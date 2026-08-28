@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Project ID details.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ProjectId {
     /// The ID of the project.
     pub id: String,

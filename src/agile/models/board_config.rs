@@ -3,19 +3,22 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct BoardConfigRanking {
     #[serde(rename = "rankCustomFieldId", default, skip_serializing_if = "Option::is_none")]
     pub rank_custom_field_id: Option<i64>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct BoardConfigSubQuery {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub query: Option<String>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct BoardConfig {
     #[serde(rename = "columnConfig", default, skip_serializing_if = "Option::is_none")]
     pub column_config: Option<ColumnConfig>,

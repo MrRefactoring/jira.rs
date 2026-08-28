@@ -166,7 +166,7 @@ impl<'a> GetIssueTypeSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issuetypescheme/{}", self.scheme_id),
+            format!("/rest/api/2/issuetypescheme/{}", crate::core::encode_path_segment(&self.scheme_id)),
         );
 
         Ok(config)
@@ -203,7 +203,7 @@ impl<'a> UpdateIssueTypeSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/issuetypescheme/{}", self.scheme_id),
+            format!("/rest/api/2/issuetypescheme/{}", crate::core::encode_path_segment(&self.scheme_id)),
         );
 
         let body = match serde_json::to_value(&self.issue_type_scheme_create_update)? {
@@ -242,7 +242,7 @@ impl<'a> DeleteIssueTypeSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/issuetypescheme/{}", self.scheme_id),
+            format!("/rest/api/2/issuetypescheme/{}", crate::core::encode_path_segment(&self.scheme_id)),
         );
 
         Ok(config)
@@ -282,7 +282,7 @@ impl<'a> GetAssociatedProjectsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issuetypescheme/{}/associations", self.scheme_id),
+            format!("/rest/api/2/issuetypescheme/{}/associations", crate::core::encode_path_segment(&self.scheme_id)),
         );
 
         if let Some(value) = &self.expand {
@@ -323,7 +323,7 @@ impl<'a> AddProjectAssociationsToSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/issuetypescheme/{}/associations", self.scheme_id),
+            format!("/rest/api/2/issuetypescheme/{}/associations", crate::core::encode_path_segment(&self.scheme_id)),
         );
 
         let body = match serde_json::to_value(&self.associate_projects)? {
@@ -367,7 +367,7 @@ impl<'a> SetProjectAssociationsForSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/issuetypescheme/{}/associations", self.scheme_id),
+            format!("/rest/api/2/issuetypescheme/{}/associations", crate::core::encode_path_segment(&self.scheme_id)),
         );
 
         let body = match serde_json::to_value(&self.associate_projects)? {
@@ -406,7 +406,7 @@ impl<'a> RemoveAllProjectAssociationsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/issuetypescheme/{}/associations", self.scheme_id),
+            format!("/rest/api/2/issuetypescheme/{}/associations", crate::core::encode_path_segment(&self.scheme_id)),
         );
 
         Ok(config)
@@ -439,7 +439,11 @@ impl<'a> RemoveProjectAssociationRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/issuetypescheme/{}/associations/{}", self.scheme_id, self.proj_id_or_key),
+            format!(
+                "/rest/api/2/issuetypescheme/{}/associations/{}",
+                crate::core::encode_path_segment(&self.scheme_id),
+                crate::core::encode_path_segment(&self.proj_id_or_key)
+            ),
         );
 
         Ok(config)

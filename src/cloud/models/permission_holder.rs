@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of a user, group, field, or project role that holds a permission. See [Holder object](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#holder-object) in *Get all permission schemes* for more information.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct PermissionHolder {
     /// Expand options that include additional permission holder details in the response.
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -12,7 +12,8 @@ crate::open_enum! {
 }
 
 /// The conditions group associated with the transition.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ConditionGroupConfiguration {
     /// The nested conditions of the condition group.
     #[serde(rename = "conditionGroups", default, skip_serializing_if = "Option::is_none")]

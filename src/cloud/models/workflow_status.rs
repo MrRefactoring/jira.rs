@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of a workflow status.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowStatus {
     /// The ID of the issue status.
     pub id: String,

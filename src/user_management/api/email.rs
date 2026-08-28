@@ -38,7 +38,7 @@ impl<'a> SetEmailRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/users/{}/manage/email", self.account_id),
+            format!("/users/{}/manage/email", crate::core::encode_path_segment(&self.account_id)),
         );
 
         let mut body = serde_json::Map::new();

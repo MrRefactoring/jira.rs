@@ -10,7 +10,7 @@ pub enum UserContextVariableType {
 }
 
 /// A [user](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#user) specified as an Atlassian account ID.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UserContextVariable {
     /// The account ID of the user.
     #[serde(rename = "accountId")]

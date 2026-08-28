@@ -13,7 +13,7 @@ crate::open_enum! {
 }
 
 /// The payload for creating a notification scheme. The user has to supply the ID for the default notification scheme. For CMP this is provided in the project payload and should be left empty, for TMP it's provided using this payload
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct NotificationSchemePayload {
     /// The description of the notification scheme
     #[serde(default, skip_serializing_if = "Option::is_none")]

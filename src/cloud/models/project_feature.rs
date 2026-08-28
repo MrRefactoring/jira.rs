@@ -12,7 +12,8 @@ crate::open_enum! {
 }
 
 /// Details of a project feature.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ProjectFeature {
     /// The key of the feature.
     #[serde(default, skip_serializing_if = "Option::is_none")]

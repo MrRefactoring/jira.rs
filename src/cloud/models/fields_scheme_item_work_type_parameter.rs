@@ -11,7 +11,8 @@ crate::open_enum! {
 }
 
 /// The list of work type-specific parameter overrides, may be empty if only default parameters are being updated
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FieldsSchemeItemWorkTypeParameter {
     /// The custom description for the field for this work type, null to use default or preserve current
     #[serde(default, skip_serializing_if = "Option::is_none")]

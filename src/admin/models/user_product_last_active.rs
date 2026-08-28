@@ -19,7 +19,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct UserProductLastActive {
     /// Unique ID of the Product instance
     pub id: String,
@@ -29,6 +30,16 @@ pub struct UserProductLastActive {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub last_active: Option<String>,
     /// Last active timestamp for a product in ISO 8601 format (UTC), with the format yyyy-MM-dd'T'HH:mm:ss'Z'.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_active_timestamp: Option<chrono::DateTime<chrono::Utc>>,
+    /// Last active timestamp for a product in ISO 8601 format (UTC), with the format yyyy-MM-dd'T'HH:mm:ss'Z'.
+    #[cfg(not(feature = "chrono"))]
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub last_active_timestamp: Option<String>,
 }

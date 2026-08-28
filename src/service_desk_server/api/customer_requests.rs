@@ -60,7 +60,7 @@ impl<'a> CustomerRequestsService<'a> {
     /// * The fields for a request type may vary based on the permissions of the currently authenticated user:
     ///     * `raiseOnBehalfOf` field - Not available to users who only have the Service Desk Customer permission.
     ///     * `requestParticipants` field - Not available to users who only have the Service Desk Customer permission or if the feature is turned off for customers.
-    /// * Schema of `requestFieldValues` field is a map of Jira's field's ID and its value, which are JSON ready objects. The object value will be interpreted with JSON semantics according to the specific field requirements. So a simple field like summary or number customer field might take String / Integer while other fields like Multi User Picker will take a more complex object that has JSON semantics. Refer to [Field input formats](#fieldformats) reference on what field types take what values.
+    /// * Schema of `requestFieldValues` field is a map of Jira's field's ID and its value, which are JSON ready objects. The object value will be interpreted with JSON semantics according to the specific field requirements. So a simple field like summary or number customer field might take String / Integer while other fields like Multi User Picker will take a more complex object that has JSON semantics. Refer to [Field input formats](https://developer.atlassian.com/server/jira-servicedesk/rest/intro#fieldformats) reference on what field types take what values.
     pub fn create_customer_request(&self) -> CreateCustomerRequestRequest<'a> {
         CreateCustomerRequestRequest::new(self.client)
     }
@@ -187,7 +187,7 @@ impl<'a> GetRequestCommentsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/comment", self.issue_id_or_key),
+            format!("/rest/servicedeskapi/request/{}/comment", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.internal {
@@ -247,7 +247,7 @@ impl<'a> CreateRequestCommentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/request/{}/comment", self.issue_id_or_key),
+            format!("/rest/servicedeskapi/request/{}/comment", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.comment_create)? {
@@ -291,7 +291,11 @@ impl<'a> GetRequestCommentByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/comment/{}", self.issue_id_or_key, self.comment_id),
+            format!(
+                "/rest/servicedeskapi/request/{}/comment/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.comment_id)
+            ),
         );
 
         Ok(config)
@@ -474,7 +478,7 @@ impl<'a> GetMyCustomerRequestsRequest<'a> {
 /// * The fields for a request type may vary based on the permissions of the currently authenticated user:
 ///     * `raiseOnBehalfOf` field - Not available to users who only have the Service Desk Customer permission.
 ///     * `requestParticipants` field - Not available to users who only have the Service Desk Customer permission or if the feature is turned off for customers.
-/// * Schema of `requestFieldValues` field is a map of Jira's field's ID and its value, which are JSON ready objects. The object value will be interpreted with JSON semantics according to the specific field requirements. So a simple field like summary or number customer field might take String / Integer while other fields like Multi User Picker will take a more complex object that has JSON semantics. Refer to [Field input formats](#fieldformats) reference on what field types take what values.
+/// * Schema of `requestFieldValues` field is a map of Jira's field's ID and its value, which are JSON ready objects. The object value will be interpreted with JSON semantics according to the specific field requirements. So a simple field like summary or number customer field might take String / Integer while other fields like Multi User Picker will take a more complex object that has JSON semantics. Refer to [Field input formats](https://developer.atlassian.com/server/jira-servicedesk/rest/intro#fieldformats) reference on what field types take what values.
 pub struct CreateCustomerRequestRequest<'a> {
     client: &'a crate::core::Client,
     request_create: Option<RequestCreate>,
@@ -547,7 +551,7 @@ impl<'a> GetCustomerRequestByIdOrKeyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}", self.issue_id_or_key),
+            format!("/rest/servicedeskapi/request/{}", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.expand {
@@ -601,7 +605,10 @@ impl<'a> GetRequestParticipantsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/participant", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/participant",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         if let Some(value) = &self.start {
@@ -679,7 +686,10 @@ impl<'a> AddRequestParticipantsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/request/{}/participant", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/participant",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         if let Some(value) = &self.start {
@@ -762,7 +772,10 @@ impl<'a> RemoveRequestParticipantsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/servicedeskapi/request/{}/participant", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/participant",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         if let Some(value) = &self.start {
@@ -831,7 +844,7 @@ impl<'a> GetSlaInformationRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/sla", self.issue_id_or_key),
+            format!("/rest/servicedeskapi/request/{}/sla", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.start {
@@ -880,7 +893,11 @@ impl<'a> GetSlaInformationByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/sla/{}", self.issue_id_or_key, self.sla_metric_id),
+            format!(
+                "/rest/servicedeskapi/request/{}/sla/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.sla_metric_id)
+            ),
         );
 
         Ok(config)
@@ -930,7 +947,7 @@ impl<'a> GetCustomerRequestStatusRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/status", self.issue_id_or_key),
+            format!("/rest/servicedeskapi/request/{}/status", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.start {

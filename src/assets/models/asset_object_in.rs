@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Representing an object to be created or updated
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct AssetObjectIn {
     /// The object type determines where the object should be stored and which attributes are available
     #[serde(rename = "objectTypeId")]

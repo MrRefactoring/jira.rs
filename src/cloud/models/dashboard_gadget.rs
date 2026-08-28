@@ -18,7 +18,8 @@ crate::open_enum! {
 }
 
 /// Details of a gadget.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct DashboardGadget {
     /// The color of the gadget. Should be one of `blue`, `red`, `yellow`, `green`, `cyan`, `purple`, `gray`, or `white`.
     pub color: DashboardGadgetColor,

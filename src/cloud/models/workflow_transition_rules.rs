@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A workflow with transition rules.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkflowTransitionRules {
     /// The list of conditions within the workflow.
     #[serde(default, skip_serializing_if = "Option::is_none")]

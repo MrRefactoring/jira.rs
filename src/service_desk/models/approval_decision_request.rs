@@ -10,7 +10,7 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ApprovalDecisionRequest {
     /// Response to the approval request.
     #[serde(default, skip_serializing_if = "Option::is_none")]

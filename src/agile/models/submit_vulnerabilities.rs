@@ -3,7 +3,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitVulnerabilitiesUnknownAssociations {
@@ -13,7 +13,8 @@ pub enum SubmitVulnerabilitiesUnknownAssociations {
 }
 
 /// The result of a successful submitVulnerabilities request.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SubmitVulnerabilities {
     /// The IDs of Vulnerabilities that have been accepted for submission.
     ///

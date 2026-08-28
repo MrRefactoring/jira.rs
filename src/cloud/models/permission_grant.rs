@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details about a permission granted to a user or group.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct PermissionGrant {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub holder: Option<PermissionHolder>,

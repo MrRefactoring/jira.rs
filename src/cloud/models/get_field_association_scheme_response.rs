@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Response object for getting a field association scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetFieldAssociationSchemeResponse {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,

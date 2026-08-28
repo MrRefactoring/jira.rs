@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The sanitized JQL queries for the given account IDs.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SanitizedJqlQueries {
     /// The list of sanitized JQL queries.
     #[serde(default, skip_serializing_if = "Option::is_none")]

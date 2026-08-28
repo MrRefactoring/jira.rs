@@ -17,7 +17,8 @@ crate::open_enum! {
 }
 
 /// A time predicate for a temporal JQL clause.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct JqlQueryClauseTimePredicate {
     pub operand: JqlQueryClauseOperand,
     /// The operator between the field and the operand.

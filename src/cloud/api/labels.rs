@@ -12,13 +12,13 @@ impl<'a> LabelsService<'a> {
         Self { client }
     }
 
-    /// Returns a [paginated](#pagination) list of labels.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of labels.
     pub fn get_all_labels(&self) -> GetAllLabelsRequest<'a> {
         GetAllLabelsRequest::new(self.client)
     }
 }
 
-/// Returns a [paginated](#pagination) list of labels.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of labels.
 pub struct GetAllLabelsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,

@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Error messages from an operation.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ErrorCollection {
     /// The list of error messages produced by this operation. For example, "input parameter 'key' must be provided"
     #[serde(rename = "errorMessages", default, skip_serializing_if = "Option::is_none")]

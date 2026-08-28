@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The payload for creating issue types in a project
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueTypeProjectCreatePayload {
     /// Defines the issue type hierarhy to be created and used during this project creation. This will only add new levels if there isn't an existing level
     #[serde(rename = "issueTypeHierarchy", default, skip_serializing_if = "Option::is_none")]

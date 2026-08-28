@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The details of a UI modification.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct CreateUiModificationDetails {
     /// List of contexts of the UI modification. The maximum number of contexts is 1000.
     #[serde(default, skip_serializing_if = "Option::is_none")]

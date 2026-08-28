@@ -14,7 +14,7 @@ crate::open_enum! {
 ///
 ///  *  `data` Returns UI modification data.
 ///  *  `contexts` Returns UI modification contexts.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetUiModificationsRequestExpand {
@@ -36,7 +36,7 @@ impl<'a> UIModificationsAppsService<'a> {
 
     /// Gets UI modifications. UI modifications can only be retrieved by Forge apps.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     ///
     /// The new `read:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
     pub fn get_ui_modifications(&self) -> GetUiModificationsRequest<'a> {
@@ -63,7 +63,7 @@ impl<'a> UIModificationsAppsService<'a> {
     ///      *  `IssueViewAgentView` \- Agent view variant of Jira issue view
     ///      *  `IssueTransitionAgentView` \- Agent view variant of Jira issue transition
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *None* if the UI modification is created without contexts.
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for one or more projects, if the UI modification is created with contexts.
@@ -96,7 +96,7 @@ impl<'a> UIModificationsAppsService<'a> {
     ///      *  `IssueViewAgentView` \- Agent view variant of Jira issue view
     ///      *  `IssueTransitionAgentView` \- Agent view variant of Jira issue transition
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *None* if the UI modification is created without contexts.
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for one or more projects, if the UI modification is created with contexts.
@@ -112,7 +112,7 @@ impl<'a> UIModificationsAppsService<'a> {
 
     /// Deletes a UI modification. All the contexts that belong to the UI modification are deleted too. UI modification can only be deleted by Forge apps.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     ///
     /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
     pub fn delete_ui_modification(&self, ui_modification_id: impl Into<String>) -> DeleteUiModificationRequest<'a> {
@@ -122,7 +122,7 @@ impl<'a> UIModificationsAppsService<'a> {
 
 /// Gets UI modifications. UI modifications can only be retrieved by Forge apps.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 ///
 /// The new `read:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
 pub struct GetUiModificationsRequest<'a> {
@@ -215,7 +215,7 @@ impl<'a> GetUiModificationsRequest<'a> {
 ///      *  `IssueViewAgentView` \- Agent view variant of Jira issue view
 ///      *  `IssueTransitionAgentView` \- Agent view variant of Jira issue transition
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *None* if the UI modification is created without contexts.
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for one or more projects, if the UI modification is created with contexts.
@@ -277,7 +277,7 @@ impl<'a> CreateUiModificationRequest<'a> {
 ///      *  `IssueViewAgentView` \- Agent view variant of Jira issue view
 ///      *  `IssueTransitionAgentView` \- Agent view variant of Jira issue transition
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *None* if the UI modification is created without contexts.
 ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for one or more projects, if the UI modification is created with contexts.
@@ -302,7 +302,7 @@ impl<'a> UpdateUiModificationRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/uiModifications/{}", self.ui_modification_id),
+            format!("/rest/api/3/uiModifications/{}", crate::core::encode_path_segment(&self.ui_modification_id)),
         );
 
         let body = match serde_json::to_value(&self.update_ui_modification_details)? {
@@ -328,7 +328,7 @@ impl<'a> UpdateUiModificationRequest<'a> {
 
 /// Deletes a UI modification. All the contexts that belong to the UI modification are deleted too. UI modification can only be deleted by Forge apps.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 ///
 /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
 pub struct DeleteUiModificationRequest<'a> {
@@ -345,7 +345,7 @@ impl<'a> DeleteUiModificationRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/uiModifications/{}", self.ui_modification_id),
+            format!("/rest/api/3/uiModifications/{}", crate::core::encode_path_segment(&self.ui_modification_id)),
         );
 
         Ok(config)

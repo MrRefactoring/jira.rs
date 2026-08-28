@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Properties that identify a published workflow.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PublishedWorkflowId {
     /// The entity ID of the workflow.
     #[serde(rename = "entityId", default, skip_serializing_if = "Option::is_none")]

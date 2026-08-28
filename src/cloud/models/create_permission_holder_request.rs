@@ -10,7 +10,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CreatePermissionHolderRequest {
     /// The permission holder type. This must be "Group" or "AccountId".
     pub r#type: CreatePermissionHolderRequestType,

@@ -90,7 +90,7 @@ impl<'a> GetRedactionStatusRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/redact/status/{}", self.job_id),
+            format!("/rest/api/3/redact/status/{}", crate::core::encode_path_segment(&self.job_id)),
         );
 
         Ok(config)

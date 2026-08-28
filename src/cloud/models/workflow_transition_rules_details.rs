@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details about a workflow configuration update request.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkflowTransitionRulesDetails {
     #[serde(rename = "workflowId")]
     pub workflow_id: WorkflowId,

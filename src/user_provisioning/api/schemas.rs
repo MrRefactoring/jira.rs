@@ -56,7 +56,7 @@ impl<'a> GetSchemasRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/scim/directory/{}/Schemas", self.directory_id),
+            format!("/scim/directory/{}/Schemas", crate::core::encode_path_segment(&self.directory_id)),
         );
 
         Ok(config)
@@ -90,7 +90,10 @@ impl<'a> GetUserSchemasRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/scim/directory/{}/Schemas/urn:ietf:params:scim:schemas:core:2.0:User", self.directory_id),
+            format!(
+                "/scim/directory/{}/Schemas/urn:ietf:params:scim:schemas:core:2.0:User",
+                crate::core::encode_path_segment(&self.directory_id)
+            ),
         );
 
         Ok(config)
@@ -124,7 +127,10 @@ impl<'a> GetGroupSchemasRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/scim/directory/{}/Schemas/urn:ietf:params:scim:schemas:core:2.0:Group", self.directory_id),
+            format!(
+                "/scim/directory/{}/Schemas/urn:ietf:params:scim:schemas:core:2.0:Group",
+                crate::core::encode_path_segment(&self.directory_id)
+            ),
         );
 
         Ok(config)
@@ -160,7 +166,7 @@ impl<'a> GetExtensionUserSchemasRequest<'a> {
             crate::core::Method::GET,
             format!(
                 "/scim/directory/{}/Schemas/urn:ietf:params:scim:schemas:extension:enterprise:2.0:User",
-                self.directory_id
+                crate::core::encode_path_segment(&self.directory_id)
             ),
         );
 

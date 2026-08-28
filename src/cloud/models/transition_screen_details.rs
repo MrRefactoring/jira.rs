@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The details of a transition screen.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct TransitionScreenDetails {
     /// The ID of the screen.
     pub id: String,

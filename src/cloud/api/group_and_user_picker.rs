@@ -61,7 +61,7 @@ impl<'a> GroupAndUserPickerService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/yodKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/yodKLg).
     pub fn find_users_and_groups(&self, query: impl Into<String>) -> FindUsersAndGroupsRequest<'a> {
         FindUsersAndGroupsRequest::new(self.client, query)
     }
@@ -89,7 +89,7 @@ impl<'a> GroupAndUserPickerService<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/yodKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/yodKLg).
 pub struct FindUsersAndGroupsRequest<'a> {
     client: &'a crate::core::Client,
     query: String,

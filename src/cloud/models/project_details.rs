@@ -15,7 +15,7 @@ crate::open_enum! {
 }
 
 /// Details about a project.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ProjectDetails {
     #[serde(rename = "avatarUrls", default, skip_serializing_if = "Option::is_none")]
     pub avatar_urls: Option<AvatarUrls>,

@@ -31,7 +31,7 @@ crate::open_enum! {
 }
 
 /// Details about a project.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct Project {
     /// Whether the project is archived.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -39,6 +39,17 @@ pub struct Project {
     #[serde(rename = "archivedBy", default, skip_serializing_if = "Option::is_none")]
     pub archived_by: Option<DashboardUser>,
     /// The date when the project was archived.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "archivedDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub archived_date: Option<chrono::DateTime<chrono::Utc>>,
+    /// The date when the project was archived.
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "archivedDate",
         default,
@@ -60,6 +71,17 @@ pub struct Project {
     #[serde(rename = "deletedBy", default, skip_serializing_if = "Option::is_none")]
     pub deleted_by: Option<DashboardUser>,
     /// The date when the project was marked as deleted.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "deletedDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub deleted_date: Option<chrono::DateTime<chrono::Utc>>,
+    /// The date when the project was marked as deleted.
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "deletedDate",
         default,
@@ -113,6 +135,17 @@ pub struct Project {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub properties: Option<std::collections::HashMap<String, serde_json::Value>>,
     /// The date when the project is deleted permanently.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "retentionTillDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub retention_till_date: Option<chrono::DateTime<chrono::Utc>>,
+    /// The date when the project is deleted permanently.
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "retentionTillDate",
         default,
@@ -120,7 +153,7 @@ pub struct Project {
         deserialize_with = "crate::core::deserialize_timestamp"
     )]
     pub retention_till_date: Option<String>,
-    /// The name and self URL for each role defined in the project. For more information, see [Create project role](#api-rest-api-3-role-post).
+    /// The name and self URL for each role defined in the project. For more information, see [Create project role](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-role/#api-rest-api-3-role-post).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub roles: Option<std::collections::HashMap<String, serde_json::Value>>,
     /// The URL of the project details.
@@ -138,7 +171,7 @@ pub struct Project {
     /// Unique ID for next-gen projects.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub uuid: Option<String>,
-    /// The versions defined in the project. For more information, see [Create version](#api-rest-api-3-version-post).
+    /// The versions defined in the project. For more information, see [Create version](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-version/#api-rest-api-3-version-post).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub versions: Option<Vec<Version>>,
     #[serde(rename = "entityId", default, skip_serializing_if = "Option::is_none")]

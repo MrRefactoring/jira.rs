@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// List of issues and JQL queries.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssuesAndJQLQueries {
     /// A list of issue IDs.
     #[serde(rename = "issueIds")]

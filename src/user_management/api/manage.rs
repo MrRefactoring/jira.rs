@@ -55,8 +55,10 @@ impl<'a> GetManagementPermissionsRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/users/{}/manage", self.account_id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/users/{}/manage", crate::core::encode_path_segment(&self.account_id)),
+        );
 
         if let Some(value) = &self.privileges {
             config.query.push(("privileges".to_owned(), crate::core::QueryValue::from_serializable(value)?));

@@ -13,7 +13,8 @@ crate::open_enum! {
 }
 
 /// Details of a workflow transition.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Transition {
     /// The description of the transition.
     pub description: String,

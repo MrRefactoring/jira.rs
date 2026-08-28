@@ -175,7 +175,7 @@ impl<'a> AddFieldToDefaultScreenRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/screens/addToDefault/{}", self.field_id),
+            format!("/rest/api/2/screens/addToDefault/{}", crate::core::encode_path_segment(&self.field_id)),
         );
 
         Ok(config)
@@ -508,7 +508,12 @@ impl<'a> RemoveFieldRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/screens/{}/tabs/{}/fields/{}", self.screen_id, self.tab_id, self.id),
+            format!(
+                "/rest/api/2/screens/{}/tabs/{}/fields/{}",
+                self.screen_id,
+                self.tab_id,
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         Ok(config)
@@ -550,7 +555,12 @@ impl<'a> MoveFieldRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/screens/{}/tabs/{}/fields/{}/move", self.screen_id, self.tab_id, self.id),
+            format!(
+                "/rest/api/2/screens/{}/tabs/{}/fields/{}/move",
+                self.screen_id,
+                self.tab_id,
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.move_field)? {
@@ -600,7 +610,10 @@ impl<'a> UpdateShowWhenEmptyIndicatorRequest<'a> {
             crate::core::Method::PUT,
             format!(
                 "/rest/api/2/screens/{}/tabs/{}/fields/{}/updateShowWhenEmptyIndicator/{}",
-                self.screen_id, self.tab_id, self.id, self.new_value
+                self.screen_id,
+                self.tab_id,
+                crate::core::encode_path_segment(&self.id),
+                self.new_value
             ),
         );
 

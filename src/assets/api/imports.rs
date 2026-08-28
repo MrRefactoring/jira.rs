@@ -31,7 +31,10 @@ impl<'a> StartImportRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(crate::core::Method::POST, format!("/import/start/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!("/import/start/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }

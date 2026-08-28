@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct Version {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub archived: Option<bool>,
@@ -22,6 +22,16 @@ pub struct Version {
     pub project: Option<String>,
     #[serde(rename = "projectId", default, skip_serializing_if = "Option::is_none")]
     pub project_id: Option<i64>,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "releaseDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub release_date: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "releaseDate",
         default,
@@ -35,6 +45,16 @@ pub struct Version {
     pub released: Option<bool>,
     #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
     pub self_: Option<String>,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "startDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub start_date: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "startDate",
         default,

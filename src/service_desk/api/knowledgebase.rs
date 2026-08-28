@@ -14,7 +14,7 @@ impl<'a> KnowledgebaseService<'a> {
 
     /// Returns articles which match the given query string across all service desks.
     ///
-    /// **[Permissions](#permissions) required**: Permission to access the [customer portal](https://confluence.atlassian.com/servicedeskcloud/configuring-the-customer-portal-732528918.html).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the [customer portal](https://confluence.atlassian.com/servicedeskcloud/configuring-the-customer-portal-732528918.html).
     pub fn get_articles(&self, query: impl Into<String>, highlight: bool) -> GetArticlesRequest<'a> {
         GetArticlesRequest::new(self.client, query, highlight)
     }
@@ -26,7 +26,7 @@ impl<'a> KnowledgebaseService<'a> {
 
 /// Returns articles which match the given query string across all service desks.
 ///
-/// **[Permissions](#permissions) required**: Permission to access the [customer portal](https://confluence.atlassian.com/servicedeskcloud/configuring-the-customer-portal-732528918.html).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the [customer portal](https://confluence.atlassian.com/servicedeskcloud/configuring-the-customer-portal-732528918.html).
 pub struct GetArticlesRequest<'a> {
     client: &'a crate::core::Client,
     query: String,
@@ -43,6 +43,7 @@ impl<'a> GetArticlesRequest<'a> {
     }
 
     /// (Deprecated) The starting index of the returned objects. Base index: 0.
+    #[deprecated(note = "(Deprecated) The starting index of the returned objects.")]
     #[must_use]
     pub fn start(mut self, value: i64) -> Self {
         self.start = Some(value);

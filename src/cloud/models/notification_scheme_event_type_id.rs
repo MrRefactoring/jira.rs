@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// The ID of an event that is being mapped to notifications.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct NotificationSchemeEventTypeId {
     /// The ID of the notification scheme event.
     pub id: String,

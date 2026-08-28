@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct OrganizationServiceDeskUpdate {
     /// List of organizations, specified by 'ID' field values, to add to or remove from the service desk.
     #[serde(rename = "organizationId")]

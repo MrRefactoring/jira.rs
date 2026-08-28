@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueCommentListRequest {
     /// The list of comment IDs. A maximum of 1000 IDs can be specified.
     pub ids: Vec<i64>,

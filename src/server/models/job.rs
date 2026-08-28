@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Job {
     #[serde(rename = "cronExpression", default, skip_serializing_if = "Option::is_none")]
     pub cron_expression: Option<String>,

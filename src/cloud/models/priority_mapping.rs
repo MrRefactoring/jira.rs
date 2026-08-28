@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Mapping of issue priorities for changes in priority schemes.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PriorityMapping {
     /// The mapping of priorities for issues being migrated **into** this priority scheme. Key is the old priority ID, value is the new priority ID (must exist in this priority scheme).
     ///

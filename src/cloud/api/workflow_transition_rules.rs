@@ -17,8 +17,8 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information in the response. This parameter accepts `transition`, which, for each rule, returns information about the transition the rule is assigned to.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts `transition`, which, for each rule, returns information about the transition the rule is assigned to.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetWorkflowTransitionRuleConfigurationsRequestExpand {
@@ -38,7 +38,7 @@ impl<'a> WorkflowTransitionRulesService<'a> {
         Self { client }
     }
 
-    /// Returns a [paginated](#pagination) list of workflows with transition rules. The workflows can be filtered to return only those containing workflow transition rules:
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of workflows with transition rules. The workflows can be filtered to return only those containing workflow transition rules:
     ///
     ///  *  of one or more transition rule types, such as [workflow post functions](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-post-function/).
     ///  *  matching one or more transition rule keys.
@@ -47,7 +47,7 @@ impl<'a> WorkflowTransitionRulesService<'a> {
     ///
     /// Due to server-side optimizations, workflows with an empty list of rules may be returned; these workflows can be ignored.
     ///
-    /// **[Permissions](#permissions) required:** Only [Connect](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps) or [Forge](https://developer.atlassian.com/cloud/jira/platform/index/#forge-apps) apps can use this operation.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only [Connect](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps) or [Forge](https://developer.atlassian.com/cloud/jira/platform/index/#forge-apps) apps can use this operation.
     pub fn get_workflow_transition_rule_configurations(
         &self,
         types: impl IntoIterator<Item = impl Into<GetWorkflowTransitionRuleConfigurationsRequestTypes>>,
@@ -72,7 +72,7 @@ impl<'a> WorkflowTransitionRulesService<'a> {
     ///
     /// **Note:** The `draft` parameter in the request body WorkflowId is deprecated and will be removed from this API on [November 2, 2026](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-3147).
     ///
-    /// **[Permissions](#permissions) required:** Only [Connect](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps) or [Forge](https://developer.atlassian.com/cloud/jira/platform/index/#forge-apps) apps can use this operation.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only [Connect](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps) or [Forge](https://developer.atlassian.com/cloud/jira/platform/index/#forge-apps) apps can use this operation.
     pub fn update_workflow_transition_rule_configurations(
         &self,
         workflow_transition_rules_update: WorkflowTransitionRulesUpdate,
@@ -90,7 +90,7 @@ impl<'a> WorkflowTransitionRulesService<'a> {
     ///
     /// **Note:** The `draft` parameter in the request body WorkflowId is deprecated and will be removed from this API on [November 2, 2026](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-3147).
     ///
-    /// **[Permissions](#permissions) required:** Only Connect apps can use this operation.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect apps can use this operation.
     pub fn delete_workflow_transition_rule_configurations(
         &self,
         workflows_with_transition_rules_details: WorkflowsWithTransitionRulesDetails,
@@ -99,7 +99,7 @@ impl<'a> WorkflowTransitionRulesService<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of workflows with transition rules. The workflows can be filtered to return only those containing workflow transition rules:
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of workflows with transition rules. The workflows can be filtered to return only those containing workflow transition rules:
 ///
 ///  *  of one or more transition rule types, such as [workflow post functions](https://developer.atlassian.com/cloud/jira/platform/modules/workflow-post-function/).
 ///  *  matching one or more transition rule keys.
@@ -108,7 +108,7 @@ impl<'a> WorkflowTransitionRulesService<'a> {
 ///
 /// Due to server-side optimizations, workflows with an empty list of rules may be returned; these workflows can be ignored.
 ///
-/// **[Permissions](#permissions) required:** Only [Connect](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps) or [Forge](https://developer.atlassian.com/cloud/jira/platform/index/#forge-apps) apps can use this operation.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only [Connect](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps) or [Forge](https://developer.atlassian.com/cloud/jira/platform/index/#forge-apps) apps can use this operation.
 pub struct GetWorkflowTransitionRuleConfigurationsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -180,6 +180,7 @@ impl<'a> GetWorkflowTransitionRuleConfigurationsRequest<'a> {
     }
 
     /// **Deprecated:** Whether draft or published workflows are returned. If not provided, both workflow types are returned. The 'draft' parameter will be removed from this API on [November 2, 2026](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-3147).
+    #[deprecated(note = "**Deprecated:** Whether draft or published workflows are returned.")]
     #[must_use]
     pub fn draft(mut self, value: bool) -> Self {
         self.draft = Some(value);
@@ -187,7 +188,7 @@ impl<'a> GetWorkflowTransitionRuleConfigurationsRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) to include additional information in the response. This parameter accepts `transition`, which, for each rule, returns information about the transition the rule is assigned to.
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts `transition`, which, for each rule, returns information about the transition the rule is assigned to.
     #[must_use]
     pub fn expand(mut self, value: GetWorkflowTransitionRuleConfigurationsRequestExpand) -> Self {
         self.expand = Some(value);
@@ -261,7 +262,7 @@ impl<'a> GetWorkflowTransitionRuleConfigurationsRequest<'a> {
 ///
 /// **Note:** The `draft` parameter in the request body WorkflowId is deprecated and will be removed from this API on [November 2, 2026](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-3147).
 ///
-/// **[Permissions](#permissions) required:** Only [Connect](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps) or [Forge](https://developer.atlassian.com/cloud/jira/platform/index/#forge-apps) apps can use this operation.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only [Connect](https://developer.atlassian.com/cloud/jira/platform/index/#connect-apps) or [Forge](https://developer.atlassian.com/cloud/jira/platform/index/#forge-apps) apps can use this operation.
 pub struct UpdateWorkflowTransitionRuleConfigurationsRequest<'a> {
     client: &'a crate::core::Client,
     workflow_transition_rules_update: WorkflowTransitionRulesUpdate,
@@ -308,7 +309,7 @@ impl<'a> UpdateWorkflowTransitionRuleConfigurationsRequest<'a> {
 ///
 /// **Note:** The `draft` parameter in the request body WorkflowId is deprecated and will be removed from this API on [November 2, 2026](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-3147).
 ///
-/// **[Permissions](#permissions) required:** Only Connect apps can use this operation.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect apps can use this operation.
 pub struct DeleteWorkflowTransitionRuleConfigurationsRequest<'a> {
     client: &'a crate::core::Client,
     workflows_with_transition_rules_details: WorkflowsWithTransitionRulesDetails,

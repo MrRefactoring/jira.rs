@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The request payload to get the required mappings for updating a workflow scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct WorkflowSchemeUpdateRequiredMappingsRequest {
     /// The ID of the new default workflow for this workflow scheme. Only used in global-scoped workflow schemes. If it isn't specified, is set to *Jira Workflow (jira)*.
     #[serde(rename = "defaultWorkflowId", default, skip_serializing_if = "Option::is_none")]

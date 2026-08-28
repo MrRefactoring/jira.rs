@@ -16,7 +16,7 @@ crate::open_enum! {
 }
 
 /// Details of the scope of the default sharing for new filters and dashboards.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DefaultShareScope {
     /// The scope of the default sharing for new filters and dashboards:
     ///

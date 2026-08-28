@@ -9,7 +9,8 @@ crate::open_enum! {
 }
 
 /// You are allowed to take or write the action/property
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ManageabilityAllowed {
     pub allowed: ManageabilityAllowedAllowed,
 }

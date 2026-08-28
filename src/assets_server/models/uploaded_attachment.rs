@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// When the attachment was stored, as whole seconds since the epoch and the nanoseconds after them.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct UploadedAttachmentCreated {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub seconds: Option<i64>,
@@ -12,7 +13,8 @@ pub struct UploadedAttachmentCreated {
 }
 
 /// An attachment as the upload reports it, whose `created` is a timestamp rather than a date.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct UploadedAttachment {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,

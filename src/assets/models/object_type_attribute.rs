@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The definition of the attribute that is associated with an object type
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ObjectTypeAttribute {
     #[serde(rename = "workspaceId")]
     pub workspace_id: String,

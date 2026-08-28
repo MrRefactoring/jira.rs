@@ -38,7 +38,7 @@ impl<'a> GetServiceDeskByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/servicedesk/{}", self.service_desk_id),
+            format!("/rest/servicedeskapi/servicedesk/{}", crate::core::encode_path_segment(&self.service_desk_id)),
         );
 
         Ok(config)

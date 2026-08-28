@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Metadata for an item in an attachment archive.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AttachmentArchiveItemReadable {
     /// The position of the item within the archive.
     #[serde(default, skip_serializing_if = "Option::is_none")]

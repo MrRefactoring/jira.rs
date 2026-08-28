@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Field association for example PROJECT\_ID.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct AssociationContextObject {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub identifier: Option<std::collections::HashMap<String, serde_json::Value>>,

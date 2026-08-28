@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Details about the default workflow.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DefaultWorkflow {
     /// Whether a draft workflow scheme is created or updated when updating an active workflow scheme. The draft is updated with the new default workflow. Defaults to `false`.
     #[serde(rename = "updateDraftIfNeeded", default, skip_serializing_if = "Option::is_none")]

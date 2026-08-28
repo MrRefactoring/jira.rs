@@ -12,7 +12,7 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct Component {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub archived: Option<bool>,

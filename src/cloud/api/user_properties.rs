@@ -16,7 +16,7 @@ impl<'a> UserPropertiesService<'a> {
     ///
     /// Note: This operation does not access the [user properties](https://confluence.atlassian.com/x/8YxjL) created and maintained in Jira.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to access the property keys on any user.
     ///  *  Access to Jira, to access the calling user's property keys.
@@ -24,11 +24,11 @@ impl<'a> UserPropertiesService<'a> {
         GetUserPropertyKeysRequest::new(self.client)
     }
 
-    /// Returns the value of a user's property. If no property key is provided [Get user property keys](#api-rest-api-3-user-properties-get) is called.
+    /// Returns the value of a user's property. If no property key is provided [Get user property keys](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-user/#api-rest-api-3-user-properties-get) is called.
     ///
     /// Note: This operation does not access the [user properties](https://confluence.atlassian.com/x/8YxjL) created and maintained in Jira.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to get a property from any user.
     ///  *  Access to Jira, to get a property from the calling user's record.
@@ -40,7 +40,7 @@ impl<'a> UserPropertiesService<'a> {
     ///
     /// Note: This operation does not access the [user properties](https://confluence.atlassian.com/x/8YxjL) created and maintained in Jira.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set a property on any user.
     ///  *  Access to Jira, to set a property on the calling user's record.
@@ -56,7 +56,7 @@ impl<'a> UserPropertiesService<'a> {
     ///
     /// Note: This operation does not access the [user properties](https://confluence.atlassian.com/x/8YxjL) created and maintained in Jira.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to delete a property from any user.
     ///  *  Access to Jira, to delete a property from the calling user's record.
@@ -69,7 +69,7 @@ impl<'a> UserPropertiesService<'a> {
 ///
 /// Note: This operation does not access the [user properties](https://confluence.atlassian.com/x/8YxjL) created and maintained in Jira.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to access the property keys on any user.
 ///  *  Access to Jira, to access the calling user's property keys.
@@ -114,11 +114,11 @@ impl<'a> GetUserPropertyKeysRequest<'a> {
     }
 }
 
-/// Returns the value of a user's property. If no property key is provided [Get user property keys](#api-rest-api-3-user-properties-get) is called.
+/// Returns the value of a user's property. If no property key is provided [Get user property keys](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-user/#api-rest-api-3-user-properties-get) is called.
 ///
 /// Note: This operation does not access the [user properties](https://confluence.atlassian.com/x/8YxjL) created and maintained in Jira.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to get a property from any user.
 ///  *  Access to Jira, to get a property from the calling user's record.
@@ -145,7 +145,7 @@ impl<'a> GetUserPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/user/properties/{}", self.property_key),
+            format!("/rest/api/3/user/properties/{}", crate::core::encode_path_segment(&self.property_key)),
         );
 
         if let Some(value) = &self.account_id {
@@ -170,7 +170,7 @@ impl<'a> GetUserPropertyRequest<'a> {
 ///
 /// Note: This operation does not access the [user properties](https://confluence.atlassian.com/x/8YxjL) created and maintained in Jira.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set a property on any user.
 ///  *  Access to Jira, to set a property on the calling user's record.
@@ -202,7 +202,7 @@ impl<'a> SetUserPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/user/properties/{}", self.property_key),
+            format!("/rest/api/3/user/properties/{}", crate::core::encode_path_segment(&self.property_key)),
         );
 
         if let Some(value) = &self.account_id {
@@ -229,7 +229,7 @@ impl<'a> SetUserPropertyRequest<'a> {
 ///
 /// Note: This operation does not access the [user properties](https://confluence.atlassian.com/x/8YxjL) created and maintained in Jira.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to delete a property from any user.
 ///  *  Access to Jira, to delete a property from the calling user's record.
@@ -256,7 +256,7 @@ impl<'a> DeleteUserPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/user/properties/{}", self.property_key),
+            format!("/rest/api/3/user/properties/{}", crate::core::encode_path_segment(&self.property_key)),
         );
 
         if let Some(value) = &self.account_id {

@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct AvatarCropping {
     #[serde(rename = "cropperOffsetX", default, skip_serializing_if = "Option::is_none")]
     pub cropper_offset_x: Option<i64>,

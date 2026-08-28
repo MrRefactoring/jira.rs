@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of a filter for exporting archived issues.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ArchivedIssuesFilterRequest {
     /// List archived issues archived by a specified account ID.
     #[serde(rename = "archivedBy", default, skip_serializing_if = "Option::is_none")]

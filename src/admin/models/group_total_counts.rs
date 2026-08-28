@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Total group counts across the organization.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GroupTotalCounts {
     /// The total number of groups in the organization.
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 ///
 ///  *  To add, specify the option with an `optionId`.
 ///  *  To clear, pass an option with `optionId` as `-1`.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct JiraSingleSelectField {
     #[serde(rename = "fieldId")]
     pub field_id: String,

@@ -59,7 +59,7 @@ impl<'a> FindObjectTicketsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/assets/1.0/objectconnectedtickets/{}/tickets", self.id),
+            format!("/rest/assets/1.0/objectconnectedtickets/{}/tickets", crate::core::encode_path_segment(&self.id)),
         );
 
         if let Some(value) = &self.filter_id {

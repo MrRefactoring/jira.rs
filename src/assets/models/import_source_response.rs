@@ -32,7 +32,8 @@ crate::open_enum! {
 }
 
 /// Import status information
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ImportSourceResponseImportStatus {
     /// Configuration status type - whether the import source is enabled or disabled
     #[serde(rename = "configurationStatusType", default, skip_serializing_if = "Option::is_none")]
@@ -58,7 +59,8 @@ pub struct ImportSourceResponseImportStatus {
 }
 
 /// Target object type configuration
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ImportSourceResponseImportSourceOTEntriesObjectType {
     /// Object type ID
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -86,7 +88,8 @@ crate::open_enum! {
 }
 
 /// Import status for this object type
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ImportSourceResponseImportSourceOTEntriesImportStatus {
     /// Configuration status type
     #[serde(rename = "configurationStatusType", default, skip_serializing_if = "Option::is_none")]
@@ -99,7 +102,8 @@ pub struct ImportSourceResponseImportSourceOTEntriesImportStatus {
     pub reason_for_invalidity: Option<std::collections::HashMap<String, serde_json::Value>>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ImportSourceResponseImportSourceOTEntriesImportSourceOTAttrEntries {
     /// Attribute mapping ID
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -107,7 +111,8 @@ pub struct ImportSourceResponseImportSourceOTEntriesImportSourceOTAttrEntries {
 }
 
 /// Import source object type configuration
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ImportSourceResponseImportSourceOTEntries {
     /// Import source object type ID
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -119,9 +124,29 @@ pub struct ImportSourceResponseImportSourceOTEntries {
     #[serde(rename = "importSourceId", default, skip_serializing_if = "Option::is_none")]
     pub import_source_id: Option<String>,
     /// Creation timestamp
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created: Option<chrono::DateTime<chrono::Utc>>,
+    /// Creation timestamp
+    #[cfg(not(feature = "chrono"))]
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
     /// Last update timestamp
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// Last update timestamp
+    #[cfg(not(feature = "chrono"))]
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub updated: Option<String>,
     /// Description
@@ -156,7 +181,8 @@ pub struct ImportSourceResponseImportSourceOTEntries {
     pub match_identifier_ignore_case: Option<bool>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ImportSourceResponse {
     /// Import source ID
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -168,9 +194,29 @@ pub struct ImportSourceResponse {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// Timestamp when the import source was created
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created: Option<chrono::DateTime<chrono::Utc>>,
+    /// Timestamp when the import source was created
+    #[cfg(not(feature = "chrono"))]
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
     /// Timestamp when the import source was last updated
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// Timestamp when the import source was last updated
+    #[cfg(not(feature = "chrono"))]
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub updated: Option<String>,
     /// Import source description

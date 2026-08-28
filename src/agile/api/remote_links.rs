@@ -28,7 +28,7 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitRemoteLinksRequestRemoteLinksAssociations {
@@ -54,7 +54,7 @@ crate::open_enum! {
 }
 
 /// The status of a Remote Link.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SubmitRemoteLinksRequestRemoteLinksStatus {
     /// Appearance is a fixed set of appearance types affecting the colour
     /// of the status lozenge in the UI. The colours they correspond to are
@@ -67,7 +67,7 @@ pub struct SubmitRemoteLinksRequestRemoteLinksStatus {
 }
 
 /// Data related to a single Remote Link.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SubmitRemoteLinksRequestRemoteLinks {
     /// The schema version used for this data.
     ///
@@ -102,6 +102,17 @@ pub struct SubmitRemoteLinksRequestRemoteLinks {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// The last-updated timestamp to present to the user as a summary of when Remote Link was last updated.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user as a summary of when Remote Link was last updated.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// The entities to associate the Remote Link information with.
@@ -124,7 +135,7 @@ pub struct SubmitRemoteLinksRequestRemoteLinks {
 
 /// Information about the provider. This is useful for auditing, logging, debugging, and other internal uses. It is
 /// not considered private information. Hence, it may not contain personally identifiable information.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitRemoteLinksRequestProviderMetadata {
     /// An optional name of the source of the Remote Links data.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -354,7 +365,7 @@ impl<'a> GetRemoteLinkByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/remotelinks/1.0/remotelink/{}", self.remote_link_id),
+            format!("/rest/remotelinks/1.0/remotelink/{}", crate::core::encode_path_segment(&self.remote_link_id)),
         );
 
         Ok(config)
@@ -389,7 +400,7 @@ impl<'a> DeleteRemoteLinkByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/remotelinks/1.0/remotelink/{}", self.remote_link_id),
+            format!("/rest/remotelinks/1.0/remotelink/{}", crate::core::encode_path_segment(&self.remote_link_id)),
         );
 
         Ok(config)

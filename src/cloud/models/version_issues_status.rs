@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Counts of the number of issues in various statuses.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct VersionIssuesStatus {
     /// Count of issues with status *done*.
     #[serde(default, skip_serializing_if = "Option::is_none")]

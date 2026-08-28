@@ -11,9 +11,11 @@ crate::open_enum! {
 }
 
 /// Details of a permission and its availability to a user.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct UserPermission {
     /// Indicate whether the permission key is deprecated. Note that deprecated keys cannot be used in the `permissions parameter of Get my permissions. Deprecated keys are not returned by Get all permissions.`
+    #[deprecated(note = "Indicate whether the permission key is deprecated.")]
     #[serde(rename = "deprecatedKey", default, skip_serializing_if = "Option::is_none")]
     pub deprecated_key: Option<bool>,
     /// The description of the permission.
@@ -22,10 +24,10 @@ pub struct UserPermission {
     /// Whether the permission is available to the user in the queried context.
     #[serde(rename = "havePermission", default, skip_serializing_if = "Option::is_none")]
     pub have_permission: Option<bool>,
-    /// The ID of the permission. Either `id` or `key` must be specified. Use [Get all permissions](#api-rest-api-3-permissions-get) to get the list of permissions.
+    /// The ID of the permission. Either `id` or `key` must be specified. Use [Get all permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get) to get the list of permissions.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// The key of the permission. Either `id` or `key` must be specified. Use [Get all permissions](#api-rest-api-3-permissions-get) to get the list of permissions.
+    /// The key of the permission. Either `id` or `key` must be specified. Use [Get all permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get) to get the list of permissions.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
     /// The name of the permission.

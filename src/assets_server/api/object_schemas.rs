@@ -104,7 +104,7 @@ impl<'a> LoadSchemaRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/assets/1.0/objectschema/{}", self.id),
+            format!("/rest/assets/1.0/objectschema/{}", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -144,7 +144,7 @@ impl<'a> UpdateSchemaRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/assets/1.0/objectschema/{}", self.id),
+            format!("/rest/assets/1.0/objectschema/{}", crate::core::encode_path_segment(&self.id)),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -178,7 +178,7 @@ impl<'a> DeleteSchemaRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/assets/1.0/objectschema/{}", self.id),
+            format!("/rest/assets/1.0/objectschema/{}", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -291,7 +291,7 @@ impl<'a> FindObjectTypeFlatListRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/assets/1.0/objectschema/{}/objecttypes/flat", self.id),
+            format!("/rest/assets/1.0/objectschema/{}/objecttypes/flat", crate::core::encode_path_segment(&self.id)),
         );
 
         if let Some(value) = &self.role {

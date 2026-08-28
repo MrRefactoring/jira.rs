@@ -185,7 +185,7 @@ impl<'a> GetIssueLinkTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issueLinkType/{}", self.issue_link_type_id),
+            format!("/rest/api/2/issueLinkType/{}", crate::core::encode_path_segment(&self.issue_link_type_id)),
         );
 
         Ok(config)
@@ -222,7 +222,7 @@ impl<'a> UpdateIssueLinkTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/issueLinkType/{}", self.issue_link_type_id),
+            format!("/rest/api/2/issueLinkType/{}", crate::core::encode_path_segment(&self.issue_link_type_id)),
         );
 
         let body = match serde_json::to_value(&self.issue_link_type_json)? {
@@ -261,7 +261,7 @@ impl<'a> DeleteIssueLinkTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/issueLinkType/{}", self.issue_link_type_id),
+            format!("/rest/api/2/issueLinkType/{}", crate::core::encode_path_segment(&self.issue_link_type_id)),
         );
 
         Ok(config)
@@ -300,7 +300,7 @@ impl<'a> MoveIssueLinkTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/issueLinkType/{}/order", self.issue_link_type_id),
+            format!("/rest/api/2/issueLinkType/{}/order", crate::core::encode_path_segment(&self.issue_link_type_id)),
         );
 
         let body = match serde_json::to_value(&self.issue_link_type_order_update_request)? {

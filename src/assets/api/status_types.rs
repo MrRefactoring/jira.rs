@@ -128,8 +128,10 @@ impl<'a> GetStatusTypeRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/config/statustype/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/config/statustype/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -159,8 +161,10 @@ impl<'a> UpdateStatusTypeRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/config/statustype/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/config/statustype/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         let body = match serde_json::to_value(&self.status_in)? {
             serde_json::Value::Object(object) => object,
@@ -196,8 +200,10 @@ impl<'a> DeleteStatusTypeRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/config/statustype/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/config/statustype/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }

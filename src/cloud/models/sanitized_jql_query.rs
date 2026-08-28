@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of the sanitized JQL query.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SanitizedJqlQuery {
     /// The account ID of the user for whom sanitization was performed.
     #[serde(rename = "accountId", default, skip_serializing_if = "Option::is_none")]

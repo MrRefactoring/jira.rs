@@ -10,7 +10,7 @@ crate::open_enum! {
 }
 
 /// A map of permission keys to permission objects.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct PermissionJson {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,

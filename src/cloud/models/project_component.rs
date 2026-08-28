@@ -37,7 +37,7 @@ crate::open_enum! {
 }
 
 /// Details about a project component.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ProjectComponent {
     /// Compass component's ID. Can't be updated. Not required for creating a Project Component.
     #[serde(default, skip_serializing_if = "Option::is_none")]

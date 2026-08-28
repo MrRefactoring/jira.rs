@@ -13,7 +13,7 @@ crate::open_enum! {
 }
 
 /// The payload for creating an issue type hierarchy
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueTypeHierarchyPayload {
     /// The hierarchy level of the issue type. 0, 1, 2, 3 .. n; Negative values for subtasks
     #[serde(rename = "hierarchyLevel", default, skip_serializing_if = "Option::is_none")]

@@ -14,14 +14,14 @@ impl<'a> WorkflowStatusCategoriesService<'a> {
 
     /// Returns a list of all status categories.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_status_categories(&self) -> GetStatusCategoriesRequest<'a> {
         GetStatusCategoriesRequest::new(self.client)
     }
 
-    /// Returns a status category. Status categories provided a mechanism for categorizing [statuses](#api-rest-api-3-status-idOrName-get).
+    /// Returns a status category. Status categories provided a mechanism for categorizing [statuses](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-status/#api-rest-api-3-status-idOrName-get).
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_status_category(&self, id_or_key: impl Into<String>) -> GetStatusCategoryRequest<'a> {
         GetStatusCategoryRequest::new(self.client, id_or_key)
     }
@@ -29,7 +29,7 @@ impl<'a> WorkflowStatusCategoriesService<'a> {
 
 /// Returns a list of all status categories.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetStatusCategoriesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -57,9 +57,9 @@ impl<'a> GetStatusCategoriesRequest<'a> {
     }
 }
 
-/// Returns a status category. Status categories provided a mechanism for categorizing [statuses](#api-rest-api-3-status-idOrName-get).
+/// Returns a status category. Status categories provided a mechanism for categorizing [statuses](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-status/#api-rest-api-3-status-idOrName-get).
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetStatusCategoryRequest<'a> {
     client: &'a crate::core::Client,
     id_or_key: String,
@@ -74,7 +74,7 @@ impl<'a> GetStatusCategoryRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/statuscategory/{}", self.id_or_key),
+            format!("/rest/api/3/statuscategory/{}", crate::core::encode_path_segment(&self.id_or_key)),
         );
 
         Ok(config)

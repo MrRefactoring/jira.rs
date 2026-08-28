@@ -23,9 +23,10 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SearchRequest {
-    /// Use [expand](#expansion) to include additional information about issues in the response. Note that, unlike the majority of instances where `expand` is specified, `expand` is defined as a list of values. The expand options are:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about issues in the response. Note that, unlike the majority of instances where `expand` is specified, `expand` is defined as a list of values. The expand options are:
     ///
     ///  *  `renderedFields` Returns field values rendered in HTML format.
     ///  *  `names` Returns the display name of each field.
@@ -53,7 +54,7 @@ pub struct SearchRequest {
     ///
     /// Multiple `fields` parameters can be included in a request.
     ///
-    /// Note: All navigable fields are returned by default. This differs from [GET issue](#api-rest-api-3-issue-issueIdOrKey-get) where the default is all fields.
+    /// Note: All navigable fields are returned by default. This differs from [GET issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueIdOrKey-get) where the default is all fields.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub fields: Option<Vec<String>>,
     /// Reference fields by their key (rather than ID). The default is `false`.
@@ -82,6 +83,7 @@ pub struct SearchRequest {
     /// The default is `strict`.
     ///
     /// Note: If the JQL is not correctly formed a 400 response code is returned, regardless of the `validateQuery` value.
+    #[deprecated(note = "* `true` *Deprecated* A legacy synonym for `strict`.")]
     #[serde(rename = "validateQuery", default, skip_serializing_if = "Option::is_none")]
     pub validate_query: Option<SearchRequestValidateQuery>,
 }

@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 /// Comma-separated list of Security Workspace IDs to delete. All data associated with the given workspaces will eventually be removed from Jira. Example: workspaceIds=111-222-333,444-555-666.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum DeleteLinkedWorkspacesRequestWorkspaceIds {
@@ -56,14 +56,14 @@ crate::open_enum! {
 /// Severity information for a single Vulnerability.
 ///
 /// This is the severity information that will be presented to the user on e.g. the Jira Security screen.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SubmitVulnerabilitiesRequestVulnerabilitiesSeverity {
     /// The severity level of the Vulnerability.
     pub level: SubmitVulnerabilitiesRequestVulnerabilitiesSeverityLevel,
 }
 
 /// The identifiers object that contains public/private information identifying the Vulnerability.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitVulnerabilitiesRequestVulnerabilitiesIdentifiers {
     /// The display name of the Vulnerability identified.
     #[serde(rename = "displayName")]
@@ -83,7 +83,7 @@ crate::open_enum! {
 }
 
 /// Extra information (optional). This data will be shown in the security feature under the vulnerability displayName.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitVulnerabilitiesRequestVulnerabilitiesAdditionalInfo {
     /// The content of the additionalInfo.
     pub content: String,
@@ -92,7 +92,7 @@ pub struct SubmitVulnerabilitiesRequestVulnerabilitiesAdditionalInfo {
     pub url: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitVulnerabilitiesRequestVulnerabilitiesAddAssociations {
@@ -101,7 +101,7 @@ pub enum SubmitVulnerabilitiesRequestVulnerabilitiesAddAssociations {
     Other(serde_json::Value),
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitVulnerabilitiesRequestVulnerabilitiesRemoveAssociations {
@@ -111,7 +111,7 @@ pub enum SubmitVulnerabilitiesRequestVulnerabilitiesRemoveAssociations {
 }
 
 /// Data related to a specific vulnerability in a specific workspace that the vulnerability is present in. Must specify at least one association.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SubmitVulnerabilitiesRequestVulnerabilities {
     /// The VulnerabilityData schema version used for this vulnerability data.
     ///
@@ -146,11 +146,37 @@ pub struct SubmitVulnerabilitiesRequestVulnerabilities {
     /// The timestamp to present to the user that shows when the Vulnerability was introduced.
     ///
     /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "introducedDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub introduced_date: Option<chrono::DateTime<chrono::Utc>>,
+    /// The timestamp to present to the user that shows when the Vulnerability was introduced.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "introducedDate", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub introduced_date: String,
     /// The last-updated timestamp to present to the user the last time the Vulnerability was updated.
     ///
     /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user the last time the Vulnerability was updated.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// Severity information for a single Vulnerability.
@@ -174,6 +200,19 @@ pub struct SubmitVulnerabilitiesRequestVulnerabilities {
     /// An ISO-8601 Date-time string representing the last time the provider updated associations on this entity.
     ///
     /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "associationsLastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub associations_last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// An ISO-8601 Date-time string representing the last time the provider updated associations on this entity.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "associationsLastUpdated",
         default,
@@ -194,7 +233,7 @@ pub struct SubmitVulnerabilitiesRequestVulnerabilities {
 
 /// Information about the provider. This is useful for auditing, logging, debugging,
 /// and other internal uses. Information in this property is not considered private, so it should not contain personally identifiable information
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitVulnerabilitiesRequestProviderMetadata {
     /// An optional name of the source of the vulnerabilities.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -417,7 +456,7 @@ impl<'a> GetLinkedWorkspaceByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/security/1.0/linkedWorkspaces/{}", self.workspace_id),
+            format!("/rest/security/1.0/linkedWorkspaces/{}", crate::core::encode_path_segment(&self.workspace_id)),
         );
 
         Ok(config)
@@ -603,7 +642,7 @@ impl<'a> GetVulnerabilityByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/security/1.0/vulnerability/{}", self.vulnerability_id),
+            format!("/rest/security/1.0/vulnerability/{}", crate::core::encode_path_segment(&self.vulnerability_id)),
         );
 
         Ok(config)
@@ -637,7 +676,7 @@ impl<'a> DeleteVulnerabilityByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/security/1.0/vulnerability/{}", self.vulnerability_id),
+            format!("/rest/security/1.0/vulnerability/{}", crate::core::encode_path_segment(&self.vulnerability_id)),
         );
 
         Ok(config)

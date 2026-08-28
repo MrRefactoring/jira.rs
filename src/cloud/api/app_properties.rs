@@ -14,7 +14,7 @@ impl<'a> AppPropertiesService<'a> {
 
     /// Gets all the properties of an app. The reserved key `connect_client_key_019cdff3-8bfb-71fe-9628-875b700aebb8` is not returned.
     ///
-    /// **[Permissions](#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
     /// Additionally, Forge apps can access Connect app properties (stored against the same `app.connect.key`).
     pub fn get_addon_properties(&self, addon_key: impl Into<String>) -> GetAddonPropertiesRequest<'a> {
         GetAddonPropertiesRequest::new(self.client, addon_key)
@@ -24,7 +24,7 @@ impl<'a> AppPropertiesService<'a> {
     /// is reserved. It returns a synthetic, read-only property containing the Connect `clientKey` for the requested tenant.
     /// This is intended for Forge apps with `app.connect.key` to retrieve the Connect client key during migration.
     ///
-    /// **[Permissions](#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
     /// Additionally, Forge apps can access Connect app properties (stored against the same `app.connect.key`).
     pub fn get_addon_property(
         &self,
@@ -38,7 +38,7 @@ impl<'a> AppPropertiesService<'a> {
     ///
     /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
     ///
-    /// **[Permissions](#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
     /// Additionally, Forge apps can access Connect app properties (stored against the same `app.connect.key`).
     pub fn put_addon_property(
         &self,
@@ -51,7 +51,7 @@ impl<'a> AppPropertiesService<'a> {
 
     /// Deletes an app's property.
     ///
-    /// **[Permissions](#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
     /// Additionally, Forge apps can access Connect app properties (stored against the same `app.connect.key`).
     pub fn delete_addon_property(
         &self,
@@ -63,14 +63,14 @@ impl<'a> AppPropertiesService<'a> {
 
     /// Returns all property keys for the Forge app.
     ///
-    /// **[Permissions](#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
     pub fn get_forge_app_property_keys(&self) -> GetForgeAppPropertyKeysRequest<'a> {
         GetForgeAppPropertyKeysRequest::new(self.client)
     }
 
     /// Returns the value of a Forge app's property.
     ///
-    /// **[Permissions](#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
     pub fn get_forge_app_property(&self, property_key: impl Into<String>) -> GetForgeAppPropertyRequest<'a> {
         GetForgeAppPropertyRequest::new(self.client, property_key)
     }
@@ -84,7 +84,7 @@ impl<'a> AppPropertiesService<'a> {
     ///
     /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
     ///
-    /// **[Permissions](#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
     ///
     /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
     pub fn put_forge_app_property(
@@ -97,7 +97,7 @@ impl<'a> AppPropertiesService<'a> {
 
     /// Deletes a Forge app's property.
     ///
-    /// **[Permissions](#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
     ///
     /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
     pub fn delete_forge_app_property(&self, property_key: impl Into<String>) -> DeleteForgeAppPropertyRequest<'a> {
@@ -107,7 +107,7 @@ impl<'a> AppPropertiesService<'a> {
 
 /// Gets all the properties of an app. The reserved key `connect_client_key_019cdff3-8bfb-71fe-9628-875b700aebb8` is not returned.
 ///
-/// **[Permissions](#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
 /// Additionally, Forge apps can access Connect app properties (stored against the same `app.connect.key`).
 pub struct GetAddonPropertiesRequest<'a> {
     client: &'a crate::core::Client,
@@ -123,7 +123,10 @@ impl<'a> GetAddonPropertiesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/atlassian-connect/1/addons/{}/properties", self.addon_key),
+            format!(
+                "/rest/atlassian-connect/1/addons/{}/properties",
+                crate::core::encode_path_segment(&self.addon_key)
+            ),
         );
 
         Ok(config)
@@ -144,7 +147,7 @@ impl<'a> GetAddonPropertiesRequest<'a> {
 /// is reserved. It returns a synthetic, read-only property containing the Connect `clientKey` for the requested tenant.
 /// This is intended for Forge apps with `app.connect.key` to retrieve the Connect client key during migration.
 ///
-/// **[Permissions](#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
 /// Additionally, Forge apps can access Connect app properties (stored against the same `app.connect.key`).
 pub struct GetAddonPropertyRequest<'a> {
     client: &'a crate::core::Client,
@@ -161,7 +164,11 @@ impl<'a> GetAddonPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/atlassian-connect/1/addons/{}/properties/{}", self.addon_key, self.property_key),
+            format!(
+                "/rest/atlassian-connect/1/addons/{}/properties/{}",
+                crate::core::encode_path_segment(&self.addon_key),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)
@@ -182,7 +189,7 @@ impl<'a> GetAddonPropertyRequest<'a> {
 ///
 /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
 ///
-/// **[Permissions](#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
 /// Additionally, Forge apps can access Connect app properties (stored against the same `app.connect.key`).
 pub struct PutAddonPropertyRequest<'a> {
     client: &'a crate::core::Client,
@@ -205,7 +212,11 @@ impl<'a> PutAddonPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/atlassian-connect/1/addons/{}/properties/{}", self.addon_key, self.property_key),
+            format!(
+                "/rest/atlassian-connect/1/addons/{}/properties/{}",
+                crate::core::encode_path_segment(&self.addon_key),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -226,7 +237,7 @@ impl<'a> PutAddonPropertyRequest<'a> {
 
 /// Deletes an app's property.
 ///
-/// **[Permissions](#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only a Connect app whose key matches `addonKey` can make this request.
 /// Additionally, Forge apps can access Connect app properties (stored against the same `app.connect.key`).
 pub struct DeleteAddonPropertyRequest<'a> {
     client: &'a crate::core::Client,
@@ -243,7 +254,11 @@ impl<'a> DeleteAddonPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/atlassian-connect/1/addons/{}/properties/{}", self.addon_key, self.property_key),
+            format!(
+                "/rest/atlassian-connect/1/addons/{}/properties/{}",
+                crate::core::encode_path_segment(&self.addon_key),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)
@@ -262,7 +277,7 @@ impl<'a> DeleteAddonPropertyRequest<'a> {
 
 /// Returns all property keys for the Forge app.
 ///
-/// **[Permissions](#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
 pub struct GetForgeAppPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -293,7 +308,7 @@ impl<'a> GetForgeAppPropertyKeysRequest<'a> {
 
 /// Returns the value of a Forge app's property.
 ///
-/// **[Permissions](#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
 pub struct GetForgeAppPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
@@ -308,7 +323,7 @@ impl<'a> GetForgeAppPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/forge/1/app/properties/{}", self.property_key),
+            format!("/rest/forge/1/app/properties/{}", crate::core::encode_path_segment(&self.property_key)),
         );
 
         Ok(config)
@@ -334,7 +349,7 @@ impl<'a> GetForgeAppPropertyRequest<'a> {
 ///
 /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
 ///
-/// **[Permissions](#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
 ///
 /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
 pub struct PutForgeAppPropertyRequest<'a> {
@@ -356,7 +371,7 @@ impl<'a> PutForgeAppPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/forge/1/app/properties/{}", self.property_key),
+            format!("/rest/forge/1/app/properties/{}", crate::core::encode_path_segment(&self.property_key)),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -377,7 +392,7 @@ impl<'a> PutForgeAppPropertyRequest<'a> {
 
 /// Deletes a Forge app's property.
 ///
-/// **[Permissions](#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Forge apps can make this request. This API can only be accessed using **[asApp()](https://developer.atlassian.com/platform/forge/apis-reference/fetch-api-product.requestjira/#method-signature)** requests from Forge.
 ///
 /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
 pub struct DeleteForgeAppPropertyRequest<'a> {
@@ -394,7 +409,7 @@ impl<'a> DeleteForgeAppPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/forge/1/app/properties/{}", self.property_key),
+            format!("/rest/forge/1/app/properties/{}", crate::core::encode_path_segment(&self.property_key)),
         );
 
         Ok(config)

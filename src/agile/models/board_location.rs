@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The container that the board is located in.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct BoardLocation {
     #[serde(rename = "avatarURI", default, skip_serializing_if = "Option::is_none")]
     pub avatar_uri: Option<String>,

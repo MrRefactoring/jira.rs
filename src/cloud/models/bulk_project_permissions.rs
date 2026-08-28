@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of project permissions and associated issues and projects to look up.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct BulkProjectPermissions {
     /// List of issue IDs.
     #[serde(default, skip_serializing_if = "Option::is_none")]

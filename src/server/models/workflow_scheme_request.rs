@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowSchemeRequest {
     #[serde(rename = "defaultWorkflow", default, skip_serializing_if = "Option::is_none")]
     pub default_workflow: Option<bool>,

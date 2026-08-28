@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The field configuration to issue type mapping.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FieldConfigurationToIssueTypeMapping {
     /// The ID of the field configuration.
     #[serde(rename = "fieldConfigurationId")]

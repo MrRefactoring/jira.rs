@@ -12,7 +12,8 @@ crate::open_enum! {
 }
 
 /// The projects the item is associated with. Indicated for items associated with [next-gen projects](https://confluence.atlassian.com/x/loMyO).
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Scope {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub project: Option<ProjectDetails>,

@@ -9,7 +9,8 @@ pub enum CustomFieldContextDefaultValueReadOnlyType {
 }
 
 /// The default text for a read only custom field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueReadOnly {
     /// The ID of the context.
     #[serde(rename = "contextId")]

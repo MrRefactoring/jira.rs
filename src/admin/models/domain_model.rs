@@ -29,7 +29,8 @@ crate::open_enum! {
 }
 
 /// Claim for the domain
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct DomainModelAttributesClaim {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub r#type: Option<DomainModelAttributesClaimType>,
@@ -39,7 +40,8 @@ pub struct DomainModelAttributesClaim {
 }
 
 /// Attributes of this object
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct DomainModelAttributes {
     /// Domain Name
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -49,7 +51,8 @@ pub struct DomainModelAttributes {
     pub claim: Option<DomainModelAttributesClaim>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct DomainModel {
     /// Unique identifier of the Domain
     pub id: String,

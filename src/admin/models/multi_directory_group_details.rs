@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Group detail information.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct MultiDirectoryGroupDetailsData {
     /// Unique ID of the group.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -32,7 +33,8 @@ pub struct MultiDirectoryGroupDetailsData {
     pub links: Option<LinkSelfCursor>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct MultiDirectoryGroupDetails {
     /// Group detail information.
     #[serde(default, skip_serializing_if = "Option::is_none")]

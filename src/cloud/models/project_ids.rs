@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// A list of project IDs.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ProjectIds {
     /// The IDs of projects.
     #[serde(rename = "projectIds")]

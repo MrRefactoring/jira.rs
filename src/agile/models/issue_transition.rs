@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueTransitionToScopeProjectAvatarUrls {
     /// The URL of the item's 16x16 pixel avatar.
     #[serde(rename = "16x16", default, skip_serializing_if = "Option::is_none")]
@@ -19,7 +20,8 @@ pub struct IssueTransitionToScopeProjectAvatarUrls {
 }
 
 /// A project category.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueTransitionToScopeProjectProjectCategory {
     /// The name of the project category.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -45,7 +47,8 @@ crate::open_enum! {
 }
 
 /// Details about a project.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueTransitionToScopeProject {
     #[serde(rename = "avatarUrls", default, skip_serializing_if = "Option::is_none")]
     pub avatar_urls: Option<IssueTransitionToScopeProjectAvatarUrls>,
@@ -81,7 +84,8 @@ crate::open_enum! {
 }
 
 /// The projects the item is associated with. Indicated for items associated with [next-gen projects](https://confluence.atlassian.com/x/loMyO).
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueTransitionToScope {
     /// Details about a project.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -92,7 +96,8 @@ pub struct IssueTransitionToScope {
 }
 
 /// A status category.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueTransitionToStatusCategory {
     /// The name of the color used to represent the status category.
     #[serde(rename = "colorName", default, skip_serializing_if = "Option::is_none")]
@@ -112,7 +117,8 @@ pub struct IssueTransitionToStatusCategory {
 }
 
 /// A status.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueTransitionTo {
     /// The description of the status.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -138,7 +144,8 @@ pub struct IssueTransitionTo {
 }
 
 /// Details of an issue transition.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueTransition {
     /// Expand options that include additional transition details in the response.
     #[serde(default, skip_serializing_if = "Option::is_none")]

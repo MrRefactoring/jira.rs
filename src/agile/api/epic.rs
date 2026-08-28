@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesWithoutEpicRequestExpand {
@@ -15,7 +15,7 @@ pub enum GetIssuesWithoutEpicRequestExpand {
 }
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForEpicRequestExpand {
@@ -35,7 +35,7 @@ impl<'a> EpicService<'a> {
         Self { client }
     }
 
-    /// Removes issues from epics. The user needs to have the edit issue permission for all issue they want to remove from epics. The maximum number of issues that can be moved in one operation is 50. **Note:** This operation does not work for epics in next-gen projects. Instead, update the issue using `\{ fields: \{ parent: \{\} \} \}`
+    /// Removes issues from epics. The user needs to have the edit issue permission for all issue they want to remove from epics. The maximum number of issues that can be moved in one operation is 50. **Note:** This operation does not work for epics in next-gen projects. Instead, update the issue using `{ fields: { parent: {} } }`
     pub fn remove_issues_from_epic(
         &self,
         issues: impl IntoIterator<Item = impl Into<String>>,
@@ -86,7 +86,7 @@ impl<'a> EpicService<'a> {
     }
 }
 
-/// Removes issues from epics. The user needs to have the edit issue permission for all issue they want to remove from epics. The maximum number of issues that can be moved in one operation is 50. **Note:** This operation does not work for epics in next-gen projects. Instead, update the issue using `\{ fields: \{ parent: \{\} \} \}`
+/// Removes issues from epics. The user needs to have the edit issue permission for all issue they want to remove from epics. The maximum number of issues that can be moved in one operation is 50. **Note:** This operation does not work for epics in next-gen projects. Instead, update the issue using `{ fields: { parent: {} } }`
 pub struct RemoveIssuesFromEpicRequest<'a> {
     client: &'a crate::core::Client,
     issues: Vec<String>,
@@ -272,7 +272,7 @@ impl<'a> GetEpicRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/agile/1.0/epic/{}", self.epic_id_or_key),
+            format!("/rest/agile/1.0/epic/{}", crate::core::encode_path_segment(&self.epic_id_or_key)),
         );
 
         Ok(config)
@@ -305,7 +305,7 @@ impl<'a> PartiallyUpdateEpicRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/agile/1.0/epic/{}", self.epic_id_or_key),
+            format!("/rest/agile/1.0/epic/{}", crate::core::encode_path_segment(&self.epic_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.epic_update)? {
@@ -352,7 +352,7 @@ impl<'a> MoveIssuesToEpicRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/agile/1.0/epic/{}/issue", self.epic_id_or_key),
+            format!("/rest/agile/1.0/epic/{}/issue", crate::core::encode_path_segment(&self.epic_id_or_key)),
         );
 
         let mut body = serde_json::Map::new();
@@ -471,7 +471,7 @@ impl<'a> GetIssuesForEpicRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/software/1.0/epic/{}/issue", self.epic_id_or_key),
+            format!("/rest/software/1.0/epic/{}/issue", crate::core::encode_path_segment(&self.epic_id_or_key)),
         );
 
         if let Some(value) = &self.next_page_token {
@@ -540,7 +540,7 @@ impl<'a> RankEpicsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/agile/1.0/epic/{}/rank", self.epic_id_or_key),
+            format!("/rest/agile/1.0/epic/{}/rank", crate::core::encode_path_segment(&self.epic_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.epic_rank_request)? {

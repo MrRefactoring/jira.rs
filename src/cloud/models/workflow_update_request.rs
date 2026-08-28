@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The update workflows payload.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct WorkflowUpdateRequest {
     /// The statuses to associate with the workflows.
     #[serde(default, skip_serializing_if = "Option::is_none")]

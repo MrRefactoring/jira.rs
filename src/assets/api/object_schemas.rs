@@ -173,7 +173,10 @@ impl<'a> LoadSchemaRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(crate::core::Method::GET, format!("/objectschema/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/objectschema/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -203,8 +206,10 @@ impl<'a> UpdateSchemaRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/objectschema/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/objectschema/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         let body = match serde_json::to_value(&self.object_schema_update)? {
             serde_json::Value::Object(object) => object,
@@ -240,7 +245,10 @@ impl<'a> DeleteSchemaRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/objectschema/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/objectschema/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -296,8 +304,10 @@ impl<'a> FindSchemaAttributesRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/objectschema/{}/attributes", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/objectschema/{}/attributes", crate::core::encode_path_segment(&self.id)),
+        );
 
         if let Some(value) = &self.only_value_editable {
             config.query.push(("onlyValueEditable".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
@@ -347,8 +357,10 @@ impl<'a> FindSchemaObjectTypesRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/objectschema/{}/objecttypes", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/objectschema/{}/objecttypes", crate::core::encode_path_segment(&self.id)),
+        );
 
         if let Some(value) = &self.exclude_abstract {
             config.query.push(("excludeAbstract".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
@@ -410,7 +422,7 @@ impl<'a> FindSchemaObjectTypesFlatRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/objectschema/{}/objecttypes/flat", self.id),
+            format!("/objectschema/{}/objecttypes/flat", crate::core::encode_path_segment(&self.id)),
         );
 
         if let Some(value) = &self.query {

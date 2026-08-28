@@ -14,7 +14,8 @@ crate::open_enum! {
 }
 
 /// Details of a request to bulk edit shareable entity.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct BulkEditShareableEntityRequest {
     /// Allowed action for bulk edit shareable entity
     pub action: BulkEditShareableEntityRequestAction,

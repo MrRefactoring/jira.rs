@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// An operand that is a function. See [Advanced searching - functions reference](https://confluence.atlassian.com/x/dwiiLQ) for more information about JQL functions.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FunctionOperand {
     /// The list of function arguments.
     pub arguments: Vec<String>,

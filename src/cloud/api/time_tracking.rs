@@ -14,14 +14,14 @@ impl<'a> TimeTrackingService<'a> {
 
     /// Returns the time tracking provider that is currently selected. Note that if time tracking is disabled, then a successful but empty response is returned.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_selected_time_tracking_implementation(&self) -> GetSelectedTimeTrackingImplementationRequest<'a> {
         GetSelectedTimeTrackingImplementationRequest::new(self.client)
     }
 
     /// Selects a time tracking provider.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn select_time_tracking_implementation(
         &self,
         time_tracking_provider: TimeTrackingProvider,
@@ -31,21 +31,21 @@ impl<'a> TimeTrackingService<'a> {
 
     /// Returns all time tracking providers. By default, Jira only has one time tracking provider: *JIRA provided time tracking*. However, you can install other time tracking providers via apps from the Atlassian Marketplace. For more information on time tracking providers, see the documentation for the [ Time Tracking Provider](https://developer.atlassian.com/cloud/jira/platform/modules/time-tracking-provider/) module.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_available_time_tracking_implementations(&self) -> GetAvailableTimeTrackingImplementationsRequest<'a> {
         GetAvailableTimeTrackingImplementationsRequest::new(self.client)
     }
 
     /// Returns the time tracking settings. This includes settings such as the time format, default time unit, and others. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_shared_time_tracking_configuration(&self) -> GetSharedTimeTrackingConfigurationRequest<'a> {
         GetSharedTimeTrackingConfigurationRequest::new(self.client)
     }
 
     /// Sets the time tracking settings.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn set_shared_time_tracking_configuration(
         &self,
         time_tracking_configuration: TimeTrackingConfiguration,
@@ -56,7 +56,7 @@ impl<'a> TimeTrackingService<'a> {
 
 /// Returns the time tracking provider that is currently selected. Note that if time tracking is disabled, then a successful but empty response is returned.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetSelectedTimeTrackingImplementationRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -89,7 +89,7 @@ impl<'a> GetSelectedTimeTrackingImplementationRequest<'a> {
 
 /// Selects a time tracking provider.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct SelectTimeTrackingImplementationRequest<'a> {
     client: &'a crate::core::Client,
     time_tracking_provider: TimeTrackingProvider,
@@ -130,7 +130,7 @@ impl<'a> SelectTimeTrackingImplementationRequest<'a> {
 
 /// Returns all time tracking providers. By default, Jira only has one time tracking provider: *JIRA provided time tracking*. However, you can install other time tracking providers via apps from the Atlassian Marketplace. For more information on time tracking providers, see the documentation for the [ Time Tracking Provider](https://developer.atlassian.com/cloud/jira/platform/modules/time-tracking-provider/) module.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetAvailableTimeTrackingImplementationsRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -163,7 +163,7 @@ impl<'a> GetAvailableTimeTrackingImplementationsRequest<'a> {
 
 /// Returns the time tracking settings. This includes settings such as the time format, default time unit, and others. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetSharedTimeTrackingConfigurationRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -196,7 +196,7 @@ impl<'a> GetSharedTimeTrackingConfigurationRequest<'a> {
 
 /// Sets the time tracking settings.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct SetSharedTimeTrackingConfigurationRequest<'a> {
     client: &'a crate::core::Client,
     time_tracking_configuration: TimeTrackingConfiguration,

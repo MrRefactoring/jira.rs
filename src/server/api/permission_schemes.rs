@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetPermissionSchemesRequestExpand {
@@ -15,7 +15,7 @@ pub enum GetPermissionSchemesRequestExpand {
 }
 
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum CreatePermissionSchemeRequestExpand {
@@ -26,7 +26,7 @@ pub enum CreatePermissionSchemeRequestExpand {
 }
 
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetPermissionSchemeRequestExpand {
@@ -37,7 +37,7 @@ pub enum GetPermissionSchemeRequestExpand {
 }
 
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum UpdatePermissionSchemeRequestExpand {
@@ -48,7 +48,7 @@ pub enum UpdatePermissionSchemeRequestExpand {
 }
 
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetPermissionSchemeGrantsRequestExpand {
@@ -59,7 +59,7 @@ pub enum GetPermissionSchemeGrantsRequestExpand {
 }
 
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum CreatePermissionGrantRequestExpand {
@@ -70,7 +70,7 @@ pub enum CreatePermissionGrantRequestExpand {
 }
 
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetPermissionSchemeGrantRequestExpand {
@@ -272,7 +272,11 @@ impl<'a> GetSchemeAttributeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/permissionscheme/{}/attribute/{}", self.permission_scheme_id, self.attribute_key),
+            format!(
+                "/rest/api/2/permissionscheme/{}/attribute/{}",
+                self.permission_scheme_id,
+                crate::core::encode_path_segment(&self.attribute_key)
+            ),
         );
 
         Ok(config)
@@ -313,7 +317,11 @@ impl<'a> SetSchemeAttributeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/permissionscheme/{}/attribute/{}", self.permission_scheme_id, self.key),
+            format!(
+                "/rest/api/2/permissionscheme/{}/attribute/{}",
+                self.permission_scheme_id,
+                crate::core::encode_path_segment(&self.key)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));

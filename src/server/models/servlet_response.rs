@@ -3,7 +3,8 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ServletResponseLocale {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub country: Option<String>,
@@ -35,7 +36,8 @@ pub struct ServletResponseLocale {
     pub variant: Option<String>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ServletResponse {
     #[serde(rename = "bufferSize", default, skip_serializing_if = "Option::is_none")]
     pub buffer_size: Option<i64>,

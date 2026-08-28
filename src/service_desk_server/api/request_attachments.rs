@@ -74,7 +74,10 @@ impl<'a> CreateAttachmentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/request/{}/attachment", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/attachment",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         let body = match serde_json::to_value(&self.attachment_create)? {
@@ -139,7 +142,10 @@ impl<'a> AttachTemporaryFileRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/servicedesk/{}/attachTemporaryFile", self.service_desk_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/attachTemporaryFile",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
         );
 
         config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));

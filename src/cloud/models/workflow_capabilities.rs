@@ -21,7 +21,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowCapabilities {
     /// The Connect provided ecosystem rules available.
     #[serde(rename = "connectRules", default, skip_serializing_if = "Option::is_none")]

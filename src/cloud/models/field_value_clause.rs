@@ -22,7 +22,8 @@ crate::open_enum! {
 }
 
 /// A clause that asserts the current value of a field. For example, `summary ~ test`.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FieldValueClause {
     pub field: JqlQueryField,
     pub operand: JqlQueryClauseOperand,

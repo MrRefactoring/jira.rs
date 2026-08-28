@@ -29,7 +29,7 @@ crate::open_enum! {
 }
 
 /// List of fields to expand for each board. Valid values: admins, permissions.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetAllBoardsRequestExpand {
@@ -40,7 +40,7 @@ pub enum GetAllBoardsRequestExpand {
 }
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForBacklogRequestExpand {
@@ -51,7 +51,7 @@ pub enum GetIssuesForBacklogRequestExpand {
 }
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesWithoutEpicForBoardRequestExpand {
@@ -62,7 +62,7 @@ pub enum GetIssuesWithoutEpicForBoardRequestExpand {
 }
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetBoardIssuesForEpicRequestExpand {
@@ -73,7 +73,7 @@ pub enum GetBoardIssuesForEpicRequestExpand {
 }
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForBoardRequestExpand {
@@ -93,7 +93,7 @@ crate::open_enum! {
 }
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetBoardIssuesForSprintRequestExpand {
@@ -131,8 +131,8 @@ impl<'a> BoardService<'a> {
     ///
     /// Note:
     ///
-    ///  *  If you want to create a new project with an associated board, use the [Jira platform REST API](https://docs.atlassian.com/jira/REST/latest). For more information, see the [Create project](#api-rest-api-3-project-post) method. The `projectTypeKey` for software boards must be 'software' and the `projectTemplateKey` must be either `com.pyxis.greenhopper.jira:gh-kanban-template` or `com.pyxis.greenhopper.jira:gh-scrum-template`.
-    ///  *  You can create a filter using the [Jira REST API](https://docs.atlassian.com/jira/REST/latest). For more information, see the [Create filter](#api-rest-api-3-filter-post) method.
+    ///  *  If you want to create a new project with an associated board, use the [Jira platform REST API](https://docs.atlassian.com/jira/REST/latest). For more information, see the [Create project](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-project-post) method. The `projectTypeKey` for software boards must be 'software' and the `projectTemplateKey` must be either `com.pyxis.greenhopper.jira:gh-kanban-template` or `com.pyxis.greenhopper.jira:gh-scrum-template`.
+    ///  *  You can create a filter using the [Jira REST API](https://docs.atlassian.com/jira/REST/latest). For more information, see the [Create filter](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-filter-post) method.
     ///  *  If you do not ORDER BY the Rank field for the filter of your board, you will not be able to reorder issues on the board.
     pub fn create_board(&self, board_create: BoardCreate) -> CreateBoardRequest<'a> {
         CreateBoardRequest::new(self.client, board_create)
@@ -174,7 +174,7 @@ impl<'a> BoardService<'a> {
     ///  *  `location` \- Reference to the container that the board is located in. Includes the container type (Valid values: project, user).
     ///  *  `subQuery` (Kanban only) - JQL subquery used by the given board.
     ///  *  `columnConfig` \- The column configuration lists the columns for the board, in the order defined in the column configuration. For each column, it shows the issue status mapping as well as the constraint type (Valid values: none, issueCount, issueCountExclSubs) for the min/max number of issues. Note, the last column with statuses mapped to it is treated as the "Done" column, which means that issues in that column will be marked as already completed.
-    ///  *  `estimation` (Scrum only) - Contains information about type of estimation used for the board. Valid values: none, issueCount, field. If the estimation type is "field", the ID and display name of the field used for estimation is also returned. Note, estimates for an issue can be updated by a PUT /rest/api/3/issue/\{issueIdOrKey\} request, however the fields must be on the screen. "timeoriginalestimate" field will never be on the screen, so in order to update it "originalEstimate" in "timetracking" field should be updated.
+    ///  *  `estimation` (Scrum only) - Contains information about type of estimation used for the board. Valid values: none, issueCount, field. If the estimation type is "field", the ID and display name of the field used for estimation is also returned. Note, estimates for an issue can be updated by a PUT /rest/api/3/issue/{issueIdOrKey} request, however the fields must be on the screen. "timeoriginalestimate" field will never be on the screen, so in order to update it "originalEstimate" in "timetracking" field should be updated.
     ///  *  `ranking` \- Contains information about custom field used for ranking in the given board.
     pub fn get_configuration(&self, board_id: i64) -> GetConfigurationRequest<'a> {
         GetConfigurationRequest::new(self.client, board_id)
@@ -533,8 +533,8 @@ impl<'a> GetAllBoardsRequest<'a> {
 ///
 /// Note:
 ///
-///  *  If you want to create a new project with an associated board, use the [Jira platform REST API](https://docs.atlassian.com/jira/REST/latest). For more information, see the [Create project](#api-rest-api-3-project-post) method. The `projectTypeKey` for software boards must be 'software' and the `projectTemplateKey` must be either `com.pyxis.greenhopper.jira:gh-kanban-template` or `com.pyxis.greenhopper.jira:gh-scrum-template`.
-///  *  You can create a filter using the [Jira REST API](https://docs.atlassian.com/jira/REST/latest). For more information, see the [Create filter](#api-rest-api-3-filter-post) method.
+///  *  If you want to create a new project with an associated board, use the [Jira platform REST API](https://docs.atlassian.com/jira/REST/latest). For more information, see the [Create project](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-project-post) method. The `projectTypeKey` for software boards must be 'software' and the `projectTemplateKey` must be either `com.pyxis.greenhopper.jira:gh-kanban-template` or `com.pyxis.greenhopper.jira:gh-scrum-template`.
+///  *  You can create a filter using the [Jira REST API](https://docs.atlassian.com/jira/REST/latest). For more information, see the [Create filter](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-filter-post) method.
 ///  *  If you do not ORDER BY the Rank field for the filter of your board, you will not be able to reorder issues on the board.
 pub struct CreateBoardRequest<'a> {
     client: &'a crate::core::Client,
@@ -885,7 +885,7 @@ impl<'a> GetApproximateIssueCountForBacklogRequest<'a> {
 ///  *  `location` \- Reference to the container that the board is located in. Includes the container type (Valid values: project, user).
 ///  *  `subQuery` (Kanban only) - JQL subquery used by the given board.
 ///  *  `columnConfig` \- The column configuration lists the columns for the board, in the order defined in the column configuration. For each column, it shows the issue status mapping as well as the constraint type (Valid values: none, issueCount, issueCountExclSubs) for the min/max number of issues. Note, the last column with statuses mapped to it is treated as the "Done" column, which means that issues in that column will be marked as already completed.
-///  *  `estimation` (Scrum only) - Contains information about type of estimation used for the board. Valid values: none, issueCount, field. If the estimation type is "field", the ID and display name of the field used for estimation is also returned. Note, estimates for an issue can be updated by a PUT /rest/api/3/issue/\{issueIdOrKey\} request, however the fields must be on the screen. "timeoriginalestimate" field will never be on the screen, so in order to update it "originalEstimate" in "timetracking" field should be updated.
+///  *  `estimation` (Scrum only) - Contains information about type of estimation used for the board. Valid values: none, issueCount, field. If the estimation type is "field", the ID and display name of the field used for estimation is also returned. Note, estimates for an issue can be updated by a PUT /rest/api/3/issue/{issueIdOrKey} request, however the fields must be on the screen. "timeoriginalestimate" field will never be on the screen, so in order to update it "originalEstimate" in "timetracking" field should be updated.
 ///  *  `ranking` \- Contains information about custom field used for ranking in the given board.
 pub struct GetConfigurationRequest<'a> {
     client: &'a crate::core::Client,
@@ -1674,7 +1674,7 @@ impl<'a> GetBoardPropertyKeysRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/agile/1.0/board/{}/properties", self.board_id),
+            format!("/rest/agile/1.0/board/{}/properties", crate::core::encode_path_segment(&self.board_id)),
         );
 
         Ok(config)
@@ -1707,7 +1707,11 @@ impl<'a> GetBoardPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/agile/1.0/board/{}/properties/{}", self.board_id, self.property_key),
+            format!(
+                "/rest/agile/1.0/board/{}/properties/{}",
+                crate::core::encode_path_segment(&self.board_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)
@@ -1748,7 +1752,11 @@ impl<'a> SetBoardPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/agile/1.0/board/{}/properties/{}", self.board_id, self.property_key),
+            format!(
+                "/rest/agile/1.0/board/{}/properties/{}",
+                crate::core::encode_path_segment(&self.board_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.property_value)?));
@@ -1783,7 +1791,11 @@ impl<'a> DeleteBoardPropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/agile/1.0/board/{}/properties/{}", self.board_id, self.property_key),
+            format!(
+                "/rest/agile/1.0/board/{}/properties/{}",
+                crate::core::encode_path_segment(&self.board_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)

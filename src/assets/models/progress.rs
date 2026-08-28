@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Used for long running processes in Assets
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Progress {
     #[serde(rename = "progressInPercent", default, skip_serializing_if = "Option::is_none")]
     pub progress_in_percent: Option<i64>,
@@ -37,6 +38,16 @@ pub struct Progress {
     /// The user key of the user that is running the process
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub actor: Option<String>,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "startDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub start_date: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "startDate",
         default,
@@ -44,6 +55,16 @@ pub struct Progress {
         deserialize_with = "crate::core::deserialize_timestamp"
     )]
     pub start_date: Option<String>,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "finishedDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub finished_date: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "finishedDate",
         default,
@@ -52,6 +73,17 @@ pub struct Progress {
     )]
     pub finished_date: Option<String>,
     /// If it is possible to estimate the comletion of the task this field will be populated
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "estimatedFinishDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub estimated_finish_date: Option<chrono::DateTime<chrono::Utc>>,
+    /// If it is possible to estimate the comletion of the task this field will be populated
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "estimatedFinishDate",
         default,

@@ -3,8 +3,8 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-/// Defines the payload for the issue type screen schemes. See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/\#api-rest-api-3-issuetypescreenscheme-post>
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+/// Defines the payload for the issue type screen schemes. See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-post>
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueTypeScreenSchemePayload {
     #[serde(rename = "defaultScreenScheme", default, skip_serializing_if = "Option::is_none")]
     pub default_screen_scheme: Option<ProjectCreateResourceIdentifier>,

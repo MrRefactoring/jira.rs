@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Associated related work to a version
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct VersionRelatedWork {
     /// The category of the related work
     pub category: String,

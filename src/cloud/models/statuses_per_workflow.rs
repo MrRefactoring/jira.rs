@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The statuses associated with each workflow.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct StatusesPerWorkflow {
     /// The ID of the initial status for the workflow.
     #[serde(rename = "initialStatusId", default, skip_serializing_if = "Option::is_none")]

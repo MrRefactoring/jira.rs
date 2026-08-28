@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// API Token information
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ApiTokenModel {
     /// Human readable description for the token.
     pub label: String,

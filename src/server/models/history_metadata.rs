@@ -3,7 +3,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct HistoryMetadata {
     #[serde(rename = "activityDescription", default, skip_serializing_if = "Option::is_none")]
     pub activity_description: Option<String>,

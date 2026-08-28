@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The ID or key of a linked issue.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct LinkedIssue {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub fields: Option<Fields>,

@@ -8,12 +8,14 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct UnclaimedDomainResponseContext {
     pub domain: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct UnclaimedDomainResponse {
     pub key: UnclaimedDomainResponseKey,
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -10,7 +10,7 @@ pub enum JsonContextVariableType {
 }
 
 /// A JSON object with custom content.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct JsonContextVariable {
     /// Type of custom context variable.
     pub r#type: JsonContextVariableType,

@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of the updated priority scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct UpdatePrioritySchemeResponse {
     #[serde(rename = "priorityScheme", default, skip_serializing_if = "Option::is_none")]
     pub priority_scheme: Option<PrioritySchemeWithPaginatedPrioritiesAndProjects>,

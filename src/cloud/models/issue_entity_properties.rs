@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Lists of issues and entity properties. See [Entity properties](https://developer.atlassian.com/cloud/jira/platform/jira-entity-properties/) for more information.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueEntityProperties {
     /// A list of entity property IDs.
     #[serde(rename = "entitiesIds", default, skip_serializing_if = "Option::is_none")]

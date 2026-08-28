@@ -9,7 +9,8 @@ pub enum CustomFieldContextDefaultValueForgeMultiStringFieldType {
 }
 
 /// The default text for a Forge collection of strings custom field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueForgeMultiStringField {
     /// The ID of the context.
     #[serde(rename = "contextId")]

@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of the name, description, and default issue type for an issue type scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueTypeSchemeUpdateDetails {
     /// The ID of the default issue type of the issue type scheme.
     #[serde(rename = "defaultIssueTypeId", default, skip_serializing_if = "Option::is_none")]

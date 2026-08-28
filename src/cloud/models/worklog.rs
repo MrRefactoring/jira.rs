@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of a worklog.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Worklog {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub author: Option<UserDetails>,
@@ -12,6 +13,16 @@ pub struct Worklog {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub comment: Option<Document>,
     /// The datetime on which the worklog was created.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created: Option<chrono::DateTime<chrono::Utc>>,
+    /// The datetime on which the worklog was created.
+    #[cfg(not(feature = "chrono"))]
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
     /// The ID of the worklog record.
@@ -27,9 +38,19 @@ pub struct Worklog {
     #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
     pub self_: Option<String>,
     /// The datetime on which the worklog effort was started. Required when creating a worklog. Optional when updating a worklog.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub started: Option<chrono::DateTime<chrono::Utc>>,
+    /// The datetime on which the worklog effort was started. Required when creating a worklog. Optional when updating a worklog.
+    #[cfg(not(feature = "chrono"))]
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub started: Option<String>,
-    /// The time spent working on the issue as days (\#d), hours (\#h), or minutes (\#m or \#). Required when creating a worklog if `timeSpentSeconds` isn't provided. Optional when updating a worklog. Cannot be provided if `timeSpentSecond` is provided.
+    /// The time spent working on the issue as days (#d), hours (#h), or minutes (#m or #). Required when creating a worklog if `timeSpentSeconds` isn't provided. Optional when updating a worklog. Cannot be provided if `timeSpentSecond` is provided.
     #[serde(rename = "timeSpent", default, skip_serializing_if = "Option::is_none")]
     pub time_spent: Option<String>,
     /// The time in seconds spent working on the issue. Required when creating a worklog if `timeSpent` isn't provided. Optional when updating a worklog. Cannot be provided if `timeSpent` is provided.
@@ -38,6 +59,16 @@ pub struct Worklog {
     #[serde(rename = "updateAuthor", default, skip_serializing_if = "Option::is_none")]
     pub update_author: Option<UserDetails>,
     /// The datetime on which the worklog was last updated.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The datetime on which the worklog was last updated.
+    #[cfg(not(feature = "chrono"))]
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub updated: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

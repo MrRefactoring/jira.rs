@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// SCIM user
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ScimUser {
     /// SCIM schemas that define the attributes present in the current JSON structure This is a required field during user creation or modification.
     #[serde(default, skip_serializing_if = "Option::is_none")]

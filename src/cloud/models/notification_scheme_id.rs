@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The ID of a notification scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct NotificationSchemeId {
     /// The ID of a notification scheme.
     pub id: String,

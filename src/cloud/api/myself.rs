@@ -10,11 +10,11 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about user in the response. This parameter accepts a comma-separated list. Expand options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about user in the response. This parameter accepts a comma-separated list. Expand options include:
 ///
 ///  *  `groups` Returns all groups, including nested groups, the user belongs to.
 ///  *  `applicationRoles` Returns the application roles the user is assigned to.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetCurrentUserRequestExpand {
@@ -50,7 +50,7 @@ impl<'a> MyselfService<'a> {
     ///
     /// Use [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch) from the user management REST API to manage timezone and locale instead.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_preference(&self, key: impl Into<String>) -> GetPreferenceRequest<'a> {
         GetPreferenceRequest::new(self.client, key)
     }
@@ -77,7 +77,7 @@ impl<'a> MyselfService<'a> {
     ///
     /// Use [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch) from the user management REST API to manage timezone and locale instead.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn set_preference(&self, key: impl Into<String>, body: impl Into<String>) -> SetPreferenceRequest<'a> {
         SetPreferenceRequest::new(self.client, key, body)
     }
@@ -91,7 +91,7 @@ impl<'a> MyselfService<'a> {
     ///
     /// Use [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch) from the user management REST API to manage timezone and locale instead.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn remove_preference(&self, key: impl Into<String>) -> RemovePreferenceRequest<'a> {
         RemovePreferenceRequest::new(self.client, key)
     }
@@ -102,14 +102,14 @@ impl<'a> MyselfService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_locale(&self) -> GetLocaleRequest<'a> {
         GetLocaleRequest::new(self.client)
     }
 
     /// Returns details for the current user.
     ///
-    /// **[Permissions](#permissions) required:** Permission to access Jira.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
     pub fn get_current_user(&self) -> GetCurrentUserRequest<'a> {
         GetCurrentUserRequest::new(self.client)
     }
@@ -131,7 +131,7 @@ impl<'a> MyselfService<'a> {
 ///
 /// Use [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch) from the user management REST API to manage timezone and locale instead.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetPreferenceRequest<'a> {
     client: &'a crate::core::Client,
     key: String,
@@ -185,7 +185,7 @@ impl<'a> GetPreferenceRequest<'a> {
 ///
 /// Use [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch) from the user management REST API to manage timezone and locale instead.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct SetPreferenceRequest<'a> {
     client: &'a crate::core::Client,
     key: String,
@@ -229,7 +229,7 @@ impl<'a> SetPreferenceRequest<'a> {
 ///
 /// Use [ Update a user profile](https://developer.atlassian.com/cloud/admin/user-management/rest/#api-users-account-id-manage-profile-patch) from the user management REST API to manage timezone and locale instead.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct RemovePreferenceRequest<'a> {
     client: &'a crate::core::Client,
     key: String,
@@ -267,7 +267,7 @@ impl<'a> RemovePreferenceRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetLocaleRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -298,7 +298,7 @@ impl<'a> GetLocaleRequest<'a> {
 
 /// Returns details for the current user.
 ///
-/// **[Permissions](#permissions) required:** Permission to access Jira.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
 pub struct GetCurrentUserRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetCurrentUserRequestExpand>,
@@ -309,7 +309,7 @@ impl<'a> GetCurrentUserRequest<'a> {
         Self { client, expand: None }
     }
 
-    /// Use [expand](#expansion) to include additional information about user in the response. This parameter accepts a comma-separated list. Expand options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about user in the response. This parameter accepts a comma-separated list. Expand options include:
     ///
     ///  *  `groups` Returns all groups, including nested groups, the user belongs to.
     ///  *  `applicationRoles` Returns the application roles the user is assigned to.

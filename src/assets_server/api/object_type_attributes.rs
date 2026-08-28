@@ -50,7 +50,7 @@ impl<'a> DeleteObjectTypeAttributeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/assets/1.0/objecttypeattribute/{}", self.id),
+            format!("/rest/assets/1.0/objecttypeattribute/{}", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -90,7 +90,7 @@ impl<'a> StoreObjectTypeAttributeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/assets/1.0/objecttypeattribute/{}", self.object_type_id),
+            format!("/rest/assets/1.0/objecttypeattribute/{}", crate::core::encode_path_segment(&self.object_type_id)),
         );
 
         let body = match serde_json::to_value(&self.object_type_attribute_in)? {
@@ -138,7 +138,11 @@ impl<'a> UpdateObjectTypeAttributeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/assets/1.0/objecttypeattribute/{}/{}", self.object_type_id, self.id),
+            format!(
+                "/rest/assets/1.0/objecttypeattribute/{}/{}",
+                crate::core::encode_path_segment(&self.object_type_id),
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));

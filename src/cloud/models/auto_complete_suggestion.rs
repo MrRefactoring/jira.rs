@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// A field auto-complete suggestion.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AutoCompleteSuggestion {
     /// The display name of a suggested item. If `fieldValue` or `predicateValue` are provided, the matching text is highlighted with the HTML bold tag.
     #[serde(rename = "displayName", default, skip_serializing_if = "Option::is_none")]

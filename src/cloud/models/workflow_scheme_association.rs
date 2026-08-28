@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// The explicit association between issue types and a workflow in a workflow scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct WorkflowSchemeAssociation {
     /// The issue types assigned to the workflow.
     #[serde(rename = "issueTypeIds")]

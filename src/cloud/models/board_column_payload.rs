@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The payload for creating a board column
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct BoardColumnPayload {
     /// The maximum issue constraint for the column
     #[serde(rename = "maximumIssueConstraint", default, skip_serializing_if = "Option::is_none")]

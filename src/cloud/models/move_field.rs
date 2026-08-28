@@ -12,7 +12,7 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct MoveField {
     /// The ID of the screen tab field after which to place the moved screen tab field. Required if `position` isn't provided.
     #[serde(default, skip_serializing_if = "Option::is_none")]

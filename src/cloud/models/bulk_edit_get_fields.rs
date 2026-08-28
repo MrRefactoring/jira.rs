@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Bulk Edit Get Fields Response.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct BulkEditGetFields {
     /// The end cursor for use in pagination.
     #[serde(rename = "endingBefore", default, skip_serializing_if = "Option::is_none")]

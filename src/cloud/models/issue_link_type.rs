@@ -4,32 +4,32 @@ use serde::{Deserialize, Serialize};
 
 /// This object is used as follows:
 ///
-///  *  In the [ issueLink](#api-rest-api-3-issueLink-post) resource it defines and reports on the type of link between the issues. Find a list of issue link types with [Get issue link types](#api-rest-api-3-issueLinkType-get).
-///  *  In the [ issueLinkType](#api-rest-api-3-issueLinkType-post) resource it defines and reports on issue link types.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+///  *  In the [ issueLink](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issueLink/#api-rest-api-3-issueLink-post) resource it defines and reports on the type of link between the issues. Find a list of issue link types with [Get issue link types](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issueLinkType/#api-rest-api-3-issueLinkType-get).
+///  *  In the [ issueLinkType](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issueLinkType/#api-rest-api-3-issueLinkType-post) resource it defines and reports on issue link types.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueLinkType {
     /// The ID of the issue link type and is used as follows:
     ///
-    ///  *  In the [ issueLink](#api-rest-api-3-issueLink-post) resource it is the type of issue link. Required on create when `name` isn't provided. Otherwise, read only.
-    ///  *  In the [ issueLinkType](#api-rest-api-3-issueLinkType-post) resource it is read only.
+    ///  *  In the [ issueLink](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issueLink/#api-rest-api-3-issueLink-post) resource it is the type of issue link. Required on create when `name` isn't provided. Otherwise, read only.
+    ///  *  In the [ issueLinkType](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issueLinkType/#api-rest-api-3-issueLinkType-post) resource it is read only.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     /// The description of the issue link type inward link and is used as follows:
     ///
-    ///  *  In the [ issueLink](#api-rest-api-3-issueLink-post) resource it is read only.
-    ///  *  In the [ issueLinkType](#api-rest-api-3-issueLinkType-post) resource it is required on create and optional on update. Otherwise, read only.
+    ///  *  In the [ issueLink](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issueLink/#api-rest-api-3-issueLink-post) resource it is read only.
+    ///  *  In the [ issueLinkType](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issueLinkType/#api-rest-api-3-issueLinkType-post) resource it is required on create and optional on update. Otherwise, read only.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub inward: Option<String>,
     /// The name of the issue link type and is used as follows:
     ///
-    ///  *  In the [ issueLink](#api-rest-api-3-issueLink-post) resource it is the type of issue link. Required on create when `id` isn't provided. Otherwise, read only.
-    ///  *  In the [ issueLinkType](#api-rest-api-3-issueLinkType-post) resource it is required on create and optional on update. Otherwise, read only.
+    ///  *  In the [ issueLink](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issueLink/#api-rest-api-3-issueLink-post) resource it is the type of issue link. Required on create when `id` isn't provided. Otherwise, read only.
+    ///  *  In the [ issueLinkType](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issueLinkType/#api-rest-api-3-issueLinkType-post) resource it is required on create and optional on update. Otherwise, read only.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// The description of the issue link type outward link and is used as follows:
     ///
-    ///  *  In the [ issueLink](#api-rest-api-3-issueLink-post) resource it is read only.
-    ///  *  In the [ issueLinkType](#api-rest-api-3-issueLinkType-post) resource it is required on create and optional on update. Otherwise, read only.
+    ///  *  In the [ issueLink](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issueLink/#api-rest-api-3-issueLink-post) resource it is read only.
+    ///  *  In the [ issueLinkType](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issueLinkType/#api-rest-api-3-issueLinkType-post) resource it is required on create and optional on update. Otherwise, read only.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub outward: Option<String>,
     /// The URL of the issue link type. Read only.

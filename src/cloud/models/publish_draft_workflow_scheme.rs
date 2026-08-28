@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details about the status mappings for publishing a draft workflow scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct PublishDraftWorkflowScheme {
     /// Mappings of statuses to new statuses for issue types.
     #[serde(rename = "statusMappings", default, skip_serializing_if = "Option::is_none")]

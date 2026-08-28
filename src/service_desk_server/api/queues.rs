@@ -135,7 +135,10 @@ impl<'a> GetQueuesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/servicedesk/{}/queue", self.service_desk_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
         );
 
         if let Some(value) = &self.include_count {
@@ -191,7 +194,10 @@ impl<'a> CreateQueueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/servicedesk/{}/queue", self.service_desk_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.queue_create)? {
@@ -244,7 +250,11 @@ impl<'a> GetQueueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/servicedesk/{}/queue/{}", self.service_desk_id, self.queue_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue/{}",
+                crate::core::encode_path_segment(&self.service_desk_id),
+                crate::core::encode_path_segment(&self.queue_id)
+            ),
         );
 
         if let Some(value) = &self.include_count {
@@ -293,7 +303,11 @@ impl<'a> UpdateQueueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/servicedesk/{}/queue/{}", self.service_desk_id, self.queue_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue/{}",
+                crate::core::encode_path_segment(&self.service_desk_id),
+                crate::core::encode_path_segment(&self.queue_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.queue_create)? {
@@ -337,7 +351,11 @@ impl<'a> DeleteQueueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/servicedeskapi/servicedesk/{}/queue/{}", self.service_desk_id, self.queue_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue/{}",
+                crate::core::encode_path_segment(&self.service_desk_id),
+                crate::core::encode_path_segment(&self.queue_id)
+            ),
         );
 
         Ok(config)
@@ -393,7 +411,11 @@ impl<'a> GetIssuesInQueueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/servicedesk/{}/queue/{}/issue", self.service_desk_id, self.queue_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue/{}/issue",
+                crate::core::encode_path_segment(&self.service_desk_id),
+                crate::core::encode_path_segment(&self.queue_id)
+            ),
         );
 
         if let Some(value) = &self.start {
@@ -445,7 +467,10 @@ impl<'a> ReorderQueuesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/servicedesk/{}/queue/reorder", self.service_desk_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue/reorder",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));

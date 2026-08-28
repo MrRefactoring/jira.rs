@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of changes to a priority scheme that require suggested priority mappings.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SuggestedMappingsRequest {
     /// The maximum number of results that could be on the page.
     #[serde(rename = "maxResults", default, skip_serializing_if = "Option::is_none")]

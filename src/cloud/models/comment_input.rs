@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A document in Atlassian Document Format, or a string of wiki markup — a string is sent to the v2 endpoint that parses it, and the result is read back as a document.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum CommentInputBody {
@@ -15,7 +15,7 @@ pub enum CommentInputBody {
 }
 
 /// A comment.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct CommentInput {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub author: Option<UserDetails>,
@@ -23,6 +23,16 @@ pub struct CommentInput {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub body: Option<CommentInputBody>,
     /// The date and time at which the comment was created.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created: Option<chrono::DateTime<chrono::Utc>>,
+    /// The date and time at which the comment was created.
+    #[cfg(not(feature = "chrono"))]
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
     /// The ID of the comment.
@@ -46,6 +56,16 @@ pub struct CommentInput {
     #[serde(rename = "updateAuthor", default, skip_serializing_if = "Option::is_none")]
     pub update_author: Option<UserDetails>,
     /// The date and time at which the comment was updated last.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The date and time at which the comment was updated last.
+    #[cfg(not(feature = "chrono"))]
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub updated: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

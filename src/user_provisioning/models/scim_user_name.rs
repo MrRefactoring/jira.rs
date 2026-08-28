@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// SCIM user name
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ScimUserName {
     /// The full name, including all middle names, titles, and suffixes as appropriate, formatted for display.
     #[serde(default, skip_serializing_if = "Option::is_none")]

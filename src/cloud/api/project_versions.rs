@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
-    /// [Order](#ordering) the results by a field:
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
     ///
     ///  *  `description` Sorts by version description.
     ///  *  `name` Sorts by version name.
@@ -31,7 +31,7 @@ crate::open_enum! {
 }
 
 /// A list of status values used to filter the results by version status. This parameter accepts a comma-separated list. The status values are `released`, `unreleased`, and `archived`.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetProjectVersionsPaginatedRequestStatus {
@@ -50,13 +50,13 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
 ///
 ///  *  `issuesstatus` Returns the number of issues in each status category for each version.
 ///  *  `operations` Returns actions that can be performed on the specified version.
 ///  *  `driver` Returns the Atlassian account ID of the version driver.
 ///  *  `approvers` Returns a list containing the approvers for this version.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetProjectVersionsPaginatedRequestExpand {
@@ -72,8 +72,8 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information in the response. This parameter accepts `operations`, which returns actions that can be performed on the version.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts `operations`, which returns actions that can be performed on the version.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetProjectVersionsRequestExpand {
@@ -92,13 +92,13 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information about version in the response. This parameter accepts a comma-separated list. Expand options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about version in the response. This parameter accepts a comma-separated list. Expand options include:
 ///
 ///  *  `operations` Returns the list of operations available for this version.
 ///  *  `issuesstatus` Returns the count of issues in this version for each of the status categories *to do*, *in progress*, *done*, and *unmapped*. The *unmapped* property represents the number of issues with a status other than *to do*, *in progress*, and *done*.
 ///  *  `driver` Returns the Atlassian account ID of the version driver.
 ///  *  `approvers` Returns a list containing the Atlassian account IDs of approvers for this version.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetVersionRequestExpand {
@@ -118,11 +118,11 @@ impl<'a> ProjectVersionsService<'a> {
         Self { client }
     }
 
-    /// Returns a [paginated](#pagination) list of all versions in a project. See the [Get project versions](#api-rest-api-3-project-projectIdOrKey-versions-get) resource if you want to get a full list of versions without pagination.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of all versions in a project. See the [Get project versions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-versions-get) resource if you want to get a full list of versions without pagination.
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
     pub fn get_project_versions_paginated(
         &self,
         project_id_or_key: impl Into<String>,
@@ -130,11 +130,11 @@ impl<'a> ProjectVersionsService<'a> {
         GetProjectVersionsPaginatedRequest::new(self.client, project_id_or_key)
     }
 
-    /// Returns all versions in a project. The response is not paginated. Use [Get project versions paginated](#api-rest-api-3-project-projectIdOrKey-version-get) if you want to get the versions in a project with pagination.
+    /// Returns all versions in a project. The response is not paginated. Use [Get project versions paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-version-get) if you want to get the versions in a project with pagination.
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
     pub fn get_project_versions(&self, project_id_or_key: impl Into<String>) -> GetProjectVersionsRequest<'a> {
         GetProjectVersionsRequest::new(self.client, project_id_or_key)
     }
@@ -143,7 +143,7 @@ impl<'a> ProjectVersionsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project the version is added to.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project the version is added to.
     pub fn create_version(&self, version: Version) -> CreateVersionRequest<'a> {
         CreateVersionRequest::new(self.client, version)
     }
@@ -152,7 +152,7 @@ impl<'a> ProjectVersionsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the version.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the version.
     pub fn get_version(&self, id: impl Into<String>) -> GetVersionRequest<'a> {
         GetVersionRequest::new(self.client, id)
     }
@@ -161,18 +161,18 @@ impl<'a> ProjectVersionsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
     pub fn update_version(&self, id: impl Into<String>, body: Version) -> UpdateVersionRequest<'a> {
         UpdateVersionRequest::new(self.client, id, body)
     }
 
     /// Merges two project versions. The merge is completed by deleting the version specified in `id` and replacing any occurrences of its ID in `fixVersion` with the version ID specified in `moveIssuesTo`.
     ///
-    /// Consider using [ Delete and replace version](#api-rest-api-3-version-id-removeAndSwap-post) instead. This resource supports swapping version values in `fixVersion`, `affectedVersion`, and custom fields.
+    /// Consider using [ Delete and replace version](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-version/#api-rest-api-3-version-id-removeAndSwap-post) instead. This resource supports swapping version values in `fixVersion`, `affectedVersion`, and custom fields.
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
     pub fn merge_versions(&self, id: impl Into<String>, move_issues_to: impl Into<String>) -> MergeVersionsRequest<'a> {
         MergeVersionsRequest::new(self.client, id, move_issues_to)
     }
@@ -181,7 +181,7 @@ impl<'a> ProjectVersionsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse projects* project permission for the project that contains the version.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* project permission for the project that contains the version.
     pub fn move_version(&self, id: impl Into<String>, version_move: VersionMove) -> MoveVersionRequest<'a> {
         MoveVersionRequest::new(self.client, id, version_move)
     }
@@ -194,7 +194,7 @@ impl<'a> ProjectVersionsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse projects* project permission for the project that contains the version.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* project permission for the project that contains the version.
     pub fn get_version_related_issues(&self, id: impl Into<String>) -> GetVersionRelatedIssuesRequest<'a> {
         GetVersionRelatedIssuesRequest::new(self.client, id)
     }
@@ -203,7 +203,7 @@ impl<'a> ProjectVersionsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the version.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the version.
     pub fn get_related_work(&self, id: impl Into<String>) -> GetRelatedWorkRequest<'a> {
         GetRelatedWorkRequest::new(self.client, id)
     }
@@ -212,7 +212,7 @@ impl<'a> ProjectVersionsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Resolve issues:* and *Edit issues* [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html) for the project that contains the version.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Resolve issues:* and *Edit issues* [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html) for the project that contains the version.
     pub fn create_related_work(
         &self,
         id: impl Into<String>,
@@ -225,7 +225,7 @@ impl<'a> ProjectVersionsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Resolve issues:* and *Edit issues* [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html) for the project that contains the version.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Resolve issues:* and *Edit issues* [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html) for the project that contains the version.
     pub fn update_related_work(
         &self,
         id: impl Into<String>,
@@ -240,7 +240,7 @@ impl<'a> ProjectVersionsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
     pub fn delete_and_replace_version(
         &self,
         id: impl Into<String>,
@@ -253,7 +253,7 @@ impl<'a> ProjectVersionsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse projects* project permission for the project that contains the version.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* project permission for the project that contains the version.
     pub fn get_version_unresolved_issues(&self, id: impl Into<String>) -> GetVersionUnresolvedIssuesRequest<'a> {
         GetVersionUnresolvedIssuesRequest::new(self.client, id)
     }
@@ -262,7 +262,7 @@ impl<'a> ProjectVersionsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Resolve issues:* and *Edit issues* [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html) for the project that contains the version.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Resolve issues:* and *Edit issues* [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html) for the project that contains the version.
     pub fn delete_related_work(
         &self,
         version_id: impl Into<String>,
@@ -272,11 +272,11 @@ impl<'a> ProjectVersionsService<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of all versions in a project. See the [Get project versions](#api-rest-api-3-project-projectIdOrKey-versions-get) resource if you want to get a full list of versions without pagination.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of all versions in a project. See the [Get project versions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-versions-get) resource if you want to get a full list of versions without pagination.
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
 pub struct GetProjectVersionsPaginatedRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -318,7 +318,7 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
         self
     }
 
-    /// [Order](#ordering) the results by a field:
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
     ///
     ///  *  `description` Sorts by version description.
     ///  *  `name` Sorts by version name.
@@ -348,7 +348,7 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
     ///
     ///  *  `issuesstatus` Returns the number of issues in each status category for each version.
     ///  *  `operations` Returns actions that can be performed on the specified version.
@@ -365,7 +365,7 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}/version", self.project_id_or_key),
+            format!("/rest/api/3/project/{}/version", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         if let Some(value) = &self.start_at {
@@ -406,11 +406,11 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
     }
 }
 
-/// Returns all versions in a project. The response is not paginated. Use [Get project versions paginated](#api-rest-api-3-project-projectIdOrKey-version-get) if you want to get the versions in a project with pagination.
+/// Returns all versions in a project. The response is not paginated. Use [Get project versions paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-version-get) if you want to get the versions in a project with pagination.
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
 pub struct GetProjectVersionsRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -422,7 +422,7 @@ impl<'a> GetProjectVersionsRequest<'a> {
         Self { client, project_id_or_key: project_id_or_key.into(), expand: None }
     }
 
-    /// Use [expand](#expansion) to include additional information in the response. This parameter accepts `operations`, which returns actions that can be performed on the version.
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts `operations`, which returns actions that can be performed on the version.
     #[must_use]
     pub fn expand(mut self, value: GetProjectVersionsRequestExpand) -> Self {
         self.expand = Some(value);
@@ -434,7 +434,7 @@ impl<'a> GetProjectVersionsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}/versions", self.project_id_or_key),
+            format!("/rest/api/3/project/{}/versions", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         if let Some(value) = &self.expand {
@@ -459,7 +459,7 @@ impl<'a> GetProjectVersionsRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project the version is added to.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project the version is added to.
 pub struct CreateVersionRequest<'a> {
     client: &'a crate::core::Client,
     version: Version,
@@ -499,7 +499,7 @@ impl<'a> CreateVersionRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the version.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the version.
 pub struct GetVersionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -511,7 +511,7 @@ impl<'a> GetVersionRequest<'a> {
         Self { client, id: id.into(), expand: None }
     }
 
-    /// Use [expand](#expansion) to include additional information about version in the response. This parameter accepts a comma-separated list. Expand options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about version in the response. This parameter accepts a comma-separated list. Expand options include:
     ///
     ///  *  `operations` Returns the list of operations available for this version.
     ///  *  `issuesstatus` Returns the count of issues in this version for each of the status categories *to do*, *in progress*, *done*, and *unmapped*. The *unmapped* property represents the number of issues with a status other than *to do*, *in progress*, and *done*.
@@ -526,8 +526,10 @@ impl<'a> GetVersionRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/3/version/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/version/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         if let Some(value) = &self.expand {
             config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
@@ -551,7 +553,7 @@ impl<'a> GetVersionRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
 pub struct UpdateVersionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -565,8 +567,10 @@ impl<'a> UpdateVersionRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/rest/api/3/version/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/3/version/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
 
@@ -586,11 +590,11 @@ impl<'a> UpdateVersionRequest<'a> {
 
 /// Merges two project versions. The merge is completed by deleting the version specified in `id` and replacing any occurrences of its ID in `fixVersion` with the version ID specified in `moveIssuesTo`.
 ///
-/// Consider using [ Delete and replace version](#api-rest-api-3-version-id-removeAndSwap-post) instead. This resource supports swapping version values in `fixVersion`, `affectedVersion`, and custom fields.
+/// Consider using [ Delete and replace version](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-version/#api-rest-api-3-version-id-removeAndSwap-post) instead. This resource supports swapping version values in `fixVersion`, `affectedVersion`, and custom fields.
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
 pub struct MergeVersionsRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -606,7 +610,11 @@ impl<'a> MergeVersionsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/version/{}/mergeto/{}", self.id, self.move_issues_to),
+            format!(
+                "/rest/api/3/version/{}/mergeto/{}",
+                crate::core::encode_path_segment(&self.id),
+                crate::core::encode_path_segment(&self.move_issues_to)
+            ),
         );
 
         Ok(config)
@@ -627,7 +635,7 @@ impl<'a> MergeVersionsRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse projects* project permission for the project that contains the version.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* project permission for the project that contains the version.
 pub struct MoveVersionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -641,8 +649,10 @@ impl<'a> MoveVersionRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::POST, format!("/rest/api/3/version/{}/move", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!("/rest/api/3/version/{}/move", crate::core::encode_path_segment(&self.id)),
+        );
 
         let body = match serde_json::to_value(&self.version_move)? {
             serde_json::Value::Object(object) => object,
@@ -673,7 +683,7 @@ impl<'a> MoveVersionRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse projects* project permission for the project that contains the version.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* project permission for the project that contains the version.
 pub struct GetVersionRelatedIssuesRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -688,7 +698,7 @@ impl<'a> GetVersionRelatedIssuesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/version/{}/relatedIssueCounts", self.id),
+            format!("/rest/api/3/version/{}/relatedIssueCounts", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -709,7 +719,7 @@ impl<'a> GetVersionRelatedIssuesRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the version.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the version.
 pub struct GetRelatedWorkRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -724,7 +734,7 @@ impl<'a> GetRelatedWorkRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/version/{}/relatedwork", self.id),
+            format!("/rest/api/3/version/{}/relatedwork", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -745,7 +755,7 @@ impl<'a> GetRelatedWorkRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Resolve issues:* and *Edit issues* [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html) for the project that contains the version.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Resolve issues:* and *Edit issues* [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html) for the project that contains the version.
 pub struct CreateRelatedWorkRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -761,7 +771,7 @@ impl<'a> CreateRelatedWorkRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/3/version/{}/relatedwork", self.id),
+            format!("/rest/api/3/version/{}/relatedwork", crate::core::encode_path_segment(&self.id)),
         );
 
         let body = match serde_json::to_value(&self.version_related_work)? {
@@ -789,7 +799,7 @@ impl<'a> CreateRelatedWorkRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Resolve issues:* and *Edit issues* [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html) for the project that contains the version.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Resolve issues:* and *Edit issues* [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html) for the project that contains the version.
 pub struct UpdateRelatedWorkRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -805,7 +815,7 @@ impl<'a> UpdateRelatedWorkRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/version/{}/relatedwork", self.id),
+            format!("/rest/api/3/version/{}/relatedwork", crate::core::encode_path_segment(&self.id)),
         );
 
         let body = match serde_json::to_value(&self.version_related_work)? {
@@ -835,7 +845,7 @@ impl<'a> UpdateRelatedWorkRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that contains the version.
 pub struct DeleteAndReplaceVersionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -855,7 +865,7 @@ impl<'a> DeleteAndReplaceVersionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/3/version/{}/removeAndSwap", self.id),
+            format!("/rest/api/3/version/{}/removeAndSwap", crate::core::encode_path_segment(&self.id)),
         );
 
         let body = match serde_json::to_value(&self.delete_and_replace_version)? {
@@ -883,7 +893,7 @@ impl<'a> DeleteAndReplaceVersionRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse projects* project permission for the project that contains the version.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* project permission for the project that contains the version.
 pub struct GetVersionUnresolvedIssuesRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
@@ -898,7 +908,7 @@ impl<'a> GetVersionUnresolvedIssuesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/version/{}/unresolvedIssueCount", self.id),
+            format!("/rest/api/3/version/{}/unresolvedIssueCount", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -919,7 +929,7 @@ impl<'a> GetVersionUnresolvedIssuesRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Resolve issues:* and *Edit issues* [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html) for the project that contains the version.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Resolve issues:* and *Edit issues* [Managing project permissions](https://confluence.atlassian.com/adminjiraserver/managing-project-permissions-938847145.html) for the project that contains the version.
 pub struct DeleteRelatedWorkRequest<'a> {
     client: &'a crate::core::Client,
     version_id: String,
@@ -935,7 +945,11 @@ impl<'a> DeleteRelatedWorkRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/version/{}/relatedwork/{}", self.version_id, self.related_work_id),
+            format!(
+                "/rest/api/3/version/{}/relatedwork/{}",
+                crate::core::encode_path_segment(&self.version_id),
+                crate::core::encode_path_segment(&self.related_work_id)
+            ),
         );
 
         Ok(config)

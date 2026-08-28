@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Comprehensive usage statistics for a tenant.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct TenantUsageResponse {
     /// Total number of objects across all schemas in the tenant.
     #[serde(rename = "totalObjectsCount")]

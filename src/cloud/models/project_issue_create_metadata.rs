@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of the issue creation metadata for a project.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ProjectIssueCreateMetadata {
     #[serde(rename = "avatarUrls", default, skip_serializing_if = "Option::is_none")]
     pub avatar_urls: Option<AvatarUrls>,

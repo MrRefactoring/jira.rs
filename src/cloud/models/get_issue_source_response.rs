@@ -12,7 +12,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetIssueSourceResponse {
     /// The issue source type. This is "Board", "Project" or "Filter".
     pub r#type: GetIssueSourceResponseType,

@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Describes the error that occurred when retrieving data for a particular issue.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueError {
     /// The error that occurred when fetching this issue.
     #[serde(rename = "errorMessage", default, skip_serializing_if = "Option::is_none")]

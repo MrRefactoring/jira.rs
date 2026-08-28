@@ -10,7 +10,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CreatePlanOnlyTeamRequest {
     /// The capacity for the plan-only team.
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Count of a version's unresolved issues.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct VersionUnresolvedIssuesCount {
     /// Count of issues.
     #[serde(rename = "issuesCount", default, skip_serializing_if = "Option::is_none")]

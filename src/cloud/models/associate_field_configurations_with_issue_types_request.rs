@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of a field configuration to issue type mappings.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AssociateFieldConfigurationsWithIssueTypesRequest {
     /// Field configuration to issue type mappings.
     pub mappings: Vec<FieldConfigurationToIssueTypeMapping>,

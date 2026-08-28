@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The ID of an issue resolution.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ResolutionId {
     /// The ID of the issue resolution.
     pub id: String,

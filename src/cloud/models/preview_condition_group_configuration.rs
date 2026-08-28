@@ -12,7 +12,8 @@ crate::open_enum! {
 }
 
 /// Condition group configuration for workflow transitions.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PreviewConditionGroupConfiguration {
     /// The nested conditions of the condition group.
     #[serde(rename = "conditionGroups", default, skip_serializing_if = "Option::is_none")]

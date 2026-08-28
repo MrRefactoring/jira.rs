@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The result of a JQL search with issues reconsilation.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SearchAndReconcileResults {
     /// Indicates whether this is the last page of the paginated response.
     #[serde(rename = "isLast", default, skip_serializing_if = "Option::is_none")]

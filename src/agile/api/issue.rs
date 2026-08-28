@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssueRequestExpand {
@@ -42,7 +42,7 @@ impl<'a> IssueService<'a> {
     ///
     /// Original time internally stores and returns the estimation as a number of seconds.
     ///
-    /// The field used for estimation on the given board can be obtained from [board configuration resource](#agile/1.0/board-getConfiguration). More information about the field are returned by [edit meta resource](#api-rest-api-3-issue-getEditIssueMeta) or [field resource](#api-rest-api-3-field-get).
+    /// The field used for estimation on the given board can be obtained from [board configuration resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#agile/1.0/board-getConfiguration). More information about the field are returned by [edit meta resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-issue-getEditIssueMeta) or [field resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-field-get).
     pub fn get_issue_estimation_for_board(
         &self,
         issue_id_or_key: impl Into<String>,
@@ -56,7 +56,7 @@ impl<'a> IssueService<'a> {
     ///
     /// Original time tracking estimation field accepts estimation in formats like "1w", "2d", "3h", "20m" or number which represent number of minutes. However, internally the field stores and returns the estimation as a number of seconds.
     ///
-    /// The field used for estimation on the given board can be obtained from [board configuration resource](#agile/1.0/board-getConfiguration). More information about the field are returned by [edit meta resource](#api-rest-api-3-issue-issueIdOrKey-editmeta-get) or [field resource](#api-rest-api-3-field-get).
+    /// The field used for estimation on the given board can be obtained from [board configuration resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#agile/1.0/board-getConfiguration). More information about the field are returned by [edit meta resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-issue-issueIdOrKey-editmeta-get) or [field resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-field-get).
     pub fn estimate_issue_for_board(&self, issue_id_or_key: impl Into<String>) -> EstimateIssueForBoardRequest<'a> {
         EstimateIssueForBoardRequest::new(self.client, issue_id_or_key)
     }
@@ -148,7 +148,7 @@ impl<'a> GetIssueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/agile/1.0/issue/{}", self.issue_id_or_key),
+            format!("/rest/agile/1.0/issue/{}", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.fields {
@@ -181,7 +181,7 @@ impl<'a> GetIssueRequest<'a> {
 ///
 /// Original time internally stores and returns the estimation as a number of seconds.
 ///
-/// The field used for estimation on the given board can be obtained from [board configuration resource](#agile/1.0/board-getConfiguration). More information about the field are returned by [edit meta resource](#api-rest-api-3-issue-getEditIssueMeta) or [field resource](#api-rest-api-3-field-get).
+/// The field used for estimation on the given board can be obtained from [board configuration resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#agile/1.0/board-getConfiguration). More information about the field are returned by [edit meta resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-issue-getEditIssueMeta) or [field resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-field-get).
 pub struct GetIssueEstimationForBoardRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -205,7 +205,7 @@ impl<'a> GetIssueEstimationForBoardRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/agile/1.0/issue/{}/estimation", self.issue_id_or_key),
+            format!("/rest/agile/1.0/issue/{}/estimation", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.board_id {
@@ -232,7 +232,7 @@ impl<'a> GetIssueEstimationForBoardRequest<'a> {
 ///
 /// Original time tracking estimation field accepts estimation in formats like "1w", "2d", "3h", "20m" or number which represent number of minutes. However, internally the field stores and returns the estimation as a number of seconds.
 ///
-/// The field used for estimation on the given board can be obtained from [board configuration resource](#agile/1.0/board-getConfiguration). More information about the field are returned by [edit meta resource](#api-rest-api-3-issue-issueIdOrKey-editmeta-get) or [field resource](#api-rest-api-3-field-get).
+/// The field used for estimation on the given board can be obtained from [board configuration resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#agile/1.0/board-getConfiguration). More information about the field are returned by [edit meta resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-issue-issueIdOrKey-editmeta-get) or [field resource](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-field-get).
 pub struct EstimateIssueForBoardRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
@@ -264,7 +264,7 @@ impl<'a> EstimateIssueForBoardRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/agile/1.0/issue/{}/estimation", self.issue_id_or_key),
+            format!("/rest/agile/1.0/issue/{}/estimation", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
         if let Some(value) = &self.board_id {

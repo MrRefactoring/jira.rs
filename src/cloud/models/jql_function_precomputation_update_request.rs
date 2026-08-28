@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// List of pairs (id and value) for precomputation updates.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct JqlFunctionPrecomputationUpdateRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<JqlFunctionPrecomputationUpdate>>,

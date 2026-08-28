@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesWithoutEpicRequestExpand {
@@ -15,7 +15,7 @@ pub enum GetIssuesWithoutEpicRequestExpand {
 }
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesWithoutEpicRequestFields {
@@ -26,7 +26,7 @@ pub enum GetIssuesWithoutEpicRequestFields {
 }
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForEpicRequestExpand {
@@ -37,7 +37,7 @@ pub enum GetIssuesForEpicRequestExpand {
 }
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForEpicRequestFields {
@@ -264,7 +264,7 @@ impl<'a> GetEpicRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/agile/1.0/epic/{}", self.epic_id_or_key),
+            format!("/rest/agile/1.0/epic/{}", crate::core::encode_path_segment(&self.epic_id_or_key)),
         );
 
         Ok(config)
@@ -297,7 +297,7 @@ impl<'a> PartiallyUpdateEpicRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/agile/1.0/epic/{}", self.epic_id_or_key),
+            format!("/rest/agile/1.0/epic/{}", crate::core::encode_path_segment(&self.epic_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.epic_update)? {
@@ -399,7 +399,7 @@ impl<'a> GetIssuesForEpicRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/agile/1.0/epic/{}/issue", self.epic_id_or_key),
+            format!("/rest/agile/1.0/epic/{}/issue", crate::core::encode_path_segment(&self.epic_id_or_key)),
         );
 
         if let Some(value) = &self.expand {
@@ -460,7 +460,7 @@ impl<'a> MoveIssuesToEpicRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/agile/1.0/epic/{}/issue", self.epic_id_or_key),
+            format!("/rest/agile/1.0/epic/{}/issue", crate::core::encode_path_segment(&self.epic_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.issue_assign_request)? {
@@ -504,7 +504,7 @@ impl<'a> RankEpicsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/agile/1.0/epic/{}/rank", self.epic_id_or_key),
+            format!("/rest/agile/1.0/epic/{}/rank", crate::core::encode_path_segment(&self.epic_id_or_key)),
         );
 
         let body = match serde_json::to_value(&self.epic_rank_request)? {

@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// An associated workflow scheme and project.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct WorkflowSchemeProjectAssociation {
     /// The ID of the project.
     #[serde(rename = "projectId")]

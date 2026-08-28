@@ -9,7 +9,8 @@ pub enum CustomFieldContextDefaultValueFloatType {
 }
 
 /// Default value for a float (number) custom field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueFloat {
     /// The ID of the context.
     #[serde(rename = "contextId")]

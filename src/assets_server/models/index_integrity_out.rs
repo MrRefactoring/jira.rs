@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IndexIntegrityOut {
     #[serde(rename = "objectJiraIssueIndexOk", default, skip_serializing_if = "Option::is_none")]
     pub object_jira_issue_index_ok: Option<bool>,

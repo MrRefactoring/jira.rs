@@ -30,7 +30,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetReviewByIdAssociations {
     /// the type of the association being made
     #[serde(rename = "associationType", default, skip_serializing_if = "Option::is_none")]
@@ -40,7 +41,8 @@ pub struct GetReviewByIdAssociations {
 }
 
 /// Data related to a specific post-incident review. Must specify at least one association to an incident.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetReviewById {
     /// The PostIncidentReviewData schema version used for this post-incident review data.
     ///
@@ -71,11 +73,37 @@ pub struct GetReviewById {
     /// The timestamp to present to the user that shows when the Review was raised.
     ///
     /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "createdDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created_date: Option<chrono::DateTime<chrono::Utc>>,
+    /// The timestamp to present to the user that shows when the Review was raised.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "createdDate", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub created_date: String,
     /// The last-updated timestamp to present to the user the last time the Review was updated.
     ///
     /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user the last time the Review was updated.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// The current status of the Post-Incident Review.

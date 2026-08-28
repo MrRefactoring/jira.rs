@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// A priority scheme with less fields to be used in for an API expand response.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ExpandPriorityScheme {
     /// The ID of the priority scheme.
     #[serde(default, skip_serializing_if = "Option::is_none")]

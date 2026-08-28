@@ -33,7 +33,7 @@ impl<'a> GetImportProgressRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/progress/category/imports/{}", self.id),
+            format!("/progress/category/imports/{}", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)

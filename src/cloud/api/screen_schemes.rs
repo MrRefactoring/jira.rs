@@ -9,8 +9,8 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) include additional information in the response. This parameter accepts `issueTypeScreenSchemes` that, for each screen schemes, returns information about the issue type screen scheme the screen scheme is assigned to.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) include additional information in the response. This parameter accepts `issueTypeScreenSchemes` that, for each screen schemes, returns information about the issue type screen scheme the screen scheme is assigned to.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetScreenSchemesRequestExpand {
@@ -21,7 +21,7 @@ pub enum GetScreenSchemesRequestExpand {
 }
 
 crate::open_enum! {
-    /// [Order](#ordering) the results by a field:
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
     ///
     ///  *  `id` Sorts by screen scheme ID.
     ///  *  `name` Sorts by screen scheme name.
@@ -45,25 +45,25 @@ impl<'a> ScreenSchemesService<'a> {
         Self { client }
     }
 
-    /// Returns a [paginated](#pagination) list of screen schemes.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of screen schemes.
     ///
     /// Only screen schemes used in classic projects are returned.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_screen_schemes(&self) -> GetScreenSchemesRequest<'a> {
         GetScreenSchemesRequest::new(self.client)
     }
 
     /// Creates a screen scheme.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn create_screen_scheme(&self, screen_scheme_details: ScreenSchemeDetails) -> CreateScreenSchemeRequest<'a> {
         CreateScreenSchemeRequest::new(self.client, screen_scheme_details)
     }
 
     /// Updates a screen scheme. Only screen schemes used in classic projects can be updated.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn update_screen_scheme(
         &self,
         screen_scheme_id: impl Into<String>,
@@ -76,17 +76,17 @@ impl<'a> ScreenSchemesService<'a> {
     ///
     /// Only screens schemes used in classic projects can be deleted.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_screen_scheme(&self, screen_scheme_id: impl Into<String>) -> DeleteScreenSchemeRequest<'a> {
         DeleteScreenSchemeRequest::new(self.client, screen_scheme_id)
     }
 }
 
-/// Returns a [paginated](#pagination) list of screen schemes.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of screen schemes.
 ///
 /// Only screen schemes used in classic projects are returned.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetScreenSchemesRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
@@ -126,7 +126,7 @@ impl<'a> GetScreenSchemesRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) include additional information in the response. This parameter accepts `issueTypeScreenSchemes` that, for each screen schemes, returns information about the issue type screen scheme the screen scheme is assigned to.
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) include additional information in the response. This parameter accepts `issueTypeScreenSchemes` that, for each screen schemes, returns information about the issue type screen scheme the screen scheme is assigned to.
     #[must_use]
     pub fn expand(mut self, value: GetScreenSchemesRequestExpand) -> Self {
         self.expand = Some(value);
@@ -142,7 +142,7 @@ impl<'a> GetScreenSchemesRequest<'a> {
         self
     }
 
-    /// [Order](#ordering) the results by a field:
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
     ///
     ///  *  `id` Sorts by screen scheme ID.
     ///  *  `name` Sorts by screen scheme name.
@@ -198,7 +198,7 @@ impl<'a> GetScreenSchemesRequest<'a> {
 
 /// Creates a screen scheme.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct CreateScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     screen_scheme_details: ScreenSchemeDetails,
@@ -237,7 +237,7 @@ impl<'a> CreateScreenSchemeRequest<'a> {
 
 /// Updates a screen scheme. Only screen schemes used in classic projects can be updated.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct UpdateScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     screen_scheme_id: String,
@@ -257,7 +257,7 @@ impl<'a> UpdateScreenSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/screenscheme/{}", self.screen_scheme_id),
+            format!("/rest/api/3/screenscheme/{}", crate::core::encode_path_segment(&self.screen_scheme_id)),
         );
 
         let body = match serde_json::to_value(&self.update_screen_scheme_details)? {
@@ -285,7 +285,7 @@ impl<'a> UpdateScreenSchemeRequest<'a> {
 ///
 /// Only screens schemes used in classic projects can be deleted.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteScreenSchemeRequest<'a> {
     client: &'a crate::core::Client,
     screen_scheme_id: String,
@@ -300,7 +300,7 @@ impl<'a> DeleteScreenSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/screenscheme/{}", self.screen_scheme_id),
+            format!("/rest/api/3/screenscheme/{}", crate::core::encode_path_segment(&self.screen_scheme_id)),
         );
 
         Ok(config)

@@ -19,7 +19,8 @@ crate::open_enum! {
 }
 
 /// Details of functions that can be used in advanced searches.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FunctionReferenceData {
     /// The display name of the function.
     #[serde(rename = "displayName", default, skip_serializing_if = "Option::is_none")]

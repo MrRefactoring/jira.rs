@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// The mapping of old to new status ID.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StatusMigration {
     /// The new status ID.
     #[serde(rename = "newStatusReference")]

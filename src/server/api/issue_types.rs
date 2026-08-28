@@ -285,8 +285,10 @@ impl<'a> GetIssueTypeRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/2/issuetype/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/2/issuetype/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -316,8 +318,10 @@ impl<'a> UpdateIssueTypeRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/rest/api/2/issuetype/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/2/issuetype/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         let body = match serde_json::to_value(&self.issue_type_update)? {
             serde_json::Value::Object(object) => object,
@@ -362,8 +366,10 @@ impl<'a> DeleteIssueTypeRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/rest/api/2/issuetype/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/2/issuetype/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         if let Some(value) = &self.alternative_issue_type_id {
             config.query.push(("alternativeIssueTypeId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
@@ -398,7 +404,7 @@ impl<'a> GetAlternativeIssueTypesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issuetype/{}/alternatives", self.id),
+            format!("/rest/api/2/issuetype/{}/alternatives", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -431,7 +437,7 @@ impl<'a> CreateIssueTypeAvatarFromTemporaryRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/issuetype/{}/avatar", self.id),
+            format!("/rest/api/2/issuetype/{}/avatar", crate::core::encode_path_segment(&self.id)),
         );
 
         let body = match serde_json::to_value(&self.avatar_cropping)? {
@@ -493,7 +499,7 @@ impl<'a> StoreTemporaryIssueTypeAvatarUsingMultiPartRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/issuetype/{}/avatar/temporary", self.id),
+            format!("/rest/api/2/issuetype/{}/avatar/temporary", crate::core::encode_path_segment(&self.id)),
         );
 
         config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
@@ -532,7 +538,7 @@ impl<'a> GetIssueTypePropertyKeysRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issuetype/{}/properties", self.issue_type_id),
+            format!("/rest/api/2/issuetype/{}/properties", crate::core::encode_path_segment(&self.issue_type_id)),
         );
 
         Ok(config)
@@ -565,7 +571,11 @@ impl<'a> GetIssueTypePropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issuetype/{}/properties/{}", self.issue_type_id, self.property_key),
+            format!(
+                "/rest/api/2/issuetype/{}/properties/{}",
+                crate::core::encode_path_segment(&self.issue_type_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)
@@ -604,7 +614,11 @@ impl<'a> SetIssueTypePropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/issuetype/{}/properties/{}", self.issue_type_id, self.property_key),
+            format!(
+                "/rest/api/2/issuetype/{}/properties/{}",
+                crate::core::encode_path_segment(&self.issue_type_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -639,7 +653,11 @@ impl<'a> DeleteIssueTypePropertyRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/issuetype/{}/properties/{}", self.issue_type_id, self.property_key),
+            format!(
+                "/rest/api/2/issuetype/{}/properties/{}",
+                crate::core::encode_path_segment(&self.issue_type_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
         );
 
         Ok(config)

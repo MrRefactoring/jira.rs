@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// The Assets object type input used for updating object types
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ObjectTypeUpdate {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,

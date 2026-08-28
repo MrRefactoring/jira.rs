@@ -64,7 +64,10 @@ impl<'a> LoadObjectTypeRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(crate::core::Method::GET, format!("/objecttype/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/objecttype/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -94,7 +97,10 @@ impl<'a> UpdateObjectTypeRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/objecttype/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/objecttype/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         let body = match serde_json::to_value(&self.object_type_update)? {
             serde_json::Value::Object(object) => object,
@@ -130,7 +136,10 @@ impl<'a> DeleteObjectTypeRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/objecttype/{}", self.id));
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/objecttype/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         Ok(config)
     }
@@ -225,8 +234,10 @@ impl<'a> FindObjectTypeAttributesRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/objecttype/{}/attributes", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/objecttype/{}/attributes", crate::core::encode_path_segment(&self.id)),
+        );
 
         if let Some(value) = &self.only_value_editable {
             config.query.push(("onlyValueEditable".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
@@ -286,8 +297,10 @@ impl<'a> ChangeObjectTypePositionRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::POST, format!("/objecttype/{}/position", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!("/objecttype/{}/position", crate::core::encode_path_segment(&self.id)),
+        );
 
         let body = match serde_json::to_value(&self.object_type_position)? {
             serde_json::Value::Object(object) => object,

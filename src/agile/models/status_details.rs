@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct StatusDetailsScopeProjectAvatarUrls {
     /// The URL of the item's 16x16 pixel avatar.
     #[serde(rename = "16x16", default, skip_serializing_if = "Option::is_none")]
@@ -19,7 +20,8 @@ pub struct StatusDetailsScopeProjectAvatarUrls {
 }
 
 /// A project category.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct StatusDetailsScopeProjectProjectCategory {
     /// The name of the project category.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -45,7 +47,8 @@ crate::open_enum! {
 }
 
 /// Details about a project.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct StatusDetailsScopeProject {
     #[serde(rename = "avatarUrls", default, skip_serializing_if = "Option::is_none")]
     pub avatar_urls: Option<StatusDetailsScopeProjectAvatarUrls>,
@@ -81,7 +84,8 @@ crate::open_enum! {
 }
 
 /// The projects the item is associated with. Indicated for items associated with [next-gen projects](https://confluence.atlassian.com/x/loMyO).
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct StatusDetailsScope {
     /// Details about a project.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -92,7 +96,8 @@ pub struct StatusDetailsScope {
 }
 
 /// A status category.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct StatusDetailsStatusCategory {
     /// The name of the color used to represent the status category.
     #[serde(rename = "colorName", default, skip_serializing_if = "Option::is_none")]
@@ -112,7 +117,8 @@ pub struct StatusDetailsStatusCategory {
 }
 
 /// A status.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct StatusDetails {
     /// The description of the status.
     #[serde(default, skip_serializing_if = "Option::is_none")]

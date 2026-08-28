@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The details of the workflows to update.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkflowUpdate {
     /// The mapping of old to new status ID.
     #[serde(rename = "defaultStatusMappings", default, skip_serializing_if = "Option::is_none")]

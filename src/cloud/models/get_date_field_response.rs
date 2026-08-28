@@ -12,7 +12,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetDateFieldResponse {
     /// A date custom field ID. This is returned if the type is "DateCustomField".
     #[serde(rename = "dateCustomFieldId", default, skip_serializing_if = "Option::is_none")]

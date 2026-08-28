@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Mapping of an issue type to a context.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueTypeToContextMapping {
     /// The ID of the context.
     #[serde(rename = "contextId")]

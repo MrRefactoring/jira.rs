@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of the custom field options for a context.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextOption {
     /// Whether the option is disabled.
     pub disabled: bool,

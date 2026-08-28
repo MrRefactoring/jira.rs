@@ -9,10 +9,10 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
 ///
 ///  *  `includeIntermediateWorkflows` Includes intermediate workflow versions that are sometimes created during workflow updates or migrations. By default, these are omitted from the response.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum ListWorkflowHistoryRequestExpand {
@@ -28,10 +28,10 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
 ///
 ///  *  `values.transitions` Returns the transitions that each workflow is associated with.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SearchWorkflowsRequestExpand {
@@ -42,7 +42,7 @@ pub enum SearchWorkflowsRequestExpand {
 }
 
 crate::open_enum! {
-    /// [Order](#ordering) the results by a field:
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
     ///
     ///  *  `name` Sorts by workflow name.
     ///  *  `created` Sorts by create time.
@@ -74,7 +74,7 @@ impl<'a> WorkflowsService<'a> {
     ///
     /// **Note:** Stored workflow data expires after 60 days. Additionally, no data from before the 30th of October 2025 is available.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
     ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
@@ -89,7 +89,7 @@ impl<'a> WorkflowsService<'a> {
     ///
     /// **Note:** Stored workflow data expires after 60 days. Additionally, no data from before the 30th of October 2025 is available.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
     ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
@@ -109,7 +109,7 @@ impl<'a> WorkflowsService<'a> {
     ///  *  associated with any workflow scheme.
     ///  *  associated with any draft workflow scheme.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_inactive_workflow(&self, entity_id: impl Into<String>) -> DeleteInactiveWorkflowRequest<'a> {
         DeleteInactiveWorkflowRequest::new(self.client, entity_id)
     }
@@ -141,7 +141,7 @@ impl<'a> WorkflowsService<'a> {
 
     /// Returns a list of workflows and related statuses by providing workflow names, workflow IDs, or project and issue types.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
     ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
@@ -151,7 +151,7 @@ impl<'a> WorkflowsService<'a> {
 
     /// Get the list of workflow capabilities for a specific workflow using either the workflow ID, or the project and issue type ID pair. The response includes the scope of the workflow, defined as global/project-based, and a list of project types that the workflow is scoped to. It also includes all rules organised into their broad categories (conditions, validators, actions, triggers, screens) as well as the source location (Atlassian-provided, Connect, Forge).
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* project permission to access all, including global-scoped, workflows
     ///  *  *Administer projects* project permissions to access project-scoped workflows
@@ -373,7 +373,7 @@ impl<'a> WorkflowsService<'a> {
     /// Parameters:
     ///
     ///  *  `fieldId` The ID of the field to check the value of. For non-system fields, it will look like `customfield_123`. Note: `fieldId` is used interchangeably with the idea of `fieldKey` here, they refer to the same field.
-    ///  *  `fieldValue` the list of values to check against the field\\u2019s value.
+    ///  *  `fieldValue` the list of values to check against the field’s value.
     ///  *  `comparator` The comparison logic. Allowed values: `>`, `>=`, `=`, `<=`, `<`, `!=`.
     ///  *  `comparisonType` The type of data being compared. Allowed values: `STRING`, `NUMBER`, `DATE`, `DATE_WITHOUT_TIME`, `OPTIONID`.
     ///
@@ -441,7 +441,7 @@ impl<'a> WorkflowsService<'a> {
     ///
     /// ##### Parent or child blocking condition #####
     ///
-    /// A condition to block the parent\\u2019s issue transition depending on the child\\u2019s issue status.
+    /// A condition to block the parent’s issue transition depending on the child’s issue status.
     ///
     ///    {
     ///       "ruleKey" : "system:parent-or-child-blocking-condition"
@@ -709,7 +709,7 @@ impl<'a> WorkflowsService<'a> {
 
     /// Create workflows and related statuses.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
     ///  *  *Administer projects* project permissions to create project-scoped workflows
@@ -719,7 +719,7 @@ impl<'a> WorkflowsService<'a> {
 
     /// Validate the payload for bulk create workflows.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
     ///  *  *Administer projects* project permissions to create project-scoped workflows
@@ -737,7 +737,7 @@ impl<'a> WorkflowsService<'a> {
 
     /// Returns a requested workflow within a given project. The response provides a read-only preview of the workflow, omitting full configuration details.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions
     pub fn read_workflow_previews(
@@ -747,9 +747,9 @@ impl<'a> WorkflowsService<'a> {
         ReadWorkflowPreviewsRequest::new(self.client, workflow_preview_request)
     }
 
-    /// Returns a [paginated](#pagination) list of global and project workflows. If workflow names are specified in the query string, details of those workflows are returned. Otherwise, all workflows are returned.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of global and project workflows. If workflow names are specified in the query string, details of those workflows are returned. Otherwise, all workflows are returned.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
     ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
@@ -759,7 +759,7 @@ impl<'a> WorkflowsService<'a> {
 
     /// Update workflows and related statuses.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
     ///  *  *Administer projects* project permissions to create project-scoped workflows
@@ -769,7 +769,7 @@ impl<'a> WorkflowsService<'a> {
 
     /// Validate the payload for bulk update workflows.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
     ///  *  *Administer projects* project permissions to create project-scoped workflows
@@ -785,7 +785,7 @@ impl<'a> WorkflowsService<'a> {
 ///
 /// **Note:** Stored workflow data expires after 60 days. Additionally, no data from before the 30th of October 2025 is available.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
 ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
@@ -829,7 +829,7 @@ impl<'a> ReadWorkflowFromHistoryRequest<'a> {
 ///
 /// **Note:** Stored workflow data expires after 60 days. Additionally, no data from before the 30th of October 2025 is available.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
 ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
@@ -844,7 +844,7 @@ impl<'a> ListWorkflowHistoryRequest<'a> {
         Self { client, workflow_history_list_request, expand: None }
     }
 
-    /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
     ///
     ///  *  `includeIntermediateWorkflows` Includes intermediate workflow versions that are sometimes created during workflow updates or migrations. By default, these are omitted from the response.
     #[must_use]
@@ -893,7 +893,7 @@ impl<'a> ListWorkflowHistoryRequest<'a> {
 ///  *  associated with any workflow scheme.
 ///  *  associated with any draft workflow scheme.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteInactiveWorkflowRequest<'a> {
     client: &'a crate::core::Client,
     entity_id: String,
@@ -908,7 +908,7 @@ impl<'a> DeleteInactiveWorkflowRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/workflow/{}", self.entity_id),
+            format!("/rest/api/3/workflow/{}", crate::core::encode_path_segment(&self.entity_id)),
         );
 
         Ok(config)
@@ -959,7 +959,11 @@ impl<'a> GetWorkflowProjectIssueTypeUsagesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/workflow/{}/project/{}/issueTypeUsages", self.workflow_id, self.project_id),
+            format!(
+                "/rest/api/3/workflow/{}/project/{}/issueTypeUsages",
+                crate::core::encode_path_segment(&self.workflow_id),
+                self.project_id
+            ),
         );
 
         if let Some(value) = &self.next_page_token {
@@ -1017,7 +1021,7 @@ impl<'a> GetProjectUsagesForWorkflowRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/workflow/{}/projectUsages", self.workflow_id),
+            format!("/rest/api/3/workflow/{}/projectUsages", crate::core::encode_path_segment(&self.workflow_id)),
         );
 
         if let Some(value) = &self.next_page_token {
@@ -1075,7 +1079,7 @@ impl<'a> GetWorkflowSchemeUsagesForWorkflowRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/workflow/{}/workflowSchemes", self.workflow_id),
+            format!("/rest/api/3/workflow/{}/workflowSchemes", crate::core::encode_path_segment(&self.workflow_id)),
         );
 
         if let Some(value) = &self.next_page_token {
@@ -1102,7 +1106,7 @@ impl<'a> GetWorkflowSchemeUsagesForWorkflowRequest<'a> {
 
 /// Returns a list of workflows and related statuses by providing workflow names, workflow IDs, or project and issue types.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
 ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
@@ -1143,7 +1147,7 @@ impl<'a> ReadWorkflowsRequest<'a> {
 
 /// Get the list of workflow capabilities for a specific workflow using either the workflow ID, or the project and issue type ID pair. The response includes the scope of the workflow, defined as global/project-based, and a list of project types that the workflow is scoped to. It also includes all rules organised into their broad categories (conditions, validators, actions, triggers, screens) as well as the source location (Atlassian-provided, Connect, Forge).
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* project permission to access all, including global-scoped, workflows
 ///  *  *Administer projects* project permissions to access project-scoped workflows
@@ -1365,7 +1369,7 @@ impl<'a> ReadWorkflowsRequest<'a> {
 /// Parameters:
 ///
 ///  *  `fieldId` The ID of the field to check the value of. For non-system fields, it will look like `customfield_123`. Note: `fieldId` is used interchangeably with the idea of `fieldKey` here, they refer to the same field.
-///  *  `fieldValue` the list of values to check against the field\\u2019s value.
+///  *  `fieldValue` the list of values to check against the field’s value.
 ///  *  `comparator` The comparison logic. Allowed values: `>`, `>=`, `=`, `<=`, `<`, `!=`.
 ///  *  `comparisonType` The type of data being compared. Allowed values: `STRING`, `NUMBER`, `DATE`, `DATE_WITHOUT_TIME`, `OPTIONID`.
 ///
@@ -1433,7 +1437,7 @@ impl<'a> ReadWorkflowsRequest<'a> {
 ///
 /// ##### Parent or child blocking condition #####
 ///
-/// A condition to block the parent\\u2019s issue transition depending on the child\\u2019s issue status.
+/// A condition to block the parent’s issue transition depending on the child’s issue status.
 ///
 ///    {
 ///       "ruleKey" : "system:parent-or-child-blocking-condition"
@@ -1761,7 +1765,7 @@ impl<'a> WorkflowCapabilitiesRequest<'a> {
 
 /// Create workflows and related statuses.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
 ///  *  *Administer projects* project permissions to create project-scoped workflows
@@ -1803,7 +1807,7 @@ impl<'a> CreateWorkflowsRequest<'a> {
 
 /// Validate the payload for bulk create workflows.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
 ///  *  *Administer projects* project permissions to create project-scoped workflows
@@ -1876,7 +1880,7 @@ impl<'a> GetDefaultEditorRequest<'a> {
 
 /// Returns a requested workflow within a given project. The response provides a read-only preview of the workflow, omitting full configuration details.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions
 pub struct ReadWorkflowPreviewsRequest<'a> {
@@ -1915,9 +1919,9 @@ impl<'a> ReadWorkflowPreviewsRequest<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of global and project workflows. If workflow names are specified in the query string, details of those workflows are returned. Otherwise, all workflows are returned.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of global and project workflows. If workflow names are specified in the query string, details of those workflows are returned. Otherwise, all workflows are returned.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
 ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
@@ -1964,7 +1968,7 @@ impl<'a> SearchWorkflowsRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
     ///
     ///  *  `values.transitions` Returns the transitions that each workflow is associated with.
     #[must_use]
@@ -1982,7 +1986,7 @@ impl<'a> SearchWorkflowsRequest<'a> {
         self
     }
 
-    /// [Order](#ordering) the results by a field:
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
     ///
     ///  *  `name` Sorts by workflow name.
     ///  *  `created` Sorts by create time.
@@ -2071,7 +2075,7 @@ impl<'a> SearchWorkflowsRequest<'a> {
 
 /// Update workflows and related statuses.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
 ///  *  *Administer projects* project permissions to create project-scoped workflows
@@ -2113,7 +2117,7 @@ impl<'a> UpdateWorkflowsRequest<'a> {
 
 /// Validate the payload for bulk update workflows.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
 ///  *  *Administer projects* project permissions to create project-scoped workflows

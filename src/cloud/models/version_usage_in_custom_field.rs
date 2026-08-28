@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// List of custom fields using the version.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct VersionUsageInCustomField {
     /// The ID of the custom field.
     #[serde(rename = "customFieldId", default, skip_serializing_if = "Option::is_none")]

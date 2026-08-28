@@ -23,11 +23,11 @@ impl<'a> ProjectTemplatesService<'a> {
     ///
     /// This operation is:
     ///
-    ///  *  [asynchronous](#async). Follow the `Location` link in the response header to determine the status of the task and use [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+    ///  *  [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `Location` link in the response header to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
     ///
     /// ***Note: This API is only supported for Jira Enterprise edition.***
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn create_project_with_custom_template(
         &self,
         project_custom_template_create_request_dto: ProjectCustomTemplateCreateRequestDTO,
@@ -47,11 +47,11 @@ impl<'a> ProjectTemplatesService<'a> {
 ///
 /// This operation is:
 ///
-///  *  [asynchronous](#async). Follow the `Location` link in the response header to determine the status of the task and use [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+///  *  [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `Location` link in the response header to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
 ///
 /// ***Note: This API is only supported for Jira Enterprise edition.***
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct CreateProjectWithCustomTemplateRequest<'a> {
     client: &'a crate::core::Client,
     project_custom_template_create_request_dto: ProjectCustomTemplateCreateRequestDTO,

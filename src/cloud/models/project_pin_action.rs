@@ -11,7 +11,7 @@ crate::open_enum! {
 }
 
 /// The list of projects to pin or unpin the issue panel to or from.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProjectPinAction {
     /// The action to perform: PIN or UNPIN.
     pub action: ProjectPinActionAction,

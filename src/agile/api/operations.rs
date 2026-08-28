@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 /// Comma-separated list of Operations Workspace IDs to delete. All data associated with the given workspaces will eventually be removed from Jira. Example: workspaceIds=111-222-333,444-555-666.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum DeleteWorkspacesRequestWorkspaceIds {
@@ -38,7 +38,7 @@ crate::open_enum! {
 /// Severity information for a single Incident.
 ///
 /// This is the severity information that will be presented to the user on e.g. the Jira Incidents screen.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SubmitEntityRequestBodyVariant0IncidentsSeverity {
     /// The severity level of the Incident with P1 being the highest and P5 being the lowest
     pub level: SubmitEntityRequestBodyVariant0IncidentsSeverityLevel,
@@ -62,7 +62,7 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitEntityRequestBodyVariant0IncidentsAssociations {
     /// the type of the association being made
     #[serde(rename = "associationType", default, skip_serializing_if = "Option::is_none")]
@@ -72,7 +72,7 @@ pub struct SubmitEntityRequestBodyVariant0IncidentsAssociations {
 }
 
 /// Data related to a specific incident in a specific container that the incident is present in. Must specify at least one association to a component.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SubmitEntityRequestBodyVariant0Incidents {
     /// The IncidentData schema version used for this incident data.
     ///
@@ -104,11 +104,37 @@ pub struct SubmitEntityRequestBodyVariant0Incidents {
     /// The timestamp to present to the user that shows when the Incident was raised.
     ///
     /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "createdDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created_date: Option<chrono::DateTime<chrono::Utc>>,
+    /// The timestamp to present to the user that shows when the Incident was raised.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "createdDate", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub created_date: String,
     /// The last-updated timestamp to present to the user the last time the Incident was updated.
     ///
     /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user the last time the Incident was updated.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// Severity information for a single Incident.
@@ -151,7 +177,7 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitEntityRequestBodyVariant1ReviewsAssociations {
     /// the type of the association being made
     #[serde(rename = "associationType", default, skip_serializing_if = "Option::is_none")]
@@ -161,7 +187,7 @@ pub struct SubmitEntityRequestBodyVariant1ReviewsAssociations {
 }
 
 /// Data related to a specific post-incident review. Must specify at least one association to an incident.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SubmitEntityRequestBodyVariant1Reviews {
     /// The PostIncidentReviewData schema version used for this post-incident review data.
     ///
@@ -192,11 +218,37 @@ pub struct SubmitEntityRequestBodyVariant1Reviews {
     /// The timestamp to present to the user that shows when the Review was raised.
     ///
     /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "createdDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created_date: Option<chrono::DateTime<chrono::Utc>>,
+    /// The timestamp to present to the user that shows when the Review was raised.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "createdDate", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub created_date: String,
     /// The last-updated timestamp to present to the user the last time the Review was updated.
     ///
     /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user the last time the Review was updated.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// The current status of the Post-Incident Review.
@@ -206,19 +258,19 @@ pub struct SubmitEntityRequestBodyVariant1Reviews {
     pub associations: Option<Vec<SubmitEntityRequestBodyVariant1ReviewsAssociations>>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitEntityRequestBodyValue {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub incidents: Option<Vec<SubmitEntityRequestBodyVariant0Incidents>>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitEntityRequestBodyValue2 {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub reviews: Option<Vec<SubmitEntityRequestBodyVariant1Reviews>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitEntityRequestBody {
@@ -598,7 +650,7 @@ impl<'a> GetIncidentByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/operations/1.0/incidents/{}", self.incident_id),
+            format!("/rest/operations/1.0/incidents/{}", crate::core::encode_path_segment(&self.incident_id)),
         );
 
         Ok(config)
@@ -635,7 +687,7 @@ impl<'a> DeleteIncidentByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/operations/1.0/incidents/{}", self.incident_id),
+            format!("/rest/operations/1.0/incidents/{}", crate::core::encode_path_segment(&self.incident_id)),
         );
 
         Ok(config)
@@ -672,7 +724,7 @@ impl<'a> GetReviewByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/operations/1.0/post-incident-reviews/{}", self.review_id),
+            format!("/rest/operations/1.0/post-incident-reviews/{}", crate::core::encode_path_segment(&self.review_id)),
         );
 
         Ok(config)
@@ -709,7 +761,7 @@ impl<'a> DeleteReviewByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/operations/1.0/post-incident-reviews/{}", self.review_id),
+            format!("/rest/operations/1.0/post-incident-reviews/{}", crate::core::encode_path_segment(&self.review_id)),
         );
 
         Ok(config)

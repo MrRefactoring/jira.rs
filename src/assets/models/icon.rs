@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// A visual representation of something, usually associated as the icon of an object type
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Icon {
     pub id: String,
     pub name: String,

@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Experimental. A warning returned alongside successful search results.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SearchWarning {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub details: Option<SearchWarningLimitDetails>,

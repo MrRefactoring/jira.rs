@@ -13,7 +13,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GroupsSearchRequest {
     /// Unique ID that serves as reference to the group.
     #[serde(rename = "groupIds", default, skip_serializing_if = "Option::is_none")]

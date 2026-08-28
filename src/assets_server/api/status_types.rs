@@ -53,7 +53,7 @@ impl<'a> GetStatusTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/assets/1.0/config/statustype/{}", self.id),
+            format!("/rest/assets/1.0/config/statustype/{}", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -93,7 +93,7 @@ impl<'a> UpdateStatusTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/assets/1.0/config/statustype/{}", self.id),
+            format!("/rest/assets/1.0/config/statustype/{}", crate::core::encode_path_segment(&self.id)),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -127,7 +127,7 @@ impl<'a> DeleteStatusTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/assets/1.0/config/statustype/{}", self.id),
+            format!("/rest/assets/1.0/config/statustype/{}", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)

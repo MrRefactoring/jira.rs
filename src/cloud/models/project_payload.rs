@@ -15,7 +15,7 @@ crate::open_enum! {
 }
 
 /// The payload for creating a project
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ProjectPayload {
     #[serde(rename = "fieldLayoutSchemeId", default, skip_serializing_if = "Option::is_none")]
     pub field_layout_scheme_id: Option<ProjectCreateResourceIdentifier>,

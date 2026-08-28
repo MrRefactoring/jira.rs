@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct AvatarUrls {
     /// The URL of the item's 16x16 pixel avatar.
     #[serde(rename = "16x16", default, skip_serializing_if = "Option::is_none")]

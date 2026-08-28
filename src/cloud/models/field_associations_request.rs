@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of field associations with projects.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct FieldAssociationsRequest {
     /// Contexts to associate/unassociate the fields with.
     #[serde(rename = "associationContexts")]

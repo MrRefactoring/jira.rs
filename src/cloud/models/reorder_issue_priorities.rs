@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Change the order of issue priorities.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ReorderIssuePriorities {
     /// The ID of the priority. Required if `position` isn't provided.
     #[serde(default, skip_serializing_if = "Option::is_none")]

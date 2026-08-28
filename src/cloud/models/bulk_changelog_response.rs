@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A page of changelogs which is designed to handle multiple issues
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct BulkChangelogResponse {
     /// The list of issues changelogs.
     #[serde(rename = "issueChangeLogs", default, skip_serializing_if = "Option::is_none")]

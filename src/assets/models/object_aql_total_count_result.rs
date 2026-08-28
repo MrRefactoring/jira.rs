@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// An object that is used to represent the total count of objects returned for a given AQL query
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ObjectAQLTotalCountResult {
     /// The total number of objects which match the provided query.
     #[serde(rename = "totalCount", default, skip_serializing_if = "Option::is_none")]

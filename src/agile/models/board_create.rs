@@ -11,7 +11,7 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct BoardCreate {
     #[serde(rename = "filterId", default, skip_serializing_if = "Option::is_none")]
     pub filter_id: Option<i64>,

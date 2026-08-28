@@ -713,7 +713,11 @@ impl<'a> GetDraftIssueTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/workflowscheme/{}/draft/issuetype/{}", self.id, self.issue_type),
+            format!(
+                "/rest/api/2/workflowscheme/{}/draft/issuetype/{}",
+                self.id,
+                crate::core::encode_path_segment(&self.issue_type)
+            ),
         );
 
         Ok(config)
@@ -748,7 +752,11 @@ impl<'a> SetDraftIssueTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/workflowscheme/{}/draft/issuetype/{}", self.id, self.issue_type),
+            format!(
+                "/rest/api/2/workflowscheme/{}/draft/issuetype/{}",
+                self.id,
+                crate::core::encode_path_segment(&self.issue_type)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -783,7 +791,11 @@ impl<'a> DeleteDraftIssueTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/workflowscheme/{}/draft/issuetype/{}", self.id, self.issue_type),
+            format!(
+                "/rest/api/2/workflowscheme/{}/draft/issuetype/{}",
+                self.id,
+                crate::core::encode_path_segment(&self.issue_type)
+            ),
         );
 
         Ok(config)
@@ -968,7 +980,11 @@ impl<'a> GetWorkflowSchemeIssueTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/workflowscheme/{}/issuetype/{}", self.id, self.issue_type),
+            format!(
+                "/rest/api/2/workflowscheme/{}/issuetype/{}",
+                self.id,
+                crate::core::encode_path_segment(&self.issue_type)
+            ),
         );
 
         if let Some(value) = &self.return_draft_if_exists {
@@ -1007,7 +1023,11 @@ impl<'a> SetIssueTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/workflowscheme/{}/issuetype/{}", self.id, self.issue_type),
+            format!(
+                "/rest/api/2/workflowscheme/{}/issuetype/{}",
+                self.id,
+                crate::core::encode_path_segment(&self.issue_type)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -1051,7 +1071,11 @@ impl<'a> DeleteWorkflowSchemeIssueTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/workflowscheme/{}/issuetype/{}", self.id, self.issue_type),
+            format!(
+                "/rest/api/2/workflowscheme/{}/issuetype/{}",
+                self.id,
+                crate::core::encode_path_segment(&self.issue_type)
+            ),
         );
 
         if let Some(value) = &self.update_draft_if_needed {

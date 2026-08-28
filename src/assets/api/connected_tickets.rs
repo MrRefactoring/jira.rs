@@ -33,7 +33,7 @@ impl<'a> FindObjectTicketsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/objectconnectedtickets/{}/tickets", self.object_id),
+            format!("/objectconnectedtickets/{}/tickets", crate::core::encode_path_segment(&self.object_id)),
         );
 
         Ok(config)

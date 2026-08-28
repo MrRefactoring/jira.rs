@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Issue security scheme, project, and remapping details.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AssociateSecuritySchemeWithProjectDetails {
     /// The list of scheme levels which should be remapped to new levels of the issue security scheme.
     #[serde(rename = "oldToNewSecurityLevelMappings", default, skip_serializing_if = "Option::is_none")]

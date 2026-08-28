@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A page of failed webhooks.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FailedWebhooks {
     /// The maximum number of items on the page. If the list of values is shorter than this number, then there are no more pages.
     #[serde(rename = "maxResults")]

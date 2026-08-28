@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The schema of a field.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FieldMetadataSchema {
     /// If the field is a custom field, the configuration of the field.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -25,7 +26,8 @@ pub struct FieldMetadataSchema {
 }
 
 /// The metadata describing an issue field.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FieldMetadata {
     /// The list of values allowed in the field.
     #[serde(rename = "allowedValues", default, skip_serializing_if = "Option::is_none")]

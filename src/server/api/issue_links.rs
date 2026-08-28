@@ -79,7 +79,7 @@ impl<'a> GetIssueLinkRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issueLink/{}", self.link_id),
+            format!("/rest/api/2/issueLink/{}", crate::core::encode_path_segment(&self.link_id)),
         );
 
         Ok(config)
@@ -111,7 +111,7 @@ impl<'a> DeleteIssueLinkRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/issueLink/{}", self.link_id),
+            format!("/rest/api/2/issueLink/{}", crate::core::encode_path_segment(&self.link_id)),
         );
 
         Ok(config)

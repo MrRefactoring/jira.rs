@@ -8,7 +8,7 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExternalReference {
     pub id: String,
     pub source: ExternalReferenceSource,

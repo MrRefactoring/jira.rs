@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The payload of linked Security Workspace IDs.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetLinkedWorkspaces {
     /// The IDs of Security Workspaces that are linked to this Jira site.
     #[serde(rename = "workspaceIds")]

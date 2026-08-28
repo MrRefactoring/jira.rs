@@ -11,7 +11,7 @@ crate::open_enum! {
 }
 
 /// The payload for creating a scope. Defines if a project is team-managed project or company-managed project
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ScopePayload {
     /// The type of the scope. Use `GLOBAL` or empty for company-managed project, and `PROJECT` for team-managed project
     #[serde(default, skip_serializing_if = "Option::is_none")]

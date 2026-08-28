@@ -30,7 +30,7 @@ impl<'a> AppMigrationService<'a> {
     /// Updates the value of a custom field added by Connect apps on one or more issues.
     /// The values of up to 200 custom fields can be updated.
     ///
-    /// **[Permissions](#permissions) required:** Only Connect apps can make this request
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect apps can make this request
     pub fn update_issue_fields(
         &self,
         atlassian_transfer_id: impl Into<String>,
@@ -62,7 +62,7 @@ impl<'a> AppMigrationService<'a> {
 /// Updates the value of a custom field added by Connect apps on one or more issues.
 /// The values of up to 200 custom fields can be updated.
 ///
-/// **[Permissions](#permissions) required:** Only Connect apps can make this request
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Only Connect apps can make this request
 pub struct UpdateIssueFieldsRequest<'a> {
     client: &'a crate::core::Client,
     atlassian_transfer_id: String,
@@ -135,7 +135,10 @@ impl<'a> UpdateEntityPropertiesValueRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/atlassian-connect/1/migration/properties/{}", self.entity_type),
+            format!(
+                "/rest/atlassian-connect/1/migration/properties/{}",
+                crate::core::encode_path_segment(self.entity_type.as_str())
+            ),
         );
 
         config.headers.push(("Atlassian-Transfer-Id".to_owned(), self.atlassian_transfer_id.clone()));

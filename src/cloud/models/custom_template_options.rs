@@ -2,7 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomTemplateOptions {
     /// Enable screen delegated admin support for the template. This means screen and associated schemes will be copied rather than referenced.
     #[serde(rename = "enableScreenDelegatedAdminSupport", default, skip_serializing_if = "Option::is_none")]

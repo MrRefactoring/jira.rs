@@ -55,7 +55,7 @@ impl<'a> QueryWorkspacesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/admin/v2/orgs/{}/workspaces", self.org_id),
+            format!("/admin/v2/orgs/{}/workspaces", crate::core::encode_path_segment(&self.org_id)),
         );
 
         let body = match serde_json::to_value(&self.search_workspaces_request_v2)? {

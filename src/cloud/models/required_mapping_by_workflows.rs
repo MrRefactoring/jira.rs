@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The list of required status mappings by workflow.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct RequiredMappingByWorkflows {
     /// The ID of the source workflow.
     #[serde(rename = "sourceWorkflowId", default, skip_serializing_if = "Option::is_none")]

@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A list of projects in which a user is granted permissions.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PermittedProjects {
     /// A list of projects.
     #[serde(default, skip_serializing_if = "Option::is_none")]

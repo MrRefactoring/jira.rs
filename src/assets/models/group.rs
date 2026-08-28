@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The Assets Group type
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Group {
     #[serde(rename = "avatarUrl")]
     pub avatar_url: String,

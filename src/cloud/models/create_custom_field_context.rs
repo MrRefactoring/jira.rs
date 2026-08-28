@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// The details of a created custom field context.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct CreateCustomFieldContext {
     /// The description of the context.
     #[serde(default, skip_serializing_if = "Option::is_none")]

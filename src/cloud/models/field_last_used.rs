@@ -16,7 +16,8 @@ crate::open_enum! {
 }
 
 /// Information about the most recent use of a field.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FieldLastUsed {
     /// Last used value type:
     ///
@@ -26,6 +27,16 @@ pub struct FieldLastUsed {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub r#type: Option<FieldLastUsedType>,
     /// The date when the value of the field last changed.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub value: Option<chrono::DateTime<chrono::Utc>>,
+    /// The date when the value of the field last changed.
+    #[cfg(not(feature = "chrono"))]
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub value: Option<String>,
 }

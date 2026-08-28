@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The payload for creating a notification scheme event. Defines which notifications should be sent for a specific event
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct NotificationSchemeEventPayload {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub event: Option<NotificationSchemeEventIDPayload>,

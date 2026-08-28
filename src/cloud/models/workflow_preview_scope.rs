@@ -12,7 +12,8 @@ crate::open_enum! {
 }
 
 /// The scope of the workflow.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowPreviewScope {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub project: Option<WorkflowProjectIdScope>,

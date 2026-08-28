@@ -26,7 +26,7 @@ crate::open_enum! {
 }
 
 /// Details of a share permission for the filter.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SharePermission {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub group: Option<GroupName>,

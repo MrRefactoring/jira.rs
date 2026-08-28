@@ -60,7 +60,7 @@ impl<'a> GetDomainsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v1/orgs/{}/domains", self.org_id),
+            format!("/admin/v1/orgs/{}/domains", crate::core::encode_path_segment(&self.org_id)),
         );
 
         if let Some(value) = &self.cursor {
@@ -100,7 +100,11 @@ impl<'a> GetDomainByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v1/orgs/{}/domains/{}", self.org_id, self.domain_id),
+            format!(
+                "/admin/v1/orgs/{}/domains/{}",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.domain_id)
+            ),
         );
 
         Ok(config)

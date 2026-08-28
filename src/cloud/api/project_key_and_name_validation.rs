@@ -14,21 +14,21 @@ impl<'a> ProjectKeyAndNameValidationService<'a> {
 
     /// Validates a project key by confirming the key is a valid string and not in use.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn validate_project_key(&self) -> ValidateProjectKeyRequest<'a> {
         ValidateProjectKeyRequest::new(self.client)
     }
 
     /// Validates a project key and, if the key is invalid or in use, generates a valid random string for the project key.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_valid_project_key(&self) -> GetValidProjectKeyRequest<'a> {
         GetValidProjectKeyRequest::new(self.client)
     }
 
     /// Checks that a project name isn't in use. If the name isn't in use, the passed string is returned. If the name is in use, this operation attempts to generate a valid project name based on the one supplied, usually by adding a sequence number. If a valid project name cannot be generated, a 404 response is returned.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_valid_project_name(&self, name: impl Into<String>) -> GetValidProjectNameRequest<'a> {
         GetValidProjectNameRequest::new(self.client, name)
     }
@@ -36,7 +36,7 @@ impl<'a> ProjectKeyAndNameValidationService<'a> {
 
 /// Validates a project key by confirming the key is a valid string and not in use.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct ValidateProjectKeyRequest<'a> {
     client: &'a crate::core::Client,
     key: Option<String>,
@@ -80,7 +80,7 @@ impl<'a> ValidateProjectKeyRequest<'a> {
 
 /// Validates a project key and, if the key is invalid or in use, generates a valid random string for the project key.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetValidProjectKeyRequest<'a> {
     client: &'a crate::core::Client,
     key: Option<String>,
@@ -126,7 +126,7 @@ impl<'a> GetValidProjectKeyRequest<'a> {
 
 /// Checks that a project name isn't in use. If the name isn't in use, the passed string is returned. If the name is in use, this operation attempts to generate a valid project name based on the one supplied, usually by adding a sequence number. If a valid project name cannot be generated, a 404 response is returned.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetValidProjectNameRequest<'a> {
     client: &'a crate::core::Client,
     name: String,

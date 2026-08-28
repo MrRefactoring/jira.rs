@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A paginated list of subscriptions to a filter.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct FilterSubscriptionsList {
     /// The index of the last item returned on the page.
     #[serde(rename = "end-index", default, skip_serializing_if = "Option::is_none")]

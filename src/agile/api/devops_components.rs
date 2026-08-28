@@ -39,7 +39,7 @@ crate::open_enum! {
 }
 
 /// Data related to a specific component in a specific workspace that is affected by incidents.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SubmitComponentsRequestDevopsComponents {
     /// The DevOpsComponentData schema version used for this devops component data.
     ///
@@ -77,6 +77,19 @@ pub struct SubmitComponentsRequestDevopsComponents {
     /// The last-updated timestamp to present to the user the last time the DevOps Component was updated.
     ///
     /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user the last time the DevOps Component was updated.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
 }
@@ -84,7 +97,7 @@ pub struct SubmitComponentsRequestDevopsComponents {
 /// Information about the provider. This is useful for auditing, logging, debugging,
 /// and other internal uses. It is not considered private information. Hence, it may not contain personally
 /// identifiable information.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SubmitComponentsRequestProviderMetadata {
     /// An optional name of the source of the incidents.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -325,7 +338,10 @@ impl<'a> GetComponentByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/devopscomponents/1.0/devopscomponents/{}", self.component_id),
+            format!(
+                "/rest/devopscomponents/1.0/devopscomponents/{}",
+                crate::core::encode_path_segment(&self.component_id)
+            ),
         );
 
         Ok(config)
@@ -362,7 +378,10 @@ impl<'a> DeleteComponentByIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/devopscomponents/1.0/devopscomponents/{}", self.component_id),
+            format!(
+                "/rest/devopscomponents/1.0/devopscomponents/{}",
+                crate::core::encode_path_segment(&self.component_id)
+            ),
         );
 
         Ok(config)

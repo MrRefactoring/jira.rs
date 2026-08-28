@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The converted JQL queries.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ConvertedJQLQueries {
     /// List of queries containing user information that could not be mapped to an existing user
     #[serde(rename = "queriesWithUnknownUsers", default, skip_serializing_if = "Option::is_none")]

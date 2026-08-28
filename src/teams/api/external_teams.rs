@@ -61,7 +61,10 @@ impl<'a> CreateExternalLinkedTeamRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/gateway/api/public/teams/v1/org/{}/teams/external", self.org_id),
+            format!(
+                "/gateway/api/public/teams/v1/org/{}/teams/external",
+                crate::core::encode_path_segment(&self.org_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.external_team_creation_payload)? {
@@ -105,7 +108,10 @@ impl<'a> UnlinkTeamsFromExternalSourceRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/gateway/api/public/teams/v1/org/{}/teams/external/bulk/unlink", self.org_id),
+            format!(
+                "/gateway/api/public/teams/v1/org/{}/teams/external/bulk/unlink",
+                crate::core::encode_path_segment(&self.org_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.bulk_operation_request)? {
@@ -151,7 +157,11 @@ impl<'a> LinkTeamToExternalSourceRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/gateway/api/public/teams/v1/org/{}/teams/{}/external/link", self.org_id, self.team_id),
+            format!(
+                "/gateway/api/public/teams/v1/org/{}/teams/{}/external/link",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.team_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.link_team_to_external_source_payload)? {

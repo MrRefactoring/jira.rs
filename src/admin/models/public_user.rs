@@ -22,7 +22,8 @@ crate::open_enum! {
 }
 
 /// The current page of search results
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PublicUser {
     /// Unique ID of the users account. The format is \[a-zA-Z0-9_|-:\]{1,128}
     #[serde(rename = "accountId", default, skip_serializing_if = "Option::is_none")]

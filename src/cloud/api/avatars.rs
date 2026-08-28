@@ -137,7 +137,7 @@ impl<'a> AvatarsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_all_system_avatars(
         &self,
         r#type: impl Into<GetAllSystemAvatarsRequestType>,
@@ -149,7 +149,7 @@ impl<'a> AvatarsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  for custom project avatars, *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project the avatar belongs to.
     ///  *  for custom issue type avatars, *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for at least one project the issue type is used in.
@@ -167,7 +167,7 @@ impl<'a> AvatarsService<'a> {
     ///
     /// Specify the avatar's local file location in the body of the request. Also, include the following headers:
     ///
-    ///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the request, for more information see [Special Headers](#special-request-headers).
+    ///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the request, for more information see [Special Headers](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#special-request-headers).
     ///  *  `Content-Type: image/image type` Valid image types are JPEG, GIF, or PNG.
     ///
     /// For example:
@@ -189,11 +189,11 @@ impl<'a> AvatarsService<'a> {
     ///
     /// After creating the avatar use:
     ///
-    ///  *  [Update issue type](#api-rest-api-3-issuetype-id-put) to set it as the issue type's displayed avatar.
-    ///  *  [Set project avatar](#api-rest-api-3-project-projectIdOrKey-avatar-put) to set it as the project's displayed avatar.
-    ///  *  [Update priority](#api-rest-api-3-priority-id-put) to set it as the priority's displayed avatar.
+    ///  *  [Update issue type](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issuetype/#api-rest-api-3-issuetype-id-put) to set it as the issue type's displayed avatar.
+    ///  *  [Set project avatar](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-avatar-put) to set it as the project's displayed avatar.
+    ///  *  [Update priority](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-priority/#api-rest-api-3-priority-id-put) to set it as the priority's displayed avatar.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn store_avatar(
         &self,
         r#type: impl Into<StoreAvatarRequestType>,
@@ -206,7 +206,7 @@ impl<'a> AvatarsService<'a> {
 
     /// Deletes an avatar from a project, issue type or priority.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_avatar(
         &self,
         r#type: impl Into<DeleteAvatarRequestType>,
@@ -220,7 +220,7 @@ impl<'a> AvatarsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** None.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
     pub fn get_avatar_image_by_type(
         &self,
         r#type: impl Into<GetAvatarImageByTypeRequestType>,
@@ -232,7 +232,7 @@ impl<'a> AvatarsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  For system avatars, none.
     ///  *  For custom project avatars, *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project the avatar belongs to.
@@ -250,7 +250,7 @@ impl<'a> AvatarsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  For system avatars, none.
     ///  *  For custom project avatars, *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project the avatar belongs to.
@@ -269,7 +269,7 @@ impl<'a> AvatarsService<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetAllSystemAvatarsRequest<'a> {
     client: &'a crate::core::Client,
     r#type: GetAllSystemAvatarsRequestType,
@@ -284,7 +284,7 @@ impl<'a> GetAllSystemAvatarsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/avatar/{}/system", self.r#type),
+            format!("/rest/api/3/avatar/{}/system", crate::core::encode_path_segment(self.r#type.as_str())),
         );
 
         Ok(config)
@@ -305,7 +305,7 @@ impl<'a> GetAllSystemAvatarsRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  for custom project avatars, *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project the avatar belongs to.
 ///  *  for custom issue type avatars, *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for at least one project the issue type is used in.
@@ -330,7 +330,11 @@ impl<'a> GetAvatarsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/universal_avatar/type/{}/owner/{}", self.r#type, self.entity_id),
+            format!(
+                "/rest/api/3/universal_avatar/type/{}/owner/{}",
+                crate::core::encode_path_segment(self.r#type.as_str()),
+                crate::core::encode_path_segment(&self.entity_id)
+            ),
         );
 
         Ok(config)
@@ -351,7 +355,7 @@ impl<'a> GetAvatarsRequest<'a> {
 ///
 /// Specify the avatar's local file location in the body of the request. Also, include the following headers:
 ///
-///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the request, for more information see [Special Headers](#special-request-headers).
+///  *  `X-Atlassian-Token: no-check` To prevent XSRF protection blocking the request, for more information see [Special Headers](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#special-request-headers).
 ///  *  `Content-Type: image/image type` Valid image types are JPEG, GIF, or PNG.
 ///
 /// For example:
@@ -373,11 +377,11 @@ impl<'a> GetAvatarsRequest<'a> {
 ///
 /// After creating the avatar use:
 ///
-///  *  [Update issue type](#api-rest-api-3-issuetype-id-put) to set it as the issue type's displayed avatar.
-///  *  [Set project avatar](#api-rest-api-3-project-projectIdOrKey-avatar-put) to set it as the project's displayed avatar.
-///  *  [Update priority](#api-rest-api-3-priority-id-put) to set it as the priority's displayed avatar.
+///  *  [Update issue type](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issuetype/#api-rest-api-3-issuetype-id-put) to set it as the issue type's displayed avatar.
+///  *  [Set project avatar](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project/#api-rest-api-3-project-projectIdOrKey-avatar-put) to set it as the project's displayed avatar.
+///  *  [Update priority](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-priority/#api-rest-api-3-priority-id-put) to set it as the priority's displayed avatar.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct StoreAvatarRequest<'a> {
     client: &'a crate::core::Client,
     r#type: StoreAvatarRequestType,
@@ -437,7 +441,11 @@ impl<'a> StoreAvatarRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/3/universal_avatar/type/{}/owner/{}", self.r#type, self.entity_id),
+            format!(
+                "/rest/api/3/universal_avatar/type/{}/owner/{}",
+                crate::core::encode_path_segment(self.r#type.as_str()),
+                crate::core::encode_path_segment(&self.entity_id)
+            ),
         );
 
         if let Some(value) = &self.x {
@@ -472,7 +480,7 @@ impl<'a> StoreAvatarRequest<'a> {
 
 /// Deletes an avatar from a project, issue type or priority.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteAvatarRequest<'a> {
     client: &'a crate::core::Client,
     r#type: DeleteAvatarRequestType,
@@ -496,7 +504,9 @@ impl<'a> DeleteAvatarRequest<'a> {
             crate::core::Method::DELETE,
             format!(
                 "/rest/api/3/universal_avatar/type/{}/owner/{}/avatar/{}",
-                self.r#type, self.owning_object_id, self.id
+                crate::core::encode_path_segment(self.r#type.as_str()),
+                crate::core::encode_path_segment(&self.owning_object_id),
+                self.id
             ),
         );
 
@@ -518,7 +528,7 @@ impl<'a> DeleteAvatarRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** None.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
 pub struct GetAvatarImageByTypeRequest<'a> {
     client: &'a crate::core::Client,
     r#type: GetAvatarImageByTypeRequestType,
@@ -551,7 +561,10 @@ impl<'a> GetAvatarImageByTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/universal_avatar/view/type/{}", self.r#type),
+            format!(
+                "/rest/api/3/universal_avatar/view/type/{}",
+                crate::core::encode_path_segment(self.r#type.as_str())
+            ),
         );
 
         if let Some(value) = &self.size {
@@ -580,7 +593,7 @@ impl<'a> GetAvatarImageByTypeRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  For system avatars, none.
 ///  *  For custom project avatars, *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project the avatar belongs to.
@@ -619,7 +632,11 @@ impl<'a> GetAvatarImageByIDRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/universal_avatar/view/type/{}/avatar/{}", self.r#type, self.id),
+            format!(
+                "/rest/api/3/universal_avatar/view/type/{}/avatar/{}",
+                crate::core::encode_path_segment(self.r#type.as_str()),
+                self.id
+            ),
         );
 
         if let Some(value) = &self.size {
@@ -648,7 +665,7 @@ impl<'a> GetAvatarImageByIDRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  For system avatars, none.
 ///  *  For custom project avatars, *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project the avatar belongs to.
@@ -691,7 +708,11 @@ impl<'a> GetAvatarImageByOwnerRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/universal_avatar/view/type/{}/owner/{}", self.r#type, self.entity_id),
+            format!(
+                "/rest/api/3/universal_avatar/view/type/{}/owner/{}",
+                crate::core::encode_path_segment(self.r#type.as_str()),
+                crate::core::encode_path_segment(&self.entity_id)
+            ),
         );
 
         if let Some(value) = &self.size {

@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// A single entry in the WorkflowHistoryPage.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowHistoryItemDTO {
     /// Whether the version is an intermediate workflow state, sometimes created during workflow updates.
     #[serde(rename = "isIntermediate", default, skip_serializing_if = "Option::is_none")]

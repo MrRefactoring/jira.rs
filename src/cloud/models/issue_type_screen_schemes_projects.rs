@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Issue type screen scheme with a list of the projects that use it.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct IssueTypeScreenSchemesProjects {
     #[serde(rename = "issueTypeScreenScheme", default, skip_serializing_if = "Option::is_none")]
     pub issue_type_screen_scheme: Option<IssueTypeScreenScheme>,

@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Errors of bulk edit action.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct BulkEditActionError {
     /// The error messages.
     #[serde(rename = "errorMessages")]

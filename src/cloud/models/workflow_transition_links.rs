@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// The statuses the transition can start from, and the mapping of ports between the statuses.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct WorkflowTransitionLinks {
     /// The port that the transition starts from.
     #[serde(rename = "fromPort", default, skip_serializing_if = "Option::is_none")]

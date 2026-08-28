@@ -9,7 +9,8 @@ pub enum CustomFieldContextDefaultValueLabelsType {
 }
 
 /// Default value for a labels custom field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueLabels {
     /// The ID of the context.
     #[serde(rename = "contextId")]

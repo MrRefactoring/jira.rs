@@ -14,7 +14,7 @@ impl<'a> ScreenTabFieldsService<'a> {
 
     /// Returns all fields for a screen tab.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     ///  *  *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) when the project key is specified, providing that the screen is associated with the project through a Screen Scheme and Issue Type Screen Scheme.
@@ -24,7 +24,7 @@ impl<'a> ScreenTabFieldsService<'a> {
 
     /// Adds a field to a screen tab.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn add_screen_tab_field(
         &self,
         screen_id: i64,
@@ -36,7 +36,7 @@ impl<'a> ScreenTabFieldsService<'a> {
 
     /// Removes a field from a screen tab.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn remove_screen_tab_field(
         &self,
         screen_id: i64,
@@ -50,7 +50,7 @@ impl<'a> ScreenTabFieldsService<'a> {
     ///
     /// If `after` and `position` are provided in the request, `position` is ignored.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn move_screen_tab_field(
         &self,
         screen_id: i64,
@@ -64,7 +64,7 @@ impl<'a> ScreenTabFieldsService<'a> {
 
 /// Returns all fields for a screen tab.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 ///  *  *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg) when the project key is specified, providing that the screen is associated with the project through a Screen Scheme and Issue Type Screen Scheme.
@@ -115,7 +115,7 @@ impl<'a> GetAllScreenTabFieldsRequest<'a> {
 
 /// Adds a field to a screen tab.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct AddScreenTabFieldRequest<'a> {
     client: &'a crate::core::Client,
     screen_id: i64,
@@ -170,7 +170,7 @@ impl<'a> AddScreenTabFieldRequest<'a> {
 
 /// Removes a field from a screen tab.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct RemoveScreenTabFieldRequest<'a> {
     client: &'a crate::core::Client,
     screen_id: i64,
@@ -187,7 +187,12 @@ impl<'a> RemoveScreenTabFieldRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/screens/{}/tabs/{}/fields/{}", self.screen_id, self.tab_id, self.id),
+            format!(
+                "/rest/api/3/screens/{}/tabs/{}/fields/{}",
+                self.screen_id,
+                self.tab_id,
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         Ok(config)
@@ -208,7 +213,7 @@ impl<'a> RemoveScreenTabFieldRequest<'a> {
 ///
 /// If `after` and `position` are provided in the request, `position` is ignored.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct MoveScreenTabFieldRequest<'a> {
     client: &'a crate::core::Client,
     screen_id: i64,
@@ -232,7 +237,12 @@ impl<'a> MoveScreenTabFieldRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/3/screens/{}/tabs/{}/fields/{}/move", self.screen_id, self.tab_id, self.id),
+            format!(
+                "/rest/api/3/screens/{}/tabs/{}/fields/{}/move",
+                self.screen_id,
+                self.tab_id,
+                crate::core::encode_path_segment(&self.id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.move_field)? {

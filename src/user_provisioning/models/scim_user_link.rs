@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Represents a SCIM user link with associated IDs.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ScimUserLink {
     /// The SCIM user ID.
     #[serde(rename = "scimUserId")]

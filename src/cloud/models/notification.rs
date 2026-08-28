@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details about a notification.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct Notification {
     /// The HTML body of the email notification for the issue.
     #[serde(rename = "htmlBody", default, skip_serializing_if = "Option::is_none")]

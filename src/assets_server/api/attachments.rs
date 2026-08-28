@@ -47,7 +47,7 @@ impl<'a> GetAttachmentsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/assets/1.0/attachments/object/{}", self.object_id),
+            format!("/rest/assets/1.0/attachments/object/{}", crate::core::encode_path_segment(&self.object_id)),
         );
 
         Ok(config)
@@ -93,7 +93,7 @@ impl<'a> AddAttachmentsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/assets/1.0/attachments/object/{}", self.object_id),
+            format!("/rest/assets/1.0/attachments/object/{}", crate::core::encode_path_segment(&self.object_id)),
         );
 
         config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
@@ -132,7 +132,7 @@ impl<'a> DeleteAttachmentRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/assets/1.0/attachments/{}", self.attachment_id),
+            format!("/rest/assets/1.0/attachments/{}", crate::core::encode_path_segment(&self.attachment_id)),
         );
 
         Ok(config)

@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Represents the position of the redaction
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RedactionPosition {
     /// The ADF pointer indicating the position of the text to be redacted. This is only required when redacting from rich text(ADF) fields. For plain text fields, this field can be omitted.
     #[serde(rename = "adfPointer", default, skip_serializing_if = "Option::is_none")]

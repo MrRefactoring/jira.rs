@@ -14,14 +14,14 @@ impl<'a> IssueSecuritySchemesService<'a> {
 
     /// Returns all [issue security schemes](https://confluence.atlassian.com/x/J4lKLg).
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_issue_security_schemes(&self) -> GetIssueSecuritySchemesRequest<'a> {
         GetIssueSecuritySchemesRequest::new(self.client)
     }
 
     /// Returns an issue security scheme along with its security levels.
     ///
-    /// **[Permissions](#permissions) required:**
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
     ///
     ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     ///  *  *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project that uses the requested issue security scheme.
@@ -32,7 +32,7 @@ impl<'a> IssueSecuritySchemesService<'a> {
 
 /// Returns all [issue security schemes](https://confluence.atlassian.com/x/J4lKLg).
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetIssueSecuritySchemesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -63,7 +63,7 @@ impl<'a> GetIssueSecuritySchemesRequest<'a> {
 
 /// Returns an issue security scheme along with its security levels.
 ///
-/// **[Permissions](#permissions) required:**
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
 ///
 ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 ///  *  *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project that uses the requested issue security scheme.

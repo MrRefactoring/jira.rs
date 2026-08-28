@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of the association between an issue type scheme and project.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssueTypeSchemeProjectAssociation {
     /// The ID of the issue type scheme.
     #[serde(rename = "issueTypeSchemeId")]

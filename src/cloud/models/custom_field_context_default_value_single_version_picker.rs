@@ -9,7 +9,8 @@ pub enum CustomFieldContextDefaultValueSingleVersionPickerType {
 }
 
 /// The default value for a version picker custom field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueSingleVersionPicker {
     /// The ID of the context.
     #[serde(rename = "contextId")]

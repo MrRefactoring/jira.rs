@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The results from a JQL query.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AutoCompleteSuggestions {
     /// The list of suggested item.
     #[serde(default, skip_serializing_if = "Option::is_none")]

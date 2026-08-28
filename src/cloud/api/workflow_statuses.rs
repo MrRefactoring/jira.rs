@@ -16,7 +16,7 @@ impl<'a> WorkflowStatusesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// [Permissions](#permissions) required: *Browse projects* [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) for the project.
+    /// [Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required: *Browse projects* [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) for the project.
     pub fn get_statuses(&self) -> GetStatusesRequest<'a> {
         GetStatusesRequest::new(self.client)
     }
@@ -27,7 +27,7 @@ impl<'a> WorkflowStatusesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// [Permissions](#permissions) required: *Browse projects* [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) for the project.
+    /// [Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required: *Browse projects* [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) for the project.
     pub fn get_status(&self, id_or_name: impl Into<String>) -> GetStatusRequest<'a> {
         GetStatusRequest::new(self.client, id_or_name)
     }
@@ -37,7 +37,7 @@ impl<'a> WorkflowStatusesService<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// [Permissions](#permissions) required: *Browse projects* [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) for the project.
+/// [Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required: *Browse projects* [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) for the project.
 pub struct GetStatusesRequest<'a> {
     client: &'a crate::core::Client,
 }
@@ -71,7 +71,7 @@ impl<'a> GetStatusesRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// [Permissions](#permissions) required: *Browse projects* [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) for the project.
+/// [Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required: *Browse projects* [project permission](https://support.atlassian.com/jira-cloud-administration/docs/manage-project-permissions/) for the project.
 pub struct GetStatusRequest<'a> {
     client: &'a crate::core::Client,
     id_or_name: String,
@@ -86,7 +86,7 @@ impl<'a> GetStatusRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/status/{}", self.id_or_name),
+            format!("/rest/api/3/status/{}", crate::core::encode_path_segment(&self.id_or_name)),
         );
 
         Ok(config)

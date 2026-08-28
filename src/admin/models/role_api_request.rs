@@ -18,7 +18,7 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RoleApiRequest {
     /// Role to assign/revoke for a user
     pub role: RoleApiRequestRole,

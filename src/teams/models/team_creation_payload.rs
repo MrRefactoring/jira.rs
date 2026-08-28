@@ -11,12 +11,13 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TeamCreationPayload {
     pub description: String,
     #[serde(rename = "displayName")]
     pub display_name: String,
     /// If the org mandates site-scoped teams, a site ID must be provided or the operation will fail. \[Deprecated\] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
+    #[deprecated(note = "\\[Deprecated\\] Omitting siteId is deprecated.")]
     #[serde(rename = "siteId", default, skip_serializing_if = "Option::is_none")]
     pub site_id: Option<String>,
     #[serde(rename = "teamType")]

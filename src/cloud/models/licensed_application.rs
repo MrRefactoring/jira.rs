@@ -12,7 +12,8 @@ crate::open_enum! {
 }
 
 /// Details about a licensed Jira application.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct LicensedApplication {
     /// The ID of the application.
     pub id: String,

@@ -42,7 +42,7 @@ impl<'a> UpdateGlobalConfigurationRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/global/config/objectschema/{}/property", self.id),
+            format!("/global/config/objectschema/{}/property", crate::core::encode_path_segment(&self.id)),
         );
 
         let body = match serde_json::to_value(&self.global_configuration_in)? {

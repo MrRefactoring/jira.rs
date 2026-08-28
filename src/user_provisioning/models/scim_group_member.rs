@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// SCIM group member
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ScimGroupMember {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub r#type: Option<String>,

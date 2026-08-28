@@ -2,9 +2,9 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SearchAndReconcileRequest {
-    /// Use [expand](#expansion) to include additional information about issues in the response. Note that, unlike the majority of instances where `expand` is specified, `expand` is defined as a comma-delimited string of values. The expand options are:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about issues in the response. Note that, unlike the majority of instances where `expand` is specified, `expand` is defined as a comma-delimited string of values. The expand options are:
     ///
     ///  *  `renderedFields` Returns field values rendered in HTML format.
     ///  *  `names` Returns the display name of each field.
@@ -34,7 +34,7 @@ pub struct SearchAndReconcileRequest {
     ///
     /// Multiple `fields` parameters can be included in a request.
     ///
-    /// Note: By default, this resource returns IDs only. This differs from [GET issue](#api-rest-api-3-issue-issueIdOrKey-get) where the default is all fields.
+    /// Note: By default, this resource returns IDs only. This differs from [GET issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueIdOrKey-get) where the default is all fields.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub fields: Option<Vec<String>>,
     /// Reference fields by their key (rather than ID). The default is `false`.

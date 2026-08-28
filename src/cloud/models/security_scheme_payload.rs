@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The payload for creating a security scheme. See <https://support.atlassian.com/jira-cloud-administration/docs/configure-issue-security-schemes/>
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SecuritySchemePayload {
     /// The description of the security scheme
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -13,7 +13,8 @@ crate::open_enum! {
 }
 
 /// Details about a workflow transition in preview context.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct TransitionPreview {
     /// The post-functions of the transition.
     #[serde(default, skip_serializing_if = "Option::is_none")]

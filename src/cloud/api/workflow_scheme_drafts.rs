@@ -14,7 +14,7 @@ impl<'a> WorkflowSchemeDraftsService<'a> {
 
     /// Create a draft workflow scheme from an active workflow scheme, by copying the active workflow scheme. Note that an active workflow scheme can only have one draft workflow scheme.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn create_workflow_scheme_draft_from_parent(&self, id: i64) -> CreateWorkflowSchemeDraftFromParentRequest<'a> {
         CreateWorkflowSchemeDraftFromParentRequest::new(self.client, id)
     }
@@ -25,35 +25,35 @@ impl<'a> WorkflowSchemeDraftsService<'a> {
     ///  *  Only active workflow schemes can have draft workflow schemes.
     ///  *  An active workflow scheme can only have one draft workflow scheme.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_workflow_scheme_draft(&self, id: i64) -> GetWorkflowSchemeDraftRequest<'a> {
         GetWorkflowSchemeDraftRequest::new(self.client, id)
     }
 
     /// Updates a draft workflow scheme. If a draft workflow scheme does not exist for the active workflow scheme, then a draft is created. Note that an active workflow scheme can only have one draft workflow scheme.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn update_workflow_scheme_draft(&self, id: i64, body: WorkflowScheme) -> UpdateWorkflowSchemeDraftRequest<'a> {
         UpdateWorkflowSchemeDraftRequest::new(self.client, id, body)
     }
 
     /// Deletes a draft workflow scheme.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_workflow_scheme_draft(&self, id: i64) -> DeleteWorkflowSchemeDraftRequest<'a> {
         DeleteWorkflowSchemeDraftRequest::new(self.client, id)
     }
 
     /// Returns the default workflow for a workflow scheme's draft. The default workflow is the workflow that is assigned any issue types that have not been mapped to any other workflow. The default workflow has *All Unassigned Issue Types* listed in its issue types for the workflow scheme in Jira.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_draft_default_workflow(&self, id: i64) -> GetDraftDefaultWorkflowRequest<'a> {
         GetDraftDefaultWorkflowRequest::new(self.client, id)
     }
 
     /// Sets the default workflow for a workflow scheme's draft.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn update_draft_default_workflow(
         &self,
         id: i64,
@@ -64,14 +64,14 @@ impl<'a> WorkflowSchemeDraftsService<'a> {
 
     /// Resets the default workflow for a workflow scheme's draft. That is, the default workflow is set to Jira's system workflow (the *jira* workflow).
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_draft_default_workflow(&self, id: i64) -> DeleteDraftDefaultWorkflowRequest<'a> {
         DeleteDraftDefaultWorkflowRequest::new(self.client, id)
     }
 
     /// Returns the issue type-workflow mapping for an issue type in a workflow scheme's draft.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_workflow_scheme_draft_issue_type(
         &self,
         id: i64,
@@ -82,7 +82,7 @@ impl<'a> WorkflowSchemeDraftsService<'a> {
 
     /// Sets the workflow for an issue type in a workflow scheme's draft.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn set_workflow_scheme_draft_issue_type(
         &self,
         id: i64,
@@ -94,7 +94,7 @@ impl<'a> WorkflowSchemeDraftsService<'a> {
 
     /// Deletes the issue type-workflow mapping for an issue type in a workflow scheme's draft.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_workflow_scheme_draft_issue_type(
         &self,
         id: i64,
@@ -107,9 +107,9 @@ impl<'a> WorkflowSchemeDraftsService<'a> {
     ///
     /// Where the draft workflow includes new workflow statuses for an issue type, mappings are provided to update issues with the original workflow status to the new workflow status.
     ///
-    /// This operation is [asynchronous](#async). Follow the `location` link in the response to determine the status of the task and use [Get task](#api-rest-api-3-task-taskId-get) to obtain updates.
+    /// This operation is [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `location` link in the response to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain updates.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn publish_draft_workflow_scheme(
         &self,
         id: i64,
@@ -120,14 +120,14 @@ impl<'a> WorkflowSchemeDraftsService<'a> {
 
     /// Returns the workflow-issue type mappings for a workflow scheme's draft.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_draft_workflow(&self, id: i64) -> GetDraftWorkflowRequest<'a> {
         GetDraftWorkflowRequest::new(self.client, id)
     }
 
     /// Sets the issue types for a workflow in a workflow scheme's draft. The workflow can also be set as the default workflow for the draft workflow scheme. Unmapped issues types are mapped to the default workflow.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn update_draft_workflow_mapping(
         &self,
         id: i64,
@@ -139,7 +139,7 @@ impl<'a> WorkflowSchemeDraftsService<'a> {
 
     /// Deletes the workflow-issue type mapping for a workflow in a workflow scheme's draft.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_draft_workflow_mapping(
         &self,
         id: i64,
@@ -151,7 +151,7 @@ impl<'a> WorkflowSchemeDraftsService<'a> {
 
 /// Create a draft workflow scheme from an active workflow scheme, by copying the active workflow scheme. Note that an active workflow scheme can only have one draft workflow scheme.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct CreateWorkflowSchemeDraftFromParentRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -189,7 +189,7 @@ impl<'a> CreateWorkflowSchemeDraftFromParentRequest<'a> {
 ///  *  Only active workflow schemes can have draft workflow schemes.
 ///  *  An active workflow scheme can only have one draft workflow scheme.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetWorkflowSchemeDraftRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -223,7 +223,7 @@ impl<'a> GetWorkflowSchemeDraftRequest<'a> {
 
 /// Updates a draft workflow scheme. If a draft workflow scheme does not exist for the active workflow scheme, then a draft is created. Note that an active workflow scheme can only have one draft workflow scheme.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct UpdateWorkflowSchemeDraftRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -260,7 +260,7 @@ impl<'a> UpdateWorkflowSchemeDraftRequest<'a> {
 
 /// Deletes a draft workflow scheme.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteWorkflowSchemeDraftRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -294,7 +294,7 @@ impl<'a> DeleteWorkflowSchemeDraftRequest<'a> {
 
 /// Returns the default workflow for a workflow scheme's draft. The default workflow is the workflow that is assigned any issue types that have not been mapped to any other workflow. The default workflow has *All Unassigned Issue Types* listed in its issue types for the workflow scheme in Jira.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetDraftDefaultWorkflowRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -328,7 +328,7 @@ impl<'a> GetDraftDefaultWorkflowRequest<'a> {
 
 /// Sets the default workflow for a workflow scheme's draft.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct UpdateDraftDefaultWorkflowRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -370,7 +370,7 @@ impl<'a> UpdateDraftDefaultWorkflowRequest<'a> {
 
 /// Resets the default workflow for a workflow scheme's draft. That is, the default workflow is set to Jira's system workflow (the *jira* workflow).
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteDraftDefaultWorkflowRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -404,7 +404,7 @@ impl<'a> DeleteDraftDefaultWorkflowRequest<'a> {
 
 /// Returns the issue type-workflow mapping for an issue type in a workflow scheme's draft.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetWorkflowSchemeDraftIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -420,7 +420,11 @@ impl<'a> GetWorkflowSchemeDraftIssueTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/workflowscheme/{}/draft/issuetype/{}", self.id, self.issue_type),
+            format!(
+                "/rest/api/3/workflowscheme/{}/draft/issuetype/{}",
+                self.id,
+                crate::core::encode_path_segment(&self.issue_type)
+            ),
         );
 
         Ok(config)
@@ -439,7 +443,7 @@ impl<'a> GetWorkflowSchemeDraftIssueTypeRequest<'a> {
 
 /// Sets the workflow for an issue type in a workflow scheme's draft.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct SetWorkflowSchemeDraftIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -461,7 +465,11 @@ impl<'a> SetWorkflowSchemeDraftIssueTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/workflowscheme/{}/draft/issuetype/{}", self.id, self.issue_type),
+            format!(
+                "/rest/api/3/workflowscheme/{}/draft/issuetype/{}",
+                self.id,
+                crate::core::encode_path_segment(&self.issue_type)
+            ),
         );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -482,7 +490,7 @@ impl<'a> SetWorkflowSchemeDraftIssueTypeRequest<'a> {
 
 /// Deletes the issue type-workflow mapping for an issue type in a workflow scheme's draft.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteWorkflowSchemeDraftIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -498,7 +506,11 @@ impl<'a> DeleteWorkflowSchemeDraftIssueTypeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/workflowscheme/{}/draft/issuetype/{}", self.id, self.issue_type),
+            format!(
+                "/rest/api/3/workflowscheme/{}/draft/issuetype/{}",
+                self.id,
+                crate::core::encode_path_segment(&self.issue_type)
+            ),
         );
 
         Ok(config)
@@ -519,9 +531,9 @@ impl<'a> DeleteWorkflowSchemeDraftIssueTypeRequest<'a> {
 ///
 /// Where the draft workflow includes new workflow statuses for an issue type, mappings are provided to update issues with the original workflow status to the new workflow status.
 ///
-/// This operation is [asynchronous](#async). Follow the `location` link in the response to determine the status of the task and use [Get task](#api-rest-api-3-task-taskId-get) to obtain updates.
+/// This operation is [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `location` link in the response to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain updates.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct PublishDraftWorkflowSchemeRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -580,7 +592,7 @@ impl<'a> PublishDraftWorkflowSchemeRequest<'a> {
 
 /// Returns the workflow-issue type mappings for a workflow scheme's draft.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetDraftWorkflowRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -627,7 +639,7 @@ impl<'a> GetDraftWorkflowRequest<'a> {
 
 /// Sets the issue types for a workflow in a workflow scheme's draft. The workflow can also be set as the default workflow for the draft workflow scheme. Unmapped issues types are mapped to the default workflow.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct UpdateDraftWorkflowMappingRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
@@ -677,7 +689,7 @@ impl<'a> UpdateDraftWorkflowMappingRequest<'a> {
 
 /// Deletes the workflow-issue type mapping for a workflow in a workflow scheme's draft.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteDraftWorkflowMappingRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,

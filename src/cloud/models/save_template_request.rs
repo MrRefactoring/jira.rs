@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Request to save a custom template
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SaveTemplateRequest {
     /// The description of the template
     #[serde(rename = "templateDescription", default, skip_serializing_if = "Option::is_none")]

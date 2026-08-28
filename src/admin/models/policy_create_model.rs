@@ -27,7 +27,7 @@ crate::open_enum! {
 }
 
 /// Rule of the Policy
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum PolicyCreateModelAttributesRule {
@@ -37,7 +37,8 @@ pub enum PolicyCreateModelAttributesRule {
 }
 
 /// Attributes of this object
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PolicyCreateModelAttributes {
     /// Type of this Policy
     pub r#type: PolicyCreateModelAttributesType,
@@ -55,7 +56,7 @@ pub struct PolicyCreateModelAttributes {
     pub resources: Option<Vec<ResourceInput>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PolicyCreateModel {
     /// Type of this object
     pub r#type: PolicyCreateModelType,

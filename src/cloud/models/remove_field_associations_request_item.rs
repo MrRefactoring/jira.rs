@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Request item for removing field associations.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct RemoveFieldAssociationsRequestItem {
     /// Set of scheme IDs from which to remove field associations
     #[serde(rename = "schemeIds")]

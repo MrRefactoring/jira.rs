@@ -3,7 +3,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkflowCreateValidateRequest {
     pub payload: WorkflowCreateRequest,
     #[serde(rename = "validationOptions", default, skip_serializing_if = "Option::is_none")]

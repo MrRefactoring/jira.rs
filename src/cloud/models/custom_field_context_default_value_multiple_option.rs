@@ -9,7 +9,8 @@ pub enum CustomFieldContextDefaultValueMultipleOptionType {
 }
 
 /// The default value for a multi-select custom field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueMultipleOption {
     /// The ID of the context.
     #[serde(rename = "contextId")]

@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// A field within a field configuration.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FieldConfigurationItem {
     /// The description of the field within the field configuration.
     #[serde(default, skip_serializing_if = "Option::is_none")]

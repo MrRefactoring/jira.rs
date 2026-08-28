@@ -10,7 +10,8 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetConfigurationLocation {
     #[serde(rename = "projectKeyOrId", default, skip_serializing_if = "Option::is_none")]
     pub project_key_or_id: Option<String>,
@@ -26,19 +27,22 @@ pub struct GetConfigurationLocation {
     pub self_: Option<String>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetConfigurationRanking {
     #[serde(rename = "rankCustomFieldId", default, skip_serializing_if = "Option::is_none")]
     pub rank_custom_field_id: Option<i64>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetConfigurationSubQuery {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub query: Option<String>,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetConfiguration {
     #[serde(rename = "columnConfig", default, skip_serializing_if = "Option::is_none")]
     pub column_config: Option<ColumnConfig>,

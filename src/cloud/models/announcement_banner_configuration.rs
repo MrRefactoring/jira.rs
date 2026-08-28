@@ -11,7 +11,8 @@ crate::open_enum! {
 }
 
 /// Announcement banner configuration.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AnnouncementBannerConfiguration {
     /// Hash of the banner data. The client detects updates by comparing hash IDs.
     #[serde(rename = "hashId", default, skip_serializing_if = "Option::is_none")]

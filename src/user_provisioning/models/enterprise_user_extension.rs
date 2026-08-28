@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// SCIM enterprise user extension
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EnterpriseUserExtension {
     /// Organization the user belongs to.
     #[serde(default, skip_serializing_if = "Option::is_none")]

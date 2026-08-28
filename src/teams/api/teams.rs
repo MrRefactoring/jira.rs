@@ -89,6 +89,7 @@ impl<'a> QueryTeamsRequest<'a> {
     }
 
     /// \[Optional\] The ID of the site to retrieve teams which are site scoped. Please note that if the org is site-scoped, teams will not be included in response if siteId is not provided. \[Deprecated\] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
+    #[deprecated(note = "\\[Deprecated\\] Omitting siteId is deprecated.")]
     #[must_use]
     pub fn site_id(mut self, value: impl Into<String>) -> Self {
         self.site_id = Some(value.into());
@@ -116,7 +117,7 @@ impl<'a> QueryTeamsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/gateway/api/public/teams/v1/org/{}/teams", self.org_id),
+            format!("/gateway/api/public/teams/v1/org/{}/teams", crate::core::encode_path_segment(&self.org_id)),
         );
 
         if let Some(value) = &self.site_id {
@@ -165,7 +166,7 @@ impl<'a> CreateTeamRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/gateway/api/public/teams/v1/org/{}/teams", self.org_id),
+            format!("/gateway/api/public/teams/v1/org/{}/teams", crate::core::encode_path_segment(&self.org_id)),
         );
 
         let body = match serde_json::to_value(&self.team_creation_payload)? {
@@ -208,7 +209,10 @@ impl<'a> ArchiveTeamsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/gateway/api/public/teams/v1/org/{}/teams/archive", self.org_id),
+            format!(
+                "/gateway/api/public/teams/v1/org/{}/teams/archive",
+                crate::core::encode_path_segment(&self.org_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.bulk_operation_request)? {
@@ -251,7 +255,10 @@ impl<'a> UnarchiveTeamsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/gateway/api/public/teams/v1/org/{}/teams/unarchive", self.org_id),
+            format!(
+                "/gateway/api/public/teams/v1/org/{}/teams/unarchive",
+                crate::core::encode_path_segment(&self.org_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.bulk_operation_request)? {
@@ -288,6 +295,7 @@ impl<'a> GetTeamRequest<'a> {
     }
 
     /// \[Optional\] The ID of the site to retrieve teams which are site scoped. Please note that if the org is site-scoped, teams will not be included in response if siteId is not provided. \[Deprecated\] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
+    #[deprecated(note = "\\[Deprecated\\] Omitting siteId is deprecated.")]
     #[must_use]
     pub fn site_id(mut self, value: impl Into<String>) -> Self {
         self.site_id = Some(value.into());
@@ -299,7 +307,11 @@ impl<'a> GetTeamRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/gateway/api/public/teams/v1/org/{}/teams/{}", self.org_id, self.team_id),
+            format!(
+                "/gateway/api/public/teams/v1/org/{}/teams/{}",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.team_id)
+            ),
         );
 
         if let Some(value) = &self.site_id {
@@ -335,7 +347,11 @@ impl<'a> DeleteTeamRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/gateway/api/public/teams/v1/org/{}/teams/{}", self.org_id, self.team_id),
+            format!(
+                "/gateway/api/public/teams/v1/org/{}/teams/{}",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.team_id)
+            ),
         );
 
         Ok(config)
@@ -374,7 +390,11 @@ impl<'a> UpdateTeamRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PATCH,
-            format!("/gateway/api/public/teams/v1/org/{}/teams/{}", self.org_id, self.team_id),
+            format!(
+                "/gateway/api/public/teams/v1/org/{}/teams/{}",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.team_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.team_update_payload)? {
@@ -413,7 +433,11 @@ impl<'a> RestoreTeamRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/gateway/api/public/teams/v1/org/{}/teams/{}/restore", self.org_id, self.team_id),
+            format!(
+                "/gateway/api/public/teams/v1/org/{}/teams/{}/restore",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.team_id)
+            ),
         );
 
         Ok(config)
@@ -459,7 +483,7 @@ impl<'a> UploadAndSetTeamCoverPhotoRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/gateway/api/public/teams/v1/{}/cover-photo", self.team_id),
+            format!("/gateway/api/public/teams/v1/{}/cover-photo", crate::core::encode_path_segment(&self.team_id)),
         );
 
         config.body = Some(crate::core::Body::Multipart(crate::core::MultipartBody::new("file", self.file.clone())));

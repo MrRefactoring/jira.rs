@@ -4,12 +4,24 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details about the Jira instance.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ServerInformation {
     /// The base URL of the Jira instance.
     #[serde(rename = "baseUrl", default, skip_serializing_if = "Option::is_none")]
     pub base_url: Option<String>,
     /// The timestamp when the Jira version was built.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "buildDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub build_date: Option<chrono::DateTime<chrono::Utc>>,
+    /// The timestamp when the Jira version was built.
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "buildDate",
         default,
@@ -33,12 +45,24 @@ pub struct ServerInformation {
     #[serde(rename = "displayUrlServicedeskHelpCenter", default, skip_serializing_if = "Option::is_none")]
     pub display_url_servicedesk_help_center: Option<String>,
     /// Jira instance health check results. Deprecated and no longer returned.
+    #[deprecated(note = "Deprecated and no longer returned.")]
     #[serde(rename = "healthChecks", default, skip_serializing_if = "Option::is_none")]
     pub health_checks: Option<Vec<HealthCheckResult>>,
     /// The unique identifier of the Jira version.
     #[serde(rename = "scmInfo", default, skip_serializing_if = "Option::is_none")]
     pub scm_info: Option<String>,
     /// The time in Jira when this request was responded to.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "serverTime",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub server_time: Option<chrono::DateTime<chrono::Utc>>,
+    /// The time in Jira when this request was responded to.
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "serverTime",
         default,

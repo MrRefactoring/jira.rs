@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of new default levels.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SetDefaultLevelsRequest {
     /// List of objects with issue security scheme ID and new default level ID.
     #[serde(rename = "defaultValues")]

@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of an application role.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ApplicationRole {
     /// The groups that are granted default access for this application role. As a group's name can change, use of `defaultGroupsDetails` is recommended to identify a groups.
     #[serde(rename = "defaultGroups", default, skip_serializing_if = "Option::is_none")]
@@ -13,6 +13,7 @@ pub struct ApplicationRole {
     #[serde(rename = "defaultGroupsDetails", default, skip_serializing_if = "Option::is_none")]
     pub default_groups_details: Option<Vec<GroupName>>,
     /// Deprecated.
+    #[deprecated(note = "Deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub defined: Option<bool>,
     /// The groups associated with the application role.

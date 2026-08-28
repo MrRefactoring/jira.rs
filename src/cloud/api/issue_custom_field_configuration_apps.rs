@@ -12,7 +12,7 @@ impl<'a> IssueCustomFieldConfigurationAppsService<'a> {
         Self { client }
     }
 
-    /// Returns a [paginated](#pagination) list of configurations for a custom field of a [type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/) created by a [Forge app](https://developer.atlassian.com/platform/forge/).
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of configurations for a custom field of a [type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/) created by a [Forge app](https://developer.atlassian.com/platform/forge/).
     ///
     /// The result can be filtered by one of these criteria:
     ///
@@ -23,7 +23,7 @@ impl<'a> IssueCustomFieldConfigurationAppsService<'a> {
     ///
     /// Otherwise, all configurations are returned.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the Forge app that provided the custom field type.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the Forge app that provided the custom field type.
     pub fn get_custom_field_configuration(
         &self,
         field_id_or_key: impl Into<String>,
@@ -33,7 +33,7 @@ impl<'a> IssueCustomFieldConfigurationAppsService<'a> {
 
     /// Update the configuration for contexts of a custom field of a [type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/) created by a [Forge app](https://developer.atlassian.com/platform/forge/).
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the Forge app that created the custom field type.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the Forge app that created the custom field type.
     pub fn update_custom_field_configuration(
         &self,
         field_id_or_key: impl Into<String>,
@@ -43,7 +43,7 @@ impl<'a> IssueCustomFieldConfigurationAppsService<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of configurations for a custom field of a [type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/) created by a [Forge app](https://developer.atlassian.com/platform/forge/).
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of configurations for a custom field of a [type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/) created by a [Forge app](https://developer.atlassian.com/platform/forge/).
 ///
 /// The result can be filtered by one of these criteria:
 ///
@@ -54,7 +54,7 @@ impl<'a> IssueCustomFieldConfigurationAppsService<'a> {
 ///
 /// Otherwise, all configurations are returned.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the Forge app that provided the custom field type.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the Forge app that provided the custom field type.
 pub struct GetCustomFieldConfigurationRequest<'a> {
     client: &'a crate::core::Client,
     field_id_or_key: String,
@@ -142,7 +142,10 @@ impl<'a> GetCustomFieldConfigurationRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/app/field/{}/context/configuration", self.field_id_or_key),
+            format!(
+                "/rest/api/3/app/field/{}/context/configuration",
+                crate::core::encode_path_segment(&self.field_id_or_key)
+            ),
         );
 
         if let Some(value) = &self.id {
@@ -189,7 +192,7 @@ impl<'a> GetCustomFieldConfigurationRequest<'a> {
 
 /// Update the configuration for contexts of a custom field of a [type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/) created by a [Forge app](https://developer.atlassian.com/platform/forge/).
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the Forge app that created the custom field type.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the Forge app that created the custom field type.
 pub struct UpdateCustomFieldConfigurationRequest<'a> {
     client: &'a crate::core::Client,
     field_id_or_key: String,
@@ -209,7 +212,10 @@ impl<'a> UpdateCustomFieldConfigurationRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/app/field/{}/context/configuration", self.field_id_or_key),
+            format!(
+                "/rest/api/3/app/field/{}/context/configuration",
+                crate::core::encode_path_segment(&self.field_id_or_key)
+            ),
         );
 
         let body = match serde_json::to_value(&self.custom_field_configurations)? {

@@ -29,9 +29,12 @@ crate::open_enum! {
 }
 
 /// Details of an issue priority.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct CreatePriorityDetails {
     /// The ID for the avatar for the priority. Either the iconUrl or avatarId must be defined, but not both. This parameter is nullable and will become mandatory once the iconUrl parameter is deprecated.
+    #[deprecated(
+        note = "This parameter is nullable and will become mandatory once the iconUrl parameter is deprecated."
+    )]
     #[serde(rename = "avatarId", default, skip_serializing_if = "Option::is_none")]
     pub avatar_id: Option<i64>,
     /// The description of the priority.

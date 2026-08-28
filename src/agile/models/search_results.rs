@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The result of a JQL search.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SearchResults {
     /// Expand options that include additional search result details in the response.
     #[serde(default, skip_serializing_if = "Option::is_none")]

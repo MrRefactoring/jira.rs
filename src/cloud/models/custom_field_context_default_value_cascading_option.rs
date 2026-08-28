@@ -9,7 +9,8 @@ pub enum CustomFieldContextDefaultValueCascadingOptionType {
 }
 
 /// The default value for a cascading select custom field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueCascadingOption {
     /// The ID of the default cascading option.
     #[serde(rename = "cascadingOptionId", default, skip_serializing_if = "Option::is_none")]

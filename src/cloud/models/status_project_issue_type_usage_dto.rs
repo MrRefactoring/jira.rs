@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The issue types using this status in a project.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct StatusProjectIssueTypeUsageDTO {
     #[serde(rename = "issueTypes", default, skip_serializing_if = "Option::is_none")]
     pub issue_types: Option<StatusProjectIssueTypeUsagePage>,

@@ -84,7 +84,7 @@ impl<'a> DeactivateUserRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/users/{}/manage/lifecycle/disable", self.account_id),
+            format!("/users/{}/manage/lifecycle/disable", crate::core::encode_path_segment(&self.account_id)),
         );
 
         let mut body = serde_json::Map::new();
@@ -130,7 +130,7 @@ impl<'a> ActivateUserRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/users/{}/manage/lifecycle/enable", self.account_id),
+            format!("/users/{}/manage/lifecycle/enable", crate::core::encode_path_segment(&self.account_id)),
         );
 
         Ok(config)
@@ -175,7 +175,7 @@ impl<'a> DeleteAccountRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/users/{}/manage/lifecycle/delete", self.account_id),
+            format!("/users/{}/manage/lifecycle/delete", crate::core::encode_path_segment(&self.account_id)),
         );
 
         Ok(config)
@@ -214,7 +214,7 @@ impl<'a> CancelAccountDeletionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/users/{}/manage/lifecycle/cancel-delete", self.account_id),
+            format!("/users/{}/manage/lifecycle/cancel-delete", crate::core::encode_path_segment(&self.account_id)),
         );
 
         Ok(config)

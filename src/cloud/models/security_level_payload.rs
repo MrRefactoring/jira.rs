@@ -12,7 +12,7 @@ crate::open_enum! {
 }
 
 /// The payload for creating a security level. See <https://support.atlassian.com/jira-cloud-administration/docs/configure-issue-security-schemes/>
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SecurityLevelPayload {
     /// The description of the security level
     #[serde(default, skip_serializing_if = "Option::is_none")]

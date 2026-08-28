@@ -18,7 +18,8 @@ crate::open_enum! {
 }
 
 /// A compound workflow transition rule condition. This object returns `nodeType` as `compound`.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowCompoundCondition {
     /// The list of workflow conditions.
     pub conditions: Vec<Box<WorkflowCondition>>,

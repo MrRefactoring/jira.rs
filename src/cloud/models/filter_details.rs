@@ -4,9 +4,21 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of a filter.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FilterDetails {
     /// \\[Experimental\\] Approximate last used time. Returns the date and time when the filter was last used. Returns `null` if the filter hasn't been used after tracking was enabled. For performance reasons, timestamps aren't updated in real time and therefore may not be exactly accurate.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "approximateLastUsed",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub approximate_last_used: Option<chrono::DateTime<chrono::Utc>>,
+    /// \\[Experimental\\] Approximate last used time. Returns the date and time when the filter was last used. Returns `null` if the filter hasn't been used after tracking was enabled. For performance reasons, timestamps aren't updated in real time and therefore may not be exactly accurate.
+    #[cfg(not(feature = "chrono"))]
     #[serde(
         rename = "approximateLastUsed",
         default,
@@ -39,7 +51,7 @@ pub struct FilterDetails {
     pub name: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub owner: Option<DashboardUser>,
-    /// A URL to view the filter results in Jira, using the [Search for issues using JQL](#api-rest-api-3-filter-search-get) operation with the filter's JQL string to return the filter results. For example, *<https://your-domain.atlassian.net/rest/api/3/search?jql=project+%3D+SSP+AND+issuetype+%3D+Bug*>.
+    /// A URL to view the filter results in Jira, using the [Search for issues using JQL](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-search-get) operation with the filter's JQL string to return the filter results. For example, *<https://your-domain.atlassian.net/rest/api/3/search?jql=project+%3D+SSP+AND+issuetype+%3D+Bug*>.
     #[serde(rename = "searchUrl", default, skip_serializing_if = "Option::is_none")]
     pub search_url: Option<String>,
     /// The URL of the filter.

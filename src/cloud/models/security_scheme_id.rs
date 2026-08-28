@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// The ID of the issue security scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SecuritySchemeId {
     /// The ID of the issue security scheme.
     pub id: String,

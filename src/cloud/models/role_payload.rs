@@ -24,7 +24,7 @@ crate::open_enum! {
 }
 
 /// The payload used to create a project role. It is optional for CMP projects, as a default role actor will be provided. TMP will add new role actors to the table.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RolePayload {
     /// The default actors for the role. By adding default actors, the role will be added to any future projects created
     #[serde(rename = "defaultActors", default, skip_serializing_if = "Option::is_none")]

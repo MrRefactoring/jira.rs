@@ -28,7 +28,7 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetRemoteLinkByIdAssociations {
@@ -54,7 +54,8 @@ crate::open_enum! {
 }
 
 /// The status of a Remote Link.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetRemoteLinkByIdStatus {
     /// Appearance is a fixed set of appearance types affecting the colour
     /// of the status lozenge in the UI. The colours they correspond to are
@@ -67,7 +68,8 @@ pub struct GetRemoteLinkByIdStatus {
 }
 
 /// Data related to a single Remote Link.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct GetRemoteLinkById {
     /// The schema version used for this data.
     ///
@@ -102,6 +104,17 @@ pub struct GetRemoteLinkById {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// The last-updated timestamp to present to the user as a summary of when Remote Link was last updated.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user as a summary of when Remote Link was last updated.
+    #[cfg(not(feature = "chrono"))]
     #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
     pub last_updated: String,
     /// The entities to associate the Remote Link information with.

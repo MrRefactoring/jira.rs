@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct Form {
     /// JSON mapping of form field answers containing form field IDs and corresponding values.
     #[serde(default, skip_serializing_if = "Option::is_none")]

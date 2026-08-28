@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details about a project version.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct Version {
     /// If the expand option `approvers` is used, returns a list containing the approvers for this version.
     #[serde(default, skip_serializing_if = "Option::is_none")]

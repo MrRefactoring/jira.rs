@@ -307,8 +307,10 @@ impl<'a> GetVersionRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/2/version/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/2/version/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         if let Some(value) = &self.expand {
             config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
@@ -342,8 +344,10 @@ impl<'a> UpdateVersionRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/rest/api/2/version/{}", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/2/version/{}", crate::core::encode_path_segment(&self.id)),
+        );
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
 
@@ -377,7 +381,11 @@ impl<'a> MergeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/version/{}/mergeto/{}", self.id, self.move_issues_to),
+            format!(
+                "/rest/api/2/version/{}/mergeto/{}",
+                crate::core::encode_path_segment(&self.id),
+                crate::core::encode_path_segment(&self.move_issues_to)
+            ),
         );
 
         Ok(config)
@@ -411,8 +419,10 @@ impl<'a> MoveVersionRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::POST, format!("/rest/api/2/version/{}/move", self.id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!("/rest/api/2/version/{}/move", crate::core::encode_path_segment(&self.id)),
+        );
 
         let body = match serde_json::to_value(&self.version_move)? {
             serde_json::Value::Object(object) => object,
@@ -450,7 +460,7 @@ impl<'a> GetVersionRelatedIssuesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/version/{}/relatedIssueCounts", self.id),
+            format!("/rest/api/2/version/{}/relatedIssueCounts", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -487,7 +497,7 @@ impl<'a> DeleteVersionAndSwapRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/version/{}/removeAndSwap", self.id),
+            format!("/rest/api/2/version/{}/removeAndSwap", crate::core::encode_path_segment(&self.id)),
         );
 
         let body = match serde_json::to_value(&self.delete_and_replace_version)? {
@@ -526,7 +536,7 @@ impl<'a> GetVersionUnresolvedIssuesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/version/{}/unresolvedIssueCount", self.id),
+            format!("/rest/api/2/version/{}/unresolvedIssueCount", crate::core::encode_path_segment(&self.id)),
         );
 
         Ok(config)
@@ -558,7 +568,7 @@ impl<'a> GetRemoteVersionLinksByVersionIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/version/{}/remotelink", self.version_id),
+            format!("/rest/api/2/version/{}/remotelink", crate::core::encode_path_segment(&self.version_id)),
         );
 
         Ok(config)
@@ -595,7 +605,7 @@ impl<'a> CreateOrUpdateRemoteVersionLinkRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/version/{}/remotelink", self.version_id),
+            format!("/rest/api/2/version/{}/remotelink", crate::core::encode_path_segment(&self.version_id)),
         );
 
         let body = match serde_json::to_value(&self.remote_entity_link_json)? {
@@ -634,7 +644,7 @@ impl<'a> DeleteRemoteVersionLinksByVersionIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/version/{}/remotelink", self.version_id),
+            format!("/rest/api/2/version/{}/remotelink", crate::core::encode_path_segment(&self.version_id)),
         );
 
         Ok(config)
@@ -667,7 +677,11 @@ impl<'a> GetRemoteVersionLinkRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/version/{}/remotelink/{}", self.version_id, self.global_id),
+            format!(
+                "/rest/api/2/version/{}/remotelink/{}",
+                crate::core::encode_path_segment(&self.version_id),
+                crate::core::encode_path_segment(&self.global_id)
+            ),
         );
 
         Ok(config)
@@ -706,7 +720,11 @@ impl<'a> CreateOrUpdateRemoteVersionLinkByGlobalIdRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/version/{}/remotelink/{}", self.version_id, self.global_id),
+            format!(
+                "/rest/api/2/version/{}/remotelink/{}",
+                crate::core::encode_path_segment(&self.version_id),
+                crate::core::encode_path_segment(&self.global_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.remote_entity_link_json)? {
@@ -746,7 +764,11 @@ impl<'a> DeleteRemoteVersionLinkRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/version/{}/remotelink/{}", self.version_id, self.global_id),
+            format!(
+                "/rest/api/2/version/{}/remotelink/{}",
+                crate::core::encode_path_segment(&self.version_id),
+                crate::core::encode_path_segment(&self.global_id)
+            ),
         );
 
         Ok(config)

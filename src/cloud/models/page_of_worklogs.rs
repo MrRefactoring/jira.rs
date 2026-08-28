@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Paginated list of worklog details
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct PageOfWorklogs {
     /// The maximum number of results that could be on the page.
     #[serde(rename = "maxResults", default, skip_serializing_if = "Option::is_none")]

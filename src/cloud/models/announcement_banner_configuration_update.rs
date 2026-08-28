@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Configuration of the announcement banner.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct AnnouncementBannerConfigurationUpdate {
     /// Flag indicating if the announcement banner can be dismissed by the user.
     #[serde(rename = "isDismissible", default, skip_serializing_if = "Option::is_none")]

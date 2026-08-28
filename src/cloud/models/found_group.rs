@@ -30,7 +30,8 @@ crate::open_enum! {
 }
 
 /// A group found in a search.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct FoundGroup {
     /// Avatar url for the group/team if present.
     #[serde(rename = "avatarUrl", default, skip_serializing_if = "Option::is_none")]

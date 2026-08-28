@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Details of scheme and new default level.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct DefaultLevelValue {
     /// The ID of the issue security level to set as default for the specified scheme. Providing null will reset the default level.
     #[serde(rename = "defaultLevelId")]

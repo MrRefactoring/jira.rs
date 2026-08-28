@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RequestCreate {
     #[serde(rename = "serviceDeskId", default, skip_serializing_if = "Option::is_none")]
     pub service_desk_id: Option<String>,

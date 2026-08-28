@@ -38,7 +38,7 @@ impl<'a> GetApiTokensRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/users/{}/manage/api-tokens", self.account_id),
+            format!("/users/{}/manage/api-tokens", crate::core::encode_path_segment(&self.account_id)),
         );
 
         Ok(config)
@@ -71,7 +71,11 @@ impl<'a> DeleteApiTokenRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/users/{}/manage/api-tokens/{}", self.account_id, self.token_id),
+            format!(
+                "/users/{}/manage/api-tokens/{}",
+                crate::core::encode_path_segment(&self.account_id),
+                crate::core::encode_path_segment(&self.token_id)
+            ),
         );
 
         Ok(config)

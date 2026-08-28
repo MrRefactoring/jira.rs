@@ -28,7 +28,7 @@ crate::open_enum! {
 }
 
 /// The approval configuration of a status within a workflow. Applies only to Jira Service Management approvals.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ApprovalConfiguration {
     /// Whether the approval configuration is active.
     pub active: ApprovalConfigurationActive,

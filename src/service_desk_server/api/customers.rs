@@ -106,7 +106,10 @@ impl<'a> AddCustomersRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/servicedesk/{}/customer", self.service_desk_id),
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/customer",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.service_desk_customer_add)? {

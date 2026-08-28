@@ -12,7 +12,7 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct JiraMultiSelectComponentField {
     #[serde(rename = "bulkEditMultiSelectFieldOption")]
     pub bulk_edit_multi_select_field_option: JiraMultiSelectComponentFieldBulkEditMultiSelectFieldOption,

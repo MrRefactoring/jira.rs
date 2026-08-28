@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// The details of the preview workflow request.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct WorkflowPreviewRequest {
     /// The list of issue type IDs. At most 25 issue type IDs can be specified.
     #[serde(rename = "issueTypeIds", default, skip_serializing_if = "Option::is_none")]

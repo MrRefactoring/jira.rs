@@ -18,7 +18,7 @@ impl<'a> ApiService<'a> {
     ///
     /// The returned list of worklogs is limited to 1000 items.
     ///
-    /// **[Permissions](#permissions) required:** This is an internal service-to-service API that requires ASAP authentication. No user permission checks are performed as this bypasses normal user context.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** This is an internal service-to-service API that requires ASAP authentication. No user permission checks are performed as this bypasses normal user context.
     pub fn get_worklogs_by_issue_id_and_worklog_id(
         &self,
         bulk_worklog_key_request: BulkWorklogKeyRequest,
@@ -33,7 +33,7 @@ impl<'a> ApiService<'a> {
 ///
 /// The returned list of worklogs is limited to 1000 items.
 ///
-/// **[Permissions](#permissions) required:** This is an internal service-to-service API that requires ASAP authentication. No user permission checks are performed as this bypasses normal user context.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** This is an internal service-to-service API that requires ASAP authentication. No user permission checks are performed as this bypasses normal user context.
 pub struct GetWorklogsByIssueIdAndWorklogIdRequest<'a> {
     client: &'a crate::core::Client,
     bulk_worklog_key_request: BulkWorklogKeyRequest,

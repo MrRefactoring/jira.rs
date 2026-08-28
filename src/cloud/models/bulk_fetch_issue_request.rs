@@ -2,9 +2,9 @@
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct BulkFetchIssueRequest {
-    /// Use [expand](#expansion) to include additional information about issues in the response. Note that, unlike the majority of instances where `expand` is specified, `expand` is defined as a list of values. The expand options are:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about issues in the response. Note that, unlike the majority of instances where `expand` is specified, `expand` is defined as a list of values. The expand options are:
     ///
     ///  *  `renderedFields` Returns field values rendered in HTML format.
     ///  *  `names` Returns the display name of each field.
@@ -12,7 +12,7 @@ pub struct BulkFetchIssueRequest {
     ///  *  `transitions` Returns all possible transitions for the issue.
     ///  *  `operations` Returns all possible operations for the issue.
     ///  *  `editmeta` Returns information about how each field can be edited.
-    ///  *  `changelog` Returns a list of recent updates to an issue, sorted by date, starting from the most recent. This returns a maximum of 40 changelogs. If you require more, please refer to [Bulk fetch changelogs](#api-rest-api-3-changelog-bulkfetch-post).
+    ///  *  `changelog` Returns a list of recent updates to an issue, sorted by date, starting from the most recent. This returns a maximum of 40 changelogs. If you require more, please refer to [Bulk fetch changelogs](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-changelog/#api-rest-api-3-changelog-bulkfetch-post).
     ///  *  `versionedRepresentations` Instead of `fields`, returns `versionedRepresentations` a JSON array containing each version of a field's value, with the highest numbered item representing the most recent version.
     ///
     /// To request up to 1000 issues in a single call, do not include `changelog`, `editmeta`, `operations`, `renderedFields`, `transitions`, or `versionedRepresentations` in `expand`. Requests that include any of these can include at most 100 issues; larger requests are rejected with a 400 error.
@@ -34,7 +34,7 @@ pub struct BulkFetchIssueRequest {
     ///
     /// Multiple `fields` parameters can be included in a request.
     ///
-    /// Note: All navigable fields are returned by default. This differs from [GET issue](#api-rest-api-3-issue-issueIdOrKey-get) where the default is all fields.
+    /// Note: All navigable fields are returned by default. This differs from [GET issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueIdOrKey-get) where the default is all fields.
     ///
     /// To request up to 1000 issues in a single call, explicitly list the fields you need: at least one field must be a positive include (a request containing only exclusions is not eligible), the `*all` and `*navigable` wildcards and the default navigable field set are not eligible for the higher limit, no more than 100 fields may be listed, and none of the included fields returns multiple values (for example `comment`, `worklog`, or `attachment`). Requests that do not meet these conditions can include at most 100 issues; larger requests are rejected with a 400 error.
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -14,7 +14,8 @@ crate::open_enum! {
 }
 
 /// Details of an entity property.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct JqlQueryFieldEntityProperty {
     /// The object on which the property is set.
     pub entity: String,

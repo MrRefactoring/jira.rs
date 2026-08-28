@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of notifications which should be added to the notification scheme.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct AddNotificationsDetails {
     /// The list of notifications which should be added to the notification scheme.
     #[serde(rename = "notificationSchemeEvents")]

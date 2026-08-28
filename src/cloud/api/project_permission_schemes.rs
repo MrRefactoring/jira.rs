@@ -14,7 +14,7 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
 ///
 ///  *  `all` Returns all expandable information.
 ///  *  `field` Returns information about the custom field granted the permission.
@@ -22,7 +22,7 @@ crate::open_enum! {
 ///  *  `permissions` Returns all permission grants for each permission scheme.
 ///  *  `projectRole` Returns information about the project role granted the permission.
 ///  *  `user` Returns information about the user who is granted the permission.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetAssignedPermissionSchemeRequestExpand {
@@ -43,7 +43,7 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
 ///
 ///  *  `all` Returns all expandable information.
 ///  *  `field` Returns information about the custom field granted the permission.
@@ -51,7 +51,7 @@ crate::open_enum! {
 ///  *  `permissions` Returns all permission grants for each permission scheme.
 ///  *  `projectRole` Returns information about the project role granted the permission.
 ///  *  `user` Returns information about the user who is granted the permission.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum AssignPermissionSchemeRequestExpand {
@@ -73,7 +73,7 @@ impl<'a> ProjectPermissionSchemesService<'a> {
 
     /// Returns the [issue security scheme](https://confluence.atlassian.com/x/J4lKLg) associated with the project.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or the *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or the *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
     pub fn get_project_issue_security_scheme(
         &self,
         project_key_or_id: impl Into<String>,
@@ -83,7 +83,7 @@ impl<'a> ProjectPermissionSchemesService<'a> {
 
     /// Gets the [permission scheme](https://confluence.atlassian.com/x/yodKLg) associated with the project.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
     pub fn get_assigned_permission_scheme(
         &self,
         project_key_or_id: impl Into<String>,
@@ -93,7 +93,7 @@ impl<'a> ProjectPermissionSchemesService<'a> {
 
     /// Assigns a permission scheme with a project. See [Managing project permissions](https://confluence.atlassian.com/x/yodKLg) for more information about permission schemes.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg)
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg)
     pub fn assign_permission_scheme(
         &self,
         project_key_or_id: impl Into<String>,
@@ -106,7 +106,7 @@ impl<'a> ProjectPermissionSchemesService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse projects* [global permission](https://confluence.atlassian.com/x/x4dKLg) for the project, however, issue security levels are only returned for authenticated user with *Set Issue Security* [global permission](https://confluence.atlassian.com/x/x4dKLg) for the project.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [global permission](https://confluence.atlassian.com/x/x4dKLg) for the project, however, issue security levels are only returned for authenticated user with *Set Issue Security* [global permission](https://confluence.atlassian.com/x/x4dKLg) for the project.
     pub fn get_security_levels_for_project(
         &self,
         project_key_or_id: impl Into<String>,
@@ -117,7 +117,7 @@ impl<'a> ProjectPermissionSchemesService<'a> {
 
 /// Returns the [issue security scheme](https://confluence.atlassian.com/x/J4lKLg) associated with the project.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or the *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or the *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
 pub struct GetProjectIssueSecuritySchemeRequest<'a> {
     client: &'a crate::core::Client,
     project_key_or_id: String,
@@ -132,7 +132,10 @@ impl<'a> GetProjectIssueSecuritySchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}/issuesecuritylevelscheme", self.project_key_or_id),
+            format!(
+                "/rest/api/3/project/{}/issuesecuritylevelscheme",
+                crate::core::encode_path_segment(&self.project_key_or_id)
+            ),
         );
 
         Ok(config)
@@ -151,7 +154,7 @@ impl<'a> GetProjectIssueSecuritySchemeRequest<'a> {
 
 /// Gets the [permission scheme](https://confluence.atlassian.com/x/yodKLg) associated with the project.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
 pub struct GetAssignedPermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     project_key_or_id: String,
@@ -163,7 +166,7 @@ impl<'a> GetAssignedPermissionSchemeRequest<'a> {
         Self { client, project_key_or_id: project_key_or_id.into(), expand: None }
     }
 
-    /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
     ///
     ///  *  `all` Returns all expandable information.
     ///  *  `field` Returns information about the custom field granted the permission.
@@ -182,7 +185,10 @@ impl<'a> GetAssignedPermissionSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}/permissionscheme", self.project_key_or_id),
+            format!(
+                "/rest/api/3/project/{}/permissionscheme",
+                crate::core::encode_path_segment(&self.project_key_or_id)
+            ),
         );
 
         if let Some(value) = &self.expand {
@@ -205,7 +211,7 @@ impl<'a> GetAssignedPermissionSchemeRequest<'a> {
 
 /// Assigns a permission scheme with a project. See [Managing project permissions](https://confluence.atlassian.com/x/yodKLg) for more information about permission schemes.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg)
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg)
 pub struct AssignPermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     project_key_or_id: String,
@@ -218,7 +224,7 @@ impl<'a> AssignPermissionSchemeRequest<'a> {
         Self { client, project_key_or_id: project_key_or_id.into(), id, expand: None }
     }
 
-    /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
     ///
     ///  *  `all` Returns all expandable information.
     ///  *  `field` Returns information about the custom field granted the permission.
@@ -237,7 +243,10 @@ impl<'a> AssignPermissionSchemeRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/project/{}/permissionscheme", self.project_key_or_id),
+            format!(
+                "/rest/api/3/project/{}/permissionscheme",
+                crate::core::encode_path_segment(&self.project_key_or_id)
+            ),
         );
 
         if let Some(value) = &self.expand {
@@ -269,7 +278,7 @@ impl<'a> AssignPermissionSchemeRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse projects* [global permission](https://confluence.atlassian.com/x/x4dKLg) for the project, however, issue security levels are only returned for authenticated user with *Set Issue Security* [global permission](https://confluence.atlassian.com/x/x4dKLg) for the project.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [global permission](https://confluence.atlassian.com/x/x4dKLg) for the project, however, issue security levels are only returned for authenticated user with *Set Issue Security* [global permission](https://confluence.atlassian.com/x/x4dKLg) for the project.
 pub struct GetSecurityLevelsForProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_key_or_id: String,
@@ -284,7 +293,7 @@ impl<'a> GetSecurityLevelsForProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}/securitylevel", self.project_key_or_id),
+            format!("/rest/api/3/project/{}/securitylevel", crate::core::encode_path_segment(&self.project_key_or_id)),
         );
 
         Ok(config)

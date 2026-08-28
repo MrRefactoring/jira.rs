@@ -12,7 +12,7 @@ crate::open_enum! {
 }
 
 /// The payload for creating a condition group in a workflow
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ConditionGroupPayload {
     /// The nested conditions of the condition group.
     #[serde(rename = "conditionGroup", default, skip_serializing_if = "Option::is_none")]

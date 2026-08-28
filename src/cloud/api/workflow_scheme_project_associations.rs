@@ -16,7 +16,7 @@ impl<'a> WorkflowSchemeProjectAssociationsService<'a> {
     ///
     /// If the project is associated with the `Default Workflow Scheme` no ID is returned. This is because the way the `Default Workflow Scheme` is stored means it has no ID.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn get_workflow_scheme_project_associations(
         &self,
         project_id: impl IntoIterator<Item = i64>,
@@ -28,7 +28,7 @@ impl<'a> WorkflowSchemeProjectAssociationsService<'a> {
     ///
     /// Workflow schemes can only be assigned to classic projects.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn assign_scheme_to_project(
         &self,
         workflow_scheme_project_association: WorkflowSchemeProjectAssociation,
@@ -41,7 +41,7 @@ impl<'a> WorkflowSchemeProjectAssociationsService<'a> {
 ///
 /// If the project is associated with the `Default Workflow Scheme` no ID is returned. This is because the way the `Default Workflow Scheme` is stored means it has no ID.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct GetWorkflowSchemeProjectAssociationsRequest<'a> {
     client: &'a crate::core::Client,
     project_id: Vec<i64>,
@@ -77,7 +77,7 @@ impl<'a> GetWorkflowSchemeProjectAssociationsRequest<'a> {
 ///
 /// Workflow schemes can only be assigned to classic projects.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct AssignSchemeToProjectRequest<'a> {
     client: &'a crate::core::Client,
     workflow_scheme_project_association: WorkflowSchemeProjectAssociation,

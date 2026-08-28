@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The details of votes on an issue.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Votes {
     /// Whether the user making this request has voted on the issue.
     #[serde(rename = "hasVoted", default, skip_serializing_if = "Option::is_none")]

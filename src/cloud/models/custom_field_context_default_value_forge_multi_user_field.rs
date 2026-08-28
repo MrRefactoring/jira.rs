@@ -9,7 +9,8 @@ pub enum CustomFieldContextDefaultValueForgeMultiUserFieldType {
 }
 
 /// Defaults for a Forge collection of users custom field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueForgeMultiUserField {
     /// The IDs of the default users.
     #[serde(rename = "accountIds")]

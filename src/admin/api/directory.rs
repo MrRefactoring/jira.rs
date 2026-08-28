@@ -92,7 +92,7 @@ impl<'a> GetDirectoriesForOrgRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v2/orgs/{}/directories", self.org_id),
+            format!("/admin/v2/orgs/{}/directories", crate::core::encode_path_segment(&self.org_id)),
         );
 
         if let Some(value) = &self.account_id {

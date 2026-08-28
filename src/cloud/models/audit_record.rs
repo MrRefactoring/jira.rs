@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// An audit record.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AuditRecord {
     /// The list of items associated with the changed record.
     #[serde(rename = "associatedItems", default, skip_serializing_if = "Option::is_none")]
@@ -16,6 +17,16 @@ pub struct AuditRecord {
     #[serde(rename = "changedValues", default, skip_serializing_if = "Option::is_none")]
     pub changed_values: Option<Vec<ChangedValue>>,
     /// The date and time on which the audit record was created.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created: Option<chrono::DateTime<chrono::Utc>>,
+    /// The date and time on which the audit record was created.
+    #[cfg(not(feature = "chrono"))]
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
     pub created: Option<String>,
     /// The description of the audit record.

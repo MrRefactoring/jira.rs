@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details about a workflow configuration update request.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct WorkflowTransitionRulesUpdate {
     /// The list of workflows with transition rules to update.
     pub workflows: Vec<WorkflowTransitionRules>,

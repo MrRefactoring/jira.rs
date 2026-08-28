@@ -138,7 +138,7 @@ crate::open_enum! {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetDirectoryUsersRequestSortBy {
     /// The name of the field to sort the results by.
     pub field: GetDirectoryUsersRequestSortByField,
@@ -328,6 +328,9 @@ impl<'a> UsersService<'a> {
     ///
     /// #### Scopes
     /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:directories:admin`
+    #[deprecated(
+        note = "**This API is deprecated and will no longer work after June 30, 2027.** Use the [Search for users in an organization endpoint](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-users/#api-v2-orgs-orgid-directories-directoryid-users-search-post) instead."
+    )]
     pub fn get_directory_users(
         &self,
         org_id: impl Into<String>,
@@ -368,7 +371,11 @@ impl<'a> SearchDirectoryUsersRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/admin/v2/orgs/{}/directories/{}/users/search", self.org_id, self.directory_id),
+            format!(
+                "/admin/v2/orgs/{}/directories/{}/users/search",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.multi_directory_user_search_request)? {
@@ -417,8 +424,10 @@ impl<'a> GetUsersRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/admin/v1/orgs/{}/users", self.org_id));
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/admin/v1/orgs/{}/users", crate::core::encode_path_segment(&self.org_id)),
+        );
 
         if let Some(value) = &self.cursor {
             config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
@@ -467,7 +476,7 @@ impl<'a> InviteUsersRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/admin/v2/orgs/{}/users/invite", self.org_id),
+            format!("/admin/v2/orgs/{}/users/invite", crate::core::encode_path_segment(&self.org_id)),
         );
 
         let body = match serde_json::to_value(&self.multidirectory_invite_api_request)? {
@@ -597,7 +606,9 @@ impl<'a> GetUserRoleAssignmentsRequest<'a> {
             crate::core::Method::GET,
             format!(
                 "/admin/v2/orgs/{}/directories/{}/users/{}/role-assignments",
-                self.org_id, self.directory_id, self.account_id
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.account_id)
             ),
         );
 
@@ -663,7 +674,11 @@ impl<'a> GrantUserAccessRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/admin/v1/orgs/{}/users/{}/roles/assign", self.org_id, self.user_id),
+            format!(
+                "/admin/v1/orgs/{}/users/{}/roles/assign",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.user_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.role_api_request)? {
@@ -711,7 +726,11 @@ impl<'a> RevokeUserAccessRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/admin/v1/orgs/{}/users/{}/roles/revoke", self.org_id, self.user_id),
+            format!(
+                "/admin/v1/orgs/{}/users/{}/roles/revoke",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.user_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.role_api_request)? {
@@ -759,7 +778,9 @@ impl<'a> SuspendDirectoryUserRequest<'a> {
             crate::core::Method::POST,
             format!(
                 "/admin/v2/orgs/{}/directories/{}/users/{}/suspend",
-                self.org_id, self.directory_id, self.account_id
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.account_id)
             ),
         );
 
@@ -801,7 +822,9 @@ impl<'a> RestoreDirectoryUserRequest<'a> {
             crate::core::Method::POST,
             format!(
                 "/admin/v2/orgs/{}/directories/{}/users/{}/restore",
-                self.org_id, self.directory_id, self.account_id
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.account_id)
             ),
         );
 
@@ -841,7 +864,12 @@ impl<'a> GetDirectoryUserDetailsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v2/orgs/{}/directories/{}/users/{}", self.org_id, self.directory_id, self.account_id),
+            format!(
+                "/admin/v2/orgs/{}/directories/{}/users/{}",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.account_id)
+            ),
         );
 
         Ok(config)
@@ -881,7 +909,12 @@ impl<'a> RemoveDirectoryUserRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/admin/v2/orgs/{}/directories/{}/users/{}", self.org_id, self.directory_id, self.account_id),
+            format!(
+                "/admin/v2/orgs/{}/directories/{}/users/{}",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id),
+                crate::core::encode_path_segment(&self.account_id)
+            ),
         );
 
         Ok(config)
@@ -924,7 +957,11 @@ impl<'a> AssignOrganizationRoleRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/admin/v1/orgs/{}/users/{}/role-assignments/assign", self.org_id, self.user_id),
+            format!(
+                "/admin/v1/orgs/{}/users/{}/role-assignments/assign",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.user_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.organization_level_role_api_request)? {
@@ -974,7 +1011,11 @@ impl<'a> RevokeOrganizationRoleRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/admin/v1/orgs/{}/users/{}/role-assignments/revoke", self.org_id, self.user_id),
+            format!(
+                "/admin/v1/orgs/{}/users/{}/role-assignments/revoke",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.user_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.organization_level_role_api_request)? {
@@ -1174,7 +1215,11 @@ impl<'a> GetDirectoryUsersCountRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v2/orgs/{}/directories/{}/users/count", self.org_id, self.directory_id),
+            format!(
+                "/admin/v2/orgs/{}/directories/{}/users/count",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id)
+            ),
         );
 
         if let Some(value) = &self.account_ids {
@@ -1258,7 +1303,11 @@ impl<'a> GetUserStatsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v2/orgs/{}/directories/{}/users/stats", self.org_id, self.directory_id),
+            format!(
+                "/admin/v2/orgs/{}/directories/{}/users/stats",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id)
+            ),
         );
 
         Ok(config)
@@ -1308,7 +1357,11 @@ impl<'a> GetUserLastActiveDatesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v1/orgs/{}/directory/users/{}/last-active-dates", self.org_id, self.account_id),
+            format!(
+                "/admin/v1/orgs/{}/directory/users/{}/last-active-dates",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.account_id)
+            ),
         );
 
         if let Some(value) = &self.cursor {
@@ -1537,7 +1590,11 @@ impl<'a> GetDirectoryUsersRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/admin/v2/orgs/{}/directories/{}/users", self.org_id, self.directory_id),
+            format!(
+                "/admin/v2/orgs/{}/directories/{}/users",
+                crate::core::encode_path_segment(&self.org_id),
+                crate::core::encode_path_segment(&self.directory_id)
+            ),
         );
 
         if let Some(value) = &self.cursor {

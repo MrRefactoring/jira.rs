@@ -68,7 +68,10 @@ impl<'a> GetCustomerTransitionsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/request/{}/transition", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/transition",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         if let Some(value) = &self.start {
@@ -117,7 +120,10 @@ impl<'a> PerformCustomerTransitionRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/request/{}/transition", self.issue_id_or_key),
+            format!(
+                "/rest/servicedeskapi/request/{}/transition",
+                crate::core::encode_path_segment(&self.issue_id_or_key)
+            ),
         );
 
         let body = match serde_json::to_value(&self.customer_transition_execution)? {

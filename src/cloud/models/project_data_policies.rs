@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details about data policies for a list of projects.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ProjectDataPolicies {
     /// List of projects with data policies.
     #[serde(rename = "projectDataPolicies", default, skip_serializing_if = "Option::is_none")]

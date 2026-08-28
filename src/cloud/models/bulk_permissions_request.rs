@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of global permissions to look up and project permissions with associated projects and issues to look up.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct BulkPermissionsRequest {
     /// The account ID of a user.
     #[serde(rename = "accountId", default, skip_serializing_if = "Option::is_none")]

@@ -4,7 +4,8 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The workflow metadata and issue type IDs which use this workflow.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct WorkflowMetadataAndIssueTypeRestModel {
     /// The list of issue type IDs for the mapping.
     #[serde(rename = "issueTypeIds")]

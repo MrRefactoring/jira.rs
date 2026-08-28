@@ -21,8 +21,8 @@ crate::open_enum! {
     }
 }
 
-/// Defines the payload for the custom field definitions. See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/\#api-rest-api-3-field-post>
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+/// Defines the payload for the custom field definitions. See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-fields/#api-rest-api-3-field-post>
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct CustomFieldPayload {
     /// The type of the custom field
     #[serde(rename = "cfType", default, skip_serializing_if = "Option::is_none")]

@@ -9,7 +9,8 @@ pub enum CustomFieldContextDefaultValueTextFieldType {
 }
 
 /// The default text for a text custom field.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueTextField {
     /// The ID of the context.
     #[serde(rename = "contextId")]

@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// Experimental. Structured details about a JQL clause exceeding its argument limit.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct SearchWarningLimitDetails {
     /// The actual number of arguments supplied that exceeded the limit.
     #[serde(default, skip_serializing_if = "Option::is_none")]

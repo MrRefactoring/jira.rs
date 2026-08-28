@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// The JQL specifying the issues available in the evaluated Jira expression under the `issues` context variable. Not all issues returned by the JQL query are loaded, only those described by the `nextPageToken` and `maxResults` properties. This bean will be replacing JexpJqlIssues bean as part of new `evaluate` endpoint
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct JexpEvaluateCtxJqlIssues {
     /// The maximum number of issues to return from the JQL query. max results value considered may be lower than the number specific here.
     #[serde(rename = "maxResults", default, skip_serializing_if = "Option::is_none")]

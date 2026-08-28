@@ -94,7 +94,10 @@ impl<'a> GetUsersInOrganizationRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/organization/{}/user", self.organization_id),
+            format!(
+                "/rest/servicedeskapi/organization/{}/user",
+                crate::core::encode_path_segment(&self.organization_id)
+            ),
         );
 
         if let Some(value) = &self.start {
@@ -142,7 +145,10 @@ impl<'a> AddUsersToOrganizationRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/servicedeskapi/organization/{}/user", self.organization_id),
+            format!(
+                "/rest/servicedeskapi/organization/{}/user",
+                crate::core::encode_path_segment(&self.organization_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.users_organization_update)? {
@@ -189,7 +195,10 @@ impl<'a> RemoveUsersFromOrganizationRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/servicedeskapi/organization/{}/user", self.organization_id),
+            format!(
+                "/rest/servicedeskapi/organization/{}/user",
+                crate::core::encode_path_segment(&self.organization_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.users_organization_update)? {
@@ -453,7 +462,7 @@ impl<'a> GetOrganizationRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/servicedeskapi/organization/{}", self.organization_id),
+            format!("/rest/servicedeskapi/organization/{}", crate::core::encode_path_segment(&self.organization_id)),
         );
 
         Ok(config)
@@ -485,7 +494,7 @@ impl<'a> DeleteOrganizationRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/servicedeskapi/organization/{}", self.organization_id),
+            format!("/rest/servicedeskapi/organization/{}", crate::core::encode_path_segment(&self.organization_id)),
         );
 
         Ok(config)

@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Contains details about a version approver.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct VersionApprover {
     /// The Atlassian account ID of the approver.
     #[serde(rename = "accountId", default, skip_serializing_if = "Option::is_none")]

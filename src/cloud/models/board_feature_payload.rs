@@ -19,7 +19,8 @@ crate::open_enum! {
 }
 
 /// The payload for setting a board feature
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct BoardFeaturePayload {
     /// The key of the feature
     #[serde(rename = "featureKey", default, skip_serializing_if = "Option::is_none")]

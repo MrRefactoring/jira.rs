@@ -67,7 +67,7 @@ impl<'a> GetAllSystemAvatarsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/avatar/{}/system", self.r#type),
+            format!("/rest/api/2/avatar/{}/system", crate::core::encode_path_segment(&self.r#type)),
         );
 
         Ok(config)
@@ -100,7 +100,11 @@ impl<'a> GetAvatarsRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/universal_avatar/type/{}/owner/{}", self.r#type, self.owning_object_id),
+            format!(
+                "/rest/api/2/universal_avatar/type/{}/owner/{}",
+                crate::core::encode_path_segment(&self.r#type),
+                crate::core::encode_path_segment(&self.owning_object_id)
+            ),
         );
 
         Ok(config)
@@ -141,7 +145,11 @@ impl<'a> CreateAvatarFromTemporaryRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/universal_avatar/type/{}/owner/{}/avatar", self.r#type, self.owning_object_id),
+            format!(
+                "/rest/api/2/universal_avatar/type/{}/owner/{}/avatar",
+                crate::core::encode_path_segment(&self.r#type),
+                crate::core::encode_path_segment(&self.owning_object_id)
+            ),
         );
 
         let body = match serde_json::to_value(&self.avatar_cropping)? {
@@ -189,7 +197,9 @@ impl<'a> DeleteAvatarRequest<'a> {
             crate::core::Method::DELETE,
             format!(
                 "/rest/api/2/universal_avatar/type/{}/owner/{}/avatar/{}",
-                self.r#type, self.owning_object_id, self.id
+                crate::core::encode_path_segment(&self.r#type),
+                crate::core::encode_path_segment(&self.owning_object_id),
+                self.id
             ),
         );
 
@@ -244,7 +254,11 @@ impl<'a> StoreTemporaryAvatarUsingMultiPartRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/universal_avatar/type/{}/owner/{}/temp", self.r#type, self.owning_object_id),
+            format!(
+                "/rest/api/2/universal_avatar/type/{}/owner/{}/temp",
+                crate::core::encode_path_segment(&self.r#type),
+                crate::core::encode_path_segment(&self.owning_object_id)
+            ),
         );
 
         config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));

@@ -71,9 +71,9 @@ crate::open_enum! {
 }
 
 crate::open_enum! {
-    /// [Order](#ordering) the results by a field.
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field.
     ///
-    ///  *  `category` Sorts by project category. A complete list of category IDs is found using [Get all project categories](#api-rest-api-3-projectCategory-get).
+    ///  *  `category` Sorts by project category. A complete list of category IDs is found using [Get all project categories](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-category/#api-rest-api-3-projectCategory-get).
     ///  *  `issueCount` Sorts by the total number of issues in each project.
     ///  *  `key` Sorts by project key.
     ///  *  `lastIssueUpdatedTime` Sorts by the last issue update time.
@@ -110,7 +110,7 @@ crate::open_enum! {
 }
 
 /// Orders results by the [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes). This parameter accepts a comma-separated list. Valid values are `business`, `service_desk`, and `software`.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SearchProjectsRequestTypeKey {
@@ -153,7 +153,7 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expanded options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expanded options include:
 ///
 ///  *  `description` Returns the project description.
 ///  *  `projectKeys` Returns all project keys associated with a project.
@@ -161,7 +161,7 @@ crate::open_enum! {
 ///  *  `issueTypes` Returns all issue types associated with the project.
 ///  *  `url` Returns the URL associated with the project.
 ///  *  `insight` EXPERIMENTAL. Returns the insight details of total issue count and last issue update time for the project.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SearchProjectsRequestExpand {
@@ -189,14 +189,14 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that the project description, issue types, and project lead are included in all responses by default. Expand options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that the project description, issue types, and project lead are included in all responses by default. Expand options include:
 ///
 ///  *  `description` The project description.
 ///  *  `issueTypes` The issue types associated with the project.
 ///  *  `lead` The project lead.
 ///  *  `projectKeys` All project keys associated with the project.
 ///  *  `issueTypeHierarchy` The project issue type hierarchy.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetProjectRequestExpand {
@@ -215,13 +215,13 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that the project description, issue types, and project lead are included in all responses by default. Expand options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that the project description, issue types, and project lead are included in all responses by default. Expand options include:
 ///
 ///  *  `description` The project description.
 ///  *  `issueTypes` The issue types associated with the project.
 ///  *  `lead` The project lead.
 ///  *  `projectKeys` All project keys associated with the project.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum UpdateProjectRequestExpand {
@@ -242,7 +242,7 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
 ///
 ///  *  `all` Returns all expandable information
 ///  *  `field` Returns information about any custom fields assigned to receive an event
@@ -250,7 +250,7 @@ crate::open_enum! {
 ///  *  `notificationSchemeEvents` Returns a list of event associations. This list is returned for all expandable information
 ///  *  `projectRole` Returns information about any project roles assigned to receive an event
 ///  *  `user` Returns information about any users assigned to receive an event
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetNotificationSchemeForProjectRequestExpand {
@@ -286,7 +286,7 @@ impl<'a> ProjectsService<'a> {
     ///
     /// To determine which features are installed, go to **Jira settings** > **Apps** > **Manage apps** and review the System Apps list. To add Jira Software or Jira Service Management into a JIRA instance, use **Jira settings** > **Apps** > **Finding new apps**. For more information, see [ Managing add-ons](https://confluence.atlassian.com/x/S31NLg).
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn create_project(
         &self,
         key: impl Into<String>,
@@ -296,11 +296,11 @@ impl<'a> ProjectsService<'a> {
         CreateProjectRequest2::new(self.client, key, lead_account_id, name)
     }
 
-    /// Returns a [paginated](#pagination) list of projects visible to the user.
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of projects visible to the user.
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** Projects are returned only where the user has one of:
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Projects are returned only where the user has one of:
     ///
     ///  *  *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
     ///  *  *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
@@ -313,7 +313,7 @@ impl<'a> ProjectsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
     pub fn get_project(&self, project_id_or_key: impl Into<String>) -> GetProjectRequest<'a> {
         GetProjectRequest::new(self.client, project_id_or_key)
     }
@@ -322,7 +322,7 @@ impl<'a> ProjectsService<'a> {
     ///
     /// All parameters are optional in the body of the request. Schemes will only be updated if they are included in the request, any omitted schemes will be left unchanged.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). is only needed when changing the schemes or project key. Otherwise you will only need *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg)
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). is only needed when changing the schemes or project key. Otherwise you will only need *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg)
     pub fn update_project(
         &self,
         project_id_or_key: impl Into<String>,
@@ -335,14 +335,14 @@ impl<'a> ProjectsService<'a> {
     ///
     /// You can't delete a project if it's archived. To delete an archived project, restore the project and then delete it. To restore a project, use the Jira UI.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn delete_project(&self, project_id_or_key: impl Into<String>) -> DeleteProjectRequest<'a> {
         DeleteProjectRequest::new(self.client, project_id_or_key)
     }
 
     /// Archives a project. You can't delete a project if it's archived. To delete an archived project, restore the project and then delete it. To restore a project, use the Jira UI.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
     pub fn archive_project(&self, project_id_or_key: impl Into<String>) -> ArchiveProjectRequest<'a> {
         ArchiveProjectRequest::new(self.client, project_id_or_key)
     }
@@ -351,7 +351,7 @@ impl<'a> ProjectsService<'a> {
     ///
     /// This operation can be accessed anonymously.
     ///
-    /// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
     pub fn get_all_statuses(&self, project_id_or_key: impl Into<String>) -> GetAllStatusesRequest<'a> {
         GetAllStatusesRequest::new(self.client, project_id_or_key)
     }
@@ -364,14 +364,14 @@ impl<'a> ProjectsService<'a> {
     ///  *  One or more issue types at level 0 such as *Story*, *Task*, or *Bug*. Where the issue type *Epic* is defined, these issue types are used to break down the content of an epic.
     ///  *  *Subtask* at level -1 (optional). This issue type enables level 0 issue types to be broken down into components. Issues based on a level -1 issue type must have a parent issue.
     ///
-    /// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
     pub fn get_hierarchy(&self, project_id: i64) -> GetHierarchyRequest<'a> {
         GetHierarchyRequest::new(self.client, project_id)
     }
 
     /// Gets a [notification scheme](https://confluence.atlassian.com/x/8YdKLg) associated with the project.
     ///
-    /// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
     pub fn get_notification_scheme_for_project(
         &self,
         project_key_or_id: impl Into<String>,
@@ -396,7 +396,7 @@ impl<'a> ProjectsService<'a> {
 ///
 /// To determine which features are installed, go to **Jira settings** > **Apps** > **Manage apps** and review the System Apps list. To add Jira Software or Jira Service Management into a JIRA instance, use **Jira settings** > **Apps** > **Finding new apps**. For more information, see [ Managing add-ons](https://confluence.atlassian.com/x/S31NLg).
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct CreateProjectRequest2<'a> {
     client: &'a crate::core::Client,
     assignee_type: Option<CreateProjectRequest2AssigneeType>,
@@ -463,7 +463,7 @@ impl<'a> CreateProjectRequest2<'a> {
         self
     }
 
-    /// The ID of the project's category. A complete list of category IDs is found using the [Get all project categories](#api-rest-api-3-projectCategory-get) operation.
+    /// The ID of the project's category. A complete list of category IDs is found using the [Get all project categories](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-category/#api-rest-api-3-projectCategory-get) operation.
     #[must_use]
     pub fn category_id(mut self, value: i64) -> Self {
         self.category_id = Some(value);
@@ -479,7 +479,7 @@ impl<'a> CreateProjectRequest2<'a> {
         self
     }
 
-    /// The ID of the field scheme for the project. Use the [Get field schemes](#api-rest-api-3-config-fieldschemes-get) operation to get a list of field scheme IDs. If you specify the field scheme you cannot specify the project template key.
+    /// The ID of the field scheme for the project. Use the [Get field schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-config/#api-rest-api-3-config-fieldschemes-get) operation to get a list of field scheme IDs. If you specify the field scheme you cannot specify the project template key.
     #[must_use]
     pub fn field_scheme(mut self, value: i64) -> Self {
         self.field_scheme = Some(value);
@@ -487,7 +487,7 @@ impl<'a> CreateProjectRequest2<'a> {
         self
     }
 
-    /// The ID of the issue security scheme for the project, which enables you to control who can and cannot view issues. Use the [Get issue security schemes](#api-rest-api-3-issuesecurityschemes-get) resource to get all issue security scheme IDs.
+    /// The ID of the issue security scheme for the project, which enables you to control who can and cannot view issues. Use the [Get issue security schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-security-schemes/#api-rest-api-3-issuesecurityschemes-get) resource to get all issue security scheme IDs.
     #[must_use]
     pub fn issue_security_scheme(mut self, value: i64) -> Self {
         self.issue_security_scheme = Some(value);
@@ -495,7 +495,7 @@ impl<'a> CreateProjectRequest2<'a> {
         self
     }
 
-    /// The ID of the issue type scheme for the project. Use the [Get all issue type schemes](#api-rest-api-3-issuetypescheme-get) operation to get a list of issue type scheme IDs. If you specify the issue type scheme you cannot specify the project template key.
+    /// The ID of the issue type scheme for the project. Use the [Get all issue type schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-schemes/#api-rest-api-3-issuetypescheme-get) operation to get a list of issue type scheme IDs. If you specify the issue type scheme you cannot specify the project template key.
     #[must_use]
     pub fn issue_type_scheme(mut self, value: i64) -> Self {
         self.issue_type_scheme = Some(value);
@@ -503,7 +503,7 @@ impl<'a> CreateProjectRequest2<'a> {
         self
     }
 
-    /// The ID of the issue type screen scheme for the project. Use the [Get all issue type screen schemes](#api-rest-api-3-issuetypescreenscheme-get) operation to get a list of issue type screen scheme IDs. If you specify the issue type screen scheme you cannot specify the project template key.
+    /// The ID of the issue type screen scheme for the project. Use the [Get all issue type screen schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-get) operation to get a list of issue type screen scheme IDs. If you specify the issue type screen scheme you cannot specify the project template key.
     #[must_use]
     pub fn issue_type_screen_scheme(mut self, value: i64) -> Self {
         self.issue_type_screen_scheme = Some(value);
@@ -511,7 +511,7 @@ impl<'a> CreateProjectRequest2<'a> {
         self
     }
 
-    /// The ID of the notification scheme for the project. Use the [Get notification schemes](#api-rest-api-3-notificationscheme-get) resource to get a list of notification scheme IDs.
+    /// The ID of the notification scheme for the project. Use the [Get notification schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-notification-schemes/#api-rest-api-3-notificationscheme-get) resource to get a list of notification scheme IDs.
     #[must_use]
     pub fn notification_scheme(mut self, value: i64) -> Self {
         self.notification_scheme = Some(value);
@@ -519,7 +519,7 @@ impl<'a> CreateProjectRequest2<'a> {
         self
     }
 
-    /// The ID of the permission scheme for the project. Use the [Get all permission schemes](#api-rest-api-3-permissionscheme-get) resource to see a list of all permission scheme IDs.
+    /// The ID of the permission scheme for the project. Use the [Get all permission schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-get) resource to see a list of all permission scheme IDs.
     #[must_use]
     pub fn permission_scheme(mut self, value: i64) -> Self {
         self.permission_scheme = Some(value);
@@ -551,7 +551,7 @@ impl<'a> CreateProjectRequest2<'a> {
         self
     }
 
-    /// The ID of the workflow scheme for the project. Use the [Get all workflow schemes](#api-rest-api-3-workflowscheme-get) operation to get a list of workflow scheme IDs. If you specify the workflow scheme you cannot specify the project template key.
+    /// The ID of the workflow scheme for the project. Use the [Get all workflow schemes](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-schemes/#api-rest-api-3-workflowscheme-get) operation to get a list of workflow scheme IDs. If you specify the workflow scheme you cannot specify the project template key.
     #[must_use]
     pub fn workflow_scheme(mut self, value: i64) -> Self {
         self.workflow_scheme = Some(value);
@@ -643,11 +643,11 @@ impl<'a> CreateProjectRequest2<'a> {
     }
 }
 
-/// Returns a [paginated](#pagination) list of projects visible to the user.
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of projects visible to the user.
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** Projects are returned only where the user has one of:
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Projects are returned only where the user has one of:
 ///
 ///  *  *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
 ///  *  *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
@@ -705,9 +705,9 @@ impl<'a> SearchProjectsRequest<'a> {
         self
     }
 
-    /// [Order](#ordering) the results by a field.
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field.
     ///
-    ///  *  `category` Sorts by project category. A complete list of category IDs is found using [Get all project categories](#api-rest-api-3-projectCategory-get).
+    ///  *  `category` Sorts by project category. A complete list of category IDs is found using [Get all project categories](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-category/#api-rest-api-3-projectCategory-get).
     ///  *  `issueCount` Sorts by the total number of issues in each project.
     ///  *  `key` Sorts by project key.
     ///  *  `lastIssueUpdatedTime` Sorts by the last issue update time.
@@ -754,7 +754,7 @@ impl<'a> SearchProjectsRequest<'a> {
         self
     }
 
-    /// The ID of the project's category. A complete list of category IDs is found using the [Get all project categories](#api-rest-api-3-projectCategory-get) operation.
+    /// The ID of the project's category. A complete list of category IDs is found using the [Get all project categories](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-project-category/#api-rest-api-3-projectCategory-get) operation.
     #[must_use]
     pub fn category_id(mut self, value: i64) -> Self {
         self.category_id = Some(value);
@@ -782,7 +782,7 @@ impl<'a> SearchProjectsRequest<'a> {
         self
     }
 
-    /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expanded options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expanded options include:
     ///
     ///  *  `description` Returns the project description.
     ///  *  `projectKeys` Returns all project keys associated with a project.
@@ -900,7 +900,7 @@ impl<'a> SearchProjectsRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
 pub struct GetProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -913,7 +913,7 @@ impl<'a> GetProjectRequest<'a> {
         Self { client, project_id_or_key: project_id_or_key.into(), expand: None, properties: None }
     }
 
-    /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that the project description, issue types, and project lead are included in all responses by default. Expand options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that the project description, issue types, and project lead are included in all responses by default. Expand options include:
     ///
     ///  *  `description` The project description.
     ///  *  `issueTypes` The issue types associated with the project.
@@ -939,7 +939,7 @@ impl<'a> GetProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}", self.project_id_or_key),
+            format!("/rest/api/3/project/{}", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         if let Some(value) = &self.expand {
@@ -968,7 +968,7 @@ impl<'a> GetProjectRequest<'a> {
 ///
 /// All parameters are optional in the body of the request. Schemes will only be updated if they are included in the request, any omitted schemes will be left unchanged.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). is only needed when changing the schemes or project key. Otherwise you will only need *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg)
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). is only needed when changing the schemes or project key. Otherwise you will only need *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg)
 pub struct UpdateProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -985,7 +985,7 @@ impl<'a> UpdateProjectRequest<'a> {
         Self { client, project_id_or_key: project_id_or_key.into(), update_project_details, expand: None }
     }
 
-    /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that the project description, issue types, and project lead are included in all responses by default. Expand options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that the project description, issue types, and project lead are included in all responses by default. Expand options include:
     ///
     ///  *  `description` The project description.
     ///  *  `issueTypes` The issue types associated with the project.
@@ -1002,7 +1002,7 @@ impl<'a> UpdateProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/3/project/{}", self.project_id_or_key),
+            format!("/rest/api/3/project/{}", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         if let Some(value) = &self.expand {
@@ -1034,7 +1034,7 @@ impl<'a> UpdateProjectRequest<'a> {
 ///
 /// You can't delete a project if it's archived. To delete an archived project, restore the project and then delete it. To restore a project, use the Jira UI.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct DeleteProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -1058,7 +1058,7 @@ impl<'a> DeleteProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/3/project/{}", self.project_id_or_key),
+            format!("/rest/api/3/project/{}", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         if let Some(value) = &self.enable_undo {
@@ -1081,7 +1081,7 @@ impl<'a> DeleteProjectRequest<'a> {
 
 /// Archives a project. You can't delete a project if it's archived. To delete an archived project, restore the project and then delete it. To restore a project, use the Jira UI.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 pub struct ArchiveProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -1096,7 +1096,7 @@ impl<'a> ArchiveProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/3/project/{}/archive", self.project_id_or_key),
+            format!("/rest/api/3/project/{}/archive", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         Ok(config)
@@ -1117,7 +1117,7 @@ impl<'a> ArchiveProjectRequest<'a> {
 ///
 /// This operation can be accessed anonymously.
 ///
-/// **[Permissions](#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
 pub struct GetAllStatusesRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
@@ -1132,7 +1132,7 @@ impl<'a> GetAllStatusesRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}/statuses", self.project_id_or_key),
+            format!("/rest/api/3/project/{}/statuses", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
 
         Ok(config)
@@ -1157,7 +1157,7 @@ impl<'a> GetAllStatusesRequest<'a> {
 ///  *  One or more issue types at level 0 such as *Story*, *Task*, or *Bug*. Where the issue type *Epic* is defined, these issue types are used to break down the content of an epic.
 ///  *  *Subtask* at level -1 (optional). This issue type enables level 0 issue types to be broken down into components. Issues based on a level -1 issue type must have a parent issue.
 ///
-/// **[Permissions](#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project.
 pub struct GetHierarchyRequest<'a> {
     client: &'a crate::core::Client,
     project_id: i64,
@@ -1191,7 +1191,7 @@ impl<'a> GetHierarchyRequest<'a> {
 
 /// Gets a [notification scheme](https://confluence.atlassian.com/x/8YdKLg) associated with the project.
 ///
-/// **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) or *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg).
 pub struct GetNotificationSchemeForProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_key_or_id: String,
@@ -1203,7 +1203,7 @@ impl<'a> GetNotificationSchemeForProjectRequest<'a> {
         Self { client, project_key_or_id: project_key_or_id.into(), expand: None }
     }
 
-    /// Use [expand](#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
     ///
     ///  *  `all` Returns all expandable information
     ///  *  `field` Returns information about any custom fields assigned to receive an event
@@ -1222,7 +1222,10 @@ impl<'a> GetNotificationSchemeForProjectRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/3/project/{}/notificationscheme", self.project_key_or_id),
+            format!(
+                "/rest/api/3/project/{}/notificationscheme",
+                crate::core::encode_path_segment(&self.project_key_or_id)
+            ),
         );
 
         if let Some(value) = &self.expand {

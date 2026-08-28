@@ -3,7 +3,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum ObjectAttributeValueValue {
@@ -13,7 +13,8 @@ pub enum ObjectAttributeValueValue {
 }
 
 /// The actual value of an object attribute. The object attribute value body will have different properties populated based on the type of the object type attribute. The value will always be present.
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ObjectAttributeValue {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub value: Option<ObjectAttributeValueValue>,
