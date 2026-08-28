@@ -70,6 +70,14 @@ pub mod user_provisioning;
 pub mod webhooks;
 
 pub use crate::core::{
-    Attachment, Auth, Body, Client, ClientBuilder, Error, MultipartBody, QueryValue, RequestConfig, Result,
-    RetryConfig, RetryOptions, SchemaMismatchIssue, SchemaMismatchReport, TenantContext, with_retry,
+    ApiErrorDetails, ApiErrorKind, Attachment, Auth, Body, Client, ClientBuilder, Error, MultipartBody,
+    OAuthErrorDetails, QueryValue, RequestConfig, Result, RetryConfig, RetryOptions, SchemaMismatchIssue,
+    SchemaMismatchReport, TenantContext, with_retry,
 };
+
+/// The HTTP client underneath, so a caller can name the same version this crate was built against.
+///
+/// It is part of the public API whether it is re-exported or not — [`ClientBuilder::http_client`] takes a
+/// `reqwest::Client`, and [`Error::Network`] carries a `reqwest::Error` — and without this a caller who depends on
+/// `reqwest` themselves has to match the version by hand to pass one in.
+pub use reqwest;

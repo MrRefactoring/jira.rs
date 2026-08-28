@@ -19,6 +19,9 @@ exclude = [".github/", "docker/", "tests/live/", "operations.json"]
 [features]
 default = ["cloud"]
 audit = ["dep:serde_ignored"]
+# Every `date-time` becomes an instant rather than the text it arrived as. Off by default: the type of a field then
+# depends on a feature, which two crates depending on this one do not get to disagree about.
+chrono = ["dep:chrono"]
 coverage = []
 
 # One feature per API surface, so a caller compiles the endpoints they use and not the ten thousand they do not.
@@ -35,8 +38,14 @@ user-management = []
 user-provisioning = []
 webhooks = ["cloud", "agile", "dep:hmac", "dep:sha2"]
 
+[lints.rust]
+# The crate reaches the network and parses what comes back, and it does all of it in safe Rust. `forbid` rather than
+# `deny` because there is no case where a generated file should be the one to make an exception.
+unsafe_code = "forbid"
+
 [dependencies]
 bytes = "1.12"
+chrono = { version = "0.4", optional = true, default-features = false, features = ["std", "serde"] }
 form_urlencoded = "1.2"
 hmac = { version = "0.12", optional = true }
 httpdate = "1.0"

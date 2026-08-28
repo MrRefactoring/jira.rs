@@ -29,6 +29,14 @@ pub enum SchemaDrift {
         /// Where in the response body it turned up. Empty for the top level.
         path: String,
     },
+    /// A `date-time` written in a spelling the reader does not know.
+    ///
+    /// Only ever recorded under the `chrono` feature, where a timestamp becomes an instant rather than the text it
+    /// arrived as: without the feature there is nothing to fail at, because the text is kept whatever it says.
+    UnreadableTimestamp {
+        /// The value the API sent, as JSON.
+        value: String,
+    },
     /// A value outside the set an open enum lists.
     UndocumentedValue {
         /// The generated enum that met it.
@@ -71,6 +79,11 @@ fn append_to_output(entry: &SchemaDrift) {
 
 pub fn record_undocumented_key(endpoint: &str, path: &str) {
     record(SchemaDrift::UndocumentedKeys { endpoint: endpoint.to_owned(), path: path.to_owned() });
+}
+
+#[cfg(feature = "chrono")]
+pub fn record_unreadable_timestamp(value: &serde_json::Value) {
+    record(SchemaDrift::UnreadableTimestamp { value: value.to_string() });
 }
 
 pub fn record_undocumented_value(type_name: &str, value: &str, documented: &[&str]) {
