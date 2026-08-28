@@ -64,12 +64,71 @@ let agile = jira::agile::AgileClient::new(client);
 # async fn example(jira: &CloudClient) -> jira::Result<()> {
 let issues = jira
     .issue_search()
-    .search_and_reconsile_issues_using_jql()
+    .search_issues()
     .jql("project = PROJ ORDER BY created DESC")
     .max_results(50)
     .fields(["summary", "status"])
     .send()
     .await?;
+# Ok(())
+# }
+```
+
+## Поиск по JQL
+
+`jql` принимает строку, а из строки, собранной через `format!`, значение умеет выбраться: одна кавычка в том, что
+ввёл пользователь, закрывает литерал, и остаток читается как запрос. `jira::jql` сам расставляет операторы и
+экранирует всё остальное.
+
+```rust,no_run
+# use jira::cloud::CloudClient;
+use jira::jql::{field, func};
+
+# async fn example(jira: &CloudClient, typed: &str) -> jira::Result<()> {
+let query = field("project").eq("PROJ")
+    .and(field("summary").contains(typed))
+    .and(field("status").not_in(["Done", "Closed"]))
+    .and(field("assignee").eq(func("currentUser")))
+    .order_by_desc("created");
+
+let page = jira.issue_search().search_issues().jql(query).fields(["summary", "status"]).send().await?;
+# Ok(())
+# }
+```
+
+В ответе удивляют две вещи. Без `fields` поиск возвращает идентификаторы и ничего больше — это умолчание самого
+эндпоинта, а не решение крейта. А `fields` приходит картой сырого JSON, потому что набор полей у задачи — свойство
+конкретного сайта, а не API:
+
+```rust,no_run
+# use jira::cloud::SearchAndReconcileResults;
+# fn example(page: SearchAndReconcileResults) {
+for issue in page.issues.unwrap_or_default() {
+    let fields = issue.fields.unwrap_or_default();
+
+    println!("{} — {}", issue.key.unwrap_or_default(), fields["summary"].as_str().unwrap_or_default());
+}
+# }
+```
+
+Поиск листается непрозрачным токеном, а не смещением. `stream` доходит по нему до конца:
+
+```rust,no_run
+# use jira::cloud::CloudClient;
+# use jira::jql::field;
+use jira::futures_util::TryStreamExt;
+
+# async fn example(jira: &CloudClient) -> jira::Result<()> {
+let mut issues = jira
+    .issue_search()
+    .search_issues()
+    .jql(field("project").eq("PROJ").order_by_desc("created"))
+    .fields(["summary"])
+    .stream();
+
+while let Some(issue) = issues.try_next().await? {
+    println!("{}", issue.key.unwrap_or_default());
+}
 # Ok(())
 # }
 ```

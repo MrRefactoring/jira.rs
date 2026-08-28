@@ -20,6 +20,10 @@ version.
 - `jira::Error`, one enum with predicates that read the status and the OAuth code — including the `X-Seraph-LoginReason`
   header, which is how Jira reports a refused credential behind a `200`.
 - `with_retry`, applying the client's own transient-failure policy around a call.
+- `jira::jql`, which builds a query out of values that came from somewhere else. A value reaches Jira quoted and
+  escaped rather than able to end the literal it sits in and add a clause of its own.
+- `stream` on the JQL search, which follows the endpoint's page token to the last page so a caller writes the query
+  rather than the loop.
 - `get_tenant_context`, resolving a site's cloud id, organization id and host name.
 - The `audit` feature, which collects the fields the API sends that the generated types do not describe.
 - The `chrono` feature, which turns every `date-time` into `Option<chrono::DateTime<Utc>>`. Off by default,
@@ -34,6 +38,10 @@ version.
 - `PartialEq` on every generated type.
 - `reqwest` is re-exported, so a caller passing their own client through `ClientBuilder::http_client` can name
   the version this crate was built against.
+- The JQL search is `search_issues` rather than `search_and_reconsile_issues_using_jql`: the specification misspells
+  the operation and spells the model it answers with correctly, in the same document, and this is the most called
+  operation in the API. The generator renames it, so `jira.js` carries the same name with the old one kept as a
+  deprecated alias; nothing was published under the old name here.
 - Wiki markup where v3 wants a document: a rich-text field written as a plain string goes to the v2 twin of the
   endpoint, which converts it, and the result is read back through v3.
 

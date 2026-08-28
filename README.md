@@ -65,12 +65,71 @@ Every operation is a builder: what the API requires is an argument, what it mere
 # async fn example(jira: &CloudClient) -> jira::Result<()> {
 let issues = jira
     .issue_search()
-    .search_and_reconsile_issues_using_jql()
+    .search_issues()
     .jql("project = PROJ ORDER BY created DESC")
     .max_results(50)
     .fields(["summary", "status"])
     .send()
     .await?;
+# Ok(())
+# }
+```
+
+## Searching with JQL
+
+`jql` takes a string, and a string built with `format!` is a string a value can escape from: one quotation mark in
+what somebody typed ends the literal and the rest is read as query. `jira::jql` writes the operators itself and quotes
+everything else.
+
+```rust,no_run
+# use jira::cloud::CloudClient;
+use jira::jql::{field, func};
+
+# async fn example(jira: &CloudClient, typed: &str) -> jira::Result<()> {
+let query = field("project").eq("PROJ")
+    .and(field("summary").contains(typed))
+    .and(field("status").not_in(["Done", "Closed"]))
+    .and(field("assignee").eq(func("currentUser")))
+    .order_by_desc("created");
+
+let page = jira.issue_search().search_issues().jql(query).fields(["summary", "status"]).send().await?;
+# Ok(())
+# }
+```
+
+Two things about the answer surprise people. Without `fields` the search returns identifiers and nothing else — that
+is the endpoint's own default, not a choice made here. And `fields` arrives as a map of raw JSON, because which fields
+an issue has is a property of the site rather than of the API:
+
+```rust,no_run
+# use jira::cloud::SearchAndReconcileResults;
+# fn example(page: SearchAndReconcileResults) {
+for issue in page.issues.unwrap_or_default() {
+    let fields = issue.fields.unwrap_or_default();
+
+    println!("{} — {}", issue.key.unwrap_or_default(), fields["summary"].as_str().unwrap_or_default());
+}
+# }
+```
+
+The search pages with an opaque token rather than an offset. `stream` follows it to the end:
+
+```rust,no_run
+# use jira::cloud::CloudClient;
+# use jira::jql::field;
+use jira::futures_util::TryStreamExt;
+
+# async fn example(jira: &CloudClient) -> jira::Result<()> {
+let mut issues = jira
+    .issue_search()
+    .search_issues()
+    .jql(field("project").eq("PROJ").order_by_desc("created"))
+    .fields(["summary"])
+    .stream();
+
+while let Some(issue) = issues.try_next().await? {
+    println!("{}", issue.key.unwrap_or_default());
+}
 # Ok(())
 # }
 ```
