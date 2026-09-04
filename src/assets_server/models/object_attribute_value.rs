@@ -24,10 +24,10 @@ pub struct ObjectAttributeValue {
     pub value: Option<String>,
     #[serde(rename = "additionalValue", default, skip_serializing_if = "Option::is_none")]
     pub additional_value: Option<String>,
-    #[serde(rename = "displayValue", default, skip_serializing_if = "Option::is_none")]
-    pub display_value: Option<String>,
     #[serde(rename = "searchValue", default, skip_serializing_if = "Option::is_none")]
     pub search_value: Option<String>,
     #[serde(rename = "referencedType", default, skip_serializing_if = "Option::is_none")]
     pub referenced_type: Option<bool>,
+    #[serde(rename = "displayValue", default, skip_serializing_if = "Option::is_none")]
+    pub display_value: Option<String>,
 }

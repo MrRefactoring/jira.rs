@@ -1,4 +1,5 @@
 use jira::cloud::{GetProjectRequestExpand, GetProjectRequestExpandValue, SearchProjectsRequestOrderBy};
+use jira::futures_util::TryStreamExt;
 
 use crate::harness::{TEST_PROJECT_KEY, cloud};
 
@@ -82,6 +83,25 @@ async fn finds_the_project_through_the_paginated_search() {
     assert!(keys.iter().any(|key| key == TEST_PROJECT_KEY), "the search finds the test project: {keys:?}");
     assert!(page.total >= 1, "a page that found something reports a total");
     assert!(page.values.len() as i64 <= page.max_results, "a page never exceeds the size it declares");
+}
+
+#[tokio::test]
+#[ignore = "live: needs a Jira site"]
+async fn a_stream_walks_every_page_of_the_project_search() {
+    let page = cloud().projects().search_projects().send().await.expect("the project search answers");
+
+    let streamed: Vec<String> = cloud()
+        .projects()
+        .search_projects()
+        .max_results(1)
+        .stream()
+        .map_ok(|project| project.key.unwrap_or_default())
+        .try_collect()
+        .await
+        .expect("every page of the project search is readable");
+
+    assert_eq!(streamed.len() as i64, page.total, "one project per page, and the stream reaches the last one");
+    assert!(streamed.contains(&TEST_PROJECT_KEY.to_owned()), "the test project is among them: {streamed:?}");
 }
 
 #[tokio::test]

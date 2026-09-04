@@ -22,7 +22,7 @@ crate::open_enum! {
 #[non_exhaustive]
 pub struct WorkflowCompoundCondition {
     /// The list of workflow conditions.
-    pub conditions: Vec<Box<WorkflowCondition>>,
+    pub conditions: Vec<WorkflowCondition>,
     #[serde(rename = "nodeType")]
     pub node_type: WorkflowCompoundConditionNodeType,
     /// The compound condition operator.

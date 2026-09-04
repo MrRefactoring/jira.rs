@@ -7,7 +7,7 @@
 //! location. The only way to reach the link just made is to read it back off one of the issues, and every caller has
 //! to do the same. That indirection is the thing worth pinning.
 
-use jira::cloud::{IssueLinkType, LinkIssueRequest, LinkedIssue};
+use jira::cloud::{IssueLink, IssueLinkType, LinkIssueRequest, LinkedIssue};
 
 use crate::harness::{ResourceTracker, await_refused, cloud, create_test_issue, poll_until, test_name};
 
@@ -40,12 +40,12 @@ async fn walks_a_link_through_creation_reading_and_deletion() {
     assert_eq!(target_links.len(), 1, "the target issue carries exactly the link just made");
 
     assert_eq!(
-        source_links[0].pointer("/inwardIssue/key").and_then(serde_json::Value::as_str),
+        source_links[0].inward_issue.as_ref().and_then(|issue| issue.key.as_deref()),
         Some(inward.key.as_str()),
         "the source sees the other end as its inward issue",
     );
     assert_eq!(
-        target_links[0].pointer("/outwardIssue/key").and_then(serde_json::Value::as_str),
+        target_links[0].outward_issue.as_ref().and_then(|issue| issue.key.as_deref()),
         Some(outward.key.as_str()),
         "the target sees the other end as its outward issue",
     );
@@ -131,7 +131,7 @@ async fn a_link_type() -> IssueLinkType {
 }
 
 /// The links an issue carries, straight off the `issuelinks` field — the only route to a link's id.
-async fn links_on(key: &str) -> Vec<serde_json::Value> {
+async fn links_on(key: &str) -> Vec<IssueLink> {
     let issue = cloud()
         .issues()
         .get_issue(key)
@@ -140,15 +140,9 @@ async fn links_on(key: &str) -> Vec<serde_json::Value> {
         .await
         .expect("an issue reads back with its links");
 
-    issue
-        .fields
-        .as_ref()
-        .and_then(|fields| fields.get("issuelinks"))
-        .and_then(serde_json::Value::as_array)
-        .cloned()
-        .expect("an issue carries its links under issuelinks")
+    issue.fields.and_then(|fields| fields.issuelinks).expect("an issue carries its links under issuelinks")
 }
 
-fn id_of(link: &serde_json::Value) -> String {
-    link.get("id").and_then(serde_json::Value::as_str).expect("a link on an issue carries an id").to_owned()
+fn id_of(link: &IssueLink) -> String {
+    link.id.clone().expect("a link on an issue carries an id")
 }

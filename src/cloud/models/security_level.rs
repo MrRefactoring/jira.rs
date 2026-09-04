@@ -4,7 +4,6 @@ use serde::{Deserialize, Serialize};
 
 /// Details of an issue level security item.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-#[non_exhaustive]
 pub struct SecurityLevel {
     /// The description of the issue level security item.
     #[serde(default, skip_serializing_if = "Option::is_none")]

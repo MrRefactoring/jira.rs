@@ -40,6 +40,9 @@ pub struct SearchAndReconcileRequest {
     /// Reference fields by their key (rather than ID). The default is `false`.
     #[serde(rename = "fieldsByKeys", default, skip_serializing_if = "Option::is_none")]
     pub fields_by_keys: Option<bool>,
+    /// Whether to also return issues that belong to archived projects. Archived projects are excluded by default. Requires *Browse projects* permission on the archived project. The default is `false`.
+    #[serde(rename = "includeArchivedProjects", default, skip_serializing_if = "Option::is_none")]
+    pub include_archived_projects: Option<bool>,
     /// A [JQL](https://confluence.atlassian.com/x/egORLQ) expression. For performance reasons, this parameter requires a bounded query. A bounded query is a query with a search restriction.
     ///
     ///  *  Example of an unbounded query: `order by key desc`.

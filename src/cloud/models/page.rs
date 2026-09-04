@@ -26,3 +26,11 @@ pub struct Page<T> {
     /// The list of items.
     pub values: Vec<T>,
 }
+
+impl<T> crate::core::Paged for Page<T> {
+    type Item = T;
+
+    fn into_step(self, requested: i64) -> crate::core::PageStep<T> {
+        crate::core::PageStep::new(self.values, Some(self.start_at), Some(self.is_last), requested)
+    }
+}

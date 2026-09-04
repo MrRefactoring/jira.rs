@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 #[non_exhaustive]
 pub struct ObjectListResult {
     #[serde(rename = "objectEntries", default, skip_serializing_if = "Option::is_none")]
-    pub object_entries: Option<Vec<Box<AssetObject>>>,
+    pub object_entries: Option<Vec<AssetObject>>,
     #[serde(rename = "objectTypeAttributes", default, skip_serializing_if = "Option::is_none")]
     pub object_type_attributes: Option<Vec<ObjectTypeAttribute>>,
     #[serde(rename = "objectTypeId", default, skip_serializing_if = "Option::is_none")]
@@ -39,7 +39,7 @@ pub struct ObjectListResult {
     #[serde(rename = "conversionPossible", default, skip_serializing_if = "Option::is_none")]
     pub conversion_possible: Option<bool>,
     #[serde(rename = "matchedFilterValues", default, skip_serializing_if = "Option::is_none")]
-    pub matched_filter_values: Option<Vec<Box<ObjectAttribute>>>,
+    pub matched_filter_values: Option<Vec<ObjectAttribute>>,
     #[serde(rename = "inheritanceTree", default, skip_serializing_if = "Option::is_none")]
     pub inheritance_tree: Option<ObjectTypeInheritanceTree>,
     #[serde(rename = "orderAscending", default, skip_serializing_if = "Option::is_none")]

@@ -20,7 +20,7 @@ pub use entitlement::is_not_entitled;
 pub use env::{has_admin_env, require_jsm_env, require_live_env, require_server_env};
 pub use fixtures::{
     TEST_ISSUE_TYPE, TEST_PROJECT_KEY, TestBoard, await_agile_visibility, create_issue_with, create_test_board,
-    create_test_issue, document_of, scrum_board,
+    create_test_issue, document_of, scrum_board, test_issue_fields,
 };
 pub use moment::{rendered, rendered_option};
 pub use naming::{RESOURCE_MARKER, project_key, run_id, run_suffix, test_name};

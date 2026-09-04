@@ -98,17 +98,41 @@ let page = jira.issue_search().search_issues().jql(query).fields(["summary", "st
 ```
 
 Two things about the answer surprise people. Without `fields` the search returns identifiers and nothing else — that
-is the endpoint's own default, not a choice made here. And `fields` arrives as a map of raw JSON, because which fields
-an issue has is a property of the site rather than of the API:
+is the endpoint's own default, not a choice made here. And the system fields are typed while a custom field lands in
+`additional` under the key the site gave it, because which custom fields an issue has is a property of the site
+rather than of the API:
 
 ```rust,no_run
 # use jira::cloud::SearchAndReconcileResults;
 # fn example(page: SearchAndReconcileResults) {
 for issue in page.issues.unwrap_or_default() {
     let fields = issue.fields.unwrap_or_default();
+    let points = fields.additional.get("customfield_10016").and_then(|value| value.as_f64());
 
-    println!("{} — {}", issue.key.unwrap_or_default(), fields["summary"].as_str().unwrap_or_default());
+    println!("{} — {} ({points:?})", issue.key.unwrap_or_default(), fields.summary.unwrap_or_default());
 }
+# }
+```
+
+The same struct is what a write takes:
+
+```rust,no_run
+# use jira::cloud::{CloudClient, IssueFields, IssueTypeDetails, IssueUpdateDetails, Project};
+# async fn example(jira: &CloudClient) -> jira::Result<()> {
+let created = jira
+    .issues()
+    .create_issue(IssueUpdateDetails {
+        fields: Some(IssueFields {
+            project: Some(Project { key: Some("PROJ".into()), ..Default::default() }),
+            issuetype: Some(IssueTypeDetails { name: Some("Task".into()), ..Default::default() }),
+            summary: Some("Rotate the signing key".into()),
+            ..Default::default()
+        }),
+        ..Default::default()
+    })
+    .send()
+    .await?;
+# Ok(())
 # }
 ```
 
@@ -129,6 +153,23 @@ let mut issues = jira
 
 while let Some(issue) = issues.try_next().await? {
     println!("{}", issue.key.unwrap_or_default());
+}
+# Ok(())
+# }
+```
+
+Every other listing pages by offset, and `stream` is on each of those too — projects, users, filters, dashboards,
+boards, sprints, service desk queues — so the loop is never yours to write:
+
+```rust,no_run
+# use jira::cloud::CloudClient;
+use jira::futures_util::TryStreamExt;
+
+# async fn example(jira: &CloudClient) -> jira::Result<()> {
+let mut projects = jira.projects().search_projects().stream();
+
+while let Some(project) = projects.try_next().await? {
+    println!("{}", project.key.unwrap_or_default());
 }
 # Ok(())
 # }
@@ -277,6 +318,14 @@ nothing when they are off:
 |---|---|
 | `audit` | Collects the fields the API sends that the generated types do not describe |
 | `coverage` | Records the endpoint of every call the process makes, which is how a live run counts what it reached |
+
+One more is for the caller's own logs rather than this crate's runs:
+
+| Feature | What it adds |
+|---|---|
+| `tracing` | A `jira.request` span around every request, carrying the method and the path, with an event per attempt — the status, and a retry or a refresh when one happens |
+
+The span is at `DEBUG`, so a subscriber filtering at `INFO` sees nothing, and nothing in it is a credential or a body.
 
 ## Other products
 

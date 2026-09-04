@@ -19,7 +19,7 @@ pub struct TransitionPayload {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub actions: Option<Vec<RulePayload>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub conditions: Option<Box<ConditionGroupPayload>>,
+    pub conditions: Option<ConditionGroupPayload>,
     /// Mechanism in Jira for triggering certain actions, like notifications, automations, etc. Unless a custom notification scheme is configure, it's better not to provide any value here
     #[serde(rename = "customIssueEventId", default, skip_serializing_if = "Option::is_none")]
     pub custom_issue_event_id: Option<String>,

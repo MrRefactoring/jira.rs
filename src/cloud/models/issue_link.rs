@@ -5,7 +5,6 @@ use serde::{Deserialize, Serialize};
 
 /// Details of a link between issues.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-#[non_exhaustive]
 pub struct IssueLink {
     /// The ID of the issue link.
     #[serde(default, skip_serializing_if = "Option::is_none")]

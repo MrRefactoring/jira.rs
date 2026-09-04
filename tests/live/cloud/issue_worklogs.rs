@@ -57,10 +57,8 @@ async fn time_spent_seconds(issue_key: &str) -> Option<i64> {
         .await
         .expect("the issue reads back with its time tracking")
         .fields
-        .as_ref()
-        .and_then(|fields| fields.get("timetracking"))
-        .and_then(|tracking| tracking.get("timeSpentSeconds"))
-        .and_then(serde_json::Value::as_i64)
+        .and_then(|fields| fields.timetracking)
+        .and_then(|tracking| tracking.time_spent_seconds)
 }
 
 /// The worklog lifecycle, end to end.

@@ -1,4 +1,4 @@
-use jira::cloud::{CreatedIssue, Document, IssueUpdateDetails};
+use jira::cloud::{CreatedIssue, Document, IssueFields, IssueTypeDetails, IssueUpdateDetails, Project};
 use serde_json::json;
 
 use super::client::{agile, cloud};
@@ -26,17 +26,19 @@ pub fn document_of(text: &str) -> Document {
     .expect("a hand-built ADF paragraph is a document")
 }
 
+/// The fields every issue the suites create starts from: the test project, the default type and a summary.
+pub fn test_issue_fields(summary: String) -> IssueFields {
+    IssueFields {
+        project: Some(Project { key: Some(TEST_PROJECT_KEY.to_owned()), ..Project::default() }),
+        issuetype: Some(IssueTypeDetails { name: Some(TEST_ISSUE_TYPE.to_owned()), ..IssueTypeDetails::default() }),
+        summary: Some(summary),
+        ..IssueFields::default()
+    }
+}
+
 /// Creates an issue in the test project and registers its deletion.
 pub async fn create_test_issue(tracker: &mut ResourceTracker, summary: Option<&str>) -> CreatedIssue {
-    create_issue_with(
-        tracker,
-        json!({
-            "project": { "key": TEST_PROJECT_KEY },
-            "issuetype": { "name": TEST_ISSUE_TYPE },
-            "summary": summary.map_or_else(|| test_name("issue"), ToOwned::to_owned),
-        }),
-    )
-    .await
+    create_issue_with(tracker, test_issue_fields(summary.map_or_else(|| test_name("issue"), ToOwned::to_owned))).await
 }
 
 /// Creates an issue from the fields given, registers its deletion, and waits for it to be readable.
@@ -45,14 +47,7 @@ pub async fn create_test_issue(tracker: &mut ResourceTracker, summary: Option<&s
 /// after the write, `getIssue`, the worklog endpoints and the watcher endpoints all answer 404 with "Issue does not
 /// exist or you do not have permission to see it". Waiting here rather than in each caller is what keeps the whole
 /// class fixed instead of the three cases that happened to fail on the day someone looked.
-pub async fn create_issue_with(tracker: &mut ResourceTracker, fields: serde_json::Value) -> CreatedIssue {
-    let fields = fields
-        .as_object()
-        .expect("issue fields are an object")
-        .iter()
-        .map(|(name, value)| (name.clone(), value.clone()))
-        .collect();
-
+pub async fn create_issue_with(tracker: &mut ResourceTracker, fields: IssueFields) -> CreatedIssue {
     let created = cloud()
         .issues()
         .create_issue(IssueUpdateDetails { fields: Some(fields), ..IssueUpdateDetails::default() })

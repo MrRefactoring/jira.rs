@@ -16,7 +16,7 @@ crate::open_enum! {
 pub struct ConditionGroupPayload {
     /// The nested conditions of the condition group.
     #[serde(rename = "conditionGroup", default, skip_serializing_if = "Option::is_none")]
-    pub condition_group: Option<Vec<Box<ConditionGroupPayload>>>,
+    pub condition_group: Option<Vec<ConditionGroupPayload>>,
     /// The rules for this condition.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub conditions: Option<Vec<RulePayload>>,

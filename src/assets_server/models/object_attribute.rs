@@ -13,7 +13,7 @@ pub struct ObjectAttribute {
     #[serde(rename = "objectTypeAttributeId", default, skip_serializing_if = "Option::is_none")]
     pub object_type_attribute_id: Option<i64>,
     #[serde(rename = "objectAttributeValues", default, skip_serializing_if = "Option::is_none")]
-    pub object_attribute_values: Option<Vec<Box<ObjectAttributeValue>>>,
+    pub object_attribute_values: Option<Vec<ObjectAttributeValue>>,
     #[serde(rename = "objectId", default, skip_serializing_if = "Option::is_none")]
     pub object_id: Option<i64>,
 }

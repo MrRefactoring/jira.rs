@@ -50,8 +50,11 @@ async fn returns_ids_alone_until_fields_are_asked_for() {
     let selected = search(&format!("key = {}", issue.key), Some("summary")).await;
     let fields = selected[0].fields.as_ref().expect("the fields asked for arrive");
 
-    assert_eq!(fields.get("summary").and_then(serde_json::Value::as_str), Some(summary.as_str()));
-    assert_eq!(fields.keys().collect::<Vec<_>>(), vec!["summary"], "exactly the field asked for, and no other");
+    assert_eq!(fields.summary.as_deref(), Some(summary.as_str()));
+    assert!(
+        fields.issuetype.is_none() && fields.additional.is_empty(),
+        "exactly the field asked for, and no other: {fields:?}",
+    );
 
     let by_text = search(&format!("project = {TEST_PROJECT_KEY} AND summary ~ \"searchable\""), Some("summary")).await;
 

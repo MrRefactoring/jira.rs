@@ -97,17 +97,40 @@ let page = jira.issue_search().search_issues().jql(query).fields(["summary", "st
 ```
 
 В ответе удивляют две вещи. Без `fields` поиск возвращает идентификаторы и ничего больше — это умолчание самого
-эндпоинта, а не решение крейта. А `fields` приходит картой сырого JSON, потому что набор полей у задачи — свойство
-конкретного сайта, а не API:
+эндпоинта, а не решение крейта. А системные поля типизированы, тогда как кастомное поле попадает в `additional` под
+тем ключом, который дал ему сайт, потому что набор кастомных полей у задачи — свойство конкретного сайта, а не API:
 
 ```rust,no_run
 # use jira::cloud::SearchAndReconcileResults;
 # fn example(page: SearchAndReconcileResults) {
 for issue in page.issues.unwrap_or_default() {
     let fields = issue.fields.unwrap_or_default();
+    let points = fields.additional.get("customfield_10016").and_then(|value| value.as_f64());
 
-    println!("{} — {}", issue.key.unwrap_or_default(), fields["summary"].as_str().unwrap_or_default());
+    println!("{} — {} ({points:?})", issue.key.unwrap_or_default(), fields.summary.unwrap_or_default());
 }
+# }
+```
+
+Та же структура идёт и на запись:
+
+```rust,no_run
+# use jira::cloud::{CloudClient, IssueFields, IssueTypeDetails, IssueUpdateDetails, Project};
+# async fn example(jira: &CloudClient) -> jira::Result<()> {
+let created = jira
+    .issues()
+    .create_issue(IssueUpdateDetails {
+        fields: Some(IssueFields {
+            project: Some(Project { key: Some("PROJ".into()), ..Default::default() }),
+            issuetype: Some(IssueTypeDetails { name: Some("Task".into()), ..Default::default() }),
+            summary: Some("Ротировать ключ подписи".into()),
+            ..Default::default()
+        }),
+        ..Default::default()
+    })
+    .send()
+    .await?;
+# Ok(())
 # }
 ```
 
@@ -128,6 +151,23 @@ let mut issues = jira
 
 while let Some(issue) = issues.try_next().await? {
     println!("{}", issue.key.unwrap_or_default());
+}
+# Ok(())
+# }
+```
+
+Все остальные списки листаются смещением, и `stream` есть у каждого из них — проекты, пользователи, фильтры, дашборды,
+доски, спринты, очереди сервис-деска — так что цикл писать не придётся никогда:
+
+```rust,no_run
+# use jira::cloud::CloudClient;
+use jira::futures_util::TryStreamExt;
+
+# async fn example(jira: &CloudClient) -> jira::Result<()> {
+let mut projects = jira.projects().search_projects().stream();
+
+while let Some(project) = projects.try_next().await? {
+    println!("{}", project.key.unwrap_or_default());
 }
 # Ok(())
 # }
@@ -276,6 +316,14 @@ cargo объединяет их флаги, так что включение в 
 |---|---|
 | `audit` | Собирает поля, которые API присылает, а сгенерированные типы не описывают |
 | `coverage` | Записывает эндпоинт каждого вызова процесса — так живой прогон считает, до чего дошёл |
+
+Ещё один — для логов вызывающего кода, а не для прогонов крейта:
+
+| Флаг | Что добавляет |
+|---|---|
+| `tracing` | Спан `jira.request` вокруг каждого запроса, с методом и путём, и событие на каждую попытку — статус, а также повтор или обновление токена, когда они случаются |
+
+Спан на уровне `DEBUG`, так что подписчик с фильтром `INFO` его не увидит, и ни учётных данных, ни тела запроса в нём нет.
 
 ## Другие продукты
 

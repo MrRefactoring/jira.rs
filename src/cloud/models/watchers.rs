@@ -5,7 +5,6 @@ use serde::{Deserialize, Serialize};
 
 /// The details of watchers on an issue.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-#[non_exhaustive]
 pub struct Watchers {
     /// Whether the calling user is watching this issue.
     #[serde(rename = "isWatching", default, skip_serializing_if = "Option::is_none")]

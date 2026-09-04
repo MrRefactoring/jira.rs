@@ -20,7 +20,7 @@ pub struct TransitionPreview {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub actions: Option<Vec<PreviewRuleConfiguration>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub conditions: Option<Box<PreviewConditionGroupConfiguration>>,
+    pub conditions: Option<PreviewConditionGroupConfiguration>,
     /// The custom issue event ID for the transition.
     #[serde(rename = "customIssueEventId", default, skip_serializing_if = "Option::is_none")]
     pub custom_issue_event_id: Option<String>,

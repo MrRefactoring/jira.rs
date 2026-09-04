@@ -5,7 +5,6 @@ use serde::{Deserialize, Serialize};
 
 /// A page of comments.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-#[non_exhaustive]
 pub struct PageOfComments {
     /// The list of comments.
     #[serde(default, skip_serializing_if = "Option::is_none")]

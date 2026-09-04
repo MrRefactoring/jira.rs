@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 #[non_exhaustive]
 pub struct OptionModel {
     #[serde(rename = "childOptions", default, skip_serializing_if = "Option::is_none")]
-    pub child_options: Option<Vec<Box<OptionModel>>>,
+    pub child_options: Option<Vec<OptionModel>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

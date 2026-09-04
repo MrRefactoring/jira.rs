@@ -13,6 +13,13 @@ crate::open_enum! {
 }
 
 crate::open_enum! {
+    /// The scope of the status. Set to GLOBAL to make the status shared across projects. Leave null for the default (project-scoped) behaviour.
+    pub enum StatusPayloadScope {
+        Global => "GLOBAL",
+    }
+}
+
+crate::open_enum! {
     /// The status category of the status. The value is case-sensitive.
     pub enum StatusPayloadStatusCategory {
         Todo => "TODO",
@@ -35,6 +42,9 @@ pub struct StatusPayload {
     pub on_conflict: Option<StatusPayloadOnConflict>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pcri: Option<ProjectCreateResourceIdentifier>,
+    /// The scope of the status. Set to GLOBAL to make the status shared across projects. Leave null for the default (project-scoped) behaviour.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub scope: Option<StatusPayloadScope>,
     /// The status category of the status. The value is case-sensitive.
     #[serde(rename = "statusCategory", default, skip_serializing_if = "Option::is_none")]
     pub status_category: Option<StatusPayloadStatusCategory>,

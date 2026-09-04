@@ -15,12 +15,15 @@
 //! `CommentInputBody::Variant1` and `WorklogInputComment::Variant1` — the string arms the models still carry —
 //! reach an endpoint that cannot read them. The markup-conversion half of the source suite is therefore absent.
 
-use jira::cloud::{Comment, CommentInput, CommentInputBody, Document, Worklog, WorklogInput, WorklogInputComment};
-use serde_json::{Value, json};
+use jira::cloud::{
+    Comment, CommentInput, CommentInputBody, Document, IssueFields, IssueFieldsDescription, Worklog, WorklogInput,
+    WorklogInputComment,
+};
+use serde_json::Value;
 
 use crate::harness::{
-    ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, await_readable, client, cloud, create_issue_with,
-    create_test_issue, document_of, poll_until, test_name,
+    ResourceTracker, await_readable, client, cloud, create_issue_with, create_test_issue, document_of, poll_until,
+    test_issue_fields, test_name,
 };
 
 /// Every node type in the tree, in document order, so a shape can be asserted without pinning exact output.
@@ -180,12 +183,10 @@ async fn accepts_a_document_as_a_description_at_issue_creation() {
 
     let created = create_issue_with(
         &mut tracker,
-        json!({
-            "project": { "key": TEST_PROJECT_KEY },
-            "issuetype": { "name": TEST_ISSUE_TYPE },
-            "summary": test_name("described"),
-            "description": document_of("described in a document"),
-        }),
+        IssueFields {
+            description: Some(IssueFieldsDescription::Document(document_of("described in a document"))),
+            ..test_issue_fields(test_name("described"))
+        },
     )
     .await;
 
@@ -193,15 +194,16 @@ async fn accepts_a_document_as_a_description_at_issue_creation() {
 
     let description = fetched
         .fields
-        .as_ref()
-        .and_then(|fields| fields.get("description"))
+        .and_then(|fields| fields.description)
         .expect("the issue carries the description it was created with");
-
-    assert_eq!(description.get("type").and_then(Value::as_str), Some("doc"), "stored as a document: {description}");
+    let IssueFieldsDescription::Document(document) = description else {
+        panic!("stored as a document: {description:?}");
+    };
+    let description = serde_json::to_value(document).expect("a document serializes");
 
     let mut types = Vec::new();
 
-    collect_types(description, &mut types);
+    collect_types(&description, &mut types);
 
     assert!(types.contains(&"paragraph".to_owned()), "the paragraph survived creation: {types:?}");
     assert!(description.to_string().contains("described in a document"), "{description}");

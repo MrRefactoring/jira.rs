@@ -8,5 +8,5 @@ use serde::{Deserialize, Serialize};
 pub struct AndOperator {
     /// Returns workspaces matching all of the nested query variants. Absence of nested variants makes this operator no-op.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub and: Option<Vec<Box<QueryVariants>>>,
+    pub and: Option<Vec<QueryVariants>>,
 }

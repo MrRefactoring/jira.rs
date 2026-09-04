@@ -66,7 +66,7 @@ pub struct HttpServletRequestUserPrincipal {
 #[non_exhaustive]
 pub struct HttpServletRequest {
     #[serde(rename = "asyncContext", default, skip_serializing_if = "Option::is_none")]
-    pub async_context: Option<Box<AsyncContext>>,
+    pub async_context: Option<AsyncContext>,
     #[serde(rename = "asyncStarted", default, skip_serializing_if = "Option::is_none")]
     pub async_started: Option<bool>,
     #[serde(rename = "asyncSupported", default, skip_serializing_if = "Option::is_none")]

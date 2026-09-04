@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 pub struct RequestTypeField {
     /// List of default values for the field.
     #[serde(rename = "defaultValues", default, skip_serializing_if = "Option::is_none")]
-    pub default_values: Option<Vec<Box<RequestTypeFieldValue>>>,
+    pub default_values: Option<Vec<RequestTypeFieldValue>>,
     /// Description of the field.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -28,7 +28,7 @@ pub struct RequestTypeField {
     pub required: Option<bool>,
     /// List of valid values for the field.
     #[serde(rename = "validValues", default, skip_serializing_if = "Option::is_none")]
-    pub valid_values: Option<Vec<Box<RequestTypeFieldValue>>>,
+    pub valid_values: Option<Vec<RequestTypeFieldValue>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub visible: Option<bool>,
 }

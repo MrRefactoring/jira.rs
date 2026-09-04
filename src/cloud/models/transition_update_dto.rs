@@ -19,7 +19,7 @@ pub struct TransitionUpdateDTO {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub actions: Option<Vec<WorkflowRuleConfiguration>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub conditions: Option<Box<ConditionGroupUpdate>>,
+    pub conditions: Option<ConditionGroupUpdate>,
     /// The custom event ID of the transition.
     #[serde(rename = "customIssueEventId", default, skip_serializing_if = "Option::is_none")]
     pub custom_issue_event_id: Option<String>,

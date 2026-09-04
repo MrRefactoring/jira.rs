@@ -25,3 +25,11 @@ pub struct Page<T> {
     /// Details of the items included in the page.
     pub values: Vec<T>,
 }
+
+impl<T> crate::core::Paged for Page<T> {
+    type Item = T;
+
+    fn into_step(self, requested: i64) -> crate::core::PageStep<T> {
+        crate::core::PageStep::new(self.values, self.start, self.is_last_page, requested)
+    }
+}

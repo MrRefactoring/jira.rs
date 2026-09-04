@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 #[non_exhaustive]
 pub struct LinkGroup {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub groups: Option<Vec<Box<LinkGroup>>>,
+    pub groups: Option<Vec<LinkGroup>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub header: Option<SimpleLink>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

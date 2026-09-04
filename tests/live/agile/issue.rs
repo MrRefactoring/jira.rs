@@ -52,8 +52,7 @@ async fn agrees_with_the_platform_endpoint_on_the_fields_they_share() {
 
     let through_agile =
         via_agile.fields.as_ref().and_then(|fields| fields.get("summary")).and_then(|value| value.as_str());
-    let through_platform =
-        via_platform.fields.as_ref().and_then(|fields| fields.get("summary")).and_then(|value| value.as_str());
+    let through_platform = via_platform.fields.as_ref().and_then(|fields| fields.summary.as_deref());
 
     assert_eq!(through_agile, through_platform);
     assert_eq!(through_agile, Some(summary.as_str()), "both lenses show the summary the issue was created with");

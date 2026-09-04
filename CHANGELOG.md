@@ -44,6 +44,25 @@ version.
   deprecated alias; nothing was published under the old name here.
 - Wiki markup where v3 wants a document: a rich-text field written as a plain string goes to the v2 twin of the
   endpoint, which converts it, and the result is read back through v3.
+- `IssueFields`: the fields of an issue are a struct rather than a map of raw JSON. The system fields Jira
+  documents in prose — summary, description, project, issue type, status, assignee, the timestamps, links, subtasks,
+  attachments, comments and the rest — are typed, and a custom field lands in `additional`, keyed the way the site
+  names it. The same struct is what `create_issue` and `edit_issue` take.
+- `stream` on every request that pages by offset — projects, boards, users, filters, dashboards and the rest across
+  the five surfaces that page this way — so the JQL search is no longer the only listing a caller does not write the
+  loop for.
+- `error_messages` and `field_errors` on `Error`, reading the two shapes Jira puts a refusal in: the list of
+  messages, and the map from a field to what was wrong with it.
+- The `tracing` feature: a `jira.request` span around every request, with an event per attempt. Off by default, and
+  nothing in it is a credential or a body.
+- `SECURITY.md`, dependency updates through Dependabot, and `cargo deny` in CI, so an advisory against a dependency
+  fails the build rather than waits to be noticed.
+- Every public item of the transport carries documentation, and the crate warns on one that does not.
+
+### Credits
+
+- Harold Dost published `0.0.1` of this crate name in 2021. That release shares no code with this one, but it kept
+  the name alive.
 
 ### Fixed
 

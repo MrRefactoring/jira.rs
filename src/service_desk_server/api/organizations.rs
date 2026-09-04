@@ -66,8 +66,8 @@ impl<'a> OrganizationsService<'a> {
 pub struct GetUsersInOrganizationRequest<'a> {
     client: &'a crate::core::Client,
     organization_id: String,
-    start: Option<f64>,
-    limit: Option<f64>,
+    start: Option<i64>,
+    limit: Option<i64>,
 }
 
 impl<'a> GetUsersInOrganizationRequest<'a> {
@@ -77,7 +77,7 @@ impl<'a> GetUsersInOrganizationRequest<'a> {
 
     /// The starting index of the returned objects. Base index: 0.
     #[must_use]
-    pub fn start(mut self, value: f64) -> Self {
+    pub fn start(mut self, value: i64) -> Self {
         self.start = Some(value);
 
         self
@@ -85,7 +85,7 @@ impl<'a> GetUsersInOrganizationRequest<'a> {
 
     /// The maximum number of items to return per page. Default: 50.
     #[must_use]
-    pub fn limit(mut self, value: f64) -> Self {
+    pub fn limit(mut self, value: i64) -> Self {
         self.limit = Some(value);
 
         self
@@ -110,6 +110,22 @@ impl<'a> GetUsersInOrganizationRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<User>> {
+        let first = self.start.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start = Some(offset);
+
+            request.send()
+        })
     }
 
     /// Sends the request.
@@ -357,8 +373,8 @@ impl<'a> CleanUpOrganizationsRequest<'a> {
 #[derive(Clone)]
 pub struct GetOrganizationsRequest<'a> {
     client: &'a crate::core::Client,
-    start: Option<f64>,
-    limit: Option<f64>,
+    start: Option<i64>,
+    limit: Option<i64>,
 }
 
 impl<'a> GetOrganizationsRequest<'a> {
@@ -368,7 +384,7 @@ impl<'a> GetOrganizationsRequest<'a> {
 
     /// The starting index of the returned objects. Base index: 0.
     #[must_use]
-    pub fn start(mut self, value: f64) -> Self {
+    pub fn start(mut self, value: i64) -> Self {
         self.start = Some(value);
 
         self
@@ -376,7 +392,7 @@ impl<'a> GetOrganizationsRequest<'a> {
 
     /// The maximum number of items to return per page. Default: 50.
     #[must_use]
-    pub fn limit(mut self, value: f64) -> Self {
+    pub fn limit(mut self, value: i64) -> Self {
         self.limit = Some(value);
 
         self
@@ -396,6 +412,22 @@ impl<'a> GetOrganizationsRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Organization>> {
+        let first = self.start.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start = Some(offset);
+
+            request.send()
+        })
     }
 
     /// Sends the request.

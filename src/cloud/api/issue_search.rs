@@ -344,6 +344,7 @@ pub struct SearchIssuesRequest<'a> {
     fields_by_keys: Option<bool>,
     fail_fast: Option<bool>,
     reconcile_issues: Option<Vec<i64>>,
+    include_archived_projects: Option<bool>,
 }
 
 impl<'a> SearchIssuesRequest<'a> {
@@ -359,6 +360,7 @@ impl<'a> SearchIssuesRequest<'a> {
             fields_by_keys: None,
             fail_fast: None,
             reconcile_issues: None,
+            include_archived_projects: None,
         }
     }
 
@@ -469,6 +471,14 @@ impl<'a> SearchIssuesRequest<'a> {
         self
     }
 
+    /// Whether to also return issues that belong to [archived projects](https://support.atlassian.com/jira-cloud-administration/docs/archive-a-project/). Issues in archived projects are excluded by default. Setting this to `true` returns them alongside issues from active projects; the *Browse projects* permission is still required on the archived project. The default is `false`.
+    #[must_use]
+    pub fn include_archived_projects(mut self, value: bool) -> Self {
+        self.include_archived_projects = Some(value);
+
+        self
+    }
+
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/search/jql".to_owned());
@@ -507,6 +517,12 @@ impl<'a> SearchIssuesRequest<'a> {
 
         if let Some(value) = &self.reconcile_issues {
             config.query.push(("reconcileIssues".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.include_archived_projects {
+            config
+                .query
+                .push(("includeArchivedProjects".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

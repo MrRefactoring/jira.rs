@@ -87,10 +87,8 @@ pub use crate::core::{
 /// `reqwest` themselves has to match the version by hand to pass one in.
 pub use reqwest;
 
-/// The stream machinery [`cloud::SearchIssuesRequest::stream`] answers with.
+/// The stream machinery every request builder's `stream()` answers with.
 ///
 /// Its `TryStreamExt` is what reads a stream, and the trait has to be in scope to be used, so re-exporting it saves
 /// a caller a dependency they would otherwise have to add and keep in step with this one.
-#[cfg(feature = "cloud")]
-#[cfg_attr(docsrs, doc(cfg(feature = "cloud")))]
 pub use futures_util;

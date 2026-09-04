@@ -8,12 +8,11 @@
 //! passes while verifying nothing where it does not, which is the failure mode this suite exists to avoid.
 
 use jira::agile::EpicUpdate;
-use jira::cloud::IssueUpdateDetails;
-use serde_json::json;
+use jira::cloud::{IssueFields, IssueTypeDetails, IssueUpdateDetails};
 
 use crate::harness::{
     ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, agile, await_readable, cloud, create_test_issue, poll_until,
-    scrum_board, test_name,
+    scrum_board, test_issue_fields, test_name,
 };
 
 /// The id of the project's Epic issue type, where its issue type scheme carries one.
@@ -55,15 +54,10 @@ async fn runs_the_whole_epic_cycle_where_an_epic_type_is_available() {
     let created = cloud()
         .issues()
         .create_issue(IssueUpdateDetails {
-            fields: Some(
-                [
-                    ("project".to_owned(), json!({ "key": TEST_PROJECT_KEY })),
-                    ("issuetype".to_owned(), json!({ "id": epic_type })),
-                    ("summary".to_owned(), json!(test_name("epic"))),
-                ]
-                .into_iter()
-                .collect(),
-            ),
+            fields: Some(IssueFields {
+                issuetype: Some(IssueTypeDetails { id: Some(epic_type), ..IssueTypeDetails::default() }),
+                ..test_issue_fields(test_name("epic"))
+            }),
             ..IssueUpdateDetails::default()
         })
         .send()

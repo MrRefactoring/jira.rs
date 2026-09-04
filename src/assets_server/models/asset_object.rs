@@ -62,7 +62,7 @@ pub struct AssetObject {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attributes: Option<Vec<Box<ObjectAttribute>>>,
+    pub attributes: Option<Vec<ObjectAttribute>>,
     #[serde(rename = "extendedInfo", default, skip_serializing_if = "Option::is_none")]
     pub extended_info: Option<AssetObjectExtended>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

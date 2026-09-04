@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 pub struct IssueUpdateDetails {
     /// List of issue screen fields to update, specifying the sub-field to update and its value for each field. This field provides a straightforward option when setting a sub-field. When multiple sub-fields or other operations are required, use `update`. Fields included in here cannot be included in `update`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub fields: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub fields: Option<IssueFields>,
     #[serde(rename = "historyMetadata", default, skip_serializing_if = "Option::is_none")]
     pub history_metadata: Option<HistoryMetadata>,
     /// Details of issue properties to be add or update.

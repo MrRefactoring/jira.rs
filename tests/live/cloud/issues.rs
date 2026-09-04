@@ -1,5 +1,4 @@
-use jira::cloud::IssueUpdateDetails;
-use serde_json::json;
+use jira::cloud::{IssueFields, IssueTypeDetails, IssueUpdateDetails, Project};
 
 use crate::harness::{
     ResourceTracker, TEST_PROJECT_KEY, await_readable, cloud, create_test_issue, poll_until, test_name,
@@ -32,7 +31,7 @@ async fn walks_an_issue_through_its_lifecycle() {
         .edit_issue(
             &issue.key,
             IssueUpdateDetails {
-                fields: Some([("summary".to_owned(), json!(edited))].into_iter().collect()),
+                fields: Some(IssueFields { summary: Some(edited.clone()), ..IssueFields::default() }),
                 ..IssueUpdateDetails::default()
             },
         )
@@ -44,7 +43,7 @@ async fn walks_an_issue_through_its_lifecycle() {
         await_readable("the edited issue reads back", || cloud().issues().get_issue(&issue.key).send()).await;
 
     assert_eq!(
-        after_edit.fields.as_ref().and_then(|fields| fields.get("summary")).and_then(|value| value.as_str()),
+        after_edit.fields.as_ref().and_then(|fields| fields.summary.as_deref()),
         Some(edited.as_str()),
         "the edit is observable on the next read",
     );
@@ -57,9 +56,13 @@ async fn walks_an_issue_through_its_lifecycle() {
         .await
         .expect("the fields parameter is accepted");
 
-    let returned = trimmed.fields.as_ref().map_or(0, std::collections::HashMap::len);
+    let fields = trimmed.fields.expect("the field asked for arrives");
 
-    assert!(returned > 0 && returned < 10, "the fields parameter trims the response, got {returned} fields");
+    assert_eq!(fields.summary.as_deref(), Some(edited.as_str()), "the field asked for arrives");
+    assert!(
+        fields.issuetype.is_none() && fields.additional.is_empty(),
+        "the fields parameter trims the response: {fields:?}",
+    );
 
     tracker.cleanup().await;
 }
@@ -109,15 +112,12 @@ async fn rejects_an_unknown_project_with_a_typed_error_rather_than_a_hang() {
     let error = cloud()
         .issues()
         .create_issue(IssueUpdateDetails {
-            fields: Some(
-                [
-                    ("project".to_owned(), json!({ "key": "NOSUCHPROJ" })),
-                    ("issuetype".to_owned(), json!({ "name": "Task" })),
-                    ("summary".to_owned(), json!("x")),
-                ]
-                .into_iter()
-                .collect(),
-            ),
+            fields: Some(IssueFields {
+                project: Some(Project { key: Some("NOSUCHPROJ".to_owned()), ..Project::default() }),
+                issuetype: Some(IssueTypeDetails { name: Some("Task".to_owned()), ..IssueTypeDetails::default() }),
+                summary: Some("x".to_owned()),
+                ..IssueFields::default()
+            }),
             ..IssueUpdateDetails::default()
         })
         .send()

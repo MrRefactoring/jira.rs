@@ -98,8 +98,8 @@ impl<'a> GetPortalByProjectKeyRequest<'a> {
 #[derive(Clone)]
 pub struct GetPortalsRequest<'a> {
     client: &'a crate::core::Client,
-    start: Option<f64>,
-    limit: Option<f64>,
+    start: Option<i64>,
+    limit: Option<i64>,
 }
 
 impl<'a> GetPortalsRequest<'a> {
@@ -109,7 +109,7 @@ impl<'a> GetPortalsRequest<'a> {
 
     /// The starting index of the returned objects. Base index: 0.
     #[must_use]
-    pub fn start(mut self, value: f64) -> Self {
+    pub fn start(mut self, value: i64) -> Self {
         self.start = Some(value);
 
         self
@@ -117,7 +117,7 @@ impl<'a> GetPortalsRequest<'a> {
 
     /// The maximum number of items to return per page. Default: 50.
     #[must_use]
-    pub fn limit(mut self, value: f64) -> Self {
+    pub fn limit(mut self, value: i64) -> Self {
         self.limit = Some(value);
 
         self
@@ -137,6 +137,22 @@ impl<'a> GetPortalsRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Portal>> {
+        let first = self.start.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start = Some(offset);
+
+            request.send()
+        })
     }
 
     /// Sends the request.

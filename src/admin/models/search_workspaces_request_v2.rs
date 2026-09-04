@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SearchWorkspacesRequestV2 {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub query: Option<Box<QueryVariants>>,
+    pub query: Option<QueryVariants>,
     /// Specifies the maximum page size.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,

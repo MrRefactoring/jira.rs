@@ -1,11 +1,9 @@
-use jira::cloud::{
-    DeleteAndReplaceVersion, GetProjectVersionsPaginatedRequestOrderBy, GetVersionRequestExpand,
-    GetVersionRequestExpandValue, IssueUpdateDetails, Version, VersionMove, VersionMovePosition,
-};
-use serde_json::json;
-
 use crate::harness::{
     ResourceTracker, TEST_PROJECT_KEY, await_readable, await_refused, cloud, create_test_issue, poll_until, test_name,
+};
+use jira::cloud::{
+    DeleteAndReplaceVersion, GetProjectVersionsPaginatedRequestOrderBy, GetVersionRequestExpand,
+    GetVersionRequestExpandValue, IssueFields, IssueUpdateDetails, Version, VersionMove, VersionMovePosition,
 };
 
 /// A version, from creation to merge, inside the standing test project.
@@ -154,7 +152,10 @@ async fn walks_a_version_through_its_lifecycle() {
         .edit_issue(
             &issue.key,
             IssueUpdateDetails {
-                fields: Some([("fixVersions".to_owned(), json!([{ "id": version_id }]))].into_iter().collect()),
+                fields: Some(IssueFields {
+                    fix_versions: Some(vec![Version { id: Some(version_id.clone()), ..Version::default() }]),
+                    ..IssueFields::default()
+                }),
                 ..IssueUpdateDetails::default()
             },
         )
@@ -212,17 +213,15 @@ async fn walks_a_version_through_its_lifecycle() {
         .await
         .expect("the issue that carried the version reads back");
 
-    let fix_versions: Vec<Option<&str>> = fetched
+    let fix_versions: Vec<Option<String>> = fetched
         .fields
-        .as_ref()
-        .and_then(|fields| fields.get("fixVersions"))
-        .and_then(|value| value.as_array())
+        .and_then(|fields| fields.fix_versions)
         .expect("an issue reports its fix versions as a list")
-        .iter()
-        .map(|version| version.get("id").and_then(serde_json::Value::as_str))
+        .into_iter()
+        .map(|version| version.id)
         .collect();
 
-    assert_eq!(fix_versions, vec![Some(second_id.as_str())], "the merge moves the issue onto the surviving version");
+    assert_eq!(fix_versions, vec![Some(second_id.clone())], "the merge moves the issue onto the surviving version");
 
     tracker.cleanup().await;
 }

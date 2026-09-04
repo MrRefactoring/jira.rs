@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 #[non_exhaustive]
 pub struct NotificationSchemeEvent {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub event: Option<Box<NotificationEvent>>,
+    pub event: Option<NotificationEvent>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub notifications: Option<Vec<EventNotification>>,
 }

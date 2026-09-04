@@ -135,12 +135,10 @@ async fn walks_an_attachment_through_its_lifecycle() {
 
     let mut listed = fetched
         .fields
-        .as_ref()
-        .and_then(|fields| fields.get("attachment"))
-        .and_then(serde_json::Value::as_array)
+        .and_then(|fields| fields.attachment)
         .expect("the attachment field is a list")
-        .iter()
-        .filter_map(|attachment| attachment.get("filename").and_then(serde_json::Value::as_str))
+        .into_iter()
+        .filter_map(|attachment| attachment.filename)
         .collect::<Vec<_>>();
 
     listed.sort_unstable();

@@ -7,6 +7,7 @@
 //! therefore only read here, never created or deleted — deleting one strips a team of its working view.
 
 use jira::agile::{BoardType, GetAllBoardsRequestType};
+use jira::futures_util::TryStreamExt;
 
 use crate::harness::{TEST_PROJECT_KEY, agile, cloud};
 
@@ -69,6 +70,24 @@ async fn pages_the_board_listing() {
             board.r#type,
         );
     }
+}
+
+#[tokio::test]
+#[ignore = "live: needs a Jira site"]
+async fn a_stream_walks_every_page_of_the_board_listing() {
+    let page = agile().board().get_all_boards().send().await.expect("the board listing answers");
+
+    let streamed: Vec<i64> = agile()
+        .board()
+        .get_all_boards()
+        .max_results(1)
+        .stream()
+        .map_ok(|board| board.id.unwrap_or_default())
+        .try_collect()
+        .await
+        .expect("every page of the board listing is readable");
+
+    assert_eq!(streamed.len() as i64, page.total, "one board per page, and the stream reaches the last one");
 }
 
 #[tokio::test]

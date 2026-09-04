@@ -442,8 +442,8 @@ impl<'a> CreateIssueRequest<'a> {
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<CreatedIssue> {
         let described_in_markup = self.issue_update_details.fields.as_ref().is_some_and(|fields| {
-            matches!(fields.get("description"), Some(serde_json::Value::String(_)))
-                || matches!(fields.get("environment"), Some(serde_json::Value::String(_)))
+            matches!(fields.description, Some(IssueFieldsDescription::Variant1(_)))
+                || matches!(fields.environment, Some(IssueFieldsEnvironment::Variant1(_)))
         });
 
         if described_in_markup {
@@ -1171,6 +1171,22 @@ impl<'a> GetChangeLogsRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Changelog>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start_at = Some(offset);
+
+            request.send()
+        })
     }
 
     /// Sends the request.

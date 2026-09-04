@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 #[non_exhaustive]
 pub struct WorkflowRules {
     #[serde(rename = "conditionsTree", default, skip_serializing_if = "Option::is_none")]
-    pub conditions_tree: Option<Box<WorkflowCondition>>,
+    pub conditions_tree: Option<WorkflowCondition>,
     /// The workflow post functions.
     #[serde(rename = "postFunctions", default, skip_serializing_if = "Option::is_none")]
     pub post_functions: Option<Vec<WorkflowTransitionRule>>,

@@ -5,7 +5,6 @@ use serde::{Deserialize, Serialize};
 
 /// A log of changes made to issue fields. Changelogs related to workflow associations are currently being deprecated.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-#[non_exhaustive]
 pub struct Changelog {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub author: Option<UserDetails>,

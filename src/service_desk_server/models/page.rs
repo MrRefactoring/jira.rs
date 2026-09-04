@@ -22,3 +22,11 @@ pub struct Page<T> {
     #[serde(rename = "maxResultWindow", default, skip_serializing_if = "Option::is_none")]
     pub max_result_window: Option<i64>,
 }
+
+impl<T> crate::core::Paged for Page<T> {
+    type Item = T;
+
+    fn into_step(self, requested: i64) -> crate::core::PageStep<T> {
+        crate::core::PageStep::new(self.values, self.start, self.is_last_page, requested)
+    }
+}

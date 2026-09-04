@@ -15,5 +15,5 @@ pub struct Throwable {
     #[serde(rename = "localizedMessage", default, skip_serializing_if = "Option::is_none")]
     pub localized_message: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub suppressed: Option<Vec<Box<Throwable>>>,
+    pub suppressed: Option<Vec<Throwable>>,
 }

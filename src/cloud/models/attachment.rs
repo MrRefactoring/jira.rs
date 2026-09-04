@@ -5,7 +5,6 @@ use serde::{Deserialize, Serialize};
 
 /// Details about an attachment.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-#[non_exhaustive]
 pub struct Attachment {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub author: Option<UserDetails>,

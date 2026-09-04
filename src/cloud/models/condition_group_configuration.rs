@@ -17,7 +17,7 @@ crate::open_enum! {
 pub struct ConditionGroupConfiguration {
     /// The nested conditions of the condition group.
     #[serde(rename = "conditionGroups", default, skip_serializing_if = "Option::is_none")]
-    pub condition_groups: Option<Vec<Box<ConditionGroupConfiguration>>>,
+    pub condition_groups: Option<Vec<ConditionGroupConfiguration>>,
     /// The rules for this condition.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub conditions: Option<Vec<WorkflowRuleConfiguration>>,

@@ -1,11 +1,9 @@
 //! Labels are site-wide and derived state: nothing creates a label directly, they come into existence by being put on
 //! an issue. So the suite makes one for real and asserts it surfaces in the global listing, and that paging behaves.
 
-use serde_json::json;
+use jira::cloud::IssueFields;
 
-use crate::harness::{
-    ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, cloud, create_issue_with, poll_until, run_id, test_name,
-};
+use crate::harness::{ResourceTracker, cloud, create_issue_with, poll_until, run_id, test_issue_fields, test_name};
 
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
@@ -31,12 +29,7 @@ async fn eventually_lists_the_label_just_put_on_an_issue() {
 
     create_issue_with(
         &mut tracker,
-        json!({
-            "project": { "key": TEST_PROJECT_KEY },
-            "issuetype": { "name": TEST_ISSUE_TYPE },
-            "summary": test_name("labelled"),
-            "labels": [label],
-        }),
+        IssueFields { labels: Some(vec![label.clone()]), ..test_issue_fields(test_name("labelled")) },
     )
     .await;
 

@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 pub struct Operations {
     /// Details of the link groups defining issue operations.
     #[serde(rename = "linkGroups", default, skip_serializing_if = "Option::is_none")]
-    pub link_groups: Option<Vec<Box<LinkGroup>>>,
+    pub link_groups: Option<Vec<LinkGroup>>,
     /// Keys the specification does not describe, kept rather than dropped.
     #[serde(flatten)]
     pub additional: std::collections::HashMap<String, serde_json::Value>,

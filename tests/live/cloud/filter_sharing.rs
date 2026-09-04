@@ -145,8 +145,8 @@ async fn resolves_an_issue_resolution_by_id() {
         .send()
         .await
         .ok()
-        .and_then(|issue| issue.fields.and_then(|fields| fields.get("resolution").cloned()))
-        .and_then(|resolution| resolution.get("id").and_then(serde_json::Value::as_str).map(ToOwned::to_owned))
+        .and_then(|issue| issue.fields.and_then(|fields| fields.resolution))
+        .and_then(|resolution| resolution.id)
         .unwrap_or_else(|| "10000".to_owned());
 
     match cloud().issue_resolutions().get_resolution(resolution_id.as_str()).send().await {

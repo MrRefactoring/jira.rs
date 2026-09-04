@@ -63,7 +63,7 @@ crate::open_enum! {
 #[non_exhaustive]
 pub struct BadRequestException {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub cause: Option<Box<Throwable>>,
+    pub cause: Option<Throwable>,
     #[serde(rename = "stackTrace", default, skip_serializing_if = "Option::is_none")]
     pub stack_trace: Option<Vec<StackTraceElement>>,
     #[serde(rename = "responseStatus", default, skip_serializing_if = "Option::is_none")]
@@ -75,5 +75,5 @@ pub struct BadRequestException {
     #[serde(rename = "localizedMessage", default, skip_serializing_if = "Option::is_none")]
     pub localized_message: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub suppressed: Option<Vec<Box<Throwable>>>,
+    pub suppressed: Option<Vec<Throwable>>,
 }

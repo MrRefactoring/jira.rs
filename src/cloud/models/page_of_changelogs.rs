@@ -5,7 +5,6 @@ use serde::{Deserialize, Serialize};
 
 /// A page of changelogs.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-#[non_exhaustive]
 pub struct PageOfChangelogs {
     /// The list of changelogs.
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -17,7 +17,7 @@ crate::open_enum! {
 #[non_exhaustive]
 pub struct CompoundClause {
     /// The list of nested clauses.
-    pub clauses: Vec<Box<JqlQueryClause>>,
+    pub clauses: Vec<JqlQueryClause>,
     /// The operator between the clauses.
     pub operator: CompoundClauseOperator,
 }

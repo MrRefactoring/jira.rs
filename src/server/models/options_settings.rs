@@ -9,5 +9,5 @@ pub struct OptionsSettings {
     #[serde(rename = "issueContext", default, skip_serializing_if = "Option::is_none")]
     pub issue_context: Option<IssueContextParam>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub options: Option<Vec<Box<OptionModel>>>,
+    pub options: Option<Vec<OptionModel>>,
 }

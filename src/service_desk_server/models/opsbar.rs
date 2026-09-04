@@ -7,5 +7,5 @@ use serde::{Deserialize, Serialize};
 #[non_exhaustive]
 pub struct Opsbar {
     #[serde(rename = "linkGroups", default, skip_serializing_if = "Option::is_none")]
-    pub link_groups: Option<Vec<Box<LinkGroup>>>,
+    pub link_groups: Option<Vec<LinkGroup>>,
 }

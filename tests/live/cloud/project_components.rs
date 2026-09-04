@@ -1,10 +1,9 @@
-use jira::cloud::{
-    GetProjectComponentsPaginatedRequestOrderBy, IssueUpdateDetails, ProjectComponent, ProjectComponentAssigneeType,
-};
-use serde_json::json;
-
 use crate::harness::{
     ResourceTracker, TEST_PROJECT_KEY, await_readable, await_refused, cloud, create_test_issue, test_name,
+};
+use jira::cloud::{
+    GetProjectComponentsPaginatedRequestOrderBy, IssueFields, IssueUpdateDetails, ProjectComponent,
+    ProjectComponentAssigneeType,
 };
 
 /// A component, from creation to deletion, inside the standing test project.
@@ -96,7 +95,13 @@ async fn walks_a_component_through_its_lifecycle() {
         .edit_issue(
             &issue.key,
             IssueUpdateDetails {
-                fields: Some([("components".to_owned(), json!([{ "id": component_id }]))].into_iter().collect()),
+                fields: Some(IssueFields {
+                    components: Some(vec![ProjectComponent {
+                        id: Some(component_id.clone()),
+                        ..ProjectComponent::default()
+                    }]),
+                    ..IssueFields::default()
+                }),
                 ..IssueUpdateDetails::default()
             },
         )
@@ -154,12 +159,8 @@ async fn walks_a_component_through_its_lifecycle() {
     })
     .await;
 
-    let components = fetched
-        .fields
-        .as_ref()
-        .and_then(|fields| fields.get("components"))
-        .and_then(|value| value.as_array())
-        .expect("an issue reports its components as a list");
+    let components =
+        fetched.fields.and_then(|fields| fields.components).expect("an issue reports its components as a list");
 
     assert!(components.is_empty(), "deleting the component leaves the issue intact and unattached");
 

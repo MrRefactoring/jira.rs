@@ -5,7 +5,6 @@ use serde::{Deserialize, Serialize};
 
 /// Details about an issue.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-#[non_exhaustive]
 pub struct Issue {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub changelog: Option<PageOfChangelogs>,
@@ -15,7 +14,7 @@ pub struct Issue {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub expand: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub fields: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub fields: Option<Box<IssueFields>>,
     #[serde(rename = "fieldsToInclude", default, skip_serializing_if = "Option::is_none")]
     pub fields_to_include: Option<IncludedFields>,
     /// The ID of the issue.
