@@ -276,26 +276,29 @@ async fn a_stream_walks_every_page_of_a_search() {
     search(&format!("key = {}", second.key), None).await;
 
     let query = field("key").is_in([first.key.as_str(), second.key.as_str()]).order_by("key");
-    let mut issues = cloud()
-        .issue_search()
-        .search_issues()
-        .jql(query)
-        // One issue per page, so a stream that stops at the first page cannot pass this.
-        .max_results(1)
-        .fields(["summary"])
-        .stream();
-    let mut keys = Vec::new();
-
-    while let Some(issue) = issues.try_next().await.expect("every page of the stream is readable") {
-        keys.push(issue.key.expect("a searched issue carries its key"));
-    }
-
-    keys.sort();
-
     let mut expected = vec![first.key.clone(), second.key.clone()];
     expected.sort();
 
-    assert_eq!(keys, expected, "the stream ends at the last page rather than at the first");
+    poll_until("the stream to end at the last page rather than at the first", || async {
+        let mut issues = cloud()
+            .issue_search()
+            .search_issues()
+            .jql(query.clone())
+            // One issue per page, so a stream that stops at the first page cannot pass this.
+            .max_results(1)
+            .fields(["summary"])
+            .stream();
+        let mut keys = Vec::new();
+
+        while let Some(issue) = issues.try_next().await.expect("every page of the stream is readable") {
+            keys.push(issue.key.expect("a searched issue carries its key"));
+        }
+
+        keys.sort();
+
+        (keys == expected).then_some(keys)
+    })
+    .await;
 
     tracker.cleanup().await;
 }
