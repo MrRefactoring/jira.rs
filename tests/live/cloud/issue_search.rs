@@ -56,12 +56,21 @@ async fn returns_ids_alone_until_fields_are_asked_for() {
         "exactly the field asked for, and no other: {fields:?}",
     );
 
-    let by_text = search(&format!("project = {TEST_PROJECT_KEY} AND summary ~ \"searchable\""), Some("summary")).await;
+    let by_text = format!("project = {TEST_PROJECT_KEY} AND summary ~ \"searchable\"");
 
-    assert!(
-        by_text.iter().any(|row| row.id.as_deref() == Some(issue.id.as_str())),
-        "the issue is findable by text, not only by key",
-    );
+    poll_until("the issue to be findable by text, not only by key", || async {
+        let page = cloud()
+            .issue_search()
+            .search_issues()
+            .jql(by_text.as_str())
+            .fields(["summary"])
+            .send()
+            .await
+            .expect("a text search is accepted");
+
+        page.issues.filter(|issues| issues.iter().any(|row| row.id.as_deref() == Some(issue.id.as_str())))
+    })
+    .await;
 
     tracker.cleanup().await;
 }
