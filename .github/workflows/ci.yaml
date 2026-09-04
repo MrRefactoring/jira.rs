@@ -60,6 +60,18 @@ jobs:
       - name: 🎛️ Check each feature
         run: cargo hack check --each-feature --no-dev-deps
 
+  deny:
+    name: 🛡️ Advisories, licences & sources
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout sources
+        uses: actions/checkout@v7
+      - name: 🛡️ cargo-deny
+        uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          command: check
+          arguments: --all-features
+
   msrv:
     name: 🕰️ Minimum supported Rust
     runs-on: ubuntu-latest
