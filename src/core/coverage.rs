@@ -1,7 +1,13 @@
+//! Records the endpoint of every call the process makes, which is how a live run counts what it reached.
+//!
+//! Only compiled under the `coverage` feature. Each endpoint is written once, as `METHOD path`, to the file the
+//! environment variable names; without the variable nothing is written.
+
 use std::collections::HashSet;
 use std::io::Write;
 use std::sync::{Mutex, OnceLock};
 
+/// The environment variable naming the file endpoints are appended to.
 pub const OUTPUT_VARIABLE: &str = "JIRA_COVERAGE_OUTPUT";
 
 fn store() -> &'static Mutex<HashSet<String>> {
@@ -10,6 +16,7 @@ fn store() -> &'static Mutex<HashSet<String>> {
     STORE.get_or_init(|| Mutex::new(HashSet::new()))
 }
 
+/// Notes that `endpoint` was called, the first time it is.
 pub fn record(endpoint: &str) {
     let Ok(mut seen) = store().lock() else { return };
 

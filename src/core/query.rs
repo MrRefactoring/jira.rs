@@ -14,6 +14,7 @@ pub enum QueryValue {
 }
 
 impl QueryValue {
+    /// Whether the parameter is left out of the URL entirely.
     pub fn is_skip(&self) -> bool {
         matches!(self, QueryValue::Skip)
     }

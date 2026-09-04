@@ -7,10 +7,12 @@ use std::time::SystemTime;
 use crate::core::error::{Error, Result};
 use crate::core::oauth::TokenRefreshEvent;
 
+/// A boxed, sendable future: the shape an async method on a trait object has to return.
 pub type BoxFuture<'a, T> = Pin<Box<dyn Future<Output = T> + Send + 'a>>;
 
 /// Supplies a bearer token per request, for callers who mint their own.
 pub trait TokenProvider: Send + Sync + 'static {
+    /// The bearer token to send with the next request.
     fn token(&self) -> BoxFuture<'_, Result<String>>;
 }
 
@@ -29,6 +31,7 @@ where
 /// Persist the rotated refresh token here — Atlassian invalidates the one that was sent, so the previous value is
 /// dead the moment this runs.
 pub trait TokenRefreshHook: Send + Sync + 'static {
+    /// Receives the freshly minted tokens.
     fn on_token_refresh(&self, event: TokenRefreshEvent) -> BoxFuture<'_, ()>;
 }
 
@@ -49,9 +52,13 @@ where
 /// fails on the first refresh — and is rejected when the client is built.
 #[derive(Clone, Default)]
 pub struct OAuth2Config {
+    /// The access token in hand, if any.
     pub access_token: Option<String>,
+    /// The refresh token, which is what lets the client refresh on its own.
     pub refresh_token: Option<String>,
+    /// The OAuth 2.0 app's client id.
     pub client_id: Option<String>,
+    /// The OAuth 2.0 app's client secret.
     pub client_secret: Option<String>,
     /// When the access token expires. The client refreshes a minute ahead of it.
     pub expires_at: Option<SystemTime>,
@@ -59,6 +66,7 @@ pub struct OAuth2Config {
     pub cloud_id: Option<String>,
     /// Site URL, e.g. `https://your-domain.atlassian.net`, used to pick a cloud id when the token reaches several.
     pub site_url: Option<String>,
+    /// Called after every refresh, with the rotated tokens to persist.
     pub on_token_refresh: Option<Arc<dyn TokenRefreshHook>>,
 }
 
@@ -85,13 +93,19 @@ impl fmt::Debug for OAuth2Config {
 /// `host` is required and is the only address involved.
 #[derive(Clone, Default)]
 pub struct OAuth2ServerConfig {
+    /// The access token in hand, if any.
     pub access_token: Option<String>,
+    /// The refresh token, which is what lets the client refresh on its own.
     pub refresh_token: Option<String>,
+    /// The client id of the incoming application link.
     pub client_id: Option<String>,
+    /// The client secret of the incoming application link.
     pub client_secret: Option<String>,
     /// The redirect URI the incoming application link was registered with. The provider validates it on refresh too.
     pub redirect_uri: Option<String>,
+    /// When the access token expires. The client refreshes a minute ahead of it.
     pub expires_at: Option<SystemTime>,
+    /// Called after every refresh, with the rotated tokens to persist.
     pub on_token_refresh: Option<Arc<dyn TokenRefreshHook>>,
 }
 
@@ -116,16 +130,21 @@ pub enum Auth {
     /// Cloud pairs an account address with an API token, Data Center a username with a password. The wire format is
     /// the same; only the two halves differ.
     Basic {
+        /// The account address on Cloud, the account name on Data Center.
         username: String,
+        /// The API token on Cloud, the password on Data Center.
         password: String,
     },
     /// A personal access token, which is how Data Center 8.14 and later prefer to be addressed.
     Bearer {
+        /// The credential, sent as `Authorization: Bearer`.
         token: String,
     },
     /// A bearer token minted per request.
     BearerProvider(Arc<dyn TokenProvider>),
+    /// Jira Cloud OAuth 2.0 (3LO), refreshed by the client.
     OAuth2(OAuth2Config),
+    /// OAuth 2.0 against a Data Center instance's own provider.
     OAuth2Server(OAuth2ServerConfig),
 }
 
@@ -145,10 +164,12 @@ impl Auth {
         Auth::Bearer { token: token.into() }
     }
 
+    /// Jira Cloud OAuth 2.0 (3LO).
     pub fn oauth2(config: OAuth2Config) -> Self {
         Auth::OAuth2(config)
     }
 
+    /// OAuth 2.0 issued by a Data Center instance.
     pub fn oauth2_server(config: OAuth2ServerConfig) -> Self {
         Auth::OAuth2Server(config)
     }

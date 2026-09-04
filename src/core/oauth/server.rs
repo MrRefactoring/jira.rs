@@ -15,13 +15,18 @@ pub(crate) const TOKEN_PATH: &str = "/rest/oauth2/latest/token";
 /// three.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ServerOAuth2Scope {
+    /// Read the instance's data.
     Read,
+    /// Read and write.
     Write,
+    /// Read, write and administer projects.
     Admin,
+    /// Everything, the instance's own administration included.
     SystemAdmin,
 }
 
 impl ServerOAuth2Scope {
+    /// The scope as the instance spells it, e.g. `SYSTEM_ADMIN`.
     pub fn as_str(self) -> &'static str {
         match self {
             ServerOAuth2Scope::Read => "READ",
@@ -42,34 +47,50 @@ pub(crate) fn normalize_host(host: &str) -> &str {
 /// `redirect_uri` that does not match the registration is rejected by the instance rather than by this function.
 #[derive(Debug, Clone)]
 pub struct ServerAuthorizationUrlParams {
+    /// The instance's site URL, e.g. `https://jira.example.com`.
     pub host: String,
+    /// The client id of the incoming application link.
     pub client_id: String,
+    /// The access levels to ask for.
     pub scopes: Vec<ServerOAuth2Scope>,
+    /// Where the instance sends the user back to, exactly as registered on the link.
     pub redirect_uri: String,
+    /// Yours to generate and to verify when the callback comes back — it is what stops CSRF on the redirect.
     pub state: String,
 }
 
 /// The authorization code to trade in, against a Data Center instance.
 #[derive(Debug, Clone)]
 pub struct ServerExchangeCodeParams {
+    /// The instance's site URL, e.g. `https://jira.example.com`.
     pub host: String,
+    /// The client id of the incoming application link.
     pub client_id: String,
+    /// The client secret of the incoming application link.
     pub client_secret: String,
+    /// The authorization code from the redirect callback.
     pub code: String,
+    /// The redirect URI the code was issued for.
     pub redirect_uri: String,
+    /// The HTTP client to reach the instance by, so a proxy or a timeout covers the token calls too.
     pub http: Option<reqwest::Client>,
 }
 
 /// The refresh credential set, against a Data Center instance.
 #[derive(Debug, Clone)]
 pub struct ServerRefreshTokenParams {
+    /// The instance's site URL, e.g. `https://jira.example.com`.
     pub host: String,
+    /// The client id of the incoming application link.
     pub client_id: String,
+    /// The client secret of the incoming application link.
     pub client_secret: String,
+    /// The refresh token in hand.
     pub refresh_token: String,
     /// Required where the specification does not ask for it: the Data Center provider validates it on the refresh
     /// grant as well, and omitting it earns an `invalid_grant` that names nothing.
     pub redirect_uri: String,
+    /// The HTTP client to reach the instance by, so a proxy or a timeout covers the token calls too.
     pub http: Option<reqwest::Client>,
 }
 

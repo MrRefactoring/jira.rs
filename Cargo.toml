@@ -23,13 +23,16 @@ audit = ["dep:serde_ignored"]
 # depends on a feature, which two crates depending on this one do not get to disagree about.
 chrono = ["dep:chrono"]
 coverage = []
+# A span per request and an event per attempt, through the `tracing` crate. Off by default: a caller who wants it
+# already depends on `tracing`, and one who does not should not pay for it.
+tracing = ["dep:tracing"]
 
 # One feature per API surface, so a caller compiles the endpoints they use and not the ten thousand they do not.
 admin = []
 agile = []
 assets = []
 assets-server = []
-cloud = ["dep:futures-util"]
+cloud = []
 server = []
 service-desk = []
 service-desk-server = []
@@ -47,7 +50,7 @@ unsafe_code = "forbid"
 bytes = "1.12"
 chrono = { version = "0.4", optional = true, default-features = false, features = ["std", "serde"] }
 form_urlencoded = "1.2"
-futures-util = { version = "0.3", optional = true, default-features = false, features = ["alloc"] }
+futures-util = { version = "0.3", default-features = false, features = ["alloc"] }
 hmac = { version = "0.12", optional = true }
 httpdate = "1.0"
 reqwest = { version = "0.13", features = ["json", "multipart", "form"] }
@@ -58,6 +61,7 @@ serde_ignored = { version = "0.1", optional = true }
 serde_path_to_error = "0.1"
 thiserror = "2.0"
 tokio = { version = "1.53", features = ["fs", "sync", "time"] }
+tracing = { version = "0.1", optional = true, default-features = false, features = ["std"] }
 url = "2.5"
 
 [dev-dependencies]

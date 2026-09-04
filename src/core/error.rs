@@ -1,3 +1,4 @@
+use std::collections::BTreeMap;
 use std::fmt;
 use std::time::{Duration, SystemTime};
 
@@ -5,6 +6,7 @@ use serde_json::Value;
 
 use crate::core::product::SCOPE_HINT;
 
+/// The result of anything this crate does.
 pub type Result<T> = std::result::Result<T, Error>;
 
 /// Node/undici error codes that signal a recoverable transport-layer failure.
@@ -14,6 +16,7 @@ const TRANSIENT_NETWORK_MARKERS: &[&str] =
 /// HTTP statuses that signal a recoverable upstream failure. The single source of truth for both retry paths.
 pub const TRANSIENT_HTTP_STATUSES: &[u16] = &[502, 503, 504];
 
+/// Whether a status is one of the gateway failures worth retrying.
 pub fn is_transient_status(status: u16) -> bool {
     TRANSIENT_HTTP_STATUSES.contains(&status)
 }
@@ -42,8 +45,11 @@ pub enum ApiErrorKind {
 #[derive(Debug, Clone)]
 #[non_exhaustive]
 pub struct ApiErrorDetails {
+    /// What kind of failure the status describes.
     pub kind: ApiErrorKind,
+    /// The HTTP status that crossed the wire.
     pub status: u16,
+    /// The status's reason phrase, e.g. `Not Found`.
     pub status_text: String,
     /// Atlassian's error payload, parsed when it was JSON and a `Value::String` when it was not.
     pub body: Value,
@@ -55,10 +61,13 @@ pub struct ApiErrorDetails {
 #[derive(Debug, Clone, Default)]
 #[non_exhaustive]
 pub struct OAuthErrorDetails {
+    /// The HTTP status of the token call, when one was answered.
     pub status: Option<u16>,
+    /// What the authorization server said, parsed when it was JSON.
     pub body: Option<Value>,
     /// The OAuth 2.0 error code, e.g. `invalid_grant`. Branch on this rather than on `status`.
     pub error: Option<String>,
+    /// The authorization server's prose about the error.
     pub error_description: Option<String>,
     /// Whether the grant is unrecoverable and the user has to authorize again.
     pub reauthorization_required: bool,
@@ -83,6 +92,7 @@ pub struct SchemaMismatchIssue {
 pub struct SchemaMismatchReport {
     /// Method and path, without the query string.
     pub endpoint: String,
+    /// Every place the two disagreed.
     pub issues: Vec<SchemaMismatchIssue>,
 }
 
@@ -110,14 +120,21 @@ impl fmt::Display for SchemaMismatchReport {
 pub enum Error {
     /// The API returned a non-2xx HTTP response.
     #[error("{message}")]
-    Api { message: String, details: Box<ApiErrorDetails> },
+    Api {
+        /// The status, and what the body said.
+        message: String,
+        /// Everything the response carried.
+        details: Box<ApiErrorDetails>,
+    },
 
     /// The request never produced an HTTP response — DNS, TLS, a reset socket, a timeout, an unreachable host.
     #[error("{message}")]
     Network {
+        /// The URL that was being reached, and what went wrong.
         message: String,
         /// Whether the failure looks retryable rather than permanent.
         transient: bool,
+        /// What the transport reported.
         #[source]
         source: reqwest::Error,
     },
@@ -127,7 +144,12 @@ pub enum Error {
     /// Deliberately not an [`Error::Api`]: it does not come from the product API, and a caller retrying product calls
     /// should not treat "your refresh token is dead" as the same class of problem as "that page is missing".
     #[error("{message}")]
-    OAuth { message: String, details: Box<OAuthErrorDetails> },
+    OAuth {
+        /// What was being done, and what the authorization server said.
+        message: String,
+        /// Everything the token call carried.
+        details: Box<OAuthErrorDetails>,
+    },
 
     /// The client was configured in a way that cannot work — contradictory options, or a required one missing.
     #[error("{0}")]
@@ -140,6 +162,7 @@ pub enum Error {
     /// anything but a string.
     #[error("A request body could not be serialized as JSON: {source}")]
     Serialization {
+        /// What the serializer reported.
         #[from]
         source: serde_json::Error,
     },
@@ -150,17 +173,21 @@ pub enum Error {
     /// drifted.
     #[error("Response did not match the schema for {}", .report.endpoint)]
     SchemaMismatch {
+        /// Where the response and the schema disagreed, by path and type.
         report: Box<SchemaMismatchReport>,
+        /// The deserializer's own complaint, when there was one.
         #[source]
         source: Option<serde_json::Error>,
     },
 }
 
 impl Error {
+    /// A configuration that cannot work, described.
     pub fn config(message: impl Into<String>) -> Self {
         Error::Config(message.into())
     }
 
+    /// An OAuth 2.0 failure, described.
     pub fn oauth(message: impl Into<String>, details: OAuthErrorDetails) -> Self {
         Error::OAuth { message: message.into(), details: Box::new(details) }
     }
@@ -215,14 +242,17 @@ impl Error {
         matches!(self, Error::Network { .. })
     }
 
+    /// The token endpoint or the cloud-id lookup failed. Not a product API failure.
     pub fn is_oauth(&self) -> bool {
         matches!(self, Error::OAuth { .. })
     }
 
+    /// The client was configured in a way that cannot work.
     pub fn is_config(&self) -> bool {
         matches!(self, Error::Config(_))
     }
 
+    /// The response arrived but is not what the schema describes. Read [`Error::schema_report`] for where.
     pub fn is_schema_mismatch(&self) -> bool {
         matches!(self, Error::SchemaMismatch { .. })
     }
@@ -269,6 +299,34 @@ impl Error {
             Error::OAuth { details, .. } => details.body.as_ref(),
             _ => None,
         }
+    }
+
+    /// What Jira said went wrong with the request as a whole, from `errorMessages`.
+    ///
+    /// Jira Service Management reports through a single `errorMessage` instead, and that is read too, so one call
+    /// covers both products. Empty for anything but an API failure, and for a body that carried neither.
+    pub fn error_messages(&self) -> Vec<&str> {
+        let Some(Value::Object(body)) = self.body() else { return Vec::new() };
+        let listed =
+            body.get("errorMessages").and_then(Value::as_array).into_iter().flatten().filter_map(Value::as_str);
+        let single = body.get("errorMessage").and_then(Value::as_str);
+
+        listed.chain(single).collect()
+    }
+
+    /// What Jira said went wrong with each field, from `errors`: the field's name against the complaint about it.
+    ///
+    /// A rejected issue creation lands here rather than in [`Error::error_messages`] — `summary` against
+    /// `You must specify a summary of the issue`, say. Sorted by field, and empty for anything but an API failure.
+    pub fn field_errors(&self) -> BTreeMap<&str, &str> {
+        let Some(Value::Object(body)) = self.body() else { return BTreeMap::new() };
+
+        body.get("errors")
+            .and_then(Value::as_object)
+            .into_iter()
+            .flatten()
+            .filter_map(|(field, message)| Some((field.as_str(), message.as_str()?)))
+            .collect()
     }
 
     /// How long the API asked you to wait, from `Retry-After`.
@@ -446,6 +504,45 @@ mod tests {
         let error = api_error(400, json!({ "errorMessages": ["Field 'foo' cannot be set"] }));
 
         assert_eq!(error.body().unwrap()["errorMessages"][0], "Field 'foo' cannot be set");
+    }
+
+    #[test]
+    fn tells_the_request_level_messages_from_the_field_level_ones() {
+        let error = api_error(
+            400,
+            json!({
+                "errorMessages": ["Issue does not exist or you do not have permission to see it."],
+                "errors": {
+                    "summary": "You must specify a summary of the issue.",
+                    "priority": "Priority is required."
+                }
+            }),
+        );
+
+        assert_eq!(error.error_messages(), vec!["Issue does not exist or you do not have permission to see it."]);
+        assert_eq!(
+            error.field_errors().into_iter().collect::<Vec<_>>(),
+            vec![("priority", "Priority is required."), ("summary", "You must specify a summary of the issue.")]
+        );
+    }
+
+    #[test]
+    fn reads_service_managements_single_message_as_a_message_too() {
+        let error = api_error(
+            404,
+            json!({ "errorMessage": "Request type not found.", "i18nErrorMessage": { "i18nKey": "sd.request.type.not.found" } }),
+        );
+
+        assert_eq!(error.error_messages(), vec!["Request type not found."]);
+        assert!(error.field_errors().is_empty());
+    }
+
+    #[test]
+    fn has_no_messages_to_offer_when_the_body_is_not_jiras_shape() {
+        assert!(api_error(502, json!("Bad Gateway")).error_messages().is_empty());
+        assert!(api_error(400, json!({ "errors": { "summary": 42 } })).field_errors().is_empty());
+        assert!(Error::config("`host` is required").error_messages().is_empty());
+        assert!(Error::config("`host` is required").field_errors().is_empty());
     }
 
     #[test]

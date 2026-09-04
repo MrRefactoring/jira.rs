@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TokenResponse {
     #[serde(rename = "access_token")]
+    /// The bearer token to send from now on.
     pub access_token: String,
     /// The rotated refresh token, present when `offline_access` was requested.
     ///
@@ -36,21 +37,27 @@ pub struct AccessibleResource {
     /// The cloud id — this is what `cloud_id` expects.
     pub id: String,
     #[serde(default)]
+    /// The site's display name.
     pub name: String,
     /// Site URL, e.g. `https://your-domain.atlassian.net`.
     #[serde(default)]
     pub url: String,
     #[serde(default)]
+    /// The scopes the token was granted on this site.
     pub scopes: Vec<String>,
     #[serde(rename = "avatarUrl", default)]
+    /// The site's avatar.
     pub avatar_url: String,
 }
 
 /// Handed to the refresh hook after every successful refresh.
 #[derive(Debug, Clone)]
 pub struct TokenRefreshEvent {
+    /// The new access token.
     pub access_token: String,
+    /// The rotated refresh token, when one was issued. Persist it: the previous one is dead.
     pub refresh_token: Option<String>,
+    /// When the new access token expires.
     pub expires_at: SystemTime,
 }
 

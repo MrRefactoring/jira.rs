@@ -20,6 +20,7 @@ use crate::core::retry::RetryConfig;
 
 /// Supplies fresh credentials once, when the ones in hand are refused.
 pub trait AuthRefresher: Send + Sync + 'static {
+    /// The credentials to try next.
     fn refresh(&self) -> BoxFuture<'_, Result<Auth>>;
 }
 
@@ -38,17 +39,22 @@ where
 /// Generated operations build this and hand it to [`Client::send`]; [`Client::request`] is the same thing by hand.
 #[derive(Debug, Clone, Default)]
 pub struct RequestConfig {
+    /// The HTTP method.
     pub method: Method,
     /// The path, e.g. `/rest/api/3/myself`. Joined onto the client's host.
     pub url: String,
+    /// Headers for this request, on top of the client's own.
     pub headers: Vec<(String, String)>,
+    /// The query string, as name and value pairs; a [`QueryValue::Skip`] is left out.
     pub query: Vec<(String, QueryValue)>,
+    /// The body, for the methods that carry one.
     pub body: Option<Body>,
     /// The media type to send the body as, for the endpoints that do not take JSON.
     pub content_type: Option<String>,
 }
 
 impl RequestConfig {
+    /// A request with this method and path, and nothing else yet.
     pub fn new(method: Method, url: impl Into<String>) -> Self {
         RequestConfig { method, url: url.into(), ..RequestConfig::default() }
     }
@@ -65,6 +71,13 @@ impl RequestConfig {
 /// which the status already says. `OUT` is absent for the same kind of reason — a Data Center instance behind SSO
 /// sets it on responses that are perfectly legitimate.
 const SERAPH_LOGIN_FAILURES: &[&str] = &["AUTHENTICATED_FAILED", "AUTHENTICATION_DENIED"];
+
+macro_rules! debug {
+    ($($arg:tt)*) => {
+        #[cfg(feature = "tracing")]
+        tracing::debug!($($arg)*);
+    };
+}
 
 struct Inner {
     http: reqwest::Client,
@@ -109,26 +122,32 @@ impl Client {
         self.inner.host.as_deref()
     }
 
+    /// A request to `url` by hand, for an endpoint the generated surfaces do not cover.
     pub fn request(&self, method: Method, url: impl Into<String>) -> RequestBuilder {
         RequestBuilder { client: self.clone(), config: RequestConfig::new(method, url) }
     }
 
+    /// A `GET` request to `url`.
     pub fn get(&self, url: impl Into<String>) -> RequestBuilder {
         self.request(Method::GET, url)
     }
 
+    /// A `POST` request to `url`.
     pub fn post(&self, url: impl Into<String>) -> RequestBuilder {
         self.request(Method::POST, url)
     }
 
+    /// A `PUT` request to `url`.
     pub fn put(&self, url: impl Into<String>) -> RequestBuilder {
         self.request(Method::PUT, url)
     }
 
+    /// A `PATCH` request to `url`.
     pub fn patch(&self, url: impl Into<String>) -> RequestBuilder {
         self.request(Method::PATCH, url)
     }
 
+    /// A `DELETE` request to `url`.
     pub fn delete(&self, url: impl Into<String>) -> RequestBuilder {
         self.request(Method::DELETE, url)
     }
@@ -190,6 +209,19 @@ impl Client {
 
     /// The whole request loop: auth, retry, re-authentication and the error the status maps to.
     async fn execute(&self, config: &RequestConfig) -> Result<RawResponse> {
+        let request = self.perform(config);
+
+        #[cfg(feature = "tracing")]
+        let request = {
+            use tracing::Instrument;
+
+            request.instrument(tracing::debug_span!("jira.request", method = %config.method, path = %config.url))
+        };
+
+        request.await
+    }
+
+    async fn perform(&self, config: &RequestConfig) -> Result<RawResponse> {
         #[cfg(feature = "coverage")]
         crate::core::coverage::record(&config.endpoint());
 
@@ -221,6 +253,7 @@ impl Client {
 
                     if attempt + 1 < max_attempts && network.is_transient() {
                         attempt += 1;
+                        debug!(attempt, wait_ms = delay.as_millis(), reason = %network, "retrying");
                         tokio::time::sleep(delay).await;
                         delay = self.inner.retry.next_delay(delay);
                         continue;
@@ -232,11 +265,14 @@ impl Client {
                     let has_auth = self.inner.auth.is_some();
                     let unauthenticated = response.status == 401 || credentials_rejected(&response.headers, has_auth);
 
+                    debug!(status = response.status, attempt, "response");
+
                     if unauthenticated && !reauthenticated && !is_scope_mismatch_body(&response.body) {
                         if let Some(manager) = &self.inner.oauth
                             && manager.can_refresh().await
                         {
                             reauthenticated = true;
+                            debug!("credentials refused, refreshing the OAuth 2.0 token");
                             manager.force_refresh(credential.generation).await?;
                             credential = self.current_credential().await?;
                             continue;
@@ -244,6 +280,7 @@ impl Client {
 
                         if let Some(refresher) = &self.inner.get_auth_on_401 {
                             reauthenticated = true;
+                            debug!("credentials refused, asking the refresher for new ones");
                             credential = Credential {
                                 header: refresher.refresh().await?.authorization_header().await?,
                                 generation: credential.generation,
@@ -254,6 +291,7 @@ impl Client {
 
                     if is_transient_status(response.status) && attempt + 1 < max_attempts {
                         attempt += 1;
+                        debug!(attempt, wait_ms = delay.as_millis(), status = response.status, "retrying");
                         tokio::time::sleep(delay).await;
                         delay = self.inner.retry.next_delay(delay);
                         continue;
@@ -542,6 +580,7 @@ impl ClientBuilder {
         self
     }
 
+    /// How the client proves who it is. Validated when the client is built.
     #[must_use]
     pub fn auth(mut self, auth: Auth) -> Self {
         self.auth = Some(auth);
@@ -589,6 +628,7 @@ impl ClientBuilder {
         self
     }
 
+    /// The client, or the reason the configuration cannot work.
     pub fn build(self) -> Result<Client> {
         if let Some(auth) = &self.auth {
             auth.validate()?;
@@ -665,18 +705,21 @@ pub struct RequestBuilder {
 }
 
 impl RequestBuilder {
+    /// A query-string parameter.
     #[must_use]
     pub fn query(mut self, name: impl Into<String>, value: impl Into<QueryValue>) -> Self {
         self.config.query.push((name.into(), value.into()));
         self
     }
 
+    /// A header for this request only.
     #[must_use]
     pub fn header(mut self, name: impl Into<String>, value: impl Into<String>) -> Self {
         self.config.headers.push((name.into(), value.into()));
         self
     }
 
+    /// The body, in whatever shape the endpoint takes.
     #[must_use]
     pub fn body(mut self, body: Body) -> Self {
         self.config.body = Some(body);
@@ -693,24 +736,29 @@ impl RequestBuilder {
         Ok(self)
     }
 
+    /// The media type to send the body as, for the endpoints that do not take JSON.
     #[must_use]
     pub fn content_type(mut self, content_type: impl Into<String>) -> Self {
         self.config.content_type = Some(content_type.into());
         self
     }
 
+    /// Sends the request and deserializes the JSON body into `T`.
     pub async fn send<T: DeserializeOwned>(self) -> Result<T> {
         self.client.send(&self.config).await
     }
 
+    /// Sends the request and hands back the JSON body unmodelled.
     pub async fn send_raw(self) -> Result<Value> {
         self.client.send_raw(&self.config).await
     }
 
+    /// Sends the request and hands back the raw bytes, for the endpoints that answer with a file.
     pub async fn send_bytes(self) -> Result<Bytes> {
         self.client.send_bytes(&self.config).await
     }
 
+    /// Sends the request and discards the body.
     pub async fn send_empty(self) -> Result<()> {
         self.client.send_empty(&self.config).await
     }

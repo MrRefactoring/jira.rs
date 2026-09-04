@@ -11,8 +11,11 @@ const DEFAULT_AUDIENCE: &str = "api.atlassian.com";
 /// Where to send the user so they can grant access.
 #[derive(Debug, Clone)]
 pub struct AuthorizationUrlParams {
+    /// The OAuth 2.0 app's client id.
     pub client_id: String,
+    /// The scopes to ask for, e.g. `read:jira-work`. Add `offline_access` to be given a refresh token.
     pub scopes: Vec<String>,
+    /// Where Atlassian sends the user back to, exactly as registered for the app.
     pub redirect_uri: String,
     /// Yours to generate and to verify when the callback comes back — it is what stops CSRF on the redirect.
     pub state: String,
@@ -23,6 +26,7 @@ pub struct AuthorizationUrlParams {
 }
 
 impl AuthorizationUrlParams {
+    /// The four required values; `prompt` and `audience` keep their defaults.
     pub fn new(
         client_id: impl Into<String>,
         scopes: impl IntoIterator<Item = impl Into<String>>,
@@ -43,15 +47,20 @@ impl AuthorizationUrlParams {
 /// The authorization code to trade in, and the credentials to trade it with.
 #[derive(Debug, Clone)]
 pub struct ExchangeCodeParams {
+    /// The OAuth 2.0 app's client id.
     pub client_id: String,
+    /// The OAuth 2.0 app's client secret.
     pub client_secret: String,
+    /// The authorization code from the redirect callback.
     pub code: String,
+    /// The redirect URI the code was issued for. It has to match the one in the authorization URL.
     pub redirect_uri: String,
     /// The HTTP client to reach Atlassian by, so a proxy or a timeout covers the token calls too.
     pub http: Option<reqwest::Client>,
 }
 
 impl ExchangeCodeParams {
+    /// The four required values, with the default HTTP client.
     pub fn new(
         client_id: impl Into<String>,
         client_secret: impl Into<String>,
@@ -71,13 +80,18 @@ impl ExchangeCodeParams {
 /// The refresh credential set.
 #[derive(Debug, Clone)]
 pub struct RefreshTokenParams {
+    /// The OAuth 2.0 app's client id.
     pub client_id: String,
+    /// The OAuth 2.0 app's client secret.
     pub client_secret: String,
+    /// The refresh token in hand. The call invalidates it, so persist the one that comes back.
     pub refresh_token: String,
+    /// The HTTP client to reach Atlassian by, so a proxy or a timeout covers the token calls too.
     pub http: Option<reqwest::Client>,
 }
 
 impl RefreshTokenParams {
+    /// The three required values, with the default HTTP client.
     pub fn new(
         client_id: impl Into<String>,
         client_secret: impl Into<String>,

@@ -77,15 +77,18 @@ fn append_to_output(entry: &SchemaDrift) {
     }
 }
 
+/// A field the specification never described, at `path` in the response of `endpoint`.
 pub fn record_undocumented_key(endpoint: &str, path: &str) {
     record(SchemaDrift::UndocumentedKeys { endpoint: endpoint.to_owned(), path: path.to_owned() });
 }
 
+/// A timestamp none of the spellings the reader knows could make sense of.
 #[cfg(feature = "chrono")]
 pub fn record_unreadable_timestamp(value: &serde_json::Value) {
     record(SchemaDrift::UnreadableTimestamp { value: value.to_string() });
 }
 
+/// A value outside the set the specification documents for `type_name`.
 pub fn record_undocumented_value(type_name: &str, value: &str, documented: &[&str]) {
     record(SchemaDrift::UndocumentedValue {
         type_name: type_name.to_owned(),

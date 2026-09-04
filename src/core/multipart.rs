@@ -9,13 +9,16 @@ use crate::core::mime::mime_type_for;
 /// endpoints that genuinely need them.
 #[derive(Debug, Clone)]
 pub struct Attachment {
+    /// The name the file is uploaded under.
     pub filename: String,
+    /// The file's bytes.
     pub content: Bytes,
     /// The content type to declare. Guessed from the filename when absent.
     pub content_type: Option<String>,
 }
 
 impl Attachment {
+    /// A file with this name and these bytes; the content type is guessed from the name.
     pub fn new(filename: impl Into<String>, content: impl Into<Bytes>) -> Self {
         Attachment { filename: filename.into(), content: content.into(), content_type: None }
     }
@@ -47,10 +50,12 @@ impl Attachment {
 pub struct MultipartBody {
     /// The form field each file is appended under. `file` for Jira's attachment endpoints.
     pub field_name: String,
+    /// The files to upload.
     pub attachments: Vec<Attachment>,
 }
 
 impl MultipartBody {
+    /// The files, under the field name the endpoint reads them from.
     pub fn new(field_name: impl Into<String>, attachments: Vec<Attachment>) -> Self {
         MultipartBody { field_name: field_name.into(), attachments }
     }
