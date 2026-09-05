@@ -1001,6 +1001,19 @@ impl<'a> EditIssueRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<()> {
+        let described_in_markup = self.issue_update_details.fields.as_ref().is_some_and(|fields| {
+            matches!(fields.description, Some(IssueFieldsDescription::Variant1(_)))
+                || matches!(fields.environment, Some(IssueFieldsEnvironment::Variant1(_)))
+        });
+
+        if described_in_markup {
+            let mut write = self.config()?;
+
+            write.url = format!("/rest/api/2/issue/{}", crate::core::encode_path_segment(&self.issue_id_or_key));
+
+            return self.client.send_empty(&write).await;
+        }
+
         self.client.send_empty(&self.config()?).await
     }
 

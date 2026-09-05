@@ -15,3 +15,15 @@ pub struct UpdatePrioritySchemeResponse {
     #[serde(flatten)]
     pub additional: std::collections::HashMap<String, serde_json::Value>,
 }
+
+impl crate::core::Extensible for UpdatePrioritySchemeResponse {
+    const FIELDS: &'static [&'static str] = &["priorityScheme", "task"];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}

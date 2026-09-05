@@ -36,3 +36,16 @@ pub struct Priority {
     #[serde(flatten)]
     pub additional: std::collections::HashMap<String, serde_json::Value>,
 }
+
+impl crate::core::Extensible for Priority {
+    const FIELDS: &'static [&'static str] =
+        &["avatarId", "description", "iconUrl", "id", "isDefault", "name", "schemes", "self", "statusColor"];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}

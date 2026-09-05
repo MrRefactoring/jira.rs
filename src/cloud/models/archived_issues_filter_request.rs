@@ -25,3 +25,15 @@ pub struct ArchivedIssuesFilterRequest {
     #[serde(flatten)]
     pub additional: std::collections::HashMap<String, serde_json::Value>,
 }
+
+impl crate::core::Extensible for ArchivedIssuesFilterRequest {
+    const FIELDS: &'static [&'static str] = &["archivedBy", "archivedDateRange", "issueTypes", "projects", "reporters"];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}

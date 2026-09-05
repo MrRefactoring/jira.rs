@@ -22,3 +22,15 @@ pub struct PageOfComments {
     #[serde(flatten)]
     pub additional: std::collections::HashMap<String, serde_json::Value>,
 }
+
+impl crate::core::Extensible for PageOfComments {
+    const FIELDS: &'static [&'static str] = &["comments", "maxResults", "startAt", "total"];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}

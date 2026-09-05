@@ -32,3 +32,16 @@ pub struct PrioritySchemeWithPaginatedPrioritiesAndProjects {
     #[serde(flatten)]
     pub additional: std::collections::HashMap<String, serde_json::Value>,
 }
+
+impl crate::core::Extensible for PrioritySchemeWithPaginatedPrioritiesAndProjects {
+    const FIELDS: &'static [&'static str] =
+        &["default", "defaultPriorityId", "description", "id", "isDefault", "name", "priorities", "projects", "self"];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}

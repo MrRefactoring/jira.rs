@@ -97,42 +97,62 @@ let page = jira.issue_search().search_issues().jql(query).fields(["summary", "st
 ```
 
 В ответе удивляют две вещи. Без `fields` поиск возвращает идентификаторы и ничего больше — это умолчание самого
-эндпоинта, а не решение крейта. А системные поля типизированы, тогда как кастомное поле попадает в `additional` под
-тем ключом, который дал ему сайт, потому что набор кастомных полей у задачи — свойство конкретного сайта, а не API:
+эндпоинта, а не решение крейта. А системные поля типизированы, тогда как кастомное поле приходит под тем ключом,
+который дал ему сайт, потому что набор кастомных полей у задачи — свойство конкретного сайта, а не API. `Extensible`
+читает эти ключи в тип, который описал сам вызывающий, и у полей сайта тоже появляются имена:
 
 ```rust,no_run
+# use jira::Extensible;
 # use jira::cloud::SearchAndReconcileResults;
-# fn example(page: SearchAndReconcileResults) {
+# use serde::Deserialize;
+#[derive(Deserialize)]
+struct Estimation {
+    #[serde(rename = "customfield_10016")]
+    story_points: Option<f64>,
+}
+
+# fn example(page: SearchAndReconcileResults) -> Result<(), serde_json::Error> {
 for issue in page.issues.unwrap_or_default() {
     let fields = issue.fields.unwrap_or_default();
-    let points = fields.additional.get("customfield_10016").and_then(|value| value.as_f64());
+    let estimation: Estimation = fields.custom()?;
 
-    println!("{} — {} ({points:?})", issue.key.unwrap_or_default(), fields.summary.unwrap_or_default());
+    println!("{} — {} ({:?})", issue.key.unwrap_or_default(), fields.summary.unwrap_or_default(), estimation.story_points);
 }
+# Ok(())
 # }
 ```
 
-Та же структура идёт и на запись:
+Та же структура идёт и на запись, а `with_custom` кладёт поля вызывающего рядом с описанными:
 
 ```rust,no_run
+# use jira::Extensible;
 # use jira::cloud::{CloudClient, IssueFields, IssueTypeDetails, IssueUpdateDetails, Project};
+# use serde::Serialize;
+# #[derive(Serialize)]
+# struct Estimation {
+#     #[serde(rename = "customfield_10016", skip_serializing_if = "Option::is_none")]
+#     story_points: Option<f64>,
+# }
 # async fn example(jira: &CloudClient) -> jira::Result<()> {
+let fields = IssueFields {
+    project: Some(Project { key: Some("PROJ".into()), ..Default::default() }),
+    issuetype: Some(IssueTypeDetails { name: Some("Task".into()), ..Default::default() }),
+    summary: Some("Ротировать ключ подписи".into()),
+    ..Default::default()
+}
+.with_custom(Estimation { story_points: Some(5.0) })?;
+
 let created = jira
     .issues()
-    .create_issue(IssueUpdateDetails {
-        fields: Some(IssueFields {
-            project: Some(Project { key: Some("PROJ".into()), ..Default::default() }),
-            issuetype: Some(IssueTypeDetails { name: Some("Task".into()), ..Default::default() }),
-            summary: Some("Ротировать ключ подписи".into()),
-            ..Default::default()
-        }),
-        ..Default::default()
-    })
+    .create_issue(IssueUpdateDetails { fields: Some(fields), ..Default::default() })
     .send()
     .await?;
 # Ok(())
 # }
 ```
+
+Ключ, который схема уже описывает, там отклоняется, а не отправляется дважды — `summary` живёт на структуре. А `with`
+задаёт один ключ, когда целый тип для вызова — это слишком.
 
 Поиск листается непрозрачным токеном, а не смещением. `stream` доходит по нему до конца:
 

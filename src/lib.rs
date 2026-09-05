@@ -75,7 +75,7 @@ pub mod user_provisioning;
 pub mod webhooks;
 
 pub use crate::core::{
-    ApiErrorDetails, ApiErrorKind, Attachment, Auth, Body, Client, ClientBuilder, Error, MultipartBody,
+    ApiErrorDetails, ApiErrorKind, Attachment, Auth, Body, Client, ClientBuilder, Error, Extensible, MultipartBody,
     OAuthErrorDetails, QueryValue, RequestConfig, Result, RetryConfig, RetryOptions, SchemaMismatchIssue,
     SchemaMismatchReport, TenantContext, with_retry,
 };

@@ -16,3 +16,15 @@ pub struct IssueFieldOptionCreate {
     #[serde(flatten)]
     pub additional: std::collections::HashMap<String, serde_json::Value>,
 }
+
+impl crate::core::Extensible for IssueFieldOptionCreate {
+    const FIELDS: &'static [&'static str] = &["config", "properties", "value"];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}

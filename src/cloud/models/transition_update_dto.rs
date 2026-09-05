@@ -56,3 +56,29 @@ pub struct TransitionUpdateDTO {
     #[serde(flatten)]
     pub additional: std::collections::HashMap<String, serde_json::Value>,
 }
+
+impl crate::core::Extensible for TransitionUpdateDTO {
+    const FIELDS: &'static [&'static str] = &[
+        "actions",
+        "conditions",
+        "customIssueEventId",
+        "description",
+        "id",
+        "links",
+        "name",
+        "properties",
+        "toStatusReference",
+        "transitionScreen",
+        "triggers",
+        "type",
+        "validators",
+    ];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}

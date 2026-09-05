@@ -24,6 +24,12 @@ version.
   escaped rather than able to end the literal it sits in and add a clause of its own.
 - `stream` on the JQL search, which follows the endpoint's page token to the last page so a caller writes the query
   rather than the loop.
+- `Extensible`, on every type that carries fields the schema does not describe: `custom` reads them into a type of
+  the caller's own, `with_custom` and `with` write them beside the described fields, and a key the schema already
+  describes is refused rather than sent twice.
+- Wiki markup written as a string into a description, an environment, a comment or a worklog reaches the `v2` twin
+  of the endpoint, which is the one that reads it — at creation and at edit alike — and comes back as the document
+  Jira parsed it into.
 - `get_tenant_context`, resolving a site's cloud id, organization id and host name.
 - The `audit` feature, which collects the fields the API sends that the generated types do not describe.
 - The `chrono` feature, which turns every `date-time` into `Option<chrono::DateTime<Utc>>`. Off by default,

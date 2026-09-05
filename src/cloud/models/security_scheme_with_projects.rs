@@ -26,3 +26,15 @@ pub struct SecuritySchemeWithProjects {
     #[serde(flatten)]
     pub additional: std::collections::HashMap<String, serde_json::Value>,
 }
+
+impl crate::core::Extensible for SecuritySchemeWithProjects {
+    const FIELDS: &'static [&'static str] = &["defaultLevel", "description", "id", "name", "projectIds", "self"];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}

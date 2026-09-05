@@ -29,3 +29,24 @@ pub struct WorkflowSchemeUpdateRequest {
     #[serde(flatten)]
     pub additional: std::collections::HashMap<String, serde_json::Value>,
 }
+
+impl crate::core::Extensible for WorkflowSchemeUpdateRequest {
+    const FIELDS: &'static [&'static str] = &[
+        "defaultWorkflowId",
+        "description",
+        "id",
+        "name",
+        "statusMappingsByIssueTypeOverride",
+        "statusMappingsByWorkflows",
+        "version",
+        "workflowsForIssueTypes",
+    ];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}

@@ -16,6 +16,7 @@ mod client;
 #[cfg(feature = "chrono")]
 mod datetime;
 mod error;
+mod extensible;
 mod mime;
 mod multipart;
 pub mod oauth;
@@ -39,6 +40,7 @@ pub(crate) use datetime::{deserialize_datetime, serialize_datetime};
 pub use error::{
     ApiErrorDetails, ApiErrorKind, Error, OAuthErrorDetails, Result, SchemaMismatchIssue, SchemaMismatchReport,
 };
+pub use extensible::Extensible;
 pub use mime::mime_type_for;
 pub use multipart::{Attachment, MultipartBody};
 pub(crate) use paging::{PageStep, Paged, stream_pages};

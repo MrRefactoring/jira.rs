@@ -46,3 +46,16 @@ pub struct Attachment {
     #[serde(flatten)]
     pub additional: std::collections::HashMap<String, serde_json::Value>,
 }
+
+impl crate::core::Extensible for Attachment {
+    const FIELDS: &'static [&'static str] =
+        &["author", "content", "created", "filename", "id", "mimeType", "self", "size", "thumbnail"];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}

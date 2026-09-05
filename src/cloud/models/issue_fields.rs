@@ -185,3 +185,56 @@ pub struct IssueFields {
     #[serde(flatten)]
     pub additional: std::collections::HashMap<String, serde_json::Value>,
 }
+
+impl crate::core::Extensible for IssueFields {
+    const FIELDS: &'static [&'static str] = &[
+        "summary",
+        "description",
+        "environment",
+        "issuetype",
+        "project",
+        "status",
+        "priority",
+        "resolution",
+        "assignee",
+        "reporter",
+        "creator",
+        "created",
+        "updated",
+        "resolutiondate",
+        "statuscategorychangedate",
+        "lastViewed",
+        "duedate",
+        "labels",
+        "components",
+        "fixVersions",
+        "versions",
+        "parent",
+        "subtasks",
+        "issuelinks",
+        "attachment",
+        "comment",
+        "worklog",
+        "timetracking",
+        "timespent",
+        "timeestimate",
+        "timeoriginalestimate",
+        "aggregatetimespent",
+        "aggregatetimeestimate",
+        "aggregatetimeoriginalestimate",
+        "progress",
+        "aggregateprogress",
+        "workratio",
+        "votes",
+        "watches",
+        "security",
+    ];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}

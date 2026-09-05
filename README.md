@@ -98,43 +98,62 @@ let page = jira.issue_search().search_issues().jql(query).fields(["summary", "st
 ```
 
 Two things about the answer surprise people. Without `fields` the search returns identifiers and nothing else — that
-is the endpoint's own default, not a choice made here. And the system fields are typed while a custom field lands in
-`additional` under the key the site gave it, because which custom fields an issue has is a property of the site
-rather than of the API:
+is the endpoint's own default, not a choice made here. And the system fields are typed while a custom field arrives
+under the key the site gave it, because which custom fields an issue has is a property of the site rather than of the
+API. `Extensible` reads those keys into a type of the caller's own, so the site's fields get names too:
 
 ```rust,no_run
+# use jira::Extensible;
 # use jira::cloud::SearchAndReconcileResults;
-# fn example(page: SearchAndReconcileResults) {
+# use serde::Deserialize;
+#[derive(Deserialize)]
+struct Estimation {
+    #[serde(rename = "customfield_10016")]
+    story_points: Option<f64>,
+}
+
+# fn example(page: SearchAndReconcileResults) -> Result<(), serde_json::Error> {
 for issue in page.issues.unwrap_or_default() {
     let fields = issue.fields.unwrap_or_default();
-    let points = fields.additional.get("customfield_10016").and_then(|value| value.as_f64());
+    let estimation: Estimation = fields.custom()?;
 
-    println!("{} — {} ({points:?})", issue.key.unwrap_or_default(), fields.summary.unwrap_or_default());
+    println!("{} — {} ({:?})", issue.key.unwrap_or_default(), fields.summary.unwrap_or_default(), estimation.story_points);
 }
+# Ok(())
 # }
 ```
 
-The same struct is what a write takes:
+The same struct is what a write takes, and `with_custom` puts the caller's fields beside the described ones:
 
 ```rust,no_run
+# use jira::Extensible;
 # use jira::cloud::{CloudClient, IssueFields, IssueTypeDetails, IssueUpdateDetails, Project};
+# use serde::Serialize;
+# #[derive(Serialize)]
+# struct Estimation {
+#     #[serde(rename = "customfield_10016", skip_serializing_if = "Option::is_none")]
+#     story_points: Option<f64>,
+# }
 # async fn example(jira: &CloudClient) -> jira::Result<()> {
+let fields = IssueFields {
+    project: Some(Project { key: Some("PROJ".into()), ..Default::default() }),
+    issuetype: Some(IssueTypeDetails { name: Some("Task".into()), ..Default::default() }),
+    summary: Some("Rotate the signing key".into()),
+    ..Default::default()
+}
+.with_custom(Estimation { story_points: Some(5.0) })?;
+
 let created = jira
     .issues()
-    .create_issue(IssueUpdateDetails {
-        fields: Some(IssueFields {
-            project: Some(Project { key: Some("PROJ".into()), ..Default::default() }),
-            issuetype: Some(IssueTypeDetails { name: Some("Task".into()), ..Default::default() }),
-            summary: Some("Rotate the signing key".into()),
-            ..Default::default()
-        }),
-        ..Default::default()
-    })
+    .create_issue(IssueUpdateDetails { fields: Some(fields), ..Default::default() })
     .send()
     .await?;
 # Ok(())
 # }
 ```
+
+A key the schema already describes is refused there rather than sent twice — `summary` belongs on the struct — and
+`with` sets a single key when a whole type would be more than the call needs.
 
 The search pages with an opaque token rather than an offset. `stream` follows it to the end:
 

@@ -9,15 +9,14 @@
 //! v2. Nothing about the last part is guaranteed by the specification; it was established by measurement, and this
 //! is the test that keeps it established.
 //!
-//! One thing the TypeScript suite proves has no counterpart here, and is reported rather than tested around: there,
-//! a plain string body was routed to the v2 endpoint so that Jira would parse the markup and hand the parsed
-//! document back. The generated Rust operations post every body to `/rest/api/3` unconditionally, so
-//! `CommentInputBody::Variant1` and `WorklogInputComment::Variant1` — the string arms the models still carry —
-//! reach an endpoint that cannot read them. The markup-conversion half of the source suite is therefore absent.
+//! The other half of the source suite is the conversion: a plain string body is routed to the v2 endpoint so that
+//! Jira parses the markup and hands the parsed document back. The generated Rust operations route the same way —
+//! a string description, environment, comment or worklog goes to `/rest/api/2`, everything else to `/rest/api/3` —
+//! and the tests below pin that the conversion happens at creation, at edit and in a comment.
 
 use jira::cloud::{
-    Comment, CommentInput, CommentInputBody, Document, IssueFields, IssueFieldsDescription, Worklog, WorklogInput,
-    WorklogInputComment,
+    Comment, CommentInput, CommentInputBody, Document, IssueFields, IssueFieldsDescription, IssueUpdateDetails,
+    Worklog, WorklogInput, WorklogInputComment,
 };
 use serde_json::Value;
 
@@ -207,6 +206,48 @@ async fn accepts_a_document_as_a_description_at_issue_creation() {
 
     assert!(types.contains(&"paragraph".to_owned()), "the paragraph survived creation: {types:?}");
     assert!(description.to_string().contains("described in a document"), "{description}");
+
+    tracker.cleanup().await;
+}
+
+#[tokio::test]
+#[ignore = "live: needs a Jira site"]
+async fn converts_wiki_markup_written_as_a_description_at_edit_into_a_document() {
+    let mut tracker = ResourceTracker::new();
+    let issue = create_test_issue(&mut tracker, Some(&test_name("edited"))).await;
+
+    cloud()
+        .issues()
+        .edit_issue(
+            &issue.key,
+            IssueUpdateDetails {
+                fields: Some(IssueFields {
+                    description: Some(IssueFieldsDescription::Variant1(
+                        "h2. Heading\n\n*bold* and _italic_".to_owned(),
+                    )),
+                    ..IssueFields::default()
+                }),
+                ..IssueUpdateDetails::default()
+            },
+        )
+        .send()
+        .await
+        .expect("a description written as wiki markup is accepted at edit");
+
+    let fetched = cloud().issues().get_issue(&issue.key).send().await.expect("the edited issue reads back");
+
+    let description = fetched
+        .fields
+        .and_then(|fields| fields.description)
+        .expect("the issue carries the description it was edited to");
+    let IssueFieldsDescription::Document(document) = description else {
+        panic!("stored as a document: {description:?}");
+    };
+    let rendered = serde_json::to_string(&document).expect("a document serializes");
+
+    assert!(rendered.contains("\"heading\""), "`h2.` became a heading: {rendered}");
+    assert!(rendered.contains("\"strong\""), "`*bold*` became a strong mark: {rendered}");
+    assert!(rendered.contains("\"em\""), "`_italic_` became an emphasis mark: {rendered}");
 
     tracker.cleanup().await;
 }

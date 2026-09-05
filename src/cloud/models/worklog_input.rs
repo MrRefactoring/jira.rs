@@ -87,3 +87,29 @@ pub struct WorklogInput {
     #[serde(flatten)]
     pub additional: std::collections::HashMap<String, serde_json::Value>,
 }
+
+impl crate::core::Extensible for WorklogInput {
+    const FIELDS: &'static [&'static str] = &[
+        "author",
+        "comment",
+        "created",
+        "id",
+        "issueId",
+        "properties",
+        "self",
+        "started",
+        "timeSpent",
+        "timeSpentSeconds",
+        "updateAuthor",
+        "updated",
+        "visibility",
+    ];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}
