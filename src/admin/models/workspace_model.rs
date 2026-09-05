@@ -1,0 +1,79 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum WorkspaceModelAttributesStatus {
+        Online => "online",
+        Offline => "offline",
+        Deprecated => "deprecated",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct WorkspaceModelAttributes {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "typeKey", default, skip_serializing_if = "Option::is_none")]
+    pub type_key: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub owner: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub status: Option<WorkspaceModelAttributesStatus>,
+    #[serde(rename = "statusDetails", default, skip_serializing_if = "Option::is_none")]
+    pub status_details: Option<Vec<String>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub icons: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub avatars: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub labels: Option<Vec<String>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sandbox: Option<Sandbox>,
+    /// The maximum number of active users/seats allowed for the workspace (soft limit). Only populated for Bitbucket workspaces. Not available for other workspace types
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub usage: Option<i64>,
+    /// The maximum number of users/seats allowed for the workspace. Populated for Bitbucket workspaces. May also be present for sited workspaces (e.g. Jira, Confluence) when license data is available. Not available for Trello workspaces.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub capacity: Option<i64>,
+    /// The ISO 8601 timestamp indicating when the workspace was created (activated). Only populated populated for sited workspaces (e.g. Jira, Confluence) when created at timestamp is available. Not available for Bitbucket or Trello workspaces.
+    #[serde(rename = "createdAt", default, skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+    /// The ARI (Atlassian Resource Identifier) of the Atlassian account that created the workspace. Only populated for sited workspaces (e.g. Jira, Confluence) when a creator account identifier is available. Not available for Bitbucket or Trello workspaces.
+    #[serde(rename = "createdBy", default, skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<String>,
+    /// The ISO 8601 timestamp indicating when the workspace was last updated. This field is not populated for any workspace type and will always be absent.
+    #[serde(rename = "updatedAt", default, skip_serializing_if = "Option::is_none")]
+    pub updated_at: Option<String>,
+    #[serde(rename = "hostUrl", default, skip_serializing_if = "Option::is_none")]
+    pub host_url: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub realm: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub regions: Option<Vec<String>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub directory: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub unit: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct WorkspaceModel {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<WorkspaceModelAttributes>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub links: Option<LinkSelfModel>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub relationships: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(rename = "appType", default, skip_serializing_if = "Option::is_none")]
+    pub app_type: Option<String>,
+}

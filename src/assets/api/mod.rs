@@ -1,0 +1,34 @@
+// @generated. Do not edit: change the generator or the specification.
+
+// A service takes its name from the tag the specification gave it, and one document names a
+// tag after the surface itself.
+#![allow(clippy::module_inception)]
+#![allow(clippy::doc_lazy_continuation)]
+
+mod connected_tickets;
+mod global_config;
+mod icons;
+mod import_sources;
+mod imports;
+mod object_schemas;
+mod object_type_attributes;
+mod object_types;
+mod objects;
+mod progress;
+mod reference_types;
+mod status_types;
+mod usage;
+
+pub use connected_tickets::*;
+pub use global_config::*;
+pub use icons::*;
+pub use import_sources::*;
+pub use imports::*;
+pub use object_schemas::*;
+pub use object_type_attributes::*;
+pub use object_types::*;
+pub use objects::*;
+pub use progress::*;
+pub use reference_types::*;
+pub use status_types::*;
+pub use usage::*;

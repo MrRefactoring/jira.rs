@@ -1,0 +1,23 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum ColumnLayoutColumnConfig {
+        System => "SYSTEM",
+        Explicit => "EXPLICIT",
+        Filter => "FILTER",
+        User => "USER",
+        None => "NONE",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ColumnLayout {
+    #[serde(rename = "columnConfig", default, skip_serializing_if = "Option::is_none")]
+    pub column_config: Option<ColumnLayoutColumnConfig>,
+    #[serde(rename = "columnLayoutItems", default, skip_serializing_if = "Option::is_none")]
+    pub column_layout_items: Option<Vec<ColumnLayoutItem>>,
+}

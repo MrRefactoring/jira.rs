@@ -1,0 +1,18 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct PrioritySchemeResponse {
+    #[serde(rename = "defaultPriority", default, skip_serializing_if = "Option::is_none")]
+    pub default_priority: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub priorities: Option<Vec<String>>,
+}

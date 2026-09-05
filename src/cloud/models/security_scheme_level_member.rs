@@ -1,0 +1,13 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct SecuritySchemeLevelMember {
+    /// The value corresponding to the specified member type.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub parameter: Option<String>,
+    /// The issue security level member type, e.g `reporter`, `group`, `user`, `projectrole`, `applicationRole`.
+    pub r#type: String,
+}

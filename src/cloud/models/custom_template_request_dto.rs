@@ -1,0 +1,31 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// The specific request object for creating a project with template.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct CustomTemplateRequestDTO {
+    #[serde(rename = "boardFeatures", default, skip_serializing_if = "Option::is_none")]
+    pub board_features: Option<BoardFeaturesPayload>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub boards: Option<BoardsPayload>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub field: Option<FieldCapabilityPayload>,
+    #[serde(rename = "issueType", default, skip_serializing_if = "Option::is_none")]
+    pub issue_type: Option<IssueTypeProjectCreatePayload>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub notification: Option<NotificationSchemePayload>,
+    #[serde(rename = "permissionScheme", default, skip_serializing_if = "Option::is_none")]
+    pub permission_scheme: Option<PermissionPayloadDTO>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub project: Option<ProjectPayload>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub role: Option<RolesCapabilityPayload>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub scope: Option<ScopePayload>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub security: Option<SecuritySchemePayload>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub workflow: Option<WorkflowCapabilityPayload>,
+}

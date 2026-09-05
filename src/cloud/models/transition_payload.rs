@@ -1,0 +1,54 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The type of the transition
+    pub enum TransitionPayloadType {
+        Global => "global",
+        Initial => "initial",
+        Directed => "directed",
+    }
+}
+
+/// The payload for creating a transition in a workflow. Can be DIRECTED, GLOBAL, SELF-LOOPED, GLOBAL LOOPED
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct TransitionPayload {
+    /// The actions that are performed when the transition is made
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub actions: Option<Vec<RulePayload>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub conditions: Option<ConditionGroupPayload>,
+    /// Mechanism in Jira for triggering certain actions, like notifications, automations, etc. Unless a custom notification scheme is configure, it's better not to provide any value here
+    #[serde(rename = "customIssueEventId", default, skip_serializing_if = "Option::is_none")]
+    pub custom_issue_event_id: Option<String>,
+    /// The description of the transition
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The statuses that the transition can be made from
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub from: Option<Vec<FromLayoutPayload>>,
+    /// The id of the transition
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    /// The name of the transition
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The properties of the transition
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub to: Option<ToLayoutPayload>,
+    #[serde(rename = "transitionScreen", default, skip_serializing_if = "Option::is_none")]
+    pub transition_screen: Option<RulePayload>,
+    /// The triggers that are performed when the transition is made
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub triggers: Option<Vec<RulePayload>>,
+    /// The type of the transition
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<TransitionPayloadType>,
+    /// The validators that are performed when the transition is made
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub validators: Option<Vec<RulePayload>>,
+}

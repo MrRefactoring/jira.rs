@@ -1,0 +1,39 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes), which defines the application-specific feature set. If you don't specify the project template you have to specify the project type.
+    pub enum ProjectPayloadProjectTypeKey {
+        Software => "software",
+        Business => "business",
+        ServiceDesk => "service_desk",
+        ProductDiscovery => "product_discovery",
+        CustomerService => "customer_service",
+    }
+}
+
+/// The payload for creating a project
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ProjectPayload {
+    #[serde(rename = "fieldLayoutSchemeId", default, skip_serializing_if = "Option::is_none")]
+    pub field_layout_scheme_id: Option<ProjectCreateResourceIdentifier>,
+    #[serde(rename = "issueSecuritySchemeId", default, skip_serializing_if = "Option::is_none")]
+    pub issue_security_scheme_id: Option<ProjectCreateResourceIdentifier>,
+    #[serde(rename = "issueTypeSchemeId", default, skip_serializing_if = "Option::is_none")]
+    pub issue_type_scheme_id: Option<ProjectCreateResourceIdentifier>,
+    #[serde(rename = "issueTypeScreenSchemeId", default, skip_serializing_if = "Option::is_none")]
+    pub issue_type_screen_scheme_id: Option<ProjectCreateResourceIdentifier>,
+    #[serde(rename = "notificationSchemeId", default, skip_serializing_if = "Option::is_none")]
+    pub notification_scheme_id: Option<ProjectCreateResourceIdentifier>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub pcri: Option<ProjectCreateResourceIdentifier>,
+    #[serde(rename = "permissionSchemeId", default, skip_serializing_if = "Option::is_none")]
+    pub permission_scheme_id: Option<ProjectCreateResourceIdentifier>,
+    /// The [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes), which defines the application-specific feature set. If you don't specify the project template you have to specify the project type.
+    #[serde(rename = "projectTypeKey", default, skip_serializing_if = "Option::is_none")]
+    pub project_type_key: Option<ProjectPayloadProjectTypeKey>,
+    #[serde(rename = "workflowSchemeId", default, skip_serializing_if = "Option::is_none")]
+    pub workflow_scheme_id: Option<ProjectCreateResourceIdentifier>,
+}

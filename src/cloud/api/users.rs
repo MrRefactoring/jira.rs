@@ -1,0 +1,673 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum GetUserRequestExpandValue {
+        Groups => "groups",
+        ApplicationRoles => "applicationRoles",
+    }
+}
+
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about users in the response. This parameter accepts a comma-separated list. Expand options include:
+///
+///  *  `groups` includes all groups and nested groups to which the user belongs.
+///  *  `applicationRoles` includes details of all the applications to which the user has access.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetUserRequestExpand {
+    One(GetUserRequestExpandValue),
+    Many(Vec<GetUserRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+/// The Users operations.
+pub struct UsersService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> UsersService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns a user.
+    ///
+    /// Privacy controls are applied to the response based on the user's preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn get_user(&self) -> GetUserRequest<'a> {
+        GetUserRequest::new(self.client)
+    }
+
+    /// Creates a user. This resource is retained for legacy compatibility. As soon as a more suitable alternative is available this resource will be deprecated.
+    ///
+    /// **Note:** This API does not support Forge apps.
+    ///
+    /// If the user exists and has access to Jira, the operation returns a 201 status. If the user exists but does not have access to Jira & no new jira-products are requested, the operation returns a 400 status.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). The caller has to be an **organization admin**.
+    pub fn create_user(&self, new_user_details: NewUserDetails) -> CreateUserRequest<'a> {
+        CreateUserRequest::new(self.client, new_user_details)
+    }
+
+    /// Deletes a user. If the operation completes successfully then the user is removed from Jira's user base. This operation does not delete the user's Atlassian account.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, membership of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+    pub fn remove_user(&self, account_id: impl Into<String>) -> RemoveUserRequest<'a> {
+        RemoveUserRequest::new(self.client, account_id)
+    }
+
+    /// Returns the default [issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the user. If `accountId` is not passed in the request, the calling user's details are returned.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLgl), to get the column details for any user.
+    ///  *  Permission to access Jira, to get the calling user's column details.
+    pub fn get_user_default_columns(&self) -> GetUserDefaultColumnsRequest<'a> {
+        GetUserDefaultColumnsRequest::new(self.client)
+    }
+
+    /// Sets the default [ issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the user. If an account ID is not passed, the calling user's default columns are set. If no column details are sent, then all default columns are removed.
+    ///
+    /// The parameters for this resource are expressed as HTML form data. For example, in curl:
+    ///
+    /// `curl -X PUT -d columns=summary -d columns=description https://your-domain.atlassian.net/rest/api/3/user/columns?accountId=5b10ac8d82e05b22cc7d4ef5'`
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the columns on any user.
+    ///  *  Permission to access Jira, to set the calling user's columns.
+    pub fn set_user_columns(&self, user_column_request_body: UserColumnRequestBody) -> SetUserColumnsRequest<'a> {
+        SetUserColumnsRequest::new(self.client, user_column_request_body)
+    }
+
+    /// Resets the default [ issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the user to the system default. If `accountId` is not passed, the calling user's default columns are reset.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the columns on any user.
+    ///  *  Permission to access Jira, to set the calling user's columns.
+    pub fn reset_user_columns(&self) -> ResetUserColumnsRequest<'a> {
+        ResetUserColumnsRequest::new(self.client)
+    }
+
+    /// Returns a user's email address regardless of the user's profile visibility settings. For Connect apps, this API is only available to apps approved by Atlassian, according to these [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603). For Forge apps, this API only supports access via asApp() requests.
+    pub fn get_user_email(&self, account_id: impl Into<String>) -> GetUserEmailRequest<'a> {
+        GetUserEmailRequest::new(self.client, account_id)
+    }
+
+    /// Returns a user's email address regardless of the user's profile visibility settings. For Connect apps, this API is only available to apps approved by Atlassian, according to these [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603). For Forge apps, this API only supports access via asApp() requests.
+    pub fn get_user_email_bulk(
+        &self,
+        account_id: impl IntoIterator<Item = impl Into<String>>,
+    ) -> GetUserEmailBulkRequest<'a> {
+        GetUserEmailBulkRequest::new(self.client, account_id)
+    }
+
+    /// Returns the groups to which a user belongs.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn get_user_groups(&self, account_id: impl Into<String>) -> GetUserGroupsRequest<'a> {
+        GetUserGroupsRequest::new(self.client, account_id)
+    }
+
+    /// Returns a list of all users, including active users, inactive users and previously deleted users that have an Atlassian account.
+    ///
+    /// Privacy controls are applied to the response based on the users' preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn get_all_users_default(&self) -> GetAllUsersDefaultRequest<'a> {
+        GetAllUsersDefaultRequest::new(self.client)
+    }
+
+    /// Returns a list of all users, including active users, inactive users and previously deleted users that have an Atlassian account.
+    ///
+    /// Privacy controls are applied to the response based on the users' preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn get_all_users(&self) -> GetAllUsersRequest<'a> {
+        GetAllUsersRequest::new(self.client)
+    }
+}
+
+/// Returns a user.
+///
+/// Privacy controls are applied to the response based on the user's preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct GetUserRequest<'a> {
+    client: &'a crate::core::Client,
+    account_id: Option<String>,
+    expand: Option<GetUserRequestExpand>,
+}
+
+impl<'a> GetUserRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, account_id: None, expand: None }
+    }
+
+    /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*. Required.
+    #[must_use]
+    pub fn account_id(mut self, value: impl Into<String>) -> Self {
+        self.account_id = Some(value.into());
+
+        self
+    }
+
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about users in the response. This parameter accepts a comma-separated list. Expand options include:
+    ///
+    ///  *  `groups` includes all groups and nested groups to which the user belongs.
+    ///  *  `applicationRoles` includes details of all the applications to which the user has access.
+    #[must_use]
+    pub fn expand(mut self, value: GetUserRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user".to_owned());
+
+        if let Some(value) = &self.account_id {
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<DashboardUser> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Creates a user. This resource is retained for legacy compatibility. As soon as a more suitable alternative is available this resource will be deprecated.
+///
+/// **Note:** This API does not support Forge apps.
+///
+/// If the user exists and has access to Jira, the operation returns a 201 status. If the user exists but does not have access to Jira & no new jira-products are requested, the operation returns a 400 status.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). The caller has to be an **organization admin**.
+#[derive(Clone)]
+pub struct CreateUserRequest<'a> {
+    client: &'a crate::core::Client,
+    new_user_details: NewUserDetails,
+}
+
+impl<'a> CreateUserRequest<'a> {
+    fn new(client: &'a crate::core::Client, new_user_details: NewUserDetails) -> Self {
+        Self { client, new_user_details }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/user".to_owned());
+
+        let body = match serde_json::to_value(&self.new_user_details)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<DashboardUser> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes a user. If the operation completes successfully then the user is removed from Jira's user base. This operation does not delete the user's Atlassian account.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Site administration (that is, membership of the *site-admin* [group](https://confluence.atlassian.com/x/24xjL)).
+#[derive(Clone)]
+pub struct RemoveUserRequest<'a> {
+    client: &'a crate::core::Client,
+    account_id: String,
+}
+
+impl<'a> RemoveUserRequest<'a> {
+    fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
+        Self { client, account_id: account_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(crate::core::Method::DELETE, "/rest/api/3/user".to_owned());
+
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the default [issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the user. If `accountId` is not passed in the request, the calling user's details are returned.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLgl), to get the column details for any user.
+///  *  Permission to access Jira, to get the calling user's column details.
+#[derive(Clone)]
+pub struct GetUserDefaultColumnsRequest<'a> {
+    client: &'a crate::core::Client,
+    account_id: Option<String>,
+}
+
+impl<'a> GetUserDefaultColumnsRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, account_id: None }
+    }
+
+    /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+    #[must_use]
+    pub fn account_id(mut self, value: impl Into<String>) -> Self {
+        self.account_id = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user/columns".to_owned());
+
+        if let Some(value) = &self.account_id {
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Vec<ColumnItem>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Sets the default [ issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the user. If an account ID is not passed, the calling user's default columns are set. If no column details are sent, then all default columns are removed.
+///
+/// The parameters for this resource are expressed as HTML form data. For example, in curl:
+///
+/// `curl -X PUT -d columns=summary -d columns=description https://your-domain.atlassian.net/rest/api/3/user/columns?accountId=5b10ac8d82e05b22cc7d4ef5'`
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the columns on any user.
+///  *  Permission to access Jira, to set the calling user's columns.
+#[derive(Clone)]
+pub struct SetUserColumnsRequest<'a> {
+    client: &'a crate::core::Client,
+    account_id: Option<String>,
+    user_column_request_body: UserColumnRequestBody,
+}
+
+impl<'a> SetUserColumnsRequest<'a> {
+    fn new(client: &'a crate::core::Client, user_column_request_body: UserColumnRequestBody) -> Self {
+        Self { client, user_column_request_body, account_id: None }
+    }
+
+    /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+    #[must_use]
+    pub fn account_id(mut self, value: impl Into<String>) -> Self {
+        self.account_id = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::PUT, "/rest/api/3/user/columns".to_owned());
+
+        if let Some(value) = &self.account_id {
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        let body = match serde_json::to_value(&self.user_column_request_body)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Resets the default [ issue table columns](https://confluence.atlassian.com/x/XYdKLg) for the user to the system default. If `accountId` is not passed, the calling user's default columns are reset.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg), to set the columns on any user.
+///  *  Permission to access Jira, to set the calling user's columns.
+#[derive(Clone)]
+pub struct ResetUserColumnsRequest<'a> {
+    client: &'a crate::core::Client,
+    account_id: Option<String>,
+}
+
+impl<'a> ResetUserColumnsRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, account_id: None }
+    }
+
+    /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+    #[must_use]
+    pub fn account_id(mut self, value: impl Into<String>) -> Self {
+        self.account_id = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::DELETE, "/rest/api/3/user/columns".to_owned());
+
+        if let Some(value) = &self.account_id {
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a user's email address regardless of the user's profile visibility settings. For Connect apps, this API is only available to apps approved by Atlassian, according to these [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603). For Forge apps, this API only supports access via asApp() requests.
+#[derive(Clone)]
+pub struct GetUserEmailRequest<'a> {
+    client: &'a crate::core::Client,
+    account_id: String,
+}
+
+impl<'a> GetUserEmailRequest<'a> {
+    fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
+        Self { client, account_id: account_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user/email".to_owned());
+
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<UnrestrictedUserEmail> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a user's email address regardless of the user's profile visibility settings. For Connect apps, this API is only available to apps approved by Atlassian, according to these [guidelines](https://community.developer.atlassian.com/t/guidelines-for-requesting-access-to-email-address/27603). For Forge apps, this API only supports access via asApp() requests.
+#[derive(Clone)]
+pub struct GetUserEmailBulkRequest<'a> {
+    client: &'a crate::core::Client,
+    account_id: Vec<String>,
+}
+
+impl<'a> GetUserEmailBulkRequest<'a> {
+    fn new(client: &'a crate::core::Client, account_id: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        Self { client, account_id: account_id.into_iter().map(Into::into).collect() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user/email/bulk".to_owned());
+
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::List(self.account_id.clone())));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<UnrestrictedUserEmail> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the groups to which a user belongs.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct GetUserGroupsRequest<'a> {
+    client: &'a crate::core::Client,
+    account_id: String,
+}
+
+impl<'a> GetUserGroupsRequest<'a> {
+    fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
+        Self { client, account_id: account_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user/groups".to_owned());
+
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Vec<GroupName>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a list of all users, including active users, inactive users and previously deleted users that have an Atlassian account.
+///
+/// Privacy controls are applied to the response based on the users' preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct GetAllUsersDefaultRequest<'a> {
+    client: &'a crate::core::Client,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
+    expand: Option<String>,
+}
+
+impl<'a> GetAllUsersDefaultRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, start_at: None, max_results: None, expand: None }
+    }
+
+    /// The index of the first item to return.
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return (limited to 1000).
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn expand(mut self, value: impl Into<String>) -> Self {
+        self.expand = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/users".to_owned());
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Vec<DashboardUser>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a list of all users, including active users, inactive users and previously deleted users that have an Atlassian account.
+///
+/// Privacy controls are applied to the response based on the users' preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct GetAllUsersRequest<'a> {
+    client: &'a crate::core::Client,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
+    expand: Option<String>,
+}
+
+impl<'a> GetAllUsersRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, start_at: None, max_results: None, expand: None }
+    }
+
+    /// The index of the first item to return.
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return (limited to 1000).
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn expand(mut self, value: impl Into<String>) -> Self {
+        self.expand = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/users/search".to_owned());
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Vec<DashboardUser>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

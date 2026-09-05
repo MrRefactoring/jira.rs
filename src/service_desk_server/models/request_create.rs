@@ -1,0 +1,17 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RequestCreate {
+    #[serde(rename = "serviceDeskId", default, skip_serializing_if = "Option::is_none")]
+    pub service_desk_id: Option<String>,
+    #[serde(rename = "requestTypeId", default, skip_serializing_if = "Option::is_none")]
+    pub request_type_id: Option<String>,
+    #[serde(rename = "requestFieldValues", default, skip_serializing_if = "Option::is_none")]
+    pub request_field_values: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(rename = "requestParticipants", default, skip_serializing_if = "Option::is_none")]
+    pub request_participants: Option<Vec<String>>,
+    #[serde(rename = "raiseOnBehalfOf", default, skip_serializing_if = "Option::is_none")]
+    pub raise_on_behalf_of: Option<String>,
+}

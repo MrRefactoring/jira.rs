@@ -1,0 +1,529 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The Queues operations.
+pub struct QueuesService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> QueuesService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns a page of queues defined inside a service project, for a given service project ID. The returned queues will include an issue count for each queue (represented in `issueCount` field) if the query param `includeCount` is set to true (defaults to false).
+    ///
+    /// **Permissions:**
+    ///
+    /// The calling user must be an agent of the given service project.
+    pub fn get_queues(&self, service_desk_id: impl Into<String>) -> GetQueuesRequest<'a> {
+        GetQueuesRequest::new(self.client, service_desk_id)
+    }
+
+    /// Creates a queue with the given properties.
+    ///
+    /// **Permissions:**
+    ///
+    /// The calling user must have permission to create a queue, i.e. they must be an admin of the service project that the queue belongs to.
+    pub fn create_queue(&self, service_desk_id: impl Into<String>) -> CreateQueueRequest<'a> {
+        CreateQueueRequest::new(self.client, service_desk_id)
+    }
+
+    /// Returns the queue for a given service project id and queue id. The returned queue will include an issue count for queue (represented in `issueCount` field) if the query param `includeCount` is set to true (defaults to false).
+    ///
+    /// **Permissions:**
+    ///
+    /// The calling user must be an agent of the given service project.
+    pub fn get_queue(&self, queue_id: impl Into<String>, service_desk_id: impl Into<String>) -> GetQueueRequest<'a> {
+        GetQueueRequest::new(self.client, queue_id, service_desk_id)
+    }
+
+    /// Updates the queue properties with the new properties. If a property is not passed it will not be updated.
+    ///
+    /// **Permissions:**
+    ///
+    /// The calling user must have permission to update a queue, i.e. they must be an admin of the service project that the queue belongs to.
+    pub fn update_queue(
+        &self,
+        queue_id: impl Into<String>,
+        service_desk_id: impl Into<String>,
+    ) -> UpdateQueueRequest<'a> {
+        UpdateQueueRequest::new(self.client, queue_id, service_desk_id)
+    }
+
+    /// Deletes the queue for the given queue id.
+    ///
+    /// **Permissions:**
+    ///
+    /// The calling user must have permission to delete the queue, i.e. they must be an admin of the service project that the queue belongs to.
+    pub fn delete_queue(
+        &self,
+        queue_id: impl Into<String>,
+        service_desk_id: impl Into<String>,
+    ) -> DeleteQueueRequest<'a> {
+        DeleteQueueRequest::new(self.client, queue_id, service_desk_id)
+    }
+
+    /// Returns a page of issues inside a queue for a given queue ID. Only fields that the queue is configured to show are returned. For example, if a queue is configured to show only Description and Due Date, then only those two fields are returned for each issue in the queue.
+    /// **Permissions:**
+    /// The calling user must have permission to view the requested queue, i.e. they must be an agent of the service project that the queue belongs to.
+    /// **Note:**
+    /// The total number of issues across all pages that can be returned using paginated search is limited to the maxResultWindow, which is defined by the underlying search engine.
+    /// The current value is returned in the `maxResultWindow` property of the response. If not set, it means there is no limit.
+    pub fn get_issues_in_queue(
+        &self,
+        queue_id: impl Into<String>,
+        service_desk_id: impl Into<String>,
+    ) -> GetIssuesInQueueRequest<'a> {
+        GetIssuesInQueueRequest::new(self.client, queue_id, service_desk_id)
+    }
+
+    /// Reorder queues for the users. This is the order in which the queues will appear in agent view. The API requires all queue ids to be passed in the new order.
+    ///
+    /// **Permissions:**
+    ///
+    /// The calling user must have permission to reorder the queue, i.e. they must be an admin of the service project that the queue belongs to.
+    pub fn reorder_queues(&self, service_desk_id: impl Into<String>) -> ReorderQueuesRequest<'a> {
+        ReorderQueuesRequest::new(self.client, service_desk_id)
+    }
+}
+
+/// Returns a page of queues defined inside a service project, for a given service project ID. The returned queues will include an issue count for each queue (represented in `issueCount` field) if the query param `includeCount` is set to true (defaults to false).
+///
+/// **Permissions:**
+///
+/// The calling user must be an agent of the given service project.
+#[derive(Clone)]
+pub struct GetQueuesRequest<'a> {
+    client: &'a crate::core::Client,
+    service_desk_id: String,
+    include_count: Option<String>,
+    start: Option<i64>,
+    limit: Option<i64>,
+}
+
+impl<'a> GetQueuesRequest<'a> {
+    fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
+        Self { client, service_desk_id: service_desk_id.into(), include_count: None, start: None, limit: None }
+    }
+
+    /// Specifies whether to include the issue count of each queue in the response. Valid values: true/false. Default: false.
+    #[must_use]
+    pub fn include_count(mut self, value: impl Into<String>) -> Self {
+        self.include_count = Some(value.into());
+
+        self
+    }
+
+    /// The starting index of the returned objects. Base index: 0.
+    #[must_use]
+    pub fn start(mut self, value: i64) -> Self {
+        self.start = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return per page. Default: 50.
+    #[must_use]
+    pub fn limit(mut self, value: i64) -> Self {
+        self.limit = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
+        );
+
+        if let Some(value) = &self.include_count {
+            config.query.push(("includeCount".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.start {
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.limit {
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Queue>> {
+        let first = self.start.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start = Some(offset);
+
+            request.send()
+        })
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Page<Queue>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Creates a queue with the given properties.
+///
+/// **Permissions:**
+///
+/// The calling user must have permission to create a queue, i.e. they must be an admin of the service project that the queue belongs to.
+#[derive(Clone)]
+pub struct CreateQueueRequest<'a> {
+    client: &'a crate::core::Client,
+    service_desk_id: String,
+    queue_create: Option<QueueCreate>,
+}
+
+impl<'a> CreateQueueRequest<'a> {
+    fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
+        Self { client, service_desk_id: service_desk_id.into(), queue_create: None }
+    }
+
+    #[must_use]
+    pub fn queue_create(mut self, value: QueueCreate) -> Self {
+        self.queue_create = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
+        );
+
+        let body = match serde_json::to_value(&self.queue_create)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Queue> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the queue for a given service project id and queue id. The returned queue will include an issue count for queue (represented in `issueCount` field) if the query param `includeCount` is set to true (defaults to false).
+///
+/// **Permissions:**
+///
+/// The calling user must be an agent of the given service project.
+#[derive(Clone)]
+pub struct GetQueueRequest<'a> {
+    client: &'a crate::core::Client,
+    queue_id: String,
+    service_desk_id: String,
+    include_count: Option<String>,
+}
+
+impl<'a> GetQueueRequest<'a> {
+    fn new(client: &'a crate::core::Client, queue_id: impl Into<String>, service_desk_id: impl Into<String>) -> Self {
+        Self { client, queue_id: queue_id.into(), service_desk_id: service_desk_id.into(), include_count: None }
+    }
+
+    /// Specifies whether to include the issue count of queue in the response. Valid values: true/false. Default: false.
+    #[must_use]
+    pub fn include_count(mut self, value: impl Into<String>) -> Self {
+        self.include_count = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue/{}",
+                crate::core::encode_path_segment(&self.service_desk_id),
+                crate::core::encode_path_segment(&self.queue_id)
+            ),
+        );
+
+        if let Some(value) = &self.include_count {
+            config.query.push(("includeCount".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Queue> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Updates the queue properties with the new properties. If a property is not passed it will not be updated.
+///
+/// **Permissions:**
+///
+/// The calling user must have permission to update a queue, i.e. they must be an admin of the service project that the queue belongs to.
+#[derive(Clone)]
+pub struct UpdateQueueRequest<'a> {
+    client: &'a crate::core::Client,
+    queue_id: String,
+    service_desk_id: String,
+    queue_create: Option<QueueCreate>,
+}
+
+impl<'a> UpdateQueueRequest<'a> {
+    fn new(client: &'a crate::core::Client, queue_id: impl Into<String>, service_desk_id: impl Into<String>) -> Self {
+        Self { client, queue_id: queue_id.into(), service_desk_id: service_desk_id.into(), queue_create: None }
+    }
+
+    #[must_use]
+    pub fn queue_create(mut self, value: QueueCreate) -> Self {
+        self.queue_create = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue/{}",
+                crate::core::encode_path_segment(&self.service_desk_id),
+                crate::core::encode_path_segment(&self.queue_id)
+            ),
+        );
+
+        let body = match serde_json::to_value(&self.queue_create)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Queue> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes the queue for the given queue id.
+///
+/// **Permissions:**
+///
+/// The calling user must have permission to delete the queue, i.e. they must be an admin of the service project that the queue belongs to.
+#[derive(Clone)]
+pub struct DeleteQueueRequest<'a> {
+    client: &'a crate::core::Client,
+    queue_id: String,
+    service_desk_id: String,
+}
+
+impl<'a> DeleteQueueRequest<'a> {
+    fn new(client: &'a crate::core::Client, queue_id: impl Into<String>, service_desk_id: impl Into<String>) -> Self {
+        Self { client, queue_id: queue_id.into(), service_desk_id: service_desk_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue/{}",
+                crate::core::encode_path_segment(&self.service_desk_id),
+                crate::core::encode_path_segment(&self.queue_id)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a page of issues inside a queue for a given queue ID. Only fields that the queue is configured to show are returned. For example, if a queue is configured to show only Description and Due Date, then only those two fields are returned for each issue in the queue.
+/// **Permissions:**
+/// The calling user must have permission to view the requested queue, i.e. they must be an agent of the service project that the queue belongs to.
+/// **Note:**
+/// The total number of issues across all pages that can be returned using paginated search is limited to the maxResultWindow, which is defined by the underlying search engine.
+/// The current value is returned in the `maxResultWindow` property of the response. If not set, it means there is no limit.
+#[derive(Clone)]
+pub struct GetIssuesInQueueRequest<'a> {
+    client: &'a crate::core::Client,
+    queue_id: String,
+    service_desk_id: String,
+    start: Option<i64>,
+    limit: Option<i64>,
+}
+
+impl<'a> GetIssuesInQueueRequest<'a> {
+    fn new(client: &'a crate::core::Client, queue_id: impl Into<String>, service_desk_id: impl Into<String>) -> Self {
+        Self { client, queue_id: queue_id.into(), service_desk_id: service_desk_id.into(), start: None, limit: None }
+    }
+
+    /// The starting index of the returned objects. Base index: 0.
+    #[must_use]
+    pub fn start(mut self, value: i64) -> Self {
+        self.start = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return per page. Default: 50.
+    #[must_use]
+    pub fn limit(mut self, value: i64) -> Self {
+        self.limit = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue/{}/issue",
+                crate::core::encode_path_segment(&self.service_desk_id),
+                crate::core::encode_path_segment(&self.queue_id)
+            ),
+        );
+
+        if let Some(value) = &self.start {
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.limit {
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.start.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start = Some(offset);
+
+            request.send()
+        })
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Page<Issue>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Reorder queues for the users. This is the order in which the queues will appear in agent view. The API requires all queue ids to be passed in the new order.
+///
+/// **Permissions:**
+///
+/// The calling user must have permission to reorder the queue, i.e. they must be an admin of the service project that the queue belongs to.
+#[derive(Clone)]
+pub struct ReorderQueuesRequest<'a> {
+    client: &'a crate::core::Client,
+    service_desk_id: String,
+    body: Option<Vec<i64>>,
+}
+
+impl<'a> ReorderQueuesRequest<'a> {
+    fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
+        Self { client, service_desk_id: service_desk_id.into(), body: None }
+    }
+
+    #[must_use]
+    pub fn body(mut self, value: impl IntoIterator<Item = i64>) -> Self {
+        self.body = Some(value.into_iter().collect());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue/reorder",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Vec<Queue>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

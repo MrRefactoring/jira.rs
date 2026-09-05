@@ -1,0 +1,63 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum JsonNodeNodeType {
+        Array => "ARRAY",
+        Binary => "BINARY",
+        Boolean => "BOOLEAN",
+        Missing => "MISSING",
+        Null => "NULL",
+        Number => "NUMBER",
+        Object => "OBJECT",
+        Pojo => "POJO",
+        String => "STRING",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct JsonNode {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub array: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub null: Option<bool>,
+    #[serde(rename = "valueNode", default, skip_serializing_if = "Option::is_none")]
+    pub value_node: Option<bool>,
+    #[serde(rename = "containerNode", default, skip_serializing_if = "Option::is_none")]
+    pub container_node: Option<bool>,
+    #[serde(rename = "missingNode", default, skip_serializing_if = "Option::is_none")]
+    pub missing_node: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub object: Option<bool>,
+    #[serde(rename = "nodeType", default, skip_serializing_if = "Option::is_none")]
+    pub node_type: Option<JsonNodeNodeType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub pojo: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub number: Option<bool>,
+    #[serde(rename = "integralNumber", default, skip_serializing_if = "Option::is_none")]
+    pub integral_number: Option<bool>,
+    #[serde(rename = "floatingPointNumber", default, skip_serializing_if = "Option::is_none")]
+    pub floating_point_number: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub short: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub int: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub long: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub double: Option<bool>,
+    #[serde(rename = "bigDecimal", default, skip_serializing_if = "Option::is_none")]
+    pub big_decimal: Option<bool>,
+    #[serde(rename = "bigInteger", default, skip_serializing_if = "Option::is_none")]
+    pub big_integer: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub textual: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub boolean: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub binary: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub float: Option<bool>,
+}

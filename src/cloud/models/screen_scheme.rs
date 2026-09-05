@@ -1,0 +1,23 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// A screen scheme.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ScreenScheme {
+    /// The description of the screen scheme.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The ID of the screen scheme.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    #[serde(rename = "issueTypeScreenSchemes", default, skip_serializing_if = "Option::is_none")]
+    pub issue_type_screen_schemes: Option<PageIssueTypeScreenScheme>,
+    /// The name of the screen scheme.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub screens: Option<ScreenTypes>,
+}

@@ -1,0 +1,11 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// A list of project IDs.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ProjectIds {
+    /// The IDs of projects.
+    #[serde(rename = "projectIds")]
+    pub project_ids: Vec<String>,
+}

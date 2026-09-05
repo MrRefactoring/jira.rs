@@ -1,0 +1,138 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The JQL operations.
+pub struct JQLService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> JQLService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns the auto complete data required for JQL searches
+    pub fn get_auto_complete(&self) -> GetAutoCompleteRequest<'a> {
+        GetAutoCompleteRequest::new(self.client)
+    }
+
+    /// Returns auto complete suggestions for JQL search
+    pub fn get_field_auto_complete_for_query_string(&self) -> GetFieldAutoCompleteForQueryStringRequest<'a> {
+        GetFieldAutoCompleteForQueryStringRequest::new(self.client)
+    }
+}
+
+/// Returns the auto complete data required for JQL searches
+#[derive(Clone)]
+pub struct GetAutoCompleteRequest<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> GetAutoCompleteRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/jql/autocompletedata".to_owned());
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<AutoCompleteResponse> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns auto complete suggestions for JQL search
+#[derive(Clone)]
+pub struct GetFieldAutoCompleteForQueryStringRequest<'a> {
+    client: &'a crate::core::Client,
+    predicate_value: Option<String>,
+    predicate_name: Option<String>,
+    field_name: Option<String>,
+    field_value: Option<String>,
+}
+
+impl<'a> GetFieldAutoCompleteForQueryStringRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, predicate_value: None, predicate_name: None, field_name: None, field_value: None }
+    }
+
+    /// The portion of the predicate value that has already been provided by the user.
+    #[must_use]
+    pub fn predicate_value(mut self, value: impl Into<String>) -> Self {
+        self.predicate_value = Some(value.into());
+
+        self
+    }
+
+    /// The predicate for which the suggestions are generated. Suggestions are generated only for: "by", "from" and "to".
+    #[must_use]
+    pub fn predicate_name(mut self, value: impl Into<String>) -> Self {
+        self.predicate_name = Some(value.into());
+
+        self
+    }
+
+    /// The field name for which the suggestions are generated.
+    #[must_use]
+    pub fn field_name(mut self, value: impl Into<String>) -> Self {
+        self.field_name = Some(value.into());
+
+        self
+    }
+
+    /// The portion of the field value that has already been provided by the user.
+    #[must_use]
+    pub fn field_value(mut self, value: impl Into<String>) -> Self {
+        self.field_value = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            "/rest/api/2/jql/autocompletedata/suggestions".to_owned(),
+        );
+
+        if let Some(value) = &self.predicate_value {
+            config.query.push(("predicateValue".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.predicate_name {
+            config.query.push(("predicateName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.field_name {
+            config.query.push(("fieldName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.field_value {
+            config.query.push(("fieldValue".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<AutoCompleteResultWrapper> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

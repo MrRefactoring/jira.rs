@@ -1,0 +1,12 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Details of updates for a custom field.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct CustomFieldValueUpdateDetails {
+    /// The list of custom field update details.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub updates: Option<Vec<CustomFieldValueUpdate>>,
+}

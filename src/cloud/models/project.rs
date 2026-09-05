@@ -1,0 +1,179 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The default assignee when creating issues for this project.
+    pub enum ProjectAssigneeType {
+        ProjectLead => "PROJECT_LEAD",
+        Unassigned => "UNASSIGNED",
+    }
+}
+
+crate::open_enum! {
+    /// The [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes) of the project.
+    pub enum ProjectProjectTypeKey {
+        Software => "software",
+        ServiceDesk => "service_desk",
+        Business => "business",
+        ProductDiscovery => "product_discovery",
+        CustomerService => "customer_service",
+    }
+}
+
+crate::open_enum! {
+    /// The type of the project.
+    pub enum ProjectStyle {
+        Classic => "classic",
+        NextGen => "next-gen",
+    }
+}
+
+/// Details about a project.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct Project {
+    /// Whether the project is archived.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub archived: Option<bool>,
+    #[serde(rename = "archivedBy", default, skip_serializing_if = "Option::is_none")]
+    pub archived_by: Option<DashboardUser>,
+    /// The date when the project was archived.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "archivedDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub archived_date: Option<chrono::DateTime<chrono::Utc>>,
+    /// The date when the project was archived.
+    #[cfg(not(feature = "chrono"))]
+    #[serde(
+        rename = "archivedDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
+    pub archived_date: Option<String>,
+    /// The default assignee when creating issues for this project.
+    #[serde(rename = "assigneeType", default, skip_serializing_if = "Option::is_none")]
+    pub assignee_type: Option<ProjectAssigneeType>,
+    #[serde(rename = "avatarUrls", default, skip_serializing_if = "Option::is_none")]
+    pub avatar_urls: Option<AvatarUrls>,
+    /// List of the components contained in the project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub components: Option<Vec<ProjectComponent>>,
+    /// Whether the project is marked as deleted.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub deleted: Option<bool>,
+    #[serde(rename = "deletedBy", default, skip_serializing_if = "Option::is_none")]
+    pub deleted_by: Option<DashboardUser>,
+    /// The date when the project was marked as deleted.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "deletedDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub deleted_date: Option<chrono::DateTime<chrono::Utc>>,
+    /// The date when the project was marked as deleted.
+    #[cfg(not(feature = "chrono"))]
+    #[serde(
+        rename = "deletedDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
+    pub deleted_date: Option<String>,
+    /// A brief description of the project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// An email address associated with the project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    /// Expand options that include additional project details in the response.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub expand: Option<String>,
+    /// Whether the project is selected as a favorite.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub favourite: Option<bool>,
+    /// The ID of the project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub insight: Option<ProjectInsight>,
+    /// Whether the project is private from the user's perspective. This means the user can't see the project or any associated issues.
+    #[serde(rename = "isPrivate", default, skip_serializing_if = "Option::is_none")]
+    pub is_private: Option<bool>,
+    #[serde(rename = "issueTypeHierarchy", default, skip_serializing_if = "Option::is_none")]
+    pub issue_type_hierarchy: Option<Hierarchy>,
+    /// List of the issue types available in the project.
+    #[serde(rename = "issueTypes", default, skip_serializing_if = "Option::is_none")]
+    pub issue_types: Option<Vec<IssueTypeDetails>>,
+    /// The key of the project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    #[serde(rename = "landingPageInfo", default, skip_serializing_if = "Option::is_none")]
+    pub landing_page_info: Option<ProjectLandingPageInfo>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub lead: Option<DashboardUser>,
+    /// The name of the project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<ProjectPermissions>,
+    #[serde(rename = "projectCategory", default, skip_serializing_if = "Option::is_none")]
+    pub project_category: Option<ProjectCategory>,
+    /// The [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes) of the project.
+    #[serde(rename = "projectTypeKey", default, skip_serializing_if = "Option::is_none")]
+    pub project_type_key: Option<ProjectProjectTypeKey>,
+    /// Map of project properties
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// The date when the project is deleted permanently.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "retentionTillDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub retention_till_date: Option<chrono::DateTime<chrono::Utc>>,
+    /// The date when the project is deleted permanently.
+    #[cfg(not(feature = "chrono"))]
+    #[serde(
+        rename = "retentionTillDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
+    pub retention_till_date: Option<String>,
+    /// The name and self URL for each role defined in the project. For more information, see [Create project role](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-role/#api-rest-api-3-role-post).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub roles: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// The URL of the project details.
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+    /// Whether the project is simplified.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub simplified: Option<bool>,
+    /// The type of the project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub style: Option<ProjectStyle>,
+    /// A link to information about this project, such as project documentation.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// Unique ID for next-gen projects.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub uuid: Option<String>,
+    /// The versions defined in the project. For more information, see [Create version](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-version/#api-rest-api-3-version-post).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub versions: Option<Vec<Version>>,
+    #[serde(rename = "entityId", default, skip_serializing_if = "Option::is_none")]
+    pub entity_id: Option<String>,
+}

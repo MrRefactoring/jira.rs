@@ -1,0 +1,702 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+use serde::{Deserialize, Serialize};
+
+/// Comma-separated list of Security Workspace IDs to delete. All data associated with the given workspaces will eventually be removed from Jira. Example: workspaceIds=111-222-333,444-555-666.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum DeleteLinkedWorkspacesRequestWorkspaceIds {
+    One(String),
+    Many(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    /// Indicates the operation being performed by the provider system when sending this data. "NORMAL" - Data received during real-time, user-triggered actions (e.g. user closed or updated a vulnerability). "SCAN" - Data sent through some automated process (e.g. some periodically scheduled repository scan). "BACKFILL" - Data received while backfilling existing data (e.g. pushing historical vulnerabilities when re-connect a workspace). Default is "NORMAL". "NORMAL" traffic has higher priority but tighter rate limits, "SCAN" traffic has medium priority and looser limits, "BACKFILL" has lower priority and much looser limits
+    pub enum SubmitVulnerabilitiesRequestOperationType {
+        Normal => "NORMAL",
+        Scan => "SCAN",
+        Backfill => "BACKFILL",
+    }
+}
+
+crate::open_enum! {
+    /// The VulnerabilityData schema version used for this vulnerability data.
+    ///
+    /// Placeholder to support potential schema changes in the future.
+    pub enum SubmitVulnerabilitiesRequestVulnerabilitiesSchemaVersion {
+        N10 => "1.0",
+    }
+}
+
+crate::open_enum! {
+    /// The type of Vulnerability detected.
+    pub enum SubmitVulnerabilitiesRequestVulnerabilitiesType {
+        Sca => "sca",
+        Sast => "sast",
+        Dast => "dast",
+        Unknown => "unknown",
+    }
+}
+
+crate::open_enum! {
+    /// The severity level of the Vulnerability.
+    pub enum SubmitVulnerabilitiesRequestVulnerabilitiesSeverityLevel {
+        Critical => "critical",
+        High => "high",
+        Medium => "medium",
+        Low => "low",
+        Unknown => "unknown",
+    }
+}
+
+/// Severity information for a single Vulnerability.
+///
+/// This is the severity information that will be presented to the user on e.g. the Jira Security screen.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SubmitVulnerabilitiesRequestVulnerabilitiesSeverity {
+    /// The severity level of the Vulnerability.
+    pub level: SubmitVulnerabilitiesRequestVulnerabilitiesSeverityLevel,
+}
+
+/// The identifiers object that contains public/private information identifying the Vulnerability.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitVulnerabilitiesRequestVulnerabilitiesIdentifiers {
+    /// The display name of the Vulnerability identified.
+    #[serde(rename = "displayName")]
+    pub display_name: String,
+    /// A URL users can use to link to the definition of the Vulnerability identified.
+    pub url: String,
+}
+
+crate::open_enum! {
+    /// The current status of the Vulnerability.
+    pub enum SubmitVulnerabilitiesRequestVulnerabilitiesStatus {
+        Open => "open",
+        Closed => "closed",
+        Ignored => "ignored",
+        Unknown => "unknown",
+    }
+}
+
+/// Extra information (optional). This data will be shown in the security feature under the vulnerability displayName.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitVulnerabilitiesRequestVulnerabilitiesAdditionalInfo {
+    /// The content of the additionalInfo.
+    pub content: String,
+    /// Optional URL linking to the information
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum SubmitVulnerabilitiesRequestVulnerabilitiesAddAssociations {
+    IssueIdOrKeysAssociation(IssueIdOrKeysAssociation),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum SubmitVulnerabilitiesRequestVulnerabilitiesRemoveAssociations {
+    IssueIdOrKeysAssociation(IssueIdOrKeysAssociation),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+/// Data related to a specific vulnerability in a specific workspace that the vulnerability is present in. Must specify at least one association.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SubmitVulnerabilitiesRequestVulnerabilities {
+    /// The VulnerabilityData schema version used for this vulnerability data.
+    ///
+    /// Placeholder to support potential schema changes in the future.
+    #[serde(rename = "schemaVersion")]
+    pub schema_version: SubmitVulnerabilitiesRequestVulnerabilitiesSchemaVersion,
+    /// The identifier for the Vulnerability. Must be unique for a given Provider.
+    pub id: String,
+    /// An ID used to apply an ordering to updates for this Vulnerability in the case of out-of-order receipt of update requests.
+    ///
+    /// This can be any monotonically increasing number. A suggested implementation is to use epoch millis from the Provider system, but other alternatives are valid (e.g. a Provider could store a counter against each Vulnerability and increment that on each update to Jira).
+    ///
+    /// Updates for a Vulnerability that are received with an updateSequenceId lower than what is currently stored will be ignored.
+    #[serde(rename = "updateSequenceNumber")]
+    pub update_sequence_number: i64,
+    /// The identifier of the Container where this Vulnerability was found. Must be unique for a given Provider. This must follow this regex pattern: `[a-zA-Z0-9\\-_.~@:{}=]+(/[a-zA-Z0-9\\-_.~@:{}=]+)*`
+    #[serde(rename = "containerId")]
+    pub container_id: String,
+    /// The human-readable name for the Vulnerability. Will be shown in the UI.
+    ///
+    /// If not provided, will use the ID for display.
+    #[serde(rename = "displayName")]
+    pub display_name: String,
+    /// A description of the issue in markdown format that will be shown in the UI and used when creating Jira Issues. HTML tags are not supported in the markdown format. For creating a new line `\n` can be used. Read more about the accepted markdown transformations [here](https://atlaskit.atlassian.com/packages/editor/editor-markdown-transformer).
+    pub description: String,
+    /// A URL users can use to link to a summary view of this vulnerability, if appropriate.
+    ///
+    /// This could be any location that makes sense in the Provider system (e.g. if the summary information comes from a specific project, it might make sense to link the user to the vulnerability in that project).
+    pub url: String,
+    /// The type of Vulnerability detected.
+    pub r#type: SubmitVulnerabilitiesRequestVulnerabilitiesType,
+    /// The timestamp to present to the user that shows when the Vulnerability was introduced.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "introducedDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub introduced_date: Option<chrono::DateTime<chrono::Utc>>,
+    /// The timestamp to present to the user that shows when the Vulnerability was introduced.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
+    #[serde(rename = "introducedDate", deserialize_with = "crate::core::deserialize_required_timestamp")]
+    pub introduced_date: String,
+    /// The last-updated timestamp to present to the user the last time the Vulnerability was updated.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user the last time the Vulnerability was updated.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
+    #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
+    pub last_updated: String,
+    /// Severity information for a single Vulnerability.
+    ///
+    /// This is the severity information that will be presented to the user on e.g. the Jira Security screen.
+    pub severity: SubmitVulnerabilitiesRequestVulnerabilitiesSeverity,
+    /// The identifying information for the Vulnerability.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub identifiers: Option<Vec<SubmitVulnerabilitiesRequestVulnerabilitiesIdentifiers>>,
+    /// The current status of the Vulnerability.
+    pub status: SubmitVulnerabilitiesRequestVulnerabilitiesStatus,
+    /// Extra information (optional). This data will be shown in the security feature under the vulnerability displayName.
+    #[serde(rename = "additionalInfo", default, skip_serializing_if = "Option::is_none")]
+    pub additional_info: Option<SubmitVulnerabilitiesRequestVulnerabilitiesAdditionalInfo>,
+    /// The associations (e.g. Jira issue) to add in addition to the currently stored associations of the Security Vulnerability.
+    #[serde(rename = "addAssociations", default, skip_serializing_if = "Option::is_none")]
+    pub add_associations: Option<Vec<SubmitVulnerabilitiesRequestVulnerabilitiesAddAssociations>>,
+    /// The associations (e.g. Jira issue) to remove from currently stored associations of the Security Vulnerability.
+    #[serde(rename = "removeAssociations", default, skip_serializing_if = "Option::is_none")]
+    pub remove_associations: Option<Vec<SubmitVulnerabilitiesRequestVulnerabilitiesRemoveAssociations>>,
+    /// An ISO-8601 Date-time string representing the last time the provider updated associations on this entity.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "associationsLastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub associations_last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// An ISO-8601 Date-time string representing the last time the provider updated associations on this entity.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
+    #[serde(
+        rename = "associationsLastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
+    pub associations_last_updated: Option<String>,
+    /// A sequence number to compare when writing entity associations to the database.
+    ///
+    /// This can be any monotonically increasing number. A highly recommended implementation is to use epoch millis.
+    ///
+    /// This is an optional field. If it is not provided it will default to being equal to the corresponding entity's `updateSequenceNumber`.
+    ///
+    /// Associations are written following a LastWriteWins strategy, association that are received with an associationsUpdateSequenceNumber lower than what is currently stored will be ignored.
+    #[serde(rename = "associationsUpdateSequenceNumber", default, skip_serializing_if = "Option::is_none")]
+    pub associations_update_sequence_number: Option<i64>,
+}
+
+/// Information about the provider. This is useful for auditing, logging, debugging,
+/// and other internal uses. Information in this property is not considered private, so it should not contain personally identifiable information
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitVulnerabilitiesRequestProviderMetadata {
+    /// An optional name of the source of the vulnerabilities.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub product: Option<String>,
+}
+
+/// The SecurityInformation operations.
+pub struct SecurityInformationService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> SecurityInformationService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Insert Security Workspace IDs to establish a relationship between them and the Jira site the app is installed on. If a relationship between the workspace ID and Jira already exists then the workspace ID will be ignored and Jira will process the rest of the entries.
+    pub fn submit_workspaces(
+        &self,
+        workspace_ids: impl IntoIterator<Item = impl Into<String>>,
+    ) -> SubmitWorkspacesRequest<'a> {
+        SubmitWorkspacesRequest::new(self.client, workspace_ids)
+    }
+
+    /// Bulk delete all linked Security Workspaces that match the given request.
+    ///
+    /// e.g. DELETE /bulk?workspaceIds=111-222-333,444-555-666
+    pub fn delete_linked_workspaces(
+        &self,
+        workspace_ids: DeleteLinkedWorkspacesRequestWorkspaceIds,
+    ) -> DeleteLinkedWorkspacesRequest<'a> {
+        DeleteLinkedWorkspacesRequest::new(self.client, workspace_ids)
+    }
+
+    /// Retrieve all Security Workspaces linked with the Jira site.
+    ///
+    /// The result will be what is currently stored, ignoring any pending updates or deletes.
+    pub fn get_linked_workspaces(&self) -> GetLinkedWorkspacesRequest<'a> {
+        GetLinkedWorkspacesRequest::new(self.client)
+    }
+
+    /// Retrieve a specific Security Workspace linked to the Jira site for the given workspace ID.
+    ///
+    /// The result will be what is currently stored, ignoring any pending updates or deletes.
+    pub fn get_linked_workspace_by_id(&self, workspace_id: impl Into<String>) -> GetLinkedWorkspaceByIdRequest<'a> {
+        GetLinkedWorkspaceByIdRequest::new(self.client, workspace_id)
+    }
+
+    /// Update / Insert Vulnerability data.
+    ///
+    /// Vulnerabilities are identified by their ID, any existing Vulnerability data with the same ID will be replaced if it exists and the updateSequenceNumber of the existing data is less than the incoming data.
+    ///
+    /// Submissions are performed asynchronously. Most updates are available within a short period of time but may take some time during peak load and/or maintenance times. The GET vulnerability endpoint can be used to confirm that data has been stored successfully (if needed).
+    ///
+    /// In the case of multiple Vulnerabilities being submitted in one request, each is validated individually prior to submission. Details of Vulnerabilities that failed submission (if any) are available in the response object.
+    ///
+    /// A maximum of 1000 vulnerabilities can be submitted in one request.
+    pub fn submit_vulnerabilities(
+        &self,
+        vulnerabilities: impl IntoIterator<Item = SubmitVulnerabilitiesRequestVulnerabilities>,
+    ) -> SubmitVulnerabilitiesRequest<'a> {
+        SubmitVulnerabilitiesRequest::new(self.client, vulnerabilities)
+    }
+
+    /// Bulk delete all Vulnerabilities that match the given request.
+    ///
+    /// One or more query params must be supplied to specify Properties to delete by.
+    /// If more than one Property is provided, data will be deleted that matches ALL of the Properties (e.g. treated as an AND).
+    /// Read the POST bulk endpoint documentation for more details.
+    ///
+    /// e.g. DELETE /bulkByProperties?accountId=account-123&createdBy=user-456
+    ///
+    /// Deletion is performed asynchronously. The GET vulnerability endpoint can be used to confirm that data has been deleted successfully (if needed).
+    pub fn delete_vulnerabilities_by_property(
+        &self,
+        account_id: impl Into<String>,
+    ) -> DeleteVulnerabilitiesByPropertyRequest<'a> {
+        DeleteVulnerabilitiesByPropertyRequest::new(self.client, account_id)
+    }
+
+    /// Retrieve the currently stored Vulnerability data for the given ID.
+    ///
+    /// The result will be what is currently stored, ignoring any pending updates or deletes.
+    pub fn get_vulnerability_by_id(&self, vulnerability_id: impl Into<String>) -> GetVulnerabilityByIdRequest<'a> {
+        GetVulnerabilityByIdRequest::new(self.client, vulnerability_id)
+    }
+
+    /// Delete the Vulnerability data currently stored for the given ID.
+    ///
+    /// Deletion is performed asynchronously. The GET vulnerability endpoint can be used to confirm that data has been deleted successfully (if needed).
+    pub fn delete_vulnerability_by_id(
+        &self,
+        vulnerability_id: impl Into<String>,
+    ) -> DeleteVulnerabilityByIdRequest<'a> {
+        DeleteVulnerabilityByIdRequest::new(self.client, vulnerability_id)
+    }
+}
+
+/// Insert Security Workspace IDs to establish a relationship between them and the Jira site the app is installed on. If a relationship between the workspace ID and Jira already exists then the workspace ID will be ignored and Jira will process the rest of the entries.
+#[derive(Clone)]
+pub struct SubmitWorkspacesRequest<'a> {
+    client: &'a crate::core::Client,
+    workspace_ids: Vec<String>,
+}
+
+impl<'a> SubmitWorkspacesRequest<'a> {
+    fn new(client: &'a crate::core::Client, workspace_ids: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        Self { client, workspace_ids: workspace_ids.into_iter().map(Into::into).collect() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            "/rest/security/1.0/linkedWorkspaces/bulk".to_owned(),
+        );
+
+        let mut body = serde_json::Map::new();
+
+        body.insert("workspaceIds".to_owned(), serde_json::to_value(&self.workspace_ids)?);
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Bulk delete all linked Security Workspaces that match the given request.
+///
+/// e.g. DELETE /bulk?workspaceIds=111-222-333,444-555-666
+#[derive(Clone)]
+pub struct DeleteLinkedWorkspacesRequest<'a> {
+    client: &'a crate::core::Client,
+    workspace_ids: DeleteLinkedWorkspacesRequestWorkspaceIds,
+}
+
+impl<'a> DeleteLinkedWorkspacesRequest<'a> {
+    fn new(client: &'a crate::core::Client, workspace_ids: DeleteLinkedWorkspacesRequestWorkspaceIds) -> Self {
+        Self { client, workspace_ids }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            "/rest/security/1.0/linkedWorkspaces/bulk".to_owned(),
+        );
+
+        config
+            .query
+            .push(("workspaceIds".to_owned(), crate::core::QueryValue::from_serializable(&self.workspace_ids)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Retrieve all Security Workspaces linked with the Jira site.
+///
+/// The result will be what is currently stored, ignoring any pending updates or deletes.
+#[derive(Clone)]
+pub struct GetLinkedWorkspacesRequest<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> GetLinkedWorkspacesRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/security/1.0/linkedWorkspaces".to_owned());
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetLinkedWorkspaces> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Retrieve a specific Security Workspace linked to the Jira site for the given workspace ID.
+///
+/// The result will be what is currently stored, ignoring any pending updates or deletes.
+#[derive(Clone)]
+pub struct GetLinkedWorkspaceByIdRequest<'a> {
+    client: &'a crate::core::Client,
+    workspace_id: String,
+}
+
+impl<'a> GetLinkedWorkspaceByIdRequest<'a> {
+    fn new(client: &'a crate::core::Client, workspace_id: impl Into<String>) -> Self {
+        Self { client, workspace_id: workspace_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/security/1.0/linkedWorkspaces/{}", crate::core::encode_path_segment(&self.workspace_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetLinkedWorkspaceById> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Update / Insert Vulnerability data.
+///
+/// Vulnerabilities are identified by their ID, any existing Vulnerability data with the same ID will be replaced if it exists and the updateSequenceNumber of the existing data is less than the incoming data.
+///
+/// Submissions are performed asynchronously. Most updates are available within a short period of time but may take some time during peak load and/or maintenance times. The GET vulnerability endpoint can be used to confirm that data has been stored successfully (if needed).
+///
+/// In the case of multiple Vulnerabilities being submitted in one request, each is validated individually prior to submission. Details of Vulnerabilities that failed submission (if any) are available in the response object.
+///
+/// A maximum of 1000 vulnerabilities can be submitted in one request.
+#[derive(Clone)]
+pub struct SubmitVulnerabilitiesRequest<'a> {
+    client: &'a crate::core::Client,
+    operation_type: Option<SubmitVulnerabilitiesRequestOperationType>,
+    properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    vulnerabilities: Vec<SubmitVulnerabilitiesRequestVulnerabilities>,
+    provider_metadata: Option<SubmitVulnerabilitiesRequestProviderMetadata>,
+}
+
+impl<'a> SubmitVulnerabilitiesRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        vulnerabilities: impl IntoIterator<Item = SubmitVulnerabilitiesRequestVulnerabilities>,
+    ) -> Self {
+        Self {
+            client,
+            vulnerabilities: vulnerabilities.into_iter().collect(),
+            operation_type: None,
+            properties: None,
+            provider_metadata: None,
+        }
+    }
+
+    /// Indicates the operation being performed by the provider system when sending this data. "NORMAL" - Data received during real-time, user-triggered actions (e.g. user closed or updated a vulnerability). "SCAN" - Data sent through some automated process (e.g. some periodically scheduled repository scan). "BACKFILL" - Data received while backfilling existing data (e.g. pushing historical vulnerabilities when re-connect a workspace). Default is "NORMAL". "NORMAL" traffic has higher priority but tighter rate limits, "SCAN" traffic has medium priority and looser limits, "BACKFILL" has lower priority and much looser limits
+    #[must_use]
+    pub fn operation_type(mut self, value: impl Into<SubmitVulnerabilitiesRequestOperationType>) -> Self {
+        self.operation_type = Some(value.into());
+
+        self
+    }
+
+    /// Properties assigned to vulnerability data that can then be used for delete / query operations.
+    ///
+    /// Examples might be an account or user ID that can then be used to clean up data if an account is removed from the Provider system.
+    ///
+    /// Properties are supplied as key/value pairs, and a maximum of 5 properties can be supplied, keys cannot contain ':' or start with '_'.
+    #[must_use]
+    pub fn properties(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
+        self.properties = Some(value);
+
+        self
+    }
+
+    /// Information about the provider. This is useful for auditing, logging, debugging,
+    /// and other internal uses. Information in this property is not considered private, so it should not contain personally identifiable information
+    #[must_use]
+    pub fn provider_metadata(mut self, value: SubmitVulnerabilitiesRequestProviderMetadata) -> Self {
+        self.provider_metadata = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/security/1.0/bulk".to_owned());
+
+        let mut body = serde_json::Map::new();
+
+        if let Some(value) = &self.operation_type {
+            body.insert("operationType".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.properties {
+            body.insert("properties".to_owned(), serde_json::to_value(value)?);
+        }
+
+        body.insert("vulnerabilities".to_owned(), serde_json::to_value(&self.vulnerabilities)?);
+
+        if let Some(value) = &self.provider_metadata {
+            body.insert("providerMetadata".to_owned(), serde_json::to_value(value)?);
+        }
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<SubmitVulnerabilities> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Bulk delete all Vulnerabilities that match the given request.
+///
+/// One or more query params must be supplied to specify Properties to delete by.
+/// If more than one Property is provided, data will be deleted that matches ALL of the Properties (e.g. treated as an AND).
+/// Read the POST bulk endpoint documentation for more details.
+///
+/// e.g. DELETE /bulkByProperties?accountId=account-123&createdBy=user-456
+///
+/// Deletion is performed asynchronously. The GET vulnerability endpoint can be used to confirm that data has been deleted successfully (if needed).
+#[derive(Clone)]
+pub struct DeleteVulnerabilitiesByPropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    account_id: String,
+    created_by: Option<String>,
+}
+
+impl<'a> DeleteVulnerabilitiesByPropertyRequest<'a> {
+    fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
+        Self { client, account_id: account_id.into(), created_by: None }
+    }
+
+    /// Optional additional property filter combined with accountId (AND). Must match a key previously supplied in submitVulnerabilities `properties`. Example: createdBy=user-456.
+    #[must_use]
+    pub fn created_by(mut self, value: impl Into<String>) -> Self {
+        self.created_by = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            "/rest/security/1.0/bulkByProperties".to_owned(),
+        );
+
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
+
+        if let Some(value) = &self.created_by {
+            config.query.push(("createdBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Retrieve the currently stored Vulnerability data for the given ID.
+///
+/// The result will be what is currently stored, ignoring any pending updates or deletes.
+#[derive(Clone)]
+pub struct GetVulnerabilityByIdRequest<'a> {
+    client: &'a crate::core::Client,
+    vulnerability_id: String,
+}
+
+impl<'a> GetVulnerabilityByIdRequest<'a> {
+    fn new(client: &'a crate::core::Client, vulnerability_id: impl Into<String>) -> Self {
+        Self { client, vulnerability_id: vulnerability_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/security/1.0/vulnerability/{}", crate::core::encode_path_segment(&self.vulnerability_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetVulnerabilityById> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Delete the Vulnerability data currently stored for the given ID.
+///
+/// Deletion is performed asynchronously. The GET vulnerability endpoint can be used to confirm that data has been deleted successfully (if needed).
+#[derive(Clone)]
+pub struct DeleteVulnerabilityByIdRequest<'a> {
+    client: &'a crate::core::Client,
+    vulnerability_id: String,
+}
+
+impl<'a> DeleteVulnerabilityByIdRequest<'a> {
+    fn new(client: &'a crate::core::Client, vulnerability_id: impl Into<String>) -> Self {
+        Self { client, vulnerability_id: vulnerability_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/security/1.0/vulnerability/{}", crate::core::encode_path_segment(&self.vulnerability_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

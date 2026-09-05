@@ -1,0 +1,20 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct Gadget {
+    #[serde(rename = "filterId", default, skip_serializing_if = "Option::is_none")]
+    pub filter_id: Option<i64>,
+    #[serde(rename = "filterName", default, skip_serializing_if = "Option::is_none")]
+    pub filter_name: Option<String>,
+    #[serde(rename = "gadgetUri", default, skip_serializing_if = "Option::is_none")]
+    pub gadget_uri: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub jql: Option<String>,
+    #[serde(rename = "portalId", default, skip_serializing_if = "Option::is_none")]
+    pub portal_id: Option<i64>,
+    #[serde(rename = "userPrefs", default, skip_serializing_if = "Option::is_none")]
+    pub user_prefs: Option<std::collections::HashMap<String, serde_json::Value>>,
+}

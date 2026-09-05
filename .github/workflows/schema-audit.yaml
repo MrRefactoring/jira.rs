@@ -1,0 +1,37 @@
+name: 🔬 Schema audit
+
+on:
+  schedule:
+    - cron: '0 5 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: schema-audit
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  audit:
+    name: 🔬 What the types do not describe
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout sources
+        uses: actions/checkout@v7
+      - name: ⚙️ Install the toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: 💾 Cache the build
+        uses: Swatinem/rust-cache@v2
+      # Reports rather than fails: a gap between the specification and the API is a fact about Atlassian's document,
+      # and a red run every week teaches people to ignore the run.
+      - name: 🔬 Run the audit
+        run: cargo xtask audit
+        env:
+          JIRA_BASE_URL: ${{ secrets.HOST }}
+          JIRA_EMAIL: ${{ secrets.EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.API_TOKEN }}
+          JIRA_ORG_ID: ${{ secrets.JIRA_ORG_ID }}

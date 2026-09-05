@@ -1,0 +1,24 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// A paginated list of users sharing the filter. This includes users that are members of the groups or can browse the projects that the filter is shared with.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct UserList {
+    /// The index of the last item returned on the page.
+    #[serde(rename = "end-index", default, skip_serializing_if = "Option::is_none")]
+    pub end_index: Option<i64>,
+    /// The list of items.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<DashboardUser>>,
+    /// The maximum number of results that could be on the page.
+    #[serde(rename = "max-results", default, skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// The number of items on the page.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub size: Option<i64>,
+    /// The index of the first item returned on the page.
+    #[serde(rename = "start-index", default, skip_serializing_if = "Option::is_none")]
+    pub start_index: Option<i64>,
+}

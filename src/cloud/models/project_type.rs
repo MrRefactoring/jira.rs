@@ -1,0 +1,24 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Details about a project type.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ProjectType {
+    /// The color of the project type.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
+    /// The key of the project type's description.
+    #[serde(rename = "descriptionI18nKey", default, skip_serializing_if = "Option::is_none")]
+    pub description_i18n_key: Option<String>,
+    /// The formatted key of the project type.
+    #[serde(rename = "formattedKey", default, skip_serializing_if = "Option::is_none")]
+    pub formatted_key: Option<String>,
+    /// The icon of the project type.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub icon: Option<String>,
+    /// The key of the project type.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+}

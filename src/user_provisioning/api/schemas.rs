@@ -1,0 +1,189 @@
+// @generated. Do not edit: change the generator or the specification.
+
+/// The Schemas operations.
+pub struct SchemasService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> SchemasService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Get all SCIM features metadata of your organization.
+    ///
+    /// **Note:** This API does not support filtering, pagination, or sorting.
+    pub fn get_schemas(&self, directory_id: impl Into<String>) -> GetSchemasRequest<'a> {
+        GetSchemasRequest::new(self.client, directory_id)
+    }
+
+    /// Get the user schemas from the SCIM provider.
+    ///
+    /// **Note:** This API does not support filtering, pagination, or sorting.
+    pub fn get_user_schemas(&self, directory_id: impl Into<String>) -> GetUserSchemasRequest<'a> {
+        GetUserSchemasRequest::new(self.client, directory_id)
+    }
+
+    /// Get the group schemas from the SCIM provider.
+    ///
+    /// **Note:** This API does not support filtering, pagination, or sorting.
+    pub fn get_group_schemas(&self, directory_id: impl Into<String>) -> GetGroupSchemasRequest<'a> {
+        GetGroupSchemasRequest::new(self.client, directory_id)
+    }
+
+    /// Get the user enterprise extension schemas from the SCIM provider.
+    ///
+    /// **Note:** This API does not support filtering, pagination, or sorting.
+    pub fn get_extension_user_schemas(&self, directory_id: impl Into<String>) -> GetExtensionUserSchemasRequest<'a> {
+        GetExtensionUserSchemasRequest::new(self.client, directory_id)
+    }
+}
+
+/// Get all SCIM features metadata of your organization.
+///
+/// **Note:** This API does not support filtering, pagination, or sorting.
+#[derive(Clone)]
+pub struct GetSchemasRequest<'a> {
+    client: &'a crate::core::Client,
+    directory_id: String,
+}
+
+impl<'a> GetSchemasRequest<'a> {
+    fn new(client: &'a crate::core::Client, directory_id: impl Into<String>) -> Self {
+        Self { client, directory_id: directory_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/scim/directory/{}/Schemas", crate::core::encode_path_segment(&self.directory_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<String> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Get the user schemas from the SCIM provider.
+///
+/// **Note:** This API does not support filtering, pagination, or sorting.
+#[derive(Clone)]
+pub struct GetUserSchemasRequest<'a> {
+    client: &'a crate::core::Client,
+    directory_id: String,
+}
+
+impl<'a> GetUserSchemasRequest<'a> {
+    fn new(client: &'a crate::core::Client, directory_id: impl Into<String>) -> Self {
+        Self { client, directory_id: directory_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/scim/directory/{}/Schemas/urn:ietf:params:scim:schemas:core:2.0:User",
+                crate::core::encode_path_segment(&self.directory_id)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<String> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Get the group schemas from the SCIM provider.
+///
+/// **Note:** This API does not support filtering, pagination, or sorting.
+#[derive(Clone)]
+pub struct GetGroupSchemasRequest<'a> {
+    client: &'a crate::core::Client,
+    directory_id: String,
+}
+
+impl<'a> GetGroupSchemasRequest<'a> {
+    fn new(client: &'a crate::core::Client, directory_id: impl Into<String>) -> Self {
+        Self { client, directory_id: directory_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/scim/directory/{}/Schemas/urn:ietf:params:scim:schemas:core:2.0:Group",
+                crate::core::encode_path_segment(&self.directory_id)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<String> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Get the user enterprise extension schemas from the SCIM provider.
+///
+/// **Note:** This API does not support filtering, pagination, or sorting.
+#[derive(Clone)]
+pub struct GetExtensionUserSchemasRequest<'a> {
+    client: &'a crate::core::Client,
+    directory_id: String,
+}
+
+impl<'a> GetExtensionUserSchemasRequest<'a> {
+    fn new(client: &'a crate::core::Client, directory_id: impl Into<String>) -> Self {
+        Self { client, directory_id: directory_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/scim/directory/{}/Schemas/urn:ietf:params:scim:schemas:extension:enterprise:2.0:User",
+                crate::core::encode_path_segment(&self.directory_id)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<String> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

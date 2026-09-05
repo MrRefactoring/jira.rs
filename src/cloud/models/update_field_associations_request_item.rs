@@ -1,0 +1,15 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Represents an association between a field and its operations.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct UpdateFieldAssociationsRequestItem {
+    /// (optional) Work types to restrict field to. Replaces any existing work type associations for the field. If not provided, the field is associated to any work types.
+    #[serde(rename = "restrictedToWorkTypes", default, skip_serializing_if = "Option::is_none")]
+    pub restricted_to_work_types: Option<Vec<i64>>,
+    /// Scheme IDs to associate field with
+    #[serde(rename = "schemeIds")]
+    pub scheme_ids: Vec<i64>,
+}

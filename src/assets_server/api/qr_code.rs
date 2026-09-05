@@ -1,0 +1,65 @@
+// @generated. Do not edit: change the generator or the specification.
+
+/// The QrCode operations.
+pub struct QrCodeService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> QrCodeService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Get a QR code for an object.
+    pub fn get_object_qr_code(&self, id: impl Into<String>) -> GetObjectQrCodeRequest<'a> {
+        GetObjectQrCodeRequest::new(self.client, id)
+    }
+}
+
+/// Get a QR code for an object.
+#[derive(Clone)]
+pub struct GetObjectQrCodeRequest<'a> {
+    client: &'a crate::core::Client,
+    size: Option<String>,
+    id: String,
+}
+
+impl<'a> GetObjectQrCodeRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
+        Self { client, id: id.into(), size: None }
+    }
+
+    /// The size of the QR code.
+    #[must_use]
+    pub fn size(mut self, value: impl Into<String>) -> Self {
+        self.size = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/assets/1.0/qrcode/object/{}/code.png", crate::core::encode_path_segment(&self.id)),
+        );
+
+        if let Some(value) = &self.size {
+            config.query.push(("size".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        config.headers.push(("Accept".to_owned(), "image/png".to_owned()));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<bytes::Bytes> {
+        self.client.send_bytes(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

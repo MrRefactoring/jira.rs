@@ -1,0 +1,26 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Time tracking details.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct TimeTrackingDetails {
+    /// The original estimate of time needed for this issue in readable format.
+    #[serde(rename = "originalEstimate", default, skip_serializing_if = "Option::is_none")]
+    pub original_estimate: Option<String>,
+    /// The original estimate of time needed for this issue in seconds.
+    #[serde(rename = "originalEstimateSeconds", default, skip_serializing_if = "Option::is_none")]
+    pub original_estimate_seconds: Option<i64>,
+    /// The remaining estimate of time needed for this issue in readable format.
+    #[serde(rename = "remainingEstimate", default, skip_serializing_if = "Option::is_none")]
+    pub remaining_estimate: Option<String>,
+    /// The remaining estimate of time needed for this issue in seconds.
+    #[serde(rename = "remainingEstimateSeconds", default, skip_serializing_if = "Option::is_none")]
+    pub remaining_estimate_seconds: Option<i64>,
+    /// Time worked on this issue in readable format.
+    #[serde(rename = "timeSpent", default, skip_serializing_if = "Option::is_none")]
+    pub time_spent: Option<String>,
+    /// Time worked on this issue in seconds.
+    #[serde(rename = "timeSpentSeconds", default, skip_serializing_if = "Option::is_none")]
+    pub time_spent_seconds: Option<i64>,
+}

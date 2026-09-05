@@ -1,0 +1,67 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum GetConfigurationLocationType {
+        Project => "project",
+        User => "user",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct GetConfigurationLocation {
+    #[serde(rename = "projectKeyOrId", default, skip_serializing_if = "Option::is_none")]
+    pub project_key_or_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<GetConfigurationLocationType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct GetConfigurationRanking {
+    #[serde(rename = "rankCustomFieldId", default, skip_serializing_if = "Option::is_none")]
+    pub rank_custom_field_id: Option<i64>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct GetConfigurationSubQuery {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub query: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct GetConfiguration {
+    #[serde(rename = "columnConfig", default, skip_serializing_if = "Option::is_none")]
+    pub column_config: Option<ColumnConfig>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub estimation: Option<EstimationConfig>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub filter: Option<Relation>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub location: Option<GetConfigurationLocation>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ranking: Option<GetConfigurationRanking>,
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+    #[serde(rename = "subQuery", default, skip_serializing_if = "Option::is_none")]
+    pub sub_query: Option<GetConfigurationSubQuery>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<String>,
+}

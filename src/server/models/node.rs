@@ -1,0 +1,34 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum NodeState {
+        Active => "ACTIVE",
+        Passive => "PASSIVE",
+        Activating => "ACTIVATING",
+        Passivating => "PASSIVATING",
+        Offline => "OFFLINE",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct Node {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub alive: Option<bool>,
+    #[serde(rename = "cacheListenerPort", default, skip_serializing_if = "Option::is_none")]
+    pub cache_listener_port: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ip: Option<String>,
+    #[serde(rename = "lastStateChangeTimestamp", default, skip_serializing_if = "Option::is_none")]
+    pub last_state_change_timestamp: Option<i64>,
+    #[serde(rename = "nodeBuildNumber", default, skip_serializing_if = "Option::is_none")]
+    pub node_build_number: Option<i64>,
+    #[serde(rename = "nodeId", default, skip_serializing_if = "Option::is_none")]
+    pub node_id: Option<String>,
+    #[serde(rename = "nodeVersion", default, skip_serializing_if = "Option::is_none")]
+    pub node_version: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub state: Option<NodeState>,
+}

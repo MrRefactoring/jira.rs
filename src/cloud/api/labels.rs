@@ -1,0 +1,74 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The Labels operations.
+pub struct LabelsService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> LabelsService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of labels.
+    pub fn get_all_labels(&self) -> GetAllLabelsRequest<'a> {
+        GetAllLabelsRequest::new(self.client)
+    }
+}
+
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of labels.
+#[derive(Clone)]
+pub struct GetAllLabelsRequest<'a> {
+    client: &'a crate::core::Client,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
+}
+
+impl<'a> GetAllLabelsRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, start_at: None, max_results: None }
+    }
+
+    /// The index of the first item to return in a page of results (page offset).
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return per page.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/label".to_owned());
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<PageString> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

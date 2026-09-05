@@ -1,0 +1,13 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Details of webhooks to register.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct WebhookRegistrationDetails {
+    /// The URL that specifies where to send the webhooks. This URL must use the same base URL as the Connect app. Only a single URL per app is allowed to be registered.
+    pub url: String,
+    /// A list of webhooks.
+    pub webhooks: Vec<WebhookDetails>,
+}

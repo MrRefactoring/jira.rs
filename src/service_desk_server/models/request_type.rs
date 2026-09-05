@@ -1,0 +1,34 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum RequestTypeRestrictionStatus {
+        Open => "OPEN",
+        Restricted => "RESTRICTED",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct RequestType {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(rename = "_links", default, skip_serializing_if = "Option::is_none")]
+    pub links: Option<SelfLink>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "helpText", default, skip_serializing_if = "Option::is_none")]
+    pub help_text: Option<String>,
+    #[serde(rename = "serviceDeskId", default, skip_serializing_if = "Option::is_none")]
+    pub service_desk_id: Option<String>,
+    #[serde(rename = "groupIds", default, skip_serializing_if = "Option::is_none")]
+    pub group_ids: Option<Vec<String>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub icon: Option<RequestTypeIcon>,
+    #[serde(rename = "restrictionStatus", default, skip_serializing_if = "Option::is_none")]
+    pub restriction_status: Option<RequestTypeRestrictionStatus>,
+}

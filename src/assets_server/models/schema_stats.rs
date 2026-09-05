@@ -1,0 +1,36 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct SchemaStats {
+    #[serde(rename = "schemaId", default, skip_serializing_if = "Option::is_none")]
+    pub schema_id: Option<i64>,
+    #[serde(rename = "totalObjectCount", default, skip_serializing_if = "Option::is_none")]
+    pub total_object_count: Option<i64>,
+    #[serde(rename = "totalObjectTypeCount", default, skip_serializing_if = "Option::is_none")]
+    pub total_object_type_count: Option<i64>,
+    #[serde(rename = "totalAttributeCount", default, skip_serializing_if = "Option::is_none")]
+    pub total_attribute_count: Option<i64>,
+    #[serde(rename = "numberOfObjectsLinkedToIssues", default, skip_serializing_if = "Option::is_none")]
+    pub number_of_objects_linked_to_issues: Option<i64>,
+    #[serde(rename = "numberOfObjectsWithUniqueAttribute", default, skip_serializing_if = "Option::is_none")]
+    pub number_of_objects_with_unique_attribute: Option<i64>,
+    #[serde(rename = "numberOfArchivedObjects", default, skip_serializing_if = "Option::is_none")]
+    pub number_of_archived_objects: Option<i64>,
+    #[serde(rename = "totalAttributeValueCount", default, skip_serializing_if = "Option::is_none")]
+    pub total_attribute_value_count: Option<i64>,
+    #[serde(rename = "numberOfAutomationRules", default, skip_serializing_if = "Option::is_none")]
+    pub number_of_automation_rules: Option<i64>,
+    #[serde(rename = "numberOfAutomationIfs", default, skip_serializing_if = "Option::is_none")]
+    pub number_of_automation_ifs: Option<i64>,
+    #[serde(rename = "numberOfAutomationWhens", default, skip_serializing_if = "Option::is_none")]
+    pub number_of_automation_whens: Option<i64>,
+    #[serde(rename = "numberOfAutomationThens", default, skip_serializing_if = "Option::is_none")]
+    pub number_of_automation_thens: Option<i64>,
+    #[serde(rename = "maxNumberOfObjectsByObjectType", default, skip_serializing_if = "Option::is_none")]
+    pub max_number_of_objects_by_object_type: Option<i64>,
+    #[serde(rename = "averageNumberOfObjectsByObjectType", default, skip_serializing_if = "Option::is_none")]
+    pub average_number_of_objects_by_object_type: Option<i64>,
+}

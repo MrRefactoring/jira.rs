@@ -1,0 +1,18 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct CreateIndex {
+    #[serde(rename = "entityName", default, skip_serializing_if = "Option::is_none")]
+    pub entity_name: Option<String>,
+    #[serde(rename = "fieldNameToColumnName", default, skip_serializing_if = "Option::is_none")]
+    pub field_name_to_column_name: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(rename = "indexName", default, skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    #[serde(rename = "tableName", default, skip_serializing_if = "Option::is_none")]
+    pub table_name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub unique: Option<bool>,
+}

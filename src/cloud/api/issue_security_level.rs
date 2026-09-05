@@ -1,0 +1,222 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum GetIssueSecurityLevelMembersRequestExpandValue {
+        All => "all",
+        Field => "field",
+        Group => "group",
+        ProjectRole => "projectRole",
+        User => "user",
+    }
+}
+
+/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+///
+///  *  `all` Returns all expandable information.
+///  *  `field` Returns information about the custom field granted the permission.
+///  *  `group` Returns information about the group that is granted the permission.
+///  *  `projectRole` Returns information about the project role granted the permission.
+///  *  `user` Returns information about the user who is granted the permission.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetIssueSecurityLevelMembersRequestExpand {
+    One(GetIssueSecurityLevelMembersRequestExpandValue),
+    Many(Vec<GetIssueSecurityLevelMembersRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+/// The IssueSecurityLevel operations.
+pub struct IssueSecurityLevelService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> IssueSecurityLevelService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns issue security level members.
+    ///
+    /// Only issue security level members in context of classic projects are returned.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn get_issue_security_level_members(
+        &self,
+        issue_security_scheme_id: i64,
+    ) -> GetIssueSecurityLevelMembersRequest<'a> {
+        GetIssueSecurityLevelMembersRequest::new(self.client, issue_security_scheme_id)
+    }
+
+    /// Returns details of an issue security level.
+    ///
+    /// Use [Get issue security scheme](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-security-schemes/#api-rest-api-3-issuesecurityschemes-id-get) to obtain the IDs of issue security levels associated with the issue security scheme.
+    ///
+    /// This operation can be accessed anonymously.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+    pub fn get_issue_security_level(&self, id: impl Into<String>) -> GetIssueSecurityLevelRequest<'a> {
+        GetIssueSecurityLevelRequest::new(self.client, id)
+    }
+}
+
+/// Returns issue security level members.
+///
+/// Only issue security level members in context of classic projects are returned.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct GetIssueSecurityLevelMembersRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_security_scheme_id: i64,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
+    issue_security_level_id: Option<Vec<String>>,
+    expand: Option<GetIssueSecurityLevelMembersRequestExpand>,
+}
+
+impl<'a> GetIssueSecurityLevelMembersRequest<'a> {
+    fn new(client: &'a crate::core::Client, issue_security_scheme_id: i64) -> Self {
+        Self {
+            client,
+            issue_security_scheme_id,
+            start_at: None,
+            max_results: None,
+            issue_security_level_id: None,
+            expand: None,
+        }
+    }
+
+    /// The index of the first item to return in a page of results (page offset).
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return per page.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// The list of issue security level IDs. To include multiple issue security levels separate IDs with ampersand: `issueSecurityLevelId=10000&issueSecurityLevelId=10001`.
+    #[must_use]
+    pub fn issue_security_level_id(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.issue_security_level_id = Some(value.into_iter().map(Into::into).collect());
+
+        self
+    }
+
+    /// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+    ///
+    ///  *  `all` Returns all expandable information.
+    ///  *  `field` Returns information about the custom field granted the permission.
+    ///  *  `group` Returns information about the group that is granted the permission.
+    ///  *  `projectRole` Returns information about the project role granted the permission.
+    ///  *  `user` Returns information about the user who is granted the permission.
+    #[must_use]
+    pub fn expand(mut self, value: GetIssueSecurityLevelMembersRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/issuesecurityschemes/{}/members", self.issue_security_scheme_id),
+        );
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.issue_security_level_id {
+            config.query.push(("issueSecurityLevelId".to_owned(), crate::core::QueryValue::List(value.clone())));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<IssueSecurityLevelMember>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start_at = Some(offset);
+
+            request.send()
+        })
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Page<IssueSecurityLevelMember>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns details of an issue security level.
+///
+/// Use [Get issue security scheme](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-security-schemes/#api-rest-api-3-issuesecurityschemes-id-get) to obtain the IDs of issue security levels associated with the issue security scheme.
+///
+/// This operation can be accessed anonymously.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+#[derive(Clone)]
+pub struct GetIssueSecurityLevelRequest<'a> {
+    client: &'a crate::core::Client,
+    id: String,
+}
+
+impl<'a> GetIssueSecurityLevelRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
+        Self { client, id: id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/securitylevel/{}", crate::core::encode_path_segment(&self.id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<SecurityLevel> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

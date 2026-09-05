@@ -1,0 +1,366 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The ObjectTypes operations.
+pub struct ObjectTypesService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> ObjectTypesService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Find an object type by id
+    pub fn load_object_type(&self, id: impl Into<String>) -> LoadObjectTypeRequest<'a> {
+        LoadObjectTypeRequest::new(self.client, id)
+    }
+
+    /// Update an existing object type
+    pub fn update_object_type(
+        &self,
+        id: impl Into<String>,
+        object_type_update: ObjectTypeUpdate,
+    ) -> UpdateObjectTypeRequest<'a> {
+        UpdateObjectTypeRequest::new(self.client, id, object_type_update)
+    }
+
+    /// Delete an object type
+    pub fn delete_object_type(&self, id: impl Into<String>) -> DeleteObjectTypeRequest<'a> {
+        DeleteObjectTypeRequest::new(self.client, id)
+    }
+
+    /// Find all attributes for this object type
+    pub fn find_object_type_attributes(&self, id: impl Into<String>) -> FindObjectTypeAttributesRequest<'a> {
+        FindObjectTypeAttributesRequest::new(self.client, id)
+    }
+
+    /// Change position of this object type
+    pub fn change_object_type_position(
+        &self,
+        id: impl Into<String>,
+        object_type_position: ObjectTypePosition,
+    ) -> ChangeObjectTypePositionRequest<'a> {
+        ChangeObjectTypePositionRequest::new(self.client, id, object_type_position)
+    }
+
+    /// Create a new object type
+    pub fn create_object_type(&self, object_type_in: ObjectTypeIn) -> CreateObjectTypeRequest<'a> {
+        CreateObjectTypeRequest::new(self.client, object_type_in)
+    }
+}
+
+/// Find an object type by id
+#[derive(Clone)]
+pub struct LoadObjectTypeRequest<'a> {
+    client: &'a crate::core::Client,
+    id: String,
+}
+
+impl<'a> LoadObjectTypeRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
+        Self { client, id: id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/objecttype/{}", crate::core::encode_path_segment(&self.id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ObjectType> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Update an existing object type
+#[derive(Clone)]
+pub struct UpdateObjectTypeRequest<'a> {
+    client: &'a crate::core::Client,
+    id: String,
+    object_type_update: ObjectTypeUpdate,
+}
+
+impl<'a> UpdateObjectTypeRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: impl Into<String>, object_type_update: ObjectTypeUpdate) -> Self {
+        Self { client, id: id.into(), object_type_update }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/objecttype/{}", crate::core::encode_path_segment(&self.id)),
+        );
+
+        let body = match serde_json::to_value(&self.object_type_update)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ObjectType> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Delete an object type
+#[derive(Clone)]
+pub struct DeleteObjectTypeRequest<'a> {
+    client: &'a crate::core::Client,
+    id: String,
+}
+
+impl<'a> DeleteObjectTypeRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
+        Self { client, id: id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/objecttype/{}", crate::core::encode_path_segment(&self.id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ObjectType> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Find all attributes for this object type
+#[derive(Clone)]
+pub struct FindObjectTypeAttributesRequest<'a> {
+    client: &'a crate::core::Client,
+    only_value_editable: Option<bool>,
+    order_by_name: Option<bool>,
+    query: Option<String>,
+    include_values_exist: Option<bool>,
+    exclude_parent_attributes: Option<bool>,
+    include_children: Option<bool>,
+    order_by_required: Option<bool>,
+    id: String,
+}
+
+impl<'a> FindObjectTypeAttributesRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
+        Self {
+            client,
+            id: id.into(),
+            only_value_editable: None,
+            order_by_name: None,
+            query: None,
+            include_values_exist: None,
+            exclude_parent_attributes: None,
+            include_children: None,
+            order_by_required: None,
+        }
+    }
+
+    #[must_use]
+    pub fn only_value_editable(mut self, value: bool) -> Self {
+        self.only_value_editable = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn order_by_name(mut self, value: bool) -> Self {
+        self.order_by_name = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn query(mut self, value: impl Into<String>) -> Self {
+        self.query = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn include_values_exist(mut self, value: bool) -> Self {
+        self.include_values_exist = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn exclude_parent_attributes(mut self, value: bool) -> Self {
+        self.exclude_parent_attributes = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn include_children(mut self, value: bool) -> Self {
+        self.include_children = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn order_by_required(mut self, value: bool) -> Self {
+        self.order_by_required = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/objecttype/{}/attributes", crate::core::encode_path_segment(&self.id)),
+        );
+
+        if let Some(value) = &self.only_value_editable {
+            config.query.push(("onlyValueEditable".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.order_by_name {
+            config.query.push(("orderByName".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.query {
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.include_values_exist {
+            config.query.push(("includeValuesExist".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.exclude_parent_attributes {
+            config
+                .query
+                .push(("excludeParentAttributes".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.include_children {
+            config.query.push(("includeChildren".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.order_by_required {
+            config.query.push(("orderByRequired".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Vec<ObjectTypeAttribute>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Change position of this object type
+#[derive(Clone)]
+pub struct ChangeObjectTypePositionRequest<'a> {
+    client: &'a crate::core::Client,
+    id: String,
+    object_type_position: ObjectTypePosition,
+}
+
+impl<'a> ChangeObjectTypePositionRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: impl Into<String>, object_type_position: ObjectTypePosition) -> Self {
+        Self { client, id: id.into(), object_type_position }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!("/objecttype/{}/position", crate::core::encode_path_segment(&self.id)),
+        );
+
+        let body = match serde_json::to_value(&self.object_type_position)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ObjectType> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Create a new object type
+#[derive(Clone)]
+pub struct CreateObjectTypeRequest<'a> {
+    client: &'a crate::core::Client,
+    object_type_in: ObjectTypeIn,
+}
+
+impl<'a> CreateObjectTypeRequest<'a> {
+    fn new(client: &'a crate::core::Client, object_type_in: ObjectTypeIn) -> Self {
+        Self { client, object_type_in }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/objecttype/create".to_owned());
+
+        let body = match serde_json::to_value(&self.object_type_in)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ObjectType> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

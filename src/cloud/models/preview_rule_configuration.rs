@@ -1,0 +1,18 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Rule configuration for workflow transitions.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct PreviewRuleConfiguration {
+    /// A transient identifier for this element, unique within this response but not guaranteed to stable across requests.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// The parameters of the rule.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// The rule key of the rule.
+    #[serde(rename = "ruleKey", default, skip_serializing_if = "Option::is_none")]
+    pub rule_key: Option<String>,
+}

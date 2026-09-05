@@ -1,0 +1,95 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum SprintState {
+        Future => "future",
+        Active => "active",
+        Closed => "closed",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct Sprint {
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "completeDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub complete_date: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
+    #[serde(
+        rename = "completeDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
+    pub complete_date: Option<String>,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "createdDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created_date: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
+    #[serde(
+        rename = "createdDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
+    pub created_date: Option<String>,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "endDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub end_date: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
+    #[serde(
+        rename = "endDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
+    pub end_date: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub goal: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "originBoardId", default, skip_serializing_if = "Option::is_none")]
+    pub origin_board_id: Option<i64>,
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "startDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub start_date: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
+    #[serde(
+        rename = "startDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
+    pub start_date: Option<String>,
+    pub state: SprintState,
+}

@@ -1,0 +1,53 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ProductLicenseTOLocale {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub country: Option<String>,
+    #[serde(rename = "displayCountry", default, skip_serializing_if = "Option::is_none")]
+    pub display_country: Option<String>,
+    #[serde(rename = "displayLanguage", default, skip_serializing_if = "Option::is_none")]
+    pub display_language: Option<String>,
+    #[serde(rename = "displayName", default, skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    #[serde(rename = "displayScript", default, skip_serializing_if = "Option::is_none")]
+    pub display_script: Option<String>,
+    #[serde(rename = "displayVariant", default, skip_serializing_if = "Option::is_none")]
+    pub display_variant: Option<String>,
+    #[serde(rename = "extensionKeys", default, skip_serializing_if = "Option::is_none")]
+    pub extension_keys: Option<Vec<String>>,
+    #[serde(rename = "iso3Country", default, skip_serializing_if = "Option::is_none")]
+    pub iso3_country: Option<String>,
+    #[serde(rename = "iso3Language", default, skip_serializing_if = "Option::is_none")]
+    pub iso3_language: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub language: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub script: Option<String>,
+    #[serde(rename = "unicodeLocaleAttributes", default, skip_serializing_if = "Option::is_none")]
+    pub unicode_locale_attributes: Option<Vec<String>>,
+    #[serde(rename = "unicodeLocaleKeys", default, skip_serializing_if = "Option::is_none")]
+    pub unicode_locale_keys: Option<Vec<String>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub variant: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ProductLicenseTO {
+    #[serde(rename = "isUnlimitedNumberOfUsers", default, skip_serializing_if = "Option::is_none")]
+    pub is_unlimited_number_of_users: Option<bool>,
+    #[serde(rename = "licenseKey", default, skip_serializing_if = "Option::is_none")]
+    pub license_key: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub locale: Option<ProductLicenseTOLocale>,
+    #[serde(rename = "numberOfUsers", default, skip_serializing_if = "Option::is_none")]
+    pub number_of_users: Option<i64>,
+    #[serde(rename = "productDisplayName", default, skip_serializing_if = "Option::is_none")]
+    pub product_display_name: Option<String>,
+    #[serde(rename = "productKey", default, skip_serializing_if = "Option::is_none")]
+    pub product_key: Option<String>,
+}

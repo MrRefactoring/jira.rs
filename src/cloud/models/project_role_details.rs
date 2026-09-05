@@ -1,0 +1,48 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The type of the project role. This is "DEFAULT" or "GUEST\_ROLE".
+    pub enum ProjectRoleDetailsType {
+        Default => "DEFAULT",
+        GuestRole => "GUEST_ROLE",
+        AiAgentRole => "AI_AGENT_ROLE",
+    }
+}
+
+/// Details about a project role.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ProjectRoleDetails {
+    /// Whether this role is the admin role for the project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub admin: Option<bool>,
+    /// Whether this role is the default role for the project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub default: Option<bool>,
+    /// The description of the project role.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The ID of the project role.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    /// The name of the project role.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// Whether the roles are configurable for this project.
+    #[serde(rename = "roleConfigurable", default, skip_serializing_if = "Option::is_none")]
+    pub role_configurable: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub scope: Option<Scope>,
+    /// The URL the project role details.
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+    /// The translated name of the project role.
+    #[serde(rename = "translatedName", default, skip_serializing_if = "Option::is_none")]
+    pub translated_name: Option<String>,
+    /// The type of the project role. This is "DEFAULT" or "GUEST\_ROLE".
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<ProjectRoleDetailsType>,
+}

@@ -1,0 +1,20 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The permission holder type. This is "Group" or "AccountId".
+    pub enum GetPermissionHolderResponseType {
+        Group => "Group",
+        AccountId => "AccountId",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct GetPermissionHolderResponse {
+    /// The permission holder type. This is "Group" or "AccountId".
+    pub r#type: GetPermissionHolderResponseType,
+    /// The permission holder value. This is a group name if the type is "Group" or an account ID if the type is "AccountId".
+    pub value: String,
+}

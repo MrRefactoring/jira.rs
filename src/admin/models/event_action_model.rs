@@ -1,0 +1,32 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Attributes of this object.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct EventActionModelAttributes {
+    /// Display name of the event action.
+    #[serde(rename = "displayName")]
+    pub display_name: String,
+    /// Display name of the event action group.
+    #[serde(rename = "groupDisplayName", default, skip_serializing_if = "Option::is_none")]
+    pub group_display_name: Option<String>,
+    #[serde(rename = "groupDisplayNames", default, skip_serializing_if = "Option::is_none")]
+    pub group_display_names: Option<Vec<String>>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct EventActionModel {
+    /// Unique identifier of the event action object.
+    pub id: String,
+    /// Type name of this object.
+    pub r#type: String,
+    /// Attributes of this object.
+    pub attributes: EventActionModelAttributes,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub links: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub message: Option<serde_json::Value>,
+}

@@ -1,0 +1,25 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct MultipartFile {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub bytes: Option<Vec<String>>,
+    #[serde(rename = "contentType", default, skip_serializing_if = "Option::is_none")]
+    pub content_type: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub empty: Option<bool>,
+    #[serde(rename = "inputStream", default, skip_serializing_if = "Option::is_none")]
+    pub input_stream: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "originalFilename", default, skip_serializing_if = "Option::is_none")]
+    pub original_filename: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resource: Option<Resource>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub size: Option<i64>,
+}

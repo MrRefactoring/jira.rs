@@ -1,0 +1,55 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The name of the resource type of the resource. This is a read-only and  case-sensitive field.
+    pub enum ScimMetadataResourceType {
+        User => "USER",
+        Group => "GROUP",
+        Directory => "DIRECTORY",
+    }
+}
+
+/// SCIM metadata
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ScimMetadata {
+    /// The name of the resource type of the resource. This is a read-only and  case-sensitive field.
+    #[serde(rename = "resourceType", default, skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<ScimMetadataResourceType>,
+    /// The URI of the resource being returned. This is a read-only field.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub location: Option<String>,
+    /// The most recent DateTime that the details of this resource were updated. This  is a read-only field.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastModified",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_modified: Option<chrono::DateTime<chrono::Utc>>,
+    /// The most recent DateTime that the details of this resource were updated. This  is a read-only field.
+    #[cfg(not(feature = "chrono"))]
+    #[serde(
+        rename = "lastModified",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
+    pub last_modified: Option<String>,
+    /// The DateTime that the resource was added to Atlassian SCIM service. This is a read-only field.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created: Option<chrono::DateTime<chrono::Utc>>,
+    /// The DateTime that the resource was added to Atlassian SCIM service. This is a read-only field.
+    #[cfg(not(feature = "chrono"))]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
+    pub created: Option<String>,
+}

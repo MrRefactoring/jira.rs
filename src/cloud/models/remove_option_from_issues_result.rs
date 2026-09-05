@@ -1,0 +1,17 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct RemoveOptionFromIssuesResult {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub errors: Option<SimpleErrorCollection>,
+    /// The IDs of the modified issues.
+    #[serde(rename = "modifiedIssues", default, skip_serializing_if = "Option::is_none")]
+    pub modified_issues: Option<Vec<i64>>,
+    /// The IDs of the unchanged issues, those issues where errors prevent modification.
+    #[serde(rename = "unmodifiedIssues", default, skip_serializing_if = "Option::is_none")]
+    pub unmodified_issues: Option<Vec<i64>>,
+}

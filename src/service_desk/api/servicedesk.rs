@@ -1,0 +1,1153 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The Servicedesk operations.
+pub struct ServicedeskService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> ServicedeskService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// This method returns all the service desks in the Jira Service Management instance that the user has permission to access. Use this method where you need a list of service desks or need to locate a service desk by name or keyword.
+    ///
+    /// **Note:** This method will be slow if the instance has hundreds of service desks. If you want to fetch a single service desk by its ID, use [/rest/servicedeskapi/servicedesk/{serviceDeskId}](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-rest-servicedeskapi-servicedesk-servicedeskid-get) instead.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Any
+    pub fn get_service_desks(&self) -> GetServiceDesksRequest<'a> {
+        GetServiceDesksRequest::new(self.client)
+    }
+
+    /// This method returns a service desk. Use this method to get service desk details whenever your application component is passed a service desk ID but needs to display other service desk details.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the Service Desk. For example, being the Service Desk's Administrator or one of its Agents or Users.
+    pub fn get_service_desk_by_id(&self, service_desk_id: impl Into<String>) -> GetServiceDeskByIdRequest<'a> {
+        GetServiceDeskByIdRequest::new(self.client, service_desk_id)
+    }
+
+    /// This method adds one or more temporary attachments to a service desk, which can then be permanently attached to a customer request using [servicedeskapi/request/{issueIdOrKey}/attachment](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-request-issueIdOrKey-attachment-post).
+    ///
+    /// **Note**: It is possible for a service desk administrator to turn off the ability to add attachments to a service desk.
+    ///
+    /// This method expects a multipart request. The media-type multipart/form-data is defined in RFC 1867. Most client libraries have classes that make dealing with multipart posts simple. For instance, in Java the Apache HTTP Components library provides [MultiPartEntity](http://hc.apache.org/httpcomponents-client-ga/httpmime/apidocs/org/apache/http/entity/mime/MultipartEntity.html).
+    ///
+    /// Because this method accepts multipart/form-data, it has XSRF protection on it. This means you must submit a header of X-Atlassian-Token: no-check with the request or it will be blocked.
+    ///
+    /// The name of the multipart/form-data parameter that contains the attachments must be `file`.
+    ///
+    /// For example, to upload a file called `myfile.txt` in the Service Desk with ID 10001 use
+    ///
+    ///    curl -D- -u customer:customer -X POST -H "X-ExperimentalApi: opt-in" -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt" <https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10001/attachTemporaryFile>
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to add attachments in this Service Desk.
+    pub fn attach_temporary_file(
+        &self,
+        service_desk_id: impl Into<String>,
+        body: impl IntoIterator<Item = MultipartFile>,
+    ) -> AttachTemporaryFileRequest<'a> {
+        AttachTemporaryFileRequest::new(self.client, service_desk_id, body)
+    }
+
+    /// Adds one or more customers to a service desk. If any of the passed customers are associated with the service desk, no changes will be made for those customers and the resource returns a 204 success code.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Service desk administrator
+    pub fn add_customers(
+        &self,
+        service_desk_id: impl Into<String>,
+        service_desk_customer: ServiceDeskCustomer,
+    ) -> AddCustomersRequest<'a> {
+        AddCustomersRequest::new(self.client, service_desk_id, service_desk_customer)
+    }
+
+    /// Adds one or more customers to a service desk on behalf of jsd-nutmeg.
+    ///
+    /// This endpoint is restricted to jsd-nutmeg via ASAP authentication. It provides the same capability as the public `POST /servicedeskapi/servicedesk/{serviceDeskId}/customer` endpoint, but does not require a User Context Token (UCT) or Connect app user — authorization is enforced entirely via the ASAP token.
+    ///
+    /// No user permission checks are performed; `null` is passed as the acting user to bypass the permission check in the underlying service.
+    ///
+    /// If any of the passed customers are already associated with the service desk, no changes will be made for those customers and the resource returns a 204 success code.
+    pub fn add_customers_skipping_permission_check(
+        &self,
+        service_desk_id: impl Into<String>,
+        service_desk_customer: ServiceDeskCustomer,
+    ) -> AddCustomersSkippingPermissionCheckRequest<'a> {
+        AddCustomersSkippingPermissionCheckRequest::new(self.client, service_desk_id, service_desk_customer)
+    }
+
+    /// Returns articles which match the given query and belong to the knowledge base linked to the service desk.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the service desk.
+    pub fn get_service_desk_articles(
+        &self,
+        service_desk_id: impl Into<String>,
+        query: impl Into<String>,
+    ) -> GetServiceDeskArticlesRequest<'a> {
+        GetServiceDeskArticlesRequest::new(self.client, service_desk_id, query)
+    }
+
+    /// This method returns the queues in a service desk. To include a customer request count for each queue (in the `issueCount` field) in the response, set the query parameter `includeCount` to true (its default is false).
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: service desk's Agent.
+    pub fn get_queues(&self, service_desk_id: impl Into<String>) -> GetQueuesRequest<'a> {
+        GetQueuesRequest::new(self.client, service_desk_id)
+    }
+
+    /// This method returns a specific queues in a service desk. To include a customer request count for the queue (in the `issueCount` field) in the response, set the query parameter `includeCount` to true (its default is false).
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: service desk's Agent.
+    pub fn get_queue(&self, service_desk_id: impl Into<String>, queue_id: i64) -> GetQueueRequest<'a> {
+        GetQueueRequest::new(self.client, service_desk_id, queue_id)
+    }
+
+    /// This method returns the customer requests in a queue. Only fields that the queue is configured to show are returned. For example, if a queue is configured to show description and due date, then only those two fields are returned for each customer request in the queue.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Service desk's agent.
+    pub fn get_issues_in_queue(
+        &self,
+        service_desk_id: impl Into<String>,
+        queue_id: i64,
+    ) -> GetIssuesInQueueRequest<'a> {
+        GetIssuesInQueueRequest::new(self.client, service_desk_id, queue_id)
+    }
+
+    /// This method returns all customer request types from a service desk. There are two parameters for filtering the returned list:
+    ///
+    ///  *  `groupId` which filters the results to items in the customer request type group.
+    ///  *  `searchQuery` which is matched against request types' `name` or `description`. For example, the strings "Install", "Inst", "Equi", or "Equipment" will match a request type with the *name* "Equipment Installation Request".
+    ///
+    /// **Note:** This API by default will filter out request types hidden in the portal (i.e. request types without groups and request types where a user doesn't have permission) when `searchQuery` is provided, unless `includeHiddenRequestTypesInSearch` is set to true. Restricted request types will not be returned for those who aren't admins.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the service desk.
+    pub fn get_request_types(&self, service_desk_id: impl Into<String>) -> GetRequestTypesRequest<'a> {
+        GetRequestTypesRequest::new(self.client, service_desk_id)
+    }
+
+    /// This method returns a customer request type from a service desk.
+    ///
+    /// This operation can be accessed anonymously.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the service desk.
+    pub fn get_request_type_by_id(
+        &self,
+        service_desk_id: impl Into<String>,
+        request_type_id: impl Into<String>,
+    ) -> GetRequestTypeByIdRequest<'a> {
+        GetRequestTypeByIdRequest::new(self.client, service_desk_id, request_type_id)
+    }
+
+    /// This method returns the fields for a service desk's customer request type.
+    ///
+    /// Also, the following information about the user's permissions for the request type is returned:
+    ///
+    ///  *  `canRaiseOnBehalfOf` returns `true` if the user has permission to raise customer requests on behalf of other customers. Otherwise, returns `false`.
+    ///  *  `canAddRequestParticipants` returns `true` if the user can add customer request participants. Otherwise, returns `false`.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the Service Desk. However, hidden fields would be visible to only Service desk's Administrator.
+    pub fn get_request_type_fields(
+        &self,
+        service_desk_id: impl Into<String>,
+        request_type_id: i64,
+    ) -> GetRequestTypeFieldsRequest<'a> {
+        GetRequestTypeFieldsRequest::new(self.client, service_desk_id, request_type_id)
+    }
+
+    /// This method returns a service desk's customer request type groups. Jira Service Management administrators can arrange the customer request type groups in an arbitrary order for display on the customer portal; the groups are returned in this order.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the service desk.
+    pub fn get_request_type_groups(&self, service_desk_id: impl Into<String>) -> GetRequestTypeGroupsRequest<'a> {
+        GetRequestTypeGroupsRequest::new(self.client, service_desk_id)
+    }
+}
+
+/// This method returns all the service desks in the Jira Service Management instance that the user has permission to access. Use this method where you need a list of service desks or need to locate a service desk by name or keyword.
+///
+/// **Note:** This method will be slow if the instance has hundreds of service desks. If you want to fetch a single service desk by its ID, use [/rest/servicedeskapi/servicedesk/{serviceDeskId}](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-rest-servicedeskapi-servicedesk-servicedeskid-get) instead.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Any
+#[derive(Clone)]
+pub struct GetServiceDesksRequest<'a> {
+    client: &'a crate::core::Client,
+    start: Option<i64>,
+    limit: Option<i64>,
+}
+
+impl<'a> GetServiceDesksRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, start: None, limit: None }
+    }
+
+    /// The starting index of the returned objects. Base index: 0. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
+    #[must_use]
+    pub fn start(mut self, value: i64) -> Self {
+        self.start = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return per page. Default: 50. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
+    #[must_use]
+    pub fn limit(mut self, value: i64) -> Self {
+        self.limit = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/servicedeskapi/servicedesk".to_owned());
+
+        if let Some(value) = &self.start {
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.limit {
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<ServiceDesk>> {
+        let first = self.start.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start = Some(offset);
+
+            request.send()
+        })
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Page<ServiceDesk>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// This method returns a service desk. Use this method to get service desk details whenever your application component is passed a service desk ID but needs to display other service desk details.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the Service Desk. For example, being the Service Desk's Administrator or one of its Agents or Users.
+#[derive(Clone)]
+pub struct GetServiceDeskByIdRequest<'a> {
+    client: &'a crate::core::Client,
+    service_desk_id: String,
+}
+
+impl<'a> GetServiceDeskByIdRequest<'a> {
+    fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
+        Self { client, service_desk_id: service_desk_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/servicedeskapi/servicedesk/{}", crate::core::encode_path_segment(&self.service_desk_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ServiceDesk> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// This method adds one or more temporary attachments to a service desk, which can then be permanently attached to a customer request using [servicedeskapi/request/{issueIdOrKey}/attachment](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-request-issueIdOrKey-attachment-post).
+///
+/// **Note**: It is possible for a service desk administrator to turn off the ability to add attachments to a service desk.
+///
+/// This method expects a multipart request. The media-type multipart/form-data is defined in RFC 1867. Most client libraries have classes that make dealing with multipart posts simple. For instance, in Java the Apache HTTP Components library provides [MultiPartEntity](http://hc.apache.org/httpcomponents-client-ga/httpmime/apidocs/org/apache/http/entity/mime/MultipartEntity.html).
+///
+/// Because this method accepts multipart/form-data, it has XSRF protection on it. This means you must submit a header of X-Atlassian-Token: no-check with the request or it will be blocked.
+///
+/// The name of the multipart/form-data parameter that contains the attachments must be `file`.
+///
+/// For example, to upload a file called `myfile.txt` in the Service Desk with ID 10001 use
+///
+///    curl -D- -u customer:customer -X POST -H "X-ExperimentalApi: opt-in" -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt" <https://your-domain.atlassian.net/rest/servicedeskapi/servicedesk/10001/attachTemporaryFile>
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to add attachments in this Service Desk.
+#[derive(Clone)]
+pub struct AttachTemporaryFileRequest<'a> {
+    client: &'a crate::core::Client,
+    service_desk_id: String,
+    body: Vec<MultipartFile>,
+}
+
+impl<'a> AttachTemporaryFileRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        service_desk_id: impl Into<String>,
+        body: impl IntoIterator<Item = MultipartFile>,
+    ) -> Self {
+        Self { client, service_desk_id: service_desk_id.into(), body: body.into_iter().collect() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/attachTemporaryFile",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<AttachTemporaryFile> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Adds one or more customers to a service desk. If any of the passed customers are associated with the service desk, no changes will be made for those customers and the resource returns a 204 success code.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Service desk administrator
+#[derive(Clone)]
+pub struct AddCustomersRequest<'a> {
+    client: &'a crate::core::Client,
+    service_desk_id: String,
+    service_desk_customer: ServiceDeskCustomer,
+}
+
+impl<'a> AddCustomersRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        service_desk_id: impl Into<String>,
+        service_desk_customer: ServiceDeskCustomer,
+    ) -> Self {
+        Self { client, service_desk_id: service_desk_id.into(), service_desk_customer }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/customer",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
+        );
+
+        let body = match serde_json::to_value(&self.service_desk_customer)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Adds one or more customers to a service desk on behalf of jsd-nutmeg.
+///
+/// This endpoint is restricted to jsd-nutmeg via ASAP authentication. It provides the same capability as the public `POST /servicedeskapi/servicedesk/{serviceDeskId}/customer` endpoint, but does not require a User Context Token (UCT) or Connect app user — authorization is enforced entirely via the ASAP token.
+///
+/// No user permission checks are performed; `null` is passed as the acting user to bypass the permission check in the underlying service.
+///
+/// If any of the passed customers are already associated with the service desk, no changes will be made for those customers and the resource returns a 204 success code.
+#[derive(Clone)]
+pub struct AddCustomersSkippingPermissionCheckRequest<'a> {
+    client: &'a crate::core::Client,
+    service_desk_id: String,
+    service_desk_customer: ServiceDeskCustomer,
+}
+
+impl<'a> AddCustomersSkippingPermissionCheckRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        service_desk_id: impl Into<String>,
+        service_desk_customer: ServiceDeskCustomer,
+    ) -> Self {
+        Self { client, service_desk_id: service_desk_id.into(), service_desk_customer }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/customer/skip-permission-check",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
+        );
+
+        let body = match serde_json::to_value(&self.service_desk_customer)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns articles which match the given query and belong to the knowledge base linked to the service desk.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the service desk.
+#[derive(Clone)]
+pub struct GetServiceDeskArticlesRequest<'a> {
+    client: &'a crate::core::Client,
+    service_desk_id: String,
+    query: String,
+    highlight: Option<bool>,
+    start: Option<i64>,
+    limit: Option<i64>,
+    cursor: Option<String>,
+    prev: Option<bool>,
+}
+
+impl<'a> GetServiceDeskArticlesRequest<'a> {
+    fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>, query: impl Into<String>) -> Self {
+        Self {
+            client,
+            service_desk_id: service_desk_id.into(),
+            query: query.into(),
+            highlight: None,
+            start: None,
+            limit: None,
+            cursor: None,
+            prev: None,
+        }
+    }
+
+    /// If set to true matching query term in the title and excerpt will be highlighted using the `@@@hl@@@term@@@endhl@@@` syntax. Default: false.
+    #[must_use]
+    pub fn highlight(mut self, value: bool) -> Self {
+        self.highlight = Some(value);
+
+        self
+    }
+
+    /// (Deprecated) The starting index of the returned objects. Base index: 0.
+    #[deprecated(note = "(Deprecated) The starting index of the returned objects.")]
+    #[must_use]
+    pub fn start(mut self, value: i64) -> Self {
+        self.start = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return per page. Default: 50. See the section for more details.
+    #[must_use]
+    pub fn limit(mut self, value: i64) -> Self {
+        self.limit = Some(value);
+
+        self
+    }
+
+    /// Pointer to a set of search results, returned as part of the next or prev URL from the previous search call.
+    #[must_use]
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+
+        self
+    }
+
+    /// Should navigate to the previous page. Defaulted to false. Set to true as part of prev URL from the previous search call.
+    #[must_use]
+    pub fn prev(mut self, value: bool) -> Self {
+        self.prev = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/knowledgebase/article",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
+        );
+
+        config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(self.query.clone())));
+
+        if let Some(value) = &self.highlight {
+            config.query.push(("highlight".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.start {
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.limit {
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.cursor {
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.prev {
+            config.query.push(("prev".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Article>> {
+        let first = self.start.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start = Some(offset);
+
+            request.send()
+        })
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Page<Article>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// This method returns the queues in a service desk. To include a customer request count for each queue (in the `issueCount` field) in the response, set the query parameter `includeCount` to true (its default is false).
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: service desk's Agent.
+#[derive(Clone)]
+pub struct GetQueuesRequest<'a> {
+    client: &'a crate::core::Client,
+    service_desk_id: String,
+    include_count: Option<bool>,
+    start: Option<i64>,
+    limit: Option<i64>,
+}
+
+impl<'a> GetQueuesRequest<'a> {
+    fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
+        Self { client, service_desk_id: service_desk_id.into(), include_count: None, start: None, limit: None }
+    }
+
+    /// Specifies whether to include each queue's customer request (issue) count in the response.
+    #[must_use]
+    pub fn include_count(mut self, value: bool) -> Self {
+        self.include_count = Some(value);
+
+        self
+    }
+
+    /// The starting index of the returned objects. Base index: 0. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
+    #[must_use]
+    pub fn start(mut self, value: i64) -> Self {
+        self.start = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return per page. Default: 50. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
+    #[must_use]
+    pub fn limit(mut self, value: i64) -> Self {
+        self.limit = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
+        );
+
+        if let Some(value) = &self.include_count {
+            config.query.push(("includeCount".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.start {
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.limit {
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Queue>> {
+        let first = self.start.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start = Some(offset);
+
+            request.send()
+        })
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Page<Queue>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// This method returns a specific queues in a service desk. To include a customer request count for the queue (in the `issueCount` field) in the response, set the query parameter `includeCount` to true (its default is false).
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: service desk's Agent.
+#[derive(Clone)]
+pub struct GetQueueRequest<'a> {
+    client: &'a crate::core::Client,
+    service_desk_id: String,
+    queue_id: i64,
+    include_count: Option<bool>,
+}
+
+impl<'a> GetQueueRequest<'a> {
+    fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>, queue_id: i64) -> Self {
+        Self { client, service_desk_id: service_desk_id.into(), queue_id, include_count: None }
+    }
+
+    /// Specifies whether to include each queue's customer request (issue) count in the response.
+    #[must_use]
+    pub fn include_count(mut self, value: bool) -> Self {
+        self.include_count = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue/{}",
+                crate::core::encode_path_segment(&self.service_desk_id),
+                self.queue_id
+            ),
+        );
+
+        if let Some(value) = &self.include_count {
+            config.query.push(("includeCount".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Queue> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// This method returns the customer requests in a queue. Only fields that the queue is configured to show are returned. For example, if a queue is configured to show description and due date, then only those two fields are returned for each customer request in the queue.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Service desk's agent.
+#[derive(Clone)]
+pub struct GetIssuesInQueueRequest<'a> {
+    client: &'a crate::core::Client,
+    service_desk_id: String,
+    queue_id: i64,
+    start: Option<i64>,
+    limit: Option<i64>,
+}
+
+impl<'a> GetIssuesInQueueRequest<'a> {
+    fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>, queue_id: i64) -> Self {
+        Self { client, service_desk_id: service_desk_id.into(), queue_id, start: None, limit: None }
+    }
+
+    /// The starting index of the returned objects. Base index: 0. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
+    #[must_use]
+    pub fn start(mut self, value: i64) -> Self {
+        self.start = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return per page. Default: 50. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
+    #[must_use]
+    pub fn limit(mut self, value: i64) -> Self {
+        self.limit = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/queue/{}/issue",
+                crate::core::encode_path_segment(&self.service_desk_id),
+                self.queue_id
+            ),
+        );
+
+        if let Some(value) = &self.start {
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.limit {
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.start.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start = Some(offset);
+
+            request.send()
+        })
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Page<Issue>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// This method returns all customer request types from a service desk. There are two parameters for filtering the returned list:
+///
+///  *  `groupId` which filters the results to items in the customer request type group.
+///  *  `searchQuery` which is matched against request types' `name` or `description`. For example, the strings "Install", "Inst", "Equi", or "Equipment" will match a request type with the *name* "Equipment Installation Request".
+///
+/// **Note:** This API by default will filter out request types hidden in the portal (i.e. request types without groups and request types where a user doesn't have permission) when `searchQuery` is provided, unless `includeHiddenRequestTypesInSearch` is set to true. Restricted request types will not be returned for those who aren't admins.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the service desk.
+#[derive(Clone)]
+pub struct GetRequestTypesRequest<'a> {
+    client: &'a crate::core::Client,
+    service_desk_id: String,
+    group_id: Option<i64>,
+    expand: Option<Vec<String>>,
+    search_query: Option<String>,
+    start: Option<i64>,
+    limit: Option<i64>,
+    include_hidden_request_types_in_search: Option<bool>,
+    restriction_status: Option<String>,
+}
+
+impl<'a> GetRequestTypesRequest<'a> {
+    fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
+        Self {
+            client,
+            service_desk_id: service_desk_id.into(),
+            group_id: None,
+            expand: None,
+            search_query: None,
+            start: None,
+            limit: None,
+            include_hidden_request_types_in_search: None,
+            restriction_status: None,
+        }
+    }
+
+    /// Filters results to those in a customer request type group.
+    #[must_use]
+    pub fn group_id(mut self, value: i64) -> Self {
+        self.group_id = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
+
+        self
+    }
+
+    /// The string to be used to filter the results.
+    #[must_use]
+    pub fn search_query(mut self, value: impl Into<String>) -> Self {
+        self.search_query = Some(value.into());
+
+        self
+    }
+
+    /// The starting index of the returned objects. Base index: 0. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
+    #[must_use]
+    pub fn start(mut self, value: i64) -> Self {
+        self.start = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return per page. Default: 50. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
+    #[must_use]
+    pub fn limit(mut self, value: i64) -> Self {
+        self.limit = Some(value);
+
+        self
+    }
+
+    /// Whether to include hidden request types when searching with `searchQuery`.
+    #[must_use]
+    pub fn include_hidden_request_types_in_search(mut self, value: bool) -> Self {
+        self.include_hidden_request_types_in_search = Some(value);
+
+        self
+    }
+
+    /// Request type restriction status (`open` or `restricted`) used to filter the results.
+    #[must_use]
+    pub fn restriction_status(mut self, value: impl Into<String>) -> Self {
+        self.restriction_status = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/requesttype",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
+        );
+
+        if let Some(value) = &self.group_id {
+            config.query.push(("groupId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
+        }
+
+        if let Some(value) = &self.search_query {
+            config.query.push(("searchQuery".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.start {
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.limit {
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.include_hidden_request_types_in_search {
+            config.query.push((
+                "includeHiddenRequestTypesInSearch".to_owned(),
+                crate::core::QueryValue::Scalar(value.to_string()),
+            ));
+        }
+
+        if let Some(value) = &self.restriction_status {
+            config.query.push(("restrictionStatus".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<RequestType>> {
+        let first = self.start.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start = Some(offset);
+
+            request.send()
+        })
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Page<RequestType>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// This method returns a customer request type from a service desk.
+///
+/// This operation can be accessed anonymously.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to access the service desk.
+#[derive(Clone)]
+pub struct GetRequestTypeByIdRequest<'a> {
+    client: &'a crate::core::Client,
+    service_desk_id: String,
+    request_type_id: String,
+    expand: Option<Vec<String>>,
+}
+
+impl<'a> GetRequestTypeByIdRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        service_desk_id: impl Into<String>,
+        request_type_id: impl Into<String>,
+    ) -> Self {
+        Self { client, service_desk_id: service_desk_id.into(), request_type_id: request_type_id.into(), expand: None }
+    }
+
+    #[must_use]
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/requesttype/{}",
+                crate::core::encode_path_segment(&self.service_desk_id),
+                crate::core::encode_path_segment(&self.request_type_id)
+            ),
+        );
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<RequestType> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// This method returns the fields for a service desk's customer request type.
+///
+/// Also, the following information about the user's permissions for the request type is returned:
+///
+///  *  `canRaiseOnBehalfOf` returns `true` if the user has permission to raise customer requests on behalf of other customers. Otherwise, returns `false`.
+///  *  `canAddRequestParticipants` returns `true` if the user can add customer request participants. Otherwise, returns `false`.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the Service Desk. However, hidden fields would be visible to only Service desk's Administrator.
+#[derive(Clone)]
+pub struct GetRequestTypeFieldsRequest<'a> {
+    client: &'a crate::core::Client,
+    service_desk_id: String,
+    request_type_id: i64,
+    expand: Option<Vec<String>>,
+}
+
+impl<'a> GetRequestTypeFieldsRequest<'a> {
+    fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>, request_type_id: i64) -> Self {
+        Self { client, service_desk_id: service_desk_id.into(), request_type_id, expand: None }
+    }
+
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#expansion) to include additional information in the response. This parameter accepts `hiddenFields` that returns hidden fields associated with the request type.
+    #[must_use]
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/requesttype/{}/field",
+                crate::core::encode_path_segment(&self.service_desk_id),
+                self.request_type_id
+            ),
+        );
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<CustomerRequestCreateMeta> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// This method returns a service desk's customer request type groups. Jira Service Management administrators can arrange the customer request type groups in an arbitrary order for display on the customer portal; the groups are returned in this order.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to view the service desk.
+#[derive(Clone)]
+pub struct GetRequestTypeGroupsRequest<'a> {
+    client: &'a crate::core::Client,
+    service_desk_id: String,
+    start: Option<i64>,
+    limit: Option<i64>,
+}
+
+impl<'a> GetRequestTypeGroupsRequest<'a> {
+    fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
+        Self { client, service_desk_id: service_desk_id.into(), start: None, limit: None }
+    }
+
+    /// The starting index of the returned objects. Base index: 0. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
+    #[must_use]
+    pub fn start(mut self, value: i64) -> Self {
+        self.start = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return per page. Default: 50. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
+    #[must_use]
+    pub fn limit(mut self, value: i64) -> Self {
+        self.limit = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/servicedeskapi/servicedesk/{}/requesttypegroup",
+                crate::core::encode_path_segment(&self.service_desk_id)
+            ),
+        );
+
+        if let Some(value) = &self.start {
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.limit {
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<RequestTypeGroup>> {
+        let first = self.start.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start = Some(offset);
+
+            request.send()
+        })
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Page<RequestTypeGroup>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

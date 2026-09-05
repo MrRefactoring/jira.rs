@@ -1,0 +1,26 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum HttpServletMappingMappingMatch {
+        ContextRoot => "CONTEXT_ROOT",
+        Default => "DEFAULT",
+        Exact => "EXACT",
+        Extension => "EXTENSION",
+        Path => "PATH",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct HttpServletMapping {
+    #[serde(rename = "mappingMatch", default, skip_serializing_if = "Option::is_none")]
+    pub mapping_match: Option<HttpServletMappingMappingMatch>,
+    #[serde(rename = "matchValue", default, skip_serializing_if = "Option::is_none")]
+    pub match_value: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub pattern: Option<String>,
+    #[serde(rename = "servletName", default, skip_serializing_if = "Option::is_none")]
+    pub servlet_name: Option<String>,
+}

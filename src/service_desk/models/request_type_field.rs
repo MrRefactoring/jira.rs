@@ -1,0 +1,34 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct RequestTypeField {
+    /// List of default values for the field.
+    #[serde(rename = "defaultValues", default, skip_serializing_if = "Option::is_none")]
+    pub default_values: Option<Vec<RequestTypeFieldValue>>,
+    /// Description of the field.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// ID of the field.
+    #[serde(rename = "fieldId", default, skip_serializing_if = "Option::is_none")]
+    pub field_id: Option<String>,
+    #[serde(rename = "jiraSchema", default, skip_serializing_if = "Option::is_none")]
+    pub jira_schema: Option<JsonType>,
+    /// Name of the field.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// List of preset values for the field.
+    #[serde(rename = "presetValues", default, skip_serializing_if = "Option::is_none")]
+    pub preset_values: Option<Vec<String>>,
+    /// Indicates if the field is required (true) or not (false).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub required: Option<bool>,
+    /// List of valid values for the field.
+    #[serde(rename = "validValues", default, skip_serializing_if = "Option::is_none")]
+    pub valid_values: Option<Vec<RequestTypeFieldValue>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub visible: Option<bool>,
+}

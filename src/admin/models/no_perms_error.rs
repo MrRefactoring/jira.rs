@@ -1,0 +1,33 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The HTTP status code applicable to this error.
+    pub enum NoPermsErrorStatus {
+        N403 => "403",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct NoPermsError {
+    /// Timestamp of the request.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub timestamp: Option<String>,
+    /// Path of the request.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+    /// The HTTP status code applicable to this error.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub status: Option<NoPermsErrorStatus>,
+    /// The HTTP status text applicable to this error.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
+    /// Human-readable explanation of the error.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// Id of the request.
+    #[serde(rename = "requestId", default, skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+}

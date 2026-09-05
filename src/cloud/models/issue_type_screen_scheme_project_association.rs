@@ -1,0 +1,14 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Associated issue type screen scheme and project.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct IssueTypeScreenSchemeProjectAssociation {
+    /// The ID of the issue type screen scheme.
+    #[serde(rename = "issueTypeScreenSchemeId", default, skip_serializing_if = "Option::is_none")]
+    pub issue_type_screen_scheme_id: Option<String>,
+    /// The ID of the project.
+    #[serde(rename = "projectId", default, skip_serializing_if = "Option::is_none")]
+    pub project_id: Option<String>,
+}

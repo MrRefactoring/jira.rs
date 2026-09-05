@@ -1,0 +1,97 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The nominal user type used to determine the assignee for issues created with this component. See `realAssigneeType` for details on how the type of the user, and hence the user, assigned to issues is determined. Can take the following values:
+    ///
+    ///  *  `PROJECT_LEAD` the assignee to any issues created with this component is nominally the lead for the project the component is in.
+    ///  *  `COMPONENT_LEAD` the assignee to any issues created with this component is nominally the lead for the component.
+    ///  *  `UNASSIGNED` an assignee is not set for issues created with this component.
+    ///  *  `PROJECT_DEFAULT` the assignee to any issues created with this component is nominally the default assignee for the project that the component is in.
+    ///
+    /// Default value: `PROJECT_DEFAULT`.
+    /// Optional when creating or updating a component.
+    pub enum ProjectComponentAssigneeType {
+        ProjectDefault => "PROJECT_DEFAULT",
+        ComponentLead => "COMPONENT_LEAD",
+        ProjectLead => "PROJECT_LEAD",
+        Unassigned => "UNASSIGNED",
+    }
+}
+
+crate::open_enum! {
+    /// The type of the assignee that is assigned to issues created with this component, when an assignee cannot be set from the `assigneeType`. For example, `assigneeType` is set to `COMPONENT_LEAD` but no component lead is set. This property is set to one of the following values:
+    ///
+    ///  *  `PROJECT_LEAD` when `assigneeType` is `PROJECT_LEAD` and the project lead has permission to be assigned issues in the project that the component is in.
+    ///  *  `COMPONENT_LEAD` when `assignee`Type is `COMPONENT_LEAD` and the component lead has permission to be assigned issues in the project that the component is in.
+    ///  *  `UNASSIGNED` when `assigneeType` is `UNASSIGNED` and Jira is configured to allow unassigned issues.
+    ///  *  `PROJECT_DEFAULT` when none of the preceding cases are true.
+    pub enum ProjectComponentRealAssigneeType {
+        ProjectDefault => "PROJECT_DEFAULT",
+        ComponentLead => "COMPONENT_LEAD",
+        ProjectLead => "PROJECT_LEAD",
+        Unassigned => "UNASSIGNED",
+    }
+}
+
+/// Details about a project component.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ProjectComponent {
+    /// Compass component's ID. Can't be updated. Not required for creating a Project Component.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ari: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub assignee: Option<DashboardUser>,
+    /// The nominal user type used to determine the assignee for issues created with this component. See `realAssigneeType` for details on how the type of the user, and hence the user, assigned to issues is determined. Can take the following values:
+    ///
+    ///  *  `PROJECT_LEAD` the assignee to any issues created with this component is nominally the lead for the project the component is in.
+    ///  *  `COMPONENT_LEAD` the assignee to any issues created with this component is nominally the lead for the component.
+    ///  *  `UNASSIGNED` an assignee is not set for issues created with this component.
+    ///  *  `PROJECT_DEFAULT` the assignee to any issues created with this component is nominally the default assignee for the project that the component is in.
+    ///
+    /// Default value: `PROJECT_DEFAULT`.
+    /// Optional when creating or updating a component.
+    #[serde(rename = "assigneeType", default, skip_serializing_if = "Option::is_none")]
+    pub assignee_type: Option<ProjectComponentAssigneeType>,
+    /// The description for the component. Optional when creating or updating a component.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The unique identifier for the component.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// Whether a user is associated with `assigneeType`. For example, if the `assigneeType` is set to `COMPONENT_LEAD` but the component lead is not set, then `false` is returned.
+    #[serde(rename = "isAssigneeTypeValid", default, skip_serializing_if = "Option::is_none")]
+    pub is_assignee_type_valid: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub lead: Option<DashboardUser>,
+    /// The accountId of the component's lead user. The accountId uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+    #[serde(rename = "leadAccountId", default, skip_serializing_if = "Option::is_none")]
+    pub lead_account_id: Option<String>,
+    /// Compass component's metadata. Can't be updated. Not required for creating a Project Component.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// The unique name for the component in the project. Required when creating a component. Optional when updating a component. The maximum length is 255 characters.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The key of the project the component is assigned to. Required when creating a component. Can't be updated.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub project: Option<String>,
+    /// The ID of the project the component is assigned to.
+    #[serde(rename = "projectId", default, skip_serializing_if = "Option::is_none")]
+    pub project_id: Option<i64>,
+    #[serde(rename = "realAssignee", default, skip_serializing_if = "Option::is_none")]
+    pub real_assignee: Option<DashboardUser>,
+    /// The type of the assignee that is assigned to issues created with this component, when an assignee cannot be set from the `assigneeType`. For example, `assigneeType` is set to `COMPONENT_LEAD` but no component lead is set. This property is set to one of the following values:
+    ///
+    ///  *  `PROJECT_LEAD` when `assigneeType` is `PROJECT_LEAD` and the project lead has permission to be assigned issues in the project that the component is in.
+    ///  *  `COMPONENT_LEAD` when `assignee`Type is `COMPONENT_LEAD` and the component lead has permission to be assigned issues in the project that the component is in.
+    ///  *  `UNASSIGNED` when `assigneeType` is `UNASSIGNED` and Jira is configured to allow unassigned issues.
+    ///  *  `PROJECT_DEFAULT` when none of the preceding cases are true.
+    #[serde(rename = "realAssigneeType", default, skip_serializing_if = "Option::is_none")]
+    pub real_assignee_type: Option<ProjectComponentRealAssigneeType>,
+    /// The URL of the component.
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+}

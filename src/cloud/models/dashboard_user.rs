@@ -1,0 +1,74 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The user account type. Can take the following values:
+    ///
+    ///  *  `atlassian` regular Atlassian user account
+    ///  *  `app` system account used for Connect applications and OAuth to represent external systems
+    ///  *  `customer` Jira Service Desk account representing an external service desk
+    pub enum DashboardUserAccountType {
+        Atlassian => "atlassian",
+        App => "app",
+        Customer => "customer",
+        Unknown => "unknown",
+    }
+}
+
+/// A user with details as permitted by the user's Atlassian Account privacy settings. However, be aware of these exceptions:
+///
+///  *  User record deleted from Atlassian: This occurs as the result of a right to be forgotten request. In this case, `displayName` provides an indication and other parameters have default values or are blank (for example, email is blank).
+///  *  User record corrupted: This occurs as a results of events such as a server import and can only happen to deleted users. In this case, `accountId` returns *unknown* and all other parameters have fallback values.
+///  *  User record unavailable: This usually occurs due to an internal service outage. In this case, all parameters have fallback values.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DashboardUser {
+    /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*. Required in requests.
+    #[serde(rename = "accountId", default, skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// The user account type. Can take the following values:
+    ///
+    ///  *  `atlassian` regular Atlassian user account
+    ///  *  `app` system account used for Connect applications and OAuth to represent external systems
+    ///  *  `customer` Jira Service Desk account representing an external service desk
+    #[serde(rename = "accountType", default, skip_serializing_if = "Option::is_none")]
+    pub account_type: Option<DashboardUserAccountType>,
+    /// Whether the user is active.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub active: Option<bool>,
+    /// The app type of the user account when accountType is 'app'. Can take the following values:
+    ///
+    ///  *  `service` Service Account
+    ///  *  `agent` Rovo Agent Account
+    ///  *  `unknown` Unknown app type
+    #[serde(rename = "appType", default, skip_serializing_if = "Option::is_none")]
+    pub app_type: Option<String>,
+    #[serde(rename = "applicationRoles", default, skip_serializing_if = "Option::is_none")]
+    pub application_roles: Option<SimpleListWrapperApplicationRole>,
+    #[serde(rename = "avatarUrls", default, skip_serializing_if = "Option::is_none")]
+    pub avatar_urls: Option<AvatarUrls>,
+    /// The display name of the user. Depending on the user’s privacy setting, this may return an alternative value.
+    #[serde(rename = "displayName", default, skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// The email address of the user. Depending on the user’s privacy setting, this may be returned as null.
+    #[serde(rename = "emailAddress", default, skip_serializing_if = "Option::is_none")]
+    pub email_address: Option<String>,
+    /// Expand options that include additional user details in the response.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub expand: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub groups: Option<SimpleListWrapperGroupName>,
+    /// Whether the user is a guest.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub guest: Option<bool>,
+    /// The locale of the user. Depending on the user’s privacy setting, this may be returned as null.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub locale: Option<String>,
+    /// The URL of the user.
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+    /// The time zone specified in the user's profile. If the user's time zone is not visible to the current user (due to user's profile setting), or if a time zone has not been set, the instance's default time zone will be returned.
+    #[serde(rename = "timeZone", default, skip_serializing_if = "Option::is_none")]
+    pub time_zone: Option<String>,
+}

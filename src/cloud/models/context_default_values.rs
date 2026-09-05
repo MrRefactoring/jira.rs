@@ -1,0 +1,16 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Default values grouped by custom field context.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ContextDefaultValues {
+    /// The ID of the context.
+    #[serde(rename = "contextId")]
+    pub context_id: i64,
+    /// Per-issue-type default values for this context. May contain a single entry for unconverted contexts, or one entry per issue type for converted contexts.
+    #[serde(rename = "defaultValues", default, skip_serializing_if = "Option::is_none")]
+    pub default_values: Option<Vec<IssueTypeDefaultValue>>,
+}

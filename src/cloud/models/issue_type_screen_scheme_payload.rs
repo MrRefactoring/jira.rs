@@ -1,0 +1,22 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Defines the payload for the issue type screen schemes. See <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-type-screen-schemes/#api-rest-api-3-issuetypescreenscheme-post>
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct IssueTypeScreenSchemePayload {
+    #[serde(rename = "defaultScreenScheme", default, skip_serializing_if = "Option::is_none")]
+    pub default_screen_scheme: Option<ProjectCreateResourceIdentifier>,
+    /// The description of the issue type screen scheme
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The IDs of the screen schemes for the issue type IDs and default. A default entry is required to create an issue type screen scheme, it defines the mapping for all issue types without a screen scheme.
+    #[serde(rename = "explicitMappings", default, skip_serializing_if = "Option::is_none")]
+    pub explicit_mappings: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// The name of the issue type screen scheme
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub pcri: Option<ProjectCreateResourceIdentifier>,
+}

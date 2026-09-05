@@ -1,0 +1,11 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Status mapping for statuses in source workflow to respective target status in target workflow.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct TargetStatus {
+    /// An object with the key as the ID of the target status and value with the list of the IDs of the current source statuses.
+    pub statuses: std::collections::HashMap<String, serde_json::Value>,
+}

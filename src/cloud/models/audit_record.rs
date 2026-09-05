@@ -1,0 +1,53 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// An audit record.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct AuditRecord {
+    /// The list of items associated with the changed record.
+    #[serde(rename = "associatedItems", default, skip_serializing_if = "Option::is_none")]
+    pub associated_items: Option<Vec<AssociatedItem>>,
+    /// The category of the audit record. For a list of these categories, see the help article [Auditing in Jira applications](https://confluence.atlassian.com/x/noXKM).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub category: Option<String>,
+    /// The list of values changed in the record event.
+    #[serde(rename = "changedValues", default, skip_serializing_if = "Option::is_none")]
+    pub changed_values: Option<Vec<ChangedValue>>,
+    /// The date and time on which the audit record was created.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created: Option<chrono::DateTime<chrono::Utc>>,
+    /// The date and time on which the audit record was created.
+    #[cfg(not(feature = "chrono"))]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::core::deserialize_timestamp")]
+    pub created: Option<String>,
+    /// The description of the audit record.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The event the audit record originated from.
+    #[serde(rename = "eventSource", default, skip_serializing_if = "Option::is_none")]
+    pub event_source: Option<String>,
+    /// The ID of the audit record.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    #[serde(rename = "objectItem", default, skip_serializing_if = "Option::is_none")]
+    pub object_item: Option<AssociatedItem>,
+    /// The URL of the computer where the creation of the audit record was initiated.
+    #[serde(rename = "remoteAddress", default, skip_serializing_if = "Option::is_none")]
+    pub remote_address: Option<String>,
+    /// The summary of the audit record.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub summary: Option<String>,
+    #[serde(rename = "authorAccountId", default, skip_serializing_if = "Option::is_none")]
+    pub author_account_id: Option<String>,
+    #[serde(rename = "authorKey", default, skip_serializing_if = "Option::is_none")]
+    pub author_key: Option<String>,
+}

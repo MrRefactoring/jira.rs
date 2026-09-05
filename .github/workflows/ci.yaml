@@ -1,0 +1,91 @@
+name: 🛠️ CI
+
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
+  pull_request:
+    branches: [master]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    name: 🏗️ Build, lint & test
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout sources
+        uses: actions/checkout@v7
+      - name: ⚙️ Install the toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - name: 💾 Cache the build
+        uses: Swatinem/rust-cache@v2
+      - name: 📐 Formatting
+        run: cargo fmt --all --check
+      - name: 🔍 Clippy
+        run: cargo clippy --all-features --all-targets -- -D warnings
+      - name: 🧪 Unit tests
+        run: cargo test --workspace --all-features
+      - name: 📚 Documentation
+        run: cargo doc --all-features --no-deps
+        env:
+          RUSTDOCFLAGS: -D warnings
+
+  features:
+    name: 🎛️ Every surface on its own
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout sources
+        uses: actions/checkout@v7
+      - name: ⚙️ Install the toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: 💾 Cache the build
+        uses: Swatinem/rust-cache@v2
+      - name: 📦 Install cargo-hack
+        uses: taiki-e/install-action@cargo-hack
+      # A surface that only compiles when another one is enabled is a feature gate in the wrong place, and nothing
+      # else in this workflow would notice.
+      - name: 🎛️ Check each feature
+        run: cargo hack check --each-feature --no-dev-deps
+
+  deny:
+    name: 🛡️ Advisories, licences & sources
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout sources
+        uses: actions/checkout@v7
+      - name: 🛡️ cargo-deny
+        uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          command: check
+          arguments: --all-features
+
+  msrv:
+    name: 🕰️ Minimum supported Rust
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout sources
+        uses: actions/checkout@v7
+      - name: 📖 Read rust-version from the manifest
+        id: msrv
+        run: echo "version=$(grep '^rust-version' Cargo.toml | cut -d'"' -f2)" >> "$GITHUB_OUTPUT"
+      - name: ⚙️ Install the toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ steps.msrv.outputs.version }}
+      - name: 💾 Cache the build
+        uses: Swatinem/rust-cache@v2
+      - name: 🕰️ Check
+        run: cargo check --all-features

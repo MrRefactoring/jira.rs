@@ -1,0 +1,2175 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum ListWorkflowHistoryRequestExpandValue {
+        IncludeIntermediateWorkflows => "includeIntermediateWorkflows",
+    }
+}
+
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+///
+///  *  `includeIntermediateWorkflows` Includes intermediate workflow versions that are sometimes created during workflow updates or migrations. By default, these are omitted from the response.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum ListWorkflowHistoryRequestExpand {
+    One(ListWorkflowHistoryRequestExpandValue),
+    Many(Vec<ListWorkflowHistoryRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    pub enum SearchWorkflowsRequestExpandValue {
+        ValuesTransitions => "values.transitions",
+    }
+}
+
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+///
+///  *  `values.transitions` Returns the transitions that each workflow is associated with.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum SearchWorkflowsRequestExpand {
+    One(SearchWorkflowsRequestExpandValue),
+    Many(Vec<SearchWorkflowsRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
+    ///
+    ///  *  `name` Sorts by workflow name.
+    ///  *  `created` Sorts by create time.
+    ///  *  `updated` Sorts by update time.
+    pub enum SearchWorkflowsRequestOrderBy {
+        Name => "name",
+        NameDescending => "-name",
+        NameAscending => "+name",
+        Created => "created",
+        CreatedDescending => "-created",
+        CreatedAscending => "+created",
+        Updated => "updated",
+        UpdatedDescending => "-updated",
+        UpdatedAscending => "+updated",
+    }
+}
+
+/// The Workflows operations.
+pub struct WorkflowsService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> WorkflowsService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns a workflow and related statuses for a specified workflow id and version number.
+    ///
+    /// **Note:** Stored workflow data expires after 60 days. Additionally, no data from before the 30th of October 2025 is available.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
+    ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
+    pub fn read_workflow_from_history(
+        &self,
+        workflow_history_read_request: WorkflowHistoryReadRequest,
+    ) -> ReadWorkflowFromHistoryRequest<'a> {
+        ReadWorkflowFromHistoryRequest::new(self.client, workflow_history_read_request)
+    }
+
+    /// Returns a list of workflow history entries for a specified workflow id.
+    ///
+    /// **Note:** Stored workflow data expires after 60 days. Additionally, no data from before the 30th of October 2025 is available.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
+    ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
+    pub fn list_workflow_history(
+        &self,
+        workflow_history_list_request: WorkflowHistoryListRequest,
+    ) -> ListWorkflowHistoryRequest<'a> {
+        ListWorkflowHistoryRequest::new(self.client, workflow_history_list_request)
+    }
+
+    /// Deletes a workflow.
+    ///
+    /// The workflow cannot be deleted if it is:
+    ///
+    ///  *  an active workflow.
+    ///  *  a system workflow.
+    ///  *  associated with any workflow scheme.
+    ///  *  associated with any draft workflow scheme.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn delete_inactive_workflow(&self, entity_id: impl Into<String>) -> DeleteInactiveWorkflowRequest<'a> {
+        DeleteInactiveWorkflowRequest::new(self.client, entity_id)
+    }
+
+    /// Returns a page of issue types using a given workflow within a project.
+    pub fn get_workflow_project_issue_type_usages(
+        &self,
+        workflow_id: impl Into<String>,
+        project_id: i64,
+    ) -> GetWorkflowProjectIssueTypeUsagesRequest<'a> {
+        GetWorkflowProjectIssueTypeUsagesRequest::new(self.client, workflow_id, project_id)
+    }
+
+    /// Returns a page of projects using a given workflow.
+    pub fn get_project_usages_for_workflow(
+        &self,
+        workflow_id: impl Into<String>,
+    ) -> GetProjectUsagesForWorkflowRequest<'a> {
+        GetProjectUsagesForWorkflowRequest::new(self.client, workflow_id)
+    }
+
+    /// Returns a page of workflow schemes using a given workflow.
+    pub fn get_workflow_scheme_usages_for_workflow(
+        &self,
+        workflow_id: impl Into<String>,
+    ) -> GetWorkflowSchemeUsagesForWorkflowRequest<'a> {
+        GetWorkflowSchemeUsagesForWorkflowRequest::new(self.client, workflow_id)
+    }
+
+    /// Returns a list of workflows and related statuses by providing workflow names, workflow IDs, or project and issue types.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
+    ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
+    pub fn read_workflows(&self, workflow_read_request: WorkflowReadRequest) -> ReadWorkflowsRequest<'a> {
+        ReadWorkflowsRequest::new(self.client, workflow_read_request)
+    }
+
+    /// Get the list of workflow capabilities for a specific workflow using either the workflow ID, or the project and issue type ID pair. The response includes the scope of the workflow, defined as global/project-based, and a list of project types that the workflow is scoped to. It also includes all rules organised into their broad categories (conditions, validators, actions, triggers, screens) as well as the source location (Atlassian-provided, Connect, Forge).
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Administer Jira* project permission to access all, including global-scoped, workflows
+    ///  *  *Administer projects* project permissions to access project-scoped workflows
+    ///
+    /// The current list of Atlassian-provided rules:
+    ///
+    /// #### Validators ####
+    ///
+    /// A validator rule that checks if a user has the required permissions to execute the transition in the workflow.
+    ///
+    /// ##### Permission validator #####
+    ///
+    /// A validator rule that checks if a user has the required permissions to execute the transition in the workflow.
+    ///
+    ///    {
+    ///       "ruleKey": "system:check-permission-validator",
+    ///       "parameters": {
+    ///         "permissionKey": "ADMINISTER_PROJECTS"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `permissionKey` The permission required to perform the transition. Allowed values: [built-in Jira permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#built-in-permissions).
+    ///
+    /// ##### Parent or child blocking validator #####
+    ///
+    /// A validator to block the child issue's transition depending on the parent issue's status.
+    ///
+    ///    {
+    ///       "ruleKey" : "system:parent-or-child-blocking-validator"
+    ///       "parameters" : {
+    ///         "blocker" : "PARENT"
+    ///         "statusIds" : "1,2,3"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `blocker` currently only supports `PARENT`.
+    ///  *  `statusIds` a comma-separated list of status IDs.
+    ///
+    /// ##### Previous status validator #####
+    ///
+    /// A validator that checks if an issue has transitioned through specified previous status(es) before allowing the current transition to occur.
+    ///
+    ///    {
+    ///       "ruleKey": "system:previous-status-validator",
+    ///       "parameters": {
+    ///         "previousStatusIds": "10014",
+    ///         "mostRecentStatusOnly": "true"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `previousStatusIds` a comma-separated list of status IDs, currently only support one ID.
+    ///  *  `mostRecentStatusOnly` when `true` only considers the most recent status for the condition evaluation. Allowed values: `true`, `false`.
+    ///
+    /// ##### Validate a field value #####
+    ///
+    /// A validation that ensures a specific field's value meets the defined criteria before allowing an issue to transition in the workflow.
+    ///
+    /// Depending on the rule type, the result will vary:
+    ///
+    /// ###### Field required ######
+    ///
+    ///    {
+    ///       "ruleKey": "system:validate-field-value",
+    ///       "parameters": {
+    ///         "ruleType": "fieldRequired",
+    ///         "fieldsRequired": "assignee",
+    ///         "ignoreContext": "true",
+    ///         "errorMessage": "An assignee must be set!"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `fieldsRequired` the ID of the field that is required. For a custom field, it would look like `customfield_123`.
+    ///  *  `ignoreContext` controls the impact of context settings on field validation. When set to `true`, the validator doesn't check a required field if its context isn't configured for the current issue. When set to `false`, the validator requires a field even if its context is invalid. Allowed values: `true`, `false`.
+    ///  *  `errorMessage` is the error message to display if the user does not provide a value during the transition. A default error message will be shown if you don't provide one (Optional).
+    ///
+    /// ###### Field changed ######
+    ///
+    ///    {
+    ///       "ruleKey": "system:validate-field-value",
+    ///       "parameters": {
+    ///         "ruleType": "fieldChanged",
+    ///         "groupsExemptFromValidation": "6862ac20-8672-4f68-896d-4854f5efb79e",
+    ///         "fieldKey": "versions",
+    ///         "errorMessage": "Affect versions must be modified before transition"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `groupsExemptFromValidation` a comma-separated list of group IDs to be exempt from the validation.
+    ///  *  `fieldKey` the ID of the field that has changed. For a custom field, it would look like `customfield_123`.
+    ///  *  `errorMessage` the error message to display if the user does not provide a value during the transition. A default error message will be shown if you don't provide one (Optional).
+    ///
+    /// ###### Field has a single value ######
+    ///
+    ///    {
+    ///       "ruleKey": "system:validate-field-value",
+    ///       "parameters": {
+    ///         "ruleType": "fieldHasSingleValue",
+    ///         "fieldKey": "created",
+    ///         "excludeSubtasks": "true"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `fieldKey` the ID of the field to validate. For a custom field, it would look like `customfield_123`.
+    ///  *  `excludeSubtasks` Option to exclude values copied from sub-tasks. Allowed values: `true`, `false`.
+    ///
+    /// ###### Field matches regular expression ######
+    ///
+    ///    {
+    ///       "ruleKey": "system:validate-field-value",
+    ///       "parameters": {
+    ///         "ruleType": "fieldMatchesRegularExpression",
+    ///         "regexp": "\[0-9\]{4}",
+    ///         "fieldKey": "description",
+    ///         "errorMessage": "Description must contain a 4-digit year"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `regexp` the regular expression used to validate the field's content.
+    ///  *  `fieldKey` the ID of the field to validate. For a custom field, it would look like `customfield_123`.
+    ///  *  `errorMessage` the error message to display if the field value does not match the regular expression. A default error message will be shown if you don't provide one (Optional).
+    ///
+    /// ###### Date field comparison ######
+    ///
+    ///    {
+    ///       "ruleKey": "system:validate-field-value",
+    ///       "parameters": {
+    ///         "ruleType": "dateFieldComparison",
+    ///         "date1FieldKey": "duedate",
+    ///         "date2FieldKey": "customfield_10054",
+    ///         "includeTime": "true",
+    ///         "conditionSelected": ">="
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `date1FieldKey` the ID of the first field to compare. For a custom field, it would look like `customfield_123`.
+    ///  *  `date2FieldKey` the ID of the second field to compare. For a custom field, it would look like `customfield_123`.
+    ///  *  `includeTime` if `true`, compares both date and time. Allowed values: `true`, `false`.
+    ///  *  `conditionSelected` the condition to compare with. Allowed values: `>`, `>=`, `=`, `<=`, `<`, `!=`.
+    ///
+    /// ###### Date range comparison ######
+    ///
+    ///    {
+    ///       "ruleKey": "system:validate-field-value",
+    ///       "parameters": {
+    ///         "ruleType": "windowDateComparison",
+    ///         "date1FieldKey": "customfield_10009",
+    ///         "date2FieldKey": "customfield_10054",
+    ///         "numberOfDays": "3"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `date1FieldKey` the ID of the first field to compare. For a custom field, it would look like `customfield_123`.
+    ///  *  `date2FieldKey` the ID of the second field to compare. For a custom field, it would look like `customfield_123`.
+    ///  *  `numberOfDays` maximum number of days past the reference date (`date2FieldKey`) to pass validation.
+    ///
+    /// This rule is composed by aggregating the following legacy rules:
+    ///
+    ///  *  FieldRequiredValidator
+    ///  *  FieldChangedValidator
+    ///  *  FieldHasSingleValueValidator
+    ///  *  RegexpFieldValidator
+    ///  *  DateFieldValidator
+    ///  *  WindowsDateValidator
+    ///
+    /// ##### Pro forma: Forms attached validator #####
+    ///
+    /// Validates that one or more forms are attached to the issue.
+    ///
+    ///    {
+    ///       "ruleKey" : "system:proforma-forms-attached"
+    ///       "parameters" : {}
+    ///     }
+    ///
+    /// ##### Proforma: Forms submitted validator #####
+    ///
+    /// Validates that all forms attached to the issue have been submitted.
+    ///
+    ///    {
+    ///       "ruleKey" : "system:proforma-forms-submitted"
+    ///       "parameters" : {}
+    ///     }
+    ///
+    /// #### Conditions ####
+    ///
+    /// Conditions enable workflow rules that govern whether a transition can execute.
+    ///
+    /// ##### Check field value #####
+    ///
+    /// A condition rule evaluates as true if a specific field's value meets the defined criteria. This rule ensures that an issue can only transition to the next step in the workflow if the field's value matches the desired condition.
+    ///
+    ///    {
+    ///       "ruleKey": "system:check-field-value",
+    ///       "parameters": {
+    ///         "fieldId": "description",
+    ///         "fieldValue": "\[\"Done\"\]",
+    ///         "comparator": "=",
+    ///         "comparisonType": "STRING"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `fieldId` The ID of the field to check the value of. For non-system fields, it will look like `customfield_123`. Note: `fieldId` is used interchangeably with the idea of `fieldKey` here, they refer to the same field.
+    ///  *  `fieldValue` the list of values to check against the field’s value.
+    ///  *  `comparator` The comparison logic. Allowed values: `>`, `>=`, `=`, `<=`, `<`, `!=`.
+    ///  *  `comparisonType` The type of data being compared. Allowed values: `STRING`, `NUMBER`, `DATE`, `DATE_WITHOUT_TIME`, `OPTIONID`.
+    ///
+    /// ##### Restrict issue transition #####
+    ///
+    /// This rule ensures that issue transitions are restricted based on user accounts, roles, group memberships, and permissions, maintaining control over who can transition an issue. This condition evaluates as `true` if any of the following criteria is met.
+    ///
+    ///    {
+    ///       "ruleKey": "system:restrict-issue-transition",
+    ///       "parameters": {
+    ///         "accountIds": "allow-reporter,5e68ac137d64450d01a77fa0",
+    ///         "roleIds": "10002,10004",
+    ///         "groupIds": "703ff44a-7dc8-4f4b-9aa6-a65bf3574fa4",
+    ///         "permissionKeys": "ADMINISTER_PROJECTS",
+    ///         "groupCustomFields": "customfield_10028",
+    ///         "allowUserCustomFields": "customfield_10072,customfield_10144,customfield_10007",
+    ///         "denyUserCustomFields": "customfield_10107"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `accountIds` a comma-separated list of the user account IDs. It also allows generic values like: `allow-assignee`, `allow-reporter`, and `accountIds` Note: This is only supported in team-managed projects
+    ///  *  `roleIds` a comma-separated list of role IDs.
+    ///  *  `groupIds` a comma-separated list of group IDs.
+    ///  *  `permissionKeys` a comma-separated list of permission keys. Allowed values: [built-in Jira permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#built-in-permissions).
+    ///  *  `groupCustomFields` a comma-separated list of group custom field IDs.
+    ///  *  `allowUserCustomFields` a comma-separated list of user custom field IDs to allow for issue transition.
+    ///  *  `denyUserCustomFields` a comma-separated list of user custom field IDs to deny for issue transition.
+    ///
+    /// This rule is composed by aggregating the following legacy rules:
+    ///
+    ///  *  AllowOnlyAssignee
+    ///  *  AllowOnlyReporter
+    ///  *  InAnyProjectRoleCondition
+    ///  *  InProjectRoleCondition
+    ///  *  UserInAnyGroupCondition
+    ///  *  UserInGroupCondition
+    ///  *  PermissionCondtion
+    ///  *  InGroupCFCondition
+    ///  *  UserIsInCustomFieldCondition
+    ///
+    /// ##### Previous status condition #####
+    ///
+    /// A condition that evaluates based on an issue's previous status(es) and specific criteria.
+    ///
+    ///    {
+    ///       "ruleKey" : "system:previous-status-condition"
+    ///       "parameters" : {
+    ///         "previousStatusIds" : "10004",
+    ///         "not": "true",
+    ///         "mostRecentStatusOnly" : "true",
+    ///         "includeCurrentStatus": "true",
+    ///         "ignoreLoopTransitions": "true"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `previousStatusIds` a comma-separated list of status IDs, current only support one ID.
+    ///  *  `not` indicates if the condition should be reversed. When `true` it checks that the issue has not been in the selected statuses. Allowed values: `true`, `false`.
+    ///  *  `mostRecentStatusOnly` when true only considers the most recent status for the condition evaluation. Allowed values: `true`, `false`.
+    ///  *  `includeCurrentStatus` includes the current status when evaluating if the issue has been through the selected statuses. Allowed values: `true`, `false`.
+    ///  *  `ignoreLoopTransitions` ignore loop transitions. Allowed values: `true`, `false`.
+    ///
+    /// ##### Parent or child blocking condition #####
+    ///
+    /// A condition to block the parent’s issue transition depending on the child’s issue status.
+    ///
+    ///    {
+    ///       "ruleKey" : "system:parent-or-child-blocking-condition"
+    ///       "parameters" : {
+    ///         "blocker" : "CHILD",
+    ///         "statusIds" : "1,2,3"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `blocker` currently only supports `CHILD`.
+    ///  *  `statusIds` a comma-separated list of status IDs.
+    ///
+    /// ##### Separation of duties #####
+    ///
+    /// A condition preventing the user from performing, if the user has already performed a transition on the issue.
+    ///
+    ///    {
+    ///       "ruleKey": "system:separation-of-duties",
+    ///       "parameters": {
+    ///         "fromStatusId": "10161",
+    ///         "toStatusId": "10160"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `fromStatusId` represents the status ID from which the issue is transitioning. It ensures that the user performing the current transition has not performed any actions when the issue was in the specified status.
+    ///  *  `toStatusId` represents the status ID to which the issue is transitioning. It ensures that the user performing the current transition is not the same user who has previously transitioned the issue.
+    ///
+    /// ##### Restrict transitions #####
+    ///
+    /// A condition preventing all users from transitioning the issue can also optionally include APIs as well.
+    ///
+    ///    {
+    ///       "ruleKey": "system:restrict-from-all-users",
+    ///       "parameters": {
+    ///         "restrictMode": "users"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `restrictMode` restricts the issue transition including/excluding APIs. Allowed values: `"users"`, `"usersAndAPI"`.
+    ///
+    /// ##### Jira Service Management block until approved #####
+    ///
+    /// Block an issue transition until approval. Note: This is only supported in team-managed projects.
+    ///
+    ///    {
+    ///       "ruleKey": "system:jsd-approvals-block-until-approved",
+    ///       "parameters": {
+    ///         "approvalConfigurationJson": "{"statusExternalUuid...}"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `approvalConfigurationJson` a stringified JSON holding the Jira Service Management approval configuration.
+    ///
+    /// ##### Jira Service Management block until rejected #####
+    ///
+    /// Block an issue transition until rejected. Note: This is only supported in team-managed projects.
+    ///
+    ///    {
+    ///       "ruleKey": "system:jsd-approvals-block-until-rejected",
+    ///       "parameters": {
+    ///         "approvalConfigurationJson": "{"statusExternalUuid...}"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `approvalConfigurationJson` a stringified JSON holding the Jira Service Management approval configuration.
+    ///
+    /// ##### Block in progress approval #####
+    ///
+    /// Condition to block issue transition if there is pending approval. Note: This is only supported in company-managed projects.
+    ///
+    ///    {
+    ///       "ruleKey": "system:block-in-progress-approval",
+    ///       "parameters": {}
+    ///     }
+    ///
+    /// #### Post functions ####
+    ///
+    /// Post functions carry out any additional processing required after a workflow transition is executed.
+    ///
+    /// ##### Change assignee #####
+    ///
+    /// A post function rule that changes the assignee of an issue after a transition.
+    ///
+    ///    {
+    ///       "ruleKey": "system:change-assignee",
+    ///       "parameters": {
+    ///         "type": "to-selected-user",
+    ///         "accountId": "example-account-id"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `type` the parameter used to determine the new assignee. Allowed values: `to-selected-user`, `to-unassigned`, `to-current-user`, `to-current-user`, `to-default-user`, `to-default-user`
+    ///  *  `accountId` the account ID of the user to assign the issue to. This parameter is required only when the type is `"to-selected-user"`.
+    ///
+    /// ##### Copy field value #####
+    ///
+    /// A post function that automates the process of copying values between fields during a specific transition, ensuring data consistency and reducing manual effort.
+    ///
+    ///    {
+    ///       "ruleKey": "system:copy-value-from-other-field",
+    ///       "parameters": {
+    ///         "sourceFieldKey": "description",
+    ///         "targetFieldKey": "components",
+    ///         "issueSource": "SAME"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `sourceFieldKey` the field key to copy from. For a custom field, it would look like `customfield_123`
+    ///  *  `targetFieldKey` the field key to copy to. For a custom field, it would look like `customfield_123`
+    ///  *  `issueSource` `SAME` or `PARENT`. Defaults to `SAME` if no value is provided.
+    ///
+    /// ##### Update field #####
+    ///
+    /// A post function that updates or appends a specific field with the given value.
+    ///
+    ///    {
+    ///       "ruleKey": "system:update-field",
+    ///       "parameters": {
+    ///         "field": "customfield_10056",
+    ///         "value": "asdf",
+    ///         "mode": "append"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `field` the ID of the field to update. For a custom field, it would look like `customfield_123`
+    ///  *  `value` the value to update the field with.
+    ///  *  `mode` `append` or `replace`. Determines if a value will be appended to the current value, or if the current value will be replaced.
+    ///
+    /// ##### Trigger webhook #####
+    ///
+    /// A post function that automatically triggers a predefined webhook when a transition occurs in the workflow.
+    ///
+    ///    {
+    ///       "ruleKey": "system:trigger-webhook",
+    ///       "parameters": {
+    ///         "webhookId": "1"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `webhookId` the ID of the webhook.
+    ///
+    /// ##### Trigger agent #####
+    ///
+    /// A post function that triggers a Jira AI agent for the issue after the transition runs, using the configured agent and an optional prompt. The agent run is asynchronous: it is scheduled after the transition finishes and does not block the transition.
+    ///
+    ///    {
+    ///       "ruleKey": "system:trigger-agent",
+    ///       "parameters": {
+    ///         "agentId": "712020:3c6d3f05-331a-4488-932e-37c34b704720",
+    ///         "promptValue": ""
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `agentId` the identifier of the agent to trigger (the Atlassian account ID of the agent).
+    ///  *  `promptValue` optional text passed to the agent as a user prompt after the transition runs; use an empty string if no extra prompt is needed.
+    ///
+    /// #### Screen ####
+    ///
+    /// ##### Remind people to update fields #####
+    ///
+    /// A screen rule that prompts users to update a specific field when they interact with an issue screen during a transition. This rule is useful for ensuring that users provide or modify necessary information before moving an issue to the next step in the workflow.
+    ///
+    ///    {
+    ///       "ruleKey": "system:remind-people-to-update-fields",
+    ///       "params": {
+    ///         "remindingFieldIds": "assignee,customfield_10025",
+    ///         "remindingMessage": "The message",
+    ///         "remindingAlwaysAsk": "true"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `remindingFieldIds` a comma-separated list of field IDs. Note: `fieldId` is used interchangeably with the idea of `fieldKey` here, they refer to the same field.
+    ///  *  `remindingMessage` the message to display when prompting the users to update the fields.
+    ///  *  `remindingAlwaysAsk` always remind to update fields. Allowed values: `true`, `false`.
+    ///
+    /// ##### Shared transition screen #####
+    ///
+    /// A common screen that is shared between transitions in a workflow.
+    ///
+    ///    {
+    ///       "ruleKey": "system:transition-screen",
+    ///       "params": {
+    ///         "screenId": "3"
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `screenId` the ID of the screen.
+    ///
+    /// #### Connect & Forge ####
+    ///
+    /// ##### Connect rules #####
+    ///
+    /// Validator/Condition/Post function for Connect app.
+    ///
+    ///    {
+    ///       "ruleKey": "connect:expression-validator",
+    ///       "parameters": {
+    ///         "appKey": "com.atlassian.app",
+    ///         "config": "",
+    ///         "id": "90ce590f-e90c-4cd3-8281-165ce41f2ac3",
+    ///         "disabled": "false",
+    ///         "tag": ""
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `ruleKey` Validator: `connect:expression-validator`, Condition: `connect:expression-condition`, and Post function: `connect:remote-workflow-function`
+    ///  *  `appKey` the reference to the Connect app
+    ///  *  `config` a JSON payload string describing the configuration
+    ///  *  `id` the ID of the rule
+    ///  *  `disabled` determine if the Connect app is disabled. Allowed values: `true`, `false`.
+    ///  *  `tag` additional tags for the Connect app
+    ///
+    /// ##### Forge rules #####
+    ///
+    /// Validator/Condition/Post function for Forge app.
+    ///
+    ///    {
+    ///       "ruleKey": "forge:expression-validator",
+    ///       "parameters": {
+    ///         "key": "ari:cloud:ecosystem::extension/{appId}/{environmentId}/static/{moduleKey}",
+    ///         "config": "{"searchString":"workflow validator"}",
+    ///         "id": "a865ddf6-bb3f-4a7b-9540-c2f8b3f9f6c2",
+    ///         "disabled": "false",
+    ///         "tag": ""
+    ///       }
+    ///     }
+    ///
+    /// Parameters:
+    ///
+    ///  *  `ruleKey` Validator: `forge:expression-validator`, Condition: `forge:expression-condition`, and Post function: `forge:workflow-post-function`
+    ///  *  `key` the identifier for the Forge app
+    ///  *  `config` the persistent stringified JSON configuration for the Forge rule
+    ///  *  `id` the ID of the Forge rule
+    ///  *  `disabled` determine if the Forge app is disabled. Allowed values: `true`, `false`.
+    ///  *  `tag` additional tags for the Forge app
+    pub fn workflow_capabilities(&self) -> WorkflowCapabilitiesRequest<'a> {
+        WorkflowCapabilitiesRequest::new(self.client)
+    }
+
+    /// Create workflows and related statuses.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
+    ///  *  *Administer projects* project permissions to create project-scoped workflows
+    pub fn create_workflows(&self, workflow_create_request: WorkflowCreateRequest) -> CreateWorkflowsRequest<'a> {
+        CreateWorkflowsRequest::new(self.client, workflow_create_request)
+    }
+
+    /// Validate the payload for bulk create workflows.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
+    ///  *  *Administer projects* project permissions to create project-scoped workflows
+    pub fn validate_create_workflows(
+        &self,
+        workflow_create_validate_request: WorkflowCreateValidateRequest,
+    ) -> ValidateCreateWorkflowsRequest<'a> {
+        ValidateCreateWorkflowsRequest::new(self.client, workflow_create_validate_request)
+    }
+
+    /// Get the user's default workflow editor. This can be either the new editor or the legacy editor.
+    pub fn get_default_editor(&self) -> GetDefaultEditorRequest<'a> {
+        GetDefaultEditorRequest::new(self.client)
+    }
+
+    /// Returns a requested workflow within a given project. The response provides a read-only preview of the workflow, omitting full configuration details.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions
+    pub fn read_workflow_previews(
+        &self,
+        workflow_preview_request: WorkflowPreviewRequest,
+    ) -> ReadWorkflowPreviewsRequest<'a> {
+        ReadWorkflowPreviewsRequest::new(self.client, workflow_preview_request)
+    }
+
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of global and project workflows. If workflow names are specified in the query string, details of those workflows are returned. Otherwise, all workflows are returned.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
+    ///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
+    pub fn search_workflows(&self) -> SearchWorkflowsRequest<'a> {
+        SearchWorkflowsRequest::new(self.client)
+    }
+
+    /// Update workflows and related statuses.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
+    ///  *  *Administer projects* project permissions to create project-scoped workflows
+    pub fn update_workflows(&self, workflow_update_request: WorkflowUpdateRequest) -> UpdateWorkflowsRequest<'a> {
+        UpdateWorkflowsRequest::new(self.client, workflow_update_request)
+    }
+
+    /// Validate the payload for bulk update workflows.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
+    ///  *  *Administer projects* project permissions to create project-scoped workflows
+    pub fn validate_update_workflows(
+        &self,
+        workflow_update_validate_request: WorkflowUpdateValidateRequest,
+    ) -> ValidateUpdateWorkflowsRequest<'a> {
+        ValidateUpdateWorkflowsRequest::new(self.client, workflow_update_validate_request)
+    }
+}
+
+/// Returns a workflow and related statuses for a specified workflow id and version number.
+///
+/// **Note:** Stored workflow data expires after 60 days. Additionally, no data from before the 30th of October 2025 is available.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
+///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
+#[derive(Clone)]
+pub struct ReadWorkflowFromHistoryRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_history_read_request: WorkflowHistoryReadRequest,
+}
+
+impl<'a> ReadWorkflowFromHistoryRequest<'a> {
+    fn new(client: &'a crate::core::Client, workflow_history_read_request: WorkflowHistoryReadRequest) -> Self {
+        Self { client, workflow_history_read_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/workflow/history".to_owned());
+
+        let body = match serde_json::to_value(&self.workflow_history_read_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowHistoryReadResponseDTO> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a list of workflow history entries for a specified workflow id.
+///
+/// **Note:** Stored workflow data expires after 60 days. Additionally, no data from before the 30th of October 2025 is available.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
+///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
+#[derive(Clone)]
+pub struct ListWorkflowHistoryRequest<'a> {
+    client: &'a crate::core::Client,
+    expand: Option<ListWorkflowHistoryRequestExpand>,
+    workflow_history_list_request: WorkflowHistoryListRequest,
+}
+
+impl<'a> ListWorkflowHistoryRequest<'a> {
+    fn new(client: &'a crate::core::Client, workflow_history_list_request: WorkflowHistoryListRequest) -> Self {
+        Self { client, workflow_history_list_request, expand: None }
+    }
+
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+    ///
+    ///  *  `includeIntermediateWorkflows` Includes intermediate workflow versions that are sometimes created during workflow updates or migrations. By default, these are omitted from the response.
+    #[must_use]
+    pub fn expand(mut self, value: ListWorkflowHistoryRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/workflow/history/list".to_owned());
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        let body = match serde_json::to_value(&self.workflow_history_list_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowHistoryListResponseDTO> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes a workflow.
+///
+/// The workflow cannot be deleted if it is:
+///
+///  *  an active workflow.
+///  *  a system workflow.
+///  *  associated with any workflow scheme.
+///  *  associated with any draft workflow scheme.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct DeleteInactiveWorkflowRequest<'a> {
+    client: &'a crate::core::Client,
+    entity_id: String,
+}
+
+impl<'a> DeleteInactiveWorkflowRequest<'a> {
+    fn new(client: &'a crate::core::Client, entity_id: impl Into<String>) -> Self {
+        Self { client, entity_id: entity_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/3/workflow/{}", crate::core::encode_path_segment(&self.entity_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a page of issue types using a given workflow within a project.
+#[derive(Clone)]
+pub struct GetWorkflowProjectIssueTypeUsagesRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_id: String,
+    project_id: i64,
+    next_page_token: Option<String>,
+    max_results: Option<i64>,
+}
+
+impl<'a> GetWorkflowProjectIssueTypeUsagesRequest<'a> {
+    fn new(client: &'a crate::core::Client, workflow_id: impl Into<String>, project_id: i64) -> Self {
+        Self { client, workflow_id: workflow_id.into(), project_id, next_page_token: None, max_results: None }
+    }
+
+    /// The cursor for pagination
+    #[must_use]
+    pub fn next_page_token(mut self, value: impl Into<String>) -> Self {
+        self.next_page_token = Some(value.into());
+
+        self
+    }
+
+    /// The maximum number of results to return. Must be an integer between 1 and 200.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/api/3/workflow/{}/project/{}/issueTypeUsages",
+                crate::core::encode_path_segment(&self.workflow_id),
+                self.project_id
+            ),
+        );
+
+        if let Some(value) = &self.next_page_token {
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowProjectIssueTypeUsageDTO> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a page of projects using a given workflow.
+#[derive(Clone)]
+pub struct GetProjectUsagesForWorkflowRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_id: String,
+    next_page_token: Option<String>,
+    max_results: Option<i64>,
+}
+
+impl<'a> GetProjectUsagesForWorkflowRequest<'a> {
+    fn new(client: &'a crate::core::Client, workflow_id: impl Into<String>) -> Self {
+        Self { client, workflow_id: workflow_id.into(), next_page_token: None, max_results: None }
+    }
+
+    /// The cursor for pagination
+    #[must_use]
+    pub fn next_page_token(mut self, value: impl Into<String>) -> Self {
+        self.next_page_token = Some(value.into());
+
+        self
+    }
+
+    /// The maximum number of results to return. Must be an integer between 1 and 200.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/workflow/{}/projectUsages", crate::core::encode_path_segment(&self.workflow_id)),
+        );
+
+        if let Some(value) = &self.next_page_token {
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowProjectUsageDTO> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a page of workflow schemes using a given workflow.
+#[derive(Clone)]
+pub struct GetWorkflowSchemeUsagesForWorkflowRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_id: String,
+    next_page_token: Option<String>,
+    max_results: Option<i64>,
+}
+
+impl<'a> GetWorkflowSchemeUsagesForWorkflowRequest<'a> {
+    fn new(client: &'a crate::core::Client, workflow_id: impl Into<String>) -> Self {
+        Self { client, workflow_id: workflow_id.into(), next_page_token: None, max_results: None }
+    }
+
+    /// The cursor for pagination
+    #[must_use]
+    pub fn next_page_token(mut self, value: impl Into<String>) -> Self {
+        self.next_page_token = Some(value.into());
+
+        self
+    }
+
+    /// The maximum number of results to return. Must be an integer between 1 and 200.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/workflow/{}/workflowSchemes", crate::core::encode_path_segment(&self.workflow_id)),
+        );
+
+        if let Some(value) = &self.next_page_token {
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowSchemeUsageDTO> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a list of workflows and related statuses by providing workflow names, workflow IDs, or project and issue types.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
+///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
+#[derive(Clone)]
+pub struct ReadWorkflowsRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_read_request: WorkflowReadRequest,
+}
+
+impl<'a> ReadWorkflowsRequest<'a> {
+    fn new(client: &'a crate::core::Client, workflow_read_request: WorkflowReadRequest) -> Self {
+        Self { client, workflow_read_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/workflows".to_owned());
+
+        let body = match serde_json::to_value(&self.workflow_read_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowReadResponse> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Get the list of workflow capabilities for a specific workflow using either the workflow ID, or the project and issue type ID pair. The response includes the scope of the workflow, defined as global/project-based, and a list of project types that the workflow is scoped to. It also includes all rules organised into their broad categories (conditions, validators, actions, triggers, screens) as well as the source location (Atlassian-provided, Connect, Forge).
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Administer Jira* project permission to access all, including global-scoped, workflows
+///  *  *Administer projects* project permissions to access project-scoped workflows
+///
+/// The current list of Atlassian-provided rules:
+///
+/// #### Validators ####
+///
+/// A validator rule that checks if a user has the required permissions to execute the transition in the workflow.
+///
+/// ##### Permission validator #####
+///
+/// A validator rule that checks if a user has the required permissions to execute the transition in the workflow.
+///
+///    {
+///       "ruleKey": "system:check-permission-validator",
+///       "parameters": {
+///         "permissionKey": "ADMINISTER_PROJECTS"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `permissionKey` The permission required to perform the transition. Allowed values: [built-in Jira permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#built-in-permissions).
+///
+/// ##### Parent or child blocking validator #####
+///
+/// A validator to block the child issue's transition depending on the parent issue's status.
+///
+///    {
+///       "ruleKey" : "system:parent-or-child-blocking-validator"
+///       "parameters" : {
+///         "blocker" : "PARENT"
+///         "statusIds" : "1,2,3"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `blocker` currently only supports `PARENT`.
+///  *  `statusIds` a comma-separated list of status IDs.
+///
+/// ##### Previous status validator #####
+///
+/// A validator that checks if an issue has transitioned through specified previous status(es) before allowing the current transition to occur.
+///
+///    {
+///       "ruleKey": "system:previous-status-validator",
+///       "parameters": {
+///         "previousStatusIds": "10014",
+///         "mostRecentStatusOnly": "true"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `previousStatusIds` a comma-separated list of status IDs, currently only support one ID.
+///  *  `mostRecentStatusOnly` when `true` only considers the most recent status for the condition evaluation. Allowed values: `true`, `false`.
+///
+/// ##### Validate a field value #####
+///
+/// A validation that ensures a specific field's value meets the defined criteria before allowing an issue to transition in the workflow.
+///
+/// Depending on the rule type, the result will vary:
+///
+/// ###### Field required ######
+///
+///    {
+///       "ruleKey": "system:validate-field-value",
+///       "parameters": {
+///         "ruleType": "fieldRequired",
+///         "fieldsRequired": "assignee",
+///         "ignoreContext": "true",
+///         "errorMessage": "An assignee must be set!"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `fieldsRequired` the ID of the field that is required. For a custom field, it would look like `customfield_123`.
+///  *  `ignoreContext` controls the impact of context settings on field validation. When set to `true`, the validator doesn't check a required field if its context isn't configured for the current issue. When set to `false`, the validator requires a field even if its context is invalid. Allowed values: `true`, `false`.
+///  *  `errorMessage` is the error message to display if the user does not provide a value during the transition. A default error message will be shown if you don't provide one (Optional).
+///
+/// ###### Field changed ######
+///
+///    {
+///       "ruleKey": "system:validate-field-value",
+///       "parameters": {
+///         "ruleType": "fieldChanged",
+///         "groupsExemptFromValidation": "6862ac20-8672-4f68-896d-4854f5efb79e",
+///         "fieldKey": "versions",
+///         "errorMessage": "Affect versions must be modified before transition"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `groupsExemptFromValidation` a comma-separated list of group IDs to be exempt from the validation.
+///  *  `fieldKey` the ID of the field that has changed. For a custom field, it would look like `customfield_123`.
+///  *  `errorMessage` the error message to display if the user does not provide a value during the transition. A default error message will be shown if you don't provide one (Optional).
+///
+/// ###### Field has a single value ######
+///
+///    {
+///       "ruleKey": "system:validate-field-value",
+///       "parameters": {
+///         "ruleType": "fieldHasSingleValue",
+///         "fieldKey": "created",
+///         "excludeSubtasks": "true"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `fieldKey` the ID of the field to validate. For a custom field, it would look like `customfield_123`.
+///  *  `excludeSubtasks` Option to exclude values copied from sub-tasks. Allowed values: `true`, `false`.
+///
+/// ###### Field matches regular expression ######
+///
+///    {
+///       "ruleKey": "system:validate-field-value",
+///       "parameters": {
+///         "ruleType": "fieldMatchesRegularExpression",
+///         "regexp": "\[0-9\]{4}",
+///         "fieldKey": "description",
+///         "errorMessage": "Description must contain a 4-digit year"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `regexp` the regular expression used to validate the field's content.
+///  *  `fieldKey` the ID of the field to validate. For a custom field, it would look like `customfield_123`.
+///  *  `errorMessage` the error message to display if the field value does not match the regular expression. A default error message will be shown if you don't provide one (Optional).
+///
+/// ###### Date field comparison ######
+///
+///    {
+///       "ruleKey": "system:validate-field-value",
+///       "parameters": {
+///         "ruleType": "dateFieldComparison",
+///         "date1FieldKey": "duedate",
+///         "date2FieldKey": "customfield_10054",
+///         "includeTime": "true",
+///         "conditionSelected": ">="
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `date1FieldKey` the ID of the first field to compare. For a custom field, it would look like `customfield_123`.
+///  *  `date2FieldKey` the ID of the second field to compare. For a custom field, it would look like `customfield_123`.
+///  *  `includeTime` if `true`, compares both date and time. Allowed values: `true`, `false`.
+///  *  `conditionSelected` the condition to compare with. Allowed values: `>`, `>=`, `=`, `<=`, `<`, `!=`.
+///
+/// ###### Date range comparison ######
+///
+///    {
+///       "ruleKey": "system:validate-field-value",
+///       "parameters": {
+///         "ruleType": "windowDateComparison",
+///         "date1FieldKey": "customfield_10009",
+///         "date2FieldKey": "customfield_10054",
+///         "numberOfDays": "3"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `date1FieldKey` the ID of the first field to compare. For a custom field, it would look like `customfield_123`.
+///  *  `date2FieldKey` the ID of the second field to compare. For a custom field, it would look like `customfield_123`.
+///  *  `numberOfDays` maximum number of days past the reference date (`date2FieldKey`) to pass validation.
+///
+/// This rule is composed by aggregating the following legacy rules:
+///
+///  *  FieldRequiredValidator
+///  *  FieldChangedValidator
+///  *  FieldHasSingleValueValidator
+///  *  RegexpFieldValidator
+///  *  DateFieldValidator
+///  *  WindowsDateValidator
+///
+/// ##### Pro forma: Forms attached validator #####
+///
+/// Validates that one or more forms are attached to the issue.
+///
+///    {
+///       "ruleKey" : "system:proforma-forms-attached"
+///       "parameters" : {}
+///     }
+///
+/// ##### Proforma: Forms submitted validator #####
+///
+/// Validates that all forms attached to the issue have been submitted.
+///
+///    {
+///       "ruleKey" : "system:proforma-forms-submitted"
+///       "parameters" : {}
+///     }
+///
+/// #### Conditions ####
+///
+/// Conditions enable workflow rules that govern whether a transition can execute.
+///
+/// ##### Check field value #####
+///
+/// A condition rule evaluates as true if a specific field's value meets the defined criteria. This rule ensures that an issue can only transition to the next step in the workflow if the field's value matches the desired condition.
+///
+///    {
+///       "ruleKey": "system:check-field-value",
+///       "parameters": {
+///         "fieldId": "description",
+///         "fieldValue": "\[\"Done\"\]",
+///         "comparator": "=",
+///         "comparisonType": "STRING"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `fieldId` The ID of the field to check the value of. For non-system fields, it will look like `customfield_123`. Note: `fieldId` is used interchangeably with the idea of `fieldKey` here, they refer to the same field.
+///  *  `fieldValue` the list of values to check against the field’s value.
+///  *  `comparator` The comparison logic. Allowed values: `>`, `>=`, `=`, `<=`, `<`, `!=`.
+///  *  `comparisonType` The type of data being compared. Allowed values: `STRING`, `NUMBER`, `DATE`, `DATE_WITHOUT_TIME`, `OPTIONID`.
+///
+/// ##### Restrict issue transition #####
+///
+/// This rule ensures that issue transitions are restricted based on user accounts, roles, group memberships, and permissions, maintaining control over who can transition an issue. This condition evaluates as `true` if any of the following criteria is met.
+///
+///    {
+///       "ruleKey": "system:restrict-issue-transition",
+///       "parameters": {
+///         "accountIds": "allow-reporter,5e68ac137d64450d01a77fa0",
+///         "roleIds": "10002,10004",
+///         "groupIds": "703ff44a-7dc8-4f4b-9aa6-a65bf3574fa4",
+///         "permissionKeys": "ADMINISTER_PROJECTS",
+///         "groupCustomFields": "customfield_10028",
+///         "allowUserCustomFields": "customfield_10072,customfield_10144,customfield_10007",
+///         "denyUserCustomFields": "customfield_10107"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `accountIds` a comma-separated list of the user account IDs. It also allows generic values like: `allow-assignee`, `allow-reporter`, and `accountIds` Note: This is only supported in team-managed projects
+///  *  `roleIds` a comma-separated list of role IDs.
+///  *  `groupIds` a comma-separated list of group IDs.
+///  *  `permissionKeys` a comma-separated list of permission keys. Allowed values: [built-in Jira permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#built-in-permissions).
+///  *  `groupCustomFields` a comma-separated list of group custom field IDs.
+///  *  `allowUserCustomFields` a comma-separated list of user custom field IDs to allow for issue transition.
+///  *  `denyUserCustomFields` a comma-separated list of user custom field IDs to deny for issue transition.
+///
+/// This rule is composed by aggregating the following legacy rules:
+///
+///  *  AllowOnlyAssignee
+///  *  AllowOnlyReporter
+///  *  InAnyProjectRoleCondition
+///  *  InProjectRoleCondition
+///  *  UserInAnyGroupCondition
+///  *  UserInGroupCondition
+///  *  PermissionCondtion
+///  *  InGroupCFCondition
+///  *  UserIsInCustomFieldCondition
+///
+/// ##### Previous status condition #####
+///
+/// A condition that evaluates based on an issue's previous status(es) and specific criteria.
+///
+///    {
+///       "ruleKey" : "system:previous-status-condition"
+///       "parameters" : {
+///         "previousStatusIds" : "10004",
+///         "not": "true",
+///         "mostRecentStatusOnly" : "true",
+///         "includeCurrentStatus": "true",
+///         "ignoreLoopTransitions": "true"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `previousStatusIds` a comma-separated list of status IDs, current only support one ID.
+///  *  `not` indicates if the condition should be reversed. When `true` it checks that the issue has not been in the selected statuses. Allowed values: `true`, `false`.
+///  *  `mostRecentStatusOnly` when true only considers the most recent status for the condition evaluation. Allowed values: `true`, `false`.
+///  *  `includeCurrentStatus` includes the current status when evaluating if the issue has been through the selected statuses. Allowed values: `true`, `false`.
+///  *  `ignoreLoopTransitions` ignore loop transitions. Allowed values: `true`, `false`.
+///
+/// ##### Parent or child blocking condition #####
+///
+/// A condition to block the parent’s issue transition depending on the child’s issue status.
+///
+///    {
+///       "ruleKey" : "system:parent-or-child-blocking-condition"
+///       "parameters" : {
+///         "blocker" : "CHILD",
+///         "statusIds" : "1,2,3"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `blocker` currently only supports `CHILD`.
+///  *  `statusIds` a comma-separated list of status IDs.
+///
+/// ##### Separation of duties #####
+///
+/// A condition preventing the user from performing, if the user has already performed a transition on the issue.
+///
+///    {
+///       "ruleKey": "system:separation-of-duties",
+///       "parameters": {
+///         "fromStatusId": "10161",
+///         "toStatusId": "10160"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `fromStatusId` represents the status ID from which the issue is transitioning. It ensures that the user performing the current transition has not performed any actions when the issue was in the specified status.
+///  *  `toStatusId` represents the status ID to which the issue is transitioning. It ensures that the user performing the current transition is not the same user who has previously transitioned the issue.
+///
+/// ##### Restrict transitions #####
+///
+/// A condition preventing all users from transitioning the issue can also optionally include APIs as well.
+///
+///    {
+///       "ruleKey": "system:restrict-from-all-users",
+///       "parameters": {
+///         "restrictMode": "users"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `restrictMode` restricts the issue transition including/excluding APIs. Allowed values: `"users"`, `"usersAndAPI"`.
+///
+/// ##### Jira Service Management block until approved #####
+///
+/// Block an issue transition until approval. Note: This is only supported in team-managed projects.
+///
+///    {
+///       "ruleKey": "system:jsd-approvals-block-until-approved",
+///       "parameters": {
+///         "approvalConfigurationJson": "{"statusExternalUuid...}"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `approvalConfigurationJson` a stringified JSON holding the Jira Service Management approval configuration.
+///
+/// ##### Jira Service Management block until rejected #####
+///
+/// Block an issue transition until rejected. Note: This is only supported in team-managed projects.
+///
+///    {
+///       "ruleKey": "system:jsd-approvals-block-until-rejected",
+///       "parameters": {
+///         "approvalConfigurationJson": "{"statusExternalUuid...}"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `approvalConfigurationJson` a stringified JSON holding the Jira Service Management approval configuration.
+///
+/// ##### Block in progress approval #####
+///
+/// Condition to block issue transition if there is pending approval. Note: This is only supported in company-managed projects.
+///
+///    {
+///       "ruleKey": "system:block-in-progress-approval",
+///       "parameters": {}
+///     }
+///
+/// #### Post functions ####
+///
+/// Post functions carry out any additional processing required after a workflow transition is executed.
+///
+/// ##### Change assignee #####
+///
+/// A post function rule that changes the assignee of an issue after a transition.
+///
+///    {
+///       "ruleKey": "system:change-assignee",
+///       "parameters": {
+///         "type": "to-selected-user",
+///         "accountId": "example-account-id"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `type` the parameter used to determine the new assignee. Allowed values: `to-selected-user`, `to-unassigned`, `to-current-user`, `to-current-user`, `to-default-user`, `to-default-user`
+///  *  `accountId` the account ID of the user to assign the issue to. This parameter is required only when the type is `"to-selected-user"`.
+///
+/// ##### Copy field value #####
+///
+/// A post function that automates the process of copying values between fields during a specific transition, ensuring data consistency and reducing manual effort.
+///
+///    {
+///       "ruleKey": "system:copy-value-from-other-field",
+///       "parameters": {
+///         "sourceFieldKey": "description",
+///         "targetFieldKey": "components",
+///         "issueSource": "SAME"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `sourceFieldKey` the field key to copy from. For a custom field, it would look like `customfield_123`
+///  *  `targetFieldKey` the field key to copy to. For a custom field, it would look like `customfield_123`
+///  *  `issueSource` `SAME` or `PARENT`. Defaults to `SAME` if no value is provided.
+///
+/// ##### Update field #####
+///
+/// A post function that updates or appends a specific field with the given value.
+///
+///    {
+///       "ruleKey": "system:update-field",
+///       "parameters": {
+///         "field": "customfield_10056",
+///         "value": "asdf",
+///         "mode": "append"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `field` the ID of the field to update. For a custom field, it would look like `customfield_123`
+///  *  `value` the value to update the field with.
+///  *  `mode` `append` or `replace`. Determines if a value will be appended to the current value, or if the current value will be replaced.
+///
+/// ##### Trigger webhook #####
+///
+/// A post function that automatically triggers a predefined webhook when a transition occurs in the workflow.
+///
+///    {
+///       "ruleKey": "system:trigger-webhook",
+///       "parameters": {
+///         "webhookId": "1"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `webhookId` the ID of the webhook.
+///
+/// ##### Trigger agent #####
+///
+/// A post function that triggers a Jira AI agent for the issue after the transition runs, using the configured agent and an optional prompt. The agent run is asynchronous: it is scheduled after the transition finishes and does not block the transition.
+///
+///    {
+///       "ruleKey": "system:trigger-agent",
+///       "parameters": {
+///         "agentId": "712020:3c6d3f05-331a-4488-932e-37c34b704720",
+///         "promptValue": ""
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `agentId` the identifier of the agent to trigger (the Atlassian account ID of the agent).
+///  *  `promptValue` optional text passed to the agent as a user prompt after the transition runs; use an empty string if no extra prompt is needed.
+///
+/// #### Screen ####
+///
+/// ##### Remind people to update fields #####
+///
+/// A screen rule that prompts users to update a specific field when they interact with an issue screen during a transition. This rule is useful for ensuring that users provide or modify necessary information before moving an issue to the next step in the workflow.
+///
+///    {
+///       "ruleKey": "system:remind-people-to-update-fields",
+///       "params": {
+///         "remindingFieldIds": "assignee,customfield_10025",
+///         "remindingMessage": "The message",
+///         "remindingAlwaysAsk": "true"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `remindingFieldIds` a comma-separated list of field IDs. Note: `fieldId` is used interchangeably with the idea of `fieldKey` here, they refer to the same field.
+///  *  `remindingMessage` the message to display when prompting the users to update the fields.
+///  *  `remindingAlwaysAsk` always remind to update fields. Allowed values: `true`, `false`.
+///
+/// ##### Shared transition screen #####
+///
+/// A common screen that is shared between transitions in a workflow.
+///
+///    {
+///       "ruleKey": "system:transition-screen",
+///       "params": {
+///         "screenId": "3"
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `screenId` the ID of the screen.
+///
+/// #### Connect & Forge ####
+///
+/// ##### Connect rules #####
+///
+/// Validator/Condition/Post function for Connect app.
+///
+///    {
+///       "ruleKey": "connect:expression-validator",
+///       "parameters": {
+///         "appKey": "com.atlassian.app",
+///         "config": "",
+///         "id": "90ce590f-e90c-4cd3-8281-165ce41f2ac3",
+///         "disabled": "false",
+///         "tag": ""
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `ruleKey` Validator: `connect:expression-validator`, Condition: `connect:expression-condition`, and Post function: `connect:remote-workflow-function`
+///  *  `appKey` the reference to the Connect app
+///  *  `config` a JSON payload string describing the configuration
+///  *  `id` the ID of the rule
+///  *  `disabled` determine if the Connect app is disabled. Allowed values: `true`, `false`.
+///  *  `tag` additional tags for the Connect app
+///
+/// ##### Forge rules #####
+///
+/// Validator/Condition/Post function for Forge app.
+///
+///    {
+///       "ruleKey": "forge:expression-validator",
+///       "parameters": {
+///         "key": "ari:cloud:ecosystem::extension/{appId}/{environmentId}/static/{moduleKey}",
+///         "config": "{"searchString":"workflow validator"}",
+///         "id": "a865ddf6-bb3f-4a7b-9540-c2f8b3f9f6c2",
+///         "disabled": "false",
+///         "tag": ""
+///       }
+///     }
+///
+/// Parameters:
+///
+///  *  `ruleKey` Validator: `forge:expression-validator`, Condition: `forge:expression-condition`, and Post function: `forge:workflow-post-function`
+///  *  `key` the identifier for the Forge app
+///  *  `config` the persistent stringified JSON configuration for the Forge rule
+///  *  `id` the ID of the Forge rule
+///  *  `disabled` determine if the Forge app is disabled. Allowed values: `true`, `false`.
+///  *  `tag` additional tags for the Forge app
+#[derive(Clone)]
+pub struct WorkflowCapabilitiesRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_id: Option<String>,
+    project_id: Option<String>,
+    issue_type_id: Option<String>,
+}
+
+impl<'a> WorkflowCapabilitiesRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, workflow_id: None, project_id: None, issue_type_id: None }
+    }
+
+    #[must_use]
+    pub fn workflow_id(mut self, value: impl Into<String>) -> Self {
+        self.workflow_id = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn project_id(mut self, value: impl Into<String>) -> Self {
+        self.project_id = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn issue_type_id(mut self, value: impl Into<String>) -> Self {
+        self.issue_type_id = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/workflows/capabilities".to_owned());
+
+        if let Some(value) = &self.workflow_id {
+            config.query.push(("workflowId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.project_id {
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.issue_type_id {
+            config.query.push(("issueTypeId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowCapabilities> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Create workflows and related statuses.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
+///  *  *Administer projects* project permissions to create project-scoped workflows
+#[derive(Clone)]
+pub struct CreateWorkflowsRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_create_request: WorkflowCreateRequest,
+}
+
+impl<'a> CreateWorkflowsRequest<'a> {
+    fn new(client: &'a crate::core::Client, workflow_create_request: WorkflowCreateRequest) -> Self {
+        Self { client, workflow_create_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/workflows/create".to_owned());
+
+        let body = match serde_json::to_value(&self.workflow_create_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowCreateResponse> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Validate the payload for bulk create workflows.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
+///  *  *Administer projects* project permissions to create project-scoped workflows
+#[derive(Clone)]
+pub struct ValidateCreateWorkflowsRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_create_validate_request: WorkflowCreateValidateRequest,
+}
+
+impl<'a> ValidateCreateWorkflowsRequest<'a> {
+    fn new(client: &'a crate::core::Client, workflow_create_validate_request: WorkflowCreateValidateRequest) -> Self {
+        Self { client, workflow_create_validate_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            "/rest/api/3/workflows/create/validation".to_owned(),
+        );
+
+        let body = match serde_json::to_value(&self.workflow_create_validate_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowValidationErrorList> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Get the user's default workflow editor. This can be either the new editor or the legacy editor.
+#[derive(Clone)]
+pub struct GetDefaultEditorRequest<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> GetDefaultEditorRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/workflows/defaultEditor".to_owned());
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<DefaultWorkflowEditorResponse> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a requested workflow within a given project. The response provides a read-only preview of the workflow, omitting full configuration details.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions
+#[derive(Clone)]
+pub struct ReadWorkflowPreviewsRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_preview_request: WorkflowPreviewRequest,
+}
+
+impl<'a> ReadWorkflowPreviewsRequest<'a> {
+    fn new(client: &'a crate::core::Client, workflow_preview_request: WorkflowPreviewRequest) -> Self {
+        Self { client, workflow_preview_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/workflows/preview".to_owned());
+
+        let body = match serde_json::to_value(&self.workflow_preview_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowPreviewResponse> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of global and project workflows. If workflow names are specified in the query string, details of those workflows are returned. Otherwise, all workflows are returned.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Administer Jira* global permission to access all, including project-scoped, workflows
+///  *  At least one of the *Administer projects* and *View (read-only) workflow* project permissions to access project-scoped workflows
+#[derive(Clone)]
+pub struct SearchWorkflowsRequest<'a> {
+    client: &'a crate::core::Client,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
+    expand: Option<SearchWorkflowsRequestExpand>,
+    query_string: Option<String>,
+    order_by: Option<SearchWorkflowsRequestOrderBy>,
+    scope: Option<String>,
+    is_active: Option<bool>,
+    project_id: Option<i64>,
+}
+
+impl<'a> SearchWorkflowsRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self {
+            client,
+            start_at: None,
+            max_results: None,
+            expand: None,
+            query_string: None,
+            order_by: None,
+            scope: None,
+            is_active: None,
+            project_id: None,
+        }
+    }
+
+    /// The index of the first item to return in a page of results (page offset).
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return per page.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+    ///
+    ///  *  `values.transitions` Returns the transitions that each workflow is associated with.
+    #[must_use]
+    pub fn expand(mut self, value: SearchWorkflowsRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// String used to perform a case-insensitive partial match with workflow name.
+    #[must_use]
+    pub fn query_string(mut self, value: impl Into<String>) -> Self {
+        self.query_string = Some(value.into());
+
+        self
+    }
+
+    /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
+    ///
+    ///  *  `name` Sorts by workflow name.
+    ///  *  `created` Sorts by create time.
+    ///  *  `updated` Sorts by update time.
+    #[must_use]
+    pub fn order_by(mut self, value: impl Into<SearchWorkflowsRequestOrderBy>) -> Self {
+        self.order_by = Some(value.into());
+
+        self
+    }
+
+    /// The scope of the workflow. Global for company-managed projects and Project for team-managed projects.
+    #[must_use]
+    pub fn scope(mut self, value: impl Into<String>) -> Self {
+        self.scope = Some(value.into());
+
+        self
+    }
+
+    /// Filters active and inactive workflows.
+    #[must_use]
+    pub fn is_active(mut self, value: bool) -> Self {
+        self.is_active = Some(value);
+
+        self
+    }
+
+    /// The ID of the project to filter the workflows by. Only workflows associated with the given project are returned.
+    #[must_use]
+    pub fn project_id(mut self, value: i64) -> Self {
+        self.project_id = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/workflows/search".to_owned());
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.query_string {
+            config.query.push(("queryString".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.order_by {
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.scope {
+            config.query.push(("scope".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.is_active {
+            config.query.push(("isActive".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.project_id {
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowSearchResponse> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Update workflows and related statuses.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
+///  *  *Administer projects* project permissions to create project-scoped workflows
+#[derive(Clone)]
+pub struct UpdateWorkflowsRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_update_request: WorkflowUpdateRequest,
+}
+
+impl<'a> UpdateWorkflowsRequest<'a> {
+    fn new(client: &'a crate::core::Client, workflow_update_request: WorkflowUpdateRequest) -> Self {
+        Self { client, workflow_update_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/workflows/update".to_owned());
+
+        let body = match serde_json::to_value(&self.workflow_update_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowUpdateResponse> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Validate the payload for bulk update workflows.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Administer Jira* project permission to create all, including global-scoped, workflows
+///  *  *Administer projects* project permissions to create project-scoped workflows
+#[derive(Clone)]
+pub struct ValidateUpdateWorkflowsRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_update_validate_request: WorkflowUpdateValidateRequest,
+}
+
+impl<'a> ValidateUpdateWorkflowsRequest<'a> {
+    fn new(client: &'a crate::core::Client, workflow_update_validate_request: WorkflowUpdateValidateRequest) -> Self {
+        Self { client, workflow_update_validate_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            "/rest/api/3/workflows/update/validation".to_owned(),
+        );
+
+        let body = match serde_json::to_value(&self.workflow_update_validate_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowValidationErrorList> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

@@ -1,0 +1,12 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Whether there is data for the properties supplied in a query
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ExistsByProperties {
+    /// Whether there is data matching the query
+    #[serde(rename = "hasDataMatchingProperties", default, skip_serializing_if = "Option::is_none")]
+    pub has_data_matching_properties: Option<bool>,
+}

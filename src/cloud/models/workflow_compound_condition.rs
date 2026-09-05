@@ -1,0 +1,30 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum WorkflowCompoundConditionNodeType {
+    #[serde(rename = "compound")]
+    Compound,
+}
+
+crate::open_enum! {
+    /// The compound condition operator.
+    pub enum WorkflowCompoundConditionOperator {
+        And => "AND",
+        Or => "OR",
+    }
+}
+
+/// A compound workflow transition rule condition. This object returns `nodeType` as `compound`.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct WorkflowCompoundCondition {
+    /// The list of workflow conditions.
+    pub conditions: Vec<WorkflowCondition>,
+    #[serde(rename = "nodeType")]
+    pub node_type: WorkflowCompoundConditionNodeType,
+    /// The compound condition operator.
+    pub operator: WorkflowCompoundConditionOperator,
+}

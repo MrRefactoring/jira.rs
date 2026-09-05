@@ -1,0 +1,17 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Filter for a User Picker (single) custom field.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct UserFilter {
+    /// Whether the filter is enabled.
+    pub enabled: bool,
+    /// User groups autocomplete suggestion users must belong to. If not provided, the default values are used. A maximum of 10 groups can be provided.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub groups: Option<Vec<String>>,
+    /// Roles that autocomplete suggestion users must belong to. If not provided, the default values are used. A maximum of 10 roles can be provided.
+    #[serde(rename = "roleIds", default, skip_serializing_if = "Option::is_none")]
+    pub role_ids: Option<Vec<i64>>,
+}

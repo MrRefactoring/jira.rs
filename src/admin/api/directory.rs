@@ -1,0 +1,131 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The Directory operations.
+pub struct DirectoryService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> DirectoryService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns a page of directories in an organization that match the supplied parameters.
+    ///
+    /// #### Scopes
+    /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:directories:admin`
+    pub fn get_directories_for_org(&self, org_id: impl Into<String>) -> GetDirectoriesForOrgRequest<'a> {
+        GetDirectoriesForOrgRequest::new(self.client, org_id)
+    }
+}
+
+/// Returns a page of directories in an organization that match the supplied parameters.
+///
+/// #### Scopes
+/// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:directories:admin`
+#[derive(Clone)]
+pub struct GetDirectoriesForOrgRequest<'a> {
+    client: &'a crate::core::Client,
+    org_id: String,
+    account_id: Option<String>,
+    directory_ids: Option<Vec<String>>,
+    search_term: Option<String>,
+    cursor: Option<String>,
+    limit: Option<i64>,
+}
+
+impl<'a> GetDirectoriesForOrgRequest<'a> {
+    fn new(client: &'a crate::core::Client, org_id: impl Into<String>) -> Self {
+        Self {
+            client,
+            org_id: org_id.into(),
+            account_id: None,
+            directory_ids: None,
+            search_term: None,
+            cursor: None,
+            limit: None,
+        }
+    }
+
+    /// Filters the results to only the directories where the specified user is a member.
+    #[must_use]
+    pub fn account_id(mut self, value: impl Into<String>) -> Self {
+        self.account_id = Some(value.into());
+
+        self
+    }
+
+    /// A list of directory IDs. The requestor must have permissions to  administer resources linked to these directories.
+    #[must_use]
+    pub fn directory_ids(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.directory_ids = Some(value.into_iter().map(Into::into).collect());
+
+        self
+    }
+
+    /// A search term to search the `name` field.
+    #[must_use]
+    pub fn search_term(mut self, value: impl Into<String>) -> Self {
+        self.search_term = Some(value.into());
+
+        self
+    }
+
+    /// Sets the cursor position to retrieve the next set of results. If present, all other parameters are discarded when searching.
+    #[must_use]
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+
+        self
+    }
+
+    /// The desired number of results for the search request.
+    #[must_use]
+    pub fn limit(mut self, value: i64) -> Self {
+        self.limit = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/admin/v2/orgs/{}/directories", crate::core::encode_path_segment(&self.org_id)),
+        );
+
+        if let Some(value) = &self.account_id {
+            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.directory_ids {
+            config.query.push(("directoryIds".to_owned(), crate::core::QueryValue::List(value.clone())));
+        }
+
+        if let Some(value) = &self.search_term {
+            config.query.push(("searchTerm".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.cursor {
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.limit {
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<MultiDirectoryUserDirectoryPage> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

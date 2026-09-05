@@ -1,0 +1,56 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The transition type.
+    pub enum WorkflowTransitionsType {
+        Initial => "INITIAL",
+        Global => "GLOBAL",
+        Directed => "DIRECTED",
+    }
+}
+
+/// The transitions of the workflow.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct WorkflowTransitions {
+    /// The post-functions of the transition.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub actions: Option<Vec<WorkflowRuleConfiguration>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub conditions: Option<ConditionGroupConfiguration>,
+    /// The custom event ID of the transition.
+    #[serde(rename = "customIssueEventId", default, skip_serializing_if = "Option::is_none")]
+    pub custom_issue_event_id: Option<String>,
+    /// The description of the transition.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The ID of the transition.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// The statuses the transition can start from, and the mapping of ports between the statuses.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub links: Option<Vec<WorkflowTransitionLinks>>,
+    /// The name of the transition.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The properties of the transition.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// The status the transition goes to.
+    #[serde(rename = "toStatusReference", default, skip_serializing_if = "Option::is_none")]
+    pub to_status_reference: Option<String>,
+    #[serde(rename = "transitionScreen", default, skip_serializing_if = "Option::is_none")]
+    pub transition_screen: Option<WorkflowRuleConfiguration>,
+    /// The triggers of the transition.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub triggers: Option<Vec<WorkflowTrigger>>,
+    /// The transition type.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<WorkflowTransitionsType>,
+    /// The validators of the transition.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub validators: Option<Vec<WorkflowRuleConfiguration>>,
+}

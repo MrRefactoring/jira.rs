@@ -1,0 +1,46 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The strategy to use when there is a conflict with an existing project role. FAIL - Fail execution, this always needs to be unique; USE - Use the existing entity and ignore new entity parameters
+    pub enum RolePayloadOnConflict {
+        Fail => "FAIL",
+        Use => "USE",
+        New => "NEW",
+    }
+}
+
+crate::open_enum! {
+    /// The type of the role. Only used by project-scoped project
+    pub enum RolePayloadType {
+        Hidden => "HIDDEN",
+        Viewable => "VIEWABLE",
+        AiAgent => "AI_AGENT",
+        Editable => "EDITABLE",
+        Guest => "GUEST",
+    }
+}
+
+/// The payload used to create a project role. It is optional for CMP projects, as a default role actor will be provided. TMP will add new role actors to the table.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RolePayload {
+    /// The default actors for the role. By adding default actors, the role will be added to any future projects created
+    #[serde(rename = "defaultActors", default, skip_serializing_if = "Option::is_none")]
+    pub default_actors: Option<Vec<ProjectCreateResourceIdentifier>>,
+    /// The description of the role
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The name of the role
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The strategy to use when there is a conflict with an existing project role. FAIL - Fail execution, this always needs to be unique; USE - Use the existing entity and ignore new entity parameters
+    #[serde(rename = "onConflict", default, skip_serializing_if = "Option::is_none")]
+    pub on_conflict: Option<RolePayloadOnConflict>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub pcri: Option<ProjectCreateResourceIdentifier>,
+    /// The type of the role. Only used by project-scoped project
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<RolePayloadType>,
+}

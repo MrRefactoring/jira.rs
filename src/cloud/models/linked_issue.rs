@@ -1,0 +1,20 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// The ID or key of a linked issue.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct LinkedIssue {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub fields: Option<Fields>,
+    /// The ID of an issue. Required if `key` isn't provided.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// The key of an issue. Required if `id` isn't provided.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// The URL of the issue.
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+}

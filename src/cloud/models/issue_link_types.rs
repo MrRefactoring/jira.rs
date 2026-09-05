@@ -1,0 +1,13 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// A list of issue link type beans.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct IssueLinkTypes {
+    /// The issue link type bean.
+    #[serde(rename = "issueLinkTypes", default, skip_serializing_if = "Option::is_none")]
+    pub issue_link_types: Option<Vec<IssueLinkType>>,
+}

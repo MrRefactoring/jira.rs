@@ -1,0 +1,14 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// The current version details of this workflow scheme.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DocumentVersion {
+    /// The version UUID.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// The version number.
+    #[serde(rename = "versionNumber", default, skip_serializing_if = "Option::is_none")]
+    pub version_number: Option<i64>,
+}

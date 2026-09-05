@@ -1,0 +1,26 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct WorkflowSchemeReadResponse {
+    #[serde(rename = "defaultWorkflow", default, skip_serializing_if = "Option::is_none")]
+    pub default_workflow: Option<WorkflowMetadataRestModel>,
+    /// The description of the workflow scheme.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The ID of the workflow scheme.
+    pub id: String,
+    /// The name of the workflow scheme.
+    pub name: String,
+    pub scope: WorkflowScope,
+    /// Indicates if there's an [asynchronous task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async-operations) for this workflow scheme.
+    #[serde(rename = "taskId", default, skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+    pub version: DocumentVersion,
+    /// Mappings from workflows to issue types.
+    #[serde(rename = "workflowsForIssueTypes")]
+    pub workflows_for_issue_types: Vec<WorkflowMetadataAndIssueTypeRestModel>,
+}

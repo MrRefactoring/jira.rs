@@ -1,0 +1,16 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Partial failure result when updating field scheme to projects associations.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct FieldSchemeToProjectsPartialFailure {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
+    #[serde(rename = "projectId")]
+    pub project_id: i64,
+    #[serde(rename = "schemeId")]
+    pub scheme_id: i64,
+    pub success: bool,
+}

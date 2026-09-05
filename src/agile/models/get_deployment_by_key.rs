@@ -1,0 +1,145 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetDeploymentByKeyAssociations {
+    IssueIdOrKeysAssociation(IssueIdOrKeysAssociation),
+    ServiceIdOrKeysAssociation(ServiceIdOrKeysAssociation),
+    EntityAssociation(EntityAssociation),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    /// The state of the deployment
+    pub enum GetDeploymentByKeyState {
+        Unknown => "unknown",
+        Pending => "pending",
+        InProgress => "in_progress",
+        Cancelled => "cancelled",
+        Failed => "failed",
+        RolledBack => "rolled_back",
+        Successful => "successful",
+    }
+}
+
+/// This object models the Continuous Delivery (CD) Pipeline concept, an automated process (usually comprised of multiple stages)
+///
+/// for getting software from version control right through to the production environment.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct GetDeploymentByKeyPipeline {
+    /// The identifier of this pipeline, must be unique for the provider.
+    pub id: String,
+    /// The name of the pipeline to present to the user.
+    #[serde(rename = "displayName")]
+    pub display_name: String,
+    /// A URL users can use to link to this deployment pipeline.
+    pub url: String,
+}
+
+crate::open_enum! {
+    /// The type of the environment.
+    pub enum GetDeploymentByKeyEnvironmentType {
+        Unmapped => "unmapped",
+        Development => "development",
+        Testing => "testing",
+        Staging => "staging",
+        Production => "production",
+    }
+}
+
+/// The environment that the deployment is present in.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct GetDeploymentByKeyEnvironment {
+    /// The identifier of this environment, must be unique for the provider so that it can be shared across pipelines.
+    pub id: String,
+    /// The name of the environment to present to the user.
+    #[serde(rename = "displayName")]
+    pub display_name: String,
+    /// The type of the environment.
+    pub r#type: GetDeploymentByKeyEnvironmentType,
+}
+
+/// A command to be actioned for this Deployment
+/// - command
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct GetDeploymentByKeyCommands {
+    /// The command name.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub command: Option<String>,
+}
+
+crate::open_enum! {
+    /// The DeploymentData schema version used for this deployment data.
+    ///
+    /// Placeholder to support potential schema changes in the future.
+    pub enum GetDeploymentByKeySchemaVersion {
+        N10 => "1.0",
+    }
+}
+
+/// Data related to a specific deployment in a specific environment that the deployment is present in.
+/// Must specify one of `issueKeys` or `associations`.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct GetDeploymentByKey {
+    /// This is the identifier for the deployment. It must be unique for the specified pipeline and environment. It must be a monotonically increasing number, as this is used to sequence the deployments.
+    #[serde(rename = "deploymentSequenceNumber")]
+    pub deployment_sequence_number: i64,
+    /// A number used to apply an order to the updates to the deployment, as identified by the deploymentSequenceNumber, in the case of out-of-order receipt of update requests. It must be a monotonically increasing number. For example, epoch time could be one way to generate the updateSequenceNumber.
+    #[serde(rename = "updateSequenceNumber")]
+    pub update_sequence_number: i64,
+    /// The entities to associate the Deployment information with.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub associations: Option<Vec<GetDeploymentByKeyAssociations>>,
+    /// The human-readable name for the deployment. Will be shown in the UI.
+    #[serde(rename = "displayName")]
+    pub display_name: String,
+    /// A URL users can use to link to this deployment, in this environment.
+    pub url: String,
+    /// A short description of the deployment
+    pub description: String,
+    /// The last-updated timestamp to present to the user as a summary of the state of the deployment.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user as a summary of the state of the deployment.
+    #[cfg(not(feature = "chrono"))]
+    #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
+    pub last_updated: String,
+    /// An (optional) additional label that may be displayed with deployment information. Can be used to display version information etc. for the deployment.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub label: Option<String>,
+    /// The duration of the deployment (in seconds).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub duration: Option<i64>,
+    /// The state of the deployment
+    pub state: GetDeploymentByKeyState,
+    /// This object models the Continuous Delivery (CD) Pipeline concept, an automated process (usually comprised of multiple stages)
+    ///
+    /// for getting software from version control right through to the production environment.
+    pub pipeline: GetDeploymentByKeyPipeline,
+    /// The environment that the deployment is present in.
+    pub environment: GetDeploymentByKeyEnvironment,
+    /// A list of commands to be actioned for this Deployment
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub commands: Option<Vec<GetDeploymentByKeyCommands>>,
+    /// The DeploymentData schema version used for this deployment data.
+    ///
+    /// Placeholder to support potential schema changes in the future.
+    #[serde(rename = "schemaVersion", default, skip_serializing_if = "Option::is_none")]
+    pub schema_version: Option<GetDeploymentByKeySchemaVersion>,
+}

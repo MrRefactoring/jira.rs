@@ -1,0 +1,18 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct NotificationJson {
+    #[serde(rename = "htmlBody", default, skip_serializing_if = "Option::is_none")]
+    pub html_body: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub restrict: Option<RestrictJson>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub subject: Option<String>,
+    #[serde(rename = "textBody", default, skip_serializing_if = "Option::is_none")]
+    pub text_body: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub to: Option<ToJson>,
+}

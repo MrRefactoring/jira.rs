@@ -1,0 +1,40 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Details about a field.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct FieldDetails {
+    /// The names that can be used to reference the field in an advanced search. For more information, see [Advanced searching - fields reference](https://confluence.atlassian.com/x/gwORLQ).
+    #[serde(rename = "clauseNames", default, skip_serializing_if = "Option::is_none")]
+    pub clause_names: Option<Vec<String>>,
+    /// Whether the field is a custom field.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub custom: Option<bool>,
+    /// The ID of the field.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// The key of the field.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// The name of the field.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// Whether the field can be used as a column on the issue navigator.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub navigable: Option<bool>,
+    /// Whether the content of the field can be used to order lists.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub orderable: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub schema: Option<JsonType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub scope: Option<Scope>,
+    /// Whether the content of the field can be searched.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub searchable: Option<bool>,
+    #[serde(rename = "untranslatedName", default, skip_serializing_if = "Option::is_none")]
+    pub untranslated_name: Option<String>,
+}

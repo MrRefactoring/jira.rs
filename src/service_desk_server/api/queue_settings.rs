@@ -1,0 +1,255 @@
+// @generated. Do not edit: change the generator or the specification.
+
+/// The QueueSettings operations.
+pub struct QueueSettingsService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> QueueSettingsService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Retrieve the current state of configurable settings for the projects Queue.
+    pub fn get_queue_settings_on_project(
+        &self,
+        project_key: impl Into<String>,
+    ) -> GetQueueSettingsOnProjectRequest<'a> {
+        GetQueueSettingsOnProjectRequest::new(self.client, project_key)
+    }
+
+    /// Allows to set whether service project queues should include the issue count on the Queues page. This is a global setting that if disabled will override any project level settings. The default value is always true. The intention of this method is that if you are experiencing performance issues with queue rendering on agent pages, then this setting might be of use to try toggling the queue count on/off. The queue count executes a JQL query that may take time on instances with many projects/issues.
+    pub fn set_should_queues_include_count_globally(&self) -> SetShouldQueuesIncludeCountGloballyRequest<'a> {
+        SetShouldQueuesIncludeCountGloballyRequest::new(self.client)
+    }
+
+    /// Allows to set whether service project queues should include the issue count on the Queues page for specified project. This is a project level setting, and it's enabled state can be overrided by the global setting. To enable queue count this and the global setting must be true. The default value is always true. The intention of this method is that if you are experiencing performance issues with queue rendering on agent pages, then this setting might be of use to try toggling the queue count on/off. The queue count executes a JQL query that may take time on instances with many projects/issues.
+    pub fn set_should_queues_include_count_on_project(
+        &self,
+        project_key: impl Into<String>,
+    ) -> SetShouldQueuesIncludeCountOnProjectRequest<'a> {
+        SetShouldQueuesIncludeCountOnProjectRequest::new(self.client, project_key)
+    }
+
+    /// Allows to set whether service project queues should always return as soon as possible, and schedule the queue count to happen off-thread. This is a global setting that if disabled will override any project level settings. The default value is always false. The intention of this method is that if you are experiencing performance issues with queue rendering on agent pages, then this setting might be of use to try toggling the queue count on/off. With this enabled, any project that also enables this setting, will return the latest cached value (up to a expiry time limit) and schedule a new count to occur in a new thread. That new thread will update the cache value when done, and subsequent update of the queue view, through polling or refresh, will take that as the latest cache value. When no cache value, or it has expired, the queue count will be blank. The queue count will still be specific to the agent viewing the queue, so any view restrictions will remain. This setting is an option to try if would are having some performance issues, but do not want to turn queue count off completely, and are happy with an approximate value.
+    pub fn set_should_queues_use_count_cache_globally(&self) -> SetShouldQueuesUseCountCacheGloballyRequest<'a> {
+        SetShouldQueuesUseCountCacheGloballyRequest::new(self.client)
+    }
+
+    /// Allows to set whether service project queues should include the issue count on the Queues page for specified project. This is a project level setting, and it's enabled state can be overrided by the global setting. To enable queue count this and the global setting must be true. The default value is always true. The intention of this method is that if you are experiencing performance issues with queue rendering on agent pages, then this setting might be of use to try toggling the queue count on/off. With this enabled, if the global setting is also enabled, queues for project will return the latest cached value (up to a expiry time limit) and schedule a new count to occur in a new thread. That new thread will update the cache value when done, and subsequent update of the queue view, through polling or refresh, will take that as the latest cache value. When no cache value, or it has expired, the queue count will be blank. The queue count will still be specific to the agent viewing the queue, so any view restrictions will remain. This setting is an option to try if would are having some performance issues, but do not want to turn queue count off completely, and are happy with an approximate value.
+    pub fn set_should_queues_use_count_cache_on_project(
+        &self,
+        project_key: impl Into<String>,
+    ) -> SetShouldQueuesUseCountCacheOnProjectRequest<'a> {
+        SetShouldQueuesUseCountCacheOnProjectRequest::new(self.client, project_key)
+    }
+}
+
+/// Retrieve the current state of configurable settings for the projects Queue.
+#[derive(Clone)]
+pub struct GetQueueSettingsOnProjectRequest<'a> {
+    client: &'a crate::core::Client,
+    project_key: String,
+}
+
+impl<'a> GetQueueSettingsOnProjectRequest<'a> {
+    fn new(client: &'a crate::core::Client, project_key: impl Into<String>) -> Self {
+        Self { client, project_key: project_key.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/servicedeskapi/admin/queues/{}", crate::core::encode_path_segment(&self.project_key)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Allows to set whether service project queues should include the issue count on the Queues page. This is a global setting that if disabled will override any project level settings. The default value is always true. The intention of this method is that if you are experiencing performance issues with queue rendering on agent pages, then this setting might be of use to try toggling the queue count on/off. The queue count executes a JQL query that may take time on instances with many projects/issues.
+#[derive(Clone)]
+pub struct SetShouldQueuesIncludeCountGloballyRequest<'a> {
+    client: &'a crate::core::Client,
+    body: Option<bool>,
+}
+
+impl<'a> SetShouldQueuesIncludeCountGloballyRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, body: None }
+    }
+
+    #[must_use]
+    pub fn body(mut self, value: bool) -> Self {
+        self.body = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            "/rest/servicedeskapi/admin/queues/include-count".to_owned(),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Allows to set whether service project queues should include the issue count on the Queues page for specified project. This is a project level setting, and it's enabled state can be overrided by the global setting. To enable queue count this and the global setting must be true. The default value is always true. The intention of this method is that if you are experiencing performance issues with queue rendering on agent pages, then this setting might be of use to try toggling the queue count on/off. The queue count executes a JQL query that may take time on instances with many projects/issues.
+#[derive(Clone)]
+pub struct SetShouldQueuesIncludeCountOnProjectRequest<'a> {
+    client: &'a crate::core::Client,
+    project_key: String,
+    body: Option<bool>,
+}
+
+impl<'a> SetShouldQueuesIncludeCountOnProjectRequest<'a> {
+    fn new(client: &'a crate::core::Client, project_key: impl Into<String>) -> Self {
+        Self { client, project_key: project_key.into(), body: None }
+    }
+
+    #[must_use]
+    pub fn body(mut self, value: bool) -> Self {
+        self.body = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!(
+                "/rest/servicedeskapi/admin/queues/{}/include-count",
+                crate::core::encode_path_segment(&self.project_key)
+            ),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Allows to set whether service project queues should always return as soon as possible, and schedule the queue count to happen off-thread. This is a global setting that if disabled will override any project level settings. The default value is always false. The intention of this method is that if you are experiencing performance issues with queue rendering on agent pages, then this setting might be of use to try toggling the queue count on/off. With this enabled, any project that also enables this setting, will return the latest cached value (up to a expiry time limit) and schedule a new count to occur in a new thread. That new thread will update the cache value when done, and subsequent update of the queue view, through polling or refresh, will take that as the latest cache value. When no cache value, or it has expired, the queue count will be blank. The queue count will still be specific to the agent viewing the queue, so any view restrictions will remain. This setting is an option to try if would are having some performance issues, but do not want to turn queue count off completely, and are happy with an approximate value.
+#[derive(Clone)]
+pub struct SetShouldQueuesUseCountCacheGloballyRequest<'a> {
+    client: &'a crate::core::Client,
+    body: Option<bool>,
+}
+
+impl<'a> SetShouldQueuesUseCountCacheGloballyRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, body: None }
+    }
+
+    #[must_use]
+    pub fn body(mut self, value: bool) -> Self {
+        self.body = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            "/rest/servicedeskapi/admin/queues/cache-count".to_owned(),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Allows to set whether service project queues should include the issue count on the Queues page for specified project. This is a project level setting, and it's enabled state can be overrided by the global setting. To enable queue count this and the global setting must be true. The default value is always true. The intention of this method is that if you are experiencing performance issues with queue rendering on agent pages, then this setting might be of use to try toggling the queue count on/off. With this enabled, if the global setting is also enabled, queues for project will return the latest cached value (up to a expiry time limit) and schedule a new count to occur in a new thread. That new thread will update the cache value when done, and subsequent update of the queue view, through polling or refresh, will take that as the latest cache value. When no cache value, or it has expired, the queue count will be blank. The queue count will still be specific to the agent viewing the queue, so any view restrictions will remain. This setting is an option to try if would are having some performance issues, but do not want to turn queue count off completely, and are happy with an approximate value.
+#[derive(Clone)]
+pub struct SetShouldQueuesUseCountCacheOnProjectRequest<'a> {
+    client: &'a crate::core::Client,
+    project_key: String,
+    body: Option<bool>,
+}
+
+impl<'a> SetShouldQueuesUseCountCacheOnProjectRequest<'a> {
+    fn new(client: &'a crate::core::Client, project_key: impl Into<String>) -> Self {
+        Self { client, project_key: project_key.into(), body: None }
+    }
+
+    #[must_use]
+    pub fn body(mut self, value: bool) -> Self {
+        self.body = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!(
+                "/rest/servicedeskapi/admin/queues/{}/cache-count",
+                crate::core::encode_path_segment(&self.project_key)
+            ),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

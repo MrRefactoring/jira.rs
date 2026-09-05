@@ -1,0 +1,23 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum CardLayoutFieldMode {
+        Plan => "PLAN",
+        Work => "WORK",
+    }
+}
+
+/// Card layout settings of the board
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct CardLayoutField {
+    #[serde(rename = "fieldId", default, skip_serializing_if = "Option::is_none")]
+    pub field_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub mode: Option<CardLayoutFieldMode>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub position: Option<i64>,
+}

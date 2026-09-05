@@ -1,0 +1,39 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The strategy to use if there is a conflict with another workflow
+    pub enum WorkflowPayloadOnConflict {
+        Fail => "FAIL",
+        Use => "USE",
+        New => "NEW",
+    }
+}
+
+/// The payload for creating workflow, see <https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflows/#api-rest-api-3-workflows-create-post>
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct WorkflowPayload {
+    /// The description of the workflow
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "loopedTransitionContainerLayout", default, skip_serializing_if = "Option::is_none")]
+    pub looped_transition_container_layout: Option<WorkflowStatusLayoutPayload>,
+    /// The name of the workflow
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The strategy to use if there is a conflict with another workflow
+    #[serde(rename = "onConflict", default, skip_serializing_if = "Option::is_none")]
+    pub on_conflict: Option<WorkflowPayloadOnConflict>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub pcri: Option<ProjectCreateResourceIdentifier>,
+    #[serde(rename = "startPointLayout", default, skip_serializing_if = "Option::is_none")]
+    pub start_point_layout: Option<WorkflowStatusLayoutPayload>,
+    /// The statuses to be used in the workflow
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub statuses: Option<Vec<WorkflowStatusPayload>>,
+    /// The transitions for the workflow
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub transitions: Option<Vec<TransitionPayload>>,
+}

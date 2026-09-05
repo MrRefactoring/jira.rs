@@ -1,0 +1,484 @@
+// @generated. Do not edit: change the generator or the specification.
+
+//! The Cloud surface.
+
+pub mod api;
+pub mod models;
+
+pub use api::*;
+pub use models::*;
+
+/// Every Cloud operation, grouped the way the API documents them.
+///
+/// Build the transport once and hand it to each surface: a second client is a second set of OAuth tokens,
+/// and whichever refreshes first invalidates the other.
+pub struct CloudClient {
+    client: crate::core::Client,
+}
+
+impl CloudClient {
+    pub fn new(client: crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// The transport underneath, for a request this surface does not describe.
+    pub fn client(&self) -> &crate::core::Client {
+        &self.client
+    }
+
+    /// The AnnouncementBanner operations.
+    pub fn announcement_banner(&self) -> AnnouncementBannerService<'_> {
+        AnnouncementBannerService::new(&self.client)
+    }
+
+    /// The IssueCustomFieldValuesApps operations.
+    pub fn issue_custom_field_values_apps(&self) -> IssueCustomFieldValuesAppsService<'_> {
+        IssueCustomFieldValuesAppsService::new(&self.client)
+    }
+
+    /// The IssueCustomFieldConfigurationApps operations.
+    pub fn issue_custom_field_configuration_apps(&self) -> IssueCustomFieldConfigurationAppsService<'_> {
+        IssueCustomFieldConfigurationAppsService::new(&self.client)
+    }
+
+    /// The JiraSettings operations.
+    pub fn jira_settings(&self) -> JiraSettingsService<'_> {
+        JiraSettingsService::new(&self.client)
+    }
+
+    /// The ApplicationRoles operations.
+    pub fn application_roles(&self) -> ApplicationRolesService<'_> {
+        ApplicationRolesService::new(&self.client)
+    }
+
+    /// The IssueAttachments operations.
+    pub fn issue_attachments(&self) -> IssueAttachmentsService<'_> {
+        IssueAttachmentsService::new(&self.client)
+    }
+
+    /// The AuditRecords operations.
+    pub fn audit_records(&self) -> AuditRecordsService<'_> {
+        AuditRecordsService::new(&self.client)
+    }
+
+    /// The Avatars operations.
+    pub fn avatars(&self) -> AvatarsService<'_> {
+        AvatarsService::new(&self.client)
+    }
+
+    /// The IssueBulkOperations operations.
+    pub fn issue_bulk_operations(&self) -> IssueBulkOperationsService<'_> {
+        IssueBulkOperationsService::new(&self.client)
+    }
+
+    /// The Issues operations.
+    pub fn issues(&self) -> IssuesService<'_> {
+        IssuesService::new(&self.client)
+    }
+
+    /// The IssueComments operations.
+    pub fn issue_comments(&self) -> IssueCommentsService<'_> {
+        IssueCommentsService::new(&self.client)
+    }
+
+    /// The IssueCommentProperties operations.
+    pub fn issue_comment_properties(&self) -> IssueCommentPropertiesService<'_> {
+        IssueCommentPropertiesService::new(&self.client)
+    }
+
+    /// The ProjectComponents operations.
+    pub fn project_components(&self) -> ProjectComponentsService<'_> {
+        ProjectComponentsService::new(&self.client)
+    }
+
+    /// The TimeTracking operations.
+    pub fn time_tracking(&self) -> TimeTrackingService<'_> {
+        TimeTrackingService::new(&self.client)
+    }
+
+    /// The IssueCustomFieldOptions operations.
+    pub fn issue_custom_field_options(&self) -> IssueCustomFieldOptionsService<'_> {
+        IssueCustomFieldOptionsService::new(&self.client)
+    }
+
+    /// The Dashboards operations.
+    pub fn dashboards(&self) -> DashboardsService<'_> {
+        DashboardsService::new(&self.client)
+    }
+
+    /// The AppDataPolicies operations.
+    pub fn app_data_policies(&self) -> AppDataPoliciesService<'_> {
+        AppDataPoliciesService::new(&self.client)
+    }
+
+    /// The JiraExpressions operations.
+    pub fn jira_expressions(&self) -> JiraExpressionsService<'_> {
+        JiraExpressionsService::new(&self.client)
+    }
+
+    /// The IssueFields operations.
+    pub fn issue_fields(&self) -> IssueFieldsService<'_> {
+        IssueFieldsService::new(&self.client)
+    }
+
+    /// The IssueCustomFieldAssociations operations.
+    pub fn issue_custom_field_associations(&self) -> IssueCustomFieldAssociationsService<'_> {
+        IssueCustomFieldAssociationsService::new(&self.client)
+    }
+
+    /// The IssueCustomFieldContexts operations.
+    pub fn issue_custom_field_contexts(&self) -> IssueCustomFieldContextsService<'_> {
+        IssueCustomFieldContextsService::new(&self.client)
+    }
+
+    /// The Screens operations.
+    pub fn screens(&self) -> ScreensService<'_> {
+        ScreensService::new(&self.client)
+    }
+
+    /// The IssueCustomFieldOptionsApps operations.
+    pub fn issue_custom_field_options_apps(&self) -> IssueCustomFieldOptionsAppsService<'_> {
+        IssueCustomFieldOptionsAppsService::new(&self.client)
+    }
+
+    /// The Filters operations.
+    pub fn filters(&self) -> FiltersService<'_> {
+        FiltersService::new(&self.client)
+    }
+
+    /// The FilterSharing operations.
+    pub fn filter_sharing(&self) -> FilterSharingService<'_> {
+        FilterSharingService::new(&self.client)
+    }
+
+    /// The IssuePanels operations.
+    pub fn issue_panels(&self) -> IssuePanelsService<'_> {
+        IssuePanelsService::new(&self.client)
+    }
+
+    /// The Groups operations.
+    pub fn groups(&self) -> GroupsService<'_> {
+        GroupsService::new(&self.client)
+    }
+
+    /// The GroupAndUserPicker operations.
+    pub fn group_and_user_picker(&self) -> GroupAndUserPickerService<'_> {
+        GroupAndUserPickerService::new(&self.client)
+    }
+
+    /// The IssueSearch operations.
+    pub fn issue_search(&self) -> IssueSearchService<'_> {
+        IssueSearchService::new(&self.client)
+    }
+
+    /// The IssueProperties operations.
+    pub fn issue_properties(&self) -> IssuePropertiesService<'_> {
+        IssuePropertiesService::new(&self.client)
+    }
+
+    /// The IssueWatchers operations.
+    pub fn issue_watchers(&self) -> IssueWatchersService<'_> {
+        IssueWatchersService::new(&self.client)
+    }
+
+    /// The IssueRemoteLinks operations.
+    pub fn issue_remote_links(&self) -> IssueRemoteLinksService<'_> {
+        IssueRemoteLinksService::new(&self.client)
+    }
+
+    /// The IssueVotes operations.
+    pub fn issue_votes(&self) -> IssueVotesService<'_> {
+        IssueVotesService::new(&self.client)
+    }
+
+    /// The IssueWorklogs operations.
+    pub fn issue_worklogs(&self) -> IssueWorklogsService<'_> {
+        IssueWorklogsService::new(&self.client)
+    }
+
+    /// The IssueWorklogProperties operations.
+    pub fn issue_worklog_properties(&self) -> IssueWorklogPropertiesService<'_> {
+        IssueWorklogPropertiesService::new(&self.client)
+    }
+
+    /// The IssueLinks operations.
+    pub fn issue_links(&self) -> IssueLinksService<'_> {
+        IssueLinksService::new(&self.client)
+    }
+
+    /// The IssueLinkTypes operations.
+    pub fn issue_link_types(&self) -> IssueLinkTypesService<'_> {
+        IssueLinkTypesService::new(&self.client)
+    }
+
+    /// The IssueSecuritySchemes operations.
+    pub fn issue_security_schemes(&self) -> IssueSecuritySchemesService<'_> {
+        IssueSecuritySchemesService::new(&self.client)
+    }
+
+    /// The IssueSecurityLevel operations.
+    pub fn issue_security_level(&self) -> IssueSecurityLevelService<'_> {
+        IssueSecurityLevelService::new(&self.client)
+    }
+
+    /// The IssueTypes operations.
+    pub fn issue_types(&self) -> IssueTypesService<'_> {
+        IssueTypesService::new(&self.client)
+    }
+
+    /// The IssueTypeProperties operations.
+    pub fn issue_type_properties(&self) -> IssueTypePropertiesService<'_> {
+        IssueTypePropertiesService::new(&self.client)
+    }
+
+    /// The IssueTypeSchemes operations.
+    pub fn issue_type_schemes(&self) -> IssueTypeSchemesService<'_> {
+        IssueTypeSchemesService::new(&self.client)
+    }
+
+    /// The IssueTypeScreenSchemes operations.
+    pub fn issue_type_screen_schemes(&self) -> IssueTypeScreenSchemesService<'_> {
+        IssueTypeScreenSchemesService::new(&self.client)
+    }
+
+    /// The JQL operations.
+    pub fn jql(&self) -> JQLService<'_> {
+        JQLService::new(&self.client)
+    }
+
+    /// The JQLFunctionsApps operations.
+    pub fn jql_functions_apps(&self) -> JQLFunctionsAppsService<'_> {
+        JQLFunctionsAppsService::new(&self.client)
+    }
+
+    /// The Labels operations.
+    pub fn labels(&self) -> LabelsService<'_> {
+        LabelsService::new(&self.client)
+    }
+
+    /// The Permissions operations.
+    pub fn permissions(&self) -> PermissionsService<'_> {
+        PermissionsService::new(&self.client)
+    }
+
+    /// The Myself operations.
+    pub fn myself(&self) -> MyselfService<'_> {
+        MyselfService::new(&self.client)
+    }
+
+    /// The IssueNotificationSchemes operations.
+    pub fn issue_notification_schemes(&self) -> IssueNotificationSchemesService<'_> {
+        IssueNotificationSchemesService::new(&self.client)
+    }
+
+    /// The PermissionSchemes operations.
+    pub fn permission_schemes(&self) -> PermissionSchemesService<'_> {
+        PermissionSchemesService::new(&self.client)
+    }
+
+    /// The IssuePriorities operations.
+    pub fn issue_priorities(&self) -> IssuePrioritiesService<'_> {
+        IssuePrioritiesService::new(&self.client)
+    }
+
+    /// The Projects operations.
+    pub fn projects(&self) -> ProjectsService<'_> {
+        ProjectsService::new(&self.client)
+    }
+
+    /// The ProjectTemplates operations.
+    pub fn project_templates(&self) -> ProjectTemplatesService<'_> {
+        ProjectTemplatesService::new(&self.client)
+    }
+
+    /// The ProjectTypes operations.
+    pub fn project_types(&self) -> ProjectTypesService<'_> {
+        ProjectTypesService::new(&self.client)
+    }
+
+    /// The ProjectAvatars operations.
+    pub fn project_avatars(&self) -> ProjectAvatarsService<'_> {
+        ProjectAvatarsService::new(&self.client)
+    }
+
+    /// The ProjectFeatures operations.
+    pub fn project_features(&self) -> ProjectFeaturesService<'_> {
+        ProjectFeaturesService::new(&self.client)
+    }
+
+    /// The ProjectProperties operations.
+    pub fn project_properties(&self) -> ProjectPropertiesService<'_> {
+        ProjectPropertiesService::new(&self.client)
+    }
+
+    /// The ProjectRoles operations.
+    pub fn project_roles(&self) -> ProjectRolesService<'_> {
+        ProjectRolesService::new(&self.client)
+    }
+
+    /// The ProjectRoleActors operations.
+    pub fn project_role_actors(&self) -> ProjectRoleActorsService<'_> {
+        ProjectRoleActorsService::new(&self.client)
+    }
+
+    /// The ProjectVersions operations.
+    pub fn project_versions(&self) -> ProjectVersionsService<'_> {
+        ProjectVersionsService::new(&self.client)
+    }
+
+    /// The ProjectEmail operations.
+    pub fn project_email(&self) -> ProjectEmailService<'_> {
+        ProjectEmailService::new(&self.client)
+    }
+
+    /// The ProjectPermissionSchemes operations.
+    pub fn project_permission_schemes(&self) -> ProjectPermissionSchemesService<'_> {
+        ProjectPermissionSchemesService::new(&self.client)
+    }
+
+    /// The ProjectCategories operations.
+    pub fn project_categories(&self) -> ProjectCategoriesService<'_> {
+        ProjectCategoriesService::new(&self.client)
+    }
+
+    /// The ProjectKeyAndNameValidation operations.
+    pub fn project_key_and_name_validation(&self) -> ProjectKeyAndNameValidationService<'_> {
+        ProjectKeyAndNameValidationService::new(&self.client)
+    }
+
+    /// The IssueRedaction operations.
+    pub fn issue_redaction(&self) -> IssueRedactionService<'_> {
+        IssueRedactionService::new(&self.client)
+    }
+
+    /// The IssueResolutions operations.
+    pub fn issue_resolutions(&self) -> IssueResolutionsService<'_> {
+        IssueResolutionsService::new(&self.client)
+    }
+
+    /// The ScreenTabs operations.
+    pub fn screen_tabs(&self) -> ScreenTabsService<'_> {
+        ScreenTabsService::new(&self.client)
+    }
+
+    /// The ScreenTabFields operations.
+    pub fn screen_tab_fields(&self) -> ScreenTabFieldsService<'_> {
+        ScreenTabFieldsService::new(&self.client)
+    }
+
+    /// The ScreenSchemes operations.
+    pub fn screen_schemes(&self) -> ScreenSchemesService<'_> {
+        ScreenSchemesService::new(&self.client)
+    }
+
+    /// The ServerInfo operations.
+    pub fn server_info(&self) -> ServerInfoService<'_> {
+        ServerInfoService::new(&self.client)
+    }
+
+    /// The IssueNavigatorSettings operations.
+    pub fn issue_navigator_settings(&self) -> IssueNavigatorSettingsService<'_> {
+        IssueNavigatorSettingsService::new(&self.client)
+    }
+
+    /// The WorkflowStatuses operations.
+    pub fn workflow_statuses(&self) -> WorkflowStatusesService<'_> {
+        WorkflowStatusesService::new(&self.client)
+    }
+
+    /// The WorkflowStatusCategories operations.
+    pub fn workflow_status_categories(&self) -> WorkflowStatusCategoriesService<'_> {
+        WorkflowStatusCategoriesService::new(&self.client)
+    }
+
+    /// The Status operations.
+    pub fn status(&self) -> StatusService<'_> {
+        StatusService::new(&self.client)
+    }
+
+    /// The Tasks operations.
+    pub fn tasks(&self) -> TasksService<'_> {
+        TasksService::new(&self.client)
+    }
+
+    /// The UIModificationsApps operations.
+    pub fn ui_modifications_apps(&self) -> UIModificationsAppsService<'_> {
+        UIModificationsAppsService::new(&self.client)
+    }
+
+    /// The Users operations.
+    pub fn users(&self) -> UsersService<'_> {
+        UsersService::new(&self.client)
+    }
+
+    /// The UserSearch operations.
+    pub fn user_search(&self) -> UserSearchService<'_> {
+        UserSearchService::new(&self.client)
+    }
+
+    /// The UserProperties operations.
+    pub fn user_properties(&self) -> UserPropertiesService<'_> {
+        UserPropertiesService::new(&self.client)
+    }
+
+    /// The Webhooks operations.
+    pub fn webhooks(&self) -> WebhooksService<'_> {
+        WebhooksService::new(&self.client)
+    }
+
+    /// The Workflows operations.
+    pub fn workflows(&self) -> WorkflowsService<'_> {
+        WorkflowsService::new(&self.client)
+    }
+
+    /// The WorkflowTransitionRules operations.
+    pub fn workflow_transition_rules(&self) -> WorkflowTransitionRulesService<'_> {
+        WorkflowTransitionRulesService::new(&self.client)
+    }
+
+    /// The WorkflowSchemes operations.
+    pub fn workflow_schemes(&self) -> WorkflowSchemesService<'_> {
+        WorkflowSchemesService::new(&self.client)
+    }
+
+    /// The WorkflowSchemeProjectAssociations operations.
+    pub fn workflow_scheme_project_associations(&self) -> WorkflowSchemeProjectAssociationsService<'_> {
+        WorkflowSchemeProjectAssociationsService::new(&self.client)
+    }
+
+    /// The WorkflowSchemeDrafts operations.
+    pub fn workflow_scheme_drafts(&self) -> WorkflowSchemeDraftsService<'_> {
+        WorkflowSchemeDraftsService::new(&self.client)
+    }
+
+    /// The AppProperties operations.
+    pub fn app_properties(&self) -> AppPropertiesService<'_> {
+        AppPropertiesService::new(&self.client)
+    }
+
+    /// The DynamicModules operations.
+    pub fn dynamic_modules(&self) -> DynamicModulesService<'_> {
+        DynamicModulesService::new(&self.client)
+    }
+
+    /// The AppMigration operations.
+    pub fn app_migration(&self) -> AppMigrationService<'_> {
+        AppMigrationService::new(&self.client)
+    }
+
+    /// The MigrationOfConnectModulesToForge operations.
+    pub fn migration_of_connect_modules_to_forge(&self) -> MigrationOfConnectModulesToForgeService<'_> {
+        MigrationOfConnectModulesToForgeService::new(&self.client)
+    }
+
+    /// The Api operations.
+    pub fn api(&self) -> ApiService<'_> {
+        ApiService::new(&self.client)
+    }
+}
+
+impl From<crate::core::Client> for CloudClient {
+    fn from(client: crate::core::Client) -> Self {
+        Self::new(client)
+    }
+}

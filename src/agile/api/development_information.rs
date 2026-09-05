@@ -1,0 +1,753 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum StoreDevelopmentInformationRequestRepositoriesCommitsFlags {
+        MergeCommit => "MERGE_COMMIT",
+    }
+}
+
+/// Describes the author of a particular entity
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StoreDevelopmentInformationRequestRepositoriesCommitsAuthor {
+    /// Deprecated. The name of this user in a format suitable for display. Max length is 255 characters.
+    #[deprecated(note = "Deprecated.")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The email address of the user. Used to associate the user with a Jira user. Max length is 255 characters.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    /// Deprecated. The username of the user. Used to associate the user with a Jira user if there are multiple users for a given email. Max length is 255 characters.
+    #[deprecated(note = "Deprecated.")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub username: Option<String>,
+    /// Deprecated. The URL of the profile for this user. Max length is 2000 characters.
+    #[deprecated(note = "Deprecated.")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// Deprecated. The URL of the avatar for this user. Max length is 2000 characters.
+    #[deprecated(note = "Deprecated.")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub avatar: Option<String>,
+}
+
+crate::open_enum! {
+    /// The operation performed on this file
+    pub enum StoreDevelopmentInformationRequestRepositoriesCommitsFilesChangeType {
+        Added => "ADDED",
+        Copied => "COPIED",
+        Deleted => "DELETED",
+        Modified => "MODIFIED",
+        Moved => "MOVED",
+        Unknown => "UNKNOWN",
+    }
+}
+
+/// Describes changes to a file
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StoreDevelopmentInformationRequestRepositoriesCommitsFiles {
+    /// The path of the file. Max length is 1024 characters.
+    pub path: String,
+    /// The URL of this file. Max length is 2000 characters.
+    pub url: String,
+    /// The operation performed on this file
+    #[serde(rename = "changeType")]
+    pub change_type: StoreDevelopmentInformationRequestRepositoriesCommitsFilesChangeType,
+    /// Number of lines added to the file
+    #[serde(rename = "linesAdded")]
+    pub lines_added: i64,
+    /// Number of lines removed from the file
+    #[serde(rename = "linesRemoved")]
+    pub lines_removed: i64,
+}
+
+/// Represents a commit in the version control system.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StoreDevelopmentInformationRequestRepositoriesCommits {
+    /// The identifier or hash of the commit. Will be used for cross entity linking. Must be unique for all commits within a repository, i.e., only one commit can have ID 'X' in repository 'Y'. But adding, e.g., a branch with ID 'X' to repository 'Y' is acceptable. Only alphanumeric characters, and '~.-_', are allowed. Max length is 1024 characters
+    pub id: String,
+    /// The Jira issue keys or IDs to associate the commit with.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub associations: Option<Vec<IssueIdOrKeysAssociation>>,
+    /// An ID used to apply an ordering to updates for this entity in the case of out-of-order receipt of update requests. This can be any monotonically increasing number. A suggested implementation is to use epoch millis from the provider system, but other alternatives are valid (e.g. a provider could store a counter against each entity and increment that on each update to Jira). Updates for an entity that are received with an updateSqeuenceId lower than what is currently stored will be ignored.
+    #[serde(rename = "updateSequenceId")]
+    pub update_sequence_id: i64,
+    /// The set of flags for this commit
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub flags: Option<Vec<StoreDevelopmentInformationRequestRepositoriesCommitsFlags>>,
+    /// The commit message. Max length is 1024 characters. If anything longer is supplied, it will be truncated down to 1024 characters.
+    pub message: String,
+    /// Describes the author of a particular entity
+    pub author: StoreDevelopmentInformationRequestRepositoriesCommitsAuthor,
+    /// The total number of files added, removed, or modified by this commit
+    #[serde(rename = "fileCount")]
+    pub file_count: i64,
+    /// The URL of this commit. Max length is 2000 characters.
+    pub url: String,
+    /// List of file changes. Max number of files is 10. Currently, only the first 5 files are shown (sorted by path) in the UI. This UI behavior may change without notice.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub files: Option<Vec<StoreDevelopmentInformationRequestRepositoriesCommitsFiles>>,
+    /// The author timestamp of this commit. Formatted as a UTC ISO 8601 date time format.
+    #[serde(rename = "authorTimestamp")]
+    pub author_timestamp: String,
+    /// Shortened identifier for this commit, used for display. Max length is 255 characters.
+    #[serde(rename = "displayId")]
+    pub display_id: String,
+}
+
+crate::open_enum! {
+    pub enum StoreDevelopmentInformationRequestRepositoriesBranchesLastCommitFlags {
+        MergeCommit => "MERGE_COMMIT",
+    }
+}
+
+/// Describes the author of a particular entity
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StoreDevelopmentInformationRequestRepositoriesBranchesLastCommitAuthor {
+    /// Deprecated. The name of this user in a format suitable for display. Max length is 255 characters.
+    #[deprecated(note = "Deprecated.")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The email address of the user. Used to associate the user with a Jira user. Max length is 255 characters.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    /// Deprecated. The username of the user. Used to associate the user with a Jira user if there are multiple users for a given email. Max length is 255 characters.
+    #[deprecated(note = "Deprecated.")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub username: Option<String>,
+    /// Deprecated. The URL of the profile for this user. Max length is 2000 characters.
+    #[deprecated(note = "Deprecated.")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// Deprecated. The URL of the avatar for this user. Max length is 2000 characters.
+    #[deprecated(note = "Deprecated.")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub avatar: Option<String>,
+}
+
+crate::open_enum! {
+    /// The operation performed on this file
+    pub enum StoreDevelopmentInformationRequestRepositoriesBranchesLastCommitFilesChangeType {
+        Added => "ADDED",
+        Copied => "COPIED",
+        Deleted => "DELETED",
+        Modified => "MODIFIED",
+        Moved => "MOVED",
+        Unknown => "UNKNOWN",
+    }
+}
+
+/// Describes changes to a file
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StoreDevelopmentInformationRequestRepositoriesBranchesLastCommitFiles {
+    /// The path of the file. Max length is 1024 characters.
+    pub path: String,
+    /// The URL of this file. Max length is 2000 characters.
+    pub url: String,
+    /// The operation performed on this file
+    #[serde(rename = "changeType")]
+    pub change_type: StoreDevelopmentInformationRequestRepositoriesBranchesLastCommitFilesChangeType,
+    /// Number of lines added to the file
+    #[serde(rename = "linesAdded")]
+    pub lines_added: i64,
+    /// Number of lines removed from the file
+    #[serde(rename = "linesRemoved")]
+    pub lines_removed: i64,
+}
+
+/// Represents a commit in the version control system.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StoreDevelopmentInformationRequestRepositoriesBranchesLastCommit {
+    /// The identifier or hash of the commit. Will be used for cross entity linking. Must be unique for all commits within a repository, i.e., only one commit can have ID 'X' in repository 'Y'. But adding, e.g., a branch with ID 'X' to repository 'Y' is acceptable. Only alphanumeric characters, and '~.-_', are allowed. Max length is 1024 characters
+    pub id: String,
+    /// List of issues keys that this entity is associated with. They must be valid Jira issue keys.
+    #[serde(rename = "issueKeys")]
+    pub issue_keys: Vec<String>,
+    /// An ID used to apply an ordering to updates for this entity in the case of out-of-order receipt of update requests. This can be any monotonically increasing number. A suggested implementation is to use epoch millis from the provider system, but other alternatives are valid (e.g. a provider could store a counter against each entity and increment that on each update to Jira). Updates for an entity that are received with an updateSqeuenceId lower than what is currently stored will be ignored.
+    #[serde(rename = "updateSequenceId")]
+    pub update_sequence_id: i64,
+    /// The set of flags for this commit
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub flags: Option<Vec<StoreDevelopmentInformationRequestRepositoriesBranchesLastCommitFlags>>,
+    /// The commit message. Max length is 1024 characters. If anything longer is supplied, it will be truncated down to 1024 characters.
+    pub message: String,
+    /// Describes the author of a particular entity
+    pub author: StoreDevelopmentInformationRequestRepositoriesBranchesLastCommitAuthor,
+    /// The total number of files added, removed, or modified by this commit
+    #[serde(rename = "fileCount")]
+    pub file_count: i64,
+    /// The URL of this commit. Max length is 2000 characters.
+    pub url: String,
+    /// List of file changes. Max number of files is 10. Currently, only the first 5 files are shown (sorted by path) in the UI. This UI behavior may change without notice.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub files: Option<Vec<StoreDevelopmentInformationRequestRepositoriesBranchesLastCommitFiles>>,
+    /// The author timestamp of this commit. Formatted as a UTC ISO 8601 date time format.
+    #[serde(rename = "authorTimestamp")]
+    pub author_timestamp: String,
+    /// Shortened identifier for this commit, used for display. Max length is 255 characters.
+    #[serde(rename = "displayId")]
+    pub display_id: String,
+}
+
+/// Represents a branch in the version control system
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StoreDevelopmentInformationRequestRepositoriesBranches {
+    /// The ID of this entity. Will be used for cross entity linking. Must be unique by entity type within a repository, i.e., only one commit can have ID 'X' in repository 'Y'. But adding, e.g., a branch with ID 'X' to repository 'Y' is acceptable. Only alphanumeric characters, and '~.-_', are allowed. Max length is 1024 characters.
+    pub id: String,
+    /// The Jira issue keys or IDs to associate the branch with.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub associations: Option<Vec<IssueIdOrKeysAssociation>>,
+    /// An ID used to apply an ordering to updates for this entity in the case of out-of-order receipt of update requests. This can be any monotonically increasing number. A suggested implementation is to use epoch millis from the provider system, but other alternatives are valid (e.g. a provider could store a counter against each entity and increment that on each update to Jira). Updates for an entity that are received with an updateSqeuenceId lower than what is currently stored will be ignored.
+    #[serde(rename = "updateSequenceId")]
+    pub update_sequence_id: i64,
+    /// The name of the branch. Max length is 512 characters.
+    pub name: String,
+    /// Represents a commit in the version control system.
+    #[serde(rename = "lastCommit")]
+    pub last_commit: StoreDevelopmentInformationRequestRepositoriesBranchesLastCommit,
+    /// The URL of the page for creating a pull request from this branch. Max length is 2000 characters.
+    #[serde(rename = "createPullRequestUrl", default, skip_serializing_if = "Option::is_none")]
+    pub create_pull_request_url: Option<String>,
+    /// The URL of the branch. Max length is 2000 characters.
+    pub url: String,
+}
+
+crate::open_enum! {
+    /// The status of the pull request. In the case of concurrent updates, priority is given in the order OPEN, MERGED, DECLINED, UNKNOWN
+    pub enum StoreDevelopmentInformationRequestRepositoriesPullRequestsStatus {
+        Open => "OPEN",
+        Merged => "MERGED",
+        Declined => "DECLINED",
+        Unknown => "UNKNOWN",
+    }
+}
+
+/// Describes the author of a particular entity
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StoreDevelopmentInformationRequestRepositoriesPullRequestsAuthor {
+    /// Deprecated. The name of this user in a format suitable for display. Max length is 255 characters.
+    #[deprecated(note = "Deprecated.")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The email address of the user. Used to associate the user with a Jira user. Max length is 255 characters.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    /// Deprecated. The username of the user. Used to associate the user with a Jira user if there are multiple users for a given email. Max length is 255 characters.
+    #[deprecated(note = "Deprecated.")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub username: Option<String>,
+    /// Deprecated. The URL of the profile for this user. Max length is 2000 characters.
+    #[deprecated(note = "Deprecated.")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// Deprecated. The URL of the avatar for this user. Max length is 2000 characters.
+    #[deprecated(note = "Deprecated.")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub avatar: Option<String>,
+}
+
+crate::open_enum! {
+    /// The approval status of this reviewer, default is UNAPPROVED.
+    pub enum StoreDevelopmentInformationRequestRepositoriesPullRequestsReviewersApprovalStatus {
+        Approved => "APPROVED",
+        Unapproved => "UNAPPROVED",
+    }
+}
+
+/// The reviewer of a pull request
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StoreDevelopmentInformationRequestRepositoriesPullRequestsReviewers {
+    /// Deprecated. The name of this reviewer. Max length is 255 characters.
+    #[deprecated(note = "Deprecated.")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The approval status of this reviewer, default is UNAPPROVED.
+    #[serde(rename = "approvalStatus", default, skip_serializing_if = "Option::is_none")]
+    pub approval_status: Option<StoreDevelopmentInformationRequestRepositoriesPullRequestsReviewersApprovalStatus>,
+    /// Deprecated. The URL of the profile for this reviewer. Max length is 2000 characters.
+    #[deprecated(note = "Deprecated.")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// Deprecated. The URL of the avatar for this reviewer. Max length is 2000 characters.
+    #[deprecated(note = "Deprecated.")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub avatar: Option<String>,
+    /// The email address of this reviewer. Max length is 254 characters.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    /// The Atlassian Account ID (AAID) of this reviewer. Max length is 128 characters.
+    #[serde(rename = "accountId", default, skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+}
+
+/// Represents a pull request
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StoreDevelopmentInformationRequestRepositoriesPullRequests {
+    /// The ID of this entity. Will be used for cross entity linking. Must be unique by entity type within a repository, i.e., only one commit can have ID 'X' in repository 'Y'. But adding, e.g., a branch with ID 'X' to repository 'Y' is acceptable. Only alphanumeric characters, and '~.-_', are allowed. Max length is 1024 characters
+    pub id: String,
+    /// The Jira issue keys or IDs to associate the pull request with.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub associations: Option<Vec<IssueIdOrKeysAssociation>>,
+    /// An ID used to apply an ordering to updates for this entity in the case of out-of-order receipt of update requests. This can be any monotonically increasing number. A suggested implementation is to use epoch millis from the provider system, but other alternatives are valid (e.g. a provider could store a counter against each entity and increment that on each update to Jira). Updates for an entity that are received with an updateSqeuenceId lower than what is currently stored will be ignored.
+    #[serde(rename = "updateSequenceId")]
+    pub update_sequence_id: i64,
+    /// The status of the pull request. In the case of concurrent updates, priority is given in the order OPEN, MERGED, DECLINED, UNKNOWN
+    pub status: StoreDevelopmentInformationRequestRepositoriesPullRequestsStatus,
+    /// Title of the pull request. Max length is 1024 characters.
+    pub title: String,
+    /// Describes the author of a particular entity
+    pub author: StoreDevelopmentInformationRequestRepositoriesPullRequestsAuthor,
+    /// The number of comments on the pull request
+    #[serde(rename = "commentCount")]
+    pub comment_count: i64,
+    /// The name of the source branch of this PR. Max length is 255 characters.
+    #[serde(rename = "sourceBranch")]
+    pub source_branch: String,
+    /// The url of the source branch of this PR. This is used to match this PR against the branch. Max length is 2000 characters.
+    #[serde(rename = "sourceBranchUrl", default, skip_serializing_if = "Option::is_none")]
+    pub source_branch_url: Option<String>,
+    /// The most recent update to this PR. Formatted as a UTC ISO 8601 date time format.
+    #[serde(rename = "lastUpdate")]
+    pub last_update: String,
+    /// The name of destination branch of this PR. Max length is 255 characters.
+    #[serde(rename = "destinationBranch", default, skip_serializing_if = "Option::is_none")]
+    pub destination_branch: Option<String>,
+    /// The url of the destination branch of this PR. Max length is 2000 characters.
+    #[serde(rename = "destinationBranchUrl", default, skip_serializing_if = "Option::is_none")]
+    pub destination_branch_url: Option<String>,
+    /// The list of reviewers of this pull request
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reviewers: Option<Vec<StoreDevelopmentInformationRequestRepositoriesPullRequestsReviewers>>,
+    /// The URL of this pull request. Max length is 2000 characters.
+    pub url: String,
+    /// Shortened identifier for this pull request, used for display. Max length is 255 characters.
+    #[serde(rename = "displayId")]
+    pub display_id: String,
+}
+
+/// Represents a repository, containing development information such as commits, pull requests, and branches.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StoreDevelopmentInformationRequestRepositories {
+    /// The name of this repository. Max length is 255 characters.
+    pub name: String,
+    /// Description of this repository. Max length is 1024 characters.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The ID of the repository this repository was forked from, if it's a fork. Max length is 1024 characters.
+    #[serde(rename = "forkOf", default, skip_serializing_if = "Option::is_none")]
+    pub fork_of: Option<String>,
+    /// The URL of this repository. Max length is 2000 characters.
+    pub url: String,
+    /// List of commits to update in this repository. Must not contain duplicate entity IDs. Maximum number of commits is 400
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub commits: Option<Vec<StoreDevelopmentInformationRequestRepositoriesCommits>>,
+    /// List of branches to update in this repository. Must not contain duplicate entity IDs. Maximum number of branches is 400.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub branches: Option<Vec<StoreDevelopmentInformationRequestRepositoriesBranches>>,
+    /// List of pull requests to update in this repository. Must not contain duplicate entity IDs. Maximum number of pull requests is 400
+    #[serde(rename = "pullRequests", default, skip_serializing_if = "Option::is_none")]
+    pub pull_requests: Option<Vec<StoreDevelopmentInformationRequestRepositoriesPullRequests>>,
+    /// The URL of the avatar for this repository. Max length is 2000 characters.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub avatar: Option<String>,
+    /// Description of the avatar for this repository. Max length is 1024 characters.
+    #[serde(rename = "avatarDescription", default, skip_serializing_if = "Option::is_none")]
+    pub avatar_description: Option<String>,
+    /// The ID of this entity. Will be used for cross entity linking. Must be unique by entity type within a repository, i.e., only one commit can have ID 'X' in repository 'Y'. But adding, e.g., a branch with ID 'X' to repository 'Y' is acceptable. Only alphanumeric characters, and '~.-_', are allowed. Max length is 1024 characters.
+    pub id: String,
+    /// An ID used to apply an ordering to updates for this entity in the case of out-of-order receipt of update requests. This can be any monotonically increasing number. A suggested implementation is to use epoch millis from the provider system, but other alternatives are valid (e.g. a provider could store a counter against each entity and increment that on each update to Jira). Updates for an entity that are received with an updateSqeuenceId lower than what is currently stored will be ignored.
+    #[serde(rename = "updateSequenceId")]
+    pub update_sequence_id: i64,
+}
+
+crate::open_enum! {
+    /// Indicates the operation being performed by the provider system when sending this data. "NORMAL" - Data received during normal operation (e.g. a user pushing a branch). "BACKFILL" - Data received while backfilling existing data (e.g. indexing a newly connected account). Default is "NORMAL". Please note that "BACKFILL" operations have a much higher rate-limiting threshold but are also processed slower in comparison to "NORMAL" operations.
+    pub enum StoreDevelopmentInformationRequestOperationType {
+        Normal => "NORMAL",
+        Backfill => "BACKFILL",
+    }
+}
+
+/// Information about the provider. This is useful for auditing, logging, debugging, and other internal uses. It is not considered private information. Hence, it may not contain personally identifiable information.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StoreDevelopmentInformationRequestProviderMetadata {
+    /// An optional name of the source of the development information data.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub product: Option<String>,
+}
+
+crate::open_enum! {
+    pub enum DeleteEntityRequestEntityType {
+        Commit => "commit",
+        Branch => "branch",
+        PullRequest => "pull_request",
+    }
+}
+
+/// The DevelopmentInformation operations.
+pub struct DevelopmentInformationService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> DevelopmentInformationService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Stores development information provided in the request to make it available when viewing issues in Jira. Existing repository and entity data for the same ID will be replaced if the updateSequenceId of existing data is less than the incoming data. Submissions are performed asynchronously. Submitted data will eventually be available in Jira; most updates are available within a short period of time, but may take some time during peak load and/or maintenance times.
+    pub fn store_development_information(
+        &self,
+        repositories: impl IntoIterator<Item = StoreDevelopmentInformationRequestRepositories>,
+    ) -> StoreDevelopmentInformationRequest<'a> {
+        StoreDevelopmentInformationRequest::new(self.client, repositories)
+    }
+
+    /// For the specified repository ID, retrieves the repository and the most recent 400 development information entities. The result will be what is currently stored, ignoring any pending updates or deletes.
+    pub fn get_repository(&self, repository_id: impl Into<String>) -> GetRepositoryRequest<'a> {
+        GetRepositoryRequest::new(self.client, repository_id)
+    }
+
+    /// Deletes the repository data stored by the given ID and all related development information entities. Deletion is performed asynchronously.
+    pub fn delete_repository(
+        &self,
+        repository_id: impl Into<String>,
+        update_sequence_id: i64,
+    ) -> DeleteRepositoryRequest<'a> {
+        DeleteRepositoryRequest::new(self.client, repository_id, update_sequence_id)
+    }
+
+    /// Deletes development information entities which have all the provided properties. Repositories which have properties that match ALL of the properties (i.e. treated as an AND), and all their related development information (such as commits, branches and pull requests), will be deleted. For example if request is `DELETE bulk?accountId=123&projectId=ABC` entities which have properties `accountId=123` and `projectId=ABC` will be deleted. Optional param `_updateSequenceId` is no longer supported. Deletion is performed asynchronously: specified entities will eventually be removed from Jira.
+    pub fn delete_by_properties(&self, update_sequence_id: i64) -> DeleteByPropertiesRequest<'a> {
+        DeleteByPropertiesRequest::new(self.client, update_sequence_id)
+    }
+
+    /// Checks if repositories which have all the provided properties exists. For example, if request is `GET existsByProperties?accountId=123&projectId=ABC` then result will be positive only if there is at least one repository with both properties `accountId=123` and `projectId=ABC`. Special property `_updateSequenceId` can be used to filter all entities with updateSequenceId less or equal than the value specified. In addition to the optional `_updateSequenceId`, one or more query params must be supplied to specify properties to search by.
+    pub fn exists_by_properties(&self) -> ExistsByPropertiesRequest<'a> {
+        ExistsByPropertiesRequest::new(self.client)
+    }
+
+    /// Deletes particular development information entity. Deletion is performed asynchronously.
+    pub fn delete_entity(
+        &self,
+        repository_id: impl Into<String>,
+        entity_type: impl Into<DeleteEntityRequestEntityType>,
+        entity_id: impl Into<String>,
+        update_sequence_id: i64,
+    ) -> DeleteEntityRequest<'a> {
+        DeleteEntityRequest::new(self.client, repository_id, entity_type, entity_id, update_sequence_id)
+    }
+}
+
+/// Stores development information provided in the request to make it available when viewing issues in Jira. Existing repository and entity data for the same ID will be replaced if the updateSequenceId of existing data is less than the incoming data. Submissions are performed asynchronously. Submitted data will eventually be available in Jira; most updates are available within a short period of time, but may take some time during peak load and/or maintenance times.
+#[derive(Clone)]
+pub struct StoreDevelopmentInformationRequest<'a> {
+    client: &'a crate::core::Client,
+    repositories: Vec<StoreDevelopmentInformationRequestRepositories>,
+    prevent_transitions: Option<bool>,
+    operation_type: Option<StoreDevelopmentInformationRequestOperationType>,
+    properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    provider_metadata: Option<StoreDevelopmentInformationRequestProviderMetadata>,
+}
+
+impl<'a> StoreDevelopmentInformationRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        repositories: impl IntoIterator<Item = StoreDevelopmentInformationRequestRepositories>,
+    ) -> Self {
+        Self {
+            client,
+            repositories: repositories.into_iter().collect(),
+            prevent_transitions: None,
+            operation_type: None,
+            properties: None,
+            provider_metadata: None,
+        }
+    }
+
+    /// Flag to prevent automatic issue transitions and smart commits being fired, default is false.
+    #[must_use]
+    pub fn prevent_transitions(mut self, value: bool) -> Self {
+        self.prevent_transitions = Some(value);
+
+        self
+    }
+
+    /// Indicates the operation being performed by the provider system when sending this data. "NORMAL" - Data received during normal operation (e.g. a user pushing a branch). "BACKFILL" - Data received while backfilling existing data (e.g. indexing a newly connected account). Default is "NORMAL". Please note that "BACKFILL" operations have a much higher rate-limiting threshold but are also processed slower in comparison to "NORMAL" operations.
+    #[must_use]
+    pub fn operation_type(mut self, value: impl Into<StoreDevelopmentInformationRequestOperationType>) -> Self {
+        self.operation_type = Some(value.into());
+
+        self
+    }
+
+    /// Arbitrary properties to tag the submitted repositories with. These properties can be used for delete operations to e.g. clean up all development information associated with an account in the event that the account is removed from the provider system. Note that these properties will never be returned with repository or entity data. They are not intended for use as metadata to associate with a repository. Maximum length of each key or value is 255 characters. Maximum allowed number of properties key/value pairs is 5. Properties keys cannot start with '_' character. Properties keys cannot contain ':' character.
+    #[must_use]
+    pub fn properties(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
+        self.properties = Some(value);
+
+        self
+    }
+
+    /// Information about the provider. This is useful for auditing, logging, debugging, and other internal uses. It is not considered private information. Hence, it may not contain personally identifiable information.
+    #[must_use]
+    pub fn provider_metadata(mut self, value: StoreDevelopmentInformationRequestProviderMetadata) -> Self {
+        self.provider_metadata = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/devinfo/0.10/bulk".to_owned());
+
+        let mut body = serde_json::Map::new();
+
+        body.insert("repositories".to_owned(), serde_json::to_value(&self.repositories)?);
+
+        if let Some(value) = &self.prevent_transitions {
+            body.insert("preventTransitions".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.operation_type {
+            body.insert("operationType".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.properties {
+            body.insert("properties".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.provider_metadata {
+            body.insert("providerMetadata".to_owned(), serde_json::to_value(value)?);
+        }
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<StoreDevelopmentInformation> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// For the specified repository ID, retrieves the repository and the most recent 400 development information entities. The result will be what is currently stored, ignoring any pending updates or deletes.
+#[derive(Clone)]
+pub struct GetRepositoryRequest<'a> {
+    client: &'a crate::core::Client,
+    repository_id: String,
+}
+
+impl<'a> GetRepositoryRequest<'a> {
+    fn new(client: &'a crate::core::Client, repository_id: impl Into<String>) -> Self {
+        Self { client, repository_id: repository_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/devinfo/0.10/repository/{}", crate::core::encode_path_segment(&self.repository_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetRepository> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes the repository data stored by the given ID and all related development information entities. Deletion is performed asynchronously.
+#[derive(Clone)]
+pub struct DeleteRepositoryRequest<'a> {
+    client: &'a crate::core::Client,
+    repository_id: String,
+    update_sequence_id: i64,
+}
+
+impl<'a> DeleteRepositoryRequest<'a> {
+    fn new(client: &'a crate::core::Client, repository_id: impl Into<String>, update_sequence_id: i64) -> Self {
+        Self { client, repository_id: repository_id.into(), update_sequence_id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/devinfo/0.10/repository/{}", crate::core::encode_path_segment(&self.repository_id)),
+        );
+
+        config.query.push((
+            "_updateSequenceId".to_owned(),
+            crate::core::QueryValue::Scalar(self.update_sequence_id.to_string()),
+        ));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes development information entities which have all the provided properties. Repositories which have properties that match ALL of the properties (i.e. treated as an AND), and all their related development information (such as commits, branches and pull requests), will be deleted. For example if request is `DELETE bulk?accountId=123&projectId=ABC` entities which have properties `accountId=123` and `projectId=ABC` will be deleted. Optional param `_updateSequenceId` is no longer supported. Deletion is performed asynchronously: specified entities will eventually be removed from Jira.
+#[derive(Clone)]
+pub struct DeleteByPropertiesRequest<'a> {
+    client: &'a crate::core::Client,
+    update_sequence_id: i64,
+}
+
+impl<'a> DeleteByPropertiesRequest<'a> {
+    fn new(client: &'a crate::core::Client, update_sequence_id: i64) -> Self {
+        Self { client, update_sequence_id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            "/rest/devinfo/0.10/bulkByProperties".to_owned(),
+        );
+
+        config.query.push((
+            "_updateSequenceId".to_owned(),
+            crate::core::QueryValue::Scalar(self.update_sequence_id.to_string()),
+        ));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Checks if repositories which have all the provided properties exists. For example, if request is `GET existsByProperties?accountId=123&projectId=ABC` then result will be positive only if there is at least one repository with both properties `accountId=123` and `projectId=ABC`. Special property `_updateSequenceId` can be used to filter all entities with updateSequenceId less or equal than the value specified. In addition to the optional `_updateSequenceId`, one or more query params must be supplied to specify properties to search by.
+#[derive(Clone)]
+pub struct ExistsByPropertiesRequest<'a> {
+    client: &'a crate::core::Client,
+    update_sequence_id: Option<i64>,
+}
+
+impl<'a> ExistsByPropertiesRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, update_sequence_id: None }
+    }
+
+    /// An optional property. Filters out entities and repositories which have updateSequenceId greater than specified.
+    #[must_use]
+    pub fn update_sequence_id(mut self, value: i64) -> Self {
+        self.update_sequence_id = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            "/rest/devinfo/0.10/existsByProperties".to_owned(),
+        );
+
+        if let Some(value) = &self.update_sequence_id {
+            config.query.push(("_updateSequenceId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ExistsByProperties> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes particular development information entity. Deletion is performed asynchronously.
+#[derive(Clone)]
+pub struct DeleteEntityRequest<'a> {
+    client: &'a crate::core::Client,
+    repository_id: String,
+    entity_type: DeleteEntityRequestEntityType,
+    entity_id: String,
+    update_sequence_id: i64,
+}
+
+impl<'a> DeleteEntityRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        repository_id: impl Into<String>,
+        entity_type: impl Into<DeleteEntityRequestEntityType>,
+        entity_id: impl Into<String>,
+        update_sequence_id: i64,
+    ) -> Self {
+        Self {
+            client,
+            repository_id: repository_id.into(),
+            entity_type: entity_type.into(),
+            entity_id: entity_id.into(),
+            update_sequence_id,
+        }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!(
+                "/rest/devinfo/0.10/repository/{}/{}/{}",
+                crate::core::encode_path_segment(&self.repository_id),
+                crate::core::encode_path_segment(self.entity_type.as_str()),
+                crate::core::encode_path_segment(&self.entity_id)
+            ),
+        );
+
+        config.query.push((
+            "_updateSequenceId".to_owned(),
+            crate::core::QueryValue::Scalar(self.update_sequence_id.to_string()),
+        ));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

@@ -1,0 +1,1104 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum GetIssueWorklogRequestExpandValue {
+        Properties => "properties",
+    }
+}
+
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts`properties`, which returns worklog properties.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetIssueWorklogRequestExpand {
+    One(GetIssueWorklogRequestExpandValue),
+    Many(Vec<GetIssueWorklogRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    /// Defines how to update the issue's time estimate, the options are:
+    ///
+    ///  *  `new` Sets the estimate to a specific value, defined in `newEstimate`.
+    ///  *  `leave` Leaves the estimate unchanged.
+    ///  *  `manual` Reduces the estimate by amount specified in `reduceBy`.
+    ///  *  `auto` Reduces the estimate by the value of `timeSpent` in the worklog.
+    pub enum AddWorklogRequestAdjustEstimate {
+        New => "new",
+        Leave => "leave",
+        Manual => "manual",
+        Auto => "auto",
+    }
+}
+
+crate::open_enum! {
+    pub enum AddWorklogRequestExpandValue {
+        Properties => "properties",
+    }
+}
+
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about work logs in the response. This parameter accepts `properties`, which returns worklog properties.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum AddWorklogRequestExpand {
+    One(AddWorklogRequestExpandValue),
+    Many(Vec<AddWorklogRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    pub enum GetWorklogRequestExpandValue {
+        Properties => "properties",
+    }
+}
+
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about work logs in the response. This parameter accepts
+///
+/// `properties`, which returns worklog properties.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetWorklogRequestExpand {
+    One(GetWorklogRequestExpandValue),
+    Many(Vec<GetWorklogRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    /// Defines how to update the issue's time estimate, the options are:
+    ///
+    ///  *  `new` Sets the estimate to a specific value, defined in `newEstimate`.
+    ///  *  `leave` Leaves the estimate unchanged.
+    ///  *  `auto` Updates the estimate by the difference between the original and updated value of `timeSpent` or `timeSpentSeconds`.
+    pub enum UpdateWorklogRequestAdjustEstimate {
+        New => "new",
+        Leave => "leave",
+        Manual => "manual",
+        Auto => "auto",
+    }
+}
+
+crate::open_enum! {
+    pub enum UpdateWorklogRequestExpandValue {
+        Properties => "properties",
+    }
+}
+
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties`, which returns worklog properties.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum UpdateWorklogRequestExpand {
+    One(UpdateWorklogRequestExpandValue),
+    Many(Vec<UpdateWorklogRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    /// Defines how to update the issue's time estimate, the options are:
+    ///
+    ///  *  `new` Sets the estimate to a specific value, defined in `newEstimate`.
+    ///  *  `leave` Leaves the estimate unchanged.
+    ///  *  `manual` Increases the estimate by amount specified in `increaseBy`.
+    ///  *  `auto` Reduces the estimate by the value of `timeSpent` in the worklog.
+    pub enum DeleteWorklogRequestAdjustEstimate {
+        New => "new",
+        Leave => "leave",
+        Manual => "manual",
+        Auto => "auto",
+    }
+}
+
+crate::open_enum! {
+    pub enum GetWorklogsForIdsRequestExpandValue {
+        Properties => "properties",
+    }
+}
+
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetWorklogsForIdsRequestExpand {
+    One(GetWorklogsForIdsRequestExpandValue),
+    Many(Vec<GetWorklogsForIdsRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    pub enum GetIdsOfWorklogsModifiedSinceRequestExpandValue {
+        Properties => "properties",
+    }
+}
+
+/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetIdsOfWorklogsModifiedSinceRequestExpand {
+    One(GetIdsOfWorklogsModifiedSinceRequestExpandValue),
+    Many(Vec<GetIdsOfWorklogsModifiedSinceRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+/// The IssueWorklogs operations.
+pub struct IssueWorklogsService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> IssueWorklogsService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns worklogs for an issue (ordered by created time), starting from the oldest worklog or from the worklog started on or after a date and time.
+    ///
+    /// Time tracking must be enabled in Jira, otherwise this operation returns an error. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+    ///
+    /// This operation can be accessed anonymously.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Workloads are only returned where the user has:
+    ///
+    ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+    pub fn get_issue_worklog(&self, issue_id_or_key: impl Into<String>) -> GetIssueWorklogRequest<'a> {
+        GetIssueWorklogRequest::new(self.client, issue_id_or_key)
+    }
+
+    /// Adds a worklog to an issue.
+    ///
+    /// Time tracking must be enabled in Jira, otherwise this operation returns an error. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+    ///
+    /// This operation can be accessed anonymously.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Browse projects* and *Work on issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    pub fn add_worklog(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        worklog_input: WorklogInput,
+    ) -> AddWorklogRequest<'a> {
+        AddWorklogRequest::new(self.client, issue_id_or_key, worklog_input)
+    }
+
+    /// Returns a worklog.
+    ///
+    /// Time tracking must be enabled in Jira, otherwise this operation returns an error. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+    ///
+    /// This operation can be accessed anonymously.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+    pub fn get_worklog(&self, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> GetWorklogRequest<'a> {
+        GetWorklogRequest::new(self.client, issue_id_or_key, id)
+    }
+
+    /// Updates a worklog.
+    ///
+    /// Time tracking must be enabled in Jira, otherwise this operation returns an error. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+    ///
+    /// This operation can be accessed anonymously.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    ///  *  *Edit all worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg) to update any worklog or *Edit own worklogs* to update worklogs created by the user.
+    ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+    pub fn update_worklog(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        id: impl Into<String>,
+        body: WorklogInput,
+    ) -> UpdateWorklogRequest<'a> {
+        UpdateWorklogRequest::new(self.client, issue_id_or_key, id, body)
+    }
+
+    /// Deletes a worklog from an issue.
+    ///
+    /// Time tracking must be enabled in Jira, otherwise this operation returns an error. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+    ///
+    /// This operation can be accessed anonymously.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    ///  *  *Delete all worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg) to delete any worklog or *Delete own worklogs* to delete worklogs created by the user,
+    ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+    pub fn delete_worklog(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        id: impl Into<String>,
+    ) -> DeleteWorklogRequest<'a> {
+        DeleteWorklogRequest::new(self.client, issue_id_or_key, id)
+    }
+
+    /// Returns a list of IDs and delete timestamps for worklogs deleted after a date and time.
+    ///
+    /// This resource is paginated, with a limit of 1000 worklogs per page. Each page lists worklogs from oldest to youngest. If the number of items in the date range exceeds 1000, `until` indicates the timestamp of the youngest item on the page. Also, `nextPage` provides the URL for the next page of worklogs. The `lastPage` parameter is set to true on the last page of worklogs.
+    ///
+    /// This resource does not return worklogs deleted during the minute preceding the request.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+    pub fn get_ids_of_worklogs_deleted_since(&self) -> GetIdsOfWorklogsDeletedSinceRequest<'a> {
+        GetIdsOfWorklogsDeletedSinceRequest::new(self.client)
+    }
+
+    /// Returns worklog details for a list of worklog IDs.
+    ///
+    /// The returned list of worklogs is limited to 1000 items.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira, however, worklogs are only returned where either of the following is true:
+    ///
+    ///  *  the worklog is set as *Viewable by All Users*.
+    ///  *  the user is a member of a project role or group with permission to view the worklog.
+    pub fn get_worklogs_for_ids(&self, worklog_ids_request: WorklogIdsRequest) -> GetWorklogsForIdsRequest<'a> {
+        GetWorklogsForIdsRequest::new(self.client, worklog_ids_request)
+    }
+
+    /// Returns a list of IDs and update timestamps for worklogs updated after a date and time.
+    ///
+    /// This resource is paginated, with a limit of 1000 worklogs per page. Each page lists worklogs from oldest to youngest. If the number of items in the date range exceeds 1000, `until` indicates the timestamp of the youngest item on the page. Also, `nextPage` provides the URL for the next page of worklogs. The `lastPage` parameter is set to true on the last page of worklogs.
+    ///
+    /// This resource does not return worklogs updated during the minute preceding the request.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira, however, worklogs are only returned where either of the following is true:
+    ///
+    ///  *  the worklog is set as *Viewable by All Users*.
+    ///  *  the user is a member of a project role or group with permission to view the worklog.
+    pub fn get_ids_of_worklogs_modified_since(&self) -> GetIdsOfWorklogsModifiedSinceRequest<'a> {
+        GetIdsOfWorklogsModifiedSinceRequest::new(self.client)
+    }
+}
+
+/// Returns worklogs for an issue (ordered by created time), starting from the oldest worklog or from the worklog started on or after a date and time.
+///
+/// Time tracking must be enabled in Jira, otherwise this operation returns an error. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+///
+/// This operation can be accessed anonymously.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Workloads are only returned where the user has:
+///
+///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
+pub struct GetIssueWorklogRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_id_or_key: String,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
+    started_after: Option<i64>,
+    started_before: Option<i64>,
+    expand: Option<GetIssueWorklogRequestExpand>,
+}
+
+impl<'a> GetIssueWorklogRequest<'a> {
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
+        Self {
+            client,
+            issue_id_or_key: issue_id_or_key.into(),
+            start_at: None,
+            max_results: None,
+            started_after: None,
+            started_before: None,
+            expand: None,
+        }
+    }
+
+    /// The index of the first item to return in a page of results (page offset).
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return per page.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// The worklog start date and time, as a UNIX timestamp in milliseconds, after which worklogs are returned.
+    #[must_use]
+    pub fn started_after(mut self, value: i64) -> Self {
+        self.started_after = Some(value);
+
+        self
+    }
+
+    /// The worklog start date and time, as a UNIX timestamp in milliseconds, before which worklogs are returned.
+    #[must_use]
+    pub fn started_before(mut self, value: i64) -> Self {
+        self.started_before = Some(value);
+
+        self
+    }
+
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts`properties`, which returns worklog properties.
+    #[must_use]
+    pub fn expand(mut self, value: GetIssueWorklogRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/issue/{}/worklog", crate::core::encode_path_segment(&self.issue_id_or_key)),
+        );
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.started_after {
+            config.query.push(("startedAfter".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.started_before {
+            config.query.push(("startedBefore".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<PageOfWorklogs> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Adds a worklog to an issue.
+///
+/// Time tracking must be enabled in Jira, otherwise this operation returns an error. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+///
+/// This operation can be accessed anonymously.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Browse projects* and *Work on issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
+pub struct AddWorklogRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_id_or_key: String,
+    notify_users: Option<bool>,
+    adjust_estimate: Option<AddWorklogRequestAdjustEstimate>,
+    new_estimate: Option<String>,
+    reduce_by: Option<String>,
+    expand: Option<AddWorklogRequestExpand>,
+    override_editable_flag: Option<bool>,
+    worklog_input: WorklogInput,
+}
+
+impl<'a> AddWorklogRequest<'a> {
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, worklog_input: WorklogInput) -> Self {
+        Self {
+            client,
+            issue_id_or_key: issue_id_or_key.into(),
+            worklog_input,
+            notify_users: None,
+            adjust_estimate: None,
+            new_estimate: None,
+            reduce_by: None,
+            expand: None,
+            override_editable_flag: None,
+        }
+    }
+
+    /// Whether users watching the issue are notified by email.
+    #[must_use]
+    pub fn notify_users(mut self, value: bool) -> Self {
+        self.notify_users = Some(value);
+
+        self
+    }
+
+    /// Defines how to update the issue's time estimate, the options are:
+    ///
+    ///  *  `new` Sets the estimate to a specific value, defined in `newEstimate`.
+    ///  *  `leave` Leaves the estimate unchanged.
+    ///  *  `manual` Reduces the estimate by amount specified in `reduceBy`.
+    ///  *  `auto` Reduces the estimate by the value of `timeSpent` in the worklog.
+    #[must_use]
+    pub fn adjust_estimate(mut self, value: impl Into<AddWorklogRequestAdjustEstimate>) -> Self {
+        self.adjust_estimate = Some(value.into());
+
+        self
+    }
+
+    /// The value to set as the issue's remaining time estimate, as days (#d), hours (#h), or minutes (#m or #). For example, *2d*. Required when `adjustEstimate` is `new`.
+    #[must_use]
+    pub fn new_estimate(mut self, value: impl Into<String>) -> Self {
+        self.new_estimate = Some(value.into());
+
+        self
+    }
+
+    /// The amount to reduce the issue's remaining estimate by, as days (#d), hours (#h), or minutes (#m). For example, *2d*. Required when `adjustEstimate` is `manual`.
+    #[must_use]
+    pub fn reduce_by(mut self, value: impl Into<String>) -> Self {
+        self.reduce_by = Some(value.into());
+
+        self
+    }
+
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about work logs in the response. This parameter accepts `properties`, which returns worklog properties.
+    #[must_use]
+    pub fn expand(mut self, value: AddWorklogRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// Whether the worklog entry should be added to the issue even if the issue is not editable, because jira.issue.editable set to false or missing. For example, the issue is closed. Connect and Forge app users with *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) can use this flag.
+    #[must_use]
+    pub fn override_editable_flag(mut self, value: bool) -> Self {
+        self.override_editable_flag = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!("/rest/api/3/issue/{}/worklog", crate::core::encode_path_segment(&self.issue_id_or_key)),
+        );
+
+        if let Some(value) = &self.notify_users {
+            config.query.push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.adjust_estimate {
+            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.new_estimate {
+            config.query.push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.reduce_by {
+            config.query.push(("reduceBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.override_editable_flag {
+            config.query.push(("overrideEditableFlag".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        let body = match serde_json::to_value(&self.worklog_input)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Worklog> {
+        if let Some(WorklogInputComment::Variant1(markup)) = &self.worklog_input.comment {
+            let mut write = crate::core::RequestConfig::new(
+                crate::core::Method::POST,
+                format!("/rest/api/2/issue/{}/worklog", self.issue_id_or_key),
+            );
+
+            write.body = Some(crate::core::Body::Json(serde_json::json!({
+                "comment": markup,
+                "started": self.worklog_input.started,
+                "timeSpent": self.worklog_input.time_spent,
+                "timeSpentSeconds": self.worklog_input.time_spent_seconds,
+                "visibility": self.worklog_input.visibility,
+            })));
+
+            let created: serde_json::Value = self.client.send(&write).await?;
+            let id = created["id"].as_str().unwrap_or_default().to_owned();
+
+            let mut read = crate::core::RequestConfig::new(
+                crate::core::Method::GET,
+                format!("/rest/api/3/issue/{}/worklog/{}", self.issue_id_or_key, id),
+            );
+
+            if let Some(expand) = &self.expand {
+                read.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(expand)?));
+            }
+
+            return self.client.send(&read).await;
+        }
+
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a worklog.
+///
+/// Time tracking must be enabled in Jira, otherwise this operation returns an error. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+///
+/// This operation can be accessed anonymously.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
+pub struct GetWorklogRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_id_or_key: String,
+    id: String,
+    expand: Option<GetWorklogRequestExpand>,
+}
+
+impl<'a> GetWorklogRequest<'a> {
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into(), expand: None }
+    }
+
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about work logs in the response. This parameter accepts
+    ///
+    /// `properties`, which returns worklog properties.
+    #[must_use]
+    pub fn expand(mut self, value: GetWorklogRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/api/3/issue/{}/worklog/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            ),
+        );
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Worklog> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Updates a worklog.
+///
+/// Time tracking must be enabled in Jira, otherwise this operation returns an error. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+///
+/// This operation can be accessed anonymously.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+///  *  *Edit all worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg) to update any worklog or *Edit own worklogs* to update worklogs created by the user.
+///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
+pub struct UpdateWorklogRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_id_or_key: String,
+    id: String,
+    notify_users: Option<bool>,
+    adjust_estimate: Option<UpdateWorklogRequestAdjustEstimate>,
+    new_estimate: Option<String>,
+    expand: Option<UpdateWorklogRequestExpand>,
+    override_editable_flag: Option<bool>,
+    body: WorklogInput,
+}
+
+impl<'a> UpdateWorklogRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        issue_id_or_key: impl Into<String>,
+        id: impl Into<String>,
+        body: WorklogInput,
+    ) -> Self {
+        Self {
+            client,
+            issue_id_or_key: issue_id_or_key.into(),
+            id: id.into(),
+            body,
+            notify_users: None,
+            adjust_estimate: None,
+            new_estimate: None,
+            expand: None,
+            override_editable_flag: None,
+        }
+    }
+
+    /// Whether users watching the issue are notified by email.
+    #[must_use]
+    pub fn notify_users(mut self, value: bool) -> Self {
+        self.notify_users = Some(value);
+
+        self
+    }
+
+    /// Defines how to update the issue's time estimate, the options are:
+    ///
+    ///  *  `new` Sets the estimate to a specific value, defined in `newEstimate`.
+    ///  *  `leave` Leaves the estimate unchanged.
+    ///  *  `auto` Updates the estimate by the difference between the original and updated value of `timeSpent` or `timeSpentSeconds`.
+    #[must_use]
+    pub fn adjust_estimate(mut self, value: impl Into<UpdateWorklogRequestAdjustEstimate>) -> Self {
+        self.adjust_estimate = Some(value.into());
+
+        self
+    }
+
+    /// The value to set as the issue's remaining time estimate, as days (#d), hours (#h), or minutes (#m or #). For example, *2d*. Required when `adjustEstimate` is `new`.
+    #[must_use]
+    pub fn new_estimate(mut self, value: impl Into<String>) -> Self {
+        self.new_estimate = Some(value.into());
+
+        self
+    }
+
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties`, which returns worklog properties.
+    #[must_use]
+    pub fn expand(mut self, value: UpdateWorklogRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// Whether the worklog should be added to the issue even if the issue is not editable. For example, because the issue is closed. Connect and Forge app users with *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg) can use this flag.
+    #[must_use]
+    pub fn override_editable_flag(mut self, value: bool) -> Self {
+        self.override_editable_flag = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!(
+                "/rest/api/3/issue/{}/worklog/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            ),
+        );
+
+        if let Some(value) = &self.notify_users {
+            config.query.push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.adjust_estimate {
+            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.new_estimate {
+            config.query.push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.override_editable_flag {
+            config.query.push(("overrideEditableFlag".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Worklog> {
+        if let Some(WorklogInputComment::Variant1(markup)) = &self.body.comment {
+            let mut write = crate::core::RequestConfig::new(
+                crate::core::Method::PUT,
+                format!("/rest/api/2/issue/{}/worklog/{}", self.issue_id_or_key, self.id),
+            );
+
+            write.body = Some(crate::core::Body::Json(serde_json::json!({
+                "comment": markup,
+                "started": self.body.started,
+                "timeSpent": self.body.time_spent,
+                "timeSpentSeconds": self.body.time_spent_seconds,
+                "visibility": self.body.visibility,
+            })));
+
+            self.client.send_empty(&write).await?;
+
+            let mut read = crate::core::RequestConfig::new(
+                crate::core::Method::GET,
+                format!("/rest/api/3/issue/{}/worklog/{}", self.issue_id_or_key, self.id),
+            );
+
+            if let Some(expand) = &self.expand {
+                read.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(expand)?));
+            }
+
+            return self.client.send(&read).await;
+        }
+
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes a worklog from an issue.
+///
+/// Time tracking must be enabled in Jira, otherwise this operation returns an error. For more information, see [Configuring time tracking](https://confluence.atlassian.com/x/qoXKM).
+///
+/// This operation can be accessed anonymously.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+///  *  *Delete all worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg) to delete any worklog or *Delete own worklogs* to delete worklogs created by the user,
+///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
+pub struct DeleteWorklogRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_id_or_key: String,
+    id: String,
+    notify_users: Option<bool>,
+    adjust_estimate: Option<DeleteWorklogRequestAdjustEstimate>,
+    new_estimate: Option<String>,
+    increase_by: Option<String>,
+    override_editable_flag: Option<bool>,
+}
+
+impl<'a> DeleteWorklogRequest<'a> {
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
+        Self {
+            client,
+            issue_id_or_key: issue_id_or_key.into(),
+            id: id.into(),
+            notify_users: None,
+            adjust_estimate: None,
+            new_estimate: None,
+            increase_by: None,
+            override_editable_flag: None,
+        }
+    }
+
+    /// Whether users watching the issue are notified by email.
+    #[must_use]
+    pub fn notify_users(mut self, value: bool) -> Self {
+        self.notify_users = Some(value);
+
+        self
+    }
+
+    /// Defines how to update the issue's time estimate, the options are:
+    ///
+    ///  *  `new` Sets the estimate to a specific value, defined in `newEstimate`.
+    ///  *  `leave` Leaves the estimate unchanged.
+    ///  *  `manual` Increases the estimate by amount specified in `increaseBy`.
+    ///  *  `auto` Reduces the estimate by the value of `timeSpent` in the worklog.
+    #[must_use]
+    pub fn adjust_estimate(mut self, value: impl Into<DeleteWorklogRequestAdjustEstimate>) -> Self {
+        self.adjust_estimate = Some(value.into());
+
+        self
+    }
+
+    /// The value to set as the issue's remaining time estimate, as days (#d), hours (#h), or minutes (#m or #). For example, *2d*. Required when `adjustEstimate` is `new`.
+    #[must_use]
+    pub fn new_estimate(mut self, value: impl Into<String>) -> Self {
+        self.new_estimate = Some(value.into());
+
+        self
+    }
+
+    /// The amount to increase the issue's remaining estimate by, as days (#d), hours (#h), or minutes (#m or #). For example, *2d*. Required when `adjustEstimate` is `manual`.
+    #[must_use]
+    pub fn increase_by(mut self, value: impl Into<String>) -> Self {
+        self.increase_by = Some(value.into());
+
+        self
+    }
+
+    /// Whether the work log entry should be added to the issue even if the issue is not editable, because jira.issue.editable set to false or missing. For example, the issue is closed. Connect and Forge app users with admin permission can use this flag.
+    #[must_use]
+    pub fn override_editable_flag(mut self, value: bool) -> Self {
+        self.override_editable_flag = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!(
+                "/rest/api/3/issue/{}/worklog/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            ),
+        );
+
+        if let Some(value) = &self.notify_users {
+            config.query.push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.adjust_estimate {
+            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.new_estimate {
+            config.query.push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.increase_by {
+            config.query.push(("increaseBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.override_editable_flag {
+            config.query.push(("overrideEditableFlag".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a list of IDs and delete timestamps for worklogs deleted after a date and time.
+///
+/// This resource is paginated, with a limit of 1000 worklogs per page. Each page lists worklogs from oldest to youngest. If the number of items in the date range exceeds 1000, `until` indicates the timestamp of the youngest item on the page. Also, `nextPage` provides the URL for the next page of worklogs. The `lastPage` parameter is set to true on the last page of worklogs.
+///
+/// This resource does not return worklogs deleted during the minute preceding the request.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
+pub struct GetIdsOfWorklogsDeletedSinceRequest<'a> {
+    client: &'a crate::core::Client,
+    since: Option<i64>,
+}
+
+impl<'a> GetIdsOfWorklogsDeletedSinceRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, since: None }
+    }
+
+    /// The date and time, as a UNIX timestamp in milliseconds, after which deleted worklogs are returned.
+    #[must_use]
+    pub fn since(mut self, value: i64) -> Self {
+        self.since = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/worklog/deleted".to_owned());
+
+        if let Some(value) = &self.since {
+            config.query.push(("since".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ChangedWorklogs> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns worklog details for a list of worklog IDs.
+///
+/// The returned list of worklogs is limited to 1000 items.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira, however, worklogs are only returned where either of the following is true:
+///
+///  *  the worklog is set as *Viewable by All Users*.
+///  *  the user is a member of a project role or group with permission to view the worklog.
+#[derive(Clone)]
+pub struct GetWorklogsForIdsRequest<'a> {
+    client: &'a crate::core::Client,
+    expand: Option<GetWorklogsForIdsRequestExpand>,
+    worklog_ids_request: WorklogIdsRequest,
+}
+
+impl<'a> GetWorklogsForIdsRequest<'a> {
+    fn new(client: &'a crate::core::Client, worklog_ids_request: WorklogIdsRequest) -> Self {
+        Self { client, worklog_ids_request, expand: None }
+    }
+
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
+    #[must_use]
+    pub fn expand(mut self, value: GetWorklogsForIdsRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/worklog/list".to_owned());
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        let body = match serde_json::to_value(&self.worklog_ids_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Vec<Worklog>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a list of IDs and update timestamps for worklogs updated after a date and time.
+///
+/// This resource is paginated, with a limit of 1000 worklogs per page. Each page lists worklogs from oldest to youngest. If the number of items in the date range exceeds 1000, `until` indicates the timestamp of the youngest item on the page. Also, `nextPage` provides the URL for the next page of worklogs. The `lastPage` parameter is set to true on the last page of worklogs.
+///
+/// This resource does not return worklogs updated during the minute preceding the request.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira, however, worklogs are only returned where either of the following is true:
+///
+///  *  the worklog is set as *Viewable by All Users*.
+///  *  the user is a member of a project role or group with permission to view the worklog.
+#[derive(Clone)]
+pub struct GetIdsOfWorklogsModifiedSinceRequest<'a> {
+    client: &'a crate::core::Client,
+    since: Option<i64>,
+    expand: Option<GetIdsOfWorklogsModifiedSinceRequestExpand>,
+}
+
+impl<'a> GetIdsOfWorklogsModifiedSinceRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, since: None, expand: None }
+    }
+
+    /// The date and time, as a UNIX timestamp in milliseconds, after which updated worklogs are returned.
+    #[must_use]
+    pub fn since(mut self, value: i64) -> Self {
+        self.since = Some(value);
+
+        self
+    }
+
+    /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
+    #[must_use]
+    pub fn expand(mut self, value: GetIdsOfWorklogsModifiedSinceRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/worklog/updated".to_owned());
+
+        if let Some(value) = &self.since {
+            config.query.push(("since".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ChangedWorklogs> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

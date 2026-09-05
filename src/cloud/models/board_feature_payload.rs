@@ -1,0 +1,31 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The key of the feature
+    pub enum BoardFeaturePayloadFeatureKey {
+        Estimation => "ESTIMATION",
+        Sprints => "SPRINTS",
+    }
+}
+
+crate::open_enum! {
+    /// Whether the feature should be turned on or off
+    pub enum BoardFeaturePayloadState {
+        True => "true",
+        False => "false",
+    }
+}
+
+/// The payload for setting a board feature
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct BoardFeaturePayload {
+    /// The key of the feature
+    #[serde(rename = "featureKey", default, skip_serializing_if = "Option::is_none")]
+    pub feature_key: Option<BoardFeaturePayloadFeatureKey>,
+    /// Whether the feature should be turned on or off
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub state: Option<BoardFeaturePayloadState>,
+}

@@ -1,0 +1,15 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LinkIssueRequest {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub comment: Option<Comment>,
+    #[serde(rename = "inwardIssue")]
+    pub inward_issue: LinkedIssue,
+    #[serde(rename = "outwardIssue")]
+    pub outward_issue: LinkedIssue,
+    pub r#type: IssueLinkType,
+}

@@ -1,0 +1,34 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Representing a history event
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ObjectHistory {
+    /// Who performed the operation
+    pub actor: User,
+    pub id: String,
+    /// The name of the affected attribute
+    #[serde(rename = "affectedAttribute", default, skip_serializing_if = "Option::is_none")]
+    pub affected_attribute: Option<String>,
+    #[serde(rename = "oldValue", default, skip_serializing_if = "Option::is_none")]
+    pub old_value: Option<String>,
+    #[serde(rename = "newValue", default, skip_serializing_if = "Option::is_none")]
+    pub new_value: Option<String>,
+    pub r#type: i64,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
+    #[serde(deserialize_with = "crate::core::deserialize_required_timestamp")]
+    pub created: String,
+    #[serde(rename = "objectId")]
+    pub object_id: String,
+}

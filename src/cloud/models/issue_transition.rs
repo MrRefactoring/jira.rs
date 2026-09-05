@@ -1,0 +1,67 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Details of an issue transition.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct IssueTransition {
+    /// Expand options that include additional transition details in the response.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub expand: Option<String>,
+    /// Details of the fields associated with the issue transition screen. Use this information to populate `fields` and `update` in a transition request.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub fields: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// Whether there is a screen associated with the issue transition.
+    #[serde(rename = "hasScreen", default, skip_serializing_if = "Option::is_none")]
+    pub has_screen: Option<bool>,
+    /// The ID of the issue transition. Required when specifying a transition to undertake.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// Whether the transition is available to be performed.
+    #[serde(rename = "isAvailable", default, skip_serializing_if = "Option::is_none")]
+    pub is_available: Option<bool>,
+    /// Whether the issue has to meet criteria before the issue transition is applied.
+    #[serde(rename = "isConditional", default, skip_serializing_if = "Option::is_none")]
+    pub is_conditional: Option<bool>,
+    /// Whether the issue transition is global, that is, the transition is applied to issues regardless of their status.
+    #[serde(rename = "isGlobal", default, skip_serializing_if = "Option::is_none")]
+    pub is_global: Option<bool>,
+    /// Whether this is the initial issue transition for the workflow.
+    #[serde(rename = "isInitial", default, skip_serializing_if = "Option::is_none")]
+    pub is_initial: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub looped: Option<bool>,
+    /// The name of the issue transition.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub to: Option<StatusDetails>,
+    /// Keys the specification does not describe, kept rather than dropped.
+    #[serde(flatten)]
+    pub additional: std::collections::HashMap<String, serde_json::Value>,
+}
+
+impl crate::core::Extensible for IssueTransition {
+    const FIELDS: &'static [&'static str] = &[
+        "expand",
+        "fields",
+        "hasScreen",
+        "id",
+        "isAvailable",
+        "isConditional",
+        "isGlobal",
+        "isInitial",
+        "looped",
+        "name",
+        "to",
+    ];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}

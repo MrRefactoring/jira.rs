@@ -1,0 +1,27 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The type of the group label.
+    pub enum GroupLabelType {
+        Admin => "ADMIN",
+        Single => "SINGLE",
+        Multiple => "MULTIPLE",
+    }
+}
+
+/// A group label.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct GroupLabel {
+    /// The group label name.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+    /// The title of the group label.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    /// The type of the group label.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<GroupLabelType>,
+}

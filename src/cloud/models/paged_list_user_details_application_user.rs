@@ -1,0 +1,25 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// A paged list. To access additional details append `[start-index:end-index]` to the expand request. For example, `?expand=sharedUsers[10:40]` returns a list starting at item 10 and finishing at item 40.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct PagedListUserDetailsApplicationUser {
+    /// The index of the last item returned on the page.
+    #[serde(rename = "end-index", default, skip_serializing_if = "Option::is_none")]
+    pub end_index: Option<i64>,
+    /// The list of items.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<UserDetails>>,
+    /// The maximum number of results that could be on the page.
+    #[serde(rename = "max-results", default, skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// The number of items on the page.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub size: Option<i64>,
+    /// The index of the first item returned on the page.
+    #[serde(rename = "start-index", default, skip_serializing_if = "Option::is_none")]
+    pub start_index: Option<i64>,
+}

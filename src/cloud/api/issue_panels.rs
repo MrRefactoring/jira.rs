@@ -1,0 +1,70 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The IssuePanels operations.
+pub struct IssuePanelsService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> IssuePanelsService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Bulk pin or unpin an issue panel (added by a Forge app) to or from multiple projects.
+    ///
+    /// The operation runs asynchronously. The response includes a task ID - use the [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) endpoint to check progress.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn bulk_pin_unpin_projects_async(
+        &self,
+        forge_panel_project_pin_request: ForgePanelProjectPinRequest,
+    ) -> BulkPinUnpinProjectsAsyncRequest<'a> {
+        BulkPinUnpinProjectsAsyncRequest::new(self.client, forge_panel_project_pin_request)
+    }
+}
+
+/// Bulk pin or unpin an issue panel (added by a Forge app) to or from multiple projects.
+///
+/// The operation runs asynchronously. The response includes a task ID - use the [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) endpoint to check progress.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct BulkPinUnpinProjectsAsyncRequest<'a> {
+    client: &'a crate::core::Client,
+    forge_panel_project_pin_request: ForgePanelProjectPinRequest,
+}
+
+impl<'a> BulkPinUnpinProjectsAsyncRequest<'a> {
+    fn new(client: &'a crate::core::Client, forge_panel_project_pin_request: ForgePanelProjectPinRequest) -> Self {
+        Self { client, forge_panel_project_pin_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            "/rest/api/3/forge/panel/action/bulk/async".to_owned(),
+        );
+
+        let body = match serde_json::to_value(&self.forge_panel_project_pin_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ForgePanelProjectPinAsyncResponse> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

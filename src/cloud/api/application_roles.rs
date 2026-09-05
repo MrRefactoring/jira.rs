@@ -1,0 +1,95 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The ApplicationRoles operations.
+pub struct ApplicationRolesService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> ApplicationRolesService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns all application roles. In Jira, application roles are managed using the [Application access configuration](https://confluence.atlassian.com/x/3YxjL) page.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn get_all_application_roles(&self) -> GetAllApplicationRolesRequest<'a> {
+        GetAllApplicationRolesRequest::new(self.client)
+    }
+
+    /// Returns an application role.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn get_application_role(&self, key: impl Into<String>) -> GetApplicationRoleRequest<'a> {
+        GetApplicationRoleRequest::new(self.client, key)
+    }
+}
+
+/// Returns all application roles. In Jira, application roles are managed using the [Application access configuration](https://confluence.atlassian.com/x/3YxjL) page.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct GetAllApplicationRolesRequest<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> GetAllApplicationRolesRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/applicationrole".to_owned());
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Vec<ApplicationRole>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns an application role.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct GetApplicationRoleRequest<'a> {
+    client: &'a crate::core::Client,
+    key: String,
+}
+
+impl<'a> GetApplicationRoleRequest<'a> {
+    fn new(client: &'a crate::core::Client, key: impl Into<String>) -> Self {
+        Self { client, key: key.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/applicationrole/{}", crate::core::encode_path_segment(&self.key)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ApplicationRole> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

@@ -1,0 +1,16 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ClusterLockStatus {
+    #[serde(rename = "holdingLockSec", default, skip_serializing_if = "Option::is_none")]
+    pub holding_lock_sec: Option<String>,
+    #[serde(rename = "lockName", default, skip_serializing_if = "Option::is_none")]
+    pub lock_name: Option<String>,
+    #[serde(rename = "lockedByNode", default, skip_serializing_if = "Option::is_none")]
+    pub locked_by_node: Option<String>,
+    #[serde(rename = "updateTime", default, skip_serializing_if = "Option::is_none")]
+    pub update_time: Option<String>,
+}

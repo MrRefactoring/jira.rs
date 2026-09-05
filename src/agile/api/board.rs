@@ -1,0 +1,2294 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// Filters results to boards of the specified types. Valid values: scrum, kanban, simple.
+    pub enum GetAllBoardsRequestType {
+        Scrum => "scrum",
+        Kanban => "kanban",
+        Simple => "simple",
+    }
+}
+
+crate::open_enum! {
+    /// Ordering of the results by a given field. If not provided, values will not be sorted. Valid values: name.
+    pub enum GetAllBoardsRequestOrderBy {
+        Name => "name",
+        NameDescending => "-name",
+        NameAscending => "+name",
+    }
+}
+
+crate::open_enum! {
+    pub enum GetAllBoardsRequestExpandValue {
+        Admins => "admins",
+        Permissions => "permissions",
+    }
+}
+
+/// List of fields to expand for each board. Valid values: admins, permissions.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetAllBoardsRequestExpand {
+    One(GetAllBoardsRequestExpandValue),
+    Many(Vec<GetAllBoardsRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+/// A comma-separated list of the parameters to expand.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetIssuesForBacklogRequestExpand {
+    One(String),
+    Many(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+/// A comma-separated list of the parameters to expand.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetIssuesWithoutEpicForBoardRequestExpand {
+    One(String),
+    Many(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+/// A comma-separated list of the parameters to expand.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetBoardIssuesForEpicRequestExpand {
+    One(String),
+    Many(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+/// A comma-separated list of the parameters to expand.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetIssuesForBoardRequestExpand {
+    One(String),
+    Many(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    /// Filters results to sprints in specified states. Valid values: future, active, closed. You can define multiple states separated by commas, e.g. state=active,closed
+    pub enum GetAllSprintsRequestState {
+        Future => "future",
+        Active => "active",
+        Closed => "closed",
+    }
+}
+
+/// A comma-separated list of the parameters to expand.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetBoardIssuesForSprintRequestExpand {
+    One(String),
+    Many(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+/// The Board operations.
+pub struct BoardService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> BoardService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns all boards. This only includes boards that the user has permission to view.
+    ///
+    /// **Deprecation notice:** The required OAuth 2.0 scopes will be updated on February 15, 2024.
+    ///
+    ///  *  `read:board-scope:jira-software`, `read:project:jira`
+    pub fn get_all_boards(&self) -> GetAllBoardsRequest<'a> {
+        GetAllBoardsRequest::new(self.client)
+    }
+
+    /// Creates a new board. Board name, type and filter ID is required.
+    ///
+    ///  *  `name` \- Must be less than 255 characters.
+    ///  *  `type` \- Valid values: scrum, kanban
+    ///  *  `filterId` \- ID of a filter that the user has permissions to view. Note, if the user does not have the 'Create shared objects' permission and tries to create a shared board, a private board will be created instead (remember that board sharing depends on the filter sharing).
+    ///  *  `location` \- The container that the board will be located in. `location` must include the `type` property (Valid values: project, user). If choosing 'project', then a project must be specified by a `projectKeyOrId` property in `location`. If choosing 'user', the current user is chosen by default. The `projectKeyOrId` property should not be provided.
+    ///
+    /// Note:
+    ///
+    ///  *  If you want to create a new project with an associated board, use the [Jira platform REST API](https://docs.atlassian.com/jira/REST/latest). For more information, see the [Create project](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-project-post) method. The `projectTypeKey` for software boards must be 'software' and the `projectTemplateKey` must be either `com.pyxis.greenhopper.jira:gh-kanban-template` or `com.pyxis.greenhopper.jira:gh-scrum-template`.
+    ///  *  You can create a filter using the [Jira REST API](https://docs.atlassian.com/jira/REST/latest). For more information, see the [Create filter](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-filter-post) method.
+    ///  *  If you do not ORDER BY the Rank field for the filter of your board, you will not be able to reorder issues on the board.
+    pub fn create_board(&self, board_create: BoardCreate) -> CreateBoardRequest<'a> {
+        CreateBoardRequest::new(self.client, board_create)
+    }
+
+    /// Returns any boards which use the provided filter id. This method can be executed by users without a valid software license in order to find which boards are using a particular filter.
+    pub fn get_board_by_filter_id(&self, filter_id: i64) -> GetBoardByFilterIdRequest<'a> {
+        GetBoardByFilterIdRequest::new(self.client, filter_id)
+    }
+
+    /// Returns the board for the given board ID. This board will only be returned if the user has permission to view it. Admins without the view permission will see the board as a private one, so will see only a subset of the board's data (board location for instance).
+    pub fn get_board(&self, board_id: i64) -> GetBoardRequest<'a> {
+        GetBoardRequest::new(self.client, board_id)
+    }
+
+    /// Deletes the board. Admin without the view permission can still remove the board.
+    pub fn delete_board(&self, board_id: i64) -> DeleteBoardRequest<'a> {
+        DeleteBoardRequest::new(self.client, board_id)
+    }
+
+    /// Returns all issues from the board's backlog, for the given board ID. Result pagination is token based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. The backlog contains incomplete issues that are not assigned to any future or active sprint. Issues returned from this resource include Software project fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
+    pub fn get_issues_for_backlog(&self, board_id: i64) -> GetIssuesForBacklogRequest<'a> {
+        GetIssuesForBacklogRequest::new(self.client, board_id)
+    }
+
+    /// Returns the approximate count of all issues from the board's backlog, for the given board ID. This is equivalent to counting the issues on all pages returned by [Get issues for backlog enhanced](https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-rest-software-1-0-board-boardid-backlog-get). Recent updates might not be immediately visible in the returned output. This only includes issues that the user has permission to view.
+    pub fn get_approximate_issue_count_for_backlog(
+        &self,
+        board_id: i64,
+    ) -> GetApproximateIssueCountForBacklogRequest<'a> {
+        GetApproximateIssueCountForBacklogRequest::new(self.client, board_id)
+    }
+
+    /// Get the board configuration. The response contains the following fields:
+    ///
+    ///  *  `id` \- ID of the board.
+    ///  *  `name` \- Name of the board.
+    ///  *  `filter` \- Reference to the filter used by the given board.
+    ///  *  `location` \- Reference to the container that the board is located in. Includes the container type (Valid values: project, user).
+    ///  *  `subQuery` (Kanban only) - JQL subquery used by the given board.
+    ///  *  `columnConfig` \- The column configuration lists the columns for the board, in the order defined in the column configuration. For each column, it shows the issue status mapping as well as the constraint type (Valid values: none, issueCount, issueCountExclSubs) for the min/max number of issues. Note, the last column with statuses mapped to it is treated as the "Done" column, which means that issues in that column will be marked as already completed.
+    ///  *  `estimation` (Scrum only) - Contains information about type of estimation used for the board. Valid values: none, issueCount, field. If the estimation type is "field", the ID and display name of the field used for estimation is also returned. Note, estimates for an issue can be updated by a PUT /rest/api/3/issue/{issueIdOrKey} request, however the fields must be on the screen. "timeoriginalestimate" field will never be on the screen, so in order to update it "originalEstimate" in "timetracking" field should be updated.
+    ///  *  `ranking` \- Contains information about custom field used for ranking in the given board.
+    pub fn get_configuration(&self, board_id: i64) -> GetConfigurationRequest<'a> {
+        GetConfigurationRequest::new(self.client, board_id)
+    }
+
+    /// Returns all epics from the board, for the given board ID. This only includes epics that the user has permission to view. Note, if the user does not have permission to view the board, no epics will be returned at all.
+    pub fn get_epics(&self, board_id: i64) -> GetEpicsRequest<'a> {
+        GetEpicsRequest::new(self.client, board_id)
+    }
+
+    /// Returns all issues that do not belong to any epic on a board, for a given board ID. Result pagination is token based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. Issues returned from this resource include Software project fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
+    pub fn get_issues_without_epic_for_board(&self, board_id: i64) -> GetIssuesWithoutEpicForBoardRequest<'a> {
+        GetIssuesWithoutEpicForBoardRequest::new(self.client, board_id)
+    }
+
+    /// Returns all issues that belong to an epic on the board, for the given epic ID and the board ID. Result pagination is token based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. Issues returned from this resource include Software project fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
+    pub fn get_board_issues_for_epic(&self, board_id: i64, epic_id: i64) -> GetBoardIssuesForEpicRequest<'a> {
+        GetBoardIssuesForEpicRequest::new(self.client, board_id, epic_id)
+    }
+
+    pub fn get_features_for_board(&self, board_id: i64) -> GetFeaturesForBoardRequest<'a> {
+        GetFeaturesForBoardRequest::new(self.client, board_id)
+    }
+
+    pub fn toggle_features(&self, board_id: i64, body: FeatureToggleRequest) -> ToggleFeaturesRequest<'a> {
+        ToggleFeaturesRequest::new(self.client, board_id, body)
+    }
+
+    /// Move issues from the backog to the board (if they are already in the backlog of that board).
+    /// This operation either moves an issue(s) onto a board from the backlog (by adding it to the issueList for the board) Or transitions the issue(s) to the first column for a kanban board with backlog. At most 50 issues may be moved at once.
+    pub fn move_issues_to_board(
+        &self,
+        board_id: i64,
+        issue_rank_request: IssueRankRequest,
+    ) -> MoveIssuesToBoardRequest<'a> {
+        MoveIssuesToBoardRequest::new(self.client, board_id, issue_rank_request)
+    }
+
+    /// Returns all issues from a board, for a given board ID. Result pagination is token based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. An issue belongs to the board if its status is mapped to the board's column. Epic issues do not belong to scrum boards. Issues returned from this resource include Software project fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
+    pub fn get_issues_for_board(&self, board_id: i64) -> GetIssuesForBoardRequest<'a> {
+        GetIssuesForBoardRequest::new(self.client, board_id)
+    }
+
+    /// Returns the approximate count of all issues from a board, for a given board ID. This is equivalent to counting the issues on all pages returned by [Get issues for board enhanced](https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-rest-software-1-0-board-boardid-issue-get). Recent updates might not be immediately visible in the returned output. This only includes issues that the user has permission to view.
+    pub fn get_approximate_issue_count_for_board(&self, board_id: i64) -> GetApproximateIssueCountForBoardRequest<'a> {
+        GetApproximateIssueCountForBoardRequest::new(self.client, board_id)
+    }
+
+    /// Returns all projects that are associated with the board, for the given board ID. If the user does not have permission to view the board, no projects will be returned at all. Returned projects are ordered by the name.
+    ///
+    /// A project is associated with a board if the board filter contains reference the project or there is an issue from the project that belongs to the board.
+    ///
+    /// The board filter contains reference the project only if JQL query guarantees that returned issues will be returned from the project set defined in JQL. For instance the query `project in (ABC, BCD) AND reporter = admin` have reference to ABC and BCD projects but query `project in (ABC, BCD) OR reporter = admin` doesn't have reference to any project.
+    ///
+    /// An issue belongs to the board if its status is mapped to the board's column. Epic issues do not belongs to the scrum boards.
+    pub fn get_projects(&self, board_id: i64) -> GetProjectsRequest<'a> {
+        GetProjectsRequest::new(self.client, board_id)
+    }
+
+    /// Returns all projects that are statically associated with the board, for the given board ID. Returned projects are ordered by the name.
+    ///
+    /// A project is associated with a board if the board filter contains reference the project.
+    ///
+    /// The board filter contains reference the project only if JQL query guarantees that returned issues will be returned from the project set defined in JQL. For instance the query `project in (ABC, BCD) AND reporter = admin` have reference to ABC and BCD projects but query `project in (ABC, BCD) OR reporter = admin` doesn't have reference to any project.
+    pub fn get_projects_full(&self, board_id: i64) -> GetProjectsFullRequest<'a> {
+        GetProjectsFullRequest::new(self.client, board_id)
+    }
+
+    /// Returns the keys of all properties for the board identified by the id. The user who retrieves the property keys is required to have permissions to view the board.
+    pub fn get_board_property_keys(&self, board_id: impl Into<String>) -> GetBoardPropertyKeysRequest<'a> {
+        GetBoardPropertyKeysRequest::new(self.client, board_id)
+    }
+
+    /// Returns the value of the property with a given key from the board identified by the provided id. The user who retrieves the property is required to have permissions to view the board.
+    pub fn get_board_property(
+        &self,
+        board_id: impl Into<String>,
+        property_key: impl Into<String>,
+    ) -> GetBoardPropertyRequest<'a> {
+        GetBoardPropertyRequest::new(self.client, board_id, property_key)
+    }
+
+    /// Sets the value of the specified board's property.
+    ///
+    /// You can use this resource to store a custom data against the board identified by the id. The user who stores the data is required to have permissions to modify the board.
+    pub fn set_board_property(
+        &self,
+        board_id: impl Into<String>,
+        property_key: impl Into<String>,
+        property_value: std::collections::HashMap<String, serde_json::Value>,
+    ) -> SetBoardPropertyRequest<'a> {
+        SetBoardPropertyRequest::new(self.client, board_id, property_key, property_value)
+    }
+
+    /// Removes the property from the board identified by the id. Ths user removing the property is required to have permissions to modify the board.
+    pub fn delete_board_property(
+        &self,
+        board_id: impl Into<String>,
+        property_key: impl Into<String>,
+    ) -> DeleteBoardPropertyRequest<'a> {
+        DeleteBoardPropertyRequest::new(self.client, board_id, property_key)
+    }
+
+    /// Returns all quick filters from a board, for a given board ID.
+    pub fn get_all_quick_filters(&self, board_id: i64) -> GetAllQuickFiltersRequest<'a> {
+        GetAllQuickFiltersRequest::new(self.client, board_id)
+    }
+
+    /// Returns the quick filter for a given quick filter ID. The quick filter will only be returned if the user can view the board that the quick filter belongs to.
+    pub fn get_quick_filter(&self, board_id: i64, quick_filter_id: i64) -> GetQuickFilterRequest<'a> {
+        GetQuickFilterRequest::new(self.client, board_id, quick_filter_id)
+    }
+
+    pub fn get_reports_for_board(&self, board_id: i64) -> GetReportsForBoardRequest<'a> {
+        GetReportsForBoardRequest::new(self.client, board_id)
+    }
+
+    /// Returns all sprints from a board, for a given board ID. This only includes sprints that the user has permission to view.
+    pub fn get_all_sprints(&self, board_id: i64) -> GetAllSprintsRequest<'a> {
+        GetAllSprintsRequest::new(self.client, board_id)
+    }
+
+    /// Get all issues you have access to that belong to the sprint from the board. Result pagination is token-based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. Issues returned from this resource contains additional fields like: sprint, closedSprints, flagged, and epic. Issues are returned ordered by rank. JQL order has higher priority than default rank.
+    pub fn get_board_issues_for_sprint(&self, board_id: i64, sprint_id: i64) -> GetBoardIssuesForSprintRequest<'a> {
+        GetBoardIssuesForSprintRequest::new(self.client, board_id, sprint_id)
+    }
+
+    /// Returns all versions from a board, for a given board ID. This only includes versions that the user has permission to view. Note, if the user does not have permission to view the board, no versions will be returned at all. Returned versions are ordered by the name of the project from which they belong and then by sequence defined by user.
+    pub fn get_all_versions(&self, board_id: i64) -> GetAllVersionsRequest<'a> {
+        GetAllVersionsRequest::new(self.client, board_id)
+    }
+}
+
+/// Returns all boards. This only includes boards that the user has permission to view.
+///
+/// **Deprecation notice:** The required OAuth 2.0 scopes will be updated on February 15, 2024.
+///
+///  *  `read:board-scope:jira-software`, `read:project:jira`
+#[derive(Clone)]
+pub struct GetAllBoardsRequest<'a> {
+    client: &'a crate::core::Client,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
+    r#type: Option<GetAllBoardsRequestType>,
+    name: Option<String>,
+    project_key_or_id: Option<String>,
+    account_id_location: Option<String>,
+    project_location: Option<String>,
+    include_private: Option<bool>,
+    negate_location_filtering: Option<bool>,
+    order_by: Option<GetAllBoardsRequestOrderBy>,
+    expand: Option<GetAllBoardsRequestExpand>,
+    project_type_location: Option<Vec<String>>,
+    filter_id: Option<i64>,
+}
+
+impl<'a> GetAllBoardsRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self {
+            client,
+            start_at: None,
+            max_results: None,
+            r#type: None,
+            name: None,
+            project_key_or_id: None,
+            account_id_location: None,
+            project_location: None,
+            include_private: None,
+            negate_location_filtering: None,
+            order_by: None,
+            expand: None,
+            project_type_location: None,
+            filter_id: None,
+        }
+    }
+
+    /// The starting index of the returned boards. Base index: 0. See the 'Pagination' section at the top of this page for more details.
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The maximum number of boards to return per page. See the 'Pagination' section at the top of this page for more details.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// Filters results to boards of the specified types. Valid values: scrum, kanban, simple.
+    #[must_use]
+    pub fn r#type(mut self, value: impl Into<GetAllBoardsRequestType>) -> Self {
+        self.r#type = Some(value.into());
+
+        self
+    }
+
+    /// Filters results to boards that match or partially match the specified name.
+    #[must_use]
+    pub fn name(mut self, value: impl Into<String>) -> Self {
+        self.name = Some(value.into());
+
+        self
+    }
+
+    /// Filters results to boards that are relevant to a project. Relevance means that the jql filter defined in board contains a reference to a project.
+    #[must_use]
+    pub fn project_key_or_id(mut self, value: impl Into<String>) -> Self {
+        self.project_key_or_id = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn account_id_location(mut self, value: impl Into<String>) -> Self {
+        self.account_id_location = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn project_location(mut self, value: impl Into<String>) -> Self {
+        self.project_location = Some(value.into());
+
+        self
+    }
+
+    /// Appends private boards to the end of the list. The name and type fields are excluded for security reasons.
+    #[must_use]
+    pub fn include_private(mut self, value: bool) -> Self {
+        self.include_private = Some(value);
+
+        self
+    }
+
+    /// If set to true, negate filters used for querying by location. By default false.
+    #[must_use]
+    pub fn negate_location_filtering(mut self, value: bool) -> Self {
+        self.negate_location_filtering = Some(value);
+
+        self
+    }
+
+    /// Ordering of the results by a given field. If not provided, values will not be sorted. Valid values: name.
+    #[must_use]
+    pub fn order_by(mut self, value: impl Into<GetAllBoardsRequestOrderBy>) -> Self {
+        self.order_by = Some(value.into());
+
+        self
+    }
+
+    /// List of fields to expand for each board. Valid values: admins, permissions.
+    #[must_use]
+    pub fn expand(mut self, value: GetAllBoardsRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// Filters results to boards that are relevant to a project types. Support Jira Software, Jira Service Management. Valid values: software, service\_desk. By default software.
+    #[must_use]
+    pub fn project_type_location(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.project_type_location = Some(value.into_iter().map(Into::into).collect());
+
+        self
+    }
+
+    /// Filters results to boards that are relevant to a filter. Not supported for next-gen boards.
+    #[must_use]
+    pub fn filter_id(mut self, value: i64) -> Self {
+        self.filter_id = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/agile/1.0/board".to_owned());
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.r#type {
+            config.query.push(("type".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.name {
+            config.query.push(("name".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.project_key_or_id {
+            config.query.push(("projectKeyOrId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.account_id_location {
+            config.query.push(("accountIdLocation".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.project_location {
+            config.query.push(("projectLocation".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.include_private {
+            config.query.push(("includePrivate".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.negate_location_filtering {
+            config
+                .query
+                .push(("negateLocationFiltering".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.order_by {
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.project_type_location {
+            config.query.push(("projectTypeLocation".to_owned(), crate::core::QueryValue::List(value.clone())));
+        }
+
+        if let Some(value) = &self.filter_id {
+            config.query.push(("filterId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Board>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start_at = Some(offset);
+
+            request.send()
+        })
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Page<Board>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Creates a new board. Board name, type and filter ID is required.
+///
+///  *  `name` \- Must be less than 255 characters.
+///  *  `type` \- Valid values: scrum, kanban
+///  *  `filterId` \- ID of a filter that the user has permissions to view. Note, if the user does not have the 'Create shared objects' permission and tries to create a shared board, a private board will be created instead (remember that board sharing depends on the filter sharing).
+///  *  `location` \- The container that the board will be located in. `location` must include the `type` property (Valid values: project, user). If choosing 'project', then a project must be specified by a `projectKeyOrId` property in `location`. If choosing 'user', the current user is chosen by default. The `projectKeyOrId` property should not be provided.
+///
+/// Note:
+///
+///  *  If you want to create a new project with an associated board, use the [Jira platform REST API](https://docs.atlassian.com/jira/REST/latest). For more information, see the [Create project](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-project-post) method. The `projectTypeKey` for software boards must be 'software' and the `projectTemplateKey` must be either `com.pyxis.greenhopper.jira:gh-kanban-template` or `com.pyxis.greenhopper.jira:gh-scrum-template`.
+///  *  You can create a filter using the [Jira REST API](https://docs.atlassian.com/jira/REST/latest). For more information, see the [Create filter](https://developer.atlassian.com/cloud/jira/software/rest/intro#api-rest-api-3-filter-post) method.
+///  *  If you do not ORDER BY the Rank field for the filter of your board, you will not be able to reorder issues on the board.
+#[derive(Clone)]
+pub struct CreateBoardRequest<'a> {
+    client: &'a crate::core::Client,
+    board_create: BoardCreate,
+}
+
+impl<'a> CreateBoardRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_create: BoardCreate) -> Self {
+        Self { client, board_create }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/agile/1.0/board".to_owned());
+
+        let body = match serde_json::to_value(&self.board_create)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Board> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns any boards which use the provided filter id. This method can be executed by users without a valid software license in order to find which boards are using a particular filter.
+#[derive(Clone)]
+pub struct GetBoardByFilterIdRequest<'a> {
+    client: &'a crate::core::Client,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
+    filter_id: i64,
+}
+
+impl<'a> GetBoardByFilterIdRequest<'a> {
+    fn new(client: &'a crate::core::Client, filter_id: i64) -> Self {
+        Self { client, filter_id, start_at: None, max_results: None }
+    }
+
+    /// The starting index of the returned boards. Base index: 0. See the 'Pagination' section at the top of this page for more details.
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The maximum number of boards to return per page. Default: 50. See the 'Pagination' section at the top of this page for more details.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/agile/1.0/board/filter/{}", self.filter_id),
+        );
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<BoardFilter>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start_at = Some(offset);
+
+            request.send()
+        })
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Page<BoardFilter>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the board for the given board ID. This board will only be returned if the user has permission to view it. Admins without the view permission will see the board as a private one, so will see only a subset of the board's data (board location for instance).
+#[derive(Clone)]
+pub struct GetBoardRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+}
+
+impl<'a> GetBoardRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
+        Self { client, board_id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/agile/1.0/board/{}", self.board_id),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Board> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes the board. Admin without the view permission can still remove the board.
+#[derive(Clone)]
+pub struct DeleteBoardRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+}
+
+impl<'a> DeleteBoardRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
+        Self { client, board_id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/agile/1.0/board/{}", self.board_id),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns all issues from the board's backlog, for the given board ID. Result pagination is token based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. The backlog contains incomplete issues that are not assigned to any future or active sprint. Issues returned from this resource include Software project fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
+#[derive(Clone)]
+pub struct GetIssuesForBacklogRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+    next_page_token: Option<String>,
+    max_results: Option<i64>,
+    reconcile_issues: Option<Vec<i64>>,
+    jql: Option<String>,
+    validate_query: Option<bool>,
+    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
+    expand: Option<GetIssuesForBacklogRequestExpand>,
+}
+
+impl<'a> GetIssuesForBacklogRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
+        Self {
+            client,
+            board_id,
+            next_page_token: None,
+            max_results: None,
+            reconcile_issues: None,
+            jql: None,
+            validate_query: None,
+            fields: None,
+            expand: None,
+        }
+    }
+
+    /// The token for a page to fetch that is not the first page. The first page has a `nextPageToken` of `null`. Use the `nextPageToken` to fetch the next page of issues.
+    ///
+    /// Note: The `nextPageToken` field is **not included** in the response for the last page, indicating there is no next page.
+    #[must_use]
+    pub fn next_page_token(mut self, value: impl Into<String>) -> Self {
+        self.next_page_token = Some(value.into());
+
+        self
+    }
+
+    /// The maximum number of items to return per page. To manage page size, the API may return fewer items per page where there is a large number of fields or properties returned. It returns max 5000 issues.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// Strong consistency issue IDs to be reconciled with search results. Accepts max 50 IDs. This list of IDs should be consistent with each paginated request across different pages.
+    #[must_use]
+    pub fn reconcile_issues(mut self, value: impl IntoIterator<Item = i64>) -> Self {
+        self.reconcile_issues = Some(value.into_iter().collect());
+
+        self
+    }
+
+    /// Filters results using a JQL query. If you define an order in your JQL query, it will override the default order of the returned issues.
+    /// Note that `username` and `userkey` can't be used as search terms for this parameter due to privacy reasons. Use `accountId` instead.
+    #[must_use]
+    pub fn jql(mut self, value: impl Into<String>) -> Self {
+        self.jql = Some(value.into());
+
+        self
+    }
+
+    /// Specifies whether to validate the JQL query or not. Default: true.
+    #[must_use]
+    pub fn validate_query(mut self, value: bool) -> Self {
+        self.validate_query = Some(value);
+
+        self
+    }
+
+    /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
+    #[must_use]
+    pub fn fields(
+        mut self,
+        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
+    ) -> Self {
+        self.fields = Some(value.into_iter().collect());
+
+        self
+    }
+
+    /// A comma-separated list of the parameters to expand.
+    #[must_use]
+    pub fn expand(mut self, value: GetIssuesForBacklogRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/software/1.0/board/{}/backlog", self.board_id),
+        );
+
+        if let Some(value) = &self.next_page_token {
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.reconcile_issues {
+            config.query.push(("reconcileIssues".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.jql {
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.validate_query {
+            config.query.push(("validateQuery".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.fields {
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<SoftwareIssueResults> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the approximate count of all issues from the board's backlog, for the given board ID. This is equivalent to counting the issues on all pages returned by [Get issues for backlog enhanced](https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-rest-software-1-0-board-boardid-backlog-get). Recent updates might not be immediately visible in the returned output. This only includes issues that the user has permission to view.
+#[derive(Clone)]
+pub struct GetApproximateIssueCountForBacklogRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+    jql: Option<String>,
+}
+
+impl<'a> GetApproximateIssueCountForBacklogRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
+        Self { client, board_id, jql: None }
+    }
+
+    /// Filters results using a JQL query. Note that `username` and `userkey` can't be used as search terms for this parameter due to privacy reasons. Use `accountId` instead.
+    #[must_use]
+    pub fn jql(mut self, value: impl Into<String>) -> Self {
+        self.jql = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/software/1.0/board/{}/backlog/approximate-count", self.board_id),
+        );
+
+        if let Some(value) = &self.jql {
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<IssueCount> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Get the board configuration. The response contains the following fields:
+///
+///  *  `id` \- ID of the board.
+///  *  `name` \- Name of the board.
+///  *  `filter` \- Reference to the filter used by the given board.
+///  *  `location` \- Reference to the container that the board is located in. Includes the container type (Valid values: project, user).
+///  *  `subQuery` (Kanban only) - JQL subquery used by the given board.
+///  *  `columnConfig` \- The column configuration lists the columns for the board, in the order defined in the column configuration. For each column, it shows the issue status mapping as well as the constraint type (Valid values: none, issueCount, issueCountExclSubs) for the min/max number of issues. Note, the last column with statuses mapped to it is treated as the "Done" column, which means that issues in that column will be marked as already completed.
+///  *  `estimation` (Scrum only) - Contains information about type of estimation used for the board. Valid values: none, issueCount, field. If the estimation type is "field", the ID and display name of the field used for estimation is also returned. Note, estimates for an issue can be updated by a PUT /rest/api/3/issue/{issueIdOrKey} request, however the fields must be on the screen. "timeoriginalestimate" field will never be on the screen, so in order to update it "originalEstimate" in "timetracking" field should be updated.
+///  *  `ranking` \- Contains information about custom field used for ranking in the given board.
+#[derive(Clone)]
+pub struct GetConfigurationRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+}
+
+impl<'a> GetConfigurationRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
+        Self { client, board_id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/agile/1.0/board/{}/configuration", self.board_id),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetConfiguration> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns all epics from the board, for the given board ID. This only includes epics that the user has permission to view. Note, if the user does not have permission to view the board, no epics will be returned at all.
+#[derive(Clone)]
+pub struct GetEpicsRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
+    done: Option<String>,
+}
+
+impl<'a> GetEpicsRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
+        Self { client, board_id, start_at: None, max_results: None, done: None }
+    }
+
+    /// The starting index of the returned epics. Base index: 0. See the 'Pagination' section at the top of this page for more details.
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The maximum number of epics to return per page. See the 'Pagination' section at the top of this page for more details.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// Filters results to epics that are either done or not done. Valid values: true, false.
+    #[must_use]
+    pub fn done(mut self, value: impl Into<String>) -> Self {
+        self.done = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/agile/1.0/board/{}/epic", self.board_id),
+        );
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.done {
+            config.query.push(("done".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetEpics> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns all issues that do not belong to any epic on a board, for a given board ID. Result pagination is token based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. Issues returned from this resource include Software project fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
+#[derive(Clone)]
+pub struct GetIssuesWithoutEpicForBoardRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+    next_page_token: Option<String>,
+    max_results: Option<i64>,
+    reconcile_issues: Option<Vec<i64>>,
+    jql: Option<String>,
+    validate_query: Option<bool>,
+    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
+    expand: Option<GetIssuesWithoutEpicForBoardRequestExpand>,
+}
+
+impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
+        Self {
+            client,
+            board_id,
+            next_page_token: None,
+            max_results: None,
+            reconcile_issues: None,
+            jql: None,
+            validate_query: None,
+            fields: None,
+            expand: None,
+        }
+    }
+
+    /// The token for a page to fetch that is not the first page. The first page has a `nextPageToken` of `null`. Use the `nextPageToken` to fetch the next page of issues.
+    ///
+    /// Note: The `nextPageToken` field is **not included** in the response for the last page, indicating there is no next page.
+    #[must_use]
+    pub fn next_page_token(mut self, value: impl Into<String>) -> Self {
+        self.next_page_token = Some(value.into());
+
+        self
+    }
+
+    /// The maximum number of items to return per page. To manage page size, the API may return fewer items per page where there is a large number of fields or properties returned. It returns max 5000 issues.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// Strong consistency issue IDs to be reconciled with search results. Accepts max 50 IDs. This list of IDs should be consistent with each paginated request across different pages.
+    #[must_use]
+    pub fn reconcile_issues(mut self, value: impl IntoIterator<Item = i64>) -> Self {
+        self.reconcile_issues = Some(value.into_iter().collect());
+
+        self
+    }
+
+    /// Filters results using a JQL query. If you define an order in your JQL query, it will override the default order of the returned issues.
+    /// Note that `username` and `userkey` can't be used as search terms for this parameter due to privacy reasons. Use `accountId` instead.
+    #[must_use]
+    pub fn jql(mut self, value: impl Into<String>) -> Self {
+        self.jql = Some(value.into());
+
+        self
+    }
+
+    /// Specifies whether to validate the JQL query or not. Default: true.
+    #[must_use]
+    pub fn validate_query(mut self, value: bool) -> Self {
+        self.validate_query = Some(value);
+
+        self
+    }
+
+    /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
+    #[must_use]
+    pub fn fields(
+        mut self,
+        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
+    ) -> Self {
+        self.fields = Some(value.into_iter().collect());
+
+        self
+    }
+
+    /// A comma-separated list of the parameters to expand.
+    #[must_use]
+    pub fn expand(mut self, value: GetIssuesWithoutEpicForBoardRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/software/1.0/board/{}/epic/none/issue", self.board_id),
+        );
+
+        if let Some(value) = &self.next_page_token {
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.reconcile_issues {
+            config.query.push(("reconcileIssues".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.jql {
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.validate_query {
+            config.query.push(("validateQuery".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.fields {
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<SoftwareIssueResults> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns all issues that belong to an epic on the board, for the given epic ID and the board ID. Result pagination is token based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. Issues returned from this resource include Software project fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
+#[derive(Clone)]
+pub struct GetBoardIssuesForEpicRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+    epic_id: i64,
+    next_page_token: Option<String>,
+    max_results: Option<i64>,
+    reconcile_issues: Option<Vec<i64>>,
+    jql: Option<String>,
+    validate_query: Option<bool>,
+    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
+    expand: Option<GetBoardIssuesForEpicRequestExpand>,
+}
+
+impl<'a> GetBoardIssuesForEpicRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64, epic_id: i64) -> Self {
+        Self {
+            client,
+            board_id,
+            epic_id,
+            next_page_token: None,
+            max_results: None,
+            reconcile_issues: None,
+            jql: None,
+            validate_query: None,
+            fields: None,
+            expand: None,
+        }
+    }
+
+    /// The token for a page to fetch that is not the first page. The first page has a `nextPageToken` of `null`. Use the `nextPageToken` to fetch the next page of issues.
+    ///
+    /// Note: The `nextPageToken` field is **not included** in the response for the last page, indicating there is no next page.
+    #[must_use]
+    pub fn next_page_token(mut self, value: impl Into<String>) -> Self {
+        self.next_page_token = Some(value.into());
+
+        self
+    }
+
+    /// The maximum number of items to return per page. To manage page size, the API may return fewer items per page where there is a large number of fields or properties returned. It returns max 5000 issues.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// Strong consistency issue IDs to be reconciled with search results. Accepts max 50 IDs. This list of IDs should be consistent with each paginated request across different pages.
+    #[must_use]
+    pub fn reconcile_issues(mut self, value: impl IntoIterator<Item = i64>) -> Self {
+        self.reconcile_issues = Some(value.into_iter().collect());
+
+        self
+    }
+
+    /// Filters results using a JQL query. If you define an order in your JQL query, it will override the default order of the returned issues.
+    /// Note that `username` and `userkey` can't be used as search terms for this parameter due to privacy reasons. Use `accountId` instead.
+    #[must_use]
+    pub fn jql(mut self, value: impl Into<String>) -> Self {
+        self.jql = Some(value.into());
+
+        self
+    }
+
+    /// Specifies whether to validate the JQL query or not. Default: true.
+    #[must_use]
+    pub fn validate_query(mut self, value: bool) -> Self {
+        self.validate_query = Some(value);
+
+        self
+    }
+
+    /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
+    #[must_use]
+    pub fn fields(
+        mut self,
+        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
+    ) -> Self {
+        self.fields = Some(value.into_iter().collect());
+
+        self
+    }
+
+    /// A comma-separated list of the parameters to expand.
+    #[must_use]
+    pub fn expand(mut self, value: GetBoardIssuesForEpicRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/software/1.0/board/{}/epic/{}/issue", self.board_id, self.epic_id),
+        );
+
+        if let Some(value) = &self.next_page_token {
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.reconcile_issues {
+            config.query.push(("reconcileIssues".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.jql {
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.validate_query {
+            config.query.push(("validateQuery".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.fields {
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<SoftwareIssueResults> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+#[derive(Clone)]
+pub struct GetFeaturesForBoardRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+}
+
+impl<'a> GetFeaturesForBoardRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
+        Self { client, board_id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/agile/1.0/board/{}/features", self.board_id),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetFeaturesForBoard> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+#[derive(Clone)]
+pub struct ToggleFeaturesRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+    body: FeatureToggleRequest,
+}
+
+impl<'a> ToggleFeaturesRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64, body: FeatureToggleRequest) -> Self {
+        Self { client, board_id, body }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/agile/1.0/board/{}/features", self.board_id),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ToggleFeatures> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Move issues from the backog to the board (if they are already in the backlog of that board).
+/// This operation either moves an issue(s) onto a board from the backlog (by adding it to the issueList for the board) Or transitions the issue(s) to the first column for a kanban board with backlog. At most 50 issues may be moved at once.
+#[derive(Clone)]
+pub struct MoveIssuesToBoardRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+    issue_rank_request: IssueRankRequest,
+}
+
+impl<'a> MoveIssuesToBoardRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64, issue_rank_request: IssueRankRequest) -> Self {
+        Self { client, board_id, issue_rank_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!("/rest/agile/1.0/board/{}/issue", self.board_id),
+        );
+
+        let body = match serde_json::to_value(&self.issue_rank_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns all issues from a board, for a given board ID. Result pagination is token based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. An issue belongs to the board if its status is mapped to the board's column. Epic issues do not belong to scrum boards. Issues returned from this resource include Software project fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
+#[derive(Clone)]
+pub struct GetIssuesForBoardRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+    next_page_token: Option<String>,
+    max_results: Option<i64>,
+    reconcile_issues: Option<Vec<i64>>,
+    jql: Option<String>,
+    validate_query: Option<bool>,
+    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
+    expand: Option<GetIssuesForBoardRequestExpand>,
+}
+
+impl<'a> GetIssuesForBoardRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
+        Self {
+            client,
+            board_id,
+            next_page_token: None,
+            max_results: None,
+            reconcile_issues: None,
+            jql: None,
+            validate_query: None,
+            fields: None,
+            expand: None,
+        }
+    }
+
+    /// The token for a page to fetch that is not the first page. The first page has a `nextPageToken` of `null`. Use the `nextPageToken` to fetch the next page of issues.
+    ///
+    /// Note: The `nextPageToken` field is **not included** in the response for the last page, indicating there is no next page.
+    #[must_use]
+    pub fn next_page_token(mut self, value: impl Into<String>) -> Self {
+        self.next_page_token = Some(value.into());
+
+        self
+    }
+
+    /// The maximum number of items to return per page. To manage page size, the API may return fewer items per page where there is a large number of fields or properties returned. It returns max 5000 issues.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// Strong consistency issue IDs to be reconciled with search results. Accepts max 50 IDs. This list of IDs should be consistent with each paginated request across different pages.
+    #[must_use]
+    pub fn reconcile_issues(mut self, value: impl IntoIterator<Item = i64>) -> Self {
+        self.reconcile_issues = Some(value.into_iter().collect());
+
+        self
+    }
+
+    /// Filters results using a JQL query. If you define an order in your JQL query, it will override the default order of the returned issues.
+    /// Note that `username` and `userkey` can't be used as search terms for this parameter due to privacy reasons. Use `accountId` instead.
+    #[must_use]
+    pub fn jql(mut self, value: impl Into<String>) -> Self {
+        self.jql = Some(value.into());
+
+        self
+    }
+
+    /// Specifies whether to validate the JQL query or not. Default: true.
+    #[must_use]
+    pub fn validate_query(mut self, value: bool) -> Self {
+        self.validate_query = Some(value);
+
+        self
+    }
+
+    /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
+    #[must_use]
+    pub fn fields(
+        mut self,
+        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
+    ) -> Self {
+        self.fields = Some(value.into_iter().collect());
+
+        self
+    }
+
+    /// A comma-separated list of the parameters to expand.
+    #[must_use]
+    pub fn expand(mut self, value: GetIssuesForBoardRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/software/1.0/board/{}/issue", self.board_id),
+        );
+
+        if let Some(value) = &self.next_page_token {
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.reconcile_issues {
+            config.query.push(("reconcileIssues".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.jql {
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.validate_query {
+            config.query.push(("validateQuery".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.fields {
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<SoftwareIssueResults> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the approximate count of all issues from a board, for a given board ID. This is equivalent to counting the issues on all pages returned by [Get issues for board enhanced](https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-rest-software-1-0-board-boardid-issue-get). Recent updates might not be immediately visible in the returned output. This only includes issues that the user has permission to view.
+#[derive(Clone)]
+pub struct GetApproximateIssueCountForBoardRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+    jql: Option<String>,
+}
+
+impl<'a> GetApproximateIssueCountForBoardRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
+        Self { client, board_id, jql: None }
+    }
+
+    /// Filters results using a JQL query. Note that `username` and `userkey` can't be used as search terms for this parameter due to privacy reasons. Use `accountId` instead.
+    #[must_use]
+    pub fn jql(mut self, value: impl Into<String>) -> Self {
+        self.jql = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/software/1.0/board/{}/issue/approximate-count", self.board_id),
+        );
+
+        if let Some(value) = &self.jql {
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<IssueCount> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns all projects that are associated with the board, for the given board ID. If the user does not have permission to view the board, no projects will be returned at all. Returned projects are ordered by the name.
+///
+/// A project is associated with a board if the board filter contains reference the project or there is an issue from the project that belongs to the board.
+///
+/// The board filter contains reference the project only if JQL query guarantees that returned issues will be returned from the project set defined in JQL. For instance the query `project in (ABC, BCD) AND reporter = admin` have reference to ABC and BCD projects but query `project in (ABC, BCD) OR reporter = admin` doesn't have reference to any project.
+///
+/// An issue belongs to the board if its status is mapped to the board's column. Epic issues do not belongs to the scrum boards.
+#[derive(Clone)]
+pub struct GetProjectsRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
+}
+
+impl<'a> GetProjectsRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
+        Self { client, board_id, start_at: None, max_results: None }
+    }
+
+    /// The starting index of the returned projects. Base index: 0. See the 'Pagination' section at the top of this page for more details.
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The maximum number of projects to return per page. See the 'Pagination' section at the top of this page for more details.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/agile/1.0/board/{}/project", self.board_id),
+        );
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetProjects> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns all projects that are statically associated with the board, for the given board ID. Returned projects are ordered by the name.
+///
+/// A project is associated with a board if the board filter contains reference the project.
+///
+/// The board filter contains reference the project only if JQL query guarantees that returned issues will be returned from the project set defined in JQL. For instance the query `project in (ABC, BCD) AND reporter = admin` have reference to ABC and BCD projects but query `project in (ABC, BCD) OR reporter = admin` doesn't have reference to any project.
+#[derive(Clone)]
+pub struct GetProjectsFullRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+}
+
+impl<'a> GetProjectsFullRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
+        Self { client, board_id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/agile/1.0/board/{}/project/full", self.board_id),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetProjectsFull> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the keys of all properties for the board identified by the id. The user who retrieves the property keys is required to have permissions to view the board.
+#[derive(Clone)]
+pub struct GetBoardPropertyKeysRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: String,
+}
+
+impl<'a> GetBoardPropertyKeysRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: impl Into<String>) -> Self {
+        Self { client, board_id: board_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/agile/1.0/board/{}/properties", crate::core::encode_path_segment(&self.board_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<PropertyKeys> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the value of the property with a given key from the board identified by the provided id. The user who retrieves the property is required to have permissions to view the board.
+#[derive(Clone)]
+pub struct GetBoardPropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: String,
+    property_key: String,
+}
+
+impl<'a> GetBoardPropertyRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: impl Into<String>, property_key: impl Into<String>) -> Self {
+        Self { client, board_id: board_id.into(), property_key: property_key.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/agile/1.0/board/{}/properties/{}",
+                crate::core::encode_path_segment(&self.board_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<EntityProperty> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Sets the value of the specified board's property.
+///
+/// You can use this resource to store a custom data against the board identified by the id. The user who stores the data is required to have permissions to modify the board.
+#[derive(Clone)]
+pub struct SetBoardPropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: String,
+    property_key: String,
+    property_value: std::collections::HashMap<String, serde_json::Value>,
+}
+
+impl<'a> SetBoardPropertyRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        board_id: impl Into<String>,
+        property_key: impl Into<String>,
+        property_value: std::collections::HashMap<String, serde_json::Value>,
+    ) -> Self {
+        Self { client, board_id: board_id.into(), property_key: property_key.into(), property_value }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!(
+                "/rest/agile/1.0/board/{}/properties/{}",
+                crate::core::encode_path_segment(&self.board_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.property_value)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Removes the property from the board identified by the id. Ths user removing the property is required to have permissions to modify the board.
+#[derive(Clone)]
+pub struct DeleteBoardPropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: String,
+    property_key: String,
+}
+
+impl<'a> DeleteBoardPropertyRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: impl Into<String>, property_key: impl Into<String>) -> Self {
+        Self { client, board_id: board_id.into(), property_key: property_key.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!(
+                "/rest/agile/1.0/board/{}/properties/{}",
+                crate::core::encode_path_segment(&self.board_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns all quick filters from a board, for a given board ID.
+#[derive(Clone)]
+pub struct GetAllQuickFiltersRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
+}
+
+impl<'a> GetAllQuickFiltersRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
+        Self { client, board_id, start_at: None, max_results: None }
+    }
+
+    /// The starting index of the returned quick filters. Base index: 0. See the 'Pagination' section at the top of this page for more details.
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The maximum number of sprints to return per page. See the 'Pagination' section at the top of this page for more details.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/agile/1.0/board/{}/quickfilter", self.board_id),
+        );
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<QuickFilter>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start_at = Some(offset);
+
+            request.send()
+        })
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Page<QuickFilter>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the quick filter for a given quick filter ID. The quick filter will only be returned if the user can view the board that the quick filter belongs to.
+#[derive(Clone)]
+pub struct GetQuickFilterRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+    quick_filter_id: i64,
+}
+
+impl<'a> GetQuickFilterRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64, quick_filter_id: i64) -> Self {
+        Self { client, board_id, quick_filter_id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/agile/1.0/board/{}/quickfilter/{}", self.board_id, self.quick_filter_id),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<QuickFilter> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+#[derive(Clone)]
+pub struct GetReportsForBoardRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+}
+
+impl<'a> GetReportsForBoardRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
+        Self { client, board_id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/agile/1.0/board/{}/reports", self.board_id),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetReportsForBoard> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns all sprints from a board, for a given board ID. This only includes sprints that the user has permission to view.
+#[derive(Clone)]
+pub struct GetAllSprintsRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
+    state: Option<GetAllSprintsRequestState>,
+}
+
+impl<'a> GetAllSprintsRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
+        Self { client, board_id, start_at: None, max_results: None, state: None }
+    }
+
+    /// The starting index of the returned sprints. Base index: 0. See the 'Pagination' section at the top of this page for more details.
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The maximum number of sprints to return per page. See the 'Pagination' section at the top of this page for more details.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// Filters results to sprints in specified states. Valid values: future, active, closed. You can define multiple states separated by commas, e.g. state=active,closed
+    #[must_use]
+    pub fn state(mut self, value: impl Into<GetAllSprintsRequestState>) -> Self {
+        self.state = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/agile/1.0/board/{}/sprint", self.board_id),
+        );
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.state {
+            config.query.push(("state".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetAllSprints> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Get all issues you have access to that belong to the sprint from the board. Result pagination is token-based, using `nextPageToken` and `maxResults`. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. Issues returned from this resource contains additional fields like: sprint, closedSprints, flagged, and epic. Issues are returned ordered by rank. JQL order has higher priority than default rank.
+#[derive(Clone)]
+pub struct GetBoardIssuesForSprintRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+    sprint_id: i64,
+    next_page_token: Option<String>,
+    max_results: Option<i64>,
+    reconcile_issues: Option<Vec<i64>>,
+    jql: Option<String>,
+    validate_query: Option<bool>,
+    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
+    expand: Option<GetBoardIssuesForSprintRequestExpand>,
+}
+
+impl<'a> GetBoardIssuesForSprintRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64, sprint_id: i64) -> Self {
+        Self {
+            client,
+            board_id,
+            sprint_id,
+            next_page_token: None,
+            max_results: None,
+            reconcile_issues: None,
+            jql: None,
+            validate_query: None,
+            fields: None,
+            expand: None,
+        }
+    }
+
+    /// The token for a page to fetch that is not the first page. The first page has a `nextPageToken` of `null`. Use the `nextPageToken` to fetch the next page of issues.
+    ///
+    /// Note: The `nextPageToken` field is **not included** in the response for the last page, indicating there is no next page.
+    #[must_use]
+    pub fn next_page_token(mut self, value: impl Into<String>) -> Self {
+        self.next_page_token = Some(value.into());
+
+        self
+    }
+
+    /// The maximum number of items to return per page. To manage page size, the API may return fewer items per page where there is a large number of fields or properties returned. It returns max 5000 issues.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// Strong consistency issue IDs to be reconciled with search results. Accepts max 50 IDs. This list of IDs should be consistent with each paginated request across different pages.
+    #[must_use]
+    pub fn reconcile_issues(mut self, value: impl IntoIterator<Item = i64>) -> Self {
+        self.reconcile_issues = Some(value.into_iter().collect());
+
+        self
+    }
+
+    /// Filters results using a JQL query. If you define an order in your JQL query, it will override the default order of the returned issues.
+    /// Note that `username` and `userkey` can't be used as search terms for this parameter due to privacy reasons. Use `accountId` instead.
+    #[must_use]
+    pub fn jql(mut self, value: impl Into<String>) -> Self {
+        self.jql = Some(value.into());
+
+        self
+    }
+
+    /// Specifies whether to validate the JQL query or not. Default: true.
+    #[must_use]
+    pub fn validate_query(mut self, value: bool) -> Self {
+        self.validate_query = Some(value);
+
+        self
+    }
+
+    /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
+    #[must_use]
+    pub fn fields(
+        mut self,
+        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
+    ) -> Self {
+        self.fields = Some(value.into_iter().collect());
+
+        self
+    }
+
+    /// A comma-separated list of the parameters to expand.
+    #[must_use]
+    pub fn expand(mut self, value: GetBoardIssuesForSprintRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/software/1.0/board/{}/sprint/{}/issue", self.board_id, self.sprint_id),
+        );
+
+        if let Some(value) = &self.next_page_token {
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.reconcile_issues {
+            config.query.push(("reconcileIssues".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.jql {
+            config.query.push(("jql".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.validate_query {
+            config.query.push(("validateQuery".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.fields {
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<SoftwareIssueResults> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns all versions from a board, for a given board ID. This only includes versions that the user has permission to view. Note, if the user does not have permission to view the board, no versions will be returned at all. Returned versions are ordered by the name of the project from which they belong and then by sequence defined by user.
+#[derive(Clone)]
+pub struct GetAllVersionsRequest<'a> {
+    client: &'a crate::core::Client,
+    board_id: i64,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
+    released: Option<String>,
+}
+
+impl<'a> GetAllVersionsRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
+        Self { client, board_id, start_at: None, max_results: None, released: None }
+    }
+
+    /// The starting index of the returned versions. Base index: 0. See the 'Pagination' section at the top of this page for more details.
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The maximum number of versions to return per page. See the 'Pagination' section at the top of this page for more details.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// Filters results to versions that are either released or unreleased. Valid values: true, false.
+    #[must_use]
+    pub fn released(mut self, value: impl Into<String>) -> Self {
+        self.released = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/agile/1.0/board/{}/version", self.board_id),
+        );
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.released {
+            config.query.push(("released".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetAllVersions> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

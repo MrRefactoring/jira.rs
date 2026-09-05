@@ -1,0 +1,4 @@
+// @generated. Do not edit: change the generator or the specification.
+
+/// An IETF BCP 47 locale string
+pub type Locale = String;

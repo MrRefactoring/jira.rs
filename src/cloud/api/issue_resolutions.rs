@@ -1,0 +1,56 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The IssueResolutions operations.
+pub struct IssueResolutionsService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> IssueResolutionsService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns an issue resolution value.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+    pub fn get_resolution(&self, id: impl Into<String>) -> GetResolutionRequest<'a> {
+        GetResolutionRequest::new(self.client, id)
+    }
+}
+
+/// Returns an issue resolution value.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
+pub struct GetResolutionRequest<'a> {
+    client: &'a crate::core::Client,
+    id: String,
+}
+
+impl<'a> GetResolutionRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
+        Self { client, id: id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/resolution/{}", crate::core::encode_path_segment(&self.id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Resolution> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

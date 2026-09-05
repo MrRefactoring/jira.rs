@@ -1,0 +1,383 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum GetUiModificationsRequestExpandValue {
+        Data => "data",
+        Contexts => "contexts",
+    }
+}
+
+/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+///
+///  *  `data` Returns UI modification data.
+///  *  `contexts` Returns UI modification contexts.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetUiModificationsRequestExpand {
+    One(GetUiModificationsRequestExpandValue),
+    Many(Vec<GetUiModificationsRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+/// The UIModificationsApps operations.
+pub struct UIModificationsAppsService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> UIModificationsAppsService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Gets UI modifications. UI modifications can only be retrieved by Forge apps.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+    ///
+    /// The new `read:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+    pub fn get_ui_modifications(&self) -> GetUiModificationsRequest<'a> {
+        GetUiModificationsRequest::new(self.client)
+    }
+
+    /// Creates a UI modification. UI modification can only be created by Forge apps.
+    ///
+    /// Each app can define up to 3000 UI modifications. Each UI modification can define up to 1000 contexts. The same context can be assigned to maximum 100 UI modifications.
+    ///
+    /// **Context types:**
+    ///
+    ///  *  **Jira contexts:** For Jira view types, use `projectId` and `issueTypeId`. One field can act as a wildcard. Supported Jira views:
+    ///
+    ///      *  `GIC` \- Jira global issue create
+    ///      *  `IssueView` \- Jira issue view
+    ///      *  `IssueTransition` \- Jira issue transition
+    ///  *  **Jira Service Management contexts:** For Jira Service Management view types, use `portalId` and `requestTypeId`. Wildcards are not supported. Supported JSM views:
+    ///
+    ///      *  `JSMRequestCreate` \- Jira Service Management request create portal view
+    ///  *  **Agent view contexts:** For Agent view types, use `projectId` and `issueTypeId` like Jira contexts, and optionally set `requestTypeId`. `portalId` must not be set. One of `projectId`, `issueTypeId`, or `viewType` can act as a wildcard. Supported Agent views:
+    ///
+    ///      *  `GICAgentView` \- Agent view variant of Jira global issue create
+    ///      *  `IssueViewAgentView` \- Agent view variant of Jira issue view
+    ///      *  `IssueTransitionAgentView` \- Agent view variant of Jira issue transition
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *None* if the UI modification is created without contexts.
+    ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for one or more projects, if the UI modification is created with contexts.
+    ///
+    /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+    pub fn create_ui_modification(
+        &self,
+        create_ui_modification_details: CreateUiModificationDetails,
+    ) -> CreateUiModificationRequest<'a> {
+        CreateUiModificationRequest::new(self.client, create_ui_modification_details)
+    }
+
+    /// Updates a UI modification. UI modification can only be updated by Forge apps.
+    ///
+    /// Each UI modification can define up to 1000 contexts. The same context can be assigned to maximum 100 UI modifications.
+    ///
+    /// **Context types:**
+    ///
+    ///  *  **Jira contexts:** For Jira view types, use `projectId` and `issueTypeId`. One field can act as a wildcard. Supported Jira views:
+    ///
+    ///      *  `GIC` \- Jira global issue create
+    ///      *  `IssueView` \- Jira issue view
+    ///      *  `IssueTransition` \- Jira issue transition
+    ///  *  **Jira Service Management contexts:** For Jira Service Management view types, use `portalId` and `requestTypeId`. Wildcards are not supported. Supported JSM views:
+    ///
+    ///      *  `JSMRequestCreate` \- Jira Service Management request create portal view
+    ///  *  **Agent view contexts:** For Agent view types, use `projectId` and `issueTypeId` like Jira contexts, and optionally set `requestTypeId`. `portalId` must not be set. One of `projectId`, `issueTypeId`, or `viewType` can act as a wildcard. Supported Agent views:
+    ///
+    ///      *  `GICAgentView` \- Agent view variant of Jira global issue create
+    ///      *  `IssueViewAgentView` \- Agent view variant of Jira issue view
+    ///      *  `IssueTransitionAgentView` \- Agent view variant of Jira issue transition
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *None* if the UI modification is created without contexts.
+    ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for one or more projects, if the UI modification is created with contexts.
+    ///
+    /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+    pub fn update_ui_modification(
+        &self,
+        ui_modification_id: impl Into<String>,
+        update_ui_modification_details: UpdateUiModificationDetails,
+    ) -> UpdateUiModificationRequest<'a> {
+        UpdateUiModificationRequest::new(self.client, ui_modification_id, update_ui_modification_details)
+    }
+
+    /// Deletes a UI modification. All the contexts that belong to the UI modification are deleted too. UI modification can only be deleted by Forge apps.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+    ///
+    /// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+    pub fn delete_ui_modification(&self, ui_modification_id: impl Into<String>) -> DeleteUiModificationRequest<'a> {
+        DeleteUiModificationRequest::new(self.client, ui_modification_id)
+    }
+}
+
+/// Gets UI modifications. UI modifications can only be retrieved by Forge apps.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+///
+/// The new `read:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+#[derive(Clone)]
+pub struct GetUiModificationsRequest<'a> {
+    client: &'a crate::core::Client,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
+    expand: Option<GetUiModificationsRequestExpand>,
+}
+
+impl<'a> GetUiModificationsRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, start_at: None, max_results: None, expand: None }
+    }
+
+    /// The index of the first item to return in a page of results (page offset).
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return per page.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
+    ///
+    ///  *  `data` Returns UI modification data.
+    ///  *  `contexts` Returns UI modification contexts.
+    #[must_use]
+    pub fn expand(mut self, value: GetUiModificationsRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/uiModifications".to_owned());
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<UiModificationDetails>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start_at = Some(offset);
+
+            request.send()
+        })
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Page<UiModificationDetails>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Creates a UI modification. UI modification can only be created by Forge apps.
+///
+/// Each app can define up to 3000 UI modifications. Each UI modification can define up to 1000 contexts. The same context can be assigned to maximum 100 UI modifications.
+///
+/// **Context types:**
+///
+///  *  **Jira contexts:** For Jira view types, use `projectId` and `issueTypeId`. One field can act as a wildcard. Supported Jira views:
+///
+///      *  `GIC` \- Jira global issue create
+///      *  `IssueView` \- Jira issue view
+///      *  `IssueTransition` \- Jira issue transition
+///  *  **Jira Service Management contexts:** For Jira Service Management view types, use `portalId` and `requestTypeId`. Wildcards are not supported. Supported JSM views:
+///
+///      *  `JSMRequestCreate` \- Jira Service Management request create portal view
+///  *  **Agent view contexts:** For Agent view types, use `projectId` and `issueTypeId` like Jira contexts, and optionally set `requestTypeId`. `portalId` must not be set. One of `projectId`, `issueTypeId`, or `viewType` can act as a wildcard. Supported Agent views:
+///
+///      *  `GICAgentView` \- Agent view variant of Jira global issue create
+///      *  `IssueViewAgentView` \- Agent view variant of Jira issue view
+///      *  `IssueTransitionAgentView` \- Agent view variant of Jira issue transition
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *None* if the UI modification is created without contexts.
+///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for one or more projects, if the UI modification is created with contexts.
+///
+/// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+#[derive(Clone)]
+pub struct CreateUiModificationRequest<'a> {
+    client: &'a crate::core::Client,
+    create_ui_modification_details: CreateUiModificationDetails,
+}
+
+impl<'a> CreateUiModificationRequest<'a> {
+    fn new(client: &'a crate::core::Client, create_ui_modification_details: CreateUiModificationDetails) -> Self {
+        Self { client, create_ui_modification_details }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/uiModifications".to_owned());
+
+        let body = match serde_json::to_value(&self.create_ui_modification_details)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<UiModificationIdentifiers> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Updates a UI modification. UI modification can only be updated by Forge apps.
+///
+/// Each UI modification can define up to 1000 contexts. The same context can be assigned to maximum 100 UI modifications.
+///
+/// **Context types:**
+///
+///  *  **Jira contexts:** For Jira view types, use `projectId` and `issueTypeId`. One field can act as a wildcard. Supported Jira views:
+///
+///      *  `GIC` \- Jira global issue create
+///      *  `IssueView` \- Jira issue view
+///      *  `IssueTransition` \- Jira issue transition
+///  *  **Jira Service Management contexts:** For Jira Service Management view types, use `portalId` and `requestTypeId`. Wildcards are not supported. Supported JSM views:
+///
+///      *  `JSMRequestCreate` \- Jira Service Management request create portal view
+///  *  **Agent view contexts:** For Agent view types, use `projectId` and `issueTypeId` like Jira contexts, and optionally set `requestTypeId`. `portalId` must not be set. One of `projectId`, `issueTypeId`, or `viewType` can act as a wildcard. Supported Agent views:
+///
+///      *  `GICAgentView` \- Agent view variant of Jira global issue create
+///      *  `IssueViewAgentView` \- Agent view variant of Jira issue view
+///      *  `IssueTransitionAgentView` \- Agent view variant of Jira issue transition
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *None* if the UI modification is created without contexts.
+///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for one or more projects, if the UI modification is created with contexts.
+///
+/// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+#[derive(Clone)]
+pub struct UpdateUiModificationRequest<'a> {
+    client: &'a crate::core::Client,
+    ui_modification_id: String,
+    update_ui_modification_details: UpdateUiModificationDetails,
+}
+
+impl<'a> UpdateUiModificationRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        ui_modification_id: impl Into<String>,
+        update_ui_modification_details: UpdateUiModificationDetails,
+    ) -> Self {
+        Self { client, ui_modification_id: ui_modification_id.into(), update_ui_modification_details }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/3/uiModifications/{}", crate::core::encode_path_segment(&self.ui_modification_id)),
+        );
+
+        let body = match serde_json::to_value(&self.update_ui_modification_details)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes a UI modification. All the contexts that belong to the UI modification are deleted too. UI modification can only be deleted by Forge apps.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None.
+///
+/// The new `write:app-data:jira` OAuth scope is 100% optional now, and not using it won't break your app. However, we recommend adding it to your app's scope list because we will eventually make it mandatory.
+#[derive(Clone)]
+pub struct DeleteUiModificationRequest<'a> {
+    client: &'a crate::core::Client,
+    ui_modification_id: String,
+}
+
+impl<'a> DeleteUiModificationRequest<'a> {
+    fn new(client: &'a crate::core::Client, ui_modification_id: impl Into<String>) -> Self {
+        Self { client, ui_modification_id: ui_modification_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/3/uiModifications/{}", crate::core::encode_path_segment(&self.ui_modification_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

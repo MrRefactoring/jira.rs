@@ -1,0 +1,24 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Details of an operation to perform on a field.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct FieldUpdateOperation {
+    /// The value to add to the field.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub add: Option<serde_json::Value>,
+    /// The field value to copy from another issue.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub copy: Option<serde_json::Value>,
+    /// The value to edit in the field.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub edit: Option<serde_json::Value>,
+    /// The value to removed from the field.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub remove: Option<serde_json::Value>,
+    /// The value to set in the field.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub set: Option<serde_json::Value>,
+}

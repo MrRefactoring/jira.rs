@@ -1,0 +1,13 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Details of Jira expressions for analysis.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct JiraExpressionForAnalysis {
+    /// Context variables and their types. The type checker assumes that [common context variables](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#context-variables), such as `issue` or `project`, are available in context and sets their type. Use this property to override the default types or provide details of new variables.
+    #[serde(rename = "contextVariables", default, skip_serializing_if = "Option::is_none")]
+    pub context_variables: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// The list of Jira expressions to analyse.
+    pub expressions: Vec<String>,
+}

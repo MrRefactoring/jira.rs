@@ -1,0 +1,474 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The schema version used for this data.
+    ///
+    /// Placeholder to support potential schema changes in the future.
+    pub enum SubmitBuildsRequestBuildsSchemaVersion {
+        N10 => "1.0",
+    }
+}
+
+crate::open_enum! {
+    /// The state of a build.
+    ///
+    /// * `pending` - The build is queued, or some manual action is required.
+    /// * `in_progress` - The build is currently running.
+    /// * `successful` - The build completed successfully.
+    /// * `failed` - The build failed.
+    /// * `cancelled` - The build has been cancelled or stopped.
+    /// * `unknown` - The build is in an unknown state.
+    pub enum SubmitBuildsRequestBuildsState {
+        Pending => "pending",
+        InProgress => "in_progress",
+        Successful => "successful",
+        Failed => "failed",
+        Cancelled => "cancelled",
+        Unknown => "unknown",
+    }
+}
+
+/// Information about tests that were executed during a build.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitBuildsRequestBuildsTestInfo {
+    /// The total number of tests considered during a build.
+    #[serde(rename = "totalNumber")]
+    pub total_number: i64,
+    /// The number of tests that passed during a build.
+    #[serde(rename = "numberPassed")]
+    pub number_passed: i64,
+    /// The number of tests that failed during a build.
+    #[serde(rename = "numberFailed")]
+    pub number_failed: i64,
+    /// The number of tests that were skipped during a build.
+    #[serde(rename = "numberSkipped", default, skip_serializing_if = "Option::is_none")]
+    pub number_skipped: Option<i64>,
+}
+
+/// Details about the commit the build was run against.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitBuildsRequestBuildsReferencesCommit {
+    /// The ID of the commit. E.g. for a Git repository this would be the SHA1 hash.
+    pub id: String,
+    /// An identifier for the repository containing the commit.
+    ///
+    /// In most cases this should be the URL of the repository in the SCM provider.
+    ///
+    /// For cases where the build was executed against a local repository etc. this should be some identifier that is
+    /// unique to that repository.
+    #[serde(rename = "repositoryUri")]
+    pub repository_uri: String,
+}
+
+/// Details about the ref the build was run on.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitBuildsRequestBuildsReferencesRef {
+    /// The name of the ref the build ran on
+    pub name: String,
+    /// An identifer for the ref.
+    ///
+    /// In most cases this should be the URL of the tag/branch etc. in the SCM provider.
+    ///
+    /// For cases where the build was executed against a local repository etc. this should be something that uniquely
+    /// identifies the ref.
+    pub uri: String,
+}
+
+/// Information that links a build to a commit, branch etc.
+///
+/// Used to provide a richer user experience by enabling us to associate builds from your system with e.g.
+/// branches / commits / tags etc. supplied by another app in the Jira UI.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitBuildsRequestBuildsReferences {
+    /// Details about the commit the build was run against.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub commit: Option<SubmitBuildsRequestBuildsReferencesCommit>,
+    /// Details about the ref the build was run on.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub r#ref: Option<SubmitBuildsRequestBuildsReferencesRef>,
+}
+
+/// Data related to a single build
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SubmitBuildsRequestBuilds {
+    /// The schema version used for this data.
+    ///
+    /// Placeholder to support potential schema changes in the future.
+    #[serde(rename = "schemaVersion", default, skip_serializing_if = "Option::is_none")]
+    pub schema_version: Option<SubmitBuildsRequestBuildsSchemaVersion>,
+    /// An ID that relates a sequence of builds. Depending on your use case this might be a project ID, pipeline ID,
+    /// plan key etc. - whatever logical unit you use to group a sequence of builds.
+    ///
+    /// The combination of `pipelineId` and `buildNumber` must uniquely identify a build you have provided.
+    #[serde(rename = "pipelineId")]
+    pub pipeline_id: String,
+    /// Identifies a build within the sequence of builds identified by the build `pipelineId`.
+    ///
+    /// Used to identify the 'most recent' build in that sequence of builds.
+    ///
+    /// The combination of `pipelineId` and `buildNumber` must uniquely identify a build you have provided.
+    #[serde(rename = "buildNumber")]
+    pub build_number: i64,
+    /// A number used to apply an order to the updates to the build, as identified by `pipelineId` and `buildNumber`,
+    /// in the case of out-of-order receipt of update requests.
+    ///
+    /// It must be a monotonically increasing number. For example, epoch time could be one way to generate the
+    /// `updateSequenceNumber`.
+    ///
+    /// Updates for a build that is received with an `updateSqeuenceNumber` less than or equal to what is currently
+    /// stored will be ignored.
+    #[serde(rename = "updateSequenceNumber")]
+    pub update_sequence_number: i64,
+    /// The human-readable name for the build.
+    ///
+    /// Will be shown in the UI.
+    #[serde(rename = "displayName")]
+    pub display_name: String,
+    /// An optional description to attach to this build.
+    ///
+    /// This may be anything that makes sense in your system.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// A human-readable string that to provide information about the build.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub label: Option<String>,
+    /// The URL to this build in your system.
+    pub url: String,
+    /// The state of a build.
+    ///
+    /// * `pending` - The build is queued, or some manual action is required.
+    /// * `in_progress` - The build is currently running.
+    /// * `successful` - The build completed successfully.
+    /// * `failed` - The build failed.
+    /// * `cancelled` - The build has been cancelled or stopped.
+    /// * `unknown` - The build is in an unknown state.
+    pub state: SubmitBuildsRequestBuildsState,
+    /// The last-updated timestamp to present to the user as a summary of the state of the build.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user as a summary of the state of the build.
+    #[cfg(not(feature = "chrono"))]
+    #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
+    pub last_updated: String,
+    /// The Jira issue keys or IDs to associate the build with.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub associations: Option<Vec<IssueIdOrKeysAssociation>>,
+    /// Information about tests that were executed during a build.
+    #[serde(rename = "testInfo", default, skip_serializing_if = "Option::is_none")]
+    pub test_info: Option<SubmitBuildsRequestBuildsTestInfo>,
+    /// Optional information that links a build to a commit, branch etc.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub references: Option<Vec<SubmitBuildsRequestBuildsReferences>>,
+}
+
+/// Information about the provider. This is useful for auditing, logging, debugging,
+/// and other internal uses. It is not considered private information. Hence, it may not contain personally
+/// identifiable information.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitBuildsRequestProviderMetadata {
+    /// An optional name of the source of the builds data.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub product: Option<String>,
+}
+
+/// The Builds operations.
+pub struct BuildsService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> BuildsService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Update / insert builds data.
+    ///
+    /// Builds are identified by the combination of `pipelineId` and `buildNumber`, and existing build data for the same
+    /// build will be replaced if it exists and the `updateSequenceNumber` of the existing data is less than the
+    /// incoming data.
+    ///
+    /// Submissions are performed asynchronously. Submitted data will eventually be available in Jira; most updates are
+    /// available within a short period of time, but may take some time during peak load and/or maintenance times.
+    /// The `getBuildByKey` operation can be used to confirm that data has been stored successfully (if needed).
+    ///
+    /// In the case of multiple builds being submitted in one request, each is validated individually prior to
+    /// submission. Details of which build failed submission (if any) are available in the response object.
+    pub fn submit_builds(
+        &self,
+        builds: impl IntoIterator<Item = SubmitBuildsRequestBuilds>,
+    ) -> SubmitBuildsRequest<'a> {
+        SubmitBuildsRequest::new(self.client, builds)
+    }
+
+    /// Bulk delete all builds data that match the given request.
+    ///
+    /// One or more query params must be supplied to specify Properties to delete by.
+    /// Optional param `_updateSequenceNumber` is no longer supported.
+    /// If more than one Property is provided, data will be deleted that matches ALL of the
+    /// Properties (e.g. treated as an AND).
+    ///
+    /// See the documentation for the `submitBuilds` operation for more details.
+    ///
+    /// e.g. DELETE /bulkByProperties?accountId=account-123&repoId=repo-345
+    ///
+    /// Deletion is performed asynchronously. The `getBuildByKey` operation can be used to confirm that data has been
+    /// deleted successfully (if needed).
+    pub fn delete_builds_by_property(&self, account_id: impl Into<String>) -> DeleteBuildsByPropertyRequest<'a> {
+        DeleteBuildsByPropertyRequest::new(self.client, account_id)
+    }
+
+    /// Retrieve the currently stored build data for the given `pipelineId` and `buildNumber` combination.
+    ///
+    /// The result will be what is currently stored, ignoring any pending updates or deletes.
+    pub fn get_build_by_key(&self, pipeline_id: impl Into<String>, build_number: i64) -> GetBuildByKeyRequest<'a> {
+        GetBuildByKeyRequest::new(self.client, pipeline_id, build_number)
+    }
+
+    /// Delete the build data currently stored for the given `pipelineId` and `buildNumber` combination.
+    ///
+    /// Deletion is performed asynchronously. The `getBuildByKey` operation can be used to confirm that data has been
+    /// deleted successfully (if needed).
+    pub fn delete_build_by_key(
+        &self,
+        pipeline_id: impl Into<String>,
+        build_number: i64,
+    ) -> DeleteBuildByKeyRequest<'a> {
+        DeleteBuildByKeyRequest::new(self.client, pipeline_id, build_number)
+    }
+}
+
+/// Update / insert builds data.
+///
+/// Builds are identified by the combination of `pipelineId` and `buildNumber`, and existing build data for the same
+/// build will be replaced if it exists and the `updateSequenceNumber` of the existing data is less than the
+/// incoming data.
+///
+/// Submissions are performed asynchronously. Submitted data will eventually be available in Jira; most updates are
+/// available within a short period of time, but may take some time during peak load and/or maintenance times.
+/// The `getBuildByKey` operation can be used to confirm that data has been stored successfully (if needed).
+///
+/// In the case of multiple builds being submitted in one request, each is validated individually prior to
+/// submission. Details of which build failed submission (if any) are available in the response object.
+#[derive(Clone)]
+pub struct SubmitBuildsRequest<'a> {
+    client: &'a crate::core::Client,
+    properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    builds: Vec<SubmitBuildsRequestBuilds>,
+    provider_metadata: Option<SubmitBuildsRequestProviderMetadata>,
+}
+
+impl<'a> SubmitBuildsRequest<'a> {
+    fn new(client: &'a crate::core::Client, builds: impl IntoIterator<Item = SubmitBuildsRequestBuilds>) -> Self {
+        Self { client, builds: builds.into_iter().collect(), properties: None, provider_metadata: None }
+    }
+
+    /// Properties assigned to build data that can then be used for delete / query operations.
+    ///
+    /// Examples might be an account or user ID that can then be used to clean up data if an account is removed from
+    /// the Provider system.
+    ///
+    /// Note that these properties will never be returned with build data. They are not intended for use as
+    /// metadata to associate with a build. Internally they are stored as a hash so that personal information etc.
+    /// is never stored within Jira.
+    ///
+    /// Properties are supplied as key/value pairs, a maximum of 5 properties can be supplied, and keys must not
+    /// contain ':' or start with '_'.
+    #[must_use]
+    pub fn properties(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
+        self.properties = Some(value);
+
+        self
+    }
+
+    /// Information about the provider. This is useful for auditing, logging, debugging,
+    /// and other internal uses. It is not considered private information. Hence, it may not contain personally
+    /// identifiable information.
+    #[must_use]
+    pub fn provider_metadata(mut self, value: SubmitBuildsRequestProviderMetadata) -> Self {
+        self.provider_metadata = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/builds/0.1/bulk".to_owned());
+
+        let mut body = serde_json::Map::new();
+
+        if let Some(value) = &self.properties {
+            body.insert("properties".to_owned(), serde_json::to_value(value)?);
+        }
+
+        body.insert("builds".to_owned(), serde_json::to_value(&self.builds)?);
+
+        if let Some(value) = &self.provider_metadata {
+            body.insert("providerMetadata".to_owned(), serde_json::to_value(value)?);
+        }
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<SubmitBuilds> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Bulk delete all builds data that match the given request.
+///
+/// One or more query params must be supplied to specify Properties to delete by.
+/// Optional param `_updateSequenceNumber` is no longer supported.
+/// If more than one Property is provided, data will be deleted that matches ALL of the
+/// Properties (e.g. treated as an AND).
+///
+/// See the documentation for the `submitBuilds` operation for more details.
+///
+/// e.g. DELETE /bulkByProperties?accountId=account-123&repoId=repo-345
+///
+/// Deletion is performed asynchronously. The `getBuildByKey` operation can be used to confirm that data has been
+/// deleted successfully (if needed).
+#[derive(Clone)]
+pub struct DeleteBuildsByPropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    account_id: String,
+    repo_id: Option<String>,
+}
+
+impl<'a> DeleteBuildsByPropertyRequest<'a> {
+    fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
+        Self { client, account_id: account_id.into(), repo_id: None }
+    }
+
+    /// Optional additional property filter combined with accountId (AND). Official example: repoId=repo-345 alongside accountId. Must match a key previously supplied in submitBuilds `properties`.
+    #[must_use]
+    pub fn repo_id(mut self, value: impl Into<String>) -> Self {
+        self.repo_id = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            "/rest/builds/0.1/bulkByProperties".to_owned(),
+        );
+
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
+
+        if let Some(value) = &self.repo_id {
+            config.query.push(("repoId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Retrieve the currently stored build data for the given `pipelineId` and `buildNumber` combination.
+///
+/// The result will be what is currently stored, ignoring any pending updates or deletes.
+#[derive(Clone)]
+pub struct GetBuildByKeyRequest<'a> {
+    client: &'a crate::core::Client,
+    pipeline_id: String,
+    build_number: i64,
+}
+
+impl<'a> GetBuildByKeyRequest<'a> {
+    fn new(client: &'a crate::core::Client, pipeline_id: impl Into<String>, build_number: i64) -> Self {
+        Self { client, pipeline_id: pipeline_id.into(), build_number }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/builds/0.1/pipelines/{}/builds/{}",
+                crate::core::encode_path_segment(&self.pipeline_id),
+                self.build_number
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetBuildByKey> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Delete the build data currently stored for the given `pipelineId` and `buildNumber` combination.
+///
+/// Deletion is performed asynchronously. The `getBuildByKey` operation can be used to confirm that data has been
+/// deleted successfully (if needed).
+#[derive(Clone)]
+pub struct DeleteBuildByKeyRequest<'a> {
+    client: &'a crate::core::Client,
+    pipeline_id: String,
+    build_number: i64,
+}
+
+impl<'a> DeleteBuildByKeyRequest<'a> {
+    fn new(client: &'a crate::core::Client, pipeline_id: impl Into<String>, build_number: i64) -> Self {
+        Self { client, pipeline_id: pipeline_id.into(), build_number }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!(
+                "/rest/builds/0.1/pipelines/{}/builds/{}",
+                crate::core::encode_path_segment(&self.pipeline_id),
+                self.build_number
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

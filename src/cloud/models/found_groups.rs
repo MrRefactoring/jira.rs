@@ -1,0 +1,18 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// The list of groups found in a search, including header text (Showing X of Y matching groups) and total of matched groups.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct FoundGroups {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub groups: Option<Vec<FoundGroup>>,
+    /// Header text indicating the number of groups in the response and the total number of groups found in the search.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub header: Option<String>,
+    /// The total number of groups found in the search.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub total: Option<i64>,
+}

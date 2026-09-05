@@ -1,0 +1,18 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct OptionModel {
+    #[serde(rename = "childOptions", default, skip_serializing_if = "Option::is_none")]
+    pub child_options: Option<Vec<OptionModel>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "optionId", default, skip_serializing_if = "Option::is_none")]
+    pub option_id: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}

@@ -1,0 +1,10 @@
+// @generated. Do not edit: change the generator or the specification.
+
+crate::open_enum! {
+    /// The group type.
+    pub enum GroupType {
+        Team => "TEAM",
+        Group => "GROUP",
+        UserbaseGroup => "USERBASE_GROUP",
+    }
+}

@@ -1,0 +1,20 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct Part {
+    #[serde(rename = "contentType", default, skip_serializing_if = "Option::is_none")]
+    pub content_type: Option<String>,
+    #[serde(rename = "headerNames", default, skip_serializing_if = "Option::is_none")]
+    pub header_names: Option<Vec<String>>,
+    #[serde(rename = "inputStream", default, skip_serializing_if = "Option::is_none")]
+    pub input_stream: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub size: Option<i64>,
+    #[serde(rename = "submittedFileName", default, skip_serializing_if = "Option::is_none")]
+    pub submitted_file_name: Option<String>,
+}

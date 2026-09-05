@@ -1,0 +1,89 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ProgressOut {
+    #[serde(rename = "progressInPercent", default, skip_serializing_if = "Option::is_none")]
+    pub progress_in_percent: Option<i64>,
+    #[serde(rename = "resourceId", default, skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub category: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    #[serde(rename = "stepDescription", default, skip_serializing_if = "Option::is_none")]
+    pub step_description: Option<String>,
+    #[serde(rename = "currentStep", default, skip_serializing_if = "Option::is_none")]
+    pub current_step: Option<i64>,
+    #[serde(rename = "numberOfSteps", default, skip_serializing_if = "Option::is_none")]
+    pub number_of_steps: Option<i64>,
+    #[serde(rename = "currentWorkUnits", default, skip_serializing_if = "Option::is_none")]
+    pub current_work_units: Option<i64>,
+    #[serde(rename = "currentWorkDescription", default, skip_serializing_if = "Option::is_none")]
+    pub current_work_description: Option<String>,
+    #[serde(rename = "currentStepTotalWorkUnits", default, skip_serializing_if = "Option::is_none")]
+    pub current_step_total_work_units: Option<i64>,
+    #[serde(rename = "totalWorkUnits", default, skip_serializing_if = "Option::is_none")]
+    pub total_work_units: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub result: Option<String>,
+    #[serde(rename = "resultData", default, skip_serializing_if = "Option::is_none")]
+    pub result_data: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(rename = "resultMessage", default, skip_serializing_if = "Option::is_none")]
+    pub result_message: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub actor: Option<String>,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "startDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub start_date: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
+    #[serde(
+        rename = "startDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
+    pub start_date: Option<String>,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "finishedDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub finished_date: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
+    #[serde(
+        rename = "finishedDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
+    pub finished_date: Option<String>,
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "estimatedFinishDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub estimated_finish_date: Option<chrono::DateTime<chrono::Utc>>,
+    #[cfg(not(feature = "chrono"))]
+    #[serde(
+        rename = "estimatedFinishDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_timestamp"
+    )]
+    pub estimated_finish_date: Option<String>,
+}

@@ -1,0 +1,15 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// The description of the page of issues loaded by the provided JQL query.This bean will be replacing IssuesJqlMetaDataBean bean as part of new `evaluate` endpoint
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct JExpEvaluateIssuesJqlMetaData {
+    /// Indicates whether this is the last page of the paginated response.
+    #[serde(rename = "isLast", default, skip_serializing_if = "Option::is_none")]
+    pub is_last: Option<bool>,
+    /// Next Page token for the next page of issues.
+    #[serde(rename = "nextPageToken", default, skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+}

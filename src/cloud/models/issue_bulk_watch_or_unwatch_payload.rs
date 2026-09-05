@@ -1,0 +1,11 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Issue Bulk Watch Or Unwatch Payload
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct IssueBulkWatchOrUnwatchPayload {
+    /// List of issue IDs or keys which are to be bulk watched or unwatched. These IDs or keys can be from different projects and issue types.
+    #[serde(rename = "selectedIssueIdsOrKeys")]
+    pub selected_issue_ids_or_keys: Vec<String>,
+}

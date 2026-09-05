@@ -1,0 +1,23 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The date field type. This is "DueDate", "TargetStartDate", "TargetEndDate" or "DateCustomField".
+    pub enum GetDateFieldResponseType {
+        DueDate => "DueDate",
+        TargetStartDate => "TargetStartDate",
+        TargetEndDate => "TargetEndDate",
+        DateCustomField => "DateCustomField",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct GetDateFieldResponse {
+    /// A date custom field ID. This is returned if the type is "DateCustomField".
+    #[serde(rename = "dateCustomFieldId", default, skip_serializing_if = "Option::is_none")]
+    pub date_custom_field_id: Option<i64>,
+    /// The date field type. This is "DueDate", "TargetStartDate", "TargetEndDate" or "DateCustomField".
+    pub r#type: GetDateFieldResponseType,
+}

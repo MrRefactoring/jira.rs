@@ -1,0 +1,16 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// A rule configuration.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RuleConfiguration {
+    /// Whether the rule is disabled.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub disabled: Option<bool>,
+    /// A tag used to filter rules in [Get workflow transition rule configurations](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-workflow-transition-rules/#api-rest-api-3-workflow-rule-config-get).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub tag: Option<String>,
+    /// Configuration of the rule, as it is stored by the Connect or the Forge app on the rule configuration page.
+    pub value: String,
+}

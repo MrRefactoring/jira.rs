@@ -1,0 +1,10 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Request to fetch precomputations by ID.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct JqlFunctionPrecomputationGetByIdRequest {
+    #[serde(rename = "precomputationIDs", default, skip_serializing_if = "Option::is_none")]
+    pub precomputation_i_ds: Option<Vec<String>>,
+}

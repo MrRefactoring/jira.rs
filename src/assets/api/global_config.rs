@@ -1,0 +1,68 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The GlobalConfig operations.
+pub struct GlobalConfigService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> GlobalConfigService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Update general configuration for object schema
+    pub fn update_global_configuration(
+        &self,
+        id: impl Into<String>,
+        global_configuration_in: GlobalConfigurationIn,
+    ) -> UpdateGlobalConfigurationRequest<'a> {
+        UpdateGlobalConfigurationRequest::new(self.client, id, global_configuration_in)
+    }
+}
+
+/// Update general configuration for object schema
+#[derive(Clone)]
+pub struct UpdateGlobalConfigurationRequest<'a> {
+    client: &'a crate::core::Client,
+    id: String,
+    global_configuration_in: GlobalConfigurationIn,
+}
+
+impl<'a> UpdateGlobalConfigurationRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        id: impl Into<String>,
+        global_configuration_in: GlobalConfigurationIn,
+    ) -> Self {
+        Self { client, id: id.into(), global_configuration_in }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!("/global/config/objectschema/{}/property", crate::core::encode_path_segment(&self.id)),
+        );
+
+        let body = match serde_json::to_value(&self.global_configuration_in)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

@@ -1,0 +1,15 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct Meta {
+    #[serde(rename = "scheduledDate", default, skip_serializing_if = "Option::is_none")]
+    pub scheduled_date: Option<String>,
+    #[serde(rename = "migrationStartDateTime", default, skip_serializing_if = "Option::is_none")]
+    pub migration_start_date_time: Option<String>,
+    #[serde(rename = "migrationEndDataTime", default, skip_serializing_if = "Option::is_none")]
+    pub migration_end_data_time: Option<String>,
+    #[serde(rename = "atlassianAccountId", default, skip_serializing_if = "Option::is_none")]
+    pub atlassian_account_id: Option<String>,
+}

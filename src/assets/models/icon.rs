@@ -1,0 +1,15 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// A visual representation of something, usually associated as the icon of an object type
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct Icon {
+    pub id: String,
+    pub name: String,
+    /// A url to the icon to display with small resolution
+    pub url16: String,
+    /// A url to the icon to display with large resolution
+    pub url48: String,
+}

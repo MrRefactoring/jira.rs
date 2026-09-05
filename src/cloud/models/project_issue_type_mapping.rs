@@ -1,0 +1,14 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// The project and issue type mapping.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ProjectIssueTypeMapping {
+    /// The ID of the issue type.
+    #[serde(rename = "issueTypeId")]
+    pub issue_type_id: String,
+    /// The ID of the project.
+    #[serde(rename = "projectId")]
+    pub project_id: String,
+}

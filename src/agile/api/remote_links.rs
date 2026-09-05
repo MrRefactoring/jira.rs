@@ -1,0 +1,422 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The schema version used for this data.
+    ///
+    /// Placeholder to support potential schema changes in the future.
+    pub enum SubmitRemoteLinksRequestRemoteLinksSchemaVersion {
+        N10 => "1.0",
+    }
+}
+
+crate::open_enum! {
+    /// The type of the Remote Link. The current supported types are 'document', 'alert', 'test',
+    /// 'security', 'logFile', 'prototype', 'coverage', 'bugReport' and 'other'
+    pub enum SubmitRemoteLinksRequestRemoteLinksType {
+        Document => "document",
+        Alert => "alert",
+        Test => "test",
+        Security => "security",
+        LogFile => "logFile",
+        Prototype => "prototype",
+        Coverage => "coverage",
+        BugReport => "bugReport",
+        Other2 => "other",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum SubmitRemoteLinksRequestRemoteLinksAssociations {
+    IssueIdOrKeysAssociation(IssueIdOrKeysAssociation),
+    ServiceIdOrKeysAssociation(ServiceIdOrKeysAssociation),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    /// Appearance is a fixed set of appearance types affecting the colour
+    /// of the status lozenge in the UI. The colours they correspond to are
+    /// equivalent to atlaskit's [Lozenge](https://atlaskit.atlassian.com/packages/core/lozenge) component.
+    pub enum SubmitRemoteLinksRequestRemoteLinksStatusAppearance {
+        Default => "default",
+        Inprogress => "inprogress",
+        Moved => "moved",
+        New => "new",
+        Removed => "removed",
+        Prototype => "prototype",
+        Success => "success",
+    }
+}
+
+/// The status of a Remote Link.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SubmitRemoteLinksRequestRemoteLinksStatus {
+    /// Appearance is a fixed set of appearance types affecting the colour
+    /// of the status lozenge in the UI. The colours they correspond to are
+    /// equivalent to atlaskit's [Lozenge](https://atlaskit.atlassian.com/packages/core/lozenge) component.
+    pub appearance: SubmitRemoteLinksRequestRemoteLinksStatusAppearance,
+    /// The human-readable description for the Remote Link status.
+    ///
+    /// Will be shown in the UI.
+    pub label: String,
+}
+
+/// Data related to a single Remote Link.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SubmitRemoteLinksRequestRemoteLinks {
+    /// The schema version used for this data.
+    ///
+    /// Placeholder to support potential schema changes in the future.
+    #[serde(rename = "schemaVersion", default, skip_serializing_if = "Option::is_none")]
+    pub schema_version: Option<SubmitRemoteLinksRequestRemoteLinksSchemaVersion>,
+    /// The identifier for the Remote Link. Must be unique for a given Provider.
+    pub id: String,
+    /// An ID used to apply an ordering to updates for this Remote Link in the case of out-of-order receipt of
+    /// update requests.
+    ///
+    /// It must be a monotonically increasing number. For example, epoch time could be one way to generate the
+    /// `updateSequenceNumber`.
+    ///
+    /// Updates for a Remote Link that is received with an `updateSqeuenceNumber` less than or equal to what is currently
+    /// stored will be ignored.
+    #[serde(rename = "updateSequenceNumber")]
+    pub update_sequence_number: i64,
+    /// The human-readable name for the Remote Link.
+    ///
+    /// Will be shown in the UI.
+    #[serde(rename = "displayName")]
+    pub display_name: String,
+    /// The URL to this Remote Link in your system.
+    pub url: String,
+    /// The type of the Remote Link. The current supported types are 'document', 'alert', 'test',
+    /// 'security', 'logFile', 'prototype', 'coverage', 'bugReport' and 'other'
+    pub r#type: SubmitRemoteLinksRequestRemoteLinksType,
+    /// An optional description to attach to this Remote Link.
+    ///
+    /// This may be anything that makes sense in your system.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The last-updated timestamp to present to the user as a summary of when Remote Link was last updated.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user as a summary of when Remote Link was last updated.
+    #[cfg(not(feature = "chrono"))]
+    #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
+    pub last_updated: String,
+    /// The entities to associate the Remote Link information with.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub associations: Option<Vec<SubmitRemoteLinksRequestRemoteLinksAssociations>>,
+    /// The status of a Remote Link.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub status: Option<SubmitRemoteLinksRequestRemoteLinksStatus>,
+    /// Optional list of actionIds. They are associated with the actions the provider is able to provide when they
+    /// registered. Indicates which actions this Remote Link has.
+    ///
+    /// If any actions have a templateUrl that requires string substitution, then `attributeMap` must be passed in.
+    #[serde(rename = "actionIds", default, skip_serializing_if = "Option::is_none")]
+    pub action_ids: Option<Vec<String>>,
+    /// Map of key/values (string to string mapping). This is used to build the urls for actions from the
+    /// templateUrl the provider registered their available actions with.
+    #[serde(rename = "attributeMap", default, skip_serializing_if = "Option::is_none")]
+    pub attribute_map: Option<std::collections::HashMap<String, serde_json::Value>>,
+}
+
+/// Information about the provider. This is useful for auditing, logging, debugging, and other internal uses. It is
+/// not considered private information. Hence, it may not contain personally identifiable information.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitRemoteLinksRequestProviderMetadata {
+    /// An optional name of the source of the Remote Links data.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub product: Option<String>,
+}
+
+/// The RemoteLinks operations.
+pub struct RemoteLinksService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> RemoteLinksService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Update / insert Remote Link data.
+    ///
+    /// Remote Links are identified by their ID, existing Remote Link data for the same ID will be replaced if it
+    /// exists and the updateSequenceId of existing data is less than the incoming data.
+    ///
+    /// Submissions are performed asynchronously. Submitted data will eventually be available in Jira; most updates are
+    /// available within a short period of time, but may take some time during peak load and/or maintenance times.
+    /// The `getRemoteLinkById` operation can be used to confirm that data has been stored successfully (if needed).
+    ///
+    /// In the case of multiple Remote Links being submitted in one request, each is validated individually prior to
+    /// submission. Details of which Remote LInk failed submission (if any) are available in the response object.
+    pub fn submit_remote_links(
+        &self,
+        remote_links: impl IntoIterator<Item = SubmitRemoteLinksRequestRemoteLinks>,
+    ) -> SubmitRemoteLinksRequest<'a> {
+        SubmitRemoteLinksRequest::new(self.client, remote_links)
+    }
+
+    /// Bulk delete all Remote Links data that match the given request.
+    ///
+    /// One or more query params must be supplied to specify Properties to delete by.
+    /// Optional param `_updateSequenceNumber` is no longer supported. If more than one Property is provided,
+    /// data will be deleted that matches ALL of the Properties (e.g. treated as an AND).
+    ///
+    /// See the documentation for the `submitRemoteLinks` operation for more details.
+    ///
+    /// e.g. DELETE /bulkByProperties?accountId=account-123&repoId=repo-345
+    ///
+    /// Deletion is performed asynchronously. The `getRemoteLinkById` operation can be used to confirm that data has been
+    /// deleted successfully (if needed).
+    pub fn delete_remote_links_by_property(&self) -> DeleteRemoteLinksByPropertyRequest<'a> {
+        DeleteRemoteLinksByPropertyRequest::new(self.client)
+    }
+
+    /// Retrieve the currently stored Remote Link data for the given ID.
+    ///
+    /// The result will be what is currently stored, ignoring any pending updates or deletes.
+    pub fn get_remote_link_by_id(&self, remote_link_id: impl Into<String>) -> GetRemoteLinkByIdRequest<'a> {
+        GetRemoteLinkByIdRequest::new(self.client, remote_link_id)
+    }
+
+    /// Delete the Remote Link data currently stored for the given ID.
+    ///
+    /// Deletion is performed asynchronously. The `getRemoteLinkById` operation can be used to confirm that data has been
+    /// deleted successfully (if needed).
+    pub fn delete_remote_link_by_id(&self, remote_link_id: impl Into<String>) -> DeleteRemoteLinkByIdRequest<'a> {
+        DeleteRemoteLinkByIdRequest::new(self.client, remote_link_id)
+    }
+}
+
+/// Update / insert Remote Link data.
+///
+/// Remote Links are identified by their ID, existing Remote Link data for the same ID will be replaced if it
+/// exists and the updateSequenceId of existing data is less than the incoming data.
+///
+/// Submissions are performed asynchronously. Submitted data will eventually be available in Jira; most updates are
+/// available within a short period of time, but may take some time during peak load and/or maintenance times.
+/// The `getRemoteLinkById` operation can be used to confirm that data has been stored successfully (if needed).
+///
+/// In the case of multiple Remote Links being submitted in one request, each is validated individually prior to
+/// submission. Details of which Remote LInk failed submission (if any) are available in the response object.
+#[derive(Clone)]
+pub struct SubmitRemoteLinksRequest<'a> {
+    client: &'a crate::core::Client,
+    properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    remote_links: Vec<SubmitRemoteLinksRequestRemoteLinks>,
+    provider_metadata: Option<SubmitRemoteLinksRequestProviderMetadata>,
+}
+
+impl<'a> SubmitRemoteLinksRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        remote_links: impl IntoIterator<Item = SubmitRemoteLinksRequestRemoteLinks>,
+    ) -> Self {
+        Self { client, remote_links: remote_links.into_iter().collect(), properties: None, provider_metadata: None }
+    }
+
+    /// Properties assigned to Remote Link data that can then be used for delete / query operations.
+    ///
+    /// Examples might be an account or user ID that can then be used to clean up data if an account is removed from
+    /// the Provider system.
+    ///
+    /// Properties are supplied as key/value pairs, a maximum of 5 properties can be supplied, and keys must not
+    /// contain ':' or start with '_'.
+    #[must_use]
+    pub fn properties(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
+        self.properties = Some(value);
+
+        self
+    }
+
+    /// Information about the provider. This is useful for auditing, logging, debugging, and other internal uses. It is
+    /// not considered private information. Hence, it may not contain personally identifiable information.
+    #[must_use]
+    pub fn provider_metadata(mut self, value: SubmitRemoteLinksRequestProviderMetadata) -> Self {
+        self.provider_metadata = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/remotelinks/1.0/bulk".to_owned());
+
+        let mut body = serde_json::Map::new();
+
+        if let Some(value) = &self.properties {
+            body.insert("properties".to_owned(), serde_json::to_value(value)?);
+        }
+
+        body.insert("remoteLinks".to_owned(), serde_json::to_value(&self.remote_links)?);
+
+        if let Some(value) = &self.provider_metadata {
+            body.insert("providerMetadata".to_owned(), serde_json::to_value(value)?);
+        }
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<SubmitRemoteLinks> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Bulk delete all Remote Links data that match the given request.
+///
+/// One or more query params must be supplied to specify Properties to delete by.
+/// Optional param `_updateSequenceNumber` is no longer supported. If more than one Property is provided,
+/// data will be deleted that matches ALL of the Properties (e.g. treated as an AND).
+///
+/// See the documentation for the `submitRemoteLinks` operation for more details.
+///
+/// e.g. DELETE /bulkByProperties?accountId=account-123&repoId=repo-345
+///
+/// Deletion is performed asynchronously. The `getRemoteLinkById` operation can be used to confirm that data has been
+/// deleted successfully (if needed).
+#[derive(Clone)]
+pub struct DeleteRemoteLinksByPropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    params: Option<std::collections::HashMap<String, serde_json::Value>>,
+}
+
+impl<'a> DeleteRemoteLinksByPropertyRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, params: None }
+    }
+
+    /// Free-form query parameters to specify which properties to delete by. Properties refer to the arbitrary
+    /// information the provider tagged Remote Links with previously.
+    ///
+    /// For example, if the provider previously tagged a remote link with accountId:
+    ///   "properties": {
+    ///     "accountId": "account-123"
+    ///   }
+    ///
+    /// And now they want to delete Remote Links in bulk by that specific accountId as follows:
+    /// e.g. DELETE /bulkByProperties?accountId=account-123
+    #[must_use]
+    pub fn params(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
+        self.params = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            "/rest/remotelinks/1.0/bulkByProperties".to_owned(),
+        );
+
+        if let Some(value) = &self.params {
+            config.query.push(("params".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Retrieve the currently stored Remote Link data for the given ID.
+///
+/// The result will be what is currently stored, ignoring any pending updates or deletes.
+#[derive(Clone)]
+pub struct GetRemoteLinkByIdRequest<'a> {
+    client: &'a crate::core::Client,
+    remote_link_id: String,
+}
+
+impl<'a> GetRemoteLinkByIdRequest<'a> {
+    fn new(client: &'a crate::core::Client, remote_link_id: impl Into<String>) -> Self {
+        Self { client, remote_link_id: remote_link_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/remotelinks/1.0/remotelink/{}", crate::core::encode_path_segment(&self.remote_link_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetRemoteLinkById> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Delete the Remote Link data currently stored for the given ID.
+///
+/// Deletion is performed asynchronously. The `getRemoteLinkById` operation can be used to confirm that data has been
+/// deleted successfully (if needed).
+#[derive(Clone)]
+pub struct DeleteRemoteLinkByIdRequest<'a> {
+    client: &'a crate::core::Client,
+    remote_link_id: String,
+}
+
+impl<'a> DeleteRemoteLinkByIdRequest<'a> {
+    fn new(client: &'a crate::core::Client, remote_link_id: impl Into<String>) -> Self {
+        Self { client, remote_link_id: remote_link_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/remotelinks/1.0/remotelink/{}", crate::core::encode_path_segment(&self.remote_link_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

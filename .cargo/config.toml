@@ -1,0 +1,10 @@
+[alias]
+xtask = "run --package xtask --"
+
+# The live binary holds every surface, but three of them need somewhere to run: `server::` wants the Jira Data Center
+# rig on :8080 and `jsm::` the Service Management one on :8082, neither of which the Cloud run brings up. Left in, they
+# do not fail on the library — they fail on a connection. A new self-hosted surface belongs on this skip list the day
+# its module appears.
+live = "test --test live --all-features -- --ignored --test-threads=1 --skip server:: --skip jsm::"
+live-server = "test --test live --all-features -- --ignored --test-threads=1 --nocapture server::"
+live-jsm = "test --test live --all-features -- --ignored --test-threads=1 --nocapture jsm::"

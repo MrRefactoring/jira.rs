@@ -1,0 +1,106 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The Profile operations.
+pub struct ProfileService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> ProfileService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns information about a single Atlassian account by ID
+    pub fn get_profile(&self, account_id: AccountId) -> GetProfileRequest<'a> {
+        GetProfileRequest::new(self.client, account_id)
+    }
+
+    /// Updates fields in a user account. The `profile.write` privilege details which fields you can change.
+    pub fn update_profile(
+        &self,
+        account_id: AccountId,
+        atlassian_account_user: AtlassianAccountUser,
+    ) -> UpdateProfileRequest<'a> {
+        UpdateProfileRequest::new(self.client, account_id, atlassian_account_user)
+    }
+}
+
+/// Returns information about a single Atlassian account by ID
+#[derive(Clone)]
+pub struct GetProfileRequest<'a> {
+    client: &'a crate::core::Client,
+    account_id: AccountId,
+}
+
+impl<'a> GetProfileRequest<'a> {
+    fn new(client: &'a crate::core::Client, account_id: AccountId) -> Self {
+        Self { client, account_id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/users/{}/manage/profile", crate::core::encode_path_segment(&self.account_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetProfile> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Updates fields in a user account. The `profile.write` privilege details which fields you can change.
+#[derive(Clone)]
+pub struct UpdateProfileRequest<'a> {
+    client: &'a crate::core::Client,
+    account_id: AccountId,
+    atlassian_account_user: AtlassianAccountUser,
+}
+
+impl<'a> UpdateProfileRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        account_id: AccountId,
+        atlassian_account_user: AtlassianAccountUser,
+    ) -> Self {
+        Self { client, account_id, atlassian_account_user }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PATCH,
+            format!("/users/{}/manage/profile", crate::core::encode_path_segment(&self.account_id)),
+        );
+
+        let body = match serde_json::to_value(&self.atlassian_account_user)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<UpdateProfile> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

@@ -1,0 +1,65 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The type of account
+    pub enum UsersSearchRequestAccountTypes {
+        Atlassian => "atlassian",
+        Customer => "customer",
+        App => "app",
+    }
+}
+
+crate::open_enum! {
+    /// The lifecycle status of the account
+    pub enum UsersSearchRequestAccountStatuses {
+        Active => "ACTIVE",
+        Inactive => "INACTIVE",
+    }
+}
+
+crate::open_enum! {
+    /// Indicates the user information fields to include in the response. If unspecified, the response defaults to including only the accountId, accountType, and accountStatus fields.
+    pub enum UsersSearchRequestExpand {
+        Name => "NAME",
+        Email => "EMAIL",
+        EmailVerified => "EMAIL_VERIFIED",
+        ProductLastAccess => "PRODUCT_LAST_ACCESS",
+        Groups => "GROUPS",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct UsersSearchRequest {
+    /// Unique ID of the users account. The format is \[a-zA-Z0-9_|-:\]{1,128}
+    #[serde(rename = "accountIds", default, skip_serializing_if = "Option::is_none")]
+    pub account_ids: Option<Vec<String>>,
+    /// The type of account
+    #[serde(rename = "accountTypes", default, skip_serializing_if = "Option::is_none")]
+    pub account_types: Option<Vec<UsersSearchRequestAccountTypes>>,
+    /// The lifecycle status of the account
+    #[serde(rename = "accountStatuses", default, skip_serializing_if = "Option::is_none")]
+    pub account_statuses: Option<Vec<UsersSearchRequestAccountStatuses>>,
+    #[serde(rename = "namesOrNicknames", default, skip_serializing_if = "Option::is_none")]
+    pub names_or_nicknames: Option<NamesOrNicknames>,
+    #[serde(rename = "emailUsernames", default, skip_serializing_if = "Option::is_none")]
+    pub email_usernames: Option<EmailUsernames>,
+    #[serde(rename = "emailDomains", default, skip_serializing_if = "Option::is_none")]
+    pub email_domains: Option<EmailDomains>,
+    /// Suspended users with no access. This is independent of the user account status
+    #[serde(rename = "isSuspended", default, skip_serializing_if = "Option::is_none")]
+    pub is_suspended: Option<bool>,
+    /// Starting point marker for page result retrieval
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cursor: Option<String>,
+    /// The number of items to return. Default = max = 10000
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// Indicates the user information fields to include in the response. If unspecified, the response defaults to including only the accountId, accountType, and accountStatus fields.
+    /// The data for the product last access may be delayed by up to 24 hours.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub expand: Option<Vec<UsersSearchRequestExpand>>,
+}

@@ -1,0 +1,43 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum ProjectArchetypeRealType {
+        Business => "BUSINESS",
+        Software => "SOFTWARE",
+        ProductDiscovery => "PRODUCT_DISCOVERY",
+        ServiceDesk => "SERVICE_DESK",
+        CustomerService => "CUSTOMER_SERVICE",
+        Ops => "OPS",
+    }
+}
+
+crate::open_enum! {
+    pub enum ProjectArchetypeStyle {
+        Classic => "classic",
+        NextGen => "next-gen",
+    }
+}
+
+crate::open_enum! {
+    pub enum ProjectArchetypeType {
+        Business => "BUSINESS",
+        Software => "SOFTWARE",
+        ProductDiscovery => "PRODUCT_DISCOVERY",
+        ServiceDesk => "SERVICE_DESK",
+        CustomerService => "CUSTOMER_SERVICE",
+        Ops => "OPS",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ProjectArchetype {
+    #[serde(rename = "realType", default, skip_serializing_if = "Option::is_none")]
+    pub real_type: Option<ProjectArchetypeRealType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub style: Option<ProjectArchetypeStyle>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<ProjectArchetypeType>,
+}
