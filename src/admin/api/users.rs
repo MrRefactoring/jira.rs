@@ -4,126 +4,6 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
-    pub enum GetUserRoleAssignmentsRequestRoleIds {
-        AtlassianUser => "atlassian/user",
-        AtlassianAdmin => "atlassian/admin",
-        AtlassianGuest => "atlassian/guest",
-        AtlassianCustomer => "atlassian/customer",
-        AtlassianUserAccessAdmin => "atlassian/user-access-admin",
-        AtlassianContributor => "atlassian/contributor",
-        AtlassianBasic => "atlassian/basic",
-        AtlassianStakeholder => "atlassian/stakeholder",
-        AtlassianOrgAdmin => "atlassian/org-admin",
-        AtlassianSiteAdmin => "atlassian/site-admin",
-        AtlassianAiAccess => "atlassian/ai-access",
-    }
-}
-
-crate::open_enum! {
-    /// The claim status for the user account. By default, both `managed` and `unmanaged` accounts are returned.
-    ///   - `managed` - Returns only managed accounts. For more on managed accounts: <https://support.atlassian.com/user-management/docs/what-are-managed-accounts/>
-    ///   - `unmanaged` - Returns only unmanaged accounts.
-    pub enum GetDirectoryUsersCountRequestClaimStatus {
-        Managed => "managed",
-        Unmanaged => "unmanaged",
-    }
-}
-
-crate::open_enum! {
-    pub enum GetDirectoryUsersCountRequestStatus {
-        Active => "active",
-        Suspended => "suspended",
-        NotInvited => "not_invited",
-        Deactivated => "deactivated",
-        ForDeletion => "for_deletion",
-    }
-}
-
-crate::open_enum! {
-    pub enum GetDirectoryUsersCountRequestAccountStatus {
-        Active => "active",
-        Inactive => "inactive",
-        Closed => "closed",
-    }
-}
-
-crate::open_enum! {
-    pub enum GetDirectoryUsersCountRequestMembershipStatus {
-        Active => "active",
-        Suspended => "suspended",
-        NoMembership => "no_membership",
-    }
-}
-
-crate::open_enum! {
-    pub enum GetDirectoryUsersCountRequestRoleIds {
-        AtlassianUser => "atlassian/user",
-        AtlassianAdmin => "atlassian/admin",
-        AtlassianGuest => "atlassian/guest",
-        AtlassianCustomer => "atlassian/customer",
-        AtlassianUserAccessAdmin => "atlassian/user-access-admin",
-        AtlassianContributor => "atlassian/contributor",
-        AtlassianBasic => "atlassian/basic",
-        AtlassianStakeholder => "atlassian/stakeholder",
-        AtlassianOrgAdmin => "atlassian/org-admin",
-        AtlassianSiteAdmin => "atlassian/site-admin",
-        AtlassianAiAccess => "atlassian/ai-access",
-    }
-}
-
-crate::open_enum! {
-    /// The claim status for the user account. By default, both `managed` and `unmanaged` accounts are returned.
-    ///   - `managed` - Returns only managed accounts. For more on managed accounts: <https://support.atlassian.com/user-management/docs/what-are-managed-accounts/>
-    ///   - `unmanaged` - Returns only unmanaged accounts.
-    pub enum GetDirectoryUsersRequestClaimStatus {
-        Managed => "managed",
-        Unmanaged => "unmanaged",
-    }
-}
-
-crate::open_enum! {
-    pub enum GetDirectoryUsersRequestStatus {
-        Active => "active",
-        Suspended => "suspended",
-        NotInvited => "not_invited",
-        Deactivated => "deactivated",
-        ForDeletion => "for_deletion",
-    }
-}
-
-crate::open_enum! {
-    pub enum GetDirectoryUsersRequestAccountStatus {
-        Active => "active",
-        Inactive => "inactive",
-        Closed => "closed",
-    }
-}
-
-crate::open_enum! {
-    pub enum GetDirectoryUsersRequestMembershipStatus {
-        Active => "active",
-        Suspended => "suspended",
-        NoMembership => "no_membership",
-    }
-}
-
-crate::open_enum! {
-    pub enum GetDirectoryUsersRequestRoleIds {
-        AtlassianUser => "atlassian/user",
-        AtlassianAdmin => "atlassian/admin",
-        AtlassianGuest => "atlassian/guest",
-        AtlassianCustomer => "atlassian/customer",
-        AtlassianUserAccessAdmin => "atlassian/user-access-admin",
-        AtlassianContributor => "atlassian/contributor",
-        AtlassianBasic => "atlassian/basic",
-        AtlassianStakeholder => "atlassian/stakeholder",
-        AtlassianOrgAdmin => "atlassian/org-admin",
-        AtlassianSiteAdmin => "atlassian/site-admin",
-        AtlassianAiAccess => "atlassian/ai-access",
-    }
-}
-
-crate::open_enum! {
     /// The name of the field to sort the results by.
     pub enum GetDirectoryUsersRequestSortByField {
         NickName => "nick_name",
@@ -518,7 +398,7 @@ pub struct GetUserRoleAssignmentsRequest<'a> {
     directory_ids: Option<Vec<String>>,
     resource_owners: Option<Vec<String>>,
     resource_ids: Option<Vec<String>>,
-    role_ids: Option<Vec<GetUserRoleAssignmentsRequestRoleIds>>,
+    role_ids: Option<Vec<RoleId>>,
 }
 
 impl<'a> GetUserRoleAssignmentsRequest<'a> {
@@ -595,10 +475,7 @@ impl<'a> GetUserRoleAssignmentsRequest<'a> {
     ///    - `atlassian/site-admin` - Site admins can access Atlassian Administration and complete tasks related to the specific site they are administering.
     ///    - `atlassian/ai-access` - Can use AI features in AI-enabled apps they have access to.
     #[must_use]
-    pub fn role_ids(
-        mut self,
-        value: impl IntoIterator<Item = impl Into<GetUserRoleAssignmentsRequestRoleIds>>,
-    ) -> Self {
+    pub fn role_ids(mut self, value: impl IntoIterator<Item = impl Into<RoleId>>) -> Self {
         self.role_ids = Some(value.into_iter().map(Into::into).collect());
 
         self
@@ -1064,11 +941,11 @@ pub struct GetDirectoryUsersCountRequest<'a> {
     resource_ids: Option<Vec<String>>,
     group_ids: Option<Vec<String>>,
     mfa_enabled: Option<bool>,
-    claim_status: Option<GetDirectoryUsersCountRequestClaimStatus>,
-    status: Option<Vec<GetDirectoryUsersCountRequestStatus>>,
-    account_status: Option<Vec<GetDirectoryUsersCountRequestAccountStatus>>,
-    membership_status: Option<Vec<GetDirectoryUsersCountRequestMembershipStatus>>,
-    role_ids: Option<Vec<GetDirectoryUsersCountRequestRoleIds>>,
+    claim_status: Option<ClaimStatus>,
+    status: Option<Vec<Status>>,
+    account_status: Option<Vec<AccountStatus>>,
+    membership_status: Option<Vec<MembershipStatus>>,
+    role_ids: Option<Vec<RoleId>>,
     search_term: Option<String>,
     email_domains: Option<Vec<String>>,
 }
@@ -1139,7 +1016,7 @@ impl<'a> GetDirectoryUsersCountRequest<'a> {
     ///   - `managed` - Returns only managed accounts. For more on managed accounts: <https://support.atlassian.com/user-management/docs/what-are-managed-accounts/>
     ///   - `unmanaged` - Returns only unmanaged accounts.
     #[must_use]
-    pub fn claim_status(mut self, value: impl Into<GetDirectoryUsersCountRequestClaimStatus>) -> Self {
+    pub fn claim_status(mut self, value: impl Into<ClaimStatus>) -> Self {
         self.claim_status = Some(value.into());
 
         self
@@ -1152,7 +1029,7 @@ impl<'a> GetDirectoryUsersCountRequest<'a> {
     ///   - `deactivated` - `accountStatus` is `inactive`.
     ///   - `for_deletion` - Indicates whether or not a managed account is scheduled for deletion.
     #[must_use]
-    pub fn status(mut self, value: impl IntoIterator<Item = impl Into<GetDirectoryUsersCountRequestStatus>>) -> Self {
+    pub fn status(mut self, value: impl IntoIterator<Item = impl Into<Status>>) -> Self {
         self.status = Some(value.into_iter().map(Into::into).collect());
 
         self
@@ -1163,10 +1040,7 @@ impl<'a> GetDirectoryUsersCountRequest<'a> {
     ///   - `inactive` - The account is inactive and doesn't have access to any resources.
     ///   - `closed` - The account is closed and can't be used.
     #[must_use]
-    pub fn account_status(
-        mut self,
-        value: impl IntoIterator<Item = impl Into<GetDirectoryUsersCountRequestAccountStatus>>,
-    ) -> Self {
+    pub fn account_status(mut self, value: impl IntoIterator<Item = impl Into<AccountStatus>>) -> Self {
         self.account_status = Some(value.into_iter().map(Into::into).collect());
 
         self
@@ -1177,10 +1051,7 @@ impl<'a> GetDirectoryUsersCountRequest<'a> {
     ///   - `suspended` - the account is suspended in ALL directories within the organization, to which the requestor has permission to access.
     ///   - `no_membership` - the account is in NONE of the organization’s directories.
     #[must_use]
-    pub fn membership_status(
-        mut self,
-        value: impl IntoIterator<Item = impl Into<GetDirectoryUsersCountRequestMembershipStatus>>,
-    ) -> Self {
+    pub fn membership_status(mut self, value: impl IntoIterator<Item = impl Into<MembershipStatus>>) -> Self {
         self.membership_status = Some(value.into_iter().map(Into::into).collect());
 
         self
@@ -1199,10 +1070,7 @@ impl<'a> GetDirectoryUsersCountRequest<'a> {
     ///    - `atlassian/site-admin` - Site admins can access Atlassian Administration and complete tasks related to the specific site they are administering.
     ///    - `atlassian/ai-access` - Can use AI features in AI-enabled apps they have access to.
     #[must_use]
-    pub fn role_ids(
-        mut self,
-        value: impl IntoIterator<Item = impl Into<GetDirectoryUsersCountRequestRoleIds>>,
-    ) -> Self {
+    pub fn role_ids(mut self, value: impl IntoIterator<Item = impl Into<RoleId>>) -> Self {
         self.role_ids = Some(value.into_iter().map(Into::into).collect());
 
         self
@@ -1417,11 +1285,11 @@ pub struct GetDirectoryUsersRequest<'a> {
     resource_ids: Option<Vec<String>>,
     group_ids: Option<Vec<String>>,
     mfa_enabled: Option<bool>,
-    claim_status: Option<GetDirectoryUsersRequestClaimStatus>,
-    status: Option<Vec<GetDirectoryUsersRequestStatus>>,
-    account_status: Option<Vec<GetDirectoryUsersRequestAccountStatus>>,
-    membership_status: Option<Vec<GetDirectoryUsersRequestMembershipStatus>>,
-    role_ids: Option<Vec<GetDirectoryUsersRequestRoleIds>>,
+    claim_status: Option<ClaimStatus>,
+    status: Option<Vec<Status>>,
+    account_status: Option<Vec<AccountStatus>>,
+    membership_status: Option<Vec<MembershipStatus>>,
+    role_ids: Option<Vec<RoleId>>,
     email_domains: Option<Vec<String>>,
     search_term: Option<String>,
     sort_by: Option<Vec<GetDirectoryUsersRequestSortBy>>,
@@ -1512,7 +1380,7 @@ impl<'a> GetDirectoryUsersRequest<'a> {
     ///   - `managed` - Returns only managed accounts. For more on managed accounts: <https://support.atlassian.com/user-management/docs/what-are-managed-accounts/>
     ///   - `unmanaged` - Returns only unmanaged accounts.
     #[must_use]
-    pub fn claim_status(mut self, value: impl Into<GetDirectoryUsersRequestClaimStatus>) -> Self {
+    pub fn claim_status(mut self, value: impl Into<ClaimStatus>) -> Self {
         self.claim_status = Some(value.into());
 
         self
@@ -1525,7 +1393,7 @@ impl<'a> GetDirectoryUsersRequest<'a> {
     ///   - `deactivated` - `accountStatus` is `inactive`.
     ///   - `for_deletion` - Indicates whether or not a managed account is scheduled for deletion.
     #[must_use]
-    pub fn status(mut self, value: impl IntoIterator<Item = impl Into<GetDirectoryUsersRequestStatus>>) -> Self {
+    pub fn status(mut self, value: impl IntoIterator<Item = impl Into<Status>>) -> Self {
         self.status = Some(value.into_iter().map(Into::into).collect());
 
         self
@@ -1536,10 +1404,7 @@ impl<'a> GetDirectoryUsersRequest<'a> {
     ///   - `inactive` - The account is inactive and doesn't have access to any resources.
     ///   - `closed` - The account is closed and can't be used.
     #[must_use]
-    pub fn account_status(
-        mut self,
-        value: impl IntoIterator<Item = impl Into<GetDirectoryUsersRequestAccountStatus>>,
-    ) -> Self {
+    pub fn account_status(mut self, value: impl IntoIterator<Item = impl Into<AccountStatus>>) -> Self {
         self.account_status = Some(value.into_iter().map(Into::into).collect());
 
         self
@@ -1550,10 +1415,7 @@ impl<'a> GetDirectoryUsersRequest<'a> {
     ///   - `suspended` - the account is suspended in ALL directories within the organization, to which the requestor has permission to access.
     ///   - `no_membership` - the account is in NONE of the organization’s directories.
     #[must_use]
-    pub fn membership_status(
-        mut self,
-        value: impl IntoIterator<Item = impl Into<GetDirectoryUsersRequestMembershipStatus>>,
-    ) -> Self {
+    pub fn membership_status(mut self, value: impl IntoIterator<Item = impl Into<MembershipStatus>>) -> Self {
         self.membership_status = Some(value.into_iter().map(Into::into).collect());
 
         self
@@ -1572,7 +1434,7 @@ impl<'a> GetDirectoryUsersRequest<'a> {
     ///    - `atlassian/site-admin` - Site admins can access Atlassian Administration and complete tasks related to the specific site they are administering.
     ///    - `atlassian/ai-access` - Can use AI features in AI-enabled apps they have access to.
     #[must_use]
-    pub fn role_ids(mut self, value: impl IntoIterator<Item = impl Into<GetDirectoryUsersRequestRoleIds>>) -> Self {
+    pub fn role_ids(mut self, value: impl IntoIterator<Item = impl Into<RoleId>>) -> Self {
         self.role_ids = Some(value.into_iter().map(Into::into).collect());
 
         self

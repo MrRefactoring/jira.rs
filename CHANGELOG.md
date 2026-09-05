@@ -64,6 +64,9 @@ version.
 - `SECURITY.md`, dependency updates through Dependabot, and `cargo deny` in CI, so an advisory against a dependency
   fails the build rather than waits to be noticed.
 - Every public item of the transport carries documentation, and the crate warns on one that does not.
+- The administration surface names a role, an account status, a membership status, a claim status and a
+  combined status once each. The specification restates the same lists per operation, which used to become
+  twenty-six types for six concepts, so a role read from one call could not be passed to another.
 
 ### Credits
 

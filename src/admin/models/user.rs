@@ -12,15 +12,6 @@ crate::open_enum! {
     }
 }
 
-crate::open_enum! {
-    /// The lifecycle status of the account
-    pub enum UserAccountStatus {
-        Active => "active",
-        Inactive => "inactive",
-        Closed => "closed",
-    }
-}
-
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct User {
@@ -29,7 +20,7 @@ pub struct User {
     /// The type of account
     pub account_type: UserAccountType,
     /// The lifecycle status of the account
-    pub account_status: UserAccountStatus,
+    pub account_status: AccountStatus,
     /// The display name of the user. Should be used for contextual rendering of the authorship in content. If the user has restricted visibility of their name, their nickname will be displayed as a substitute value
     pub name: String,
     /// The absolute URI (RFC3986) to the avatar name of the user. Should be used for contextual rendering of the authorship in content. If the user has restricted visibility of their avatar, an alternative URI will be provided as a substitute value

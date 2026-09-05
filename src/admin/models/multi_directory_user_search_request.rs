@@ -1,58 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
+use super::*;
 use serde::{Deserialize, Serialize};
-
-crate::open_enum! {
-    /// The claim status for the user account. By default, both `managed` and `unmanaged` accounts are returned.
-    ///   - `managed` - Returns only managed accounts. For more on managed accounts: <https://support.atlassian.com/user-management/docs/what-are-managed-accounts/>
-    ///   - `unmanaged` - Returns only unmanaged accounts.
-    pub enum MultiDirectoryUserSearchRequestClaimStatus {
-        Managed => "managed",
-        Unmanaged => "unmanaged",
-    }
-}
-
-crate::open_enum! {
-    pub enum MultiDirectoryUserSearchRequestStatus {
-        Active => "active",
-        Suspended => "suspended",
-        NotInvited => "not_invited",
-        Deactivated => "deactivated",
-        ForDeletion => "for_deletion",
-    }
-}
-
-crate::open_enum! {
-    pub enum MultiDirectoryUserSearchRequestAccountStatus {
-        Active => "active",
-        Inactive => "inactive",
-        Closed => "closed",
-    }
-}
-
-crate::open_enum! {
-    pub enum MultiDirectoryUserSearchRequestMembershipStatus {
-        Active => "active",
-        Suspended => "suspended",
-        NoMembership => "no_membership",
-    }
-}
-
-crate::open_enum! {
-    pub enum MultiDirectoryUserSearchRequestRoleIds {
-        AtlassianUser => "atlassian/user",
-        AtlassianAdmin => "atlassian/admin",
-        AtlassianGuest => "atlassian/guest",
-        AtlassianCustomer => "atlassian/customer",
-        AtlassianUserAccessAdmin => "atlassian/user-access-admin",
-        AtlassianContributor => "atlassian/contributor",
-        AtlassianBasic => "atlassian/basic",
-        AtlassianStakeholder => "atlassian/stakeholder",
-        AtlassianOrgAdmin => "atlassian/org-admin",
-        AtlassianSiteAdmin => "atlassian/site-admin",
-        AtlassianAiAccess => "atlassian/ai-access",
-    }
-}
 
 crate::open_enum! {
     pub enum MultiDirectoryUserSearchRequestExpand {
@@ -115,7 +64,7 @@ pub struct MultiDirectoryUserSearchRequest {
     ///   - `managed` - Returns only managed accounts. For more on managed accounts: <https://support.atlassian.com/user-management/docs/what-are-managed-accounts/>
     ///   - `unmanaged` - Returns only unmanaged accounts.
     #[serde(rename = "claimStatus", default, skip_serializing_if = "Option::is_none")]
-    pub claim_status: Option<MultiDirectoryUserSearchRequestClaimStatus>,
+    pub claim_status: Option<ClaimStatus>,
     /// The status for the user account. This status is a composite of `accountStatus` and `membershipStatus`.
     ///   - `active` - `accountStatus` is `active` and `membershipStatus` is `active`.
     ///   - `suspended` - `accountStatus` is `active` and `membershipStatus` is `suspended`.
@@ -123,19 +72,19 @@ pub struct MultiDirectoryUserSearchRequest {
     ///   - `deactivated` - `accountStatus` is `inactive`.
     ///   - `for_deletion` - Indicates whether or not a managed account is scheduled for deletion.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub status: Option<Vec<MultiDirectoryUserSearchRequestStatus>>,
+    pub status: Option<Vec<Status>>,
     /// The lifecycle status of the account.
     ///   - `active` - The account is active and can be used.
     ///   - `inactive` - The account is inactive and doesn't have access to any resources.
     ///   - `closed` - The account is closed and can't be used.
     #[serde(rename = "accountStatus", default, skip_serializing_if = "Option::is_none")]
-    pub account_status: Option<Vec<MultiDirectoryUserSearchRequestAccountStatus>>,
+    pub account_status: Option<Vec<AccountStatus>>,
     /// A list of membership statuses. The membership status is the status of the user account in the organization.
     ///   - `active` - the account has an active membership for one or more directories within the organization.
     ///   - `suspended` - the account is suspended in ALL directories within the organization, to which the requestor has permission to access.
     ///   - `no_membership` - the account is in NONE of the organization’s directories.
     #[serde(rename = "membershipStatus", default, skip_serializing_if = "Option::is_none")]
-    pub membership_status: Option<Vec<MultiDirectoryUserSearchRequestMembershipStatus>>,
+    pub membership_status: Option<Vec<MembershipStatus>>,
     /// A list of role IDs. The Atlassian canonical roles are used to determine the permissions of the user against resources within the organization. The allowed roles are:
     ///    - `atlassian/user` - Can access the product, with no product admin permissions
     ///    - `atlassian/admin` - Can access the product, with product admin permissions
@@ -149,7 +98,7 @@ pub struct MultiDirectoryUserSearchRequest {
     ///    - `atlassian/site-admin` - Site admins can access Atlassian Administration and complete tasks related to the specific site they are administering.
     ///    - `atlassian/ai-access` - Can use AI features in AI-enabled apps they have access to.
     #[serde(rename = "roleIds", default, skip_serializing_if = "Option::is_none")]
-    pub role_ids: Option<Vec<MultiDirectoryUserSearchRequestRoleIds>>,
+    pub role_ids: Option<Vec<RoleId>>,
     /// The email domain to filter the results. The email domain will be used to search against the account email domain. For example, get all users with the `@atlassian.com` or `@example.com` email domain.
     #[serde(rename = "emailDomains", default, skip_serializing_if = "Option::is_none")]
     pub email_domains: Option<Vec<String>>,

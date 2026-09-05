@@ -3,38 +3,6 @@
 use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
-crate::open_enum! {
-    pub enum GetGroupRoleAssignmentsRequestRoleIds {
-        AtlassianUser => "atlassian/user",
-        AtlassianAdmin => "atlassian/admin",
-        AtlassianGuest => "atlassian/guest",
-        AtlassianCustomer => "atlassian/customer",
-        AtlassianUserAccessAdmin => "atlassian/user-access-admin",
-        AtlassianContributor => "atlassian/contributor",
-        AtlassianBasic => "atlassian/basic",
-        AtlassianStakeholder => "atlassian/stakeholder",
-        AtlassianOrgAdmin => "atlassian/org-admin",
-        AtlassianSiteAdmin => "atlassian/site-admin",
-        AtlassianAiAccess => "atlassian/ai-access",
-    }
-}
-
-crate::open_enum! {
-    pub enum GetGroupsCountRequestRoleIds {
-        AtlassianUser => "atlassian/user",
-        AtlassianAdmin => "atlassian/admin",
-        AtlassianGuest => "atlassian/guest",
-        AtlassianCustomer => "atlassian/customer",
-        AtlassianUserAccessAdmin => "atlassian/user-access-admin",
-        AtlassianContributor => "atlassian/contributor",
-        AtlassianBasic => "atlassian/basic",
-        AtlassianStakeholder => "atlassian/stakeholder",
-        AtlassianOrgAdmin => "atlassian/org-admin",
-        AtlassianSiteAdmin => "atlassian/site-admin",
-        AtlassianAiAccess => "atlassian/ai-access",
-    }
-}
-
 /// Whether to include counts of different objects associated with the group.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetGroupsRequestCounts {
@@ -67,22 +35,6 @@ pub struct GetGroupsRequestSortBy {
     pub field: GetGroupsRequestSortByField,
     /// The direction to sort the results by.
     pub direction: GetGroupsRequestSortByDirection,
-}
-
-crate::open_enum! {
-    pub enum GetGroupsRequestRoleIds {
-        AtlassianUser => "atlassian/user",
-        AtlassianAdmin => "atlassian/admin",
-        AtlassianGuest => "atlassian/guest",
-        AtlassianCustomer => "atlassian/customer",
-        AtlassianUserAccessAdmin => "atlassian/user-access-admin",
-        AtlassianContributor => "atlassian/contributor",
-        AtlassianBasic => "atlassian/basic",
-        AtlassianStakeholder => "atlassian/stakeholder",
-        AtlassianOrgAdmin => "atlassian/org-admin",
-        AtlassianSiteAdmin => "atlassian/site-admin",
-        AtlassianAiAccess => "atlassian/ai-access",
-    }
 }
 
 /// The Groups operations.
@@ -308,7 +260,7 @@ pub struct GetGroupRoleAssignmentsRequest<'a> {
     directory_ids: Option<Vec<String>>,
     resource_owners: Option<Vec<String>>,
     resource_ids: Option<Vec<String>>,
-    role_ids: Option<Vec<GetGroupRoleAssignmentsRequestRoleIds>>,
+    role_ids: Option<Vec<RoleId>>,
 }
 
 impl<'a> GetGroupRoleAssignmentsRequest<'a> {
@@ -385,10 +337,7 @@ impl<'a> GetGroupRoleAssignmentsRequest<'a> {
     ///    - `atlassian/site-admin` - Site admins can access Atlassian Administration and complete tasks related to the specific site they are administering.
     ///    - `atlassian/ai-access` - Can use AI features in AI-enabled apps they have access to.
     #[must_use]
-    pub fn role_ids(
-        mut self,
-        value: impl IntoIterator<Item = impl Into<GetGroupRoleAssignmentsRequestRoleIds>>,
-    ) -> Self {
+    pub fn role_ids(mut self, value: impl IntoIterator<Item = impl Into<RoleId>>) -> Self {
         self.role_ids = Some(value.into_iter().map(Into::into).collect());
 
         self
@@ -793,7 +742,7 @@ pub struct GetGroupsCountRequest<'a> {
     resource_owners: Option<Vec<String>>,
     resource_ids: Option<Vec<String>>,
     search_term: Option<String>,
-    role_ids: Option<Vec<GetGroupsCountRequestRoleIds>>,
+    role_ids: Option<Vec<RoleId>>,
 }
 
 impl<'a> GetGroupsCountRequest<'a> {
@@ -873,7 +822,7 @@ impl<'a> GetGroupsCountRequest<'a> {
     ///    - `atlassian/site-admin` - Site admins can access Atlassian Administration and complete tasks related to the specific site they are administering.
     ///    - `atlassian/ai-access` - Can use AI features in AI-enabled apps they have access to.
     #[must_use]
-    pub fn role_ids(mut self, value: impl IntoIterator<Item = impl Into<GetGroupsCountRequestRoleIds>>) -> Self {
+    pub fn role_ids(mut self, value: impl IntoIterator<Item = impl Into<RoleId>>) -> Self {
         self.role_ids = Some(value.into_iter().map(Into::into).collect());
 
         self
@@ -991,7 +940,7 @@ pub struct GetGroupsRequest<'a> {
     search_term: Option<String>,
     counts: Option<GetGroupsRequestCounts>,
     sort_by: Option<Vec<GetGroupsRequestSortBy>>,
-    role_ids: Option<Vec<GetGroupsRequestRoleIds>>,
+    role_ids: Option<Vec<RoleId>>,
 }
 
 impl<'a> GetGroupsRequest<'a> {
@@ -1107,7 +1056,7 @@ impl<'a> GetGroupsRequest<'a> {
     ///    - `atlassian/site-admin` - Site admins can access Atlassian Administration and complete tasks related to the specific site they are administering.
     ///    - `atlassian/ai-access` - Can use AI features in AI-enabled apps they have access to.
     #[must_use]
-    pub fn role_ids(mut self, value: impl IntoIterator<Item = impl Into<GetGroupsRequestRoleIds>>) -> Self {
+    pub fn role_ids(mut self, value: impl IntoIterator<Item = impl Into<RoleId>>) -> Self {
         self.role_ids = Some(value.into_iter().map(Into::into).collect());
 
         self
