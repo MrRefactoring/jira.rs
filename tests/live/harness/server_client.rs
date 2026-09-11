@@ -12,6 +12,9 @@ use super::env::{require_jsm_env, require_server_env};
 const RETRY: RetryConfig =
     RetryConfig { max_attempts: 3, initial_delay: Duration::from_millis(300), backoff_factor: 2.0 };
 
+/// The longest any one call to a rig may take. A cold Data Center instance is slow, not silent.
+const TIMEOUT: Duration = Duration::from_secs(60);
+
 /// The transport the Data Center suites use.
 ///
 /// A personal access token where the instance was given one, and the administrator's password otherwise: Jira 10.3
@@ -30,6 +33,7 @@ pub fn server_client() -> &'static Client {
             .host(env.host)
             .auth(auth)
             .retry(RETRY)
+            .timeout(TIMEOUT)
             .build()
             .expect("the Data Center credentials describe a usable client")
     })
@@ -57,6 +61,7 @@ fn jsm_client() -> &'static Client {
             .host(env.host)
             .auth(auth)
             .retry(RETRY)
+            .timeout(TIMEOUT)
             .build()
             .expect("the Service Management credentials describe a usable client")
     })

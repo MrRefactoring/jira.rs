@@ -15,7 +15,7 @@ use crate::harness::{admin_key_client, admin_surface, has_admin_env, org_id};
 /// The administration client, or `None` when the organization API key the whole surface needs is absent.
 fn administration(org: &str) -> Option<AdminClient> {
     if has_admin_env() {
-        return Some(AdminClient::new(admin_key_client()));
+        return Some(AdminClient::new(admin_key_client().clone()));
     }
 
     let config = admin_surface().orgs().get_org_by_id(org).config().expect("the request is well formed");

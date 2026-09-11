@@ -15,6 +15,13 @@ use super::env::require_live_env;
 const RETRY: RetryConfig =
     RetryConfig { max_attempts: 3, initial_delay: Duration::from_millis(300), backoff_factor: 2.0 };
 
+/// The longest any one live call may take before the suite gives up on it.
+///
+/// `RETRY` only covers a request that fails; a connection that accepts and then says nothing is not a failure, and
+/// reqwest has no timeout of its own. Without this a single hung call holds the runner until GitHub's six-hour limit,
+/// and `cancel-in-progress: false` puts the next night's run in the queue behind it.
+const TIMEOUT: Duration = Duration::from_secs(60);
+
 /// The one transport every surface is built from.
 ///
 /// Deliberately shared: two clients would mean two auth states, which under OAuth 2.0 is a live bug rather than
@@ -29,6 +36,7 @@ pub fn client() -> &'static Client {
             .host(env.host)
             .auth(Auth::api_token(env.email, env.api_token))
             .retry(RETRY)
+            .timeout(TIMEOUT)
             .build()
             .expect("the live credentials describe a usable client")
     })
@@ -90,14 +98,21 @@ pub async fn org_id() -> String {
 }
 
 /// A client authenticated with the organization API key, for the surfaces a site token cannot reach.
-pub fn admin_key_client() -> Client {
-    let env = require_live_env();
-    let key = env.admin_api_key.expect("an organization API key is configured");
+///
+/// Shared like the others: a fresh client per call is a fresh connection pool per call.
+pub fn admin_key_client() -> &'static Client {
+    static CLIENT: OnceLock<Client> = OnceLock::new();
 
-    Client::builder()
-        .host("https://api.atlassian.com")
-        .auth(Auth::bearer(key))
-        .retry(RETRY)
-        .build()
-        .expect("the organization key describes a usable client")
+    CLIENT.get_or_init(|| {
+        let env = require_live_env();
+        let key = env.admin_api_key.expect("an organization API key is configured");
+
+        Client::builder()
+            .host("https://api.atlassian.com")
+            .auth(Auth::bearer(key))
+            .retry(RETRY)
+            .timeout(TIMEOUT)
+            .build()
+            .expect("the organization key describes a usable client")
+    })
 }

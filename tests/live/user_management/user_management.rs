@@ -26,7 +26,10 @@ use crate::harness::{admin_key_client, has_admin_env, org_id, user_management};
 /// asserting nothing.
 fn keyed_clients() -> Option<(UserManagementClient, AdminClient)> {
     if has_admin_env() {
-        return Some((UserManagementClient::new(admin_key_client()), AdminClient::new(admin_key_client())));
+        return Some((
+            UserManagementClient::new(admin_key_client().clone()),
+            AdminClient::new(admin_key_client().clone()),
+        ));
     }
 
     let config = user_management()
