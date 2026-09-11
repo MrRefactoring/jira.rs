@@ -402,7 +402,7 @@ pub fn parse_retry_after(header: Option<&str>, now: SystemTime) -> Option<Durati
     if let Ok(seconds) = header.parse::<f64>()
         && seconds.is_finite()
     {
-        return Some(Duration::from_secs_f64(seconds.max(0.0)));
+        return Duration::try_from_secs_f64(seconds.max(0.0)).ok();
     }
 
     let date = httpdate::parse_http_date(header).ok()?;
@@ -590,6 +590,12 @@ mod tests {
     fn leaves_retry_after_absent_when_the_header_is_missing_or_nonsense() {
         assert_eq!(parse_retry_after(None, SystemTime::now()), None);
         assert_eq!(parse_retry_after(Some("soon"), SystemTime::now()), None);
+    }
+
+    #[test]
+    fn leaves_retry_after_absent_when_no_duration_could_hold_it() {
+        assert_eq!(parse_retry_after(Some("99999999999999999999"), SystemTime::now()), None);
+        assert_eq!(parse_retry_after(Some("1e30"), SystemTime::now()), None);
     }
 
     #[test]

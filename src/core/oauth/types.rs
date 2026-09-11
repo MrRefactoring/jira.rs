@@ -24,10 +24,12 @@ pub struct TokenResponse {
     pub token_type: String,
 }
 
+const LONGEST_LIFETIME: Duration = Duration::from_secs(365 * 24 * 60 * 60);
+
 impl TokenResponse {
     /// When this access token expires, counted from now.
     pub fn expires_at(&self) -> SystemTime {
-        SystemTime::now() + Duration::from_secs(self.expires_in)
+        SystemTime::now() + Duration::from_secs(self.expires_in).min(LONGEST_LIFETIME)
     }
 }
 
@@ -68,4 +70,41 @@ pub struct CallbackParams {
     pub code: String,
     /// The `state` that came back, already verified against the expected one.
     pub state: String,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn answering_with(expires_in: u64) -> TokenResponse {
+        TokenResponse {
+            access_token: "token".to_owned(),
+            refresh_token: None,
+            expires_in,
+            scope: String::new(),
+            token_type: "bearer".to_owned(),
+        }
+    }
+
+    #[test]
+    fn counts_the_lifetime_the_token_endpoint_gave_from_now() {
+        let before = SystemTime::now();
+        let expires_at = answering_with(3600).expires_at();
+
+        let lifetime = expires_at.duration_since(before).expect("an hour from now is after now");
+
+        assert!(lifetime >= Duration::from_secs(3600));
+        assert!(lifetime < Duration::from_secs(3600 + 60));
+    }
+
+    #[test]
+    fn holds_a_lifetime_no_instant_could_hold_at_a_year() {
+        let before = SystemTime::now();
+        let expires_at = answering_with(u64::MAX).expires_at();
+
+        let lifetime = expires_at.duration_since(before).expect("a year from now is after now");
+
+        assert!(lifetime >= LONGEST_LIFETIME);
+        assert!(lifetime < LONGEST_LIFETIME + Duration::from_secs(60));
+    }
 }
