@@ -119,8 +119,8 @@ async fn lists_the_members_of_a_group_by_id_and_by_name_alike() {
     assert_eq!(by_name.total, by_id.total, "both addressing modes describe the same group");
 
     for user in &by_id.values {
-        assert!(user.account_id.as_deref().is_some_and(|id| !id.is_empty()), "a member carries an id: {user:?}");
-        assert!(user.active.is_some(), "a member says whether it is active: {user:?}");
+        assert!(user.account_id.as_deref().is_some_and(|id| !id.is_empty()), "a member carries an id");
+        assert!(user.active.is_some(), "a member says whether it is active: {:?}", user.account_id);
     }
 }
 
@@ -182,5 +182,5 @@ async fn fails_typed_on_the_destructive_path_without_ever_aiming_it_at_a_real_gr
         .await
         .expect_err("a group that does not exist cannot be removed");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }

@@ -109,8 +109,8 @@ async fn pages_with_a_token_rather_than_an_offset() {
             .await
             .expect("the token names a further page");
 
-        let first = first_page.issues.as_ref().and_then(|issues| issues[0].id.clone());
-        let second = second_page.issues.as_ref().and_then(|issues| issues[0].id.clone());
+        let first = first_page.issues.as_ref().and_then(|issues| issues.first()?.id.clone());
+        let second = second_page.issues.as_ref().and_then(|issues| issues.first()?.id.clone());
 
         assert_ne!(second, first, "the token moves the window rather than repeating it");
     }

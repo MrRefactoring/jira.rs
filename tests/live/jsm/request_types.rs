@@ -88,7 +88,10 @@ async fn creates_reads_updates_and_deletes_a_request_type() {
         .await
         .expect("a request type lists the fields its form asks for");
 
-    let _ = fields;
+    assert!(
+        fields.request_type_fields.iter().flatten().all(|field| field.field_id.is_some()),
+        "every field the form asks for names itself"
+    );
 
     let updated = service_desk_server()
         .request_types()

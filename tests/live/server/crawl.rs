@@ -35,7 +35,7 @@ use jira::server::{CommentJson, Filter, IssueUpdate, ProjectInput, Version, Work
 use serde_json::{Value, json};
 
 use super::fixtures::software_licensed;
-use crate::harness::{ResourceTracker, run_id, server, server_client, test_name};
+use crate::harness::{ResourceTracker, run_suffix, server, server_client, test_name};
 
 /// Where the generated operations live, as the crate compiles them.
 const GENERATED_SOURCES: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/src/server/api");
@@ -287,10 +287,10 @@ enum Outcome {
 /// A project key of this file's own making.
 ///
 /// `project_key` derives its key from the run id alone, so every call to it in a run answers with the same key — and
-/// the other Data Center suites use it for the project they create. `X` is not a hexadecimal digit and the run id is
-/// nothing else, so this key cannot collide with theirs however the run comes out.
+/// the other Data Center suites use it for the project they create. The `"crawl"` label is what keeps this key off
+/// theirs; hashing rather than trimming is what keeps it off the key the same suite made an hour ago.
 fn crawl_project_key() -> String {
-    format!("JRSX{}", run_id().to_uppercase()).chars().take(10).collect()
+    format!("JRSX{}", run_suffix("crawl", b"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 6))
 }
 
 /// The world the crawl points at.

@@ -109,7 +109,7 @@ async fn pages_the_site_user_listing() {
 
     for user in &first {
         assert!(user.account_id.as_deref().is_some_and(|id| !id.is_empty()), "a listed user carries an id");
-        assert!(user.account_type.is_some(), "a listed user carries an account type: {user:?}");
+        assert!(user.account_type.is_some(), "a listed user carries an account type: {:?}", user.account_id);
     }
 
     let offset =
@@ -152,7 +152,7 @@ async fn surfaces_an_unknown_account_as_a_typed_error() {
         .await
         .expect_err("an account that does not exist cannot be read");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 #[tokio::test]
@@ -165,7 +165,7 @@ async fn fails_typed_on_the_destructive_path_without_ever_aiming_it_at_a_real_ac
         .await
         .expect_err("an account that does not exist cannot be removed");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// The one write in this suite, and it belongs to the authenticating account alone: the issue navigator columns this

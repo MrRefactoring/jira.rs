@@ -9,7 +9,7 @@
 
 use jira::cloud::{CustomTemplatesProjectDetails, ErrorCollection, ProjectCustomTemplateCreateRequestDTO};
 
-use crate::harness::{TEST_PROJECT_KEY, cloud};
+use crate::harness::{TEST_PROJECT_KEY, cloud, project_key};
 
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
@@ -34,7 +34,7 @@ async fn accepts_a_key_that_is_genuinely_valid() {
     let result = cloud()
         .project_key_and_name_validation()
         .validate_project_key()
-        .key("JRSVALID")
+        .key(project_key("valid"))
         .send()
         .await
         .expect("a well-formed, unused key is validated");
@@ -175,7 +175,7 @@ async fn fails_typed_on_project_creation_from_a_template_without_ever_creating_o
         .await
         .expect_err("a lowercase key and an empty name describe no project Jira would create");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// The two channels validation answers on, flattened: free-text messages and complaints keyed by parameter.

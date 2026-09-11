@@ -11,7 +11,8 @@ use jira::assets_server::{
 use tokio::sync::OnceCell;
 
 use crate::harness::{
-    RESOURCE_MARKER, ResourceTracker, assets_server, jsm_platform, run_id, run_suffix, service_desk_server,
+    RESOURCE_MARKER, ResourceTracker, assets_server, jsm_platform, require_jsm_env, run_id, run_suffix,
+    service_desk_server,
 };
 
 /// The world the suites run in, made once.
@@ -31,6 +32,15 @@ pub struct Fixtures {
 /// [`crate::harness::test_name`] cannot be used here: it brackets the run id with a colon, and Assets rejects `=;:?."`
 /// in the name of a schema, an object type or an object — a 400 calling them reserved characters, which is a good deal
 /// less obvious arriving from a fixture than from a test.
+/// The account this rig signs in as, which is the only user it is sure to have.
+///
+/// Data Center addresses a user by `name`, and the rig's administrator is whatever `JSM_SERVER_USERNAME` says — a
+/// stand set up with any other account rejects `admin` as a lead that does not exist, and every suite that goes
+/// through the service desk project falls over on it.
+pub fn jsm_username() -> String {
+    require_jsm_env().username
+}
+
 pub fn asset_name(label: &str) -> String {
     format!("{RESOURCE_MARKER}-{} {label}", run_id())
 }
@@ -65,7 +75,7 @@ async fn build_service_desk_project() -> ServiceDeskProject {
         .create_project(jira::server::ProjectInput {
             key: Some(project_key.clone()),
             name: Some(asset_name("service desk")),
-            lead: Some("admin".to_owned()),
+            lead: Some(jsm_username()),
             project_type_key: Some("service_desk".to_owned()),
             project_template_key: Some(SERVICE_DESK_TEMPLATE.to_owned()),
             ..jira::server::ProjectInput::default()

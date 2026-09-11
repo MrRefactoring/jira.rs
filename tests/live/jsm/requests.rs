@@ -5,7 +5,7 @@ use jira::service_desk_server::{
 };
 use serde_json::json;
 
-use super::fixtures::{asset_name, service_desk_licensed, service_desk_project};
+use super::fixtures::{asset_name, jsm_username, service_desk_licensed, service_desk_project};
 use crate::harness::service_desk_server;
 
 async fn raise_a_request(label: &str) -> String {
@@ -139,12 +139,12 @@ async fn adds_lists_and_removes_the_participants_of_a_request() {
         .await
         .expect("a customer request lists its participants");
 
-    let _ = listed;
+    assert!(listed.values.iter().all(|user| user.name.is_some()), "every participant listed names itself");
 
     service_desk_server()
         .customer_requests()
         .add_request_participants(key.clone())
-        .request_participant_update(RequestParticipantUpdate { usernames: Some(vec!["admin".to_owned()]) })
+        .request_participant_update(RequestParticipantUpdate { usernames: Some(vec![jsm_username()]) })
         .send()
         .await
         .expect("a customer request accepts a participant");
@@ -152,7 +152,7 @@ async fn adds_lists_and_removes_the_participants_of_a_request() {
     service_desk_server()
         .customer_requests()
         .remove_request_participants(key)
-        .request_participant_update(RequestParticipantUpdate { usernames: Some(vec!["admin".to_owned()]) })
+        .request_participant_update(RequestParticipantUpdate { usernames: Some(vec![jsm_username()]) })
         .send()
         .await
         .expect("a participant can be removed from a customer request");

@@ -1,6 +1,6 @@
 use jira::service_desk_server::{OrganizationCreate, OrganizationServiceDeskUpdate, UsersOrganizationUpdate};
 
-use super::fixtures::{asset_name, service_desk_licensed, service_desk_project};
+use super::fixtures::{asset_name, jsm_username, service_desk_licensed, service_desk_project};
 use crate::harness::service_desk_server;
 
 async fn create_organization(label: &str) -> i64 {
@@ -65,7 +65,7 @@ async fn adds_lists_and_removes_the_users_of_an_organization() {
     service_desk_server()
         .organizations()
         .add_users_to_organization(id.to_string())
-        .users_organization_update(UsersOrganizationUpdate { usernames: Some(vec!["admin".to_owned()]) })
+        .users_organization_update(UsersOrganizationUpdate { usernames: Some(vec![jsm_username()]) })
         .send()
         .await
         .expect("an organization accepts a user");
@@ -82,7 +82,7 @@ async fn adds_lists_and_removes_the_users_of_an_organization() {
     service_desk_server()
         .organizations()
         .remove_users_from_organization(id.to_string())
-        .users_organization_update(UsersOrganizationUpdate { usernames: Some(vec!["admin".to_owned()]) })
+        .users_organization_update(UsersOrganizationUpdate { usernames: Some(vec![jsm_username()]) })
         .send()
         .await
         .expect("a user can be removed from an organization");
@@ -146,7 +146,7 @@ async fn the_cleanup_endpoints_are_declared_and_not_served() {
         .expect_err("Service Management 10.3 does not route the organization cleanup the document declares");
 
     assert!(
-        refused.status().is_some_and(|status| status >= 400),
+        refused.status().is_some_and(|status| (400..500).contains(&status)),
         "the refusal is typed rather than a parse failure: the instance answers 500 wrapping its own 404, which is \
          what an endpoint the document declares and the build does not carry looks like",
     );

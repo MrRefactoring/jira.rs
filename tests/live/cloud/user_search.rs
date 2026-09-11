@@ -70,7 +70,7 @@ async fn reports_a_total_alongside_the_page_through_the_picker() {
 
     for user in &users {
         assert!(user.account_id.as_deref().is_some_and(|id| !id.is_empty()), "a picked user carries an id");
-        assert!(user.display_name.is_some(), "the picker names the users it offers: {user:?}");
+        assert!(user.display_name.is_some(), "the picker names the users it offers: {:?}", user.account_id);
     }
 }
 
