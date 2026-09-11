@@ -77,5 +77,20 @@ name = "live"
 path = "tests/live/main.rs"
 
 [package.metadata.docs.rs]
-all-features = true
+features = [
+  "admin",
+  "agile",
+  "assets",
+  "assets-server",
+  "audit",
+  "cloud",
+  "server",
+  "service-desk",
+  "service-desk-server",
+  "teams",
+  "tracing",
+  "user-management",
+  "user-provisioning",
+  "webhooks",
+]
 rustdoc-args = ["--cfg", "docsrs"]
