@@ -46,8 +46,8 @@ use std::fmt::{self, Display, Formatter};
 
 /// The name of a field a clause is about.
 ///
-/// A name that is a plain word reaches JQL as it was written; anything else is quoted, so a field named
-/// `Story Points` and a custom field written `cf[10001]` both work.
+/// A plain word, and a custom field written exactly `cf[10001]`, reach JQL as they were written. Every other name is
+/// quoted, so `Story Points` works and a name carrying JQL of its own arrives as a name rather than as a clause.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Field(String);
 
@@ -196,12 +196,20 @@ impl Field {
 
         // A custom field is written `cf[10001]`, brackets and all, and quoting it would make it a name to look up
         // rather than the field it addresses.
-        if plain || self.0.starts_with("cf[") {
+        if plain || is_custom_field(&self.0) {
             return self.0.clone();
         }
 
         quote(&self.0)
     }
+}
+
+fn is_custom_field(name: &str) -> bool {
+    let Some(id) = name.strip_prefix("cf[").and_then(|rest| rest.strip_suffix(']')) else {
+        return false;
+    };
+
+    !id.is_empty() && id.bytes().all(|byte| byte.is_ascii_digit())
 }
 
 impl Clause {
@@ -416,6 +424,29 @@ mod tests {
         assert_eq!(field("project").is_empty().to_string(), "project IS EMPTY");
         assert_eq!(field("cf[10001]").is_not_empty().to_string(), "cf[10001] IS NOT EMPTY");
         assert_eq!(field("Story Points").is_empty().to_string(), r#""Story Points" IS EMPTY"#);
+    }
+
+    #[test]
+    fn a_field_name_cannot_smuggle_a_clause_of_its_own() {
+        let clause = field("cf[1] IS NOT EMPTY OR project").eq("SECRET");
+
+        assert_eq!(clause.to_string(), r#""cf[1] IS NOT EMPTY OR project" = "SECRET""#);
+    }
+
+    #[test]
+    fn only_the_exact_shape_of_a_custom_field_goes_through_unquoted() {
+        for name in ["cf[", "cf[]", "cf[10001", "cf[abc]", "cf[10001] OR project", "cf[1 0]", "cf[-1]"] {
+            let rendered = field(name).is_empty().to_string();
+
+            assert!(rendered.starts_with('"'), "{name} reached JQL unquoted as {rendered}");
+        }
+    }
+
+    #[test]
+    fn a_field_name_in_order_by_is_quoted_the_same_way() {
+        let query = field("project").eq("PROJ").order_by_desc("cf[1] IS NOT EMPTY OR project");
+
+        assert_eq!(query.to_string(), r#"project = "PROJ" ORDER BY "cf[1] IS NOT EMPTY OR project" DESC"#);
     }
 
     #[test]
