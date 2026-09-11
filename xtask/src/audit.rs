@@ -8,14 +8,9 @@ use std::collections::BTreeMap;
 use std::path::PathBuf;
 use std::process::Command;
 
-type Failure = Box<dyn std::error::Error>;
+use jira::core::audit::SchemaDrift;
 
-#[derive(Debug, serde::Deserialize)]
-#[serde(tag = "kind", rename_all = "camelCase")]
-enum Finding {
-    UndocumentedKeys { endpoint: String, path: String },
-    UndocumentedValue { type_name: String, value: String, documented: Vec<String> },
-}
+type Failure = Box<dyn std::error::Error>;
 
 /// The whole hosted surface when nothing was named, and exactly what was named otherwise.
 ///
@@ -72,15 +67,24 @@ fn read_findings(output: &std::path::Path) -> Result<String, Failure> {
 
     let mut keys: BTreeMap<String, Vec<String>> = BTreeMap::new();
     let mut values: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    let mut timestamps: Vec<String> = Vec::new();
+    let mut unreadable = 0_usize;
 
     for line in contents.lines().filter(|line| !line.trim().is_empty()) {
-        match serde_json::from_str::<Finding>(line)? {
-            Finding::UndocumentedKeys { endpoint, path } => {
+        let Ok(finding) = serde_json::from_str::<SchemaDrift>(line) else {
+            unreadable += 1;
+
+            continue;
+        };
+
+        match finding {
+            SchemaDrift::UndocumentedKeys { endpoint, path } => {
                 let path = if path.is_empty() { "(root)".to_owned() } else { collapse_indices(&path) };
 
                 keys.entry(anonymise(&endpoint)).or_default().push(path);
             }
-            Finding::UndocumentedValue { type_name, value, documented } => {
+            SchemaDrift::UnreadableTimestamp { value } => timestamps.push(value),
+            SchemaDrift::UndocumentedValue { type_name, value, documented } => {
                 values.entry(type_name).or_default().push(format!("`{value}` (documented: {})", documented.join(", ")));
             }
         }
@@ -88,8 +92,9 @@ fn read_findings(output: &std::path::Path) -> Result<String, Failure> {
 
     let mut report = String::from("## Schema audit\n");
 
-    if keys.is_empty() && values.is_empty() {
+    if keys.is_empty() && values.is_empty() && timestamps.is_empty() {
         report.push_str("\nNothing was recorded: the types describe every response the suite read.\n");
+        report.push_str(&skipped_lines(unreadable));
 
         return Ok(report);
     }
@@ -117,12 +122,37 @@ fn read_findings(output: &std::path::Path) -> Result<String, Failure> {
         }
     }
 
+    if !timestamps.is_empty() {
+        report.push_str("\n### Timestamps the reader could not make sense of\n\n");
+
+        timestamps.sort();
+        timestamps.dedup();
+
+        for value in timestamps {
+            report.push_str(&format!("- {value}\n"));
+        }
+    }
+
+    report.push_str(&skipped_lines(unreadable));
     report.push_str(
         "\nEach of these is a gap in the specification rather than breakage: repair them in the \
 generator's patches, then regenerate.\n",
     );
 
     Ok(report)
+}
+
+/// Says how many findings were written but could not be read back.
+///
+/// Findings are appended one JSON document per line as the suite makes them, so a run killed by a timeout, a cancelled
+/// workflow or the OOM killer leaves its last line half-written. The rest of the run is still worth reporting, and the
+/// count is what says the report is short.
+fn skipped_lines(unreadable: usize) -> String {
+    if unreadable == 0 {
+        return String::new();
+    }
+
+    format!("\n{unreadable} line(s) could not be read back and were skipped; the run was cut short.\n")
 }
 
 /// Replaces the identifiers a call carried with the shape of the path it called.

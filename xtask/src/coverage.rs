@@ -336,7 +336,7 @@ mod tests {
     }
 
     #[test]
-    fn a_request_matching_nothing_is_counted_apart() {
+    fn a_request_matching_nothing_is_ignored() {
         let shipped = [operation("GET", "/rest/api/2/myself", "getMyself")];
         let shipped: Vec<&Operation> = shipped.iter().collect();
 
