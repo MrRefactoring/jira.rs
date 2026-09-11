@@ -61,7 +61,7 @@ async fn names_the_scheme_the_test_project_is_associated_with() {
     let association = &page.values[0];
 
     assert!(
-        association.issue_type_screen_scheme.as_ref().is_some_and(|scheme| !scheme.id.is_empty()),
+        !association.issue_type_screen_scheme.id.is_empty(),
         "the association names the scheme, which is the whole point of the lookup",
     );
     assert!(
@@ -184,8 +184,7 @@ async fn project_scheme_id() -> Option<i64> {
 
     page.values
         .first()
-        .and_then(|association| association.issue_type_screen_scheme.as_ref())
-        .map(|scheme| scheme.id.parse().expect("a scheme id is a number"))
+        .map(|association| association.issue_type_screen_scheme.id.parse().expect("a scheme id is a number"))
 }
 
 /// Whether the token may read the issue type screen scheme configuration at all.

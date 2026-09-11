@@ -71,7 +71,7 @@ async fn reads_and_writes_an_application_role() {
     // Both writes want an `If-Match` a caller cannot know, so a refusal is the expected answer and the shape of the
     // request is what is under test.
     touch(server().application_roles().update_application_role(key).body(role.clone()).send().await);
-    touch(server().application_roles().put_bulk().application_role(role).send().await);
+    touch(server().application_roles().put_bulk().body([role]).send().await);
 }
 
 #[tokio::test]
@@ -197,9 +197,9 @@ async fn handles_the_email_templates() {
     assert!(!templates.is_empty(), "a zip of email templates is not empty");
     assert!(templates.starts_with(b"PK\x03\x04"), "the bytes are a zip, not a JSON error");
 
-    // The upload takes a zip; the document describes its body as a JSON object, so there is no zip to send. The gap
-    // is the document's, and what is left to prove is that the request reaches Jira in a shape it recognises.
-    touch(server().email_templates().upload_email_templates().send().await);
+    // The upload takes the zip the download just answered with, which is the round trip the pair exists for. The
+    // document types that body as a JSON object; a patch in the generator says it is bytes, and this is what proves it.
+    touch(server().email_templates().upload_email_templates(templates).send().await);
     touch(server().email_templates().apply_email_templates().send().await);
     touch(server().email_templates().revert_email_templates_to_default().send().await);
 }

@@ -67,7 +67,7 @@ async fn names_the_scheme_the_test_project_is_attached_to() {
         entry.project_ids,
     );
     assert!(
-        entry.issue_type_scheme.as_ref().is_some_and(|scheme| !scheme.id.is_empty()),
+        !entry.issue_type_scheme.id.is_empty(),
         "the entry names the scheme, which is the whole point of the lookup",
     );
 }
@@ -93,8 +93,8 @@ async fn explains_which_issue_types_the_project_offers() {
     let scheme_id: i64 = for_project
         .values
         .first()
-        .and_then(|entry| entry.issue_type_scheme.as_ref())
         .expect("the project names a scheme")
+        .issue_type_scheme
         .id
         .parse()
         .expect("a scheme id is a number");

@@ -1,24 +1,27 @@
 use jira::cloud::{
     BulkPermissionsRequest, BulkProjectPermissions, GetMyPermissionsRequestPermissions, PermissionsKeys,
+    UserPermission, UserPermissionType,
 };
-use serde_json::Value;
 
 use crate::harness::{TEST_PROJECT_KEY, cloud};
 
 /// Every permission the API returns carries a key and a type; `havePermission` is what callers branch on.
-fn assert_well_formed(permission: &Value) {
-    let key = permission.get("key").and_then(Value::as_str).expect("a permission carries a key");
+fn assert_well_formed(permission: &UserPermission) {
+    let key = permission.key.as_deref().expect("a permission carries a key");
 
     assert!(!key.is_empty(), "a permission key is not blank");
 
-    let scope = permission.get("type").and_then(Value::as_str).expect("a permission carries a type");
+    let scope = permission.r#type.as_ref().expect("a permission carries a type");
 
-    assert!(matches!(scope, "GLOBAL" | "PROJECT"), "a permission is global or project scoped, got {scope}");
+    assert!(
+        matches!(scope, UserPermissionType::Global | UserPermissionType::Project),
+        "a permission is global or project scoped, got {scope:?}",
+    );
 }
 
 /// Whether the caller holds the permission, as the entry reports it.
-fn have_permission(permission: &Value) -> Option<bool> {
-    permission.get("havePermission").and_then(Value::as_bool)
+fn have_permission(permission: &UserPermission) -> Option<bool> {
+    permission.have_permission
 }
 
 /// What the token can actually do, pinned in one place.

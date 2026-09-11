@@ -67,7 +67,7 @@ async fn walks_a_watcher_through_its_lifecycle() {
     tracker.defer(move || {
         let (key, watcher) = (key.clone(), watcher.clone());
 
-        async move { cloud().issue_watchers().remove_watcher(key).account_id(watcher).send().await }
+        async move { cloud().issue_watchers().remove_watcher(key, watcher).send().await }
     });
 
     let watching = poll_until("the calling account to appear in the watcher list", || async {
@@ -103,18 +103,14 @@ async fn walks_a_watcher_through_its_lifecycle() {
         .expect("the bulk watching query answers");
 
     assert_eq!(
-        bulk.issues_is_watching
-            .as_ref()
-            .and_then(|watching| watching.get(&issue.id))
-            .and_then(serde_json::Value::as_bool),
+        bulk.issues_is_watching.as_ref().and_then(|watching| watching.get(&issue.id)).copied(),
         Some(true),
         "the bulk query agrees with the per-issue read",
     );
 
     cloud()
         .issue_watchers()
-        .remove_watcher(&issue.key)
-        .account_id(&account_id)
+        .remove_watcher(&issue.key, &account_id)
         .send()
         .await
         .expect("the watcher can be removed through the query parameter");

@@ -597,9 +597,7 @@ async fn reads_and_moves_sub_tasks() {
     assert_eq!(sub_tasks.len(), 1, "the parent has the one sub-task that was filed under it");
 
     let sub_task_id = sub_tasks[0].id.clone().expect("a sub-task carries an id");
-    let can_move = server().issues().can_move_sub_task(&sub_task_id).send().await.expect("the move check answers");
-
-    assert!(!can_move.is_null(), "a sub-task says whether it can be moved: {can_move}");
+    server().issues().can_move_sub_task(&sub_task_id).send().await.expect("the move check answers with a boolean");
 
     // One sub-task cannot be reordered against itself, which is the refusal this proves is typed.
     touch(

@@ -193,7 +193,7 @@ async fn puts_actors_in_a_role_and_takes_them_out() {
                 role_id,
                 ProjectRoleActorsUpdate {
                     categorised_actors: Some(
-                        [("atlassian-user-role-actor".to_owned(), json!([username]))].into_iter().collect(),
+                        [("atlassian-user-role-actor".to_owned(), vec![username.to_owned()])].into_iter().collect(),
                     ),
                     ..ProjectRoleActorsUpdate::default()
                 },

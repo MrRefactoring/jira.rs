@@ -30,10 +30,11 @@ fn listed(links: GetRemoteIssueLinks) -> Vec<RemoteIssueLink> {
 
 fn link_to(url: &str, title: &str, global_id: Option<&str>) -> RemoteIssueLinkRequest {
     RemoteIssueLinkRequest {
+        application: None,
         global_id: global_id.map(ToOwned::to_owned),
+        object: RemoteObject { url: url.to_owned(), title: title.to_owned(), ..RemoteObject::default() },
         relationship: Some("documented by".to_owned()),
-        object: Some(RemoteObject { url: url.to_owned(), title: title.to_owned(), ..RemoteObject::default() }),
-        ..RemoteIssueLinkRequest::default()
+        additional: std::collections::HashMap::new(),
     }
 }
 

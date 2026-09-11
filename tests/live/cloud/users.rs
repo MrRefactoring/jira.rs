@@ -1,4 +1,4 @@
-use jira::cloud::{DashboardUserAccountType, GetUserRequestExpand, GetUserRequestExpandValue, UserColumnRequestBody};
+use jira::cloud::{GetUserRequestExpand, GetUserRequestExpandValue, UserAccountType, UserColumnRequestBody};
 
 use crate::harness::{ResourceTracker, await_readable, cloud};
 
@@ -23,11 +23,11 @@ async fn current_account_id() -> String {
 async fn resolves_the_authenticating_account_by_account_id() {
     let account_id = current_account_id().await;
 
-    let user = cloud().users().get_user().account_id(account_id.as_str()).send().await.expect("the account reads back");
+    let user = cloud().users().get_user(account_id.as_str()).send().await.expect("the account reads back");
 
     assert_eq!(user.account_id.as_deref(), Some(account_id.as_str()));
     assert_eq!(user.active, Some(true), "the account the suite authenticates as is an active one");
-    assert_eq!(user.account_type, Some(DashboardUserAccountType::Atlassian));
+    assert_eq!(user.account_type, Some(UserAccountType::Atlassian));
 
     let link = user.self_.expect("a user carries a link to itself");
 
@@ -41,7 +41,7 @@ async fn resolves_the_authenticating_account_by_account_id() {
 async fn treats_personal_data_as_optional_because_privacy_settings_make_it_so() {
     let account_id = current_account_id().await;
 
-    let user = cloud().users().get_user().account_id(account_id.as_str()).send().await.expect("the account reads back");
+    let user = cloud().users().get_user(account_id.as_str()).send().await.expect("the account reads back");
 
     if let Some(email) = &user.email_address {
         assert!(email.contains('@'), "an email address that is shown is an address: {email}");
@@ -61,13 +61,11 @@ async fn treats_personal_data_as_optional_because_privacy_settings_make_it_so() 
 async fn expands_groups_only_when_asked() {
     let account_id = current_account_id().await;
 
-    let plain =
-        cloud().users().get_user().account_id(account_id.as_str()).send().await.expect("the account reads back");
+    let plain = cloud().users().get_user(account_id.as_str()).send().await.expect("the account reads back");
 
     let expanded = cloud()
         .users()
-        .get_user()
-        .account_id(account_id.as_str())
+        .get_user(account_id.as_str())
         .expand(GetUserRequestExpand::One(GetUserRequestExpandValue::Groups))
         .send()
         .await
@@ -146,8 +144,7 @@ async fn refuses_to_report_an_email_to_user_credentials_at_all() {
 async fn surfaces_an_unknown_account_as_a_typed_error() {
     let error = cloud()
         .users()
-        .get_user()
-        .account_id("no-such-account-id")
+        .get_user("no-such-account-id")
         .send()
         .await
         .expect_err("an account that does not exist cannot be read");

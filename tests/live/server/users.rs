@@ -89,7 +89,10 @@ async fn checks_a_password_against_the_policy() {
         .await
         .expect("a proposed password is checked against the policy");
 
-    assert!(on_create.is_array(), "the policy answers with a list of what is wrong: {on_create}");
+    assert!(
+        on_create.iter().all(|message| !message.trim().is_empty()),
+        "what the policy objects to is said in words: {on_create:?}",
+    );
 
     let on_update = server()
         .password()
@@ -102,11 +105,14 @@ async fn checks_a_password_against_the_policy() {
         .await
         .expect("a proposed change is checked too");
 
-    assert!(on_update.is_array(), "and answers in the same shape: {on_update}");
+    assert!(on_update.iter().all(|message| !message.trim().is_empty()), "and objects in the same words: {on_update:?}",);
 
     let policy = server().password().get_password_policy().send().await.expect("the policy itself reads");
 
-    assert!(policy.is_array(), "a policy is the list of requirements it imposes: {policy}");
+    assert!(
+        policy.iter().all(|requirement| !requirement.trim().is_empty()),
+        "a policy states the requirements it imposes: {policy:?}",
+    );
 
     tracker.cleanup().await;
 }
