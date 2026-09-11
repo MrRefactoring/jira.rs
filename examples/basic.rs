@@ -19,13 +19,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let myself: serde_json::Value = client.get("/rest/api/3/myself").send().await?;
 
-    println!("{} <{}>", myself["displayName"], myself["emailAddress"]);
+    println!(
+        "{} <{}>",
+        myself["displayName"].as_str().unwrap_or_default(),
+        myself["emailAddress"].as_str().unwrap_or_default()
+    );
 
     let projects: serde_json::Value =
         client.get("/rest/api/3/project/search").query("maxResults", 5).query("orderBy", "name").send().await?;
 
     for project in projects["values"].as_array().into_iter().flatten() {
-        println!("{} — {}", project["key"], project["name"]);
+        println!("{} — {}", project["key"].as_str().unwrap_or_default(), project["name"].as_str().unwrap_or_default());
     }
 
     Ok(())

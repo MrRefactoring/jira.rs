@@ -2,12 +2,16 @@ use chrono::{DateTime, NaiveDate, NaiveDateTime, TimeZone, Utc};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_json::Value;
 
-/// The shapes Jira writes a `date-time` in, in the order they are tried.
+/// The two offset-bearing shapes Jira writes a `date-time` in, tried in this order.
 ///
 /// The first is the one Atlassian's own documentation gives and the one nearly every Cloud endpoint sends. It is not
 /// RFC 3339 — that spelling wants `+00:00` and this one writes `+0000` — so a reader that only knows the standard
-/// would reject the format the API actually uses. RFC 3339 is second because a handful of endpoints do write it, and
-/// the offset-less form is third because the self-hosted products send it.
+/// would reject the format the API actually uses. The second differs only in the colon.
+///
+/// These are not the whole cascade, and the order across it matters: RFC 3339 is tried before this list, the
+/// offset-less form the self-hosted products send is tried after it, and a bare date last. Adding a spelling here
+/// puts it after RFC 3339 and before the offset-less form — anywhere a `%z` and a `%:z` disagree, the earlier one
+/// wins silently, so the order is part of the behaviour rather than a detail of the constant.
 const LAYOUTS: &[&str] = &["%Y-%m-%dT%H:%M:%S%.f%z", "%Y-%m-%dT%H:%M:%S%.f%:z"];
 
 /// A `date-time` as an instant, or nothing when it was written in a way this does not read.

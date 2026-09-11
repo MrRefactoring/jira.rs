@@ -1,6 +1,10 @@
 //! The headers Jira attaches to a webhook it delivers.
 //!
-//! Written in lower case, because that is how they arrive.
+//! Written in lower case, because that is how a Rust HTTP server hands them over. Not every host does: AWS API
+//! Gateway (REST) and Azure Functions pass header names through in the case the sender used, so `X-Hub-Signature`
+//! arrives unchanged and every field here reads as absent — [`verify_signature`](super::verify_signature) then
+//! answers `Ok(false)` and a genuine delivery is dropped as unsigned. Lower-case the names before deserializing
+//! into [`WebhookHeaders`] on those platforms.
 
 use serde::{Deserialize, Serialize};
 

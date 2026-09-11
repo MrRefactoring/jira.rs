@@ -14,7 +14,7 @@
 //!
 //! let myself: serde_json::Value = client.get("/rest/api/3/myself").send().await?;
 //!
-//! println!("{}", myself["displayName"]);
+//! println!("{}", myself["displayName"].as_str().unwrap_or_default());
 //! # Ok(())
 //! # }
 //! ```

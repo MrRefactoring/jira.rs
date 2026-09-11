@@ -21,8 +21,10 @@ rather than fail when it is missing. `server::crawl` is not among them: it needs
 so it falls back to a business project and keeps going. `cargo xtask coverage server` counts what a run reached, so
 the cost of an unlicensed rig is visible as a number: 358 of 444 operations on a Service Desk licence.
 
-A Jira Software Data Center evaluation from [my.atlassian.com](https://my.atlassian.com) brings them back. Nothing in
-the suites needs editing.
+A Jira Software Data Center evaluation from [my.atlassian.com](https://my.atlassian.com) brings them back. The suites
+need no editing, but the registry does: the 42 `unreachable` lines in `tests/live/uncovered/server.txt` were recorded
+under a Service Desk licence, and once the Agile endpoints start answering, `cargo xtask coverage server` reports them
+as stale and refuses the ratchet. Remove those lines in the same commit that changes the licence.
 
 ## The Service Management rig is not affected
 
