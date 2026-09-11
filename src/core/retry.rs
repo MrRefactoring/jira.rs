@@ -3,6 +3,8 @@ use std::time::Duration;
 
 use crate::core::error::{Error, Result};
 
+const LONGEST_WAIT: Duration = Duration::from_secs(60);
+
 /// Opt-in retry for transient transport failures, applied by the client to every request it sends.
 ///
 /// Never retries 4xx (including 401 and 429) or a 5xx other than 502/503/504 — those signal client or server logic,
@@ -30,7 +32,7 @@ impl RetryConfig {
     }
 
     pub(crate) fn next_delay(&self, current: Duration) -> Duration {
-        current.mul_f64(self.backoff_factor)
+        Duration::try_from_secs_f64(current.as_secs_f64() * self.backoff_factor).unwrap_or(current)
     }
 }
 
@@ -97,10 +99,10 @@ where
                     return Err(error);
                 }
 
-                let wait = error.retry_after().filter(|_| rate_limited).unwrap_or(delay);
+                let wait = error.retry_after().filter(|_| rate_limited).unwrap_or(delay).min(LONGEST_WAIT);
 
                 tokio::time::sleep(wait).await;
-                delay = delay.mul_f64(options.backoff_factor);
+                delay = Duration::try_from_secs_f64(delay.as_secs_f64() * options.backoff_factor).unwrap_or(delay);
             }
         }
     }
