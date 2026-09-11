@@ -80,7 +80,7 @@ impl<'a> GetPasswordPolicyRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<serde_json::Value> {
+    pub async fn send(self) -> crate::core::Result<Vec<String>> {
         self.client.send(&self.config()?).await
     }
 
@@ -127,7 +127,7 @@ impl<'a> PolicyCheckCreateUserRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<serde_json::Value> {
+    pub async fn send(self) -> crate::core::Result<Vec<String>> {
         self.client.send(&self.config()?).await
     }
 
@@ -173,7 +173,7 @@ impl<'a> PolicyCheckUpdateUserRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<serde_json::Value> {
+    pub async fn send(self) -> crate::core::Result<Vec<String>> {
         self.client.send(&self.config()?).await
     }
 

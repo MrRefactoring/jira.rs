@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// The metadata describing an issue field for createmeta.
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct FieldCreateMetadata {
     /// The list of values allowed in the field.
@@ -33,6 +33,5 @@ pub struct FieldCreateMetadata {
     pub operations: Vec<String>,
     /// Whether the field is required.
     pub required: bool,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub schema: Option<JsonType>,
+    pub schema: JsonType,
 }

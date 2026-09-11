@@ -7,13 +7,13 @@ use serde::{Deserialize, Serialize};
 #[non_exhaustive]
 pub struct IndexSummary {
     #[serde(rename = "externalPlatformIndexReplay", default, skip_serializing_if = "Option::is_none")]
-    pub external_platform_index_replay: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub external_platform_index_replay: Option<std::collections::HashMap<String, ExternalPlatformIndexReplaySummary>>,
     #[serde(rename = "issueIndex", default, skip_serializing_if = "Option::is_none")]
     pub issue_index: Option<IssueIndexSummary>,
     #[serde(rename = "nodeId", default, skip_serializing_if = "Option::is_none")]
     pub node_id: Option<String>,
     #[serde(rename = "replicationQueues", default, skip_serializing_if = "Option::is_none")]
-    pub replication_queues: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub replication_queues: Option<std::collections::HashMap<String, IndexReplicationQueueSummary>>,
     #[cfg(feature = "chrono")]
     #[serde(
         rename = "reportTime",

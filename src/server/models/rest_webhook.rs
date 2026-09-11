@@ -16,7 +16,7 @@ pub struct RestWebhook {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub active: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub configuration: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub configuration: Option<std::collections::HashMap<String, String>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub credentials: Option<RestWebhookCredentials>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

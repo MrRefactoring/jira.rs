@@ -16,5 +16,5 @@ pub struct Gadget {
     #[serde(rename = "portalId", default, skip_serializing_if = "Option::is_none")]
     pub portal_id: Option<i64>,
     #[serde(rename = "userPrefs", default, skip_serializing_if = "Option::is_none")]
-    pub user_prefs: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub user_prefs: Option<std::collections::HashMap<String, String>>,
 }

@@ -18,7 +18,7 @@ pub struct IssueUpdateDetails {
     pub transition: Option<IssueTransition>,
     /// A Map containing the field field name and a list of operations to perform on the issue screen field. Note that fields included in here cannot be included in `fields`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub update: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub update: Option<std::collections::HashMap<String, Vec<FieldUpdateOperation>>>,
     /// Keys the specification does not describe, kept rather than dropped.
     #[serde(flatten)]
     pub additional: std::collections::HashMap<String, serde_json::Value>,

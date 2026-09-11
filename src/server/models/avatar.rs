@@ -20,5 +20,5 @@ pub struct Avatar {
     pub file_name: Option<String>,
     /// The avatar at each size, keyed by size.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub urls: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub urls: Option<std::collections::HashMap<String, String>>,
 }

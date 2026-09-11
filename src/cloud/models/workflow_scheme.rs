@@ -20,15 +20,15 @@ pub struct WorkflowScheme {
     pub id: Option<i64>,
     /// The issue type to workflow mappings, where each mapping is an issue type ID and workflow name pair. Note that an issue type can only be mapped to one workflow in a workflow scheme.
     #[serde(rename = "issueTypeMappings", default, skip_serializing_if = "Option::is_none")]
-    pub issue_type_mappings: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub issue_type_mappings: Option<std::collections::HashMap<String, String>>,
     /// The issue types available in Jira.
     #[serde(rename = "issueTypes", default, skip_serializing_if = "Option::is_none")]
-    pub issue_types: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub issue_types: Option<std::collections::HashMap<String, IssueTypeDetails>>,
     /// The date-time that the draft workflow scheme was last modified. A modification is a change to the issue type-project mappings only. This property does not apply to non-draft workflows.
     #[serde(rename = "lastModified", default, skip_serializing_if = "Option::is_none")]
     pub last_modified: Option<String>,
     #[serde(rename = "lastModifiedUser", default, skip_serializing_if = "Option::is_none")]
-    pub last_modified_user: Option<DashboardUser>,
+    pub last_modified_user: Option<User>,
     /// The name of the workflow scheme. The name must be unique. The maximum length is 255 characters. Required when creating a workflow scheme.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -37,7 +37,7 @@ pub struct WorkflowScheme {
     pub original_default_workflow: Option<String>,
     /// For draft workflow schemes, this property is the issue type to workflow mappings for the original workflow scheme, where each mapping is an issue type ID and workflow name pair. Note that an issue type can only be mapped to one workflow in a workflow scheme.
     #[serde(rename = "originalIssueTypeMappings", default, skip_serializing_if = "Option::is_none")]
-    pub original_issue_type_mappings: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub original_issue_type_mappings: Option<std::collections::HashMap<String, String>>,
     #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
     pub self_: Option<String>,
     /// Whether to create or update a draft workflow scheme when updating an active workflow scheme. An active workflow scheme is a workflow scheme that is used by at least one project. The following examples show how this property works:

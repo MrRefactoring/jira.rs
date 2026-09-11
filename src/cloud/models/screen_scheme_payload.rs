@@ -18,5 +18,5 @@ pub struct ScreenSchemePayload {
     pub pcri: Option<ProjectCreateResourceIdentifier>,
     /// Similar to the field layout scheme those mappings allow users to set different screens for different operations: default - always there, applied to all operations that don't have an explicit mapping `create`, `view`, `edit` - specific operations that are available and users can assign a different screen for each one of them <https://support.atlassian.com/jira-cloud-administration/docs/manage-screen-schemes/#Associating-a-screen-with-an-issue-operation>
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub screens: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub screens: Option<std::collections::HashMap<String, ProjectCreateResourceIdentifier>>,
 }

@@ -135,8 +135,8 @@ impl<'a> GroupsService<'a> {
     /// Creates a read-only group in the organization's directory. You can only edit groups from your identity provider.
     ///
     /// **Note:** An attempt to create a group with an existing name will fail with a 409 (Conflict) error.
-    pub fn create_group(&self, directory_id: impl Into<String>) -> CreateGroupRequest<'a> {
-        CreateGroupRequest::new(self.client, directory_id)
+    pub fn create_group(&self, directory_id: impl Into<String>, scim_group: ScimGroup) -> CreateGroupRequest<'a> {
+        CreateGroupRequest::new(self.client, directory_id, scim_group)
     }
 }
 
@@ -184,17 +184,63 @@ pub struct ReplaceGroupRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
     id: String,
-    body: Option<std::collections::HashMap<String, serde_json::Value>>,
+    schemas: Option<Vec<String>>,
+    external_id: Option<String>,
+    display_name: Option<String>,
+    members: Option<Vec<ScimGroupMember>>,
+    meta: Option<ScimMetadata>,
 }
 
 impl<'a> ReplaceGroupRequest<'a> {
     fn new(client: &'a crate::core::Client, directory_id: impl Into<String>, id: impl Into<String>) -> Self {
-        Self { client, directory_id: directory_id.into(), id: id.into(), body: None }
+        Self {
+            client,
+            directory_id: directory_id.into(),
+            id: id.into(),
+            schemas: None,
+            external_id: None,
+            display_name: None,
+            members: None,
+            meta: None,
+        }
     }
 
+    /// SCIM schemas that define the attributes present in the current JSON structure. This ia a required field  during user creation or modification.
     #[must_use]
-    pub fn body(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
-        self.body = Some(value);
+    pub fn schemas(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.schemas = Some(value.into_iter().map(Into::into).collect());
+
+        self
+    }
+
+    /// Identifier defined by provisioning client. CaseExact. Uniqueness is controlled by client.
+    #[must_use]
+    pub fn external_id(mut self, value: impl Into<String>) -> Self {
+        self.external_id = Some(value.into());
+
+        self
+    }
+
+    /// Group display name. This is a immutable, required, and read-only field.
+    #[must_use]
+    pub fn display_name(mut self, value: impl Into<String>) -> Self {
+        self.display_name = Some(value.into());
+
+        self
+    }
+
+    /// Group members
+    #[must_use]
+    pub fn members(mut self, value: impl IntoIterator<Item = ScimGroupMember>) -> Self {
+        self.members = Some(value.into_iter().collect());
+
+        self
+    }
+
+    /// Group metadata information.
+    #[must_use]
+    pub fn meta(mut self, value: ScimMetadata) -> Self {
+        self.meta = Some(value);
 
         self
     }
@@ -210,7 +256,29 @@ impl<'a> ReplaceGroupRequest<'a> {
             ),
         );
 
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+        let mut body = serde_json::Map::new();
+
+        if let Some(value) = &self.schemas {
+            body.insert("schemas".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.external_id {
+            body.insert("externalId".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.display_name {
+            body.insert("displayName".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.members {
+            body.insert("members".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.meta {
+            body.insert("meta".to_owned(), serde_json::to_value(value)?);
+        }
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
 
         Ok(config)
     }
@@ -484,19 +552,12 @@ impl<'a> GetGroupsRequest<'a> {
 pub struct CreateGroupRequest<'a> {
     client: &'a crate::core::Client,
     directory_id: String,
-    body: Option<std::collections::HashMap<String, serde_json::Value>>,
+    scim_group: ScimGroup,
 }
 
 impl<'a> CreateGroupRequest<'a> {
-    fn new(client: &'a crate::core::Client, directory_id: impl Into<String>) -> Self {
-        Self { client, directory_id: directory_id.into(), body: None }
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
-        self.body = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, directory_id: impl Into<String>, scim_group: ScimGroup) -> Self {
+        Self { client, directory_id: directory_id.into(), scim_group }
     }
 
     /// The request as the transport will send it.
@@ -506,7 +567,12 @@ impl<'a> CreateGroupRequest<'a> {
             format!("/scim/directory/{}/Groups", crate::core::encode_path_segment(&self.directory_id)),
         );
 
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+        let body = match serde_json::to_value(&self.scim_group)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
 
         Ok(config)
     }

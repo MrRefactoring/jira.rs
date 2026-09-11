@@ -18,10 +18,10 @@ pub struct SearchResults {
     pub max_results: Option<i64>,
     /// The ID and name of each field in the search results.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub names: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub names: Option<std::collections::HashMap<String, String>>,
     /// The schema describing the field types in the search results.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub schema: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub schema: Option<std::collections::HashMap<String, JsonType>>,
     /// The index of the first item returned on the page.
     #[serde(rename = "startAt", default, skip_serializing_if = "Option::is_none")]
     pub start_at: Option<i64>,

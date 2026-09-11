@@ -26,7 +26,7 @@ pub struct IssueChangelog {
 #[non_exhaustive]
 pub struct IssueEditmeta {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub fields: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub fields: Option<std::collections::HashMap<String, FieldMetadata>>,
 }
 
 /// Details about an issue.
@@ -52,7 +52,7 @@ pub struct Issue {
     pub key: String,
     /// The ID and name of each field present on the issue.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub names: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub names: Option<std::collections::HashMap<String, String>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub operations: Option<Operations>,
     /// Details of the issue properties identified in the request.
@@ -63,7 +63,7 @@ pub struct Issue {
     pub rendered_fields: Option<std::collections::HashMap<String, serde_json::Value>>,
     /// The schema describing each field present on the issue.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub schema: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub schema: Option<std::collections::HashMap<String, JsonType>>,
     /// The URL of the issue details.
     #[serde(rename = "self")]
     pub self_: String,

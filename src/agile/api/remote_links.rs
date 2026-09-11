@@ -3,6 +3,18 @@
 use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
+/// Properties assigned to Remote Link data that can then be used for delete / query operations.
+///
+/// Examples might be an account or user ID that can then be used to clean up data if an account is removed from
+/// the Provider system.
+///
+/// Properties are supplied as key/value pairs, a maximum of 5 properties can be supplied, and keys must not
+/// contain ':' or start with '_'.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitRemoteLinksRequestProperties {
+    pub properties: String,
+}
+
 crate::open_enum! {
     /// The schema version used for this data.
     ///
@@ -130,7 +142,7 @@ pub struct SubmitRemoteLinksRequestRemoteLinks {
     /// Map of key/values (string to string mapping). This is used to build the urls for actions from the
     /// templateUrl the provider registered their available actions with.
     #[serde(rename = "attributeMap", default, skip_serializing_if = "Option::is_none")]
-    pub attribute_map: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub attribute_map: Option<std::collections::HashMap<String, String>>,
 }
 
 /// Information about the provider. This is useful for auditing, logging, debugging, and other internal uses. It is
@@ -216,7 +228,7 @@ impl<'a> RemoteLinksService<'a> {
 #[derive(Clone)]
 pub struct SubmitRemoteLinksRequest<'a> {
     client: &'a crate::core::Client,
-    properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    properties: Option<SubmitRemoteLinksRequestProperties>,
     remote_links: Vec<SubmitRemoteLinksRequestRemoteLinks>,
     provider_metadata: Option<SubmitRemoteLinksRequestProviderMetadata>,
 }
@@ -237,7 +249,7 @@ impl<'a> SubmitRemoteLinksRequest<'a> {
     /// Properties are supplied as key/value pairs, a maximum of 5 properties can be supplied, and keys must not
     /// contain ':' or start with '_'.
     #[must_use]
-    pub fn properties(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
+    pub fn properties(mut self, value: SubmitRemoteLinksRequestProperties) -> Self {
         self.properties = Some(value);
 
         self

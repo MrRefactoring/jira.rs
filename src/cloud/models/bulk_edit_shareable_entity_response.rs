@@ -1,5 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
+use super::*;
 use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
@@ -20,5 +21,5 @@ pub struct BulkEditShareableEntityResponse {
     pub action: BulkEditShareableEntityResponseAction,
     /// The mapping dashboard id to errors if any.
     #[serde(rename = "entityErrors", default, skip_serializing_if = "Option::is_none")]
-    pub entity_errors: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub entity_errors: Option<std::collections::HashMap<String, BulkEditActionError>>,
 }

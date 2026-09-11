@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 #[non_exhaustive]
 pub struct Cookie {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attributes: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub attributes: Option<std::collections::HashMap<String, String>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -43,7 +43,7 @@ pub struct ProjectComponent {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub ari: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub assignee: Option<DashboardUser>,
+    pub assignee: Option<User>,
     /// The nominal user type used to determine the assignee for issues created with this component. See `realAssigneeType` for details on how the type of the user, and hence the user, assigned to issues is determined. Can take the following values:
     ///
     ///  *  `PROJECT_LEAD` the assignee to any issues created with this component is nominally the lead for the project the component is in.
@@ -65,13 +65,13 @@ pub struct ProjectComponent {
     #[serde(rename = "isAssigneeTypeValid", default, skip_serializing_if = "Option::is_none")]
     pub is_assignee_type_valid: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub lead: Option<DashboardUser>,
+    pub lead: Option<User>,
     /// The accountId of the component's lead user. The accountId uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
     #[serde(rename = "leadAccountId", default, skip_serializing_if = "Option::is_none")]
     pub lead_account_id: Option<String>,
     /// Compass component's metadata. Can't be updated. Not required for creating a Project Component.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub metadata: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub metadata: Option<std::collections::HashMap<String, String>>,
     /// The unique name for the component in the project. Required when creating a component. Optional when updating a component. The maximum length is 255 characters.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -82,7 +82,7 @@ pub struct ProjectComponent {
     #[serde(rename = "projectId", default, skip_serializing_if = "Option::is_none")]
     pub project_id: Option<i64>,
     #[serde(rename = "realAssignee", default, skip_serializing_if = "Option::is_none")]
-    pub real_assignee: Option<DashboardUser>,
+    pub real_assignee: Option<User>,
     /// The type of the assignee that is assigned to issues created with this component, when an assignee cannot be set from the `assigneeType`. For example, `assigneeType` is set to `COMPONENT_LEAD` but no component lead is set. This property is set to one of the following values:
     ///
     ///  *  `PROJECT_LEAD` when `assigneeType` is `PROJECT_LEAD` and the project lead has permission to be assigned issues in the project that the component is in.

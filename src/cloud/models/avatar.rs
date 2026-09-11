@@ -24,7 +24,7 @@ pub struct Avatar {
     pub owner: Option<String>,
     /// The list of avatar icon URLs.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub urls: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub urls: Option<std::collections::HashMap<String, String>>,
     /// Keys the specification does not describe, kept rather than dropped.
     #[serde(flatten)]
     pub additional: std::collections::HashMap<String, serde_json::Value>,

@@ -34,13 +34,13 @@ crate::open_enum! {
 pub struct GetSchedulingResponse {
     /// The dependencies for the plan. This is "Sequential" or "Concurrent".
     pub dependencies: GetSchedulingResponseDependencies,
-    #[serde(rename = "endDate", default, skip_serializing_if = "Option::is_none")]
-    pub end_date: Option<GetDateFieldResponse>,
+    #[serde(rename = "endDate")]
+    pub end_date: GetDateFieldResponse,
     /// The estimation unit for the plan. This is "StoryPoints", "Days" or "Hours".
     pub estimation: GetSchedulingResponseEstimation,
     /// The inferred dates for the plan. This is "None", "SprintDates" or "ReleaseDates".
     #[serde(rename = "inferredDates")]
     pub inferred_dates: GetSchedulingResponseInferredDates,
-    #[serde(rename = "startDate", default, skip_serializing_if = "Option::is_none")]
-    pub start_date: Option<GetDateFieldResponse>,
+    #[serde(rename = "startDate")]
+    pub start_date: GetDateFieldResponse,
 }

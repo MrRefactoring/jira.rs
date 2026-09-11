@@ -359,7 +359,7 @@ impl<'a> CleanUpOrganizationsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<serde_json::Value> {
+    pub async fn send(self) -> crate::core::Result<f64> {
         self.client.send(&self.config()?).await
     }
 

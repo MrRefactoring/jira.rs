@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 #[non_exhaustive]
 pub struct AttachmentMetadata {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub author: Option<DashboardUser>,
+    pub author: Option<User>,
     /// The URL of the attachment.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,

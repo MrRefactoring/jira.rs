@@ -8,7 +8,7 @@ pub struct CreateIndex {
     #[serde(rename = "entityName", default, skip_serializing_if = "Option::is_none")]
     pub entity_name: Option<String>,
     #[serde(rename = "fieldNameToColumnName", default, skip_serializing_if = "Option::is_none")]
-    pub field_name_to_column_name: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub field_name_to_column_name: Option<std::collections::HashMap<String, String>>,
     #[serde(rename = "indexName", default, skip_serializing_if = "Option::is_none")]
     pub index_name: Option<String>,
     #[serde(rename = "tableName", default, skip_serializing_if = "Option::is_none")]

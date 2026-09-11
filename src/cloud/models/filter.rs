@@ -46,7 +46,7 @@ pub struct Filter {
     /// The name of the filter. Must be unique.
     pub name: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub owner: Option<DashboardUser>,
+    pub owner: Option<User>,
     /// A URL to view the filter results in Jira, using the [Search for issues using JQL](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-filters/#api-rest-api-3-filter-search-get) operation with the filter's JQL string to return the filter results. For example, *<https://your-domain.atlassian.net/rest/api/3/search?jql=project+%3D+SSP+AND+issuetype+%3D+Bug*>.
     #[serde(rename = "searchUrl", default, skip_serializing_if = "Option::is_none")]
     pub search_url: Option<String>,

@@ -39,8 +39,8 @@ impl<'a> UsersService<'a> {
     /// Privacy controls are applied to the response based on the user's preferences. This could mean, for example, that the user's email address is hidden. See the [Profile visibility overview](https://developer.atlassian.com/cloud/jira/platform/profile-visibility/) for more details.
     ///
     /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse users and groups* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-    pub fn get_user(&self) -> GetUserRequest<'a> {
-        GetUserRequest::new(self.client)
+    pub fn get_user(&self, account_id: impl Into<String>) -> GetUserRequest<'a> {
+        GetUserRequest::new(self.client, account_id)
     }
 
     /// Creates a user. This resource is retained for legacy compatibility. As soon as a more suitable alternative is available this resource will be deprecated.
@@ -142,21 +142,13 @@ impl<'a> UsersService<'a> {
 #[derive(Clone)]
 pub struct GetUserRequest<'a> {
     client: &'a crate::core::Client,
-    account_id: Option<String>,
+    account_id: String,
     expand: Option<GetUserRequestExpand>,
 }
 
 impl<'a> GetUserRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, account_id: None, expand: None }
-    }
-
-    /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*. Required.
-    #[must_use]
-    pub fn account_id(mut self, value: impl Into<String>) -> Self {
-        self.account_id = Some(value.into());
-
-        self
+    fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
+        Self { client, account_id: account_id.into(), expand: None }
     }
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about users in the response. This parameter accepts a comma-separated list. Expand options include:
@@ -174,9 +166,7 @@ impl<'a> GetUserRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/user".to_owned());
 
-        if let Some(value) = &self.account_id {
-            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
 
         if let Some(value) = &self.expand {
             config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
@@ -186,7 +176,7 @@ impl<'a> GetUserRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<DashboardUser> {
+    pub async fn send(self) -> crate::core::Result<User> {
         self.client.send(&self.config()?).await
     }
 
@@ -229,7 +219,7 @@ impl<'a> CreateUserRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<DashboardUser> {
+    pub async fn send(self) -> crate::core::Result<User> {
         self.client.send(&self.config()?).await
     }
 
@@ -590,7 +580,7 @@ impl<'a> GetAllUsersDefaultRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<DashboardUser>> {
+    pub async fn send(self) -> crate::core::Result<Vec<User>> {
         self.client.send(&self.config()?).await
     }
 
@@ -662,7 +652,7 @@ impl<'a> GetAllUsersRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<DashboardUser>> {
+    pub async fn send(self) -> crate::core::Result<Vec<User>> {
         self.client.send(&self.config()?).await
     }
 

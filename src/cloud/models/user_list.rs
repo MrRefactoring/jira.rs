@@ -11,7 +11,7 @@ pub struct UserList {
     pub end_index: Option<i64>,
     /// The list of items.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<DashboardUser>>,
+    pub items: Option<Vec<User>>,
     /// The maximum number of results that could be on the page.
     #[serde(rename = "max-results", default, skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,

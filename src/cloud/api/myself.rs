@@ -337,7 +337,7 @@ impl<'a> GetCurrentUserRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<DashboardUser> {
+    pub async fn send(self) -> crate::core::Result<User> {
         self.client.send(&self.config()?).await
     }
 

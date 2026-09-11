@@ -37,7 +37,7 @@ pub struct TransitionPayload {
     pub name: Option<String>,
     /// The properties of the transition
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub properties: Option<std::collections::HashMap<String, String>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub to: Option<ToLayoutPayload>,
     #[serde(rename = "transitionScreen", default, skip_serializing_if = "Option::is_none")]

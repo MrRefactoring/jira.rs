@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 pub struct JiraExpressionForAnalysis {
     /// Context variables and their types. The type checker assumes that [common context variables](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#context-variables), such as `issue` or `project`, are available in context and sets their type. Use this property to override the default types or provide details of new variables.
     #[serde(rename = "contextVariables", default, skip_serializing_if = "Option::is_none")]
-    pub context_variables: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub context_variables: Option<std::collections::HashMap<String, String>>,
     /// The list of Jira expressions to analyse.
     pub expressions: Vec<String>,
 }

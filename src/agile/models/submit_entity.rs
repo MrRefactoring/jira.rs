@@ -2,6 +2,17 @@
 
 use serde::{Deserialize, Serialize};
 
+/// A message supplied in the case of an error.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct SubmitEntityFailedIncidents {
+    /// A human-readable message describing the error.
+    pub message: String,
+    /// An optional trace ID that can be used by Jira developers to locate the source of the error.
+    #[serde(rename = "errorTraceId", default, skip_serializing_if = "Option::is_none")]
+    pub error_trace_id: Option<String>,
+}
+
 /// The result of a successful submitIncidents request.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 #[non_exhaustive]
@@ -17,7 +28,7 @@ pub struct SubmitEntity {
     ///
     /// The object (if present) will be keyed by Incident ID and include any errors associated with that Incident that have prevented it being submitted.
     #[serde(rename = "failedIncidents", default, skip_serializing_if = "Option::is_none")]
-    pub failed_incidents: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub failed_incidents: Option<std::collections::HashMap<String, Vec<SubmitEntityFailedIncidents>>>,
     /// Project keys that are not known on this Jira instance (if any).
     ///
     /// These may be invalid keys (e.g. `UTF` is sometimes incorrectly identified as a Jira project key), or they may be for projects that no longer exist.

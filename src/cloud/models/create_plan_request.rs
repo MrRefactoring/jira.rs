@@ -3,7 +3,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct CreatePlanRequest {
     /// The cross-project releases to include in the plan.
@@ -25,6 +25,5 @@ pub struct CreatePlanRequest {
     /// The permissions for the plan.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub permissions: Option<Vec<CreatePermissionRequest>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub scheduling: Option<CreateSchedulingRequest>,
+    pub scheduling: CreateSchedulingRequest,
 }

@@ -4,6 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AtlassianAccountUser {
     #[serde(flatten)]
     pub user: User,

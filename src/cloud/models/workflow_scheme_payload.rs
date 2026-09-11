@@ -22,7 +22,7 @@ pub struct WorkflowSchemePayload {
     pub description: Option<String>,
     /// Association between issuetypes and workflows
     #[serde(rename = "explicitMappings", default, skip_serializing_if = "Option::is_none")]
-    pub explicit_mappings: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub explicit_mappings: Option<std::collections::HashMap<String, ProjectCreateResourceIdentifier>>,
     /// The name of the workflow scheme
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,

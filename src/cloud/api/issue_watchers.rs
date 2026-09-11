@@ -61,8 +61,12 @@ impl<'a> IssueWatchersService<'a> {
     ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
     ///  *  To remove users other than themselves from the watchlist, *Manage watcher list* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
-    pub fn remove_watcher(&self, issue_id_or_key: impl Into<String>) -> RemoveWatcherRequest<'a> {
-        RemoveWatcherRequest::new(self.client, issue_id_or_key)
+    pub fn remove_watcher(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        account_id: impl Into<String>,
+    ) -> RemoveWatcherRequest<'a> {
+        RemoveWatcherRequest::new(self.client, issue_id_or_key, account_id)
     }
 }
 
@@ -211,20 +215,12 @@ impl<'a> AddWatcherRequest<'a> {
 pub struct RemoveWatcherRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    account_id: Option<String>,
+    account_id: String,
 }
 
 impl<'a> RemoveWatcherRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), account_id: None }
-    }
-
-    /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*. Required.
-    #[must_use]
-    pub fn account_id(mut self, value: impl Into<String>) -> Self {
-        self.account_id = Some(value.into());
-
-        self
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, account_id: impl Into<String>) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), account_id: account_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -234,9 +230,7 @@ impl<'a> RemoveWatcherRequest<'a> {
             format!("/rest/api/3/issue/{}/watchers", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
-        if let Some(value) = &self.account_id {
-            config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
 
         Ok(config)
     }

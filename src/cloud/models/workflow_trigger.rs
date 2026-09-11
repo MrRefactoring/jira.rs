@@ -9,7 +9,7 @@ pub struct WorkflowTrigger {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     /// The parameters of the trigger.
-    pub parameters: std::collections::HashMap<String, serde_json::Value>,
+    pub parameters: std::collections::HashMap<String, String>,
     /// The rule key of the trigger.
     #[serde(rename = "ruleKey")]
     pub rule_key: String,

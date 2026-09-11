@@ -9,7 +9,7 @@ pub struct Transition {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub fields: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub fields: Option<std::collections::HashMap<String, FieldMeta>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

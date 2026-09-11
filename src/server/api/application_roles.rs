@@ -68,12 +68,12 @@ impl<'a> GetAllRequest<'a> {
 pub struct PutBulkRequest<'a> {
     client: &'a crate::core::Client,
     if_match: Option<String>,
-    application_role: Option<ApplicationRole>,
+    body: Option<Vec<ApplicationRole>>,
 }
 
 impl<'a> PutBulkRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, if_match: None, application_role: None }
+        Self { client, if_match: None, body: None }
     }
 
     #[must_use]
@@ -84,8 +84,8 @@ impl<'a> PutBulkRequest<'a> {
     }
 
     #[must_use]
-    pub fn application_role(mut self, value: ApplicationRole) -> Self {
-        self.application_role = Some(value);
+    pub fn body(mut self, value: impl IntoIterator<Item = ApplicationRole>) -> Self {
+        self.body = Some(value.into_iter().collect());
 
         self
     }
@@ -99,18 +99,13 @@ impl<'a> PutBulkRequest<'a> {
             config.headers.push(("If-Match".to_owned(), value.clone()));
         }
 
-        let body = match serde_json::to_value(&self.application_role)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
 
         Ok(config)
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<ApplicationRole> {
+    pub async fn send(self) -> crate::core::Result<Vec<ApplicationRole>> {
         self.client.send(&self.config()?).await
     }
 

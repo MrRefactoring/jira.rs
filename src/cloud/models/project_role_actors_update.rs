@@ -15,7 +15,7 @@ pub struct ProjectRoleActorsUpdate {
     ///
     /// Add users using `atlassian-user-role-actor` and a list of account IDs. For example, `"atlassian-user-role-actor":["12345678-9abc-def1-2345-6789abcdef12", "abcdef12-3456-789a-bcde-f123456789ab"]`.
     #[serde(rename = "categorisedActors", default, skip_serializing_if = "Option::is_none")]
-    pub categorised_actors: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub categorised_actors: Option<std::collections::HashMap<String, Vec<String>>>,
     /// The ID of the project role. Use [Get all project roles](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-role/#api-rest-api-3-role-get) to get a list of project role IDs.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,

@@ -26,7 +26,7 @@ pub struct FieldMetadataSchema {
 }
 
 /// The metadata describing an issue field.
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct FieldMetadata {
     /// The list of values allowed in the field.
@@ -53,6 +53,5 @@ pub struct FieldMetadata {
     /// Whether the field is required.
     pub required: bool,
     /// The schema of a field.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub schema: Option<FieldMetadataSchema>,
+    pub schema: FieldMetadataSchema,
 }

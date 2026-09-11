@@ -17,9 +17,9 @@ pub struct SearchResults {
     #[serde(rename = "maxResults", default, skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub names: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub names: Option<std::collections::HashMap<String, String>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub schema: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub schema: Option<std::collections::HashMap<String, JsonType>>,
     #[serde(rename = "startAt", default, skip_serializing_if = "Option::is_none")]
     pub start_at: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

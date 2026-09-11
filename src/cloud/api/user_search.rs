@@ -262,7 +262,7 @@ impl<'a> FindBulkAssignableUsersRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<DashboardUser>> {
+    pub async fn send(self) -> crate::core::Result<Vec<User>> {
         self.client.send(&self.config()?).await
     }
 
@@ -471,7 +471,7 @@ impl<'a> FindAssignableUsersRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<DashboardUser>> {
+    pub async fn send(self) -> crate::core::Result<Vec<User>> {
         self.client.send(&self.config()?).await
     }
 
@@ -607,7 +607,7 @@ impl<'a> FindUsersWithAllPermissionsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<DashboardUser>> {
+    pub async fn send(self) -> crate::core::Result<Vec<User>> {
         self.client.send(&self.config()?).await
     }
 
@@ -842,7 +842,7 @@ impl<'a> FindUsersRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<DashboardUser>> {
+    pub async fn send(self) -> crate::core::Result<Vec<User>> {
         self.client.send(&self.config()?).await
     }
 
@@ -925,7 +925,7 @@ impl<'a> FindUsersByQueryRequest<'a> {
     /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
     /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
     /// required.
-    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<DashboardUser>> {
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<User>> {
         let first = self.start_at.unwrap_or(0);
 
         crate::core::stream_pages(self, first, |mut request, offset| {
@@ -936,7 +936,7 @@ impl<'a> FindUsersByQueryRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Page<DashboardUser>> {
+    pub async fn send(self) -> crate::core::Result<Page<User>> {
         self.client.send(&self.config()?).await
     }
 
@@ -1162,7 +1162,7 @@ impl<'a> FindUsersWithBrowsePermissionRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<DashboardUser>> {
+    pub async fn send(self) -> crate::core::Result<Vec<User>> {
         self.client.send(&self.config()?).await
     }
 

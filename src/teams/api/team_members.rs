@@ -54,7 +54,6 @@ impl<'a> FetchMembersRequest<'a> {
     }
 
     /// \[Optional\] The ID of the site you are fetching members for. \[Deprecated\] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
-    #[deprecated(note = "\\[Deprecated\\] Omitting siteId is deprecated.")]
     #[must_use]
     pub fn site_id(mut self, value: impl Into<String>) -> Self {
         self.site_id = Some(value.into());

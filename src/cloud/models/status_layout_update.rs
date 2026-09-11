@@ -11,7 +11,7 @@ pub struct StatusLayoutUpdate {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub layout: Option<WorkflowLayout>,
     /// The properties for this status layout.
-    pub properties: std::collections::HashMap<String, serde_json::Value>,
+    pub properties: std::collections::HashMap<String, String>,
     /// A unique ID which the status will use to refer to this layout configuration.
     #[serde(rename = "statusReference")]
     pub status_reference: String,

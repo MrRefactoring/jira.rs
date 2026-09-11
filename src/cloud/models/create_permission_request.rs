@@ -14,8 +14,7 @@ crate::open_enum! {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct CreatePermissionRequest {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub holder: Option<CreatePermissionHolderRequest>,
+    pub holder: CreatePermissionHolderRequest,
     /// The permission type. This must be "View" or "Edit".
     pub r#type: CreatePermissionRequestType,
 }

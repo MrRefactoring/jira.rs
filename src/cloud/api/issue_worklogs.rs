@@ -538,26 +538,22 @@ impl<'a> AddWorklogRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<Worklog> {
-        if let Some(WorklogInputComment::Variant1(markup)) = &self.worklog_input.comment {
-            let mut write = crate::core::RequestConfig::new(
-                crate::core::Method::POST,
-                format!("/rest/api/2/issue/{}/worklog", self.issue_id_or_key),
-            );
+        if let Some(WorklogInputComment::Variant1(_)) = &self.worklog_input.comment {
+            let mut write = self.config()?;
 
-            write.body = Some(crate::core::Body::Json(serde_json::json!({
-                "comment": markup,
-                "started": self.worklog_input.started,
-                "timeSpent": self.worklog_input.time_spent,
-                "timeSpentSeconds": self.worklog_input.time_spent_seconds,
-                "visibility": self.worklog_input.visibility,
-            })));
+            write.url =
+                format!("/rest/api/2/issue/{}/worklog", crate::core::encode_path_segment(&self.issue_id_or_key));
 
             let created: serde_json::Value = self.client.send(&write).await?;
             let id = created["id"].as_str().unwrap_or_default().to_owned();
 
             let mut read = crate::core::RequestConfig::new(
                 crate::core::Method::GET,
-                format!("/rest/api/3/issue/{}/worklog/{}", self.issue_id_or_key, id),
+                format!(
+                    "/rest/api/3/issue/{}/worklog/{}",
+                    crate::core::encode_path_segment(&self.issue_id_or_key),
+                    crate::core::encode_path_segment(&id)
+                ),
             );
 
             if let Some(expand) = &self.expand {
@@ -766,25 +762,24 @@ impl<'a> UpdateWorklogRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<Worklog> {
-        if let Some(WorklogInputComment::Variant1(markup)) = &self.body.comment {
-            let mut write = crate::core::RequestConfig::new(
-                crate::core::Method::PUT,
-                format!("/rest/api/2/issue/{}/worklog/{}", self.issue_id_or_key, self.id),
-            );
+        if let Some(WorklogInputComment::Variant1(_)) = &self.body.comment {
+            let mut write = self.config()?;
 
-            write.body = Some(crate::core::Body::Json(serde_json::json!({
-                "comment": markup,
-                "started": self.body.started,
-                "timeSpent": self.body.time_spent,
-                "timeSpentSeconds": self.body.time_spent_seconds,
-                "visibility": self.body.visibility,
-            })));
+            write.url = format!(
+                "/rest/api/2/issue/{}/worklog/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.id)
+            );
 
             self.client.send_empty(&write).await?;
 
             let mut read = crate::core::RequestConfig::new(
                 crate::core::Method::GET,
-                format!("/rest/api/3/issue/{}/worklog/{}", self.issue_id_or_key, self.id),
+                format!(
+                    "/rest/api/3/issue/{}/worklog/{}",
+                    crate::core::encode_path_segment(&self.issue_id_or_key),
+                    crate::core::encode_path_segment(&self.id)
+                ),
             );
 
             if let Some(expand) = &self.expand {

@@ -18,12 +18,8 @@ impl<'a> ProfileService<'a> {
     }
 
     /// Updates fields in a user account. The `profile.write` privilege details which fields you can change.
-    pub fn update_profile(
-        &self,
-        account_id: AccountId,
-        atlassian_account_user: AtlassianAccountUser,
-    ) -> UpdateProfileRequest<'a> {
-        UpdateProfileRequest::new(self.client, account_id, atlassian_account_user)
+    pub fn update_profile(&self, account_id: AccountId) -> UpdateProfileRequest<'a> {
+        UpdateProfileRequest::new(self.client, account_id)
     }
 }
 
@@ -65,16 +61,51 @@ impl<'a> GetProfileRequest<'a> {
 pub struct UpdateProfileRequest<'a> {
     client: &'a crate::core::Client,
     account_id: AccountId,
-    atlassian_account_user: AtlassianAccountUser,
+    name: Option<Name>,
+    nickname: Option<Nickname>,
+    zoneinfo: Option<ZoneInfo>,
+    locale: Option<Locale>,
+    extended_profile: Option<ExtendedProfile>,
 }
 
 impl<'a> UpdateProfileRequest<'a> {
-    fn new(
-        client: &'a crate::core::Client,
-        account_id: AccountId,
-        atlassian_account_user: AtlassianAccountUser,
-    ) -> Self {
-        Self { client, account_id, atlassian_account_user }
+    fn new(client: &'a crate::core::Client, account_id: AccountId) -> Self {
+        Self { client, account_id, name: None, nickname: None, zoneinfo: None, locale: None, extended_profile: None }
+    }
+
+    #[must_use]
+    pub fn name(mut self, value: Name) -> Self {
+        self.name = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn nickname(mut self, value: Nickname) -> Self {
+        self.nickname = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn zoneinfo(mut self, value: ZoneInfo) -> Self {
+        self.zoneinfo = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn locale(mut self, value: Locale) -> Self {
+        self.locale = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn extended_profile(mut self, value: ExtendedProfile) -> Self {
+        self.extended_profile = Some(value);
+
+        self
     }
 
     /// The request as the transport will send it.
@@ -84,10 +115,27 @@ impl<'a> UpdateProfileRequest<'a> {
             format!("/users/{}/manage/profile", crate::core::encode_path_segment(&self.account_id)),
         );
 
-        let body = match serde_json::to_value(&self.atlassian_account_user)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
+        let mut body = serde_json::Map::new();
+
+        if let Some(value) = &self.name {
+            body.insert("name".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.nickname {
+            body.insert("nickname".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.zoneinfo {
+            body.insert("zoneinfo".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.locale {
+            body.insert("locale".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.extended_profile {
+            body.insert("extended_profile".to_owned(), serde_json::to_value(value)?);
+        }
 
         config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
 

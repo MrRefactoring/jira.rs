@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 pub struct RolesCapabilityPayload {
     /// A map of role PCRI (can be ID or REF) to a list of user or group PCRI IDs to associate with the role and project.
     #[serde(rename = "roleToProjectActors", default, skip_serializing_if = "Option::is_none")]
-    pub role_to_project_actors: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub role_to_project_actors: Option<std::collections::HashMap<String, Vec<ProjectCreateResourceIdentifier>>>,
     /// The list of roles to create.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub roles: Option<Vec<RolePayload>>,

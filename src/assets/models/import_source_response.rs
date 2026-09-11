@@ -43,7 +43,7 @@ pub struct ImportSourceResponseImportStatus {
     pub validation_status_type: Option<ImportSourceResponseImportStatusValidationStatusType>,
     /// Map of reasons for invalidity
     #[serde(rename = "reasonForInvalidity", default, skip_serializing_if = "Option::is_none")]
-    pub reason_for_invalidity: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub reason_for_invalidity: Option<std::collections::HashMap<String, String>>,
     /// Status name (computed from configurationStatusType)
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -99,7 +99,7 @@ pub struct ImportSourceResponseImportSourceOTEntriesImportStatus {
     pub validation_status_type: Option<ImportSourceResponseImportSourceOTEntriesImportStatusValidationStatusType>,
     /// Reasons for invalidity
     #[serde(rename = "reasonForInvalidity", default, skip_serializing_if = "Option::is_none")]
-    pub reason_for_invalidity: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub reason_for_invalidity: Option<std::collections::HashMap<String, String>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]

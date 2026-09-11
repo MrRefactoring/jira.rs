@@ -514,7 +514,7 @@ impl<'a> ProcessRequestsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<serde_json::Value> {
+    pub async fn send(self) -> crate::core::Result<Vec<f64>> {
         self.client.send(&self.config()?).await
     }
 
@@ -557,7 +557,7 @@ impl<'a> GetProgressBulkRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<ReindexRequest>> {
+    pub async fn send(self) -> crate::core::Result<serde_json::Value> {
         self.client.send(&self.config()?).await
     }
 

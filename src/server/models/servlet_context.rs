@@ -187,7 +187,7 @@ pub struct ServletContext {
     #[serde(rename = "effectiveSessionTrackingModes", default, skip_serializing_if = "Option::is_none")]
     pub effective_session_tracking_modes: Option<Vec<ServletContextEffectiveSessionTrackingModes>>,
     #[serde(rename = "filterRegistrations", default, skip_serializing_if = "Option::is_none")]
-    pub filter_registrations: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub filter_registrations: Option<std::collections::HashMap<String, FilterRegistration>>,
     #[serde(rename = "initParameterNames", default, skip_serializing_if = "Option::is_none")]
     pub init_parameter_names: Option<std::collections::HashMap<String, serde_json::Value>>,
     #[serde(rename = "jspConfigDescriptor", default, skip_serializing_if = "Option::is_none")]
@@ -205,7 +205,7 @@ pub struct ServletContext {
     #[serde(rename = "servletContextName", default, skip_serializing_if = "Option::is_none")]
     pub servlet_context_name: Option<String>,
     #[serde(rename = "servletRegistrations", default, skip_serializing_if = "Option::is_none")]
-    pub servlet_registrations: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub servlet_registrations: Option<std::collections::HashMap<String, ServletRegistration>>,
     #[serde(rename = "sessionCookieConfig", default, skip_serializing_if = "Option::is_none")]
     pub session_cookie_config: Option<SessionCookieConfig>,
     #[serde(rename = "sessionTimeout", default, skip_serializing_if = "Option::is_none")]

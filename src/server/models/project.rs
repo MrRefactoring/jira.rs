@@ -7,7 +7,7 @@ pub struct Project {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub archived: Option<bool>,
     #[serde(rename = "avatarUrls", default, skip_serializing_if = "Option::is_none")]
-    pub avatar_urls: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub avatar_urls: Option<std::collections::HashMap<String, String>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

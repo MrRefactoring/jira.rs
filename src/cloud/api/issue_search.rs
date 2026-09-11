@@ -62,7 +62,7 @@ impl<'a> IssueSearchService<'a> {
         GetIssuePickerResourceRequest::new(self.client)
     }
 
-    /// Checks whether one or more issues would be returned by one or more JQL queries.
+    /// Checks whether one or more issues would be returned by one or more JQL queries. Up to 10 JQL queries can be specified and up to 50 issue IDs included in the request.
     ///
     /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None, however, issues are only matched against JQL queries where the user has:
     ///
@@ -235,7 +235,7 @@ impl<'a> GetIssuePickerResourceRequest<'a> {
     }
 }
 
-/// Checks whether one or more issues would be returned by one or more JQL queries.
+/// Checks whether one or more issues would be returned by one or more JQL queries. Up to 10 JQL queries can be specified and up to 50 issue IDs included in the request.
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** None, however, issues are only matched against JQL queries where the user has:
 ///

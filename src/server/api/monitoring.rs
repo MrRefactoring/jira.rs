@@ -215,7 +215,7 @@ impl<'a> AreMetricsExposedRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<serde_json::Value> {
+    pub async fn send(self) -> crate::core::Result<bool> {
         self.client.send(&self.config()?).await
     }
 
@@ -247,7 +247,7 @@ impl<'a> GetAvailableMetricsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<serde_json::Value> {
+    pub async fn send(self) -> crate::core::Result<Vec<String>> {
         self.client.send(&self.config()?).await
     }
 

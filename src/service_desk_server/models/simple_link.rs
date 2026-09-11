@@ -14,7 +14,7 @@ pub struct SimpleLink {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub params: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub params: Option<std::collections::HashMap<String, String>>,
     #[serde(rename = "styleClass", default, skip_serializing_if = "Option::is_none")]
     pub style_class: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

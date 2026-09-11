@@ -370,6 +370,12 @@ crate::open_enum! {
     }
 }
 
+/// Arbitrary properties to tag the submitted repositories with. These properties can be used for delete operations to e.g. clean up all development information associated with an account in the event that the account is removed from the provider system. Note that these properties will never be returned with repository or entity data. They are not intended for use as metadata to associate with a repository. Maximum length of each key or value is 255 characters. Maximum allowed number of properties key/value pairs is 5. Properties keys cannot start with '_' character. Properties keys cannot contain ':' character.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StoreDevelopmentInformationRequestProperties {
+    pub properties: String,
+}
+
 /// Information about the provider. This is useful for auditing, logging, debugging, and other internal uses. It is not considered private information. Hence, it may not contain personally identifiable information.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StoreDevelopmentInformationRequestProviderMetadata {
@@ -447,7 +453,7 @@ pub struct StoreDevelopmentInformationRequest<'a> {
     repositories: Vec<StoreDevelopmentInformationRequestRepositories>,
     prevent_transitions: Option<bool>,
     operation_type: Option<StoreDevelopmentInformationRequestOperationType>,
-    properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    properties: Option<StoreDevelopmentInformationRequestProperties>,
     provider_metadata: Option<StoreDevelopmentInformationRequestProviderMetadata>,
 }
 
@@ -484,7 +490,7 @@ impl<'a> StoreDevelopmentInformationRequest<'a> {
 
     /// Arbitrary properties to tag the submitted repositories with. These properties can be used for delete operations to e.g. clean up all development information associated with an account in the event that the account is removed from the provider system. Note that these properties will never be returned with repository or entity data. They are not intended for use as metadata to associate with a repository. Maximum length of each key or value is 255 characters. Maximum allowed number of properties key/value pairs is 5. Properties keys cannot start with '_' character. Properties keys cannot contain ':' character.
     #[must_use]
-    pub fn properties(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
+    pub fn properties(mut self, value: StoreDevelopmentInformationRequestProperties) -> Self {
         self.properties = Some(value);
 
         self

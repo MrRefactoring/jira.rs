@@ -2,4 +2,4 @@
 
 use super::*;
 
-pub type PageUser = Page<DashboardUser>;
+pub type PageUser = Page<User>;

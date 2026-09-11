@@ -1,5 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
+use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details about permissions.
@@ -8,5 +9,5 @@ use serde::{Deserialize, Serialize};
 pub struct Permissions {
     /// List of permissions.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub permissions: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub permissions: Option<std::collections::HashMap<String, UserPermission>>,
 }

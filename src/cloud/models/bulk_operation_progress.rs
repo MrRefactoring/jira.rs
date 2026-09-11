@@ -34,7 +34,7 @@ pub struct BulkOperationProgress {
     pub created: Option<String>,
     /// Map of issue IDs for which the operation failed and that the user has permission to view, to their one or more reasons for failure. These reasons are open-ended text descriptions of the error and are not selected from a predefined list of standard reasons.
     #[serde(rename = "failedAccessibleIssues", default, skip_serializing_if = "Option::is_none")]
-    pub failed_accessible_issues: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub failed_accessible_issues: Option<std::collections::HashMap<String, Vec<String>>>,
     /// The number of issues that are either invalid or issues that the user doesn't have permission to view, regardless of the success or failure of the operation.
     #[serde(rename = "invalidOrInaccessibleIssueCount", default, skip_serializing_if = "Option::is_none")]
     pub invalid_or_inaccessible_issue_count: Option<i64>,
@@ -61,7 +61,7 @@ pub struct BulkOperationProgress {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub status: Option<BulkOperationProgressStatus>,
     #[serde(rename = "submittedBy", default, skip_serializing_if = "Option::is_none")]
-    pub submitted_by: Option<DashboardUser>,
+    pub submitted_by: Option<User>,
     /// The ID of the task.
     #[serde(rename = "taskId", default, skip_serializing_if = "Option::is_none")]
     pub task_id: Option<String>,

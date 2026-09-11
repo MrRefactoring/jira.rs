@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of a remote issue link.
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoteIssueLinkRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub application: Option<Application>,
@@ -15,8 +15,7 @@ pub struct RemoteIssueLinkRequest {
     /// The maximum length is 255 characters.
     #[serde(rename = "globalId", default, skip_serializing_if = "Option::is_none")]
     pub global_id: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub object: Option<RemoteObject>,
+    pub object: RemoteObject,
     /// Description of the relationship between the issue and the linked item. If not set, the relationship description "links to" is used in Jira.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub relationship: Option<String>,

@@ -6399,7 +6399,7 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/securitylevel/{id}",
-    "operation": "getIssuesecuritylevel"
+    "operation": "getIssueSecurityLevel"
   },
   {
     "surface": "server",

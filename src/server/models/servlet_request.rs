@@ -80,7 +80,7 @@ pub struct ServletRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub locales: Option<std::collections::HashMap<String, serde_json::Value>>,
     #[serde(rename = "parameterMap", default, skip_serializing_if = "Option::is_none")]
-    pub parameter_map: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub parameter_map: Option<std::collections::HashMap<String, Vec<String>>>,
     #[serde(rename = "parameterNames", default, skip_serializing_if = "Option::is_none")]
     pub parameter_names: Option<std::collections::HashMap<String, serde_json::Value>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

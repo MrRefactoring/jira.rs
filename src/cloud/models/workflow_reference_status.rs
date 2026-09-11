@@ -10,14 +10,13 @@ pub struct WorkflowReferenceStatus {
     #[serde(rename = "approvalConfiguration", default, skip_serializing_if = "Option::is_none")]
     pub approval_configuration: Option<ApprovalConfiguration>,
     /// Indicates if the status is deprecated.
-    #[deprecated(note = "Indicates if the status is deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub deprecated: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub layout: Option<WorkflowStatusLayout>,
     /// The properties associated with the status.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub properties: Option<std::collections::HashMap<String, String>>,
     /// The reference of the status.
     #[serde(rename = "statusReference", default, skip_serializing_if = "Option::is_none")]
     pub status_reference: Option<String>,

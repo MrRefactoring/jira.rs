@@ -19,7 +19,7 @@ pub struct Issue {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub names: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub names: Option<std::collections::HashMap<String, String>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub operations: Option<Opsbar>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -27,7 +27,7 @@ pub struct Issue {
     #[serde(rename = "renderedFields", default, skip_serializing_if = "Option::is_none")]
     pub rendered_fields: Option<std::collections::HashMap<String, serde_json::Value>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub schema: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub schema: Option<std::collections::HashMap<String, JsonType>>,
     #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
     pub self_: Option<String>,
     #[serde(rename = "transitionBeans", default, skip_serializing_if = "Option::is_none")]

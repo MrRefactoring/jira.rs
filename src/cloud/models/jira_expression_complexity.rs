@@ -14,5 +14,5 @@ pub struct JiraExpressionComplexity {
     pub expensive_operations: String,
     /// Variables used in the formula, mapped to the parts of the expression they refer to.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub variables: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub variables: Option<std::collections::HashMap<String, String>>,
 }

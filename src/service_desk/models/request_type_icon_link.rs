@@ -7,5 +7,5 @@ use serde::{Deserialize, Serialize};
 pub struct RequestTypeIconLink {
     /// URLs for the request type icons.
     #[serde(rename = "iconUrls", default, skip_serializing_if = "Option::is_none")]
-    pub icon_urls: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub icon_urls: Option<std::collections::HashMap<String, String>>,
 }

@@ -8,5 +8,5 @@ use serde::{Deserialize, Serialize};
 pub struct BulkIssueIsWatching {
     /// The map of issue ID to boolean watch status.
     #[serde(rename = "issuesIsWatching", default, skip_serializing_if = "Option::is_none")]
-    pub issues_is_watching: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub issues_is_watching: Option<std::collections::HashMap<String, bool>>,
 }

@@ -8,7 +8,7 @@ pub struct UserJson {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub active: Option<bool>,
     #[serde(rename = "avatarUrls", default, skip_serializing_if = "Option::is_none")]
-    pub avatar_urls: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub avatar_urls: Option<std::collections::HashMap<String, String>>,
     #[serde(rename = "displayName", default, skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
     #[serde(rename = "emailAddress", default, skip_serializing_if = "Option::is_none")]

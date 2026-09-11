@@ -483,8 +483,8 @@ impl<'a> RankIssuesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
+    pub async fn send(self) -> crate::core::Result<PartialSuccess> {
+        self.client.send(&self.config()?).await
     }
 
     /// Sends the request and hands back the body unmodelled.
@@ -890,7 +890,7 @@ impl<'a> GetCreateIssueMetaProjectIssueTypesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<CreateMetaIssueType> {
+    pub async fn send(self) -> crate::core::Result<Page<CreateMetaIssueType>> {
         self.client.send(&self.config()?).await
     }
 
@@ -964,7 +964,7 @@ impl<'a> GetCreateIssueMetaFieldsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<FieldMeta> {
+    pub async fn send(self) -> crate::core::Result<Page<FieldMeta>> {
         self.client.send(&self.config()?).await
     }
 
@@ -2534,7 +2534,7 @@ impl<'a> CanMoveSubTaskRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<serde_json::Value> {
+    pub async fn send(self) -> crate::core::Result<bool> {
         self.client.send(&self.config()?).await
     }
 

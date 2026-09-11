@@ -3,14 +3,6 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-crate::open_enum! {
-    /// Whether the security level is default for the security scheme
-    pub enum SecurityLevelPayloadIsDefault {
-        True => "true",
-        False => "false",
-    }
-}
-
 /// The payload for creating a security level. See <https://support.atlassian.com/jira-cloud-administration/docs/configure-issue-security-schemes/>
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SecurityLevelPayload {
@@ -19,7 +11,7 @@ pub struct SecurityLevelPayload {
     pub description: Option<String>,
     /// Whether the security level is default for the security scheme
     #[serde(rename = "isDefault", default, skip_serializing_if = "Option::is_none")]
-    pub is_default: Option<SecurityLevelPayloadIsDefault>,
+    pub is_default: Option<bool>,
     /// The name of the security level
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,

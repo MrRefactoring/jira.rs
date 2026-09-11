@@ -12,5 +12,5 @@ pub struct WorkflowStatusPayload {
     pub pcri: Option<ProjectCreateResourceIdentifier>,
     /// The properties of the workflow status.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub properties: Option<std::collections::HashMap<String, String>>,
 }

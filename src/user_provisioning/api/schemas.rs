@@ -1,5 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
+use super::super::models::*;
+
 /// The Schemas operations.
 pub struct SchemasService<'a> {
     client: &'a crate::core::Client,
@@ -64,7 +66,7 @@ impl<'a> GetSchemasRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<String> {
+    pub async fn send(self) -> crate::core::Result<ScimSchemaDocument> {
         self.client.send(&self.config()?).await
     }
 
@@ -102,7 +104,7 @@ impl<'a> GetUserSchemasRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<String> {
+    pub async fn send(self) -> crate::core::Result<ScimSchemaDocument> {
         self.client.send(&self.config()?).await
     }
 
@@ -140,7 +142,7 @@ impl<'a> GetGroupSchemasRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<String> {
+    pub async fn send(self) -> crate::core::Result<ScimSchemaDocument> {
         self.client.send(&self.config()?).await
     }
 
@@ -178,7 +180,7 @@ impl<'a> GetExtensionUserSchemasRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<String> {
+    pub async fn send(self) -> crate::core::Result<ScimSchemaDocument> {
         self.client.send(&self.config()?).await
     }
 

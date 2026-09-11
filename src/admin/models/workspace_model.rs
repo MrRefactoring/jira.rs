@@ -61,6 +61,17 @@ pub struct WorkspaceModelAttributes {
     pub unit: Option<String>,
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum WorkspaceModelRelationships {
+    PolicyModelV2(PolicyModelV2),
+    EntitlementModelV2(EntitlementModelV2),
+    FeatureModelV2(FeatureModelV2),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct WorkspaceModel {
@@ -73,7 +84,7 @@ pub struct WorkspaceModel {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub links: Option<LinkSelfModel>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub relationships: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub relationships: Option<std::collections::HashMap<String, Vec<WorkspaceModelRelationships>>>,
     #[serde(rename = "appType", default, skip_serializing_if = "Option::is_none")]
     pub app_type: Option<String>,
 }

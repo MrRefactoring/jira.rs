@@ -14,7 +14,7 @@ pub struct Votes {
     pub self_: Option<String>,
     /// List of the users who have voted on this issue. An empty list is returned when the calling user doesn't have the *View voters and watchers* project permission.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub voters: Option<Vec<DashboardUser>>,
+    pub voters: Option<Vec<User>>,
     /// The number of votes on the issue.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub votes: Option<i64>,

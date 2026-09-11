@@ -186,7 +186,7 @@ impl<'a> GetCustomFieldsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<CustomField> {
+    pub async fn send(self) -> crate::core::Result<Page<CustomField>> {
         self.client.send(&self.config()?).await
     }
 

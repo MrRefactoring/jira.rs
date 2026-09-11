@@ -21,7 +21,7 @@ pub struct IssueTypeIssueCreateMetadata {
     pub expand: Option<String>,
     /// List of the fields available when creating an issue for the issue type.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub fields: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub fields: Option<std::collections::HashMap<String, FieldMetadata>>,
     /// Hierarchy level of the issue type.
     #[serde(rename = "hierarchyLevel", default, skip_serializing_if = "Option::is_none")]
     pub hierarchy_level: Option<i64>,

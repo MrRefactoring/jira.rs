@@ -1,5 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
+use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A list of editable field details.
@@ -7,5 +8,5 @@ use serde::{Deserialize, Serialize};
 #[non_exhaustive]
 pub struct IssueUpdateMetadata {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub fields: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub fields: Option<std::collections::HashMap<String, FieldMetadata>>,
 }

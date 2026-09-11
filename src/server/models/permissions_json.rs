@@ -1,5 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
+use super::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -7,5 +8,5 @@ use serde::{Deserialize, Serialize};
 pub struct PermissionsJson {
     /// A map of permission keys to permission objects.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub permissions: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub permissions: Option<std::collections::HashMap<String, PermissionJson>>,
 }

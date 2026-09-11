@@ -255,8 +255,8 @@ impl<'a> UpdatePrecomputationsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
+    pub async fn send(self) -> crate::core::Result<JqlFunctionPrecomputationUpdateResponse> {
+        self.client.send(&self.config()?).await
     }
 
     /// Sends the request and hands back the body unmodelled.

@@ -3,6 +3,17 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
+/// A message supplied in the case of an error.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct SubmitRemoteLinksRejectedRemoteLinks {
+    /// A human-readable message describing the error.
+    pub message: String,
+    /// An optional trace ID that can be used by Jira developers to locate the source of the error.
+    #[serde(rename = "errorTraceId", default, skip_serializing_if = "Option::is_none")]
+    pub error_trace_id: Option<String>,
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
@@ -34,7 +45,7 @@ pub struct SubmitRemoteLinks {
     /// The object (if present) will be keyed by Remote Link ID and include any errors associated with that
     /// Remote Link that have prevented it being submitted.
     #[serde(rename = "rejectedRemoteLinks", default, skip_serializing_if = "Option::is_none")]
-    pub rejected_remote_links: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub rejected_remote_links: Option<std::collections::HashMap<String, Vec<SubmitRemoteLinksRejectedRemoteLinks>>>,
     /// Issue keys or services IDs or keys that are not known on this Jira instance (if any).
     #[serde(rename = "unknownAssociations", default, skip_serializing_if = "Option::is_none")]
     pub unknown_associations: Option<Vec<SubmitRemoteLinksUnknownAssociations>>,

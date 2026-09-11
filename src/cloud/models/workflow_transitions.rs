@@ -38,7 +38,7 @@ pub struct WorkflowTransitions {
     pub name: Option<String>,
     /// The properties of the transition.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub properties: Option<std::collections::HashMap<String, String>>,
     /// The status the transition goes to.
     #[serde(rename = "toStatusReference", default, skip_serializing_if = "Option::is_none")]
     pub to_status_reference: Option<String>,

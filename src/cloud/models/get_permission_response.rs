@@ -14,8 +14,7 @@ crate::open_enum! {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct GetPermissionResponse {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub holder: Option<GetPermissionHolderResponse>,
+    pub holder: GetPermissionHolderResponse,
     /// The permission type. This is "View" or "Edit".
     pub r#type: GetPermissionResponseType,
 }

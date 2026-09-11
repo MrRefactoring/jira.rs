@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 pub struct WorkflowTransitionRulesUpdateErrorDetails {
     /// A list of transition rule update errors, indexed by the transition rule ID. Any transition rule that appears here wasn't updated.
     #[serde(rename = "ruleUpdateErrors")]
-    pub rule_update_errors: std::collections::HashMap<String, serde_json::Value>,
+    pub rule_update_errors: std::collections::HashMap<String, Vec<String>>,
     /// The list of errors that specify why the workflow update failed. The workflow was not updated if the list contains any entries.
     #[serde(rename = "updateErrors")]
     pub update_errors: Vec<String>,

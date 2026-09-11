@@ -40,8 +40,7 @@ pub struct GetPlanResponse {
     /// The permissions for the plan.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub permissions: Option<Vec<GetPermissionResponse>>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub scheduling: Option<GetSchedulingResponse>,
+    pub scheduling: GetSchedulingResponse,
     /// The plan status. This is "Active", "Trashed" or "Archived".
     pub status: GetPlanResponseStatus,
 }

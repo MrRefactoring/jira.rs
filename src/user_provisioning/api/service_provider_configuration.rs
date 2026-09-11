@@ -1,5 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
+use super::super::models::*;
+
 /// The ServiceProviderConfiguration operations.
 pub struct ServiceProviderConfigurationService<'a> {
     client: &'a crate::core::Client,
@@ -62,7 +64,7 @@ impl<'a> GetResourceTypesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<String> {
+    pub async fn send(self) -> crate::core::Result<ScimConfigurationDocument> {
         self.client.send(&self.config()?).await
     }
 
@@ -97,7 +99,7 @@ impl<'a> GetUserResourceTypeRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<String> {
+    pub async fn send(self) -> crate::core::Result<ScimConfigurationDocument> {
         self.client.send(&self.config()?).await
     }
 
@@ -132,7 +134,7 @@ impl<'a> GetGroupResourceTypeRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<String> {
+    pub async fn send(self) -> crate::core::Result<ScimConfigurationDocument> {
         self.client.send(&self.config()?).await
     }
 
@@ -167,7 +169,7 @@ impl<'a> GetServiceProviderConfigRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<String> {
+    pub async fn send(self) -> crate::core::Result<ScimConfigurationDocument> {
         self.client.send(&self.config()?).await
     }
 

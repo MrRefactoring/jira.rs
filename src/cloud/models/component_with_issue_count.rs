@@ -38,7 +38,7 @@ crate::open_enum! {
 #[non_exhaustive]
 pub struct ComponentWithIssueCount {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub assignee: Option<DashboardUser>,
+    pub assignee: Option<User>,
     /// The nominal user type used to determine the assignee for issues created with this component. See `realAssigneeType` for details on how the type of the user, and hence the user, assigned to issues is determined. Takes the following values:
     ///
     ///  *  `PROJECT_LEAD` the assignee to any issues created with this component is nominally the lead for the project the component is in.
@@ -60,7 +60,7 @@ pub struct ComponentWithIssueCount {
     #[serde(rename = "issueCount", default, skip_serializing_if = "Option::is_none")]
     pub issue_count: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub lead: Option<DashboardUser>,
+    pub lead: Option<User>,
     /// The name for the component.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -71,7 +71,7 @@ pub struct ComponentWithIssueCount {
     #[serde(rename = "projectId", default, skip_serializing_if = "Option::is_none")]
     pub project_id: Option<i64>,
     #[serde(rename = "realAssignee", default, skip_serializing_if = "Option::is_none")]
-    pub real_assignee: Option<DashboardUser>,
+    pub real_assignee: Option<User>,
     /// The type of the assignee that is assigned to issues created with this component, when an assignee cannot be set from the `assigneeType`. For example, `assigneeType` is set to `COMPONENT_LEAD` but no component lead is set. This property is set to one of the following values:
     ///
     ///  *  `PROJECT_LEAD` when `assigneeType` is `PROJECT_LEAD` and the project lead has permission to be assigned issues in the project that the component is in.

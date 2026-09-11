@@ -15,7 +15,7 @@ pub struct FieldLayoutSchemePayload {
     pub description: Option<String>,
     /// There is a default configuration "fieldlayout" that is applied to all issue types using this scheme that don't have an explicit mapping users can create (or re-use existing) configurations for other issue types and map them to this scheme
     #[serde(rename = "explicitMappings", default, skip_serializing_if = "Option::is_none")]
-    pub explicit_mappings: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub explicit_mappings: Option<std::collections::HashMap<String, ProjectCreateResourceIdentifier>>,
     /// The name of the field layout scheme
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,

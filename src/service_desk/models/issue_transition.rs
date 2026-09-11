@@ -12,7 +12,7 @@ pub struct IssueTransition {
     pub expand: Option<String>,
     /// Details of the fields associated with the issue transition screen. Use this information to populate `fields` and `update` in a transition request.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub fields: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub fields: Option<std::collections::HashMap<String, FieldMetadata>>,
     /// Whether there is a screen associated with the issue transition.
     #[serde(rename = "hasScreen", default, skip_serializing_if = "Option::is_none")]
     pub has_screen: Option<bool>,

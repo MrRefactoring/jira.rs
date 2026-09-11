@@ -23,6 +23,16 @@ crate::open_enum! {
     }
 }
 
+/// Properties assigned to vulnerability data that can then be used for delete / query operations.
+///
+/// Examples might be an account or user ID that can then be used to clean up data if an account is removed from the Provider system.
+///
+/// Properties are supplied as key/value pairs, and a maximum of 5 properties can be supplied, keys cannot contain ':' or start with '_'.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitVulnerabilitiesRequestProperties {
+    pub properties: String,
+}
+
 crate::open_enum! {
     /// The VulnerabilityData schema version used for this vulnerability data.
     ///
@@ -490,7 +500,7 @@ impl<'a> GetLinkedWorkspaceByIdRequest<'a> {
 pub struct SubmitVulnerabilitiesRequest<'a> {
     client: &'a crate::core::Client,
     operation_type: Option<SubmitVulnerabilitiesRequestOperationType>,
-    properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    properties: Option<SubmitVulnerabilitiesRequestProperties>,
     vulnerabilities: Vec<SubmitVulnerabilitiesRequestVulnerabilities>,
     provider_metadata: Option<SubmitVulnerabilitiesRequestProviderMetadata>,
 }
@@ -523,7 +533,7 @@ impl<'a> SubmitVulnerabilitiesRequest<'a> {
     ///
     /// Properties are supplied as key/value pairs, and a maximum of 5 properties can be supplied, keys cannot contain ':' or start with '_'.
     #[must_use]
-    pub fn properties(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
+    pub fn properties(mut self, value: SubmitVulnerabilitiesRequestProperties) -> Self {
         self.properties = Some(value);
 
         self

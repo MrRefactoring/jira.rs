@@ -1,5 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
+use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Issue Bulk Move Payload
@@ -18,5 +19,5 @@ pub struct IssueBulkMovePayload {
     ///  *  ***Destination issueType*** (Required): ID of the issueType to which the issues are being moved.
     ///  *  ***Destination parent ID or key*** (Optional): ID or key of the issue which will become the parent of the issues being moved. Only required when the destination issueType is a subtask.
     #[serde(rename = "targetToSourcesMapping", default, skip_serializing_if = "Option::is_none")]
-    pub target_to_sources_mapping: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub target_to_sources_mapping: Option<std::collections::HashMap<String, TargetToSourcesMapping>>,
 }

@@ -9,7 +9,7 @@ crate::open_enum! {
     ///  *  `atlassian` regular Atlassian user account
     ///  *  `app` system account used for Connect applications and OAuth to represent external systems
     ///  *  `customer` Jira Service Desk account representing an external service desk
-    pub enum DashboardUserAccountType {
+    pub enum UserAccountType {
         Atlassian => "atlassian",
         App => "app",
         Customer => "customer",
@@ -23,7 +23,7 @@ crate::open_enum! {
 ///  *  User record corrupted: This occurs as a results of events such as a server import and can only happen to deleted users. In this case, `accountId` returns *unknown* and all other parameters have fallback values.
 ///  *  User record unavailable: This usually occurs due to an internal service outage. In this case, all parameters have fallback values.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct DashboardUser {
+pub struct User {
     /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*. Required in requests.
     #[serde(rename = "accountId", default, skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
@@ -33,7 +33,7 @@ pub struct DashboardUser {
     ///  *  `app` system account used for Connect applications and OAuth to represent external systems
     ///  *  `customer` Jira Service Desk account representing an external service desk
     #[serde(rename = "accountType", default, skip_serializing_if = "Option::is_none")]
-    pub account_type: Option<DashboardUserAccountType>,
+    pub account_type: Option<UserAccountType>,
     /// Whether the user is active.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub active: Option<bool>,

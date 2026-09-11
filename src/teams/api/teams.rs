@@ -12,7 +12,7 @@ impl<'a> TeamsService<'a> {
         Self { client }
     }
 
-    /// This returns a list of all teams contained under an organization. This may be used as an option to export teams data within your organization.
+    /// This returns a list of all teams contained under an organization. This may be used as an option to export teams data within your organization. Callers must continue querying with the returned cursor until the cursor is null.
     pub fn query_teams(&self, org_id: impl Into<String>) -> QueryTeamsRequest<'a> {
         QueryTeamsRequest::new(self.client, org_id)
     }
@@ -74,7 +74,7 @@ impl<'a> TeamsService<'a> {
     }
 }
 
-/// This returns a list of all teams contained under an organization. This may be used as an option to export teams data within your organization.
+/// This returns a list of all teams contained under an organization. This may be used as an option to export teams data within your organization. Callers must continue querying with the returned cursor until the cursor is null.
 #[derive(Clone)]
 pub struct QueryTeamsRequest<'a> {
     client: &'a crate::core::Client,
@@ -90,7 +90,6 @@ impl<'a> QueryTeamsRequest<'a> {
     }
 
     /// \[Optional\] The ID of the site to retrieve teams which are site scoped. Please note that if the org is site-scoped, teams will not be included in response if siteId is not provided. \[Deprecated\] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
-    #[deprecated(note = "\\[Deprecated\\] Omitting siteId is deprecated.")]
     #[must_use]
     pub fn site_id(mut self, value: impl Into<String>) -> Self {
         self.site_id = Some(value.into());
@@ -106,7 +105,7 @@ impl<'a> QueryTeamsRequest<'a> {
         self
     }
 
-    /// An optional cursor token. Leave off for the first request.
+    /// An optional cursor token to fetch the next page of results. Leave empty for the first request. Callers must continue querying with the returned cursor until the cursor is null.
     #[must_use]
     pub fn cursor(mut self, value: impl Into<String>) -> Self {
         self.cursor = Some(value.into());
@@ -300,7 +299,6 @@ impl<'a> GetTeamRequest<'a> {
     }
 
     /// \[Optional\] The ID of the site to retrieve teams which are site scoped. Please note that if the org is site-scoped, teams will not be included in response if siteId is not provided. \[Deprecated\] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
-    #[deprecated(note = "\\[Deprecated\\] Omitting siteId is deprecated.")]
     #[must_use]
     pub fn site_id(mut self, value: impl Into<String>) -> Self {
         self.site_id = Some(value.into());

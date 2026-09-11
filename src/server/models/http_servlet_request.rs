@@ -108,7 +108,7 @@ pub struct HttpServletRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub method: Option<String>,
     #[serde(rename = "parameterMap", default, skip_serializing_if = "Option::is_none")]
-    pub parameter_map: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub parameter_map: Option<std::collections::HashMap<String, Vec<String>>>,
     #[serde(rename = "parameterNames", default, skip_serializing_if = "Option::is_none")]
     pub parameter_names: Option<std::collections::HashMap<String, serde_json::Value>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -164,7 +164,7 @@ pub struct HttpServletRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub session: Option<HttpSession>,
     #[serde(rename = "trailerFields", default, skip_serializing_if = "Option::is_none")]
-    pub trailer_fields: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub trailer_fields: Option<std::collections::HashMap<String, String>>,
     #[serde(rename = "trailerFieldsReady", default, skip_serializing_if = "Option::is_none")]
     pub trailer_fields_ready: Option<bool>,
     #[serde(rename = "userPrincipal", default, skip_serializing_if = "Option::is_none")]

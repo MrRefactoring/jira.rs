@@ -12,5 +12,5 @@ pub struct FilterSubscription {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub user: Option<DashboardUser>,
+    pub user: Option<User>,
 }

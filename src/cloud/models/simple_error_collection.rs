@@ -10,7 +10,7 @@ pub struct SimpleErrorCollection {
     pub error_messages: Option<Vec<String>>,
     /// The list of errors by parameter returned by the operation. For example,"projectKey": "Project keys must start with an uppercase letter, followed by one or more uppercase alphanumeric characters."
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub errors: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub errors: Option<std::collections::HashMap<String, String>>,
     #[serde(rename = "httpStatusCode", default, skip_serializing_if = "Option::is_none")]
     pub http_status_code: Option<i64>,
 }

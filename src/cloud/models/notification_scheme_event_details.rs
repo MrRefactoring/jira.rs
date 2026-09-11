@@ -4,10 +4,9 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of a notification scheme event.
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NotificationSchemeEventDetails {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub event: Option<NotificationSchemeEventTypeId>,
+    pub event: NotificationSchemeEventTypeId,
     /// The list of notifications mapped to a specified event.
     pub notifications: Vec<NotificationSchemeNotificationDetails>,
     /// Keys the specification does not describe, kept rather than dropped.

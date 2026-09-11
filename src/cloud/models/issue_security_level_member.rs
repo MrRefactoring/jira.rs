@@ -4,11 +4,10 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Issue security level member.
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct IssueSecurityLevelMember {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub holder: Option<PermissionHolder>,
+    pub holder: PermissionHolder,
     /// The ID of the issue security level member.
     pub id: i64,
     /// The ID of the issue security level.

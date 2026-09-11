@@ -31,7 +31,7 @@ pub struct HistoryMetadata {
     pub email_description_key: Option<String>,
     /// Additional arbitrary information about the history record.
     #[serde(rename = "extraData", default, skip_serializing_if = "Option::is_none")]
-    pub extra_data: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub extra_data: Option<std::collections::HashMap<String, String>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub generator: Option<HistoryMetadataParticipant>,
     /// The type of the history record.

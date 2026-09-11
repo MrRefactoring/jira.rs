@@ -15,7 +15,7 @@ crate::open_enum! {
 #[non_exhaustive]
 pub struct UserPermission {
     /// Indicate whether the permission key is deprecated. Note that deprecated keys cannot be used in the `permissions parameter of Get my permissions. Deprecated keys are not returned by Get all permissions.`
-    #[deprecated(note = "Indicate whether the permission key is deprecated.")]
+    #[deprecated(note = "Deprecated keys are not returned by Get all permissions.`")]
     #[serde(rename = "deprecatedKey", default, skip_serializing_if = "Option::is_none")]
     pub deprecated_key: Option<bool>,
     /// The description of the permission.

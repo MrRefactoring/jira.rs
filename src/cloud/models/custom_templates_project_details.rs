@@ -30,7 +30,7 @@ pub struct CustomTemplatesProjectDetails {
     pub access_level: Option<CustomTemplatesProjectDetailsAccessLevel>,
     /// Additional properties of the project
     #[serde(rename = "additionalProperties", default, skip_serializing_if = "Option::is_none")]
-    pub additional_properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub additional_properties: Option<std::collections::HashMap<String, String>>,
     /// The default assignee when creating issues in the project
     #[serde(rename = "assigneeType", default, skip_serializing_if = "Option::is_none")]
     pub assignee_type: Option<CustomTemplatesProjectDetailsAssigneeType>,

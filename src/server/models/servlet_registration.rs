@@ -8,7 +8,7 @@ pub struct ServletRegistration {
     #[serde(rename = "className", default, skip_serializing_if = "Option::is_none")]
     pub class_name: Option<String>,
     #[serde(rename = "initParameters", default, skip_serializing_if = "Option::is_none")]
-    pub init_parameters: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub init_parameters: Option<std::collections::HashMap<String, String>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub mappings: Option<Vec<String>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

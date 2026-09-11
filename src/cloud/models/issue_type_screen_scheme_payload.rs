@@ -13,7 +13,7 @@ pub struct IssueTypeScreenSchemePayload {
     pub description: Option<String>,
     /// The IDs of the screen schemes for the issue type IDs and default. A default entry is required to create an issue type screen scheme, it defines the mapping for all issue types without a screen scheme.
     #[serde(rename = "explicitMappings", default, skip_serializing_if = "Option::is_none")]
-    pub explicit_mappings: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub explicit_mappings: Option<std::collections::HashMap<String, ProjectCreateResourceIdentifier>>,
     /// The name of the issue type screen scheme
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,

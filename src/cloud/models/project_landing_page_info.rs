@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ProjectLandingPageInfo {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub attributes: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub attributes: Option<std::collections::HashMap<String, String>>,
     #[serde(rename = "boardId", default, skip_serializing_if = "Option::is_none")]
     pub board_id: Option<i64>,
     #[serde(rename = "boardName", default, skip_serializing_if = "Option::is_none")]

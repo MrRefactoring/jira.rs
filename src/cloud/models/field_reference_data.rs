@@ -45,11 +45,9 @@ pub struct FieldReferenceData {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cfid: Option<String>,
     /// Whether this field has been deprecated.
-    #[deprecated(note = "Whether this field has been deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub deprecated: Option<FieldReferenceDataDeprecated>,
     /// The searcher key of the field, only passed when the field is deprecated.
-    #[deprecated(note = "The searcher key of the field, only passed when the field is deprecated.")]
     #[serde(rename = "deprecatedSearcherKey", default, skip_serializing_if = "Option::is_none")]
     pub deprecated_searcher_key: Option<String>,
     /// The display name contains the following:

@@ -10,5 +10,5 @@ pub struct BulkEditActionError {
     #[serde(rename = "errorMessages")]
     pub error_messages: Vec<String>,
     /// The errors.
-    pub errors: std::collections::HashMap<String, serde_json::Value>,
+    pub errors: std::collections::HashMap<String, String>,
 }

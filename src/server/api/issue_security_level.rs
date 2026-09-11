@@ -13,19 +13,19 @@ impl<'a> IssueSecurityLevelService<'a> {
     }
 
     /// Returns a full representation of the security level that has the given id.
-    pub fn get_issuesecuritylevel(&self, id: impl Into<String>) -> GetIssuesecuritylevelRequest<'a> {
-        GetIssuesecuritylevelRequest::new(self.client, id)
+    pub fn get_issue_security_level(&self, id: impl Into<String>) -> GetIssueSecurityLevelRequest<'a> {
+        GetIssueSecurityLevelRequest::new(self.client, id)
     }
 }
 
 /// Returns a full representation of the security level that has the given id.
 #[derive(Clone)]
-pub struct GetIssuesecuritylevelRequest<'a> {
+pub struct GetIssueSecurityLevelRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
 }
 
-impl<'a> GetIssuesecuritylevelRequest<'a> {
+impl<'a> GetIssueSecurityLevelRequest<'a> {
     fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
         Self { client, id: id.into() }
     }

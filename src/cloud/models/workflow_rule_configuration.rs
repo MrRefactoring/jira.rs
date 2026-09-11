@@ -10,7 +10,7 @@ pub struct WorkflowRuleConfiguration {
     pub id: Option<String>,
     /// The parameters related to the rule.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub parameters: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub parameters: Option<std::collections::HashMap<String, String>>,
     /// The rule key of the rule.
     #[serde(rename = "ruleKey")]
     pub rule_key: String,

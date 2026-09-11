@@ -3,6 +3,22 @@
 use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
+/// Properties assigned to build data that can then be used for delete / query operations.
+///
+/// Examples might be an account or user ID that can then be used to clean up data if an account is removed from
+/// the Provider system.
+///
+/// Note that these properties will never be returned with build data. They are not intended for use as
+/// metadata to associate with a build. Internally they are stored as a hash so that personal information etc.
+/// is never stored within Jira.
+///
+/// Properties are supplied as key/value pairs, a maximum of 5 properties can be supplied, and keys must not
+/// contain ':' or start with '_'.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitBuildsRequestProperties {
+    pub properties: String,
+}
+
 crate::open_enum! {
     /// The schema version used for this data.
     ///
@@ -262,7 +278,7 @@ impl<'a> BuildsService<'a> {
 #[derive(Clone)]
 pub struct SubmitBuildsRequest<'a> {
     client: &'a crate::core::Client,
-    properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    properties: Option<SubmitBuildsRequestProperties>,
     builds: Vec<SubmitBuildsRequestBuilds>,
     provider_metadata: Option<SubmitBuildsRequestProviderMetadata>,
 }
@@ -284,7 +300,7 @@ impl<'a> SubmitBuildsRequest<'a> {
     /// Properties are supplied as key/value pairs, a maximum of 5 properties can be supplied, and keys must not
     /// contain ':' or start with '_'.
     #[must_use]
-    pub fn properties(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
+    pub fn properties(mut self, value: SubmitBuildsRequestProperties) -> Self {
         self.properties = Some(value);
 
         self

@@ -16,5 +16,5 @@ pub struct IssueLimitReportResponse {
     pub issues_breaching_limit: Option<std::collections::HashMap<String, serde_json::Value>>,
     /// The fields and their defined limits
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub limits: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub limits: Option<std::collections::HashMap<String, i64>>,
 }

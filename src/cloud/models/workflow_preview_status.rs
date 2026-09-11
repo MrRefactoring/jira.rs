@@ -10,7 +10,6 @@ pub struct WorkflowPreviewStatus {
     #[serde(rename = "approvalConfiguration", default, skip_serializing_if = "Option::is_none")]
     pub approval_configuration: Option<ApprovalConfigurationPreview>,
     /// Whether the status is deprecated.
-    #[deprecated(note = "Whether the status is deprecated.")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub deprecated: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

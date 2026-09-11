@@ -3,6 +3,18 @@
 use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
+/// Properties assigned to Feature Flag data that can then be used for delete / query operations.
+///
+/// Examples might be an account or user ID that can then be used to clean up data if an account is removed from the Provider system.
+///
+/// Note that these properties will never be returned with Feature Flag data. They are not intended for use as metadata to associate with a Feature Flag. Internally they are stored as a hash so that personal information etc. is never stored within Jira.
+///
+/// Properties are supplied as key/value pairs, a maximum of 5 properties can be supplied, and keys must not contain ':' or start with '_'.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitFeatureFlagsRequestProperties {
+    pub properties: String,
+}
+
 crate::open_enum! {
     /// The FeatureFlagData schema version used for this flag data.
     ///
@@ -301,7 +313,7 @@ impl<'a> FeatureFlagsService<'a> {
 #[derive(Clone)]
 pub struct SubmitFeatureFlagsRequest<'a> {
     client: &'a crate::core::Client,
-    properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    properties: Option<SubmitFeatureFlagsRequestProperties>,
     flags: Vec<SubmitFeatureFlagsRequestFlags>,
     provider_metadata: Option<SubmitFeatureFlagsRequestProviderMetadata>,
 }
@@ -319,7 +331,7 @@ impl<'a> SubmitFeatureFlagsRequest<'a> {
     ///
     /// Properties are supplied as key/value pairs, a maximum of 5 properties can be supplied, and keys must not contain ':' or start with '_'.
     #[must_use]
-    pub fn properties(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
+    pub fn properties(mut self, value: SubmitFeatureFlagsRequestProperties) -> Self {
         self.properties = Some(value);
 
         self

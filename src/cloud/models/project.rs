@@ -37,7 +37,7 @@ pub struct Project {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub archived: Option<bool>,
     #[serde(rename = "archivedBy", default, skip_serializing_if = "Option::is_none")]
-    pub archived_by: Option<DashboardUser>,
+    pub archived_by: Option<User>,
     /// The date when the project was archived.
     #[cfg(feature = "chrono")]
     #[serde(
@@ -69,7 +69,7 @@ pub struct Project {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub deleted: Option<bool>,
     #[serde(rename = "deletedBy", default, skip_serializing_if = "Option::is_none")]
-    pub deleted_by: Option<DashboardUser>,
+    pub deleted_by: Option<User>,
     /// The date when the project was marked as deleted.
     #[cfg(feature = "chrono")]
     #[serde(
@@ -120,7 +120,7 @@ pub struct Project {
     #[serde(rename = "landingPageInfo", default, skip_serializing_if = "Option::is_none")]
     pub landing_page_info: Option<ProjectLandingPageInfo>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub lead: Option<DashboardUser>,
+    pub lead: Option<User>,
     /// The name of the project.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -155,7 +155,7 @@ pub struct Project {
     pub retention_till_date: Option<String>,
     /// The name and self URL for each role defined in the project. For more information, see [Create project role](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-role/#api-rest-api-3-role-post).
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub roles: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub roles: Option<std::collections::HashMap<String, String>>,
     /// The URL of the project details.
     #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
     pub self_: Option<String>,

@@ -3,6 +3,16 @@
 use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
+/// Properties assigned to deployment data that can then be used for delete / query operations.
+///
+/// Examples might be an account or user ID that can then be used to clean up data if an account is removed from the Provider system.
+///
+/// Properties are supplied as key/value pairs, and a maximum of 5 properties can be supplied, keys cannot contain ':' or start with '_'.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitDeploymentsRequestProperties {
+    pub properties: String,
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
@@ -236,7 +246,7 @@ impl<'a> DeploymentsService<'a> {
 #[derive(Clone)]
 pub struct SubmitDeploymentsRequest<'a> {
     client: &'a crate::core::Client,
-    properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+    properties: Option<SubmitDeploymentsRequestProperties>,
     deployments: Vec<SubmitDeploymentsRequestDeployments>,
     provider_metadata: Option<SubmitDeploymentsRequestProviderMetadata>,
 }
@@ -255,7 +265,7 @@ impl<'a> SubmitDeploymentsRequest<'a> {
     ///
     /// Properties are supplied as key/value pairs, and a maximum of 5 properties can be supplied, keys cannot contain ':' or start with '_'.
     #[must_use]
-    pub fn properties(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
+    pub fn properties(mut self, value: SubmitDeploymentsRequestProperties) -> Self {
         self.properties = Some(value);
 
         self

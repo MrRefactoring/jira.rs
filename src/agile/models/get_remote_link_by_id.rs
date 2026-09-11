@@ -132,5 +132,5 @@ pub struct GetRemoteLinkById {
     /// Map of key/values (string to string mapping). This is used to build the urls for actions from the
     /// templateUrl the provider registered their available actions with.
     #[serde(rename = "attributeMap", default, skip_serializing_if = "Option::is_none")]
-    pub attribute_map: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub attribute_map: Option<std::collections::HashMap<String, String>>,
 }

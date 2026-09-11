@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 #[non_exhaustive]
 pub struct ProjectJson {
     #[serde(rename = "avatarUrls", default, skip_serializing_if = "Option::is_none")]
-    pub avatar_urls: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub avatar_urls: Option<std::collections::HashMap<String, String>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -14,5 +14,5 @@ pub struct IssueUpdate {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub transition: Option<Transition>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub update: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub update: Option<std::collections::HashMap<String, Vec<FieldOperation>>>,
 }

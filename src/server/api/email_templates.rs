@@ -18,8 +18,8 @@ impl<'a> EmailTemplatesService<'a> {
     }
 
     /// Extracts given zip file to temporary templates folder. If the folder already exists it will replace it's content
-    pub fn upload_email_templates(&self) -> UploadEmailTemplatesRequest<'a> {
-        UploadEmailTemplatesRequest::new(self.client)
+    pub fn upload_email_templates(&self, body: impl Into<bytes::Bytes>) -> UploadEmailTemplatesRequest<'a> {
+        UploadEmailTemplatesRequest::new(self.client, body)
     }
 
     /// Replaces the current email templates pack with previously uploaded one, if exists.
@@ -74,17 +74,19 @@ impl<'a> DownloadEmailTemplatesRequest<'a> {
 #[derive(Clone)]
 pub struct UploadEmailTemplatesRequest<'a> {
     client: &'a crate::core::Client,
-    body: Option<std::collections::HashMap<String, serde_json::Value>>,
+    body: bytes::Bytes,
+    content_type: Option<String>,
 }
 
 impl<'a> UploadEmailTemplatesRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, body: None }
+    fn new(client: &'a crate::core::Client, body: impl Into<bytes::Bytes>) -> Self {
+        Self { client, body: body.into(), content_type: None }
     }
 
+    /// The media type of the bytes being sent, e.g. `image/png`.
     #[must_use]
-    pub fn body(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
-        self.body = Some(value);
+    pub fn content_type(mut self, value: impl Into<String>) -> Self {
+        self.content_type = Some(value.into());
 
         self
     }
@@ -94,9 +96,9 @@ impl<'a> UploadEmailTemplatesRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/email-templates".to_owned());
 
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+        config.body = Some(crate::core::Body::Bytes(self.body.clone()));
 
-        config.content_type = Some("application/zip".to_owned());
+        config.content_type = self.content_type.clone().or(Some("application/zip".to_owned()));
 
         Ok(config)
     }

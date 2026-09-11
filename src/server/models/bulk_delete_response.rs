@@ -10,5 +10,5 @@ pub struct BulkDeleteResponse {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
     #[serde(rename = "notDeletedCustomFields", default, skip_serializing_if = "Option::is_none")]
-    pub not_deleted_custom_fields: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub not_deleted_custom_fields: Option<std::collections::HashMap<String, String>>,
 }

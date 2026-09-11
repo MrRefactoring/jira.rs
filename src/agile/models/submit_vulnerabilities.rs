@@ -3,6 +3,17 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
+/// A message supplied in the case of an error.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct SubmitVulnerabilitiesFailedVulnerabilities {
+    /// A human-readable message describing the error.
+    pub message: String,
+    /// An optional trace ID that can be used by Jira developers to locate the source of the error.
+    #[serde(rename = "errorTraceId", default, skip_serializing_if = "Option::is_none")]
+    pub error_trace_id: Option<String>,
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
@@ -27,7 +38,8 @@ pub struct SubmitVulnerabilities {
     ///
     /// The object (if present) will be keyed by Vulnerability ID and include any errors associated with that Vulnerability that have prevented it being submitted.
     #[serde(rename = "failedVulnerabilities", default, skip_serializing_if = "Option::is_none")]
-    pub failed_vulnerabilities: Option<std::collections::HashMap<String, serde_json::Value>>,
+    pub failed_vulnerabilities:
+        Option<std::collections::HashMap<String, Vec<SubmitVulnerabilitiesFailedVulnerabilities>>>,
     /// Associations (e.g. Service IDs) that are not known on this Jira instance (if any).
     ///
     /// If a Vulnerability has been associated with any other association other than those in this array it will still be stored against those valid associations.
