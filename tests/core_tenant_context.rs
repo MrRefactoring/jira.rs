@@ -62,6 +62,24 @@ async fn reports_a_gateway_failure_with_the_status_it_hid_in_the_body() {
 }
 
 #[tokio::test]
+async fn names_the_status_it_reports_rather_than_the_one_it_fell_back_to() {
+    for (status, expected) in [(403u16, "Forbidden"), (404, "Not Found"), (429, "Too Many Requests")] {
+        let server = gateway(json!({
+            "errors": [{ "message": "Not authorised", "extensions": { "statusCode": status } }]
+        }))
+        .await;
+        let client = Client::builder().host(server.uri()).build().unwrap();
+
+        let error = get_tenant_context(&client).await.unwrap_err();
+
+        let jira::core::Error::Api { details, .. } = &error else { panic!("the gateway failure is an API error") };
+
+        assert_eq!(details.status, status);
+        assert_eq!(details.status_text, expected, "{status} was reported as {}", details.status_text);
+    }
+}
+
+#[tokio::test]
 async fn falls_back_to_502_when_the_gateway_names_no_status() {
     let server = gateway(json!({ "errors": [{ "message": "boom" }] })).await;
     let client = Client::builder().host(server.uri()).build().unwrap();

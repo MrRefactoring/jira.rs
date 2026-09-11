@@ -96,11 +96,15 @@ explicit `host` instead.",
     if let Some(failure) = response.errors.and_then(|errors| errors.into_iter().next()) {
         let message = failure.message.unwrap_or_else(|| "the GraphQL gateway reported an error".to_owned());
         let status = failure.extensions.and_then(|extensions| extensions.status_code).unwrap_or(502);
+        let status_text = reqwest::StatusCode::from_u16(status)
+            .ok()
+            .and_then(|code| code.canonical_reason())
+            .unwrap_or("Bad Gateway");
 
         return Err(create_api_error(
             format!("Could not resolve the tenant context: {message}"),
             status,
-            "Bad Gateway".to_owned(),
+            status_text.to_owned(),
             serde_json::Value::Null,
             None,
         ));
