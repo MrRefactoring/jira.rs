@@ -2,7 +2,8 @@
 #
 # The sibling of docker/jira-dc, and not a replacement for it: `atlassian/jira-software` carries neither Service
 # Management nor Assets, and the `server` suites need Jira Software's boards and sprints, which this image does not
-# have. Both rigs run at once, on 8080 and 8082.
+# have. The two do not fit side by side — a runner has memory for one, and starting the second takes the first down
+# without an error — so the ports are split only to keep one rig out of the other's way while switching between them.
 #
 # Not production-shaped and not meant to be: one node, one database, no reverse proxy, and a licence that expires in
 # three hours. What it has to be is reproducible, so that a schema mismatch found here is a fact about Jira Service
@@ -46,7 +47,7 @@ services:
       ATL_DB_TYPE: postgres72
       ATL_DB_DRIVER: org.postgresql.Driver
       ATL_TOMCAT_PORT: '8080'
-      # Service Management indexes more than Jira Software does, and 2 GB is where a cold start stops thrashing.
+      # Service Management indexes more than Jira Software does, and 3 GB is where a cold start stops thrashing.
       JVM_MINIMUM_MEMORY: 1024m
       JVM_MAXIMUM_MEMORY: 3072m
       # Jira writes this into the base URL it hands back in `self` links, and the live suites compare against it.
@@ -54,7 +55,7 @@ services:
       ATL_PROXY_PORT: '8082'
       ATL_TOMCAT_SCHEME: http
     ports:
-      - '8082:8080'
+      - '127.0.0.1:8082:8080'
     volumes:
       - jira-home:/var/atlassian/application-data/jira
 

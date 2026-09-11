@@ -30,6 +30,7 @@ fn jira_dc() -> Rig {
         admin_password: "admin123",
         admin_email: "admin@example.invalid",
         title: "jira-rs live suite",
+        license_name: "Jira Software (Data Center)",
     }
 }
 
@@ -42,6 +43,7 @@ fn jsm_dc() -> Rig {
         admin_password: "admin123",
         admin_email: "admin@example.invalid",
         title: "jira-rs live suite (JSM)",
+        license_name: "Jira Service Desk (Data Center)",
     }
 }
 

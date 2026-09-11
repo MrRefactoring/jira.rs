@@ -32,7 +32,7 @@ services:
         condition: service_healthy
     environment:
       # These four are what let the setup wizard skip its database step. Everything after it — licence, administrator,
-      # mail — has no environment variable and is driven over HTTP by scripts/jiraDc.ts.
+      # mail — has no environment variable and is driven over HTTP by `run_wizard` in xtask/src/dc_rig.rs.
       ATL_JDBC_URL: jdbc:postgresql://postgres:5432/jira
       ATL_JDBC_USER: jira
       ATL_JDBC_PASSWORD: jira
@@ -50,7 +50,7 @@ services:
       ATL_PROXY_PORT: '8080'
       ATL_TOMCAT_SCHEME: http
     ports:
-      - '8080:8080'
+      - '127.0.0.1:8080:8080'
     volumes:
       - jira-home:/var/atlassian/application-data/jira
 

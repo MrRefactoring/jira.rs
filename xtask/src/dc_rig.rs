@@ -34,6 +34,12 @@ pub struct Rig {
     pub admin_email: &'static str,
     /// The name the instance gives itself, which is what its own page titles show.
     pub title: &'static str,
+    /// Which timebomb key to take, which is not the same one for both rigs.
+    ///
+    /// The Service Desk key licenses Service Management and Assets together, and on `atlassian/jira-software` it
+    /// leaves Jira Software unlicensed — boards, sprints and the Scrum template all disappear and coverage falls to
+    /// 358 of 444. Each rig therefore asks for its own.
+    pub license_name: &'static str,
 }
 
 type Failure = Box<dyn std::error::Error>;
@@ -247,10 +253,12 @@ fn read_license(rig: &Rig) -> Result<String, Failure> {
         Ok(license) => Ok(license.trim().to_owned()),
         Err(_) => Err(format!(
             "No licence at {}. Atlassian publishes three-hour timebomb keys for exactly this at \
-https://developer.atlassian.com/platform/marketplace/timebomb-licenses-for-testing-server-apps/ — take the Jira \
-Service Desk Data Center one, which licenses both halves of the rig, and write it to that path. In CI it comes from \
-the repository secret instead.",
-            path.display()
+https://developer.atlassian.com/platform/marketplace/timebomb-licenses-for-testing-server-apps/ — take the {} one and \
+write it to that path. In CI it comes from the repository secret instead. What the choice costs this rig is written \
+down in {}/README.md.",
+            path.display(),
+            rig.license_name,
+            rig.compose_dir.display()
         )
         .into()),
     }
