@@ -76,6 +76,16 @@ wiremock = "0.6"
 name = "live"
 path = "tests/live/main.rs"
 
+# Each example reaches for a surface beyond the default, so cargo has to be told which features it needs. Without
+# this, `cargo test` on default features fails to build the examples before it runs a single test.
+[[example]]
+name = "typed"
+required-features = ["cloud", "agile"]
+
+[[example]]
+name = "preflight"
+required-features = ["cloud", "agile", "service-desk"]
+
 [package.metadata.docs.rs]
 features = [
   "admin",
