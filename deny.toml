@@ -4,6 +4,7 @@ all-features = true
 [advisories]
 version = 2
 yanked = "deny"
+unmaintained = "all"
 
 [licenses]
 version = 2

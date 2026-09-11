@@ -4,10 +4,14 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # A major bump that does not build would otherwise hold every patch in the same pull request hostage.
     groups:
       dependencies:
         patterns:
           - "*"
+        update-types:
+          - minor
+          - patch
   - package-ecosystem: github-actions
     directory: /
     schedule:
