@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: schema-audit
+  group: live-tests
   cancel-in-progress: false
 
 permissions:
