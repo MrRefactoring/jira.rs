@@ -49,7 +49,9 @@ async fn refuses_registration_before_validating_the_payload() {
         .await;
 
     match registered {
-        Err(error) => assert!(error.status().is_some_and(|status| status >= 400), "the refusal is typed: {error}"),
+        Err(error) => {
+            assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "the refusal is typed: {error}")
+        }
         // Not expected from a user token, but a webhook that exists fires at a URL, so it is removed before the
         // failure is reported rather than left behind by the panic.
         Ok(container) => {
@@ -85,7 +87,7 @@ async fn refuses_deletion_without_an_app_context() {
         .await
         .expect_err("a user token has no app whose webhooks it could delete");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 #[tokio::test]
@@ -98,7 +100,7 @@ async fn refuses_the_expiry_refresh_without_an_app_context() {
         .await
         .expect_err("a user token has no app whose webhooks could be kept alive");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 #[tokio::test]
@@ -111,7 +113,7 @@ async fn refuses_the_dynamic_module_reads_too() {
         .await
         .expect_err("a user token has no app whose modules could be listed");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// Failing typed rather than hanging is the part the library owns; what the status means is Atlassian's business.

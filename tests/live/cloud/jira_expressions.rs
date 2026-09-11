@@ -23,7 +23,7 @@ async fn evaluates_a_constant_expression_with_no_context_at_all() {
         // A float rather than an integer: Jira's expression engine answers `2.0`, so reading it as an integer
         // finds nothing at all.
         Ok(result) => assert_eq!(result.value.as_f64(), Some(2.0), "the server does the arithmetic, not the client"),
-        Err(error) => assert!(error.status().is_some_and(|status| status >= 400), "{error}"),
+        Err(error) => assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}"),
     }
 }
 
@@ -38,7 +38,7 @@ async fn reads_the_current_user_from_the_implicit_context() {
 
     match cloud().jira_expressions().evaluate_jsis_jira_expression(request).send().await {
         Ok(result) => assert_eq!(result.value.as_str(), Some(account_id.as_str()), "the expression sees the caller"),
-        Err(error) => assert!(error.status().is_some_and(|status| status >= 400), "{error}"),
+        Err(error) => assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}"),
     }
 }
 
@@ -60,7 +60,7 @@ async fn reads_an_issue_passed_explicitly_in_the_context() {
         Ok(result) => {
             assert_eq!(result.value.as_str(), Some(issue.key.as_str()), "the issue given in context is the one read");
         }
-        Err(error) => assert!(error.status().is_some_and(|status| status >= 400), "{error}"),
+        Err(error) => assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}"),
     }
 
     tracker.cleanup().await;
@@ -79,7 +79,7 @@ async fn rejects_an_expression_that_references_something_not_in_context() {
         .await
         .expect_err("an issue that was never put in context cannot be read");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 #[tokio::test]

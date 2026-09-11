@@ -60,7 +60,7 @@ pub fn touch<T>(outcome: jira::Result<T>) -> Option<T> {
     match outcome {
         Ok(value) => Some(value),
         Err(error) => {
-            assert!(error.status().is_some_and(|status| status >= 400), "a refusal is typed: {error}");
+            assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "a refusal is typed: {error}");
 
             None
         }

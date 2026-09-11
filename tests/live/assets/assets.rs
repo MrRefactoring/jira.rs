@@ -29,7 +29,10 @@ async fn workspace_id() -> Option<String> {
             None
         }
         Err(error) => {
-            assert!(error.status().is_some_and(|status| status >= 400), "the site refused rather than failed: {error}");
+            assert!(
+                error.status().is_some_and(|status| (400..500).contains(&status)),
+                "the site refused rather than failed: {error}"
+            );
 
             None
         }

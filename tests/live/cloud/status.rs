@@ -193,7 +193,7 @@ async fn reports_which_projects_and_workflows_use_a_status() {
             Some(status_id.as_str()),
             "the usage report names the status it was asked about",
         ),
-        Err(error) => assert!(error.status().is_some_and(|status| status >= 400), "{error}"),
+        Err(error) => assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}"),
     }
 
     match cloud().status().get_workflow_usages_for_status(status_id.as_str()).send().await {
@@ -202,7 +202,7 @@ async fn reports_which_projects_and_workflows_use_a_status() {
             Some(status_id.as_str()),
             "the workflow usage report names the status it was asked about",
         ),
-        Err(error) => assert!(error.status().is_some_and(|status| status >= 400), "{error}"),
+        Err(error) => assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}"),
     }
 }
 
@@ -215,7 +215,7 @@ async fn surfaces_an_unknown_status_id_as_an_empty_result_rather_than_an_error()
 
     match cloud().status().get_statuses_by_id(["99999999"]).send().await {
         Ok(statuses) => assert!(statuses.is_empty(), "an id nothing matches comes back as an empty list"),
-        Err(error) => assert!(error.status().is_some_and(|status| status >= 400), "{error}"),
+        Err(error) => assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}"),
     }
 }
 
@@ -230,5 +230,5 @@ async fn fails_typed_on_the_destructive_path() {
         .await
         .expect_err("a status that does not exist cannot be deleted");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }

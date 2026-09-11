@@ -166,7 +166,7 @@ async fn fails_typed_on_the_site_wide_writes() {
         .await
         .expect_err("a visibility that is neither public nor private cannot be set");
 
-    assert!(banner.status().is_some_and(|status| status >= 400), "{banner}");
+    assert!(banner.status().is_some_and(|status| (400..500).contains(&status)), "{banner}");
 
     let provider = cloud()
         .time_tracking()
@@ -179,5 +179,5 @@ async fn fails_typed_on_the_site_wide_writes() {
         .await
         .expect_err("a provider that is not installed cannot be selected");
 
-    assert!(provider.status().is_some_and(|status| status >= 400), "{provider}");
+    assert!(provider.status().is_some_and(|status| (400..500).contains(&status)), "{provider}");
 }

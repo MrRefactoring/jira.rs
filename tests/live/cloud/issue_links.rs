@@ -94,7 +94,7 @@ async fn rejects_a_link_to_an_issue_that_does_not_exist() {
         .await
         .expect_err("an issue that does not exist cannot be one end of a link");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 
     tracker.cleanup().await;
 }

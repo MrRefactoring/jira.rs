@@ -39,7 +39,7 @@ async fn moves_an_issue_to_the_backlog_and_reads_the_board_back() {
     // body that fails to parse.
     match agile().board().get_approximate_issue_count_for_backlog(board_id).send().await {
         Ok(count) => assert!(count.count.is_some(), "a count endpoint answers with a count"),
-        Err(error) => assert!(error.status().is_some_and(|status| status >= 400), "{error}"),
+        Err(error) => assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}"),
     }
 
     agile()
@@ -83,7 +83,7 @@ async fn rejects_an_issue_key_that_does_not_exist() {
         .await
         .expect_err("an issue that does not exist cannot leave a sprint");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 #[tokio::test]
@@ -99,7 +99,7 @@ async fn rejects_a_board_that_does_not_exist() {
         .await
         .expect_err("a board that does not exist has no backlog to move an issue into");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 
     tracker.cleanup().await;
 }

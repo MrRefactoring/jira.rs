@@ -45,5 +45,8 @@ async fn refuses_the_surface_outright_where_it_is_not_licensed() {
         .await
         .expect_err("an unlicensed instance does not answer this surface");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "the refusal is typed rather than a parse failure");
+    assert!(
+        error.status().is_some_and(|status| (400..500).contains(&status)),
+        "the refusal is typed rather than a parse failure"
+    );
 }

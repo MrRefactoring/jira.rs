@@ -132,7 +132,7 @@ async fn reports_the_estimation_for_the_board_or_refuses_typed() {
             estimation.field_id.is_some_and(|field| !field.is_empty()),
             "an estimation names the field it was read from",
         ),
-        Err(error) => assert!(error.status().is_some_and(|status| status >= 400), "{error}"),
+        Err(error) => assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}"),
     }
 
     tracker.cleanup().await;

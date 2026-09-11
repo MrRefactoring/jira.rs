@@ -145,5 +145,5 @@ async fn fails_typed_on_the_toggle_without_ever_aiming_it_at_a_real_feature() {
         .await
         .expect_err("a feature that does not exist cannot be toggled");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }

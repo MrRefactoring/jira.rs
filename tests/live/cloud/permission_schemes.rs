@@ -192,7 +192,7 @@ async fn fails_typed_on_the_destructive_path_without_ever_aiming_it_at_a_real_sc
         .await
         .expect_err("a scheme that does not exist cannot be deleted");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// The id of the permission scheme the test project is attached to, where the token may see it.

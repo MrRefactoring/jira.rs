@@ -147,7 +147,7 @@ async fn lists_the_options_of_a_context() {
     {
         Ok(page) => page,
         Err(error) => {
-            assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+            assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 
             return;
         }
@@ -219,7 +219,7 @@ async fn fails_typed_on_the_destructive_path_without_ever_aiming_it_at_a_real_co
         .await
         .expect_err("a context that does not exist cannot be deleted");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// A custom field on the site whose contexts the token may read.

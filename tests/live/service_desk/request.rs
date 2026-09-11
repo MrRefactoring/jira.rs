@@ -127,7 +127,7 @@ async fn never_opens_a_real_ticket_and_fails_typed_on_the_attempt() {
         .await
         .expect_err("a service desk that does not exist cannot take a request");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "the refused write is typed: {error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "the refused write is typed: {error}");
 }
 
 #[tokio::test]

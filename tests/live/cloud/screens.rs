@@ -181,7 +181,7 @@ async fn fails_typed_on_the_site_wide_write() {
         .await
         .expect_err("a field that does not exist cannot be added to the default screen");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// Whether the token may read the screen configuration at all.

@@ -212,7 +212,7 @@ async fn fails_typed_on_the_destructive_path() {
         .await
         .expect_err("an avatar that does not exist cannot be deleted");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "a refused delete is typed: {error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "a refused delete is typed: {error}");
 }
 
 /// The id of the project the suites work in, read rather than assumed.

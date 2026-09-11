@@ -170,7 +170,7 @@ async fn fails_typed_on_the_site_wide_write() {
         .await
         .expect_err("a property that does not exist cannot be set");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// The advanced settings, or `None` when the token cannot read them.

@@ -124,7 +124,10 @@ async fn names_the_projects_a_workflow_is_used_by() {
             "the usage report names the workflow it was asked about",
         ),
         Err(error) => {
-            assert!(error.status().is_some_and(|status| status >= 400), "a refused usage report is typed: {error}");
+            assert!(
+                error.status().is_some_and(|status| (400..500).contains(&status)),
+                "a refused usage report is typed: {error}"
+            );
         }
     }
 }
@@ -135,7 +138,10 @@ async fn reports_the_capabilities_available_when_authoring_a_workflow() {
     let capabilities = match cloud().workflows().workflow_capabilities().send().await {
         Ok(capabilities) => capabilities,
         Err(error) => {
-            assert!(error.status().is_some_and(|status| status >= 400), "a refused listing is typed: {error}");
+            assert!(
+                error.status().is_some_and(|status| (400..500).contains(&status)),
+                "a refused listing is typed: {error}"
+            );
 
             return;
         }
@@ -189,7 +195,7 @@ async fn fails_typed_on_the_destructive_path() {
         .await
         .expect_err("a workflow that does not exist cannot be deleted");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// Whether the token may read the workflow configuration at all.

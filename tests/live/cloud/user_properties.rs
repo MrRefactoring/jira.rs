@@ -143,5 +143,5 @@ async fn surfaces_a_property_on_an_unknown_account_as_a_typed_error() {
         .await
         .expect_err("an account that does not exist has no properties");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }

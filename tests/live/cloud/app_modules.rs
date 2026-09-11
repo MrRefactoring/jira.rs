@@ -42,7 +42,7 @@ async fn refuses_the_app_owned_custom_field_value_writes() {
         .await
         .expect_err("only the app that owns the field may write its values");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 #[tokio::test]
@@ -55,7 +55,7 @@ async fn refuses_the_app_custom_field_configuration_reads() {
         .await
         .expect_err("a field type no app declared has no configuration to read");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 #[tokio::test]
@@ -69,7 +69,7 @@ async fn refuses_the_jql_function_precomputation_reads() {
         .await
         .expect_err("precomputations belong to the app whose JQL function produced them");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// Both migration surfaces act on an app installation that is being moved, so neither has anything to say to a user
@@ -98,8 +98,8 @@ async fn refuses_the_migration_endpoints_which_act_on_an_app_installation() {
         .await
         .expect_err("an app that was never installed has no migration task");
 
-    assert!(migration.status().is_some_and(|status| status >= 400), "{migration}");
-    assert!(forge.status().is_some_and(|status| status >= 400), "{forge}");
+    assert!(migration.status().is_some_and(|status| (400..500).contains(&status)), "{migration}");
+    assert!(forge.status().is_some_and(|status| (400..500).contains(&status)), "{forge}");
 }
 
 /// The one read in the family that is not app-gated: what an app *would* be allowed to see is a property of the site,
@@ -112,7 +112,7 @@ async fn reports_the_site_data_policy_which_is_not_app_gated() {
             policy.any_content_blocked.is_some(),
             "a site that answers at all says whether any of its content is blocked",
         ),
-        Err(error) => assert!(error.status().is_some_and(|status| status >= 400), "{error}"),
+        Err(error) => assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}"),
     }
 }
 
@@ -122,7 +122,10 @@ async fn reports_per_project_data_policies_alongside_the_site_one() {
     let policies = match cloud().app_data_policies().get_policies().send().await {
         Ok(policies) => policies,
         Err(error) => {
-            assert!(error.status().is_some_and(|status| status >= 400), "a refused policy listing is typed: {error}");
+            assert!(
+                error.status().is_some_and(|status| (400..500).contains(&status)),
+                "a refused policy listing is typed: {error}"
+            );
 
             return;
         }

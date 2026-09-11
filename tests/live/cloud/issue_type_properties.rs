@@ -121,7 +121,7 @@ async fn surfaces_a_property_on_an_unknown_issue_type_as_a_typed_error() {
         .await
         .expect_err("an issue type that does not exist has no properties");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 fn object_of(value: &serde_json::Value) -> std::collections::HashMap<String, serde_json::Value> {

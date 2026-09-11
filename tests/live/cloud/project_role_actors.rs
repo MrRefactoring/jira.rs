@@ -87,7 +87,7 @@ async fn reports_the_default_actors_a_role_gives_new_projects() {
                 assert!(actor.id.is_some(), "every default actor carries an id: {actor:?}");
             }
         }
-        Err(error) => assert!(error.status().is_some_and(|status| status >= 400), "{error}"),
+        Err(error) => assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}"),
     }
 }
 
@@ -115,7 +115,7 @@ async fn rejects_an_actor_addition_naming_nobody() {
         .await
         .expect_err("an actor addition naming nobody is refused");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 
     // A Free plan refuses every role actor write, so the refusal here would say nothing about the empty payload.
     if is_not_entitled(&error) {
@@ -184,7 +184,7 @@ async fn silently_succeeds_when_removing_an_actor_that_is_not_in_the_role() {
             );
         }
         Err(error) => {
-            assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+            assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
             assert!(is_not_entitled(&error), "only a plan refusal explains a failure here: {error}");
         }
     }

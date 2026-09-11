@@ -117,7 +117,7 @@ async fn fails_typed_on_the_destructive_path() {
         .await
         .expect_err("a screen scheme that does not exist cannot be deleted");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// Whether the token may read the screen scheme configuration at all.

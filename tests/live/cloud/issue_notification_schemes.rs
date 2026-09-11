@@ -146,7 +146,7 @@ async fn fails_typed_on_the_write_without_ever_aiming_it_at_a_real_scheme() {
         .await
         .expect_err("a scheme that does not exist cannot take notifications");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// The first notification scheme the token can see, where it can see any.

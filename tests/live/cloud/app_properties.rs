@@ -36,7 +36,7 @@ async fn refuses_a_single_app_property_the_same_way() {
         .await
         .expect_err("one property is no more reachable than the listing");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// The write is aimed at an app key that does not exist, so no app's state is ever touched — the refusal is the
@@ -55,7 +55,7 @@ async fn refuses_the_write_so_no_app_state_is_ever_touched() {
         .await
         .expect_err("a user token cannot write an app's property");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// The Forge variants are addressed by the calling app rather than by a key in the path, so they carry no argument to
@@ -70,7 +70,7 @@ async fn refuses_the_forge_property_variants_too() {
         .await
         .expect_err("only a Forge app can read its own property keys");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 #[tokio::test]
@@ -84,7 +84,7 @@ async fn refuses_the_ui_modification_reads_which_are_app_scoped_as_well() {
         .await
         .expect_err("UI modifications belong to the app that declared them");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// A redaction job id that cannot exist, so the answer separates "no such job" from "no permission to ask".
@@ -98,7 +98,7 @@ async fn reports_redaction_job_status_as_unreachable_rather_than_empty() {
         .await
         .expect_err("a redaction job that was never submitted has no status");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// Redaction is irreversible, so the request carries nothing to redact and is proven only through its error channel.
@@ -112,5 +112,5 @@ async fn never_submits_a_redaction_and_fails_typed_on_the_attempt() {
         .await
         .expect_err("an empty redaction is still a redaction a user token may not submit");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }

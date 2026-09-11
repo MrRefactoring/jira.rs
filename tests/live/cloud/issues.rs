@@ -124,5 +124,5 @@ async fn rejects_an_unknown_project_with_a_typed_error_rather_than_a_hang() {
         .await
         .expect_err("a project that does not exist cannot take an issue");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }

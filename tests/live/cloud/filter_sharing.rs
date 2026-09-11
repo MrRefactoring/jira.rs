@@ -170,7 +170,9 @@ async fn reports_the_project_email_address_or_refuses_typed() {
             email.email_address.as_deref().is_some_and(|address| !address.is_empty()),
             "a project that answers names the address it sends from: {email:?}",
         ),
-        Err(error) => assert!(error.status().is_some_and(|status| status >= 400), "a refusal is typed: {error}"),
+        Err(error) => {
+            assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "a refusal is typed: {error}")
+        }
     }
 }
 

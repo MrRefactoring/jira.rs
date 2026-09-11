@@ -80,5 +80,5 @@ async fn rejects_a_key_outside_the_enum_with_a_typed_error() {
         .await
         .expect_err("a project type that does not exist cannot be read");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }

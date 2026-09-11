@@ -50,7 +50,10 @@ async fn names_the_scheme_the_test_project_is_associated_with() {
     {
         Ok(associations) => associations,
         Err(error) => {
-            assert!(error.status().is_some_and(|status| status >= 400), "a refused association read is typed: {error}");
+            assert!(
+                error.status().is_some_and(|status| (400..500).contains(&status)),
+                "a refused association read is typed: {error}"
+            );
 
             return;
         }
@@ -76,7 +79,10 @@ async fn maps_issue_types_to_workflows_within_a_scheme() {
     let detail = match cloud().workflow_schemes().get_workflow_scheme(scheme_id).send().await {
         Ok(detail) => detail,
         Err(error) => {
-            assert!(error.status().is_some_and(|status| status >= 400), "a refused scheme read is typed: {error}");
+            assert!(
+                error.status().is_some_and(|status| (400..500).contains(&status)),
+                "a refused scheme read is typed: {error}"
+            );
 
             return;
         }
@@ -112,7 +118,10 @@ async fn reads_schemes_through_the_newer_endpoint_without_a_schema_mismatch() {
         }
         Err(error) => {
             assert!(!error.is_schema_mismatch(), "the response model matches what the endpoint sends: {error}");
-            assert!(error.status().is_some_and(|status| status >= 400), "a refused read is typed: {error}");
+            assert!(
+                error.status().is_some_and(|status| (400..500).contains(&status)),
+                "a refused read is typed: {error}"
+            );
         }
     }
 }
@@ -141,7 +150,7 @@ async fn fails_typed_on_the_destructive_path() {
         .await
         .expect_err("a scheme that does not exist cannot be deleted");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// The numeric id of the project every suite works in, which is what the association endpoints take.

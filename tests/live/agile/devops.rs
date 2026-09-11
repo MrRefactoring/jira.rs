@@ -83,7 +83,7 @@ async fn refuses_the_submits_so_nothing_is_pushed_into_pipeline_data() {
         .expect_err("a user token cannot submit feature flags");
 
     for error in [&builds, &deployments, &flags] {
-        assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+        assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
     }
 }
 
@@ -97,7 +97,7 @@ async fn refuses_the_delete_by_property_variants() {
         .await
         .expect_err("a user token cannot bulk delete build data");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 #[tokio::test]
@@ -110,7 +110,7 @@ async fn refuses_the_development_information_reads() {
         .await
         .expect_err("a user token is not the app that owns repository data");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 #[tokio::test]

@@ -54,7 +54,7 @@ async fn fails_typed_on_publishing() {
         .await
         .expect_err("a draft that does not exist cannot be published");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// The rules belong to Connect and Forge apps, so a site token is refused — and refused as a client error, not as a
@@ -106,7 +106,7 @@ async fn fails_typed_on_reassigning_a_permission_scheme() {
         .await
         .expect_err("a permission scheme that does not exist cannot be assigned");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// The panel write is asynchronous, and an empty project list makes it a no-op — what is asserted is that Jira hands

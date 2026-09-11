@@ -145,7 +145,7 @@ async fn fails_typed_on_the_destructive_path() {
         .await
         .expect_err("an issue type screen scheme that does not exist cannot be deleted");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 /// The numeric id of the project every Cloud suite works in, which is what the association lookups take.

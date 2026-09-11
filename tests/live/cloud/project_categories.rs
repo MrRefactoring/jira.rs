@@ -89,7 +89,7 @@ async fn walks_a_project_category_through_its_lifecycle() {
         .await
         .expect_err("two categories cannot share a name");
 
-    assert!(collision.status().is_some_and(|status| status >= 400), "{collision}");
+    assert!(collision.status().is_some_and(|status| (400..500).contains(&status)), "{collision}");
 
     let throwaway = cloud()
         .project_categories()

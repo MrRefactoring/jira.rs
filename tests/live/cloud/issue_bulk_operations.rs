@@ -32,7 +32,10 @@ async fn reports_the_fields_and_transitions_a_pair_of_issues_has_in_common() {
             );
         }
         Err(error) => {
-            assert!(error.status().is_some_and(|status| status >= 400), "a refused bulk read is typed: {error}")
+            assert!(
+                error.status().is_some_and(|status| (400..500).contains(&status)),
+                "a refused bulk read is typed: {error}"
+            )
         }
     }
 
@@ -46,7 +49,10 @@ async fn reports_the_fields_and_transitions_a_pair_of_issues_has_in_common() {
             );
         }
         Err(error) => {
-            assert!(error.status().is_some_and(|status| status >= 400), "a refused bulk read is typed: {error}")
+            assert!(
+                error.status().is_some_and(|status| (400..500).contains(&status)),
+                "a refused bulk read is typed: {error}"
+            )
         }
     }
 
@@ -74,7 +80,10 @@ async fn answers_a_bulk_watch_with_a_task_and_applies_it_afterwards() {
         // Bulk change is a global permission a site can withhold; the refusal is still typed, which is the part the
         // library owns.
         Err(error) => {
-            assert!(error.status().is_some_and(|status| status >= 400), "a refused bulk submit is typed: {error}");
+            assert!(
+                error.status().is_some_and(|status| (400..500).contains(&status)),
+                "a refused bulk submit is typed: {error}"
+            );
 
             tracker.cleanup().await;
 
@@ -132,7 +141,7 @@ async fn surfaces_an_unknown_task_as_a_typed_error() {
     let error =
         cloud().tasks().get_task("99999999").send().await.expect_err("a task that does not exist cannot be read");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
 #[tokio::test]
@@ -148,5 +157,5 @@ async fn rejects_a_bulk_request_naming_no_issues() {
         .await
         .expect_err("a bulk delete that names no issues is not a request Jira accepts");
 
-    assert!(error.status().is_some_and(|status| status >= 400), "{error}");
+    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }

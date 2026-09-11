@@ -113,7 +113,7 @@ async fn registers_a_webhook_replaces_it_and_unregisters_it() {
         .await
         .expect_err("an unregistered webhook cannot be read back");
 
-    assert!(gone.status().is_some_and(|status| status >= 400), "{gone}");
+    assert!(gone.status().is_some_and(|status| (400..500).contains(&status)), "{gone}");
 
     tracker.cleanup().await;
 }
