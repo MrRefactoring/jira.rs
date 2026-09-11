@@ -67,8 +67,10 @@ struct Inner {
 /// Holds the OAuth 2.0 token state for one client: refreshes before expiry, resolves the cloud id once, and reports
 /// rotated refresh tokens onwards.
 ///
-/// Both the refresh and the cloud-id lookup are single-flighted by their mutexes, so N concurrent requests hitting an
-/// expired token produce one token call, not N.
+/// The refresh is single-flighted by its mutex, so N concurrent requests hitting an expired token produce one token
+/// call, not N — which is what stops N of them rotating the refresh token past each other. The cloud-id lookup holds
+/// nothing while it runs, so two callers racing the very first one can both ask; the answer is the same either way,
+/// and the first to finish is the one that is kept.
 #[derive(Clone)]
 pub(crate) struct OAuth2Manager {
     inner: Arc<Inner>,
@@ -142,9 +144,7 @@ impl OAuth2Manager {
     pub(crate) async fn authorization_header(&self) -> Result<(String, u64)> {
         let mut tokens = self.inner.tokens.lock().await;
 
-        if self.needs_refresh(&tokens).await {
-            self.refresh_locked(&mut tokens).await?;
-        }
+        let event = if self.needs_refresh(&tokens).await { self.refresh_locked(&mut tokens).await? } else { None };
 
         let token = tokens.access_token.clone().ok_or_else(|| {
             Error::oauth(
@@ -153,8 +153,12 @@ the full refresh credentials.",
                 OAuthErrorDetails::default(),
             )
         })?;
+        let generation = tokens.generation;
 
-        Ok((format!("Bearer {token}"), tokens.generation))
+        drop(tokens);
+        self.report_refresh(event).await;
+
+        Ok((format!("Bearer {token}"), generation))
     }
 
     /// Refresh unless someone already did since `seen_generation` was handed out. Used by the 401 retry path.
@@ -165,7 +169,12 @@ the full refresh credentials.",
             return Ok(());
         }
 
-        self.refresh_locked(&mut tokens).await
+        let event = self.refresh_locked(&mut tokens).await?;
+
+        drop(tokens);
+        self.report_refresh(event).await;
+
+        Ok(())
     }
 
     /// The base URL every request goes to: the gateway for a resolved cloud id, or the instance itself.
@@ -208,7 +217,7 @@ the full refresh credentials.",
             && tokens.refresh_token.is_some()
     }
 
-    async fn refresh_locked(&self, tokens: &mut TokenState) -> Result<()> {
+    async fn refresh_locked(&self, tokens: &mut TokenState) -> Result<Option<TokenRefreshEvent>> {
         if !self.has_refresh_credentials(tokens) {
             return Err(Error::oauth(
                 "Cannot refresh the OAuth 2.0 access token: the refresh token, client id and client secret are \
@@ -256,31 +265,28 @@ required, and a Data Center instance validates the redirect URI as well.",
         tokens.expires_at = Some(expires_at);
         tokens.generation += 1;
 
-        if let Some(hook) = &self.inner.on_token_refresh {
-            hook.on_token_refresh(TokenRefreshEvent {
-                access_token: response.access_token,
-                refresh_token: tokens.refresh_token.clone(),
-                expires_at,
-            })
-            .await;
-        }
+        Ok(self.inner.on_token_refresh.as_ref().map(|_| TokenRefreshEvent {
+            access_token: response.access_token,
+            refresh_token: tokens.refresh_token.clone(),
+            expires_at,
+        }))
+    }
 
-        Ok(())
+    async fn report_refresh(&self, event: Option<TokenRefreshEvent>) {
+        if let (Some(hook), Some(event)) = (&self.inner.on_token_refresh, event) {
+            hook.on_token_refresh(event).await;
+        }
     }
 
     async fn resolve_cloud_id(&self) -> Result<String> {
-        let mut cloud_id = self.inner.cloud_id.lock().await;
-
-        if let Some(resolved) = cloud_id.as_ref() {
-            return Ok(resolved.clone());
+        if let Some(resolved) = self.inner.cloud_id.lock().await.clone() {
+            return Ok(resolved);
         }
 
         let resources = self.list_resources().await?;
         let resolved = self.select_resource(resources)?.id;
 
-        *cloud_id = Some(resolved.clone());
-
-        Ok(resolved)
+        Ok(self.inner.cloud_id.lock().await.get_or_insert(resolved).clone())
     }
 
     /// The sites this token can reach, refreshing once if the token turns out to be stale.
@@ -360,6 +366,7 @@ fn normalize_site_url(url: &str) -> String {
 #[cfg(test)]
 mod tests {
     use std::sync::Mutex as StdMutex;
+    use std::sync::OnceLock;
     use std::sync::atomic::{AtomicUsize, Ordering};
 
     use serde_json::json;
@@ -557,6 +564,52 @@ mod tests {
         let base = manager(&refreshable(Some("fresh"), None), &server).base_url().await.unwrap();
 
         assert_eq!(base, "https://api.atlassian.com/ex/jira/cloud-1");
+    }
+
+    #[tokio::test]
+    async fn the_refresh_hook_can_use_the_client_that_called_it() {
+        let server = MockServer::start().await;
+        token_endpoint(&server, json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" })).await;
+
+        Mock::given(method("GET"))
+            .and(path("/oauth/token/accessible-resources"))
+            .respond_with(
+                ResponseTemplate::new(200)
+                    .set_body_json(json!([{ "id": "cloud-9", "url": "https://acme.atlassian.net" }])),
+            )
+            .mount(&server)
+            .await;
+
+        let shared: Arc<OnceLock<OAuth2Manager>> = Arc::new(OnceLock::new());
+        let reentered = Arc::new(AtomicUsize::new(0));
+
+        let hook_manager = Arc::clone(&shared);
+        let hook_reentered = Arc::clone(&reentered);
+        let hook = move |_: TokenRefreshEvent| {
+            let manager = hook_manager.get().cloned();
+            let reentered = Arc::clone(&hook_reentered);
+
+            async move {
+                let manager = manager.expect("the manager is set before the first refresh");
+
+                manager.authorization_header().await.expect("the token the refresh just minted");
+                manager.base_url().await.expect("the gateway the same client resolves");
+
+                reentered.fetch_add(1, Ordering::SeqCst);
+            }
+        };
+
+        let config = OAuth2Config { cloud_id: None, on_token_refresh: Some(Arc::new(hook)), ..refreshable(None, None) };
+        let manager = manager(&config, &server);
+
+        shared.set(manager.clone()).ok().expect("nothing else sets this");
+
+        let base_url = tokio::time::timeout(Duration::from_secs(5), manager.base_url())
+            .await
+            .expect("a hook holding a lock the client needs would never return");
+
+        assert_eq!(base_url.unwrap(), "https://api.atlassian.com/ex/jira/cloud-9");
+        assert_eq!(reentered.load(Ordering::SeqCst), 1);
     }
 
     #[tokio::test]
