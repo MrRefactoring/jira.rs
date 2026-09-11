@@ -260,6 +260,13 @@ pub fn parse_callback_url(url: &str, expected_state: &str) -> Result<CallbackPar
         ));
     }
 
+    if expected_state.is_empty() {
+        return Err(Error::config(
+            "`expected_state` is empty, so every callback would match it. Generate a state for the authorization URL \
+and hand the same value back here.",
+        ));
+    }
+
     let state = state.filter(|state| timing_safe_equals(state, expected_state)).ok_or_else(|| {
         Error::oauth(
             "The `state` in the callback does not match the one issued for this authorization request. The callback \

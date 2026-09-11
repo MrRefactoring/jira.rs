@@ -44,7 +44,7 @@ enum Deployment {
     Server { host: String, redirect_uri: Option<String> },
 }
 
-#[derive(Debug, Default)]
+#[derive(Default)]
 struct TokenState {
     access_token: Option<String>,
     refresh_token: Option<String>,
@@ -144,7 +144,7 @@ impl OAuth2Manager {
     pub(crate) async fn authorization_header(&self) -> Result<(String, u64)> {
         let mut tokens = self.inner.tokens.lock().await;
 
-        let event = if self.needs_refresh(&tokens).await { self.refresh_locked(&mut tokens).await? } else { None };
+        let event = if self.needs_refresh(&tokens) { self.refresh_locked(&mut tokens).await? } else { None };
 
         let token = tokens.access_token.clone().ok_or_else(|| {
             Error::oauth(
@@ -189,7 +189,7 @@ the full refresh credentials.",
         }
     }
 
-    async fn needs_refresh(&self, tokens: &TokenState) -> bool {
+    fn needs_refresh(&self, tokens: &TokenState) -> bool {
         if !self.has_refresh_credentials(tokens) {
             return false;
         }
