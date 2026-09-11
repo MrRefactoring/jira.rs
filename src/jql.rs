@@ -40,7 +40,7 @@
 //!
 //! What is not here is a model of JQL itself. `WAS`, `CHANGED`, `DURING` and the rest of the history operators are
 //! reachable through [`raw`], which puts a fragment in unescaped and is the one place a caller is responsible for
-//! what it contains.
+//! what it contains. Everything else — field names, function names, values — is quoted where it is not a plain word.
 
 use std::fmt::{self, Display, Formatter};
 
@@ -86,15 +86,27 @@ pub fn field(name: impl Into<String>) -> Field {
 }
 
 /// A JQL function with no arguments, such as `currentUser()`.
+///
+/// A name that is not a plain word is quoted, which Jira rejects as a syntax error rather than running as a clause.
 pub fn func(name: impl Into<String>) -> Value {
-    Value(format!("{}()", name.into()))
+    Value(format!("{}()", function_name(&name.into())))
 }
 
 /// A JQL function with arguments, each quoted the way a value is: `membersOf("jira-administrators")`.
+///
+/// A name that is not a plain word is quoted, which Jira rejects as a syntax error rather than running as a clause.
 pub fn func_with(name: impl Into<String>, arguments: impl IntoIterator<Item = impl Into<Value>>) -> Value {
     let arguments = arguments.into_iter().map(|argument| argument.into().0).collect::<Vec<_>>().join(", ");
 
-    Value(format!("{}({arguments})", name.into()))
+    Value(format!("{}({arguments})", function_name(&name.into())))
+}
+
+fn function_name(name: &str) -> String {
+    let plain = !name.is_empty()
+        && name.starts_with(|character: char| character.is_ascii_alphabetic())
+        && name.chars().all(|character| character.is_ascii_alphanumeric() || character == '_');
+
+    if plain { name.to_owned() } else { quote(name) }
 }
 
 /// A fragment put into the query exactly as written, escaping nothing.
@@ -156,12 +168,18 @@ impl Field {
     }
 
     /// `field IN (…)`.
+    ///
+    /// An empty list renders `field IN ()`, which JQL has no meaning for and Jira rejects with a 400 on the whole
+    /// search. A filter that can narrow to nothing has to decide what that means before it gets here.
     #[must_use]
     pub fn is_in(self, values: impl IntoIterator<Item = impl Into<Value>>) -> Clause {
         self.membership("IN", values)
     }
 
     /// `field NOT IN (…)`.
+    ///
+    /// An empty list renders `field NOT IN ()`, which JQL has no meaning for and Jira rejects with a 400 on the whole
+    /// search. A filter that can narrow to nothing has to decide what that means before it gets here.
     #[must_use]
     pub fn not_in(self, values: impl IntoIterator<Item = impl Into<Value>>) -> Clause {
         self.membership("NOT IN", values)
@@ -184,7 +202,11 @@ impl Field {
     }
 
     fn membership(self, operator: &str, values: impl IntoIterator<Item = impl Into<Value>>) -> Clause {
-        let values = values.into_iter().map(|value| value.into().0).collect::<Vec<_>>().join(", ");
+        let values = values.into_iter().map(|value| value.into().0).collect::<Vec<_>>();
+
+        debug_assert!(!values.is_empty(), "`{operator} ()` is not valid JQL: narrow the list before building a clause");
+
+        let values = values.join(", ");
 
         Clause(Node::Comparison(format!("{} {operator} ({values})", self.rendered())))
     }
