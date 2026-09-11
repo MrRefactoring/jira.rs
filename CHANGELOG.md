@@ -5,7 +5,7 @@ All notable changes to this crate are documented here. The format follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html) — before `1.0.0`, a breaking change raises the minor
 version.
 
-## [Unreleased]
+## [0.1.0]
 
 ### Added
 
@@ -84,3 +84,5 @@ version.
 - A `date-time` field reads a number as well as a string. Jira declares every timestamp a string and the bulk queue
   answers epoch milliseconds.
 - A generated union ends in a catch-all, so a shape the specification does not list no longer fails the response.
+
+[0.1.0]: https://github.com/MrRefactoring/jira.rs/releases/tag/v0.1.0
