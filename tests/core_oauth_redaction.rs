@@ -68,13 +68,14 @@ fn server_refresh_token_params_print_neither_the_secret_nor_the_refresh_token() 
 
 #[test]
 fn a_token_response_prints_neither_token() {
-    let response = TokenResponse {
-        access_token: SECRET.to_owned(),
-        refresh_token: Some(SECRET.to_owned()),
-        expires_in: 3600,
-        scope: "read:jira-work".to_owned(),
-        token_type: "bearer".to_owned(),
-    };
+    let response: TokenResponse = serde_json::from_value(serde_json::json!({
+        "access_token": SECRET,
+        "refresh_token": SECRET,
+        "expires_in": 3600,
+        "scope": "read:jira-work",
+        "token_type": "bearer",
+    }))
+    .expect("the token response parses");
 
     let rendered = format!("{response:?}");
 
@@ -86,13 +87,13 @@ fn a_token_response_prints_neither_token() {
 
 #[test]
 fn a_token_response_without_a_refresh_token_says_so_rather_than_redacting_nothing() {
-    let response = TokenResponse {
-        access_token: SECRET.to_owned(),
-        refresh_token: None,
-        expires_in: 3600,
-        scope: String::new(),
-        token_type: "bearer".to_owned(),
-    };
+    let response: TokenResponse = serde_json::from_value(serde_json::json!({
+        "access_token": SECRET,
+        "expires_in": 3600,
+        "scope": "",
+        "token_type": "bearer",
+    }))
+    .expect("the token response parses");
 
     let rendered = format!("{response:?}");
 

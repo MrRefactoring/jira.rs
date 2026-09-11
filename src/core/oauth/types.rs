@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 
 /// The token endpoint's answer, in this crate's vocabulary.
 #[derive(Clone, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct TokenResponse {
     #[serde(rename = "access_token")]
     /// The bearer token to send from now on.
@@ -49,6 +50,7 @@ impl TokenResponse {
 
 /// An entry from `GET /oauth/token/accessible-resources`.
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct AccessibleResource {
     /// The cloud id — this is what `cloud_id` expects.
     pub id: String,

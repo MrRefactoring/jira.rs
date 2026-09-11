@@ -16,6 +16,7 @@ pub(crate) const TOKEN_PATH: &str = "/rest/oauth2/latest/token";
 /// Each implies the ones above it: `Write` includes `Read`, `Admin` includes both, and `SystemAdmin` includes all
 /// three.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum ServerOAuth2Scope {
     /// Read the instance's data.
     Read,

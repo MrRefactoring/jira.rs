@@ -31,12 +31,38 @@ macro_rules! open_enum {
         }
     ) => {
         $(#[$meta])*
-        #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+        #[derive(Debug, Clone)]
         #[non_exhaustive]
         $visibility enum $name {
             $( $(#[$variant_meta])* $variant, )*
             /// A value the specification does not list. Atlassian grew the set; this is what it grew by.
             Other(::std::string::String),
+        }
+
+        impl ::std::cmp::PartialEq for $name {
+            fn eq(&self, other: &Self) -> bool {
+                self.as_str() == other.as_str()
+            }
+        }
+
+        impl ::std::cmp::Eq for $name {}
+
+        impl ::std::cmp::PartialOrd for $name {
+            fn partial_cmp(&self, other: &Self) -> ::std::option::Option<::std::cmp::Ordering> {
+                ::std::option::Option::Some(::std::cmp::Ord::cmp(self, other))
+            }
+        }
+
+        impl ::std::cmp::Ord for $name {
+            fn cmp(&self, other: &Self) -> ::std::cmp::Ordering {
+                self.as_str().cmp(other.as_str())
+            }
+        }
+
+        impl ::std::hash::Hash for $name {
+            fn hash<H: ::std::hash::Hasher>(&self, state: &mut H) {
+                self.as_str().hash(state);
+            }
         }
 
         impl $name {
