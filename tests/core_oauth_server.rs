@@ -296,6 +296,10 @@ fn data_center_oauth_needs_the_instance_it_is_talking_to() {
         .unwrap_err();
 
     assert!(error.is_config());
+    assert!(
+        error.to_string().contains("needs the instance it is talking to"),
+        "the message names the missing host rather than sending the caller to the Cloud gateway: {error}"
+    );
 }
 
 #[test]

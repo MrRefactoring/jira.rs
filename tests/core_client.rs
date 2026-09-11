@@ -79,7 +79,6 @@ async fn encodes_a_credential_that_is_not_ascii() {
 
     let expected = format!("Basic {}", {
         use std::fmt::Write as _;
-        let _ = String::new();
         // Computed the same way any other base64 implementation would, from the UTF-8 bytes.
         let mut encoded = String::new();
         let input = "ada:пароль".as_bytes();

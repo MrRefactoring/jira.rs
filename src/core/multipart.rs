@@ -75,9 +75,14 @@ impl MultipartBody {
         let mut form = reqwest::multipart::Form::new();
 
         for attachment in &self.attachments {
-            let part = reqwest::multipart::Part::stream(attachment.content.clone())
-                .file_name(attachment.filename.clone())
-                .mime_str(&attachment.resolved_content_type())
+            let typed = |mime: &str| {
+                reqwest::multipart::Part::stream(attachment.content.clone())
+                    .file_name(attachment.filename.clone())
+                    .mime_str(mime)
+            };
+
+            let part = typed(&attachment.resolved_content_type())
+                .or_else(|_| typed(mime_type_for(&attachment.filename)))
                 .unwrap_or_else(|_| {
                     reqwest::multipart::Part::stream(attachment.content.clone()).file_name(attachment.filename.clone())
                 });

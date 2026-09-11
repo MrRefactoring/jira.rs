@@ -241,6 +241,17 @@ impl Client {
         let url = build_url_with_search_params(&url, &config.query);
 
         let mut credential = self.current_credential().await?;
+
+        reject_unsendable_headers(self.inner.headers.iter().chain(config.headers.iter()))?;
+
+        if let Some(header) = credential.header.as_deref()
+            && HeaderValue::from_str(header).is_err()
+        {
+            return Err(Error::config(
+                "the credential holds a character HTTP cannot carry in a header, such as a trailing newline",
+            ));
+        }
+
         let mut attempt = 0;
         let mut delay = self.inner.retry.initial_delay;
         let mut reauthenticated = false;
@@ -364,13 +375,11 @@ impl Client {
 
         request = match &config.body {
             None => request,
-            Some(Body::Json(value)) => {
-                if config.content_type.as_deref() == Some(FORM_URLENCODED) {
-                    request.form(&json_to_form(value))
-                } else {
-                    request.body(value.to_string())
-                }
-            }
+            Some(Body::Json(value)) => match (config.content_type.as_deref(), value) {
+                (Some(FORM_URLENCODED), _) => request.form(&json_to_form(value)),
+                (Some(declared), Value::String(text)) if !declared.contains("json") => request.body(text.clone()),
+                _ => request.body(value.to_string()),
+            },
             Some(Body::Text(text)) => request.body(text.clone()),
             Some(Body::Form(entries)) => request.form(entries),
             Some(Body::Bytes(bytes)) => request.body(bytes.clone()),
@@ -441,6 +450,22 @@ impl RawResponse {
     }
 }
 
+fn reject_unsendable_headers<'a>(headers: impl Iterator<Item = &'a (String, String)>) -> Result<()> {
+    for (name, value) in headers {
+        if HeaderName::from_bytes(name.as_bytes()).is_err() {
+            return Err(Error::config(format!("`{name}` is not a name HTTP can carry in a header")));
+        }
+
+        if HeaderValue::from_str(value).is_err() {
+            return Err(Error::config(format!(
+                "the value given for the `{name}` header holds a character HTTP cannot carry, such as a newline"
+            )));
+        }
+    }
+
+    Ok(())
+}
+
 /// Whether the credentials were refused, whatever status the response carries.
 ///
 /// An endpoint that permits anonymous access answers `200` with an anonymous-scope body when the API token is expired
@@ -505,12 +530,14 @@ fn deserialize_at<T: DeserializeOwned>(endpoint: &str, value: &Value) -> Result<
             let path = if path == "." { String::new() } else { path };
             let received = describe_value_at_path(value, &path);
 
+            let expected = error.inner().to_string();
+
             Err(Error::SchemaMismatch {
                 report: Box::new(SchemaMismatchReport {
                     endpoint: endpoint.to_owned(),
-                    issues: vec![SchemaMismatchIssue { path, expected: error.inner().to_string(), received }],
+                    issues: vec![SchemaMismatchIssue { path, expected, received }],
                 }),
-                source: None,
+                source: Some(error.into_inner()),
             })
         }
     }
@@ -648,6 +675,9 @@ impl ClientBuilder {
                 Some(host.trim_end_matches('/').to_owned())
             }
             None if is_cloud_oauth => None,
+            None if matches!(self.auth, Some(Auth::OAuth2Server(_))) => {
+                return Err(Error::config("Data Center OAuth 2.0 needs the instance it is talking to: pass `host`."));
+            }
             None => {
                 return Err(Error::config(
                     "`host` is required unless you authenticate with OAuth 2.0, which routes through the Atlassian \
@@ -655,10 +685,6 @@ gateway.",
                 ));
             }
         };
-
-        if matches!(self.auth, Some(Auth::OAuth2Server(_))) && host.is_none() {
-            return Err(Error::config("Data Center OAuth 2.0 needs the instance it is talking to: pass `host`."));
-        }
 
         let http = match self.http {
             Some(http) => http,
@@ -728,10 +754,7 @@ impl RequestBuilder {
 
     /// Anything serialisable, as a JSON body.
     pub fn json<T: serde::Serialize>(mut self, value: &T) -> Result<Self> {
-        self.config.body =
-            Some(Body::json(value).map_err(|error| {
-                Error::config(format!("The request body could not be serialized as JSON: {error}"))
-            })?);
+        self.config.body = Some(Body::json(value)?);
 
         Ok(self)
     }
