@@ -1,9 +1,10 @@
+use std::fmt;
 use std::time::{Duration, SystemTime};
 
 use serde::{Deserialize, Serialize};
 
 /// The token endpoint's answer, in this crate's vocabulary.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct TokenResponse {
     #[serde(rename = "access_token")]
     /// The bearer token to send from now on.
@@ -22,6 +23,19 @@ pub struct TokenResponse {
     /// Always `bearer`.
     #[serde(rename = "token_type", default)]
     pub token_type: String,
+}
+
+impl fmt::Debug for TokenResponse {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("TokenResponse")
+            .field("access_token", &"<redacted>")
+            .field("refresh_token", &self.refresh_token.as_deref().map(|_| "<redacted>"))
+            .field("expires_in", &self.expires_in)
+            .field("scope", &self.scope)
+            .field("token_type", &self.token_type)
+            .finish()
+    }
 }
 
 const LONGEST_LIFETIME: Duration = Duration::from_secs(365 * 24 * 60 * 60);
@@ -53,7 +67,7 @@ pub struct AccessibleResource {
 }
 
 /// Handed to the refresh hook after every successful refresh.
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct TokenRefreshEvent {
     /// The new access token.
     pub access_token: String,
@@ -63,13 +77,30 @@ pub struct TokenRefreshEvent {
     pub expires_at: SystemTime,
 }
 
+impl fmt::Debug for TokenRefreshEvent {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("TokenRefreshEvent")
+            .field("access_token", &"<redacted>")
+            .field("refresh_token", &self.refresh_token.as_deref().map(|_| "<redacted>"))
+            .field("expires_at", &self.expires_at)
+            .finish()
+    }
+}
+
 /// What the redirect callback carried, once it was checked.
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct CallbackParams {
     /// The authorization code, ready for [`exchange_authorization_code`](super::exchange_authorization_code).
     pub code: String,
     /// The `state` that came back, already verified against the expected one.
     pub state: String,
+}
+
+impl fmt::Debug for CallbackParams {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter.debug_struct("CallbackParams").field("code", &"<redacted>").field("state", &self.state).finish()
+    }
 }
 
 #[cfg(test)]

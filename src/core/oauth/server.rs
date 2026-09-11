@@ -1,3 +1,5 @@
+use std::fmt;
+
 use crate::core::error::Result;
 use crate::core::oauth::helpers::{post_form, post_json};
 use crate::core::oauth::types::TokenResponse;
@@ -60,7 +62,7 @@ pub struct ServerAuthorizationUrlParams {
 }
 
 /// The authorization code to trade in, against a Data Center instance.
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ServerExchangeCodeParams {
     /// The instance's site URL, e.g. `https://jira.example.com`.
     pub host: String,
@@ -77,7 +79,7 @@ pub struct ServerExchangeCodeParams {
 }
 
 /// The refresh credential set, against a Data Center instance.
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ServerRefreshTokenParams {
     /// The instance's site URL, e.g. `https://jira.example.com`.
     pub host: String,
@@ -92,6 +94,34 @@ pub struct ServerRefreshTokenParams {
     pub redirect_uri: String,
     /// The HTTP client to reach the instance by, so a proxy or a timeout covers the token calls too.
     pub http: Option<reqwest::Client>,
+}
+
+impl fmt::Debug for ServerExchangeCodeParams {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("ServerExchangeCodeParams")
+            .field("host", &self.host)
+            .field("client_id", &self.client_id)
+            .field("client_secret", &"<redacted>")
+            .field("code", &"<redacted>")
+            .field("redirect_uri", &self.redirect_uri)
+            .field("http", &self.http)
+            .finish()
+    }
+}
+
+impl fmt::Debug for ServerRefreshTokenParams {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("ServerRefreshTokenParams")
+            .field("host", &self.host)
+            .field("client_id", &self.client_id)
+            .field("client_secret", &"<redacted>")
+            .field("refresh_token", &"<redacted>")
+            .field("redirect_uri", &self.redirect_uri)
+            .field("http", &self.http)
+            .finish()
+    }
 }
 
 /// Build the URL to send the user to so they can grant access to a Data Center instance.

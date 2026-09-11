@@ -1,3 +1,5 @@
+use std::fmt;
+
 use serde_json::{Value, json};
 
 use crate::core::error::{Error, OAuthErrorDetails, Result};
@@ -45,7 +47,7 @@ impl AuthorizationUrlParams {
 }
 
 /// The authorization code to trade in, and the credentials to trade it with.
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct ExchangeCodeParams {
     /// The OAuth 2.0 app's client id.
     pub client_id: String,
@@ -57,6 +59,19 @@ pub struct ExchangeCodeParams {
     pub redirect_uri: String,
     /// The HTTP client to reach Atlassian by, so a proxy or a timeout covers the token calls too.
     pub http: Option<reqwest::Client>,
+}
+
+impl fmt::Debug for ExchangeCodeParams {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("ExchangeCodeParams")
+            .field("client_id", &self.client_id)
+            .field("client_secret", &"<redacted>")
+            .field("code", &"<redacted>")
+            .field("redirect_uri", &self.redirect_uri)
+            .field("http", &self.http)
+            .finish()
+    }
 }
 
 impl ExchangeCodeParams {
@@ -78,7 +93,7 @@ impl ExchangeCodeParams {
 }
 
 /// The refresh credential set.
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct RefreshTokenParams {
     /// The OAuth 2.0 app's client id.
     pub client_id: String,
@@ -88,6 +103,18 @@ pub struct RefreshTokenParams {
     pub refresh_token: String,
     /// The HTTP client to reach Atlassian by, so a proxy or a timeout covers the token calls too.
     pub http: Option<reqwest::Client>,
+}
+
+impl fmt::Debug for RefreshTokenParams {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("RefreshTokenParams")
+            .field("client_id", &self.client_id)
+            .field("client_secret", &"<redacted>")
+            .field("refresh_token", &"<redacted>")
+            .field("http", &self.http)
+            .finish()
+    }
 }
 
 impl RefreshTokenParams {
