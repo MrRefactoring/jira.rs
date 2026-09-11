@@ -1,7 +1,7 @@
 use jira::service_desk_server::{CustomerCreate, ServiceDeskCustomerAdd};
 
 use super::fixtures::{asset_name, service_desk_licensed, service_desk_project};
-use crate::harness::{run_id, service_desk_server};
+use crate::harness::{ResourceTracker, jsm_platform, run_id, service_desk_server};
 
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jsm-dc up`"]
@@ -53,6 +53,7 @@ async fn creates_a_customer_and_adds_it_to_the_desk() {
 
     let project = service_desk_project().await;
     let username = format!("jirars-{}-customer", run_id());
+    let mut tracker = ResourceTracker::new();
 
     let customer = service_desk_server()
         .customers()
@@ -67,6 +68,16 @@ async fn creates_a_customer_and_adds_it_to_the_desk() {
 
     let name = customer.name.clone().expect("a created customer carries a name");
 
+    {
+        let doomed = name.clone();
+
+        tracker.defer(move || {
+            let doomed = doomed.clone();
+
+            async move { jsm_platform().users().remove_user().username(doomed).send().await }
+        });
+    }
+
     service_desk_server()
         .customers()
         .add_customers(project.service_desk_id.to_string())
@@ -74,4 +85,6 @@ async fn creates_a_customer_and_adds_it_to_the_desk() {
         .send()
         .await
         .expect("a customer can be added to a service desk");
+
+    tracker.cleanup().await;
 }

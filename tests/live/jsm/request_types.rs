@@ -1,7 +1,7 @@
 use jira::service_desk_server::{RequestTypeCreate, RequestTypePermissionRequest, RequestTypeUpdate};
 
 use super::fixtures::{asset_name, service_desk_licensed, service_desk_project};
-use crate::harness::{jsm_platform, service_desk_server};
+use crate::harness::{ResourceTracker, jsm_platform, service_desk_server};
 
 async fn any_issue_type_id() -> String {
     let types = jsm_platform()
@@ -128,15 +128,35 @@ async fn reads_and_writes_the_permissions_of_a_request_type() {
 
     let project = service_desk_project().await;
     let desk = project.service_desk_id.to_string();
+    let issue_type_id = any_issue_type_id().await;
+    let mut tracker = ResourceTracker::new();
 
-    let types = service_desk_server()
+    let created = service_desk_server()
         .request_types()
-        .get_request_types(desk.clone())
+        .create_request_type(desk.clone())
+        .request_type_create(RequestTypeCreate {
+            issue_type_id: Some(issue_type_id),
+            name: Some(asset_name("permissioned request type")),
+            description: Some("Created and removed by one test.".to_owned()),
+            help_text: None,
+        })
         .send()
         .await
-        .expect("a service desk lists its request types");
+        .expect("a service desk accepts a request type");
 
-    let id = types.values.first().and_then(|kind| kind.id.clone()).expect("the template brings request types with it");
+    let id = created.id.clone().expect("a created request type carries an id");
+
+    {
+        let desk = desk.clone();
+        let id = id.clone();
+
+        tracker.defer(move || {
+            let desk = desk.clone();
+            let id = id.clone();
+
+            async move { service_desk_server().request_types().delete_request_type(desk, id).send().await.map(drop) }
+        });
+    }
 
     let permissions = service_desk_server()
         .request_type_permissions()
@@ -153,4 +173,6 @@ async fn reads_and_writes_the_permissions_of_a_request_type() {
         .send()
         .await
         .expect("the permissions of a request type can be written back");
+
+    tracker.cleanup().await;
 }
