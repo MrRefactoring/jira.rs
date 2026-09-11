@@ -59,7 +59,7 @@ jobs:
       # A surface that only compiles when another one is enabled is a feature gate in the wrong place, and nothing
       # else in this workflow would notice.
       - name: 🎛️ Check each feature
-        run: cargo hack check --locked --each-feature --no-dev-deps
+        run: cargo hack check --each-feature --no-dev-deps
 
   deny:
     name: 🛡️ Advisories, licences & sources
