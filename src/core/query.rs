@@ -72,13 +72,7 @@ impl From<Vec<&str>> for QueryValue {
 
 impl From<Value> for QueryValue {
     fn from(value: Value) -> Self {
-        match value {
-            Value::Null => QueryValue::Skip,
-            Value::String(text) => QueryValue::Scalar(text),
-            Value::Bool(flag) => QueryValue::Scalar(flag.to_string()),
-            Value::Number(number) => QueryValue::Scalar(number.to_string()),
-            other => QueryValue::Json(other),
-        }
+        QueryValue::from_json(value)
     }
 }
 
@@ -184,6 +178,17 @@ mod tests {
         assert!(QueryValue::from(None::<String>).is_skip());
         assert!(QueryValue::from(serde_json::Value::Null).is_skip());
         assert_eq!(build_url_with_search_params(BASE, &params(vec![("a", QueryValue::from(None::<i32>))])), BASE);
+    }
+
+    #[test]
+    fn a_json_array_repeats_the_key_however_the_value_was_made() {
+        let array = serde_json::json!(["summary", "status"]);
+
+        assert_eq!(QueryValue::from(array.clone()), QueryValue::from_serializable(&array).unwrap());
+
+        let url = build_url_with_search_params(BASE, &params(vec![("fields", QueryValue::from(array))]));
+
+        assert_eq!(url, format!("{BASE}?fields=summary&fields=status"));
     }
 
     #[test]
