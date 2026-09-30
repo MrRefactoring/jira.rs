@@ -11,8 +11,6 @@
 Rust client for the Atlassian Jira REST APIs — the Rust counterpart of
 [jira.js](https://github.com/MrRefactoring/jira.js). The transport is written by hand; every operation and model is
 generated from the same OpenAPI pipeline that produces `jira.js`, so the two cannot drift on anything but the language.
-Five hundred and sixty-eight live cases run against a real Jira site and the Data Center rigs in Docker, and they are
-what found the defects the type checker could not.
 
 ## Installation
 
