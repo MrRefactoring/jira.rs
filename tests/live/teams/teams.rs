@@ -95,19 +95,23 @@ async fn lists_the_organization_teams_cursor_and_all() {
     let mut tracker = ResourceTracker::new();
     let team = create_team(&mut tracker, &org, "list").await;
 
-    let page = teams()
-        .teams()
-        .query_teams(&org, site_id().await)
-        .size(300)
-        .send()
-        .await
-        .expect("the organization lists its teams");
+    let site = site_id().await;
+    let mut cursor: Option<String> = None;
+    let listed = loop {
+        let mut request = teams().teams().query_teams(&org, site.clone()).size(300);
 
-    let listed = page
-        .entities
-        .iter()
-        .find(|entity| entity.team_id == team.team_id)
-        .expect("a team that was just created is in the listing");
+        if let Some(cursor) = cursor.take() {
+            request = request.cursor(cursor);
+        }
+
+        let page = request.send().await.expect("the organization lists its teams");
+
+        if let Some(listed) = page.entities.into_iter().find(|entity| entity.team_id == team.team_id) {
+            break listed;
+        }
+
+        cursor = Some(page.cursor.expect("a team that was just created is in the listing, on some page"));
+    };
 
     assert_eq!(listed.display_name, team.display_name);
     assert_eq!(listed.organization_id, org);
