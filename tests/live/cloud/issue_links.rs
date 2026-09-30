@@ -40,12 +40,12 @@ async fn walks_a_link_through_creation_reading_and_deletion() {
     assert_eq!(target_links.len(), 1, "the target issue carries exactly the link just made");
 
     assert_eq!(
-        source_links[0].inward_issue.key.as_deref(),
+        source_links[0].inward_issue.as_ref().and_then(|issue| issue.key.as_deref()),
         Some(inward.key.as_str()),
         "the source sees the other end as its inward issue",
     );
     assert_eq!(
-        target_links[0].outward_issue.key.as_deref(),
+        target_links[0].outward_issue.as_ref().and_then(|issue| issue.key.as_deref()),
         Some(outward.key.as_str()),
         "the target sees the other end as its outward issue",
     );
@@ -57,8 +57,8 @@ async fn walks_a_link_through_creation_reading_and_deletion() {
     let link = cloud().issue_links().get_issue_link(&link_id).send().await.expect("the link reads back by id");
 
     assert_eq!(link.id.as_deref(), Some(link_id.as_str()));
-    assert_eq!(link.inward_issue.key.as_deref(), Some(inward.key.as_str()));
-    assert_eq!(link.outward_issue.key.as_deref(), Some(outward.key.as_str()));
+    assert_eq!(link.inward_issue.as_ref().and_then(|issue| issue.key.as_deref()), Some(inward.key.as_str()));
+    assert_eq!(link.outward_issue.as_ref().and_then(|issue| issue.key.as_deref()), Some(outward.key.as_str()));
     assert_eq!(link.r#type.name, Some(type_name), "the link reports its own type");
 
     cloud().issue_links().delete_issue_link(&link_id).send().await.expect("a link can be removed");

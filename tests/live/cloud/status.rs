@@ -19,7 +19,7 @@ use crate::harness::{TEST_PROJECT_KEY, cloud};
 /// The management API is administrator-only. A token that is not one must not turn that into a red run, so the shape
 /// of the refusal is asserted here and the caller stands down.
 async fn search_statuses(max_results: i64) -> Option<PageOfStatuses> {
-    match cloud().status().search().max_results(max_results).send().await {
+    match cloud().status().search_statuses().max_results(max_results).send().await {
         Ok(page) => Some(page),
         Err(error) => {
             assert!(error.is_forbidden() || error.status() == Some(401), "a refusal names the rights: {error}");
@@ -108,7 +108,7 @@ async fn filters_the_search_by_category_and_by_name() {
 
     let done = cloud()
         .status()
-        .search()
+        .search_statuses()
         .status_category("DONE")
         .max_results(50)
         .send()
@@ -129,7 +129,7 @@ async fn filters_the_search_by_category_and_by_name() {
 
     let by_name = cloud()
         .status()
-        .search()
+        .search_statuses()
         .search_string(name.as_str())
         .max_results(50)
         .send()
@@ -154,7 +154,7 @@ async fn distinguishes_global_statuses_from_project_scoped_ones() {
 
     let scoped = cloud()
         .status()
-        .search()
+        .search_statuses()
         .project_id(project_id.as_str())
         .max_results(50)
         .send()

@@ -94,8 +94,7 @@ async fn reorders_the_queues_of_a_service_desk() {
 
     service_desk_server()
         .queues()
-        .reorder_queues(desk)
-        .body(order)
+        .reorder_queues(desk, order)
         .send()
         .await
         .expect("the queues of a service desk can be reordered, and the body is every id in the new order");
@@ -119,32 +118,28 @@ async fn reads_and_writes_the_queue_count_settings() {
 
     service_desk_server()
         .queue_settings()
-        .set_should_queues_include_count_on_project(project.project_key.clone())
-        .body(true)
+        .set_should_queues_include_count_on_project(project.project_key.clone(), true)
         .send()
         .await
         .expect("a project's queues can be told to carry a count");
 
     service_desk_server()
         .queue_settings()
-        .set_should_queues_use_count_cache_on_project(project.project_key.clone())
-        .body(true)
+        .set_should_queues_use_count_cache_on_project(project.project_key.clone(), true)
         .send()
         .await
         .expect("a project's queue counts can be told to come from a cache");
 
     service_desk_server()
         .queue_settings()
-        .set_should_queues_include_count_globally()
-        .body(true)
+        .set_should_queues_include_count_globally(true)
         .send()
         .await
         .expect("the instance can be told the same thing for every project");
 
     service_desk_server()
         .queue_settings()
-        .set_should_queues_use_count_cache_globally()
-        .body(true)
+        .set_should_queues_use_count_cache_globally(true)
         .send()
         .await
         .expect("and the same for the cache");

@@ -15,7 +15,9 @@ pub mod poll;
 pub mod resources;
 pub mod server_client;
 
-pub use client::{admin_key_client, admin_surface, agile, client, cloud, org_id, service_desk, teams, user_management};
+pub use client::{
+    admin_key_client, admin_surface, agile, client, cloud, org_id, service_desk, site_id, teams, user_management,
+};
 pub use entitlement::is_not_entitled;
 pub use env::{has_admin_env, require_jsm_env, require_live_env, require_server_env};
 pub use fixtures::{

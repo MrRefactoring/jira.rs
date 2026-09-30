@@ -69,6 +69,46 @@ async fn walks_an_issue_through_its_lifecycle() {
 
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
+async fn assigns_an_issue_and_takes_the_assignee_away_with_none() {
+    let mut tracker = ResourceTracker::new();
+    let issue = create_test_issue(&mut tracker, Some(&test_name("assign"))).await;
+    let me = cloud().myself().get_current_user().send().await.expect("the live credentials name a user");
+    let account_id = me.account_id.expect("the current user has an account id");
+
+    cloud()
+        .issues()
+        .assign_issue(&issue.key, Some(account_id.clone()))
+        .send()
+        .await
+        .expect("the issue can be assigned by account id");
+
+    let assigned =
+        await_readable("the assigned issue reads back", || cloud().issues().get_issue(&issue.key).send()).await;
+
+    assert_eq!(
+        assigned
+            .fields
+            .as_ref()
+            .and_then(|fields| fields.assignee.as_ref())
+            .and_then(|user| user.account_id.as_deref()),
+        Some(account_id.as_str()),
+        "the assignment is observable on the next read",
+    );
+
+    cloud().issues().assign_issue(&issue.key, None).send().await.expect("None sends accountId: null, which unassigns");
+
+    let unassigned = cloud().issues().get_issue(&issue.key).send().await.expect("the unassigned issue reads back");
+
+    assert!(
+        unassigned.fields.as_ref().and_then(|fields| fields.assignee.as_ref()).is_none(),
+        "the issue carries no assignee once None was sent",
+    );
+
+    tracker.cleanup().await;
+}
+
+#[tokio::test]
+#[ignore = "live: needs a Jira site"]
 async fn finds_the_issue_through_jql_once_indexing_catches_up() {
     let mut tracker = ResourceTracker::new();
     let issue = create_test_issue(&mut tracker, Some(&test_name("searchable"))).await;

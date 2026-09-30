@@ -97,6 +97,17 @@ pub async fn org_id() -> String {
         .clone()
 }
 
+pub async fn site_id() -> String {
+    static SITE_ID: tokio::sync::OnceCell<String> = tokio::sync::OnceCell::const_new();
+
+    SITE_ID
+        .get_or_init(|| async {
+            jira::core::get_tenant_context(client()).await.expect("the site answers with its tenant context").cloud_id
+        })
+        .await
+        .clone()
+}
+
 /// A client authenticated with the organization API key, for the surfaces a site token cannot reach.
 ///
 /// Shared like the others: a fresh client per call is a fresh connection pool per call.

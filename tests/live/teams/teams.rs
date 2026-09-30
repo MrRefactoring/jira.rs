@@ -10,7 +10,7 @@ use jira::teams::{
     TeamResponseWithMembers, TeamResponseWithMembersState, TeamResponseWithMembersTeamType, TeamUpdatePayload,
 };
 
-use crate::harness::{ResourceTracker, await_readable, await_refused, org_id, poll_until, teams, test_name};
+use crate::harness::{ResourceTracker, await_readable, await_refused, org_id, poll_until, site_id, teams, test_name};
 
 /// Creates a team on the organization and registers its deletion.
 ///
@@ -18,7 +18,6 @@ use crate::harness::{ResourceTracker, await_readable, await_refused, org_id, pol
 /// not scoped to a project and no issue sweep will ever collect it. So the teardown is registered the moment the team
 /// exists, and it treats `410 Gone` as success — a team the test deleted itself answers that rather than `404`, and
 /// the tracker would otherwise report a resource that is demonstrably absent as leaked.
-#[allow(deprecated, reason = "`site_id` is required by the payload and deprecated only in its documentation")]
 async fn create_team(tracker: &mut ResourceTracker, org: &str, label: &str) -> TeamResponseWithMembers {
     let team = teams()
         .teams()
@@ -27,7 +26,7 @@ async fn create_team(tracker: &mut ResourceTracker, org: &str, label: &str) -> T
             TeamCreationPayload {
                 description: "Created by the jira live suite.".to_owned(),
                 display_name: test_name(label),
-                site_id: None,
+                site_id: Some(site_id().await),
                 team_type: TeamCreationPayloadTeamType::MemberInvite,
             },
         )
@@ -96,7 +95,13 @@ async fn lists_the_organization_teams_cursor_and_all() {
     let mut tracker = ResourceTracker::new();
     let team = create_team(&mut tracker, &org, "list").await;
 
-    let page = teams().teams().query_teams(&org).size(300).send().await.expect("the organization lists its teams");
+    let page = teams()
+        .teams()
+        .query_teams(&org, site_id().await)
+        .size(300)
+        .send()
+        .await
+        .expect("the organization lists its teams");
 
     let listed = page
         .entities
