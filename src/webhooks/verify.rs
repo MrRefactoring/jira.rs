@@ -1,6 +1,6 @@
 //! Whether a delivery really came from your Jira site.
 
-use hmac::{Hmac, Mac};
+use hmac::{Hmac, KeyInit, Mac};
 use sha2::Sha256;
 
 use crate::core::{Error, Result};
