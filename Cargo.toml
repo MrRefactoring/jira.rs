@@ -19,15 +19,10 @@ exclude = [".github/", "docker/", "tests/live/", "operations.json"]
 [features]
 default = ["cloud"]
 audit = ["dep:serde_ignored"]
-# Every `date-time` becomes an instant rather than the text it arrived as. Off by default: the type of a field then
-# depends on a feature, which two crates depending on this one do not get to disagree about.
 chrono = ["dep:chrono"]
 coverage = []
-# A span per request and an event per attempt, through the `tracing` crate. Off by default: a caller who wants it
-# already depends on `tracing`, and one who does not should not pay for it.
 tracing = ["dep:tracing"]
 
-# One feature per API surface, so a caller compiles the endpoints they use and not the ten thousand they do not.
 admin = []
 agile = []
 assets = []
@@ -42,8 +37,6 @@ user-provisioning = []
 webhooks = ["cloud", "agile", "dep:hmac", "dep:sha2"]
 
 [lints.rust]
-# The crate reaches the network and parses what comes back, and it does all of it in safe Rust. `forbid` rather than
-# `deny` because there is no case where a generated file should be the one to make an exception.
 unsafe_code = "forbid"
 
 [dependencies]
@@ -71,13 +64,10 @@ dotenvy = "0.15"
 reqwest = { version = "0.13", features = ["json"] }
 wiremock = "0.6"
 
-# The live suites are one binary rather than ninety-six, so the harness is compiled once instead of once per file.
 [[test]]
 name = "live"
 path = "tests/live/main.rs"
 
-# Each example reaches for a surface beyond the default, so cargo has to be told which features it needs. Without
-# this, `cargo test` on default features fails to build the examples before it runs a single test.
 [[example]]
 name = "typed"
 required-features = ["cloud", "agile"]

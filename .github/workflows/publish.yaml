@@ -28,7 +28,6 @@ jobs:
           components: rustfmt, clippy
       - name: 💾 Cache the build
         uses: Swatinem/rust-cache@v2
-      # A tag that does not match the manifest publishes a version nobody asked for, and crates.io cannot take it back.
       - name: 🏷️ The tag and the manifest agree
         id: version
         run: |
@@ -62,8 +61,6 @@ jobs:
     steps:
       - name: 🔄 Checkout sources
         uses: actions/checkout@v7
-      # A draft, not a release. `cargo publish` is the irreversible step and it has not run yet; a draft that is never
-      # un-drafted is what a failed publish looks like from the outside.
       - name: 📝 Create draft release from CHANGELOG
         id: create
         uses: actions/github-script@v9
@@ -107,8 +104,6 @@ jobs:
     environment: crates-io
     permissions:
       contents: write
-      # Trusted Publishing: crates.io trades this token for a short-lived publish token, so no API token is stored
-      # in this repository at all.
       id-token: write
     steps:
       - name: 🔄 Checkout sources

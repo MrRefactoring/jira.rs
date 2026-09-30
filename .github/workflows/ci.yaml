@@ -1,8 +1,6 @@
 name: 🛠️ CI
 
 on:
-  # A branch with an open pull request would otherwise run twice per push: the two events carry different `github.ref`,
-  # so the concurrency group does not collapse them. `master` covers the merge; `pull_request` covers everything else.
   push:
     branches: [master]
   pull_request:
@@ -56,8 +54,6 @@ jobs:
         uses: Swatinem/rust-cache@v2
       - name: 📦 Install cargo-hack
         uses: taiki-e/install-action@cargo-hack
-      # A surface that only compiles when another one is enabled is a feature gate in the wrong place, and nothing
-      # else in this workflow would notice.
       - name: 🎛️ Check each feature
         run: cargo hack check --each-feature --no-dev-deps
 

@@ -27,8 +27,6 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
       - name: 💾 Cache the build
         uses: Swatinem/rust-cache@v2
-      # Reports rather than fails: a gap between the specification and the API is a fact about Atlassian's document,
-      # and a red run every week teaches people to ignore the run.
       - name: 🔬 Run the audit
         run: cargo xtask audit
         env:

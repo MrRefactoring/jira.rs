@@ -7,8 +7,6 @@ on:
     - cron: '0 3 * * *'
   workflow_dispatch:
 
-# One tenant, one run at a time: the suites create real issues in a shared project, and two runs would sweep up each
-# other's fixtures.
 concurrency:
   group: live-tests
   cancel-in-progress: false

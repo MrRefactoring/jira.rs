@@ -1,13 +1,3 @@
-# A throwaway Jira Service Management Data Center instance for the `jsm` live suites.
-#
-# The sibling of docker/jira-dc, and not a replacement for it: `atlassian/jira-software` carries neither Service
-# Management nor Assets, and the `server` suites need Jira Software's boards and sprints, which this image does not
-# have. The two do not fit side by side — a runner has memory for one, and starting the second takes the first down
-# without an error — so the ports are split only to keep one rig out of the other's way while switching between them.
-#
-# Not production-shaped and not meant to be: one node, one database, no reverse proxy, and a licence that expires in
-# three hours. What it has to be is reproducible, so that a schema mismatch found here is a fact about Jira Service
-# Management rather than about somebody's laptop.
 name: jira-rs-jsm
 
 services:
@@ -26,16 +16,6 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
   jira:
-    # 10.3 for the reason docker/jira-dc/compose.yaml gives for its own pin: 11.x disables basic authentication by
-    # default and rejects `/rest/auth/1/session`, leaving a personal access token as the only way in — and a token
-    # cannot be minted without first signing in through a browser.
-    #
-    # What the licence beside this file buys was measured rather than assumed. A Jira Software timebomb sets the
-    # instance up and opens /rest/assets/1.0 completely — an object schema creates and reads back, 201 — because
-    # Assets ships with the image and its REST module does not check for a Service Management seat. Every
-    # /rest/servicedeskapi/ endpoint answers 403 with an HTML page under the same licence, and `servicedeskapi/info`
-    # says `isLicensedForUse: false`. The Service Desk suites therefore need a Service Management Data Center
-    # timebomb here; the Assets suites do not.
     image: atlassian/jira-servicemanagement:${JSM_DC_VERSION:-10.3}
     depends_on:
       postgres:
@@ -47,10 +27,8 @@ services:
       ATL_DB_TYPE: postgres72
       ATL_DB_DRIVER: org.postgresql.Driver
       ATL_TOMCAT_PORT: '8080'
-      # Service Management indexes more than Jira Software does, and 3 GB is where a cold start stops thrashing.
       JVM_MINIMUM_MEMORY: 1024m
       JVM_MAXIMUM_MEMORY: 3072m
-      # Jira writes this into the base URL it hands back in `self` links, and the live suites compare against it.
       ATL_PROXY_NAME: localhost
       ATL_PROXY_PORT: '8082'
       ATL_TOMCAT_SCHEME: http

@@ -27,18 +27,12 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
       - name: 💾 Cache the build
         uses: Swatinem/rust-cache@v2
-      # Atlassian publishes three-hour timebomb keys and a fresh container starts the three hours again, which is what
-      # makes a rig per run workable. It lives in a secret rather than in the repository because a licence key is not
-      # ours to redistribute. Use the Jira Service Desk Data Center key for both rigs: the published Jira Software one
-      # is expired, and the Service Desk one licenses Assets and Service Desk together.
       - name: 🔑 Write the timebomb licence
         env:
           TIMEBOMB_LICENSE: ${{ secrets.JIRA_DC_TIMEBOMB_LICENSE }}
         run: |
           printf '%s' "$TIMEBOMB_LICENSE" > docker/jira-dc/timebomb-license.txt
           test -s docker/jira-dc/timebomb-license.txt
-      # A cold instance takes minutes to reach RUNNING, which is why the rig is a separate step rather than something
-      # the suite does for itself.
       - name: 🧱 Bring up Jira Data Center
         run: cargo xtask jira-dc up
       - name: 🚀 Run the Data Center suite
