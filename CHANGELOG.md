@@ -37,6 +37,8 @@ version.
   reader takes the spelling Atlassian documents — which is not RFC 3339 — as well as RFC 3339, an instant
   without an offset, a bare date, and the epoch milliseconds the bulk queue sends; a value it does not
   recognise becomes `None` rather than failing the response around it.
+  An instant is written back as the API it goes to reads it: `+0000` for Jira, RFC 3339 for Assets, which rejects
+  the other spelling.
 - `#[deprecated]` on the operations, parameters and fields Atlassian deprecates in prose rather than with the
   OpenAPI flag, which is how it deprecates nearly all of them. Where the prose points at a URL rather than a method,
   the note names the method of this crate that answers there, and the documentation links to it.
