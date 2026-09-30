@@ -18,7 +18,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .auth(Auth::api_token(std::env::var("JIRA_EMAIL")?, std::env::var("JIRA_API_TOKEN")?))
         .build()?;
 
-    // One transport, every surface: two clients would mean two OAuth token states.
     let jira = CloudClient::new(client.clone());
     let agile = AgileClient::new(client);
 
