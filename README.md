@@ -8,9 +8,8 @@
 
 > 🌐 **English** · [Русский](https://github.com/MrRefactoring/jira.rs/blob/master/README.ru.md)
 
-Rust client for the Atlassian Jira REST APIs — the Rust counterpart of
-[jira.js](https://github.com/MrRefactoring/jira.js). The transport is written by hand; every operation and model is
-generated from the same OpenAPI pipeline that produces `jira.js`, so the two cannot drift on anything but the language.
+A Rust client for the Atlassian Jira REST APIs, built as the Rust counterpart of
+[jira.js](https://github.com/MrRefactoring/jira.js).
 
 ## Installation
 
@@ -42,11 +41,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-`host` is the bare site URL — the API path belongs to the request, not here.
+`host` is the bare site URL. The API path goes on each request.
 
-Build the transport **once** and hand it to each surface. Under OAuth 2.0 this matters: two clients mean two token
-states, and since Atlassian rotates the refresh token on every refresh, whichever refreshes first invalidates the
-other's copy.
+Build the transport **once** and share it between surfaces. Under OAuth 2.0 each transport holds its own token, and
+Atlassian rotates the refresh token on every refresh, so a second transport would invalidate the first.
 
 ```rust,no_run
 # use jira::{Auth, Client};
@@ -56,7 +54,7 @@ let agile = jira::agile::AgileClient::new(client);
 # }
 ```
 
-Every operation is a builder: what the API requires is an argument, what it merely accepts is a method.
+Every operation is a builder: required parameters are arguments, optional ones are methods.
 
 ```rust,no_run
 # use jira::cloud::CloudClient;
@@ -75,9 +73,7 @@ let issues = jira
 
 ## Searching with JQL
 
-`jql` takes a string, and a string built with `format!` is a string a value can escape from: one quotation mark in
-what somebody typed ends the literal and the rest is read as query. `jira::jql` writes the operators itself and quotes
-everything else.
+`jira::jql` builds a query with every value quoted and escaped, so user input cannot change its structure.
 
 ```rust,no_run
 # use jira::cloud::CloudClient;
@@ -95,10 +91,8 @@ let page = jira.issue_search().search_issues().jql(query).fields(["summary", "st
 # }
 ```
 
-Two things about the answer surprise people. Without `fields` the search returns identifiers and nothing else — that
-is the endpoint's own default, not a choice made here. And the system fields are typed while a custom field arrives
-under the key the site gave it, because which custom fields an issue has is a property of the site rather than of the
-API. `Extensible` reads those keys into a type of the caller's own, so the site's fields get names too:
+Without `fields` the search returns only identifiers. System fields are typed; custom fields arrive under their
+site-specific keys, and `Extensible::custom` reads them into a type of your own:
 
 ```rust,no_run
 # use jira::Extensible;
@@ -121,7 +115,7 @@ for issue in page.issues.unwrap_or_default() {
 # }
 ```
 
-The same struct is what a write takes, and `with_custom` puts the caller's fields beside the described ones:
+Writes take the same struct; `with_custom` adds your fields to it:
 
 ```rust,no_run
 # use jira::Extensible;
@@ -150,10 +144,9 @@ let created = jira
 # }
 ```
 
-A key the schema already describes is refused there rather than sent twice — `summary` belongs on the struct — and
-`with` sets a single key when a whole type would be more than the call needs.
+A key the struct already has, such as `summary`, is refused. `with` sets a single key.
 
-The search pages with an opaque token rather than an offset. `stream` follows it to the end:
+`stream` follows the search's page token to the last page:
 
 ```rust,no_run
 # use jira::cloud::CloudClient;
@@ -175,8 +168,7 @@ while let Some(issue) = issues.try_next().await? {
 # }
 ```
 
-Every other listing pages by offset, and `stream` is on each of those too — projects, users, filters, dashboards,
-boards, sprints, service desk queues — so the loop is never yours to write:
+Every paginated listing has `stream` too, including projects, users, filters, dashboards, boards, sprints and queues:
 
 ```rust,no_run
 # use jira::cloud::CloudClient;
@@ -230,8 +222,7 @@ refresh fails.
 
 ## Errors
 
-Every failure is a `jira::Error`. Branch on the predicates rather than the variant — they read the status and the
-OAuth code for you:
+Every failure is a `jira::Error`. Its predicates read the HTTP status and the OAuth error code, so match on them:
 
 ```rust,no_run
 # use jira::{Client, Error};
@@ -248,24 +239,23 @@ match client.get("/rest/api/3/issue/PROJ-1").send::<serde_json::Value>().await {
 
 | Predicate | Means |
 |---|---|
-| `is_auth` | 401 — credentials missing, expired or rejected |
+| `is_auth` | 401: credentials missing, expired or rejected |
 | `is_scope` | 401 with a scope the token never asked for; refreshing cannot help |
-| `is_forbidden` | 403 — authenticated, not permitted |
-| `is_not_found` | 404 — absent, or invisible to you |
-| `is_rate_limit` | 429 — read `retry_after()` |
+| `is_forbidden` | 403: authenticated but not permitted |
+| `is_not_found` | 404: absent, or not visible to you |
+| `is_rate_limit` | 429: read `retry_after()` |
 | `is_server` | 5xx |
 | `is_network` | no HTTP answer at all |
 | `is_oauth` | the token endpoint refused, or the cloud id would not resolve |
 | `is_config` | the client cannot work as configured |
 | `is_schema_mismatch` | a 2xx whose body is not what the type describes |
 
-A refused credential is not always a 401: an endpoint permitting anonymous access answers `200` with an
-anonymous-scope body and reports the refusal only in `X-Seraph-LoginReason`. That is read too, and reported with the
-status that was actually on the wire.
+A credential refused through `X-Seraph-LoginReason` on a `200` response is reported as an auth error too.
 
 ## Retry
 
-Off by default. It covers transient transport failures and 502/503/504 only — never a 4xx, never a 429, never a 500:
+Retry is off by default. When enabled, it retries transient transport failures and 502, 503 and 504 responses. It
+never retries a 4xx, a 429 or a 500:
 
 ```rust,no_run
 # use jira::{Client, RetryConfig};
@@ -281,8 +271,8 @@ let client = Client::builder()
 
 ## Cancellation, proxies and timeouts
 
-Cancellation is Rust's own: drop the future, or wrap it in `tokio::time::timeout`. Everything else the transport
-offers goes through your own `reqwest::Client`:
+To cancel a request, drop its future or wrap it in `tokio::time::timeout`. Proxies, timeouts and other transport
+settings go through your own `reqwest::Client`:
 
 ```rust,no_run
 # use jira::Client;
@@ -297,13 +287,12 @@ let client = Client::builder().host("https://your-domain.atlassian.net").http_cl
 
 ## Feature flags
 
-One feature per API surface. A surface you do not enable is not compiled, and the crate holds over three thousand
-types, so almost nobody wants all of them.
+One feature per API surface; a surface you do not enable is not compiled.
 
 | Feature | Surface |
 |---|---|
-| `cloud` (default) | Jira Cloud platform — issues, projects, fields, workflows |
-| `agile` | Jira Agile — boards, sprints, backlog |
+| `cloud` (default) | Jira Cloud platform: issues, projects, fields, workflows |
+| `agile` | Jira Agile: boards, sprints, backlog |
 | `service-desk` | Jira Service Management |
 | `server` | Jira Data Center, platform and Agile in one surface |
 | `service-desk-server` | Jira Service Management Data Center |
@@ -311,42 +300,21 @@ types, so almost nobody wants all of them.
 | `admin` | Organization administration |
 | `teams` | Teams |
 | `user-management` / `user-provisioning` | User management and SCIM provisioning |
-| `webhooks` | Event and payload types, and the signature check that says a delivery came from Jira |
+| `webhooks` | Event and payload types, and signature verification for deliveries |
 
-One feature changes what the types look like rather than which of them exist:
-
-| Feature | What it changes |
-|---|---|
-| `chrono` | Every `date-time` field becomes `Option<chrono::DateTime<Utc>>` instead of the text it arrived as |
-
-It is off by default, and deliberately so. Turning it on changes the type of a field, and two crates that both depend
-on this one do not get to disagree about that: cargo unifies their features, so enabling it anywhere enables it
-everywhere in the build. Leave it off in a library and let the application decide.
-
-The field is optional even where the specification says the value is always there. Reading a timestamp can fail — the
-spelling Atlassian documents is not RFC 3339, and the bulk queue answers epoch milliseconds where the document
-promises a string — and a value the reader does not recognise becomes `None` rather than failing the response around
-it. Without the feature the text is kept exactly as it arrived, whatever it says.
-
-Two more are instruments rather than surfaces. They exist for this crate's own runs against a live site, and cost
-nothing when they are off:
+Other features, all off by default:
 
 | Feature | What it adds |
 |---|---|
-| `audit` | Collects the fields the API sends that the generated types do not describe |
-| `coverage` | Records the endpoint of every call the process makes, which is how a live run counts what it reached |
+| `chrono` | Every `date-time` field becomes `Option<chrono::DateTime<Utc>>`; a value that does not parse becomes `None` |
+| `tracing` | A `DEBUG` span per request with an event per attempt; no credentials or bodies are recorded |
+| `audit` | Collects the response fields the generated types do not describe |
 
-One more is for the caller's own logs rather than this crate's runs:
-
-| Feature | What it adds |
-|---|---|
-| `tracing` | A `jira.request` span around every request, carrying the method and the path, with an event per attempt — the status, and a retry or a refresh when one happens |
-
-The span is at `DEBUG`, so a subscriber filtering at `INFO` sees nothing, and nothing in it is a credential or a body.
+`chrono` changes field types, and cargo unifies features across a build, so enable it in applications, not libraries.
 
 ## Other products
 
-- [jira.js](https://github.com/MrRefactoring/jira.js) — the same APIs for Node.js and browsers
+- [jira.js](https://github.com/MrRefactoring/jira.js): the same APIs for Node.js and browsers
 - [confluence.js](https://github.com/MrRefactoring/confluence.js)
 - [trello.js](https://github.com/MrRefactoring/trello.js)
 
