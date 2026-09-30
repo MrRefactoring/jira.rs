@@ -38,7 +38,8 @@ version.
   without an offset, a bare date, and the epoch milliseconds the bulk queue sends; a value it does not
   recognise becomes `None` rather than failing the response around it.
 - `#[deprecated]` on the operations, parameters and fields Atlassian deprecates in prose rather than with the
-  OpenAPI flag, which is how it deprecates nearly all of them.
+  OpenAPI flag, which is how it deprecates nearly all of them. Where the prose points at a URL rather than a method,
+  the note names the method of this crate that answers there, and the documentation links to it.
 - `#[non_exhaustive]` on the types a caller only ever reads, so a field Atlassian adds is a minor release. The
   types a caller builds stay open, so a request body can still be assembled with `..Default::default()`.
 - `PartialEq` on every generated type.
@@ -67,22 +68,19 @@ version.
 - The administration surface names a role, an account status, a membership status, a claim status and a
   combined status once each. The specification restates the same lists per operation, which used to become
   twenty-six types for six concepts, so a role read from one call could not be passed to another.
+- `assign_issue` takes the account as an `Option`: `Some(account_id)` assigns, `None` sends `accountId: null`, which
+  is how Jira takes the assignee away.
+- A value interpolated into a request path is escaped, so a `/`, a `?` or a `..` in a property key cannot split the
+  segment, start a query string or address a different endpoint.
+- A request body the specification types as binary is sent as bytes rather than as a JSON array of them, and carries
+  a `content_type` the caller declares — Jira reads the declared type rather than sniffing the bytes.
+- A `date-time` field reads a number as well as a string. Jira declares every timestamp a string and the bulk queue
+  answers epoch milliseconds.
+- A generated union ends in a catch-all, so a shape the specification does not list does not fail the response.
 
 ### Credits
 
 - Harold Dost published `0.0.1` of this crate name in 2021. That release shares no code with this one, but it kept
   the name alive.
-
-### Fixed
-
-- A value interpolated into a request path is escaped. A property key holding a `/` used to split the
-  segment in two, a `?` turned the rest of the path into a query string, and `..` addressed a different
-  endpoint altogether.
-
-- A request body the specification types as binary is sent as bytes rather than as a JSON array of them, and carries
-  a `content_type` the caller declares — Jira reads the declared type rather than sniffing the bytes.
-- A `date-time` field reads a number as well as a string. Jira declares every timestamp a string and the bulk queue
-  answers epoch milliseconds.
-- A generated union ends in a catch-all, so a shape the specification does not list no longer fails the response.
 
 [0.1.0]: https://github.com/MrRefactoring/jira.rs/releases/tag/v0.1.0
