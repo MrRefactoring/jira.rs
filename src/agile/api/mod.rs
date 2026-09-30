@@ -1,7 +1,5 @@
 // @generated. Do not edit: change the generator or the specification.
 
-// A service takes its name from the tag the specification gave it, and one document names a
-// tag after the surface itself.
 #![allow(clippy::module_inception)]
 #![allow(clippy::doc_lazy_continuation)]
 

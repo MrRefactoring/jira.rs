@@ -421,8 +421,6 @@ impl<'a> AddCommentRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<Comment> {
-        // A plain string is wiki markup, which v3 cannot read. v2 takes it, converts it, and the re-read
-        // below hands the caller the document v3 made of it.
         if let Some(CommentInputBody::Variant1(_)) = &self.comment_input.body {
             let mut write = self.config()?;
 
