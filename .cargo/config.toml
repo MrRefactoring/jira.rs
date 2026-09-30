@@ -1,0 +1,6 @@
+[alias]
+xtask = "run --package xtask --"
+
+live = "test --test live --all-features -- --ignored --test-threads=1 --skip server:: --skip jsm::"
+live-server = "test --test live --all-features -- --ignored --test-threads=1 --nocapture server::"
+live-jsm = "test --test live --all-features -- --ignored --test-threads=1 --nocapture jsm::"

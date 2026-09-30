@@ -1,0 +1,59 @@
+// @generated. Do not edit: change the generator or the specification.
+
+//! The UserProvisioning surface.
+
+pub mod api;
+pub mod models;
+
+pub use api::*;
+pub use models::*;
+
+/// Every UserProvisioning operation, grouped the way the API documents them.
+///
+/// Build the transport once and hand it to each surface: a second client is a second set of OAuth tokens,
+/// and whichever refreshes first invalidates the other.
+pub struct UserProvisioningClient {
+    client: crate::core::Client,
+}
+
+impl UserProvisioningClient {
+    pub fn new(client: crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// The transport underneath, for a request this surface does not describe.
+    pub fn client(&self) -> &crate::core::Client {
+        &self.client
+    }
+
+    /// The Groups operations.
+    pub fn groups(&self) -> GroupsService<'_> {
+        GroupsService::new(&self.client)
+    }
+
+    /// The Schemas operations.
+    pub fn schemas(&self) -> SchemasService<'_> {
+        SchemasService::new(&self.client)
+    }
+
+    /// The ServiceProviderConfiguration operations.
+    pub fn service_provider_configuration(&self) -> ServiceProviderConfigurationService<'_> {
+        ServiceProviderConfigurationService::new(&self.client)
+    }
+
+    /// The Users operations.
+    pub fn users(&self) -> UsersService<'_> {
+        UsersService::new(&self.client)
+    }
+
+    /// The SCIMLinks operations.
+    pub fn scim_links(&self) -> SCIMLinksService<'_> {
+        SCIMLinksService::new(&self.client)
+    }
+}
+
+impl From<crate::core::Client> for UserProvisioningClient {
+    fn from(client: crate::core::Client) -> Self {
+        Self::new(client)
+    }
+}

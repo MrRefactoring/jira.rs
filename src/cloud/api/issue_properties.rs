@@ -1,0 +1,618 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The IssueProperties operations.
+pub struct IssuePropertiesService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> IssuePropertiesService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Sets or updates a list of entity property values on issues. A list of up to 10 entity properties can be specified along with up to 10,000 issues on which to set or update that list of entity properties.
+    ///
+    /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON. The maximum length of single issue property value is 32768 characters. This operation can be accessed anonymously.
+    ///
+    /// This operation is:
+    ///
+    ///  *  transactional, either all properties are updated in all eligible issues or, when errors occur, no properties are updated.
+    ///  *  [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `location` link in the response to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Browse projects* and *Edit issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    pub fn bulk_set_issues_properties_list(
+        &self,
+        issue_entity_properties: IssueEntityProperties,
+    ) -> BulkSetIssuesPropertiesListRequest<'a> {
+        BulkSetIssuesPropertiesListRequest::new(self.client, issue_entity_properties)
+    }
+
+    /// Sets or updates entity property values on issues. Up to 10 entity properties can be specified for each issue and up to 100 issues included in the request.
+    ///
+    /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON.
+    ///
+    /// This operation is:
+    ///
+    ///  *  [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `location` link in the response to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+    ///  *  non-transactional. Updating some entities may fail. Such information will available in the task result.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Browse projects* and *Edit issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    pub fn bulk_set_issue_properties_by_issue(
+        &self,
+        multi_issue_entity_properties: MultiIssueEntityProperties,
+    ) -> BulkSetIssuePropertiesByIssueRequest<'a> {
+        BulkSetIssuePropertiesByIssueRequest::new(self.client, multi_issue_entity_properties)
+    }
+
+    /// Sets a property value on multiple issues.
+    ///
+    /// The value set can be a constant or determined by a [Jira expression](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/). Expressions must be computable with constant complexity when applied to a set of issues. Expressions must also comply with the [restrictions](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#restrictions) that apply to all Jira expressions.
+    ///
+    /// The issues to be updated can be specified by a filter.
+    ///
+    /// The filter identifies issues eligible for update using these criteria:
+    ///
+    ///  *  `entityIds` Only issues from this list are eligible.
+    ///  *  `currentValue` Only issues with the property set to this value are eligible.
+    ///  *  `hasProperty`:
+    ///
+    ///      *  If *true*, only issues with the property are eligible.
+    ///      *  If *false*, only issues without the property are eligible.
+    ///
+    /// If more than one criteria is specified, they are joined with the logical *AND*: only issues that satisfy all criteria are eligible.
+    ///
+    /// If an invalid combination of criteria is provided, an error is returned. For example, specifying a `currentValue` and `hasProperty` as *false* would not match any issues (because without the property the property cannot have a value).
+    ///
+    /// The filter is optional. Without the filter all the issues visible to the user and where the user has the EDIT\_ISSUES permission for the issue are considered eligible.
+    ///
+    /// This operation is:
+    ///
+    ///  *  transactional, either all eligible issues are updated or, when errors occur, none are updated.
+    ///  *  [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `location` link in the response to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for each project containing issues.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    ///  *  *Edit issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for each issue.
+    pub fn bulk_set_issue_property(
+        &self,
+        property_key: impl Into<String>,
+        bulk_issue_property_update_request: BulkIssuePropertyUpdateRequest,
+    ) -> BulkSetIssuePropertyRequest<'a> {
+        BulkSetIssuePropertyRequest::new(self.client, property_key, bulk_issue_property_update_request)
+    }
+
+    /// Deletes a property value from multiple issues. The issues to be updated can be specified by filter criteria.
+    ///
+    /// The criteria the filter used to identify eligible issues are:
+    ///
+    ///  *  `entityIds` Only issues from this list are eligible.
+    ///  *  `currentValue` Only issues with the property set to this value are eligible.
+    ///
+    /// If both criteria is specified, they are joined with the logical *AND*: only issues that satisfy both criteria are considered eligible.
+    ///
+    /// If no filter criteria are specified, all the issues visible to the user and where the user has the EDIT\_ISSUES permission for the issue are considered eligible.
+    ///
+    /// This operation is:
+    ///
+    ///  *  transactional, either the property is deleted from all eligible issues or, when errors occur, no properties are deleted.
+    ///  *  [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `location` link in the response to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Browse projects* [ project permission](https://confluence.atlassian.com/x/yodKLg) for each project containing issues.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    ///  *  *Edit issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for each issue.
+    pub fn bulk_delete_issue_property(
+        &self,
+        property_key: impl Into<String>,
+        issue_filter_for_bulk_property_delete: IssueFilterForBulkPropertyDelete,
+    ) -> BulkDeleteIssuePropertyRequest<'a> {
+        BulkDeleteIssuePropertyRequest::new(self.client, property_key, issue_filter_for_bulk_property_delete)
+    }
+
+    /// Returns the URLs and keys of an issue's properties.
+    ///
+    /// This operation can be accessed anonymously.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Property details are only returned where the user has:
+    ///
+    ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    pub fn get_issue_property_keys(&self, issue_id_or_key: impl Into<String>) -> GetIssuePropertyKeysRequest<'a> {
+        GetIssuePropertyKeysRequest::new(self.client, issue_id_or_key)
+    }
+
+    /// Returns the key and value of an issue's property.
+    ///
+    /// This operation can be accessed anonymously.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    pub fn get_issue_property(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
+    ) -> GetIssuePropertyRequest<'a> {
+        GetIssuePropertyRequest::new(self.client, issue_id_or_key, property_key)
+    }
+
+    /// Sets the value of an issue's property. Use this resource to store custom data against an issue.
+    ///
+    /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
+    ///
+    /// This operation can be accessed anonymously.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Browse projects* and *Edit issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    pub fn set_issue_property(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
+        body: std::collections::HashMap<String, serde_json::Value>,
+    ) -> SetIssuePropertyRequest<'a> {
+        SetIssuePropertyRequest::new(self.client, issue_id_or_key, property_key, body)
+    }
+
+    /// Deletes an issue's property.
+    ///
+    /// This operation can be accessed anonymously.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Browse projects* and *Edit issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    pub fn delete_issue_property(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
+    ) -> DeleteIssuePropertyRequest<'a> {
+        DeleteIssuePropertyRequest::new(self.client, issue_id_or_key, property_key)
+    }
+}
+
+/// Sets or updates a list of entity property values on issues. A list of up to 10 entity properties can be specified along with up to 10,000 issues on which to set or update that list of entity properties.
+///
+/// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON. The maximum length of single issue property value is 32768 characters. This operation can be accessed anonymously.
+///
+/// This operation is:
+///
+///  *  transactional, either all properties are updated in all eligible issues or, when errors occur, no properties are updated.
+///  *  [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `location` link in the response to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Browse projects* and *Edit issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
+pub struct BulkSetIssuesPropertiesListRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_entity_properties: IssueEntityProperties,
+}
+
+impl<'a> BulkSetIssuesPropertiesListRequest<'a> {
+    fn new(client: &'a crate::core::Client, issue_entity_properties: IssueEntityProperties) -> Self {
+        Self { client, issue_entity_properties }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/issue/properties".to_owned());
+
+        let body = match serde_json::to_value(&self.issue_entity_properties)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Sets or updates entity property values on issues. Up to 10 entity properties can be specified for each issue and up to 100 issues included in the request.
+///
+/// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON.
+///
+/// This operation is:
+///
+///  *  [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `location` link in the response to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+///  *  non-transactional. Updating some entities may fail. Such information will available in the task result.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Browse projects* and *Edit issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
+pub struct BulkSetIssuePropertiesByIssueRequest<'a> {
+    client: &'a crate::core::Client,
+    multi_issue_entity_properties: MultiIssueEntityProperties,
+}
+
+impl<'a> BulkSetIssuePropertiesByIssueRequest<'a> {
+    fn new(client: &'a crate::core::Client, multi_issue_entity_properties: MultiIssueEntityProperties) -> Self {
+        Self { client, multi_issue_entity_properties }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/issue/properties/multi".to_owned());
+
+        let body = match serde_json::to_value(&self.multi_issue_entity_properties)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Sets a property value on multiple issues.
+///
+/// The value set can be a constant or determined by a [Jira expression](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/). Expressions must be computable with constant complexity when applied to a set of issues. Expressions must also comply with the [restrictions](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#restrictions) that apply to all Jira expressions.
+///
+/// The issues to be updated can be specified by a filter.
+///
+/// The filter identifies issues eligible for update using these criteria:
+///
+///  *  `entityIds` Only issues from this list are eligible.
+///  *  `currentValue` Only issues with the property set to this value are eligible.
+///  *  `hasProperty`:
+///
+///      *  If *true*, only issues with the property are eligible.
+///      *  If *false*, only issues without the property are eligible.
+///
+/// If more than one criteria is specified, they are joined with the logical *AND*: only issues that satisfy all criteria are eligible.
+///
+/// If an invalid combination of criteria is provided, an error is returned. For example, specifying a `currentValue` and `hasProperty` as *false* would not match any issues (because without the property the property cannot have a value).
+///
+/// The filter is optional. Without the filter all the issues visible to the user and where the user has the EDIT\_ISSUES permission for the issue are considered eligible.
+///
+/// This operation is:
+///
+///  *  transactional, either all eligible issues are updated or, when errors occur, none are updated.
+///  *  [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `location` link in the response to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for each project containing issues.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+///  *  *Edit issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for each issue.
+#[derive(Clone)]
+pub struct BulkSetIssuePropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    property_key: String,
+    bulk_issue_property_update_request: BulkIssuePropertyUpdateRequest,
+}
+
+impl<'a> BulkSetIssuePropertyRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        property_key: impl Into<String>,
+        bulk_issue_property_update_request: BulkIssuePropertyUpdateRequest,
+    ) -> Self {
+        Self { client, property_key: property_key.into(), bulk_issue_property_update_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/3/issue/properties/{}", crate::core::encode_path_segment(&self.property_key)),
+        );
+
+        let body = match serde_json::to_value(&self.bulk_issue_property_update_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes a property value from multiple issues. The issues to be updated can be specified by filter criteria.
+///
+/// The criteria the filter used to identify eligible issues are:
+///
+///  *  `entityIds` Only issues from this list are eligible.
+///  *  `currentValue` Only issues with the property set to this value are eligible.
+///
+/// If both criteria is specified, they are joined with the logical *AND*: only issues that satisfy both criteria are considered eligible.
+///
+/// If no filter criteria are specified, all the issues visible to the user and where the user has the EDIT\_ISSUES permission for the issue are considered eligible.
+///
+/// This operation is:
+///
+///  *  transactional, either the property is deleted from all eligible issues or, when errors occur, no properties are deleted.
+///  *  [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `location` link in the response to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Browse projects* [ project permission](https://confluence.atlassian.com/x/yodKLg) for each project containing issues.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+///  *  *Edit issues* [project permission](https://confluence.atlassian.com/x/yodKLg) for each issue.
+#[derive(Clone)]
+pub struct BulkDeleteIssuePropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    property_key: String,
+    issue_filter_for_bulk_property_delete: IssueFilterForBulkPropertyDelete,
+}
+
+impl<'a> BulkDeleteIssuePropertyRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        property_key: impl Into<String>,
+        issue_filter_for_bulk_property_delete: IssueFilterForBulkPropertyDelete,
+    ) -> Self {
+        Self { client, property_key: property_key.into(), issue_filter_for_bulk_property_delete }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/3/issue/properties/{}", crate::core::encode_path_segment(&self.property_key)),
+        );
+
+        let body = match serde_json::to_value(&self.issue_filter_for_bulk_property_delete)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the URLs and keys of an issue's properties.
+///
+/// This operation can be accessed anonymously.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Property details are only returned where the user has:
+///
+///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
+pub struct GetIssuePropertyKeysRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_id_or_key: String,
+}
+
+impl<'a> GetIssuePropertyKeysRequest<'a> {
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/issue/{}/properties", crate::core::encode_path_segment(&self.issue_id_or_key)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<PropertyKeys> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the key and value of an issue's property.
+///
+/// This operation can be accessed anonymously.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
+pub struct GetIssuePropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_id_or_key: String,
+    property_key: String,
+}
+
+impl<'a> GetIssuePropertyRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        issue_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
+    ) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), property_key: property_key.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/api/3/issue/{}/properties/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<EntityProperty> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Sets the value of an issue's property. Use this resource to store custom data against an issue.
+///
+/// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
+///
+/// This operation can be accessed anonymously.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Browse projects* and *Edit issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
+pub struct SetIssuePropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_id_or_key: String,
+    property_key: String,
+    body: std::collections::HashMap<String, serde_json::Value>,
+}
+
+impl<'a> SetIssuePropertyRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        issue_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
+        body: std::collections::HashMap<String, serde_json::Value>,
+    ) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), property_key: property_key.into(), body }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!(
+                "/rest/api/3/issue/{}/properties/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes an issue's property.
+///
+/// This operation can be accessed anonymously.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Browse projects* and *Edit issues* [project permissions](https://confluence.atlassian.com/x/yodKLg) for the project containing the issue.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+#[derive(Clone)]
+pub struct DeleteIssuePropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_id_or_key: String,
+    property_key: String,
+}
+
+impl<'a> DeleteIssuePropertyRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        issue_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
+    ) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), property_key: property_key.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!(
+                "/rest/api/3/issue/{}/properties/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

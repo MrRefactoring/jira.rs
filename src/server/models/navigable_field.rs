@@ -1,0 +1,25 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct NavigableField {
+    #[serde(rename = "columnCssClass", default, skip_serializing_if = "Option::is_none")]
+    pub column_css_class: Option<String>,
+    #[serde(rename = "columnHeadingKey", default, skip_serializing_if = "Option::is_none")]
+    pub column_heading_key: Option<String>,
+    #[serde(rename = "defaultSortOrder", default, skip_serializing_if = "Option::is_none")]
+    pub default_sort_order: Option<String>,
+    #[serde(rename = "hiddenFieldId", default, skip_serializing_if = "Option::is_none")]
+    pub hidden_field_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "nameKey", default, skip_serializing_if = "Option::is_none")]
+    pub name_key: Option<String>,
+    #[serde(rename = "valueLoader", default, skip_serializing_if = "Option::is_none")]
+    pub value_loader: Option<FieldValueLoader>,
+}

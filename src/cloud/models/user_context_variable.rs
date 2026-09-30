@@ -1,0 +1,20 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Type of custom context variable.
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum UserContextVariableType {
+    #[serde(rename = "user")]
+    User,
+}
+
+/// A [user](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#user) specified as an Atlassian account ID.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UserContextVariable {
+    /// The account ID of the user.
+    #[serde(rename = "accountId")]
+    pub account_id: String,
+    /// Type of custom context variable.
+    pub r#type: UserContextVariableType,
+}

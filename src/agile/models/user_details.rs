@@ -1,0 +1,53 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct UserDetailsAvatarUrls {
+    /// The URL of the item's 16x16 pixel avatar.
+    #[serde(rename = "16x16", default, skip_serializing_if = "Option::is_none")]
+    pub n16x16: Option<String>,
+    /// The URL of the item's 24x24 pixel avatar.
+    #[serde(rename = "24x24", default, skip_serializing_if = "Option::is_none")]
+    pub n24x24: Option<String>,
+    /// The URL of the item's 32x32 pixel avatar.
+    #[serde(rename = "32x32", default, skip_serializing_if = "Option::is_none")]
+    pub n32x32: Option<String>,
+    /// The URL of the item's 48x48 pixel avatar.
+    #[serde(rename = "48x48", default, skip_serializing_if = "Option::is_none")]
+    pub n48x48: Option<String>,
+}
+
+/// User details permitted by the user's Atlassian Account privacy settings. However, be aware of these exceptions:
+///
+///  *  User record deleted from Atlassian: This occurs as the result of a right to be forgotten request. In this case, `displayName` provides an indication and other parameters have default values or are blank (for example, email is blank).
+///  *  User record corrupted: This occurs as a results of events such as a server import and can only happen to deleted users. In this case, `accountId` returns *unknown* and all other parameters have fallback values.
+///  *  User record unavailable: This usually occurs due to an internal service outage. In this case, all parameters have fallback values.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct UserDetails {
+    /// The account ID of the user, which uniquely identifies the user across all Atlassian products. For example, *5b10ac8d82e05b22cc7d4ef5*.
+    #[serde(rename = "accountId", default, skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// The type of account represented by this user. This will be one of 'atlassian' (normal users), 'app' (application user) or 'customer' (Jira Service Desk customer user)
+    #[serde(rename = "accountType", default, skip_serializing_if = "Option::is_none")]
+    pub account_type: Option<String>,
+    /// Whether the user is active.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub active: Option<bool>,
+    #[serde(rename = "avatarUrls", default, skip_serializing_if = "Option::is_none")]
+    pub avatar_urls: Option<UserDetailsAvatarUrls>,
+    /// The display name of the user. Depending on the user’s privacy settings, this may return an alternative value.
+    #[serde(rename = "displayName", default, skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// The email address of the user. Depending on the user’s privacy settings, this may be returned as null.
+    #[serde(rename = "emailAddress", default, skip_serializing_if = "Option::is_none")]
+    pub email_address: Option<String>,
+    /// The URL of the user.
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+    /// The time zone specified in the user's profile. Depending on the user’s privacy settings, this may be returned as null.
+    #[serde(rename = "timeZone", default, skip_serializing_if = "Option::is_none")]
+    pub time_zone: Option<String>,
+}

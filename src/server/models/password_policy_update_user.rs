@@ -1,0 +1,13 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct PasswordPolicyUpdateUser {
+    #[serde(rename = "newPassword", default, skip_serializing_if = "Option::is_none")]
+    pub new_password: Option<String>,
+    #[serde(rename = "oldPassword", default, skip_serializing_if = "Option::is_none")]
+    pub old_password: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub username: Option<String>,
+}

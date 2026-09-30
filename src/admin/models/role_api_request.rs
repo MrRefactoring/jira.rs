@@ -1,0 +1,29 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// Role to assign/revoke for a user
+    pub enum RoleApiRequestRole {
+        AtlassianUser => "atlassian/user",
+        AtlassianUserAccessAdmin => "atlassian/user-access-admin",
+        AtlassianAdmin => "atlassian/admin",
+        AtlassianGuest => "atlassian/guest",
+        AtlassianContributor => "atlassian/contributor",
+        AtlassianCustomer => "atlassian/customer",
+        AtlassianBasic => "atlassian/basic",
+        AtlassianStakeholder => "atlassian/stakeholder",
+        AtlassianSiteAdmin => "atlassian/site-admin",
+        AtlassianOrgAdmin => "atlassian/org-admin",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RoleApiRequest {
+    /// Role to assign/revoke for a user
+    pub role: RoleApiRequestRole,
+    /// Use the [Get Workspaces API](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-workspaces/#api-v2-orgs-orgid-workspaces-post) to get an id.
+    /// Resource is required for all roles other than org-admin. Any resource passed for org-admin shall be ignored
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resource: Option<String>,
+}

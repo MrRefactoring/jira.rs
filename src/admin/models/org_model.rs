@@ -1,0 +1,66 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// Type name of this object
+    pub enum OrgModelType {
+        Orgs => "orgs",
+    }
+}
+
+/// Attributes of this object
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct OrgModelAttributes {
+    /// Name of this Org
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// Link to the related Domains of the Org
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct OrgModelRelationshipsDomains {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub links: Option<LinkRelatedModel>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub related: Option<String>,
+}
+
+/// Link to the related Users of the Org
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct OrgModelRelationshipsUsers {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub links: Option<LinkRelatedModel>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub related: Option<String>,
+}
+
+/// Relationships of this object
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct OrgModelRelationships {
+    /// Link to the related Domains of the Org
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub domains: Option<OrgModelRelationshipsDomains>,
+    /// Link to the related Users of the Org
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub users: Option<OrgModelRelationshipsUsers>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct OrgModel {
+    /// Unique identifier of the Org
+    pub id: String,
+    /// Type name of this object
+    pub r#type: OrgModelType,
+    /// Attributes of this object
+    pub attributes: OrgModelAttributes,
+    /// Relationships of this object
+    pub relationships: OrgModelRelationships,
+    pub links: LinkSelfModel,
+}

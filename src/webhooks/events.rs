@@ -1,0 +1,70 @@
+//! The events Jira sends a webhook for.
+
+crate::open_enum! {
+    /// The event a delivery reports, and the field to switch on.
+    ///
+    /// The variants spell the literal values of the body's `webhookEvent` field, prefix included — Atlassian prefixes
+    /// some with `jira:` and not others, and nothing about the event decides which.
+    ///
+    /// Open, like every enum in this crate, and here the reason is sharper than usual: a receiver that rejects an
+    /// event Atlassian added last Tuesday is an outage rather than a safeguard.
+    pub enum WebhookEvent {
+        JiraIssueCreated => "jira:issue_created",
+        JiraIssueUpdated => "jira:issue_updated",
+        JiraIssueDeleted => "jira:issue_deleted",
+        IssuePropertySet => "issue_property_set",
+        IssuePropertyDeleted => "issue_property_deleted",
+        WorklogCreated => "worklog_created",
+        WorklogUpdated => "worklog_updated",
+        WorklogDeleted => "worklog_deleted",
+        CommentCreated => "comment_created",
+        CommentUpdated => "comment_updated",
+        CommentDeleted => "comment_deleted",
+        AttachmentCreated => "attachment_created",
+        AttachmentDeleted => "attachment_deleted",
+        IssuelinkCreated => "issuelink_created",
+        IssuelinkDeleted => "issuelink_deleted",
+        IssuetypeCreated => "issuetype_created",
+        IssuetypeUpdated => "issuetype_updated",
+        IssuetypeDeleted => "issuetype_deleted",
+        ProjectCreated => "project_created",
+        ProjectUpdated => "project_updated",
+        ProjectDeleted => "project_deleted",
+        ProjectSoftDeleted => "project_soft_deleted",
+        ProjectRestoredDeleted => "project_restored_deleted",
+        ProjectArchived => "project_archived",
+        ProjectRestoredArchived => "project_restored_archived",
+        JiraVersionCreated => "jira:version_created",
+        JiraVersionUpdated => "jira:version_updated",
+        JiraVersionDeleted => "jira:version_deleted",
+        JiraVersionReleased => "jira:version_released",
+        JiraVersionUnreleased => "jira:version_unreleased",
+        JiraVersionMoved => "jira:version_moved",
+        JiraVersionMerged => "jira:version_merged",
+        FilterCreated => "filter_created",
+        FilterUpdated => "filter_updated",
+        FilterDeleted => "filter_deleted",
+        UserCreated => "user_created",
+        UserUpdated => "user_updated",
+        UserDeleted => "user_deleted",
+        OptionVotingChanged => "option_voting_changed",
+        OptionWatchingChanged => "option_watching_changed",
+        OptionUnassignedIssuesChanged => "option_unassigned_issues_changed",
+        OptionSubtasksChanged => "option_subtasks_changed",
+        OptionIssuelinksChanged => "option_issuelinks_changed",
+        OptionTimetrackingChanged => "option_timetracking_changed",
+        OptionTimetrackingProviderChanged => "option_timetracking_provider_changed",
+        SprintCreated => "sprint_created",
+        SprintUpdated => "sprint_updated",
+        SprintDeleted => "sprint_deleted",
+        SprintStarted => "sprint_started",
+        SprintClosed => "sprint_closed",
+        BoardCreated => "board_created",
+        BoardUpdated => "board_updated",
+        BoardDeleted => "board_deleted",
+        BoardConfigurationChanged => "board_configuration_changed",
+        AppAccessToObjectsBlocked => "app_access_to_objects_blocked",
+        AppAccessToObjectsInContainerBlocked => "app_access_to_objects_in_container_blocked",
+        JiraExpressionEvaluationFailed => "jira_expression_evaluation_failed",
+    }
+}

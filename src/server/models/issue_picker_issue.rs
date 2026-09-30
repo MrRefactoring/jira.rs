@@ -1,0 +1,18 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct IssuePickerIssue {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub img: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    #[serde(rename = "keyHtml", default, skip_serializing_if = "Option::is_none")]
+    pub key_html: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub summary: Option<String>,
+    #[serde(rename = "summaryText", default, skip_serializing_if = "Option::is_none")]
+    pub summary_text: Option<String>,
+}

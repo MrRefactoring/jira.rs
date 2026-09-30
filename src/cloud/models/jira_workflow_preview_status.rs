@@ -1,0 +1,39 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The category of the status.
+    pub enum JiraWorkflowPreviewStatusStatusCategory {
+        Todo => "TODO",
+        InProgress => "IN_PROGRESS",
+        Done => "DONE",
+    }
+}
+
+/// Details of a status.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct JiraWorkflowPreviewStatus {
+    /// The description of the status.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The ID of the status.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// The name of the status.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The raw name of the status.
+    #[serde(rename = "rawName", default, skip_serializing_if = "Option::is_none")]
+    pub raw_name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub scope: Option<WorkflowPreviewScope>,
+    /// The category of the status.
+    #[serde(rename = "statusCategory", default, skip_serializing_if = "Option::is_none")]
+    pub status_category: Option<JiraWorkflowPreviewStatusStatusCategory>,
+    /// The reference of the status. Unique within this response but not guaranteed to be stable across requests.
+    #[serde(rename = "statusReference", default, skip_serializing_if = "Option::is_none")]
+    pub status_reference: Option<String>,
+}

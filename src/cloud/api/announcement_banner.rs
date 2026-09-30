@@ -1,0 +1,106 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The AnnouncementBanner operations.
+pub struct AnnouncementBannerService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> AnnouncementBannerService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns the current announcement banner configuration.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn get_banner(&self) -> GetBannerRequest<'a> {
+        GetBannerRequest::new(self.client)
+    }
+
+    /// Updates the announcement banner configuration.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn set_banner(
+        &self,
+        announcement_banner_configuration_update: AnnouncementBannerConfigurationUpdate,
+    ) -> SetBannerRequest<'a> {
+        SetBannerRequest::new(self.client, announcement_banner_configuration_update)
+    }
+}
+
+/// Returns the current announcement banner configuration.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct GetBannerRequest<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> GetBannerRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/announcementBanner".to_owned());
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<AnnouncementBannerConfiguration> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Updates the announcement banner configuration.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct SetBannerRequest<'a> {
+    client: &'a crate::core::Client,
+    announcement_banner_configuration_update: AnnouncementBannerConfigurationUpdate,
+}
+
+impl<'a> SetBannerRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        announcement_banner_configuration_update: AnnouncementBannerConfigurationUpdate,
+    ) -> Self {
+        Self { client, announcement_banner_configuration_update }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::PUT, "/rest/api/3/announcementBanner".to_owned());
+
+        let body = match serde_json::to_value(&self.announcement_banner_configuration_update)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

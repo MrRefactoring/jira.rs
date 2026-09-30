@@ -1,0 +1,45 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// A status.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct StatusDetails {
+    /// The description of the status.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The URL of the icon used to represent the status.
+    #[serde(rename = "iconUrl", default, skip_serializing_if = "Option::is_none")]
+    pub icon_url: Option<String>,
+    /// The ID of the status.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// The name of the status.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub scope: Option<Scope>,
+    /// The URL of the status.
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+    #[serde(rename = "statusCategory", default, skip_serializing_if = "Option::is_none")]
+    pub status_category: Option<StatusCategory>,
+    /// Keys the specification does not describe, kept rather than dropped.
+    #[serde(flatten)]
+    pub additional: std::collections::HashMap<String, serde_json::Value>,
+}
+
+impl crate::core::Extensible for StatusDetails {
+    const FIELDS: &'static [&'static str] =
+        &["description", "iconUrl", "id", "name", "scope", "self", "statusCategory"];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}

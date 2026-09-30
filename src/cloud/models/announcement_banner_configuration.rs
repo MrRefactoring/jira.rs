@@ -1,0 +1,32 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// Visibility of the announcement banner.
+    pub enum AnnouncementBannerConfigurationVisibility {
+        Public => "public",
+        Private => "private",
+    }
+}
+
+/// Announcement banner configuration.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct AnnouncementBannerConfiguration {
+    /// Hash of the banner data. The client detects updates by comparing hash IDs.
+    #[serde(rename = "hashId", default, skip_serializing_if = "Option::is_none")]
+    pub hash_id: Option<String>,
+    /// Flag indicating if the announcement banner can be dismissed by the user.
+    #[serde(rename = "isDismissible", default, skip_serializing_if = "Option::is_none")]
+    pub is_dismissible: Option<bool>,
+    /// Flag indicating if the announcement banner is enabled or not.
+    #[serde(rename = "isEnabled", default, skip_serializing_if = "Option::is_none")]
+    pub is_enabled: Option<bool>,
+    /// The text on the announcement banner.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// Visibility of the announcement banner.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub visibility: Option<AnnouncementBannerConfigurationVisibility>,
+}

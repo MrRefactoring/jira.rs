@@ -1,0 +1,11 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Container for a list of webhook IDs.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ContainerForWebhookIDs {
+    /// A list of webhook IDs.
+    #[serde(rename = "webhookIds")]
+    pub webhook_ids: Vec<i64>,
+}

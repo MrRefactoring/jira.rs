@@ -1,0 +1,317 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The IssueWorklogProperties operations.
+pub struct IssueWorklogPropertiesService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> IssueWorklogPropertiesService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns the keys of all properties for a worklog.
+    ///
+    /// This operation can be accessed anonymously.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+    pub fn get_worklog_property_keys(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        worklog_id: impl Into<String>,
+    ) -> GetWorklogPropertyKeysRequest<'a> {
+        GetWorklogPropertyKeysRequest::new(self.client, issue_id_or_key, worklog_id)
+    }
+
+    /// Returns the value of a worklog property.
+    ///
+    /// This operation can be accessed anonymously.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+    pub fn get_worklog_property(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        worklog_id: impl Into<String>,
+        property_key: impl Into<String>,
+    ) -> GetWorklogPropertyRequest<'a> {
+        GetWorklogPropertyRequest::new(self.client, issue_id_or_key, worklog_id, property_key)
+    }
+
+    /// Sets the value of a worklog property. Use this operation to store custom data against the worklog.
+    ///
+    /// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
+    ///
+    /// This operation can be accessed anonymously.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    ///  *  *Edit all worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg) to update any worklog or *Edit own worklogs* to update worklogs created by the user.
+    ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+    pub fn set_worklog_property(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        worklog_id: impl Into<String>,
+        property_key: impl Into<String>,
+        body: std::collections::HashMap<String, serde_json::Value>,
+    ) -> SetWorklogPropertyRequest<'a> {
+        SetWorklogPropertyRequest::new(self.client, issue_id_or_key, worklog_id, property_key, body)
+    }
+
+    /// Deletes a worklog property.
+    ///
+    /// This operation can be accessed anonymously.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+    ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+    ///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+    pub fn delete_worklog_property(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        worklog_id: impl Into<String>,
+        property_key: impl Into<String>,
+    ) -> DeleteWorklogPropertyRequest<'a> {
+        DeleteWorklogPropertyRequest::new(self.client, issue_id_or_key, worklog_id, property_key)
+    }
+}
+
+/// Returns the keys of all properties for a worklog.
+///
+/// This operation can be accessed anonymously.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
+pub struct GetWorklogPropertyKeysRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_id_or_key: String,
+    worklog_id: String,
+}
+
+impl<'a> GetWorklogPropertyKeysRequest<'a> {
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, worklog_id: impl Into<String>) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), worklog_id: worklog_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/api/3/issue/{}/worklog/{}/properties",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.worklog_id)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<PropertyKeys> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the value of a worklog property.
+///
+/// This operation can be accessed anonymously.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
+pub struct GetWorklogPropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_id_or_key: String,
+    worklog_id: String,
+    property_key: String,
+}
+
+impl<'a> GetWorklogPropertyRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        issue_id_or_key: impl Into<String>,
+        worklog_id: impl Into<String>,
+        property_key: impl Into<String>,
+    ) -> Self {
+        Self {
+            client,
+            issue_id_or_key: issue_id_or_key.into(),
+            worklog_id: worklog_id.into(),
+            property_key: property_key.into(),
+        }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/api/3/issue/{}/worklog/{}/properties/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.worklog_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<EntityProperty> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Sets the value of a worklog property. Use this operation to store custom data against the worklog.
+///
+/// The value of the request body must be a [valid](http://tools.ietf.org/html/rfc4627), non-empty JSON blob. The maximum length is 32768 characters.
+///
+/// This operation can be accessed anonymously.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+///  *  *Edit all worklogs*[ project permission](https://confluence.atlassian.com/x/yodKLg) to update any worklog or *Edit own worklogs* to update worklogs created by the user.
+///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
+pub struct SetWorklogPropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_id_or_key: String,
+    worklog_id: String,
+    property_key: String,
+    body: std::collections::HashMap<String, serde_json::Value>,
+}
+
+impl<'a> SetWorklogPropertyRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        issue_id_or_key: impl Into<String>,
+        worklog_id: impl Into<String>,
+        property_key: impl Into<String>,
+        body: std::collections::HashMap<String, serde_json::Value>,
+    ) -> Self {
+        Self {
+            client,
+            issue_id_or_key: issue_id_or_key.into(),
+            worklog_id: worklog_id.into(),
+            property_key: property_key.into(),
+            body,
+        }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!(
+                "/rest/api/3/issue/{}/worklog/{}/properties/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.worklog_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes a worklog property.
+///
+/// This operation can be accessed anonymously.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Browse projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
+///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
+///  *  If the worklog has visibility restrictions, belongs to the group or has the role visibility is restricted to.
+#[derive(Clone)]
+pub struct DeleteWorklogPropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_id_or_key: String,
+    worklog_id: String,
+    property_key: String,
+}
+
+impl<'a> DeleteWorklogPropertyRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        issue_id_or_key: impl Into<String>,
+        worklog_id: impl Into<String>,
+        property_key: impl Into<String>,
+    ) -> Self {
+        Self {
+            client,
+            issue_id_or_key: issue_id_or_key.into(),
+            worklog_id: worklog_id.into(),
+            property_key: property_key.into(),
+        }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!(
+                "/rest/api/3/issue/{}/worklog/{}/properties/{}",
+                crate::core::encode_path_segment(&self.issue_id_or_key),
+                crate::core::encode_path_segment(&self.worklog_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

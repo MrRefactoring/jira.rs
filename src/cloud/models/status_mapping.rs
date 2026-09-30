@@ -1,0 +1,17 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Details about the mapping from a status to a new status for an issue type.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StatusMapping {
+    /// The ID of the issue type.
+    #[serde(rename = "issueTypeId")]
+    pub issue_type_id: String,
+    /// The ID of the new status.
+    #[serde(rename = "newStatusId")]
+    pub new_status_id: String,
+    /// The ID of the status.
+    #[serde(rename = "statusId")]
+    pub status_id: String,
+}

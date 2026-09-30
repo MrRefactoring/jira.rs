@@ -1,0 +1,18 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Approval configuration.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ApprovalConfigurationPreview {
+    /// The active approval configuration.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub active: Option<String>,
+    /// The transition ID for approved state.
+    #[serde(rename = "transitionApproved", default, skip_serializing_if = "Option::is_none")]
+    pub transition_approved: Option<String>,
+    /// The transition ID for rejected state.
+    #[serde(rename = "transitionRejected", default, skip_serializing_if = "Option::is_none")]
+    pub transition_rejected: Option<String>,
+}

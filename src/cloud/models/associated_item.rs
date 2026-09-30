@@ -1,0 +1,24 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Details of an item associated with the changed record.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct AssociatedItem {
+    /// The ID of the associated record.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// The name of the associated record.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The ID of the associated parent record.
+    #[serde(rename = "parentId", default, skip_serializing_if = "Option::is_none")]
+    pub parent_id: Option<String>,
+    /// The name of the associated parent record.
+    #[serde(rename = "parentName", default, skip_serializing_if = "Option::is_none")]
+    pub parent_name: Option<String>,
+    /// The type of the associated record.
+    #[serde(rename = "typeName", default, skip_serializing_if = "Option::is_none")]
+    pub type_name: Option<String>,
+}

@@ -1,0 +1,90 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The ConnectedTickets operations.
+pub struct ConnectedTicketsService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> ConnectedTicketsService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Retrieve all tickets connected to the specified object.
+    pub fn find_object_tickets(&self, id: impl Into<String>) -> FindObjectTicketsRequest<'a> {
+        FindObjectTicketsRequest::new(self.client, id)
+    }
+}
+
+/// Retrieve all tickets connected to the specified object.
+#[derive(Clone)]
+pub struct FindObjectTicketsRequest<'a> {
+    client: &'a crate::core::Client,
+    filter_id: Option<String>,
+    xoauth_requestor_id: Option<String>,
+    limit: Option<String>,
+    id: String,
+}
+
+impl<'a> FindObjectTicketsRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
+        Self { client, id: id.into(), filter_id: None, xoauth_requestor_id: None, limit: None }
+    }
+
+    /// Filter the tickets based on the filter ID. If filterId is not specified then no filter will be used. In the context of Jira the filterId will be the ID on an existing JQL filter.
+    #[must_use]
+    pub fn filter_id(mut self, value: impl Into<String>) -> Self {
+        self.filter_id = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn xoauth_requestor_id(mut self, value: impl Into<String>) -> Self {
+        self.xoauth_requestor_id = Some(value.into());
+
+        self
+    }
+
+    /// Limit the result set to the amount of objects. If the limit is not specified all connected tickets will be returned. Unlimited search is discouraged for performance reasons. If the limit is specified, it should not be higher than the max result window configured for the underlying search engine.
+    #[must_use]
+    pub fn limit(mut self, value: impl Into<String>) -> Self {
+        self.limit = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/assets/1.0/objectconnectedtickets/{}/tickets", crate::core::encode_path_segment(&self.id)),
+        );
+
+        if let Some(value) = &self.filter_id {
+            config.query.push(("filterId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.xoauth_requestor_id {
+            config.query.push(("xoauth_requestor_id".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.limit {
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Tickets> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

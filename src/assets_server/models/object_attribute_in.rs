@@ -1,0 +1,16 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ObjectAttributeIn {
+    #[serde(rename = "objectId", default, skip_serializing_if = "Option::is_none")]
+    pub object_id: Option<i64>,
+    #[serde(rename = "objectTypeAttributeId", default, skip_serializing_if = "Option::is_none")]
+    pub object_type_attribute_id: Option<i64>,
+    #[serde(rename = "objectAttributeValues")]
+    pub object_attribute_values: Vec<ObjectAttributeValueIn>,
+    #[serde(rename = "operationType", default, skip_serializing_if = "Option::is_none")]
+    pub operation_type: Option<i64>,
+}

@@ -1,0 +1,26 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Details of an issue level security item.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SecurityLevel {
+    /// The description of the issue level security item.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The ID of the issue level security item.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// Whether the issue level security item is the default.
+    #[serde(rename = "isDefault", default, skip_serializing_if = "Option::is_none")]
+    pub is_default: Option<bool>,
+    /// The ID of the issue level security scheme.
+    #[serde(rename = "issueSecuritySchemeId", default, skip_serializing_if = "Option::is_none")]
+    pub issue_security_scheme_id: Option<String>,
+    /// The name of the issue level security item.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The URL of the issue level security item.
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+}

@@ -1,0 +1,37 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// Status of policy application on resource
+    pub enum ResourceApplicationStatus {
+        Applying => "applying",
+        Removing => "removing",
+        Applied => "applied",
+        Failed => "failed",
+        Scheduled => "scheduled",
+        Enabled => "enabled",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct Resource {
+    pub id: String,
+    /// Status of policy application on resource
+    #[serde(rename = "applicationStatus")]
+    pub application_status: ResourceApplicationStatus,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub meta: Option<Meta>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub links: Option<Links>,
+    #[serde(rename = "createdAt", default, skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<serde_json::Value>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<String>,
+    #[serde(rename = "updatedAt", default, skip_serializing_if = "Option::is_none")]
+    pub updated_at: Option<String>,
+}

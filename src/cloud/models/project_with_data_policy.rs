@@ -1,0 +1,15 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Details about data policies for a project.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ProjectWithDataPolicy {
+    #[serde(rename = "dataPolicy", default, skip_serializing_if = "Option::is_none")]
+    pub data_policy: Option<ProjectDataPolicy>,
+    /// The project ID.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+}

@@ -1,0 +1,51 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Details of an application role.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ApplicationRole {
+    /// The groups that are granted default access for this application role. As a group's name can change, use of `defaultGroupsDetails` is recommended to identify a groups.
+    #[serde(rename = "defaultGroups", default, skip_serializing_if = "Option::is_none")]
+    pub default_groups: Option<Vec<String>>,
+    /// The groups that are granted default access for this application role.
+    #[serde(rename = "defaultGroupsDetails", default, skip_serializing_if = "Option::is_none")]
+    pub default_groups_details: Option<Vec<GroupName>>,
+    /// Deprecated.
+    #[deprecated(note = "Deprecated.")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub defined: Option<bool>,
+    /// The groups associated with the application role.
+    #[serde(rename = "groupDetails", default, skip_serializing_if = "Option::is_none")]
+    pub group_details: Option<Vec<GroupName>>,
+    /// The groups associated with the application role. As a group's name can change, use of `groupDetails` is recommended to identify a groups.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub groups: Option<Vec<String>>,
+    #[serde(rename = "hasUnlimitedSeats", default, skip_serializing_if = "Option::is_none")]
+    pub has_unlimited_seats: Option<bool>,
+    /// The key of the application role.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// The display name of the application role.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The maximum count of users on your license.
+    #[serde(rename = "numberOfSeats", default, skip_serializing_if = "Option::is_none")]
+    pub number_of_seats: Option<i64>,
+    /// Indicates if the application role belongs to Jira platform (`jira-core`).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub platform: Option<bool>,
+    /// The count of users remaining on your license.
+    #[serde(rename = "remainingSeats", default, skip_serializing_if = "Option::is_none")]
+    pub remaining_seats: Option<i64>,
+    /// Determines whether this application role should be selected by default on user creation.
+    #[serde(rename = "selectedByDefault", default, skip_serializing_if = "Option::is_none")]
+    pub selected_by_default: Option<bool>,
+    /// The number of users counting against your license.
+    #[serde(rename = "userCount", default, skip_serializing_if = "Option::is_none")]
+    pub user_count: Option<i64>,
+    /// The [type of users](https://confluence.atlassian.com/x/lRW3Ng) being counted against your license.
+    #[serde(rename = "userCountDescription", default, skip_serializing_if = "Option::is_none")]
+    pub user_count_description: Option<String>,
+}

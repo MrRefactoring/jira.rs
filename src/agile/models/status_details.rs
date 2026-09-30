@@ -1,0 +1,160 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct StatusDetailsScopeProjectAvatarUrls {
+    /// The URL of the item's 16x16 pixel avatar.
+    #[serde(rename = "16x16", default, skip_serializing_if = "Option::is_none")]
+    pub n16x16: Option<String>,
+    /// The URL of the item's 24x24 pixel avatar.
+    #[serde(rename = "24x24", default, skip_serializing_if = "Option::is_none")]
+    pub n24x24: Option<String>,
+    /// The URL of the item's 32x32 pixel avatar.
+    #[serde(rename = "32x32", default, skip_serializing_if = "Option::is_none")]
+    pub n32x32: Option<String>,
+    /// The URL of the item's 48x48 pixel avatar.
+    #[serde(rename = "48x48", default, skip_serializing_if = "Option::is_none")]
+    pub n48x48: Option<String>,
+}
+
+/// A project category.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct StatusDetailsScopeProjectProjectCategory {
+    /// The name of the project category.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The ID of the project category.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// The description of the project category.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The URL of the project category.
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+}
+
+crate::open_enum! {
+    /// The [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes) of the project.
+    pub enum StatusDetailsScopeProjectProjectTypeKey {
+        Software => "software",
+        ServiceDesk => "service_desk",
+        Business => "business",
+    }
+}
+
+/// Details about a project.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct StatusDetailsScopeProject {
+    #[serde(rename = "avatarUrls", default, skip_serializing_if = "Option::is_none")]
+    pub avatar_urls: Option<StatusDetailsScopeProjectAvatarUrls>,
+    /// The ID of the project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// The key of the project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// The name of the project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// A project category.
+    #[serde(rename = "projectCategory", default, skip_serializing_if = "Option::is_none")]
+    pub project_category: Option<StatusDetailsScopeProjectProjectCategory>,
+    /// The [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes) of the project.
+    #[serde(rename = "projectTypeKey", default, skip_serializing_if = "Option::is_none")]
+    pub project_type_key: Option<StatusDetailsScopeProjectProjectTypeKey>,
+    /// The URL of the project details.
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+    /// Whether or not the project is simplified.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub simplified: Option<bool>,
+}
+
+crate::open_enum! {
+    /// The type of scope.
+    pub enum StatusDetailsScopeType {
+        Project => "PROJECT",
+        Template => "TEMPLATE",
+    }
+}
+
+/// The projects the item is associated with. Indicated for items associated with [next-gen projects](https://confluence.atlassian.com/x/loMyO).
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct StatusDetailsScope {
+    /// Details about a project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub project: Option<StatusDetailsScopeProject>,
+    /// The type of scope.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<StatusDetailsScopeType>,
+}
+
+/// A status category.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct StatusDetailsStatusCategory {
+    /// The name of the color used to represent the status category.
+    #[serde(rename = "colorName", default, skip_serializing_if = "Option::is_none")]
+    pub color_name: Option<String>,
+    /// The ID of the status category.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    /// The key of the status category.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// The name of the status category.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The URL of the status category.
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+}
+
+/// A status.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct StatusDetails {
+    /// The description of the status.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The URL of the icon used to represent the status.
+    #[serde(rename = "iconUrl", default, skip_serializing_if = "Option::is_none")]
+    pub icon_url: Option<String>,
+    /// The ID of the status.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// The name of the status.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The projects the item is associated with. Indicated for items associated with [next-gen projects](https://confluence.atlassian.com/x/loMyO).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub scope: Option<StatusDetailsScope>,
+    /// The URL of the status.
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+    /// A status category.
+    #[serde(rename = "statusCategory", default, skip_serializing_if = "Option::is_none")]
+    pub status_category: Option<StatusDetailsStatusCategory>,
+    /// Keys the specification does not describe, kept rather than dropped.
+    #[serde(flatten)]
+    pub additional: std::collections::HashMap<String, serde_json::Value>,
+}
+
+impl crate::core::Extensible for StatusDetails {
+    const FIELDS: &'static [&'static str] =
+        &["description", "iconUrl", "id", "name", "scope", "self", "statusCategory"];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}

@@ -1,0 +1,11 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ConnectModules {
+    /// A list of app modules in the same format as the `modules` property in the
+    /// [app descriptor](https://developer.atlassian.com/cloud/jira/platform/app-descriptor/).
+    pub modules: Vec<ConnectModule>,
+}

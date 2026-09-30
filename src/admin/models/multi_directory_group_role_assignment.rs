@@ -1,0 +1,19 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// The role assignment for the group.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct MultiDirectoryGroupRoleAssignment {
+    #[serde(rename = "resourceId", default, skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<ResourceId>,
+    #[serde(rename = "resourceOwner", default, skip_serializing_if = "Option::is_none")]
+    pub resource_owner: Option<ResourceOwner>,
+    /// Indicates which role is granted by default for the resource ID.
+    #[serde(rename = "defaultRole", default, skip_serializing_if = "Option::is_none")]
+    pub default_role: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub roles: Option<RoleIds>,
+}

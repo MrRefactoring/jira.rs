@@ -1,0 +1,788 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+use serde::{Deserialize, Serialize};
+
+/// Comma-separated list of Operations Workspace IDs to delete. All data associated with the given workspaces will eventually be removed from Jira. Example: workspaceIds=111-222-333,444-555-666.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum DeleteWorkspacesRequestWorkspaceIds {
+    One(String),
+    Many(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    /// The IncidentData schema version used for this incident data.
+    ///
+    /// Placeholder to support potential schema changes in the future.
+    pub enum SubmitEntityRequestBodyVariant0IncidentsSchemaVersion {
+        N10 => "1.0",
+    }
+}
+
+crate::open_enum! {
+    /// The severity level of the Incident with P1 being the highest and P5 being the lowest
+    pub enum SubmitEntityRequestBodyVariant0IncidentsSeverityLevel {
+        P1 => "P1",
+        P2 => "P2",
+        P3 => "P3",
+        P4 => "P4",
+        P5 => "P5",
+        Unknown => "unknown",
+    }
+}
+
+/// Severity information for a single Incident.
+///
+/// This is the severity information that will be presented to the user on e.g. the Jira Incidents screen.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SubmitEntityRequestBodyVariant0IncidentsSeverity {
+    /// The severity level of the Incident with P1 being the highest and P5 being the lowest
+    pub level: SubmitEntityRequestBodyVariant0IncidentsSeverityLevel,
+}
+
+crate::open_enum! {
+    /// The current status of the Incident.
+    pub enum SubmitEntityRequestBodyVariant0IncidentsStatus {
+        Open => "open",
+        Resolved => "resolved",
+        Unknown => "unknown",
+    }
+}
+
+crate::open_enum! {
+    /// the type of the association being made
+    pub enum SubmitEntityRequestBodyVariant0IncidentsAssociationsAssociationType {
+        IssueIdOrKeys => "issueIdOrKeys",
+        ServiceIdOrKeys => "serviceIdOrKeys",
+        AtiCloudCompassEventSource => "ati:cloud:compass:event-source",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitEntityRequestBodyVariant0IncidentsAssociations {
+    /// the type of the association being made
+    #[serde(rename = "associationType", default, skip_serializing_if = "Option::is_none")]
+    pub association_type: Option<SubmitEntityRequestBodyVariant0IncidentsAssociationsAssociationType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub values: Option<Vec<String>>,
+}
+
+/// Data related to a specific incident in a specific container that the incident is present in. Must specify at least one association to a component.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SubmitEntityRequestBodyVariant0Incidents {
+    /// The IncidentData schema version used for this incident data.
+    ///
+    /// Placeholder to support potential schema changes in the future.
+    #[serde(rename = "schemaVersion")]
+    pub schema_version: SubmitEntityRequestBodyVariant0IncidentsSchemaVersion,
+    /// The identifier for the Incident. Must be unique for a given Provider.
+    pub id: String,
+    /// An ID used to apply an ordering to updates for this Incident in the case of out-of-order receipt of update requests.
+    ///
+    /// This can be any monotonically increasing number. A suggested implementation is to use epoch millis from the Provider system, but other alternatives are valid (e.g. a Provider could store a counter against each Incident and increment that on each update to Jira).
+    ///
+    /// Updates for a Incident that are received with an updateSqeuenceId lower than what is currently stored will be ignored.
+    #[serde(rename = "updateSequenceNumber")]
+    pub update_sequence_number: i64,
+    /// The IDs of the Components impacted by this Incident. Must be unique for a given Provider.
+    #[serde(rename = "affectedComponents")]
+    pub affected_components: Vec<String>,
+    /// The human-readable summary for the Incident. Will be shown in the UI.
+    ///
+    /// If not provided, will use the ID for display.
+    pub summary: String,
+    /// A description of the issue in Markdown format. Will be shown in the UI and used when creating Jira Issues.
+    pub description: String,
+    /// A URL users can use to link to a summary view of this incident, if appropriate.
+    ///
+    /// This could be any location that makes sense in the Provider system (e.g. if the summary information comes from a specific project, it might make sense to link the user to the incident in that project).
+    pub url: String,
+    /// The timestamp to present to the user that shows when the Incident was raised.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "createdDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created_date: Option<chrono::DateTime<chrono::Utc>>,
+    /// The timestamp to present to the user that shows when the Incident was raised.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
+    #[serde(rename = "createdDate", deserialize_with = "crate::core::deserialize_required_timestamp")]
+    pub created_date: String,
+    /// The last-updated timestamp to present to the user the last time the Incident was updated.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user the last time the Incident was updated.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
+    #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
+    pub last_updated: String,
+    /// Severity information for a single Incident.
+    ///
+    /// This is the severity information that will be presented to the user on e.g. the Jira Incidents screen.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub severity: Option<SubmitEntityRequestBodyVariant0IncidentsSeverity>,
+    /// The current status of the Incident.
+    pub status: SubmitEntityRequestBodyVariant0IncidentsStatus,
+    /// The IDs of the Jira issues related to this Incident. Must be unique for a given Provider.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub associations: Option<Vec<SubmitEntityRequestBodyVariant0IncidentsAssociations>>,
+}
+
+crate::open_enum! {
+    /// The PostIncidentReviewData schema version used for this post-incident review data.
+    ///
+    /// Placeholder to support potential schema changes in the future.
+    pub enum SubmitEntityRequestBodyVariant1ReviewsSchemaVersion {
+        N10 => "1.0",
+    }
+}
+
+crate::open_enum! {
+    /// The current status of the Post-Incident Review.
+    pub enum SubmitEntityRequestBodyVariant1ReviewsStatus {
+        InProgress => "in progress",
+        OutstandingActions => "outstanding actions",
+        Completed => "completed",
+        Unknown => "unknown",
+    }
+}
+
+crate::open_enum! {
+    /// the type of the association being made
+    pub enum SubmitEntityRequestBodyVariant1ReviewsAssociationsAssociationType {
+        IssueIdOrKeys => "issueIdOrKeys",
+        ServiceIdOrKeys => "serviceIdOrKeys",
+        AtiCloudCompassEventSource => "ati:cloud:compass:event-source",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitEntityRequestBodyVariant1ReviewsAssociations {
+    /// the type of the association being made
+    #[serde(rename = "associationType", default, skip_serializing_if = "Option::is_none")]
+    pub association_type: Option<SubmitEntityRequestBodyVariant1ReviewsAssociationsAssociationType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub values: Option<Vec<String>>,
+}
+
+/// Data related to a specific post-incident review. Must specify at least one association to an incident.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SubmitEntityRequestBodyVariant1Reviews {
+    /// The PostIncidentReviewData schema version used for this post-incident review data.
+    ///
+    /// Placeholder to support potential schema changes in the future.
+    #[serde(rename = "schemaVersion")]
+    pub schema_version: SubmitEntityRequestBodyVariant1ReviewsSchemaVersion,
+    /// The identifier for the Review. Must be unique for a given Provider.
+    pub id: String,
+    /// An ID used to apply an ordering to updates for this Review in the case of out-of-order receipt of update requests.
+    ///
+    /// This can be any monotonically increasing number. A suggested implementation is to use epoch millis from the Provider system, but other alternatives are valid (e.g. a Provider could store a counter against each Review and increment that on each update to Jira).
+    ///
+    /// Updates for a Review that are received with an updateSqeuenceId lower than what is currently stored will be ignored.
+    #[serde(rename = "updateSequenceNumber")]
+    pub update_sequence_number: i64,
+    /// The IDs of the Incidents covered by this Review. Must be unique for a given Provider.
+    pub reviews: Vec<String>,
+    /// The human-readable summary for the Post-Incident Review. Will be shown in the UI.
+    ///
+    /// If not provided, will use the ID for display.
+    pub summary: String,
+    /// A description of the review in Markdown format. Will be shown in the UI and used when creating Jira Issues.
+    pub description: String,
+    /// A URL users can use to link to a summary view of this review, if appropriate.
+    ///
+    /// This could be any location that makes sense in the Provider system (e.g. if the summary information comes from a specific project, it might make sense to link the user to the review in that project).
+    pub url: String,
+    /// The timestamp to present to the user that shows when the Review was raised.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "createdDate",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub created_date: Option<chrono::DateTime<chrono::Utc>>,
+    /// The timestamp to present to the user that shows when the Review was raised.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
+    #[serde(rename = "createdDate", deserialize_with = "crate::core::deserialize_required_timestamp")]
+    pub created_date: String,
+    /// The last-updated timestamp to present to the user the last time the Review was updated.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(feature = "chrono")]
+    #[serde(
+        rename = "lastUpdated",
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::core::deserialize_datetime",
+        serialize_with = "crate::core::serialize_datetime"
+    )]
+    pub last_updated: Option<chrono::DateTime<chrono::Utc>>,
+    /// The last-updated timestamp to present to the user the last time the Review was updated.
+    ///
+    /// Expected format is an RFC3339 formatted string.
+    #[cfg(not(feature = "chrono"))]
+    #[serde(rename = "lastUpdated", deserialize_with = "crate::core::deserialize_required_timestamp")]
+    pub last_updated: String,
+    /// The current status of the Post-Incident Review.
+    pub status: SubmitEntityRequestBodyVariant1ReviewsStatus,
+    /// The IDs of the Jira issues related to this Incident. Must be unique for a given Provider.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub associations: Option<Vec<SubmitEntityRequestBodyVariant1ReviewsAssociations>>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitEntityRequestBodyValue {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub incidents: Option<Vec<SubmitEntityRequestBodyVariant0Incidents>>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SubmitEntityRequestBodyValue2 {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub reviews: Option<Vec<SubmitEntityRequestBodyVariant1Reviews>>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum SubmitEntityRequestBody {
+    Variant0(SubmitEntityRequestBodyValue),
+    Variant1(SubmitEntityRequestBodyValue2),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+/// The Operations operations.
+pub struct OperationsService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> OperationsService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Insert Operations Workspace IDs to establish a relationship between them and the Jira site the app is installed in. If a relationship between the Workspace ID and Jira already exists then the workspace ID will be ignored and Jira will process the rest of the entries.
+    ///
+    /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+    /// This resource requires the 'WRITE' scope for Connect apps.
+    pub fn submit_operations_workspaces(
+        &self,
+        workspace_ids: impl IntoIterator<Item = impl Into<String>>,
+    ) -> SubmitOperationsWorkspacesRequest<'a> {
+        SubmitOperationsWorkspacesRequest::new(self.client, workspace_ids)
+    }
+
+    /// Bulk delete all Operations Workspaces that match the given request.
+    ///
+    /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+    /// This resource requires the 'DELETE' scope for Connect apps.
+    ///
+    /// e.g. DELETE /bulk?workspaceIds=111-222-333,444-555-666
+    pub fn delete_workspaces(&self, workspace_ids: DeleteWorkspacesRequestWorkspaceIds) -> DeleteWorkspacesRequest<'a> {
+        DeleteWorkspacesRequest::new(self.client, workspace_ids)
+    }
+
+    /// Retrieve the either all Operations Workspace IDs associated with the Jira site or a specific Operations Workspace ID for the given ID.
+    ///
+    /// The result will be what is currently stored, ignoring any pending updates or deletes.
+    ///
+    /// e.g. GET /workspace?workspaceId=111-222-333
+    ///
+    /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+    /// This resource requires the 'READ' scope for Connect apps.
+    pub fn get_workspaces(&self) -> GetWorkspacesRequest<'a> {
+        GetWorkspacesRequest::new(self.client)
+    }
+
+    /// Update / insert Incident or Review data.
+    ///
+    /// Incidents and reviews are identified by their ID, and existing Incident and Review data for the same ID will be replaced if it exists and the updateSequenceNumber of existing data is less than the incoming data.
+    ///
+    /// Submissions are performed asynchronously. Submitted data will eventually be available in Jira; most updates are available within a short period of time, but may take some time during peak load and/or maintenance times. The getIncidentById or getReviewById operation can be used to confirm that data has been stored successfully (if needed).
+    ///
+    /// In the case of multiple Incidents and Reviews being submitted in one request, each is validated individually prior to submission. Details of which entities failed submission (if any) are available in the response object.
+    ///
+    /// A maximum of 1000 incidents can be submitted in one request.
+    ///
+    /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+    /// This resource requires the 'WRITE' scope for Connect apps.
+    pub fn submit_entity(&self, body: SubmitEntityRequestBody) -> SubmitEntityRequest<'a> {
+        SubmitEntityRequest::new(self.client, body)
+    }
+
+    /// Bulk delete all Entties that match the given request.
+    ///
+    /// One or more query params must be supplied to specify Properties to delete by.
+    /// If more than one Property is provided, data will be deleted that matches ALL of the Properties (e.g. treated as an AND).
+    /// See the documentation for the submitEntity operation for more details.
+    ///
+    /// e.g. DELETE /bulkByProperties?accountId=account-123&createdBy=user-456
+    ///
+    /// Deletion is performed asynchronously. The getIncidentById operation can be used to confirm that data has been deleted successfully (if needed).
+    ///
+    /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+    /// This resource requires the 'DELETE' scope for Connect apps.
+    pub fn delete_entity_by_property(&self, account_id: impl Into<String>) -> DeleteEntityByPropertyRequest<'a> {
+        DeleteEntityByPropertyRequest::new(self.client, account_id)
+    }
+
+    /// Retrieve the currently stored Incident data for the given ID.
+    ///
+    /// The result will be what is currently stored, ignoring any pending updates or deletes.
+    ///
+    /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+    /// This resource requires the 'READ' scope for Connect apps.
+    pub fn get_incident_by_id(&self, incident_id: impl Into<String>) -> GetIncidentByIdRequest<'a> {
+        GetIncidentByIdRequest::new(self.client, incident_id)
+    }
+
+    /// Delete the Incident data currently stored for the given ID.
+    ///
+    /// Deletion is performed asynchronously. The getIncidentById operation can be used to confirm that data has been deleted successfully (if needed).
+    ///
+    /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+    /// This resource requires the 'DELETE' scope for Connect apps.
+    pub fn delete_incident_by_id(&self, incident_id: impl Into<String>) -> DeleteIncidentByIdRequest<'a> {
+        DeleteIncidentByIdRequest::new(self.client, incident_id)
+    }
+
+    /// Retrieve the currently stored Review data for the given ID.
+    ///
+    /// The result will be what is currently stored, ignoring any pending updates or deletes.
+    ///
+    /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+    /// This resource requires the 'READ' scope for Connect apps.
+    pub fn get_review_by_id(&self, review_id: impl Into<String>) -> GetReviewByIdRequest<'a> {
+        GetReviewByIdRequest::new(self.client, review_id)
+    }
+
+    /// Delete the Review data currently stored for the given ID.
+    ///
+    /// Deletion is performed asynchronously. The getReviewById operation can be used to confirm that data has been deleted successfully (if needed).
+    ///
+    /// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+    /// This resource requires the 'DELETE' scope for Connect apps.
+    pub fn delete_review_by_id(&self, review_id: impl Into<String>) -> DeleteReviewByIdRequest<'a> {
+        DeleteReviewByIdRequest::new(self.client, review_id)
+    }
+}
+
+/// Insert Operations Workspace IDs to establish a relationship between them and the Jira site the app is installed in. If a relationship between the Workspace ID and Jira already exists then the workspace ID will be ignored and Jira will process the rest of the entries.
+///
+/// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+/// This resource requires the 'WRITE' scope for Connect apps.
+#[derive(Clone)]
+pub struct SubmitOperationsWorkspacesRequest<'a> {
+    client: &'a crate::core::Client,
+    workspace_ids: Vec<String>,
+}
+
+impl<'a> SubmitOperationsWorkspacesRequest<'a> {
+    fn new(client: &'a crate::core::Client, workspace_ids: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        Self { client, workspace_ids: workspace_ids.into_iter().map(Into::into).collect() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            "/rest/operations/1.0/linkedWorkspaces/bulk".to_owned(),
+        );
+
+        let mut body = serde_json::Map::new();
+
+        body.insert("workspaceIds".to_owned(), serde_json::to_value(&self.workspace_ids)?);
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<SubmitOperationsWorkspaces> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Bulk delete all Operations Workspaces that match the given request.
+///
+/// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+/// This resource requires the 'DELETE' scope for Connect apps.
+///
+/// e.g. DELETE /bulk?workspaceIds=111-222-333,444-555-666
+#[derive(Clone)]
+pub struct DeleteWorkspacesRequest<'a> {
+    client: &'a crate::core::Client,
+    workspace_ids: DeleteWorkspacesRequestWorkspaceIds,
+}
+
+impl<'a> DeleteWorkspacesRequest<'a> {
+    fn new(client: &'a crate::core::Client, workspace_ids: DeleteWorkspacesRequestWorkspaceIds) -> Self {
+        Self { client, workspace_ids }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            "/rest/operations/1.0/linkedWorkspaces/bulk".to_owned(),
+        );
+
+        config
+            .query
+            .push(("workspaceIds".to_owned(), crate::core::QueryValue::from_serializable(&self.workspace_ids)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Retrieve the either all Operations Workspace IDs associated with the Jira site or a specific Operations Workspace ID for the given ID.
+///
+/// The result will be what is currently stored, ignoring any pending updates or deletes.
+///
+/// e.g. GET /workspace?workspaceId=111-222-333
+///
+/// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+/// This resource requires the 'READ' scope for Connect apps.
+#[derive(Clone)]
+pub struct GetWorkspacesRequest<'a> {
+    client: &'a crate::core::Client,
+    workspace_id: Option<String>,
+}
+
+impl<'a> GetWorkspacesRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, workspace_id: None }
+    }
+
+    /// Optional Operations Workspace ID to retrieve a specific workspace. If omitted, all workspace IDs linked to the Jira site are returned. Example: workspaceId=111-222-333.
+    #[must_use]
+    pub fn workspace_id(mut self, value: impl Into<String>) -> Self {
+        self.workspace_id = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            "/rest/operations/1.0/linkedWorkspaces".to_owned(),
+        );
+
+        if let Some(value) = &self.workspace_id {
+            config.query.push(("workspaceId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetWorkspaces> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Update / insert Incident or Review data.
+///
+/// Incidents and reviews are identified by their ID, and existing Incident and Review data for the same ID will be replaced if it exists and the updateSequenceNumber of existing data is less than the incoming data.
+///
+/// Submissions are performed asynchronously. Submitted data will eventually be available in Jira; most updates are available within a short period of time, but may take some time during peak load and/or maintenance times. The getIncidentById or getReviewById operation can be used to confirm that data has been stored successfully (if needed).
+///
+/// In the case of multiple Incidents and Reviews being submitted in one request, each is validated individually prior to submission. Details of which entities failed submission (if any) are available in the response object.
+///
+/// A maximum of 1000 incidents can be submitted in one request.
+///
+/// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+/// This resource requires the 'WRITE' scope for Connect apps.
+#[derive(Clone)]
+pub struct SubmitEntityRequest<'a> {
+    client: &'a crate::core::Client,
+    body: SubmitEntityRequestBody,
+}
+
+impl<'a> SubmitEntityRequest<'a> {
+    fn new(client: &'a crate::core::Client, body: SubmitEntityRequestBody) -> Self {
+        Self { client, body }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/operations/1.0/bulk".to_owned());
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<SubmitEntity> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Bulk delete all Entties that match the given request.
+///
+/// One or more query params must be supplied to specify Properties to delete by.
+/// If more than one Property is provided, data will be deleted that matches ALL of the Properties (e.g. treated as an AND).
+/// See the documentation for the submitEntity operation for more details.
+///
+/// e.g. DELETE /bulkByProperties?accountId=account-123&createdBy=user-456
+///
+/// Deletion is performed asynchronously. The getIncidentById operation can be used to confirm that data has been deleted successfully (if needed).
+///
+/// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+/// This resource requires the 'DELETE' scope for Connect apps.
+#[derive(Clone)]
+pub struct DeleteEntityByPropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    account_id: String,
+    created_by: Option<String>,
+}
+
+impl<'a> DeleteEntityByPropertyRequest<'a> {
+    fn new(client: &'a crate::core::Client, account_id: impl Into<String>) -> Self {
+        Self { client, account_id: account_id.into(), created_by: None }
+    }
+
+    /// Optional additional property filter combined with accountId (AND). Must match a key previously supplied in submitEntity `properties`. Example: createdBy=user-456.
+    #[must_use]
+    pub fn created_by(mut self, value: impl Into<String>) -> Self {
+        self.created_by = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            "/rest/operations/1.0/bulkByProperties".to_owned(),
+        );
+
+        config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
+
+        if let Some(value) = &self.created_by {
+            config.query.push(("createdBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Retrieve the currently stored Incident data for the given ID.
+///
+/// The result will be what is currently stored, ignoring any pending updates or deletes.
+///
+/// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+/// This resource requires the 'READ' scope for Connect apps.
+#[derive(Clone)]
+pub struct GetIncidentByIdRequest<'a> {
+    client: &'a crate::core::Client,
+    incident_id: String,
+}
+
+impl<'a> GetIncidentByIdRequest<'a> {
+    fn new(client: &'a crate::core::Client, incident_id: impl Into<String>) -> Self {
+        Self { client, incident_id: incident_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/operations/1.0/incidents/{}", crate::core::encode_path_segment(&self.incident_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetIncidentById> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Delete the Incident data currently stored for the given ID.
+///
+/// Deletion is performed asynchronously. The getIncidentById operation can be used to confirm that data has been deleted successfully (if needed).
+///
+/// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+/// This resource requires the 'DELETE' scope for Connect apps.
+#[derive(Clone)]
+pub struct DeleteIncidentByIdRequest<'a> {
+    client: &'a crate::core::Client,
+    incident_id: String,
+}
+
+impl<'a> DeleteIncidentByIdRequest<'a> {
+    fn new(client: &'a crate::core::Client, incident_id: impl Into<String>) -> Self {
+        Self { client, incident_id: incident_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/operations/1.0/incidents/{}", crate::core::encode_path_segment(&self.incident_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Retrieve the currently stored Review data for the given ID.
+///
+/// The result will be what is currently stored, ignoring any pending updates or deletes.
+///
+/// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+/// This resource requires the 'READ' scope for Connect apps.
+#[derive(Clone)]
+pub struct GetReviewByIdRequest<'a> {
+    client: &'a crate::core::Client,
+    review_id: String,
+}
+
+impl<'a> GetReviewByIdRequest<'a> {
+    fn new(client: &'a crate::core::Client, review_id: impl Into<String>) -> Self {
+        Self { client, review_id: review_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/operations/1.0/post-incident-reviews/{}", crate::core::encode_path_segment(&self.review_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetReviewById> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Delete the Review data currently stored for the given ID.
+///
+/// Deletion is performed asynchronously. The getReviewById operation can be used to confirm that data has been deleted successfully (if needed).
+///
+/// Only Connect apps that define the `jiraOperationsInfoProvider` module can access this resource.
+/// This resource requires the 'DELETE' scope for Connect apps.
+#[derive(Clone)]
+pub struct DeleteReviewByIdRequest<'a> {
+    client: &'a crate::core::Client,
+    review_id: String,
+}
+
+impl<'a> DeleteReviewByIdRequest<'a> {
+    fn new(client: &'a crate::core::Client, review_id: impl Into<String>) -> Self {
+        Self { client, review_id: review_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/operations/1.0/post-incident-reviews/{}", crate::core::encode_path_segment(&self.review_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

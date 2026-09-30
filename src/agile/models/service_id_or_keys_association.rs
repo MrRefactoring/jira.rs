@@ -1,0 +1,23 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// Defines the association type.
+    pub enum ServiceIdOrKeysAssociationAssociationType {
+        ServiceIdOrKeys => "serviceIdOrKeys",
+    }
+}
+
+/// An association type referencing service ID or keys.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ServiceIdOrKeysAssociation {
+    /// Defines the association type.
+    #[serde(rename = "associationType")]
+    pub association_type: ServiceIdOrKeysAssociationAssociationType,
+    /// The service ID or keys to associate the entity with.
+    ///
+    /// The number of values counted across all associationTypes must not exceed a limit of 500.
+    pub values: Vec<String>,
+}

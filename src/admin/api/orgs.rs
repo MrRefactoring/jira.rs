@@ -1,0 +1,105 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The Orgs operations.
+pub struct OrgsService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> OrgsService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns a list of your organizations (based on your API key).
+    pub fn get_orgs(&self) -> GetOrgsRequest<'a> {
+        GetOrgsRequest::new(self.client)
+    }
+
+    /// Returns information about a single organization by ID
+    ///
+    /// #### Scopes
+    /// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:orgs:admin`
+    pub fn get_org_by_id(&self, org_id: impl Into<String>) -> GetOrgByIdRequest<'a> {
+        GetOrgByIdRequest::new(self.client, org_id)
+    }
+}
+
+/// Returns a list of your organizations (based on your API key).
+#[derive(Clone)]
+pub struct GetOrgsRequest<'a> {
+    client: &'a crate::core::Client,
+    cursor: Option<String>,
+}
+
+impl<'a> GetOrgsRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, cursor: None }
+    }
+
+    /// Sets the starting point for the page of results to return.
+    #[must_use]
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/admin/v1/orgs".to_owned());
+
+        if let Some(value) = &self.cursor {
+            config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<OrgPage> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns information about a single organization by ID
+///
+/// #### Scopes
+/// **[Authorization scopes](https://developer.atlassian.com/cloud/admin/scopes/) required:** `read:orgs:admin`
+#[derive(Clone)]
+pub struct GetOrgByIdRequest<'a> {
+    client: &'a crate::core::Client,
+    org_id: String,
+}
+
+impl<'a> GetOrgByIdRequest<'a> {
+    fn new(client: &'a crate::core::Client, org_id: impl Into<String>) -> Self {
+        Self { client, org_id: org_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/admin/v1/orgs/{}", crate::core::encode_path_segment(&self.org_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Org> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

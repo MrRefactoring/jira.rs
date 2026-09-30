@@ -1,0 +1,82 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The Upgrade operations.
+pub struct UpgradeService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> UpgradeService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns the result of the last upgrade task.
+    pub fn get_upgrade_result(&self) -> GetUpgradeResultRequest<'a> {
+        GetUpgradeResultRequest::new(self.client)
+    }
+
+    /// Runs any pending delayed upgrade tasks. Need Admin permissions to do this.
+    pub fn run_upgrades_now(&self) -> RunUpgradesNowRequest<'a> {
+        RunUpgradesNowRequest::new(self.client)
+    }
+}
+
+/// Returns the result of the last upgrade task.
+#[derive(Clone)]
+pub struct GetUpgradeResultRequest<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> GetUpgradeResultRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/upgrade".to_owned());
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<UpgradeResult> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Runs any pending delayed upgrade tasks. Need Admin permissions to do this.
+#[derive(Clone)]
+pub struct RunUpgradesNowRequest<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> RunUpgradesNowRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/upgrade".to_owned());
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

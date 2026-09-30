@@ -1,0 +1,18 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// A page of failed webhooks.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct FailedWebhooks {
+    /// The maximum number of items on the page. If the list of values is shorter than this number, then there are no more pages.
+    #[serde(rename = "maxResults")]
+    pub max_results: i64,
+    /// The URL to the next page of results. Present only if the request returned at least one result.The next page may be empty at the time of receiving the response, but new failed webhooks may appear in time. You can save the URL to the next page and query for new results periodically (for example, every hour).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub next: Option<String>,
+    /// The list of webhooks.
+    pub values: Vec<FailedWebhook>,
+}

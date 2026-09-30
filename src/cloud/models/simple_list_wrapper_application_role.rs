@@ -1,0 +1,18 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SimpleListWrapperApplicationRole {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub callback: Option<ListWrapperCallbackApplicationRole>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<ApplicationRole>>,
+    #[serde(rename = "max-results", default, skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    #[serde(rename = "pagingCallback", default, skip_serializing_if = "Option::is_none")]
+    pub paging_callback: Option<ListWrapperCallbackApplicationRole>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub size: Option<i64>,
+}

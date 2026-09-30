@@ -1,0 +1,26 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Details of a new priority scheme
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct CreatePrioritySchemeDetails {
+    /// The ID of the default priority for the priority scheme.
+    #[serde(rename = "defaultPriorityId")]
+    pub default_priority_id: i64,
+    /// The description of the priority scheme.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub mappings: Option<PriorityMapping>,
+    /// The name of the priority scheme. Must be unique.
+    pub name: String,
+    /// The IDs of priorities in the scheme.
+    #[serde(rename = "priorityIds")]
+    pub priority_ids: Vec<i64>,
+    /// The IDs of projects that will use the priority scheme.
+    #[serde(rename = "projectIds", default, skip_serializing_if = "Option::is_none")]
+    pub project_ids: Option<Vec<i64>>,
+}

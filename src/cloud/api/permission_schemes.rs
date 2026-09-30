@@ -1,0 +1,956 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum GetAllPermissionSchemesRequestExpandValue {
+        All => "all",
+        Field => "field",
+        Group => "group",
+        Permissions => "permissions",
+        ProjectRole => "projectRole",
+        User => "user",
+    }
+}
+
+/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
+///
+///  *  `all` Returns all expandable information.
+///  *  `field` Returns information about the custom field granted the permission.
+///  *  `group` Returns information about the group that is granted the permission.
+///  *  `permissions` Returns all permission grants for each permission scheme.
+///  *  `projectRole` Returns information about the project role granted the permission.
+///  *  `user` Returns information about the user who is granted the permission.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetAllPermissionSchemesRequestExpand {
+    One(GetAllPermissionSchemesRequestExpandValue),
+    Many(Vec<GetAllPermissionSchemesRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    pub enum CreatePermissionSchemeRequestExpandValue {
+        All => "all",
+        Field => "field",
+        Group => "group",
+        Permissions => "permissions",
+        ProjectRole => "projectRole",
+        User => "user",
+    }
+}
+
+/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
+///
+///  *  `all` Returns all expandable information.
+///  *  `field` Returns information about the custom field granted the permission.
+///  *  `group` Returns information about the group that is granted the permission.
+///  *  `permissions` Returns all permission grants for each permission scheme.
+///  *  `projectRole` Returns information about the project role granted the permission.
+///  *  `user` Returns information about the user who is granted the permission.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum CreatePermissionSchemeRequestExpand {
+    One(CreatePermissionSchemeRequestExpandValue),
+    Many(Vec<CreatePermissionSchemeRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    pub enum GetPermissionSchemeRequestExpandValue {
+        All => "all",
+        Field => "field",
+        Group => "group",
+        Permissions => "permissions",
+        ProjectRole => "projectRole",
+        User => "user",
+    }
+}
+
+/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
+///
+///  *  `all` Returns all expandable information.
+///  *  `field` Returns information about the custom field granted the permission.
+///  *  `group` Returns information about the group that is granted the permission.
+///  *  `permissions` Returns all permission grants for each permission scheme.
+///  *  `projectRole` Returns information about the project role granted the permission.
+///  *  `user` Returns information about the user who is granted the permission.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetPermissionSchemeRequestExpand {
+    One(GetPermissionSchemeRequestExpandValue),
+    Many(Vec<GetPermissionSchemeRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    pub enum UpdatePermissionSchemeRequestExpandValue {
+        All => "all",
+        Field => "field",
+        Group => "group",
+        Permissions => "permissions",
+        ProjectRole => "projectRole",
+        User => "user",
+    }
+}
+
+/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
+///
+///  *  `all` Returns all expandable information.
+///  *  `field` Returns information about the custom field granted the permission.
+///  *  `group` Returns information about the group that is granted the permission.
+///  *  `permissions` Returns all permission grants for each permission scheme.
+///  *  `projectRole` Returns information about the project role granted the permission.
+///  *  `user` Returns information about the user who is granted the permission.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum UpdatePermissionSchemeRequestExpand {
+    One(UpdatePermissionSchemeRequestExpandValue),
+    Many(Vec<UpdatePermissionSchemeRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    pub enum GetPermissionSchemeGrantsRequestExpandValue {
+        Permissions => "permissions",
+        User => "user",
+        Group => "group",
+        ProjectRole => "projectRole",
+        Field => "field",
+        All => "all",
+    }
+}
+
+/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
+///
+///  *  `permissions` Returns all permission grants for each permission scheme.
+///  *  `user` Returns information about the user who is granted the permission.
+///  *  `group` Returns information about the group that is granted the permission.
+///  *  `projectRole` Returns information about the project role granted the permission.
+///  *  `field` Returns information about the custom field granted the permission.
+///  *  `all` Returns all expandable information.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetPermissionSchemeGrantsRequestExpand {
+    One(GetPermissionSchemeGrantsRequestExpandValue),
+    Many(Vec<GetPermissionSchemeGrantsRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    pub enum CreatePermissionGrantRequestExpandValue {
+        Permissions => "permissions",
+        User => "user",
+        Group => "group",
+        ProjectRole => "projectRole",
+        Field => "field",
+        All => "all",
+    }
+}
+
+/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
+///
+///  *  `permissions` Returns all permission grants for each permission scheme.
+///  *  `user` Returns information about the user who is granted the permission.
+///  *  `group` Returns information about the group that is granted the permission.
+///  *  `projectRole` Returns information about the project role granted the permission.
+///  *  `field` Returns information about the custom field granted the permission.
+///  *  `all` Returns all expandable information.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum CreatePermissionGrantRequestExpand {
+    One(CreatePermissionGrantRequestExpandValue),
+    Many(Vec<CreatePermissionGrantRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+crate::open_enum! {
+    pub enum GetPermissionSchemeGrantRequestExpandValue {
+        All => "all",
+        Field => "field",
+        Group => "group",
+        Permissions => "permissions",
+        ProjectRole => "projectRole",
+        User => "user",
+    }
+}
+
+/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
+///
+///  *  `all` Returns all expandable information.
+///  *  `field` Returns information about the custom field granted the permission.
+///  *  `group` Returns information about the group that is granted the permission.
+///  *  `permissions` Returns all permission grants for each permission scheme.
+///  *  `projectRole` Returns information about the project role granted the permission.
+///  *  `user` Returns information about the user who is granted the permission.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum GetPermissionSchemeGrantRequestExpand {
+    One(GetPermissionSchemeGrantRequestExpandValue),
+    Many(Vec<GetPermissionSchemeGrantRequestExpandValue>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+/// The PermissionSchemes operations.
+pub struct PermissionSchemesService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> PermissionSchemesService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns all permission schemes.
+    ///
+    /// ### About permission schemes and grants ###
+    ///
+    /// A permission scheme is a collection of permission grants. A permission grant consists of a `holder` and a `permission`.
+    ///
+    /// #### Holder object ####
+    ///
+    /// The `holder` object contains information about the user or group being granted the permission. For example, the *Administer projects* permission is granted to a group named *Teams in space administrators*. In this case, the type is `"type": "group"`, and the parameter is the group name, `"parameter": "Teams in space administrators"` and the value is group ID, `"value": "ca85fac0-d974-40ca-a615-7af99c48d24f"`.
+    ///
+    /// The `holder` object is defined by the following properties:
+    ///
+    ///  *  `type` Identifies the user or group (see the list of types below).
+    ///  *  `parameter` As a group's name can change, use of `value` is recommended. The value of this property depends on the `type`. For example, if the `type` is a group, then you need to specify the group name.
+    ///  *  `value` The value of this property depends on the `type`. If the `type` is a group, then you need to specify the group ID. For other `type` it has the same value as `parameter`
+    ///
+    /// The following `types` are available. The expected values for `parameter` and `value` are given in parentheses (some types may not have a `parameter` or `value`):
+    ///
+    ///  *  `anyone` Grant for anonymous users.
+    ///  *  `applicationRole` Grant for users with access to the specified application (application name, application name). See [Update product access settings](https://confluence.atlassian.com/x/3YxjL) for more information.
+    ///  *  `assignee` Grant for the user currently assigned to an issue.
+    ///  *  `group` Grant for the specified group (`parameter` : group name, `value` : group ID).
+    ///  *  `groupCustomField` Grant for a user in the group selected in the specified custom field (`parameter` : custom field ID, `value` : custom field ID).
+    ///  *  `projectLead` Grant for a project lead.
+    ///  *  `projectRole` Grant for the specified project role (`parameter` :project role ID, `value` : project role ID).
+    ///  *  `reporter` Grant for the user who reported the issue.
+    ///  *  `sd.customer.portal.only` Jira Service Desk only. Grants customers permission to access the customer portal but not Jira. See [Customizing Jira Service Desk permissions](https://confluence.atlassian.com/x/24dKLg) for more information.
+    ///  *  `user` Grant for the specified user (`parameter` : user ID - historically this was the userkey but that is deprecated and the account ID should be used, `value` : user ID).
+    ///  *  `userCustomField` Grant for a user selected in the specified custom field (`parameter` : custom field ID, `value` : custom field ID).
+    ///
+    /// #### Built-in permissions ####
+    ///
+    /// The [built-in Jira permissions](https://confluence.atlassian.com/x/yodKLg) are listed below. Apps can also define custom permissions. See the [project permission](https://developer.atlassian.com/cloud/jira/platform/modules/project-permission/) and [global permission](https://developer.atlassian.com/cloud/jira/platform/modules/global-permission/) module documentation for more information.
+    ///
+    /// **Administration permissions**
+    ///
+    ///  *  `ADMINISTER_PROJECTS`
+    ///  *  `EDIT_WORKFLOW`
+    ///  *  `EDIT_ISSUE_LAYOUT`
+    ///
+    /// **Project permissions**
+    ///
+    ///  *  `BROWSE_PROJECTS`
+    ///  *  `MANAGE_SPRINTS_PERMISSION` (Jira Software only)
+    ///  *  `SERVICEDESK_AGENT` (Jira Service Desk only)
+    ///  *  `VIEW_DEV_TOOLS` (Jira Software only)
+    ///  *  `VIEW_READONLY_WORKFLOW`
+    ///
+    /// **Issue permissions**
+    ///
+    ///  *  `ASSIGNABLE_USER`
+    ///  *  `ASSIGN_ISSUES`
+    ///  *  `CLOSE_ISSUES`
+    ///  *  `CREATE_ISSUES`
+    ///  *  `DELETE_ISSUES`
+    ///  *  `EDIT_ISSUES`
+    ///  *  `LINK_ISSUES`
+    ///  *  `MODIFY_REPORTER`
+    ///  *  `MOVE_ISSUES`
+    ///  *  `RESOLVE_ISSUES`
+    ///  *  `SCHEDULE_ISSUES`
+    ///  *  `SET_ISSUE_SECURITY`
+    ///  *  `TRANSITION_ISSUES`
+    ///
+    /// **Voters and watchers permissions**
+    ///
+    ///  *  `MANAGE_WATCHERS`
+    ///  *  `VIEW_VOTERS_AND_WATCHERS`
+    ///
+    /// **Comments permissions**
+    ///
+    ///  *  `ADD_COMMENTS`
+    ///  *  `DELETE_ALL_COMMENTS`
+    ///  *  `DELETE_OWN_COMMENTS`
+    ///  *  `EDIT_ALL_COMMENTS`
+    ///  *  `EDIT_OWN_COMMENTS`
+    ///
+    /// **Attachments permissions**
+    ///
+    ///  *  `CREATE_ATTACHMENTS`
+    ///  *  `DELETE_ALL_ATTACHMENTS`
+    ///  *  `DELETE_OWN_ATTACHMENTS`
+    ///
+    /// **Time tracking permissions**
+    ///
+    ///  *  `DELETE_ALL_WORKLOGS`
+    ///  *  `DELETE_OWN_WORKLOGS`
+    ///  *  `EDIT_ALL_WORKLOGS`
+    ///  *  `EDIT_OWN_WORKLOGS`
+    ///  *  `WORK_ON_ISSUES`
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+    pub fn get_all_permission_schemes(&self) -> GetAllPermissionSchemesRequest<'a> {
+        GetAllPermissionSchemesRequest::new(self.client)
+    }
+
+    /// Creates a new permission scheme. You can create a permission scheme with or without defining a set of permission grants.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn create_permission_scheme(&self, body: PermissionScheme) -> CreatePermissionSchemeRequest<'a> {
+        CreatePermissionSchemeRequest::new(self.client, body)
+    }
+
+    /// Returns a permission scheme.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+    pub fn get_permission_scheme(&self, scheme_id: i64) -> GetPermissionSchemeRequest<'a> {
+        GetPermissionSchemeRequest::new(self.client, scheme_id)
+    }
+
+    /// Updates a permission scheme. Below are some important things to note when using this resource:
+    ///
+    ///  *  If a permissions list is present in the request, then it is set in the permission scheme, overwriting *all existing* grants.
+    ///  *  If you want to update only the name and description, then do not send a permissions list in the request.
+    ///  *  Sending an empty list will remove all permission grants from the permission scheme.
+    ///
+    /// If you want to add or delete a permission grant instead of updating the whole list, see [Create permission grant](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeId-permission-post) or [Delete permission scheme entity](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeId-permission-permissionId-delete).
+    ///
+    /// See [About permission schemes and grants](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#about-permission-schemes-and-grants) for more details.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn update_permission_scheme(
+        &self,
+        scheme_id: i64,
+        body: PermissionScheme,
+    ) -> UpdatePermissionSchemeRequest<'a> {
+        UpdatePermissionSchemeRequest::new(self.client, scheme_id, body)
+    }
+
+    /// Deletes a permission scheme.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn delete_permission_scheme(&self, scheme_id: i64) -> DeletePermissionSchemeRequest<'a> {
+        DeletePermissionSchemeRequest::new(self.client, scheme_id)
+    }
+
+    /// Returns all permission grants for a permission scheme.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+    pub fn get_permission_scheme_grants(&self, scheme_id: i64) -> GetPermissionSchemeGrantsRequest<'a> {
+        GetPermissionSchemeGrantsRequest::new(self.client, scheme_id)
+    }
+
+    /// Creates a permission grant in a permission scheme.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn create_permission_grant(
+        &self,
+        scheme_id: i64,
+        permission_grant: PermissionGrant,
+    ) -> CreatePermissionGrantRequest<'a> {
+        CreatePermissionGrantRequest::new(self.client, scheme_id, permission_grant)
+    }
+
+    /// Returns a permission grant.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+    pub fn get_permission_scheme_grant(
+        &self,
+        scheme_id: i64,
+        permission_id: i64,
+    ) -> GetPermissionSchemeGrantRequest<'a> {
+        GetPermissionSchemeGrantRequest::new(self.client, scheme_id, permission_id)
+    }
+
+    /// Deletes a permission grant from a permission scheme. See [About permission schemes and grants](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#about-permission-schemes-and-grants) for more details.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn delete_permission_scheme_entity(
+        &self,
+        scheme_id: i64,
+        permission_id: i64,
+    ) -> DeletePermissionSchemeEntityRequest<'a> {
+        DeletePermissionSchemeEntityRequest::new(self.client, scheme_id, permission_id)
+    }
+}
+
+/// Returns all permission schemes.
+///
+/// ### About permission schemes and grants ###
+///
+/// A permission scheme is a collection of permission grants. A permission grant consists of a `holder` and a `permission`.
+///
+/// #### Holder object ####
+///
+/// The `holder` object contains information about the user or group being granted the permission. For example, the *Administer projects* permission is granted to a group named *Teams in space administrators*. In this case, the type is `"type": "group"`, and the parameter is the group name, `"parameter": "Teams in space administrators"` and the value is group ID, `"value": "ca85fac0-d974-40ca-a615-7af99c48d24f"`.
+///
+/// The `holder` object is defined by the following properties:
+///
+///  *  `type` Identifies the user or group (see the list of types below).
+///  *  `parameter` As a group's name can change, use of `value` is recommended. The value of this property depends on the `type`. For example, if the `type` is a group, then you need to specify the group name.
+///  *  `value` The value of this property depends on the `type`. If the `type` is a group, then you need to specify the group ID. For other `type` it has the same value as `parameter`
+///
+/// The following `types` are available. The expected values for `parameter` and `value` are given in parentheses (some types may not have a `parameter` or `value`):
+///
+///  *  `anyone` Grant for anonymous users.
+///  *  `applicationRole` Grant for users with access to the specified application (application name, application name). See [Update product access settings](https://confluence.atlassian.com/x/3YxjL) for more information.
+///  *  `assignee` Grant for the user currently assigned to an issue.
+///  *  `group` Grant for the specified group (`parameter` : group name, `value` : group ID).
+///  *  `groupCustomField` Grant for a user in the group selected in the specified custom field (`parameter` : custom field ID, `value` : custom field ID).
+///  *  `projectLead` Grant for a project lead.
+///  *  `projectRole` Grant for the specified project role (`parameter` :project role ID, `value` : project role ID).
+///  *  `reporter` Grant for the user who reported the issue.
+///  *  `sd.customer.portal.only` Jira Service Desk only. Grants customers permission to access the customer portal but not Jira. See [Customizing Jira Service Desk permissions](https://confluence.atlassian.com/x/24dKLg) for more information.
+///  *  `user` Grant for the specified user (`parameter` : user ID - historically this was the userkey but that is deprecated and the account ID should be used, `value` : user ID).
+///  *  `userCustomField` Grant for a user selected in the specified custom field (`parameter` : custom field ID, `value` : custom field ID).
+///
+/// #### Built-in permissions ####
+///
+/// The [built-in Jira permissions](https://confluence.atlassian.com/x/yodKLg) are listed below. Apps can also define custom permissions. See the [project permission](https://developer.atlassian.com/cloud/jira/platform/modules/project-permission/) and [global permission](https://developer.atlassian.com/cloud/jira/platform/modules/global-permission/) module documentation for more information.
+///
+/// **Administration permissions**
+///
+///  *  `ADMINISTER_PROJECTS`
+///  *  `EDIT_WORKFLOW`
+///  *  `EDIT_ISSUE_LAYOUT`
+///
+/// **Project permissions**
+///
+///  *  `BROWSE_PROJECTS`
+///  *  `MANAGE_SPRINTS_PERMISSION` (Jira Software only)
+///  *  `SERVICEDESK_AGENT` (Jira Service Desk only)
+///  *  `VIEW_DEV_TOOLS` (Jira Software only)
+///  *  `VIEW_READONLY_WORKFLOW`
+///
+/// **Issue permissions**
+///
+///  *  `ASSIGNABLE_USER`
+///  *  `ASSIGN_ISSUES`
+///  *  `CLOSE_ISSUES`
+///  *  `CREATE_ISSUES`
+///  *  `DELETE_ISSUES`
+///  *  `EDIT_ISSUES`
+///  *  `LINK_ISSUES`
+///  *  `MODIFY_REPORTER`
+///  *  `MOVE_ISSUES`
+///  *  `RESOLVE_ISSUES`
+///  *  `SCHEDULE_ISSUES`
+///  *  `SET_ISSUE_SECURITY`
+///  *  `TRANSITION_ISSUES`
+///
+/// **Voters and watchers permissions**
+///
+///  *  `MANAGE_WATCHERS`
+///  *  `VIEW_VOTERS_AND_WATCHERS`
+///
+/// **Comments permissions**
+///
+///  *  `ADD_COMMENTS`
+///  *  `DELETE_ALL_COMMENTS`
+///  *  `DELETE_OWN_COMMENTS`
+///  *  `EDIT_ALL_COMMENTS`
+///  *  `EDIT_OWN_COMMENTS`
+///
+/// **Attachments permissions**
+///
+///  *  `CREATE_ATTACHMENTS`
+///  *  `DELETE_ALL_ATTACHMENTS`
+///  *  `DELETE_OWN_ATTACHMENTS`
+///
+/// **Time tracking permissions**
+///
+///  *  `DELETE_ALL_WORKLOGS`
+///  *  `DELETE_OWN_WORKLOGS`
+///  *  `EDIT_ALL_WORKLOGS`
+///  *  `EDIT_OWN_WORKLOGS`
+///  *  `WORK_ON_ISSUES`
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
+pub struct GetAllPermissionSchemesRequest<'a> {
+    client: &'a crate::core::Client,
+    expand: Option<GetAllPermissionSchemesRequestExpand>,
+}
+
+impl<'a> GetAllPermissionSchemesRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, expand: None }
+    }
+
+    /// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
+    ///
+    ///  *  `all` Returns all expandable information.
+    ///  *  `field` Returns information about the custom field granted the permission.
+    ///  *  `group` Returns information about the group that is granted the permission.
+    ///  *  `permissions` Returns all permission grants for each permission scheme.
+    ///  *  `projectRole` Returns information about the project role granted the permission.
+    ///  *  `user` Returns information about the user who is granted the permission.
+    #[must_use]
+    pub fn expand(mut self, value: GetAllPermissionSchemesRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/permissionscheme".to_owned());
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<PermissionSchemes> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Creates a new permission scheme. You can create a permission scheme with or without defining a set of permission grants.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct CreatePermissionSchemeRequest<'a> {
+    client: &'a crate::core::Client,
+    expand: Option<CreatePermissionSchemeRequestExpand>,
+    body: PermissionScheme,
+}
+
+impl<'a> CreatePermissionSchemeRequest<'a> {
+    fn new(client: &'a crate::core::Client, body: PermissionScheme) -> Self {
+        Self { client, body, expand: None }
+    }
+
+    /// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
+    ///
+    ///  *  `all` Returns all expandable information.
+    ///  *  `field` Returns information about the custom field granted the permission.
+    ///  *  `group` Returns information about the group that is granted the permission.
+    ///  *  `permissions` Returns all permission grants for each permission scheme.
+    ///  *  `projectRole` Returns information about the project role granted the permission.
+    ///  *  `user` Returns information about the user who is granted the permission.
+    #[must_use]
+    pub fn expand(mut self, value: CreatePermissionSchemeRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/permissionscheme".to_owned());
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<PermissionScheme> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a permission scheme.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
+pub struct GetPermissionSchemeRequest<'a> {
+    client: &'a crate::core::Client,
+    scheme_id: i64,
+    expand: Option<GetPermissionSchemeRequestExpand>,
+}
+
+impl<'a> GetPermissionSchemeRequest<'a> {
+    fn new(client: &'a crate::core::Client, scheme_id: i64) -> Self {
+        Self { client, scheme_id, expand: None }
+    }
+
+    /// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
+    ///
+    ///  *  `all` Returns all expandable information.
+    ///  *  `field` Returns information about the custom field granted the permission.
+    ///  *  `group` Returns information about the group that is granted the permission.
+    ///  *  `permissions` Returns all permission grants for each permission scheme.
+    ///  *  `projectRole` Returns information about the project role granted the permission.
+    ///  *  `user` Returns information about the user who is granted the permission.
+    #[must_use]
+    pub fn expand(mut self, value: GetPermissionSchemeRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/permissionscheme/{}", self.scheme_id),
+        );
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<PermissionScheme> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Updates a permission scheme. Below are some important things to note when using this resource:
+///
+///  *  If a permissions list is present in the request, then it is set in the permission scheme, overwriting *all existing* grants.
+///  *  If you want to update only the name and description, then do not send a permissions list in the request.
+///  *  Sending an empty list will remove all permission grants from the permission scheme.
+///
+/// If you want to add or delete a permission grant instead of updating the whole list, see [Create permission grant](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeId-permission-post) or [Delete permission scheme entity](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#api-rest-api-3-permissionscheme-schemeId-permission-permissionId-delete).
+///
+/// See [About permission schemes and grants](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#about-permission-schemes-and-grants) for more details.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct UpdatePermissionSchemeRequest<'a> {
+    client: &'a crate::core::Client,
+    scheme_id: i64,
+    expand: Option<UpdatePermissionSchemeRequestExpand>,
+    body: PermissionScheme,
+}
+
+impl<'a> UpdatePermissionSchemeRequest<'a> {
+    fn new(client: &'a crate::core::Client, scheme_id: i64, body: PermissionScheme) -> Self {
+        Self { client, scheme_id, body, expand: None }
+    }
+
+    /// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
+    ///
+    ///  *  `all` Returns all expandable information.
+    ///  *  `field` Returns information about the custom field granted the permission.
+    ///  *  `group` Returns information about the group that is granted the permission.
+    ///  *  `permissions` Returns all permission grants for each permission scheme.
+    ///  *  `projectRole` Returns information about the project role granted the permission.
+    ///  *  `user` Returns information about the user who is granted the permission.
+    #[must_use]
+    pub fn expand(mut self, value: UpdatePermissionSchemeRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/3/permissionscheme/{}", self.scheme_id),
+        );
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<PermissionScheme> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes a permission scheme.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct DeletePermissionSchemeRequest<'a> {
+    client: &'a crate::core::Client,
+    scheme_id: i64,
+}
+
+impl<'a> DeletePermissionSchemeRequest<'a> {
+    fn new(client: &'a crate::core::Client, scheme_id: i64) -> Self {
+        Self { client, scheme_id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/3/permissionscheme/{}", self.scheme_id),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns all permission grants for a permission scheme.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
+pub struct GetPermissionSchemeGrantsRequest<'a> {
+    client: &'a crate::core::Client,
+    scheme_id: i64,
+    expand: Option<GetPermissionSchemeGrantsRequestExpand>,
+}
+
+impl<'a> GetPermissionSchemeGrantsRequest<'a> {
+    fn new(client: &'a crate::core::Client, scheme_id: i64) -> Self {
+        Self { client, scheme_id, expand: None }
+    }
+
+    /// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
+    ///
+    ///  *  `permissions` Returns all permission grants for each permission scheme.
+    ///  *  `user` Returns information about the user who is granted the permission.
+    ///  *  `group` Returns information about the group that is granted the permission.
+    ///  *  `projectRole` Returns information about the project role granted the permission.
+    ///  *  `field` Returns information about the custom field granted the permission.
+    ///  *  `all` Returns all expandable information.
+    #[must_use]
+    pub fn expand(mut self, value: GetPermissionSchemeGrantsRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/permissionscheme/{}/permission", self.scheme_id),
+        );
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<PermissionGrants> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Creates a permission grant in a permission scheme.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct CreatePermissionGrantRequest<'a> {
+    client: &'a crate::core::Client,
+    scheme_id: i64,
+    expand: Option<CreatePermissionGrantRequestExpand>,
+    permission_grant: PermissionGrant,
+}
+
+impl<'a> CreatePermissionGrantRequest<'a> {
+    fn new(client: &'a crate::core::Client, scheme_id: i64, permission_grant: PermissionGrant) -> Self {
+        Self { client, scheme_id, permission_grant, expand: None }
+    }
+
+    /// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
+    ///
+    ///  *  `permissions` Returns all permission grants for each permission scheme.
+    ///  *  `user` Returns information about the user who is granted the permission.
+    ///  *  `group` Returns information about the group that is granted the permission.
+    ///  *  `projectRole` Returns information about the project role granted the permission.
+    ///  *  `field` Returns information about the custom field granted the permission.
+    ///  *  `all` Returns all expandable information.
+    #[must_use]
+    pub fn expand(mut self, value: CreatePermissionGrantRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!("/rest/api/3/permissionscheme/{}/permission", self.scheme_id),
+        );
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        let body = match serde_json::to_value(&self.permission_grant)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<PermissionGrant> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a permission grant.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
+pub struct GetPermissionSchemeGrantRequest<'a> {
+    client: &'a crate::core::Client,
+    scheme_id: i64,
+    permission_id: i64,
+    expand: Option<GetPermissionSchemeGrantRequestExpand>,
+}
+
+impl<'a> GetPermissionSchemeGrantRequest<'a> {
+    fn new(client: &'a crate::core::Client, scheme_id: i64, permission_id: i64) -> Self {
+        Self { client, scheme_id, permission_id, expand: None }
+    }
+
+    /// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
+    ///
+    ///  *  `all` Returns all expandable information.
+    ///  *  `field` Returns information about the custom field granted the permission.
+    ///  *  `group` Returns information about the group that is granted the permission.
+    ///  *  `permissions` Returns all permission grants for each permission scheme.
+    ///  *  `projectRole` Returns information about the project role granted the permission.
+    ///  *  `user` Returns information about the user who is granted the permission.
+    #[must_use]
+    pub fn expand(mut self, value: GetPermissionSchemeGrantRequestExpand) -> Self {
+        self.expand = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/permissionscheme/{}/permission/{}", self.scheme_id, self.permission_id),
+        );
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<PermissionGrant> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes a permission grant from a permission scheme. See [About permission schemes and grants](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permission-schemes/#about-permission-schemes-and-grants) for more details.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct DeletePermissionSchemeEntityRequest<'a> {
+    client: &'a crate::core::Client,
+    scheme_id: i64,
+    permission_id: i64,
+}
+
+impl<'a> DeletePermissionSchemeEntityRequest<'a> {
+    fn new(client: &'a crate::core::Client, scheme_id: i64, permission_id: i64) -> Self {
+        Self { client, scheme_id, permission_id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/3/permissionscheme/{}/permission/{}", self.scheme_id, self.permission_id),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

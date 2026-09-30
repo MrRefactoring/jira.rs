@@ -1,0 +1,16 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// A page of changelogs which is designed to handle multiple issues
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct BulkChangelogResponse {
+    /// The list of issues changelogs.
+    #[serde(rename = "issueChangeLogs", default, skip_serializing_if = "Option::is_none")]
+    pub issue_change_logs: Option<Vec<IssueChangeLog>>,
+    /// Continuation token to fetch the next page. If this result represents the last or the only page, this token will be null.
+    #[serde(rename = "nextPageToken", default, skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+}

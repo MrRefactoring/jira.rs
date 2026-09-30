@@ -1,0 +1,17 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct IssueTypeSchemeCreateUpdate {
+    #[serde(rename = "defaultIssueTypeId", default, skip_serializing_if = "Option::is_none")]
+    pub default_issue_type_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "issueTypeIDs", default, skip_serializing_if = "Option::is_none")]
+    pub issue_type_i_ds: Option<Vec<String>>,
+    #[serde(rename = "issueTypeIds", default, skip_serializing_if = "Option::is_none")]
+    pub issue_type_ids: Option<Vec<String>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}

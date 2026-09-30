@@ -1,0 +1,25 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct Organization {
+    #[serde(rename = "_links", default, skip_serializing_if = "Option::is_none")]
+    pub links: Option<SelfLink>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub created: Option<Date>,
+    /// A unique system generated ID for the organization.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// Name of the organization.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// Returns if an organization is managed by scim. This field may not be present in some older organizations
+    #[serde(rename = "scimManaged", default, skip_serializing_if = "Option::is_none")]
+    pub scim_managed: Option<bool>,
+    /// A unique system generated ID for the organization. This is identity from the group directory id
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub uuid: Option<String>,
+}

@@ -1,0 +1,15 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// The field configuration to issue type mapping.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct FieldConfigurationToIssueTypeMapping {
+    /// The ID of the field configuration.
+    #[serde(rename = "fieldConfigurationId")]
+    pub field_configuration_id: String,
+    /// The ID of the issue type or *default*. When set to *default* this field configuration issue type item applies to all issue types without a field configuration. An issue type can be included only once in a request.
+    #[serde(rename = "issueTypeId")]
+    pub issue_type_id: String,
+}

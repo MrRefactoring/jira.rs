@@ -1,0 +1,29 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Working days configuration
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct WorkingDaysConfig {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub friday: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub monday: Option<bool>,
+    #[serde(rename = "nonWorkingDays", default, skip_serializing_if = "Option::is_none")]
+    pub non_working_days: Option<Vec<NonWorkingDay>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub saturday: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sunday: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub thursday: Option<bool>,
+    #[serde(rename = "timezoneId", default, skip_serializing_if = "Option::is_none")]
+    pub timezone_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub tuesday: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub wednesday: Option<bool>,
+}

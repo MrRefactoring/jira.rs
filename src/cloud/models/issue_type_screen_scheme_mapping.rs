@@ -1,0 +1,14 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// The IDs of the screen schemes for the issue type IDs.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct IssueTypeScreenSchemeMapping {
+    /// The ID of the issue type or *default*. Only issue types used in classic projects are accepted. An entry for *default* must be provided and defines the mapping for all issue types without a screen scheme.
+    #[serde(rename = "issueTypeId")]
+    pub issue_type_id: String,
+    /// The ID of the screen scheme. Only screen schemes used in classic projects are accepted.
+    #[serde(rename = "screenSchemeId")]
+    pub screen_scheme_id: String,
+}

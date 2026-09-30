@@ -1,0 +1,52 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The Info operations.
+pub struct InfoService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> InfoService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// This method retrieves information about the Jira Service Management instance such as software version, builds, and related links.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: None, the user does not need to be logged in.
+    pub fn get_info(&self) -> GetInfoRequest<'a> {
+        GetInfoRequest::new(self.client)
+    }
+}
+
+/// This method retrieves information about the Jira Service Management instance such as software version, builds, and related links.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: None, the user does not need to be logged in.
+#[derive(Clone)]
+pub struct GetInfoRequest<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> GetInfoRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/servicedeskapi/info".to_owned());
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<SoftwareInfo> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

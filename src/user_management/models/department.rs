@@ -1,0 +1,4 @@
+// @generated. Do not edit: change the generator or the specification.
+
+/// The department in which the user works
+pub type Department = String;

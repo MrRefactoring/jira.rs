@@ -1,0 +1,13 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ProjectIdAssociationContext {
+    #[serde(flatten)]
+    pub association_context_object: AssociationContextObject,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub identifier: Option<i64>,
+}

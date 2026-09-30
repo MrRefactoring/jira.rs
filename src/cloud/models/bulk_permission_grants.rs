@@ -1,0 +1,16 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Details of global and project permissions granted to the user.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct BulkPermissionGrants {
+    /// List of permissions granted to the user.
+    #[serde(rename = "globalPermissions")]
+    pub global_permissions: Vec<String>,
+    /// List of project permissions and the projects and issues those permissions provide access to.
+    #[serde(rename = "projectPermissions")]
+    pub project_permissions: Vec<BulkProjectPermissionGrants>,
+}

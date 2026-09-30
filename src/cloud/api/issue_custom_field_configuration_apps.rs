@@ -1,0 +1,258 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The IssueCustomFieldConfigurationApps operations.
+pub struct IssueCustomFieldConfigurationAppsService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> IssueCustomFieldConfigurationAppsService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of configurations for a custom field of a [type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/) created by a [Forge app](https://developer.atlassian.com/platform/forge/).
+    ///
+    /// The result can be filtered by one of these criteria:
+    ///
+    ///  *  `id`.
+    ///  *  `fieldContextId`.
+    ///  *  `issueId`.
+    ///  *  `projectKeyOrId` and `issueTypeId`.
+    ///
+    /// Otherwise, all configurations are returned.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the Forge app that provided the custom field type.
+    pub fn get_custom_field_configuration(
+        &self,
+        field_id_or_key: impl Into<String>,
+    ) -> GetCustomFieldConfigurationRequest<'a> {
+        GetCustomFieldConfigurationRequest::new(self.client, field_id_or_key)
+    }
+
+    /// Update the configuration for contexts of a custom field of a [type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/) created by a [Forge app](https://developer.atlassian.com/platform/forge/).
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the Forge app that created the custom field type.
+    pub fn update_custom_field_configuration(
+        &self,
+        field_id_or_key: impl Into<String>,
+        custom_field_configurations: CustomFieldConfigurations,
+    ) -> UpdateCustomFieldConfigurationRequest<'a> {
+        UpdateCustomFieldConfigurationRequest::new(self.client, field_id_or_key, custom_field_configurations)
+    }
+}
+
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of configurations for a custom field of a [type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/) created by a [Forge app](https://developer.atlassian.com/platform/forge/).
+///
+/// The result can be filtered by one of these criteria:
+///
+///  *  `id`.
+///  *  `fieldContextId`.
+///  *  `issueId`.
+///  *  `projectKeyOrId` and `issueTypeId`.
+///
+/// Otherwise, all configurations are returned.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the Forge app that provided the custom field type.
+#[derive(Clone)]
+pub struct GetCustomFieldConfigurationRequest<'a> {
+    client: &'a crate::core::Client,
+    field_id_or_key: String,
+    id: Option<Vec<i64>>,
+    field_context_id: Option<Vec<i64>>,
+    issue_id: Option<i64>,
+    project_key_or_id: Option<String>,
+    issue_type_id: Option<String>,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
+}
+
+impl<'a> GetCustomFieldConfigurationRequest<'a> {
+    fn new(client: &'a crate::core::Client, field_id_or_key: impl Into<String>) -> Self {
+        Self {
+            client,
+            field_id_or_key: field_id_or_key.into(),
+            id: None,
+            field_context_id: None,
+            issue_id: None,
+            project_key_or_id: None,
+            issue_type_id: None,
+            start_at: None,
+            max_results: None,
+        }
+    }
+
+    /// The list of configuration IDs. To include multiple configurations, separate IDs with an ampersand: `id=10000&id=10001`. Can't be provided with `fieldContextId`, `issueId`, `projectKeyOrId`, or `issueTypeId`.
+    #[must_use]
+    pub fn id(mut self, value: impl IntoIterator<Item = i64>) -> Self {
+        self.id = Some(value.into_iter().collect());
+
+        self
+    }
+
+    /// The list of field context IDs. To include multiple field contexts, separate IDs with an ampersand: `fieldContextId=10000&fieldContextId=10001`. Can't be provided with `id`, `issueId`, `projectKeyOrId`, or `issueTypeId`.
+    #[must_use]
+    pub fn field_context_id(mut self, value: impl IntoIterator<Item = i64>) -> Self {
+        self.field_context_id = Some(value.into_iter().collect());
+
+        self
+    }
+
+    /// The ID of the issue to filter results by. If the issue doesn't exist, an empty list is returned. Can't be provided with `projectKeyOrId`, or `issueTypeId`.
+    #[must_use]
+    pub fn issue_id(mut self, value: i64) -> Self {
+        self.issue_id = Some(value);
+
+        self
+    }
+
+    /// The ID or key of the project to filter results by. Must be provided with `issueTypeId`. Can't be provided with `issueId`.
+    #[must_use]
+    pub fn project_key_or_id(mut self, value: impl Into<String>) -> Self {
+        self.project_key_or_id = Some(value.into());
+
+        self
+    }
+
+    /// The ID of the issue type to filter results by. Must be provided with `projectKeyOrId`. Can't be provided with `issueId`.
+    #[must_use]
+    pub fn issue_type_id(mut self, value: impl Into<String>) -> Self {
+        self.issue_type_id = Some(value.into());
+
+        self
+    }
+
+    /// The index of the first item to return in a page of results (page offset).
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return per page.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/api/3/app/field/{}/context/configuration",
+                crate::core::encode_path_segment(&self.field_id_or_key)
+            ),
+        );
+
+        if let Some(value) = &self.id {
+            config.query.push(("id".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.field_context_id {
+            config.query.push(("fieldContextId".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+        }
+
+        if let Some(value) = &self.issue_id {
+            config.query.push(("issueId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.project_key_or_id {
+            config.query.push(("projectKeyOrId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.issue_type_id {
+            config.query.push(("issueTypeId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<ContextualConfiguration>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start_at = Some(offset);
+
+            request.send()
+        })
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Page<ContextualConfiguration>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Update the configuration for contexts of a custom field of a [type](https://developer.atlassian.com/platform/forge/manifest-reference/modules/jira-custom-field-type/) created by a [Forge app](https://developer.atlassian.com/platform/forge/).
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg). Jira permissions are not required for the Forge app that created the custom field type.
+#[derive(Clone)]
+pub struct UpdateCustomFieldConfigurationRequest<'a> {
+    client: &'a crate::core::Client,
+    field_id_or_key: String,
+    custom_field_configurations: CustomFieldConfigurations,
+}
+
+impl<'a> UpdateCustomFieldConfigurationRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        field_id_or_key: impl Into<String>,
+        custom_field_configurations: CustomFieldConfigurations,
+    ) -> Self {
+        Self { client, field_id_or_key: field_id_or_key.into(), custom_field_configurations }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!(
+                "/rest/api/3/app/field/{}/context/configuration",
+                crate::core::encode_path_segment(&self.field_id_or_key)
+            ),
+        );
+
+        let body = match serde_json::to_value(&self.custom_field_configurations)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

@@ -1,0 +1,108 @@
+name: 🛠️ CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    name: 🏗️ Build, lint & test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: 🔄 Checkout sources
+        uses: actions/checkout@v7
+      - name: ⚙️ Install the toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - name: 💾 Cache the build
+        uses: Swatinem/rust-cache@v2
+      - name: 📐 Formatting
+        run: cargo fmt --all --check
+      - name: 🔍 Clippy
+        run: cargo clippy --locked --all-features --all-targets -- -D warnings
+      - name: 🧪 Unit tests
+        run: cargo test --locked --workspace --all-features
+      - name: 📚 Documentation
+        run: cargo doc --locked --all-features --no-deps
+        env:
+          RUSTDOCFLAGS: -D warnings
+
+  features:
+    name: 🎛️ Every surface on its own
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: 🔄 Checkout sources
+        uses: actions/checkout@v7
+      - name: ⚙️ Install the toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: 💾 Cache the build
+        uses: Swatinem/rust-cache@v2
+      - name: 📦 Install cargo-hack
+        uses: taiki-e/install-action@cargo-hack
+      - name: 🎛️ Check each feature
+        run: cargo hack check --each-feature --no-dev-deps
+
+  deny:
+    name: 🛡️ Advisories, licences & sources
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: 🔄 Checkout sources
+        uses: actions/checkout@v7
+      - name: 🛡️ cargo-deny
+        uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          command: check
+          arguments: --all-features
+
+  msrv:
+    name: 🕰️ Minimum supported Rust
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: 🔄 Checkout sources
+        uses: actions/checkout@v7
+      - name: 📖 Read rust-version from the manifest
+        id: msrv
+        run: echo "version=$(grep '^rust-version' Cargo.toml | cut -d'"' -f2)" >> "$GITHUB_OUTPUT"
+      - name: ⚙️ Install the toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ steps.msrv.outputs.version }}
+      - name: 💾 Cache the build
+        uses: Swatinem/rust-cache@v2
+      - name: 🕰️ Check
+        run: cargo check --locked --all-features
+
+  minimal-versions:
+    name: 📉 Minimal dependency versions
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: 🔄 Checkout sources
+        uses: actions/checkout@v7
+      - name: ⚙️ Install the toolchain
+        uses: dtolnay/rust-toolchain@nightly
+      - name: 💾 Cache the build
+        uses: Swatinem/rust-cache@v2
+      - name: ✂️ Resolve the published crate alone, without xtask
+        run: sed -i 's/^members = \[".", "xtask"\]$/members = ["."]/' Cargo.toml
+      - name: 📉 Take the lowest version every requirement allows
+        run: cargo update -Z direct-minimal-versions
+      - name: 🔍 Check
+        run: cargo check -p jira --all-features --all-targets

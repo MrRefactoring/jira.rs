@@ -1,0 +1,10 @@
+// @generated. Do not edit: change the generator or the specification.
+
+crate::open_enum! {
+    /// The lifecycle status of the account
+    pub enum AccountStatus {
+        Active => "active",
+        Inactive => "inactive",
+        Closed => "closed",
+    }
+}

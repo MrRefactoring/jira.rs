@@ -1,0 +1,348 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The Dashboards operations.
+pub struct DashboardsService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> DashboardsService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns a list of all dashboards, optionally filtering them.
+    pub fn list(&self) -> ListRequest<'a> {
+        ListRequest::new(self.client)
+    }
+
+    /// Returns the keys of all properties for the dashboard item identified by the id.
+    pub fn get_dashboard_item_property_keys(
+        &self,
+        item_id: impl Into<String>,
+        dashboard_id: impl Into<String>,
+    ) -> GetDashboardItemPropertyKeysRequest<'a> {
+        GetDashboardItemPropertyKeysRequest::new(self.client, item_id, dashboard_id)
+    }
+
+    /// Returns the value of the property with a given key from the dashboard item identified by the id.
+    pub fn get_dashboard_item_property(
+        &self,
+        property_key: impl Into<String>,
+        item_id: impl Into<String>,
+        dashboard_id: impl Into<String>,
+    ) -> GetDashboardItemPropertyRequest<'a> {
+        GetDashboardItemPropertyRequest::new(self.client, property_key, item_id, dashboard_id)
+    }
+
+    /// Sets the value of the property with a given key on the dashboard item identified by the id.
+    pub fn set_dashboard_item_property(
+        &self,
+        property_key: impl Into<String>,
+        item_id: impl Into<String>,
+        dashboard_id: impl Into<String>,
+        body: std::collections::HashMap<String, serde_json::Value>,
+    ) -> SetDashboardItemPropertyRequest<'a> {
+        SetDashboardItemPropertyRequest::new(self.client, property_key, item_id, dashboard_id, body)
+    }
+
+    /// Removes the property from the dashboard item identified by the key or by the id.
+    pub fn delete_dashboard_item_property(
+        &self,
+        property_key: impl Into<String>,
+        item_id: impl Into<String>,
+        dashboard_id: impl Into<String>,
+    ) -> DeleteDashboardItemPropertyRequest<'a> {
+        DeleteDashboardItemPropertyRequest::new(self.client, property_key, item_id, dashboard_id)
+    }
+
+    /// Returns a single dashboard.
+    pub fn get_dashboard(&self, id: impl Into<String>) -> GetDashboardRequest<'a> {
+        GetDashboardRequest::new(self.client, id)
+    }
+}
+
+/// Returns a list of all dashboards, optionally filtering them.
+#[derive(Clone)]
+pub struct ListRequest<'a> {
+    client: &'a crate::core::Client,
+    filter: Option<String>,
+    max_results: Option<String>,
+    start_at: Option<String>,
+}
+
+impl<'a> ListRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, filter: None, max_results: None, start_at: None }
+    }
+
+    /// An optional filter that is applied to the list of dashboards.
+    #[must_use]
+    pub fn filter(mut self, value: impl Into<String>) -> Self {
+        self.filter = Some(value.into());
+
+        self
+    }
+
+    /// A hint as to the maximum number of dashboards to return in each call.
+    #[must_use]
+    pub fn max_results(mut self, value: impl Into<String>) -> Self {
+        self.max_results = Some(value.into());
+
+        self
+    }
+
+    /// The index of the first dashboard to return (0-based).
+    #[must_use]
+    pub fn start_at(mut self, value: impl Into<String>) -> Self {
+        self.start_at = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/dashboard".to_owned());
+
+        if let Some(value) = &self.filter {
+            config.query.push(("filter".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Dashboards> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the keys of all properties for the dashboard item identified by the id.
+#[derive(Clone)]
+pub struct GetDashboardItemPropertyKeysRequest<'a> {
+    client: &'a crate::core::Client,
+    item_id: String,
+    dashboard_id: String,
+}
+
+impl<'a> GetDashboardItemPropertyKeysRequest<'a> {
+    fn new(client: &'a crate::core::Client, item_id: impl Into<String>, dashboard_id: impl Into<String>) -> Self {
+        Self { client, item_id: item_id.into(), dashboard_id: dashboard_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/api/2/dashboard/{}/items/{}/properties",
+                crate::core::encode_path_segment(&self.dashboard_id),
+                crate::core::encode_path_segment(&self.item_id)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<EntityPropertiesKeys> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the value of the property with a given key from the dashboard item identified by the id.
+#[derive(Clone)]
+pub struct GetDashboardItemPropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    property_key: String,
+    item_id: String,
+    dashboard_id: String,
+}
+
+impl<'a> GetDashboardItemPropertyRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        property_key: impl Into<String>,
+        item_id: impl Into<String>,
+        dashboard_id: impl Into<String>,
+    ) -> Self {
+        Self { client, property_key: property_key.into(), item_id: item_id.into(), dashboard_id: dashboard_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/api/2/dashboard/{}/items/{}/properties/{}",
+                crate::core::encode_path_segment(&self.dashboard_id),
+                crate::core::encode_path_segment(&self.item_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<EntityProperty> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Sets the value of the property with a given key on the dashboard item identified by the id.
+#[derive(Clone)]
+pub struct SetDashboardItemPropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    property_key: String,
+    item_id: String,
+    dashboard_id: String,
+    body: std::collections::HashMap<String, serde_json::Value>,
+}
+
+impl<'a> SetDashboardItemPropertyRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        property_key: impl Into<String>,
+        item_id: impl Into<String>,
+        dashboard_id: impl Into<String>,
+        body: std::collections::HashMap<String, serde_json::Value>,
+    ) -> Self {
+        Self {
+            client,
+            property_key: property_key.into(),
+            item_id: item_id.into(),
+            dashboard_id: dashboard_id.into(),
+            body,
+        }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!(
+                "/rest/api/2/dashboard/{}/items/{}/properties/{}",
+                crate::core::encode_path_segment(&self.dashboard_id),
+                crate::core::encode_path_segment(&self.item_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Removes the property from the dashboard item identified by the key or by the id.
+#[derive(Clone)]
+pub struct DeleteDashboardItemPropertyRequest<'a> {
+    client: &'a crate::core::Client,
+    property_key: String,
+    item_id: String,
+    dashboard_id: String,
+}
+
+impl<'a> DeleteDashboardItemPropertyRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        property_key: impl Into<String>,
+        item_id: impl Into<String>,
+        dashboard_id: impl Into<String>,
+    ) -> Self {
+        Self { client, property_key: property_key.into(), item_id: item_id.into(), dashboard_id: dashboard_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!(
+                "/rest/api/2/dashboard/{}/items/{}/properties/{}",
+                crate::core::encode_path_segment(&self.dashboard_id),
+                crate::core::encode_path_segment(&self.item_id),
+                crate::core::encode_path_segment(&self.property_key)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a single dashboard.
+#[derive(Clone)]
+pub struct GetDashboardRequest<'a> {
+    client: &'a crate::core::Client,
+    id: String,
+}
+
+impl<'a> GetDashboardRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
+        Self { client, id: id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/2/dashboard/{}", crate::core::encode_path_segment(&self.id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Dashboard> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

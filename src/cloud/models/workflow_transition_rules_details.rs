@@ -1,0 +1,14 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Details about a workflow configuration update request.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WorkflowTransitionRulesDetails {
+    #[serde(rename = "workflowId")]
+    pub workflow_id: WorkflowId,
+    /// The list of connect workflow rule IDs.
+    #[serde(rename = "workflowRuleIds")]
+    pub workflow_rule_ids: Vec<String>,
+}

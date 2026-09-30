@@ -1,0 +1,40 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// Whether the function can take a list of arguments.
+    pub enum FunctionReferenceDataIsList {
+        True => "true",
+        False => "false",
+    }
+}
+
+crate::open_enum! {
+    /// Whether the function supports both single and list value operators.
+    pub enum FunctionReferenceDataSupportsListAndSingleValueOperators {
+        True => "true",
+        False => "false",
+    }
+}
+
+/// Details of functions that can be used in advanced searches.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct FunctionReferenceData {
+    /// The display name of the function.
+    #[serde(rename = "displayName", default, skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// Whether the function can take a list of arguments.
+    #[serde(rename = "isList", default, skip_serializing_if = "Option::is_none")]
+    pub is_list: Option<FunctionReferenceDataIsList>,
+    /// Whether the function supports both single and list value operators.
+    #[serde(rename = "supportsListAndSingleValueOperators", default, skip_serializing_if = "Option::is_none")]
+    pub supports_list_and_single_value_operators: Option<FunctionReferenceDataSupportsListAndSingleValueOperators>,
+    /// The data types returned by the function.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub types: Option<Vec<String>>,
+    /// The function identifier.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}

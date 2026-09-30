@@ -1,0 +1,6 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+
+/// Keyed by event name.
+pub type GetWebhookStatisticsSummary = std::collections::HashMap<String, WebhookStatistics>;

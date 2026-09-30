@@ -1,0 +1,51 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// An issue priority.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct Priority {
+    /// The avatarId of the avatar for the issue priority. This parameter is nullable and when set, this avatar references the universal avatar APIs.
+    #[serde(rename = "avatarId", default, skip_serializing_if = "Option::is_none")]
+    pub avatar_id: Option<i64>,
+    /// The description of the issue priority.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// The URL of the icon for the issue priority.
+    #[serde(rename = "iconUrl", default, skip_serializing_if = "Option::is_none")]
+    pub icon_url: Option<String>,
+    /// The ID of the issue priority.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// Whether this priority is the default.
+    #[serde(rename = "isDefault", default, skip_serializing_if = "Option::is_none")]
+    pub is_default: Option<bool>,
+    /// The name of the issue priority.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub schemes: Option<ExpandPrioritySchemePage>,
+    /// The URL of the issue priority.
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+    /// The color used to indicate the issue priority.
+    #[serde(rename = "statusColor", default, skip_serializing_if = "Option::is_none")]
+    pub status_color: Option<String>,
+    /// Keys the specification does not describe, kept rather than dropped.
+    #[serde(flatten)]
+    pub additional: std::collections::HashMap<String, serde_json::Value>,
+}
+
+impl crate::core::Extensible for Priority {
+    const FIELDS: &'static [&'static str] =
+        &["avatarId", "description", "iconUrl", "id", "isDefault", "name", "schemes", "self", "statusColor"];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}

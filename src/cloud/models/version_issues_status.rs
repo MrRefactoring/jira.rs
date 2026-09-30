@@ -1,0 +1,35 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Counts of the number of issues in various statuses.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct VersionIssuesStatus {
+    /// Count of issues with status *done*.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub done: Option<i64>,
+    /// Count of issues with status *in progress*.
+    #[serde(rename = "inProgress", default, skip_serializing_if = "Option::is_none")]
+    pub in_progress: Option<i64>,
+    /// Count of issues with status *to do*.
+    #[serde(rename = "toDo", default, skip_serializing_if = "Option::is_none")]
+    pub to_do: Option<i64>,
+    /// Count of issues with a status other than *to do*, *in progress*, and *done*.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub unmapped: Option<i64>,
+    /// Keys the specification does not describe, kept rather than dropped.
+    #[serde(flatten)]
+    pub additional: std::collections::HashMap<String, serde_json::Value>,
+}
+
+impl crate::core::Extensible for VersionIssuesStatus {
+    const FIELDS: &'static [&'static str] = &["done", "inProgress", "toDo", "unmapped"];
+
+    fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
+        &self.additional
+    }
+
+    fn additional_mut(&mut self) -> &mut std::collections::HashMap<String, serde_json::Value> {
+        &mut self.additional
+    }
+}

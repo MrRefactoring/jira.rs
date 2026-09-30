@@ -1,0 +1,11 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Details of workflows and their transition rules to delete.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct WorkflowsWithTransitionRulesDetails {
+    /// The list of workflows with transition rules to delete.
+    pub workflows: Vec<WorkflowTransitionRulesDetails>,
+}

@@ -1,0 +1,30 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Details of the issue creation metadata for a project.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ProjectIssueCreateMetadata {
+    #[serde(rename = "avatarUrls", default, skip_serializing_if = "Option::is_none")]
+    pub avatar_urls: Option<AvatarUrls>,
+    /// Expand options that include additional project issue create metadata details in the response.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub expand: Option<String>,
+    /// The ID of the project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// List of the issue types supported by the project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub issuetypes: Option<Vec<IssueTypeIssueCreateMetadata>>,
+    /// The key of the project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// The name of the project.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The URL of the project.
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+}

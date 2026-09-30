@@ -1,0 +1,990 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The ImportSources operations.
+pub struct ImportSourcesService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> ImportSourcesService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Retrieves a specific import source configuration by its ID. If scheduled imports are enabled, the response includes scheduling information.
+    pub fn get_import_source(&self, id: impl Into<String>) -> GetImportSourceRequest<'a> {
+        GetImportSourceRequest::new(self.client, id)
+    }
+
+    /// Provide object schema and mapping configuration for the external import
+    pub fn submit_schema_and_mapping(
+        &self,
+        import_source_id: impl Into<String>,
+        import_schema_and_mapping: ImportSchemaAndMapping,
+    ) -> SubmitSchemaAndMappingRequest<'a> {
+        SubmitSchemaAndMappingRequest::new(self.client, import_source_id, import_schema_and_mapping)
+    }
+
+    /// Update object schema and mapping configuration for the external import
+    pub fn update_schema_and_mapping(&self, import_source_id: impl Into<String>) -> UpdateSchemaAndMappingRequest<'a> {
+        UpdateSchemaAndMappingRequest::new(self.client, import_source_id)
+    }
+
+    /// Get the progress of an asynchronous schema and mapping operation
+    pub fn get_schema_and_mapping_progress(
+        &self,
+        import_source_id: impl Into<String>,
+        resource_id: impl Into<String>,
+    ) -> GetSchemaAndMappingProgressRequest<'a> {
+        GetSchemaAndMappingProgressRequest::new(self.client, import_source_id, resource_id)
+    }
+
+    /// Get the current status of the import configuration
+    pub fn get_import_configuration_status(
+        &self,
+        import_source_id: impl Into<String>,
+    ) -> GetImportConfigurationStatusRequest<'a> {
+        GetImportConfigurationStatusRequest::new(self.client, import_source_id)
+    }
+
+    /// Get the current schema and mapping of the import configuration
+    pub fn get_schema_and_mapping(&self, import_source_id: impl Into<String>) -> GetSchemaAndMappingRequest<'a> {
+        GetSchemaAndMappingRequest::new(self.client, import_source_id)
+    }
+
+    /// Move to the data ingestion steps of external imports
+    pub fn start_import_execution(&self, import_source_id: impl Into<String>) -> StartImportExecutionRequest<'a> {
+        StartImportExecutionRequest::new(self.client, import_source_id)
+    }
+
+    /// Cancel current on-going import
+    pub fn cancel_import_execution(
+        &self,
+        import_execution_id: impl Into<String>,
+        import_source_id: impl Into<String>,
+    ) -> CancelImportExecutionRequest<'a> {
+        CancelImportExecutionRequest::new(self.client, import_execution_id, import_source_id)
+    }
+
+    /// Submit progress of ingesting data
+    pub fn submit_import_execution_progress(
+        &self,
+        import_execution_id: impl Into<String>,
+        import_source_id: impl Into<String>,
+    ) -> SubmitImportExecutionProgressRequest<'a> {
+        SubmitImportExecutionProgressRequest::new(self.client, import_execution_id, import_source_id)
+    }
+
+    /// Providing data to be ingested
+    pub fn submit_import_execution_data(
+        &self,
+        import_execution_id: impl Into<String>,
+        import_source_id: impl Into<String>,
+    ) -> SubmitImportExecutionDataRequest<'a> {
+        SubmitImportExecutionDataRequest::new(self.client, import_execution_id, import_source_id)
+    }
+
+    /// Get the status of the import
+    pub fn get_import_execution_status(
+        &self,
+        import_execution_id: impl Into<String>,
+        import_source_id: impl Into<String>,
+    ) -> GetImportExecutionStatusRequest<'a> {
+        GetImportExecutionStatusRequest::new(self.client, import_execution_id, import_source_id)
+    }
+
+    /// Get the status of the most recently created import execution
+    pub fn get_latest_import_execution_status(
+        &self,
+        import_source_id: impl Into<String>,
+    ) -> GetLatestImportExecutionStatusRequest<'a> {
+        GetLatestImportExecutionStatusRequest::new(self.client, import_source_id)
+    }
+
+    /// Creates a failed import history record for the specified import source and execution with the given failure reason
+    pub fn create_failed_import_history(
+        &self,
+        import_source_id: impl Into<String>,
+        execution_id: impl Into<String>,
+    ) -> CreateFailedImportHistoryRequest<'a> {
+        CreateFailedImportHistoryRequest::new(self.client, import_source_id, execution_id)
+    }
+
+    /// Generate a Bearer token which can be used to authenticate against Assets `/importsource/` APIs, to take actions against the specified import source.
+    pub fn generate_import_source_token(
+        &self,
+        import_source_id: impl Into<String>,
+    ) -> GenerateImportSourceTokenRequest<'a> {
+        GenerateImportSourceTokenRequest::new(self.client, import_source_id)
+    }
+
+    /// Retrieve links for import schedule operations (create, get, update, delete). Returns a createSchedule link to POST a new schedule, and if a schedule already exists, returns a schedule link that can be used with GET, PUT, or DELETE operations.
+    pub fn get_import_schedule_links(&self, import_source_id: impl Into<String>) -> GetImportScheduleLinksRequest<'a> {
+        GetImportScheduleLinksRequest::new(self.client, import_source_id)
+    }
+
+    /// Creates a new scheduled import configuration for the specified import source. Scheduled imports allow you to automate data imports on a recurring basis (daily, weekly, monthly) or run them once at a specific time.
+    pub fn create_import_schedule(
+        &self,
+        import_source_id: impl Into<String>,
+        import_schedule_request: ImportScheduleRequest,
+    ) -> CreateImportScheduleRequest<'a> {
+        CreateImportScheduleRequest::new(self.client, import_source_id, import_schedule_request)
+    }
+
+    /// Retrieves a specific scheduled import configuration by ID
+    pub fn get_import_schedule(
+        &self,
+        import_source_id: impl Into<String>,
+        import_schedule_id: impl Into<String>,
+    ) -> GetImportScheduleRequest<'a> {
+        GetImportScheduleRequest::new(self.client, import_source_id, import_schedule_id)
+    }
+
+    /// Updates an existing scheduled import configuration. You can modify the start time, run interval, or callback URL.
+    pub fn update_import_schedule(
+        &self,
+        import_source_id: impl Into<String>,
+        import_schedule_id: impl Into<String>,
+        import_schedule_request: ImportScheduleRequest,
+    ) -> UpdateImportScheduleRequest<'a> {
+        UpdateImportScheduleRequest::new(self.client, import_source_id, import_schedule_id, import_schedule_request)
+    }
+
+    /// Deletes a scheduled import configuration. The import source will remain, but will no longer execute on a schedule.
+    pub fn delete_import_schedule(
+        &self,
+        import_source_id: impl Into<String>,
+        import_schedule_id: impl Into<String>,
+    ) -> DeleteImportScheduleRequest<'a> {
+        DeleteImportScheduleRequest::new(self.client, import_source_id, import_schedule_id)
+    }
+}
+
+/// Retrieves a specific import source configuration by its ID. If scheduled imports are enabled, the response includes scheduling information.
+#[derive(Clone)]
+pub struct GetImportSourceRequest<'a> {
+    client: &'a crate::core::Client,
+    id: String,
+}
+
+impl<'a> GetImportSourceRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
+        Self { client, id: id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/importsource/{}", crate::core::encode_path_segment(&self.id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ImportSourceResponse> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Provide object schema and mapping configuration for the external import
+#[derive(Clone)]
+pub struct SubmitSchemaAndMappingRequest<'a> {
+    client: &'a crate::core::Client,
+    import_source_id: String,
+    r#async: Option<bool>,
+    import_schema_and_mapping: ImportSchemaAndMapping,
+}
+
+impl<'a> SubmitSchemaAndMappingRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        import_source_id: impl Into<String>,
+        import_schema_and_mapping: ImportSchemaAndMapping,
+    ) -> Self {
+        Self { client, import_source_id: import_source_id.into(), import_schema_and_mapping, r#async: None }
+    }
+
+    /// Execute the operation asynchronously
+    #[must_use]
+    pub fn r#async(mut self, value: bool) -> Self {
+        self.r#async = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/importsource/{}/mapping", crate::core::encode_path_segment(&self.import_source_id)),
+        );
+
+        if let Some(value) = &self.r#async {
+            config.query.push(("async".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        let body = match serde_json::to_value(&self.import_schema_and_mapping)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Update object schema and mapping configuration for the external import
+#[derive(Clone)]
+pub struct UpdateSchemaAndMappingRequest<'a> {
+    client: &'a crate::core::Client,
+    import_source_id: String,
+    r#async: Option<bool>,
+    import_schema_and_mapping: Option<ImportSchemaAndMapping>,
+}
+
+impl<'a> UpdateSchemaAndMappingRequest<'a> {
+    fn new(client: &'a crate::core::Client, import_source_id: impl Into<String>) -> Self {
+        Self { client, import_source_id: import_source_id.into(), r#async: None, import_schema_and_mapping: None }
+    }
+
+    /// Execute the operation asynchronously
+    #[must_use]
+    pub fn r#async(mut self, value: bool) -> Self {
+        self.r#async = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn import_schema_and_mapping(mut self, value: ImportSchemaAndMapping) -> Self {
+        self.import_schema_and_mapping = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PATCH,
+            format!("/importsource/{}/mapping", crate::core::encode_path_segment(&self.import_source_id)),
+        );
+
+        if let Some(value) = &self.r#async {
+            config.query.push(("async".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        let body = match serde_json::to_value(&self.import_schema_and_mapping)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Get the progress of an asynchronous schema and mapping operation
+#[derive(Clone)]
+pub struct GetSchemaAndMappingProgressRequest<'a> {
+    client: &'a crate::core::Client,
+    import_source_id: String,
+    resource_id: String,
+}
+
+impl<'a> GetSchemaAndMappingProgressRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        import_source_id: impl Into<String>,
+        resource_id: impl Into<String>,
+    ) -> Self {
+        Self { client, import_source_id: import_source_id.into(), resource_id: resource_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/importsource/{}/mapping/progress/{}",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.resource_id)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Get the current status of the import configuration
+#[derive(Clone)]
+pub struct GetImportConfigurationStatusRequest<'a> {
+    client: &'a crate::core::Client,
+    import_source_id: String,
+}
+
+impl<'a> GetImportConfigurationStatusRequest<'a> {
+    fn new(client: &'a crate::core::Client, import_source_id: impl Into<String>) -> Self {
+        Self { client, import_source_id: import_source_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/importsource/{}/configstatus", crate::core::encode_path_segment(&self.import_source_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Get the current schema and mapping of the import configuration
+#[derive(Clone)]
+pub struct GetSchemaAndMappingRequest<'a> {
+    client: &'a crate::core::Client,
+    import_source_id: String,
+}
+
+impl<'a> GetSchemaAndMappingRequest<'a> {
+    fn new(client: &'a crate::core::Client, import_source_id: impl Into<String>) -> Self {
+        Self { client, import_source_id: import_source_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/importsource/{}/schema-and-mapping", crate::core::encode_path_segment(&self.import_source_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ImportSchemaAndMapping> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Move to the data ingestion steps of external imports
+#[derive(Clone)]
+pub struct StartImportExecutionRequest<'a> {
+    client: &'a crate::core::Client,
+    import_source_id: String,
+}
+
+impl<'a> StartImportExecutionRequest<'a> {
+    fn new(client: &'a crate::core::Client, import_source_id: impl Into<String>) -> Self {
+        Self { client, import_source_id: import_source_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!("/importsource/{}/executions", crate::core::encode_path_segment(&self.import_source_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Cancel current on-going import
+#[derive(Clone)]
+pub struct CancelImportExecutionRequest<'a> {
+    client: &'a crate::core::Client,
+    import_execution_id: String,
+    import_source_id: String,
+}
+
+impl<'a> CancelImportExecutionRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        import_execution_id: impl Into<String>,
+        import_source_id: impl Into<String>,
+    ) -> Self {
+        Self { client, import_execution_id: import_execution_id.into(), import_source_id: import_source_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!(
+                "/importsource/{}/executions/{}",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.import_execution_id)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Submit progress of ingesting data
+#[derive(Clone)]
+pub struct SubmitImportExecutionProgressRequest<'a> {
+    client: &'a crate::core::Client,
+    import_execution_id: String,
+    import_source_id: String,
+    body: Option<std::collections::HashMap<String, serde_json::Value>>,
+}
+
+impl<'a> SubmitImportExecutionProgressRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        import_execution_id: impl Into<String>,
+        import_source_id: impl Into<String>,
+    ) -> Self {
+        Self {
+            client,
+            import_execution_id: import_execution_id.into(),
+            import_source_id: import_source_id.into(),
+            body: None,
+        }
+    }
+
+    #[must_use]
+    pub fn body(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
+        self.body = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!(
+                "/importsource/{}/executions/{}/progress",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.import_execution_id)
+            ),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Providing data to be ingested
+#[derive(Clone)]
+pub struct SubmitImportExecutionDataRequest<'a> {
+    client: &'a crate::core::Client,
+    import_execution_id: String,
+    import_source_id: String,
+    body: Option<std::collections::HashMap<String, serde_json::Value>>,
+}
+
+impl<'a> SubmitImportExecutionDataRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        import_execution_id: impl Into<String>,
+        import_source_id: impl Into<String>,
+    ) -> Self {
+        Self {
+            client,
+            import_execution_id: import_execution_id.into(),
+            import_source_id: import_source_id.into(),
+            body: None,
+        }
+    }
+
+    #[must_use]
+    pub fn body(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
+        self.body = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!(
+                "/importsource/{}/executions/{}/data",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.import_execution_id)
+            ),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Get the status of the import
+#[derive(Clone)]
+pub struct GetImportExecutionStatusRequest<'a> {
+    client: &'a crate::core::Client,
+    import_execution_id: String,
+    import_source_id: String,
+}
+
+impl<'a> GetImportExecutionStatusRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        import_execution_id: impl Into<String>,
+        import_source_id: impl Into<String>,
+    ) -> Self {
+        Self { client, import_execution_id: import_execution_id.into(), import_source_id: import_source_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/importsource/{}/executions/{}/status",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.import_execution_id)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Get the status of the most recently created import execution
+#[derive(Clone)]
+pub struct GetLatestImportExecutionStatusRequest<'a> {
+    client: &'a crate::core::Client,
+    import_source_id: String,
+}
+
+impl<'a> GetLatestImportExecutionStatusRequest<'a> {
+    fn new(client: &'a crate::core::Client, import_source_id: impl Into<String>) -> Self {
+        Self { client, import_source_id: import_source_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/importsource/{}/executions/status", crate::core::encode_path_segment(&self.import_source_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Creates a failed import history record for the specified import source and execution with the given failure reason
+#[derive(Clone)]
+pub struct CreateFailedImportHistoryRequest<'a> {
+    client: &'a crate::core::Client,
+    import_source_id: String,
+    execution_id: String,
+    body: Option<std::collections::HashMap<String, serde_json::Value>>,
+}
+
+impl<'a> CreateFailedImportHistoryRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        import_source_id: impl Into<String>,
+        execution_id: impl Into<String>,
+    ) -> Self {
+        Self { client, import_source_id: import_source_id.into(), execution_id: execution_id.into(), body: None }
+    }
+
+    #[must_use]
+    pub fn body(mut self, value: std::collections::HashMap<String, serde_json::Value>) -> Self {
+        self.body = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!(
+                "/importsource/{}/executions/{}/history/failed",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.execution_id)
+            ),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Generate a Bearer token which can be used to authenticate against Assets `/importsource/` APIs, to take actions against the specified import source.
+#[derive(Clone)]
+pub struct GenerateImportSourceTokenRequest<'a> {
+    client: &'a crate::core::Client,
+    import_source_id: String,
+}
+
+impl<'a> GenerateImportSourceTokenRequest<'a> {
+    fn new(client: &'a crate::core::Client, import_source_id: impl Into<String>) -> Self {
+        Self { client, import_source_id: import_source_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!("/importsource/{}/token", crate::core::encode_path_segment(&self.import_source_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Retrieve links for import schedule operations (create, get, update, delete). Returns a createSchedule link to POST a new schedule, and if a schedule already exists, returns a schedule link that can be used with GET, PUT, or DELETE operations.
+#[derive(Clone)]
+pub struct GetImportScheduleLinksRequest<'a> {
+    client: &'a crate::core::Client,
+    import_source_id: String,
+}
+
+impl<'a> GetImportScheduleLinksRequest<'a> {
+    fn new(client: &'a crate::core::Client, import_source_id: impl Into<String>) -> Self {
+        Self { client, import_source_id: import_source_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/importsource/{}/schedule", crate::core::encode_path_segment(&self.import_source_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetImportScheduleLinks> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Creates a new scheduled import configuration for the specified import source. Scheduled imports allow you to automate data imports on a recurring basis (daily, weekly, monthly) or run them once at a specific time.
+#[derive(Clone)]
+pub struct CreateImportScheduleRequest<'a> {
+    client: &'a crate::core::Client,
+    import_source_id: String,
+    import_schedule_request: ImportScheduleRequest,
+}
+
+impl<'a> CreateImportScheduleRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        import_source_id: impl Into<String>,
+        import_schedule_request: ImportScheduleRequest,
+    ) -> Self {
+        Self { client, import_source_id: import_source_id.into(), import_schedule_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            format!("/importsource/{}/importschedule", crate::core::encode_path_segment(&self.import_source_id)),
+        );
+
+        let body = match serde_json::to_value(&self.import_schedule_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ImportScheduleResponse> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Retrieves a specific scheduled import configuration by ID
+#[derive(Clone)]
+pub struct GetImportScheduleRequest<'a> {
+    client: &'a crate::core::Client,
+    import_source_id: String,
+    import_schedule_id: String,
+}
+
+impl<'a> GetImportScheduleRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        import_source_id: impl Into<String>,
+        import_schedule_id: impl Into<String>,
+    ) -> Self {
+        Self { client, import_source_id: import_source_id.into(), import_schedule_id: import_schedule_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/importsource/{}/importschedule/{}",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.import_schedule_id)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ImportScheduleResponse> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Updates an existing scheduled import configuration. You can modify the start time, run interval, or callback URL.
+#[derive(Clone)]
+pub struct UpdateImportScheduleRequest<'a> {
+    client: &'a crate::core::Client,
+    import_source_id: String,
+    import_schedule_id: String,
+    import_schedule_request: ImportScheduleRequest,
+}
+
+impl<'a> UpdateImportScheduleRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        import_source_id: impl Into<String>,
+        import_schedule_id: impl Into<String>,
+        import_schedule_request: ImportScheduleRequest,
+    ) -> Self {
+        Self {
+            client,
+            import_source_id: import_source_id.into(),
+            import_schedule_id: import_schedule_id.into(),
+            import_schedule_request,
+        }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!(
+                "/importsource/{}/importschedule/{}",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.import_schedule_id)
+            ),
+        );
+
+        let body = match serde_json::to_value(&self.import_schedule_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ImportScheduleResponse> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes a scheduled import configuration. The import source will remain, but will no longer execute on a schedule.
+#[derive(Clone)]
+pub struct DeleteImportScheduleRequest<'a> {
+    client: &'a crate::core::Client,
+    import_source_id: String,
+    import_schedule_id: String,
+}
+
+impl<'a> DeleteImportScheduleRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        import_source_id: impl Into<String>,
+        import_schedule_id: impl Into<String>,
+    ) -> Self {
+        Self { client, import_source_id: import_source_id.into(), import_schedule_id: import_schedule_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!(
+                "/importsource/{}/importschedule/{}",
+                crate::core::encode_path_segment(&self.import_source_id),
+                crate::core::encode_path_segment(&self.import_schedule_id)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

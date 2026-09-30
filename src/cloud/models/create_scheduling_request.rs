@@ -1,0 +1,47 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The dependencies for the plan. This must be "Sequential" or "Concurrent".
+    pub enum CreateSchedulingRequestDependencies {
+        Sequential => "Sequential",
+        Concurrent => "Concurrent",
+    }
+}
+
+crate::open_enum! {
+    /// The estimation unit for the plan. This must be "StoryPoints", "Days" or "Hours".
+    pub enum CreateSchedulingRequestEstimation {
+        StoryPoints => "StoryPoints",
+        Days => "Days",
+        Hours => "Hours",
+    }
+}
+
+crate::open_enum! {
+    /// The inferred dates for the plan. This must be "None", "SprintDates" or "ReleaseDates".
+    pub enum CreateSchedulingRequestInferredDates {
+        None => "None",
+        SprintDates => "SprintDates",
+        ReleaseDates => "ReleaseDates",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct CreateSchedulingRequest {
+    /// The dependencies for the plan. This must be "Sequential" or "Concurrent".
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub dependencies: Option<CreateSchedulingRequestDependencies>,
+    #[serde(rename = "endDate", default, skip_serializing_if = "Option::is_none")]
+    pub end_date: Option<CreateDateFieldRequest>,
+    /// The estimation unit for the plan. This must be "StoryPoints", "Days" or "Hours".
+    pub estimation: CreateSchedulingRequestEstimation,
+    /// The inferred dates for the plan. This must be "None", "SprintDates" or "ReleaseDates".
+    #[serde(rename = "inferredDates", default, skip_serializing_if = "Option::is_none")]
+    pub inferred_dates: Option<CreateSchedulingRequestInferredDates>,
+    #[serde(rename = "startDate", default, skip_serializing_if = "Option::is_none")]
+    pub start_date: Option<CreateDateFieldRequest>,
+}

@@ -1,0 +1,18 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Details of the group membership or permissions needed to receive the notification.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct NotificationRecipientsRestrictions {
+    /// List of groupId memberships required to receive the notification.
+    #[serde(rename = "groupIds", default, skip_serializing_if = "Option::is_none")]
+    pub group_ids: Option<Vec<String>>,
+    /// List of group memberships required to receive the notification.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub groups: Option<Vec<GroupName>>,
+    /// List of permissions required to receive the notification.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<RestrictedPermission>>,
+}

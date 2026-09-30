@@ -1,0 +1,12 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// Details of a field configuration to issue type mappings.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct AssociateFieldConfigurationsWithIssueTypesRequest {
+    /// Field configuration to issue type mappings.
+    pub mappings: Vec<FieldConfigurationToIssueTypeMapping>,
+}

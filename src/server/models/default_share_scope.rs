@@ -1,0 +1,17 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    pub enum DefaultShareScopeScope {
+        Global => "GLOBAL",
+        Authenticated => "AUTHENTICATED",
+        Private => "PRIVATE",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DefaultShareScope {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub scope: Option<DefaultShareScopeScope>,
+}

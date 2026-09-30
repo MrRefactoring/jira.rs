@@ -1,0 +1,15 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Details for changing owners of shareable entities
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct BulkChangeOwnerDetails {
+    /// Whether the name is fixed automatically if it's duplicated after changing owner.
+    #[serde(rename = "autofixName")]
+    pub autofix_name: bool,
+    /// The account id of the new owner.
+    #[serde(rename = "newOwner")]
+    pub new_owner: String,
+}

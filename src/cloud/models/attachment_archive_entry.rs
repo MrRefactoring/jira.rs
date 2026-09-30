@@ -1,0 +1,18 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct AttachmentArchiveEntry {
+    #[serde(rename = "abbreviatedName", default, skip_serializing_if = "Option::is_none")]
+    pub abbreviated_name: Option<String>,
+    #[serde(rename = "entryIndex", default, skip_serializing_if = "Option::is_none")]
+    pub entry_index: Option<i64>,
+    #[serde(rename = "mediaType", default, skip_serializing_if = "Option::is_none")]
+    pub media_type: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub size: Option<i64>,
+}

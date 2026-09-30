@@ -1,0 +1,95 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The ApiTokens operations.
+pub struct ApiTokensService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> ApiTokensService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Gets the API tokens owned by the specified user.
+    pub fn get_api_tokens(&self, account_id: AccountId) -> GetApiTokensRequest<'a> {
+        GetApiTokensRequest::new(self.client, account_id)
+    }
+
+    /// Deletes a specifid API token by ID.
+    pub fn delete_api_token(&self, account_id: AccountId, token_id: impl Into<String>) -> DeleteApiTokenRequest<'a> {
+        DeleteApiTokenRequest::new(self.client, account_id, token_id)
+    }
+}
+
+/// Gets the API tokens owned by the specified user.
+#[derive(Clone)]
+pub struct GetApiTokensRequest<'a> {
+    client: &'a crate::core::Client,
+    account_id: AccountId,
+}
+
+impl<'a> GetApiTokensRequest<'a> {
+    fn new(client: &'a crate::core::Client, account_id: AccountId) -> Self {
+        Self { client, account_id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/users/{}/manage/api-tokens", crate::core::encode_path_segment(&self.account_id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Vec<ApiTokenModel>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes a specifid API token by ID.
+#[derive(Clone)]
+pub struct DeleteApiTokenRequest<'a> {
+    client: &'a crate::core::Client,
+    account_id: AccountId,
+    token_id: String,
+}
+
+impl<'a> DeleteApiTokenRequest<'a> {
+    fn new(client: &'a crate::core::Client, account_id: AccountId, token_id: impl Into<String>) -> Self {
+        Self { client, account_id, token_id: token_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!(
+                "/users/{}/manage/api-tokens/{}",
+                crate::core::encode_path_segment(&self.account_id),
+                crate::core::encode_path_segment(&self.token_id)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

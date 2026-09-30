@@ -1,0 +1,31 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct EmailTemplateTypesEmailTypes {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    #[serde(rename = "eventName", default, skip_serializing_if = "Option::is_none")]
+    pub event_name: Option<String>,
+    #[serde(rename = "templateName", default, skip_serializing_if = "Option::is_none")]
+    pub template_name: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub html: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub text: Option<bool>,
+    #[serde(rename = "batchedNotification", default, skip_serializing_if = "Option::is_none")]
+    pub batched_notification: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub active: Option<bool>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct EmailTemplateTypes {
+    #[serde(rename = "userEmailAddress", default, skip_serializing_if = "Option::is_none")]
+    pub user_email_address: Option<String>,
+    #[serde(rename = "emailTypes", default, skip_serializing_if = "Option::is_none")]
+    pub email_types: Option<Vec<EmailTemplateTypesEmailTypes>>,
+}

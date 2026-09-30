@@ -1,0 +1,62 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The ProjectKeyAndNameValidation operations.
+pub struct ProjectKeyAndNameValidationService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> ProjectKeyAndNameValidationService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Validates a project key.
+    pub fn validate_project_key(&self) -> ValidateProjectKeyRequest<'a> {
+        ValidateProjectKeyRequest::new(self.client)
+    }
+}
+
+/// Validates a project key.
+#[derive(Clone)]
+pub struct ValidateProjectKeyRequest<'a> {
+    client: &'a crate::core::Client,
+    key: Option<String>,
+}
+
+impl<'a> ValidateProjectKeyRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, key: None }
+    }
+
+    /// The project key
+    #[must_use]
+    pub fn key(mut self, value: impl Into<String>) -> Self {
+        self.key = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/projectvalidate/key".to_owned());
+
+        if let Some(value) = &self.key {
+            config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ErrorCollection> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

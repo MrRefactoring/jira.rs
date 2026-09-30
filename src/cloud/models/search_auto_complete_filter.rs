@@ -1,0 +1,14 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Details of how to filter and list search auto complete information.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SearchAutoCompleteFilter {
+    /// Include collapsed fields for fields that have non-unique names.
+    #[serde(rename = "includeCollapsedFields", default, skip_serializing_if = "Option::is_none")]
+    pub include_collapsed_fields: Option<bool>,
+    /// List of project IDs used to filter the visible field details returned.
+    #[serde(rename = "projectIds", default, skip_serializing_if = "Option::is_none")]
+    pub project_ids: Option<Vec<i64>>,
+}

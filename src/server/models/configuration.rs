@@ -1,0 +1,25 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct Configuration {
+    #[serde(rename = "attachmentsEnabled", default, skip_serializing_if = "Option::is_none")]
+    pub attachments_enabled: Option<bool>,
+    #[serde(rename = "issueLinkingEnabled", default, skip_serializing_if = "Option::is_none")]
+    pub issue_linking_enabled: Option<bool>,
+    #[serde(rename = "subTasksEnabled", default, skip_serializing_if = "Option::is_none")]
+    pub sub_tasks_enabled: Option<bool>,
+    #[serde(rename = "timeTrackingConfiguration", default, skip_serializing_if = "Option::is_none")]
+    pub time_tracking_configuration: Option<TimeTrackingConfiguration>,
+    #[serde(rename = "timeTrackingEnabled", default, skip_serializing_if = "Option::is_none")]
+    pub time_tracking_enabled: Option<bool>,
+    #[serde(rename = "unassignedIssuesAllowed", default, skip_serializing_if = "Option::is_none")]
+    pub unassigned_issues_allowed: Option<bool>,
+    #[serde(rename = "votingEnabled", default, skip_serializing_if = "Option::is_none")]
+    pub voting_enabled: Option<bool>,
+    #[serde(rename = "watchingEnabled", default, skip_serializing_if = "Option::is_none")]
+    pub watching_enabled: Option<bool>,
+}

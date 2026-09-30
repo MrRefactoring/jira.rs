@@ -1,0 +1,4 @@
+// @generated. Do not edit: change the generator or the specification.
+
+/// The organisation to which the user belongs
+pub type Organization = String;

@@ -1,0 +1,18 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Details of the custom field options for a context.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct CustomFieldContextOption {
+    /// Whether the option is disabled.
+    pub disabled: bool,
+    /// The ID of the custom field option.
+    pub id: String,
+    /// For cascading options, the ID of the custom field option containing the cascading option.
+    #[serde(rename = "optionId", default, skip_serializing_if = "Option::is_none")]
+    pub option_id: Option<String>,
+    /// The value of the custom field option.
+    pub value: String,
+}

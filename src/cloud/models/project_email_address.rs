@@ -1,0 +1,14 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// A project's sender email address.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ProjectEmailAddress {
+    /// The email address.
+    #[serde(rename = "emailAddress", default, skip_serializing_if = "Option::is_none")]
+    pub email_address: Option<String>,
+    /// When using a custom domain, the status of the email address.
+    #[serde(rename = "emailAddressStatus", default, skip_serializing_if = "Option::is_none")]
+    pub email_address_status: Option<Vec<String>>,
+}

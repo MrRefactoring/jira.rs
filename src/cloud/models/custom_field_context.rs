@@ -1,0 +1,21 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// The details of a custom field context.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct CustomFieldContext {
+    /// The description of the context.
+    pub description: String,
+    /// The ID of the context.
+    pub id: String,
+    /// Whether the context apply to all issue types.
+    #[serde(rename = "isAnyIssueType")]
+    pub is_any_issue_type: bool,
+    /// Whether the context is global.
+    #[serde(rename = "isGlobalContext")]
+    pub is_global_context: bool,
+    /// The name of the context.
+    pub name: String,
+}

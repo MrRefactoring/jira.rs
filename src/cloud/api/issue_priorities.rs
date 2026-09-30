@@ -1,0 +1,470 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The IssuePriorities operations.
+pub struct IssuePrioritiesService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> IssuePrioritiesService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Creates an issue priority.
+    ///
+    /// **Deprecation notice:** The `iconUrl` parameter was sunset on 16th Mar 2025, and replaced with `avatarId`. See [CHANGE-1525](https://developer.atlassian.com/changelog/#CHANGE-1525).
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn create_priority(&self, create_priority_details: CreatePriorityDetails) -> CreatePriorityRequest<'a> {
+        CreatePriorityRequest::new(self.client, create_priority_details)
+    }
+
+    /// Sets default issue priority.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn set_default_priority(
+        &self,
+        set_default_priority_request: SetDefaultPriorityRequest,
+    ) -> SetDefaultPriorityRequest2<'a> {
+        SetDefaultPriorityRequest2::new(self.client, set_default_priority_request)
+    }
+
+    /// Changes the order of issue priorities.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn move_priorities(&self, reorder_issue_priorities: ReorderIssuePriorities) -> MovePrioritiesRequest<'a> {
+        MovePrioritiesRequest::new(self.client, reorder_issue_priorities)
+    }
+
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of priorities. The list can contain all priorities or a subset determined by any combination of these criteria:
+    ///
+    ///  *  a list of priority IDs. Any invalid priority IDs are ignored.
+    ///  *  a list of project IDs. Only priorities that are available in these projects will be returned. Any invalid project IDs are ignored.
+    ///  *  whether the field configuration is a default. This returns priorities from company-managed (classic) projects only, as there is no concept of default priorities in team-managed projects.
+    ///
+    /// **Deprecation notice:** The `onlyDefault` parameter is deprecated and will be removed at a later date. See [CHANGE-1655](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-1655).
+    ///
+    /// **Deprecation notice:** The `isDefault` property of priorities is deprecated and will be removed at a later date. See [CHANGE-1655](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-1655).
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+    pub fn search_priorities(&self) -> SearchPrioritiesRequest<'a> {
+        SearchPrioritiesRequest::new(self.client)
+    }
+
+    /// Returns an issue priority. To fetch multiple priorities at once, use [Search priorities](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-priority/#api-rest-api-3-priority-search-get) instead.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+    pub fn get_priority(&self, id: impl Into<String>) -> GetPriorityRequest<'a> {
+        GetPriorityRequest::new(self.client, id)
+    }
+
+    /// Updates an issue priority.
+    ///
+    /// At least one request body parameter must be defined.
+    ///
+    /// **Deprecation notice:** The `iconUrl` parameter was sunset on 16th Mar 2025, and replaced with `avatarId`. See [CHANGE-1525](https://developer.atlassian.com/changelog/#CHANGE-1525).
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn update_priority(
+        &self,
+        id: impl Into<String>,
+        update_priority_details: UpdatePriorityDetails,
+    ) -> UpdatePriorityRequest<'a> {
+        UpdatePriorityRequest::new(self.client, id, update_priority_details)
+    }
+
+    /// Deletes an issue priority.
+    ///
+    /// This operation is [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `location` link in the response to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn delete_priority(&self, id: impl Into<String>) -> DeletePriorityRequest<'a> {
+        DeletePriorityRequest::new(self.client, id)
+    }
+}
+
+/// Creates an issue priority.
+///
+/// **Deprecation notice:** The `iconUrl` parameter was sunset on 16th Mar 2025, and replaced with `avatarId`. See [CHANGE-1525](https://developer.atlassian.com/changelog/#CHANGE-1525).
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct CreatePriorityRequest<'a> {
+    client: &'a crate::core::Client,
+    create_priority_details: CreatePriorityDetails,
+}
+
+impl<'a> CreatePriorityRequest<'a> {
+    fn new(client: &'a crate::core::Client, create_priority_details: CreatePriorityDetails) -> Self {
+        Self { client, create_priority_details }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/priority".to_owned());
+
+        let body = match serde_json::to_value(&self.create_priority_details)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<PriorityId> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Sets default issue priority.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct SetDefaultPriorityRequest2<'a> {
+    client: &'a crate::core::Client,
+    set_default_priority_request: SetDefaultPriorityRequest,
+}
+
+impl<'a> SetDefaultPriorityRequest2<'a> {
+    fn new(client: &'a crate::core::Client, set_default_priority_request: SetDefaultPriorityRequest) -> Self {
+        Self { client, set_default_priority_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::PUT, "/rest/api/3/priority/default".to_owned());
+
+        let body = match serde_json::to_value(&self.set_default_priority_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Changes the order of issue priorities.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct MovePrioritiesRequest<'a> {
+    client: &'a crate::core::Client,
+    reorder_issue_priorities: ReorderIssuePriorities,
+}
+
+impl<'a> MovePrioritiesRequest<'a> {
+    fn new(client: &'a crate::core::Client, reorder_issue_priorities: ReorderIssuePriorities) -> Self {
+        Self { client, reorder_issue_priorities }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::PUT, "/rest/api/3/priority/move".to_owned());
+
+        let body = match serde_json::to_value(&self.reorder_issue_priorities)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of priorities. The list can contain all priorities or a subset determined by any combination of these criteria:
+///
+///  *  a list of priority IDs. Any invalid priority IDs are ignored.
+///  *  a list of project IDs. Only priorities that are available in these projects will be returned. Any invalid project IDs are ignored.
+///  *  whether the field configuration is a default. This returns priorities from company-managed (classic) projects only, as there is no concept of default priorities in team-managed projects.
+///
+/// **Deprecation notice:** The `onlyDefault` parameter is deprecated and will be removed at a later date. See [CHANGE-1655](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-1655).
+///
+/// **Deprecation notice:** The `isDefault` property of priorities is deprecated and will be removed at a later date. See [CHANGE-1655](https://developer.atlassian.com/cloud/jira/platform/changelog/#CHANGE-1655).
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
+pub struct SearchPrioritiesRequest<'a> {
+    client: &'a crate::core::Client,
+    start_at: Option<String>,
+    max_results: Option<String>,
+    id: Option<Vec<String>>,
+    project_id: Option<Vec<String>>,
+    priority_name: Option<String>,
+    only_default: Option<bool>,
+    expand: Option<String>,
+}
+
+impl<'a> SearchPrioritiesRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self {
+            client,
+            start_at: None,
+            max_results: None,
+            id: None,
+            project_id: None,
+            priority_name: None,
+            only_default: None,
+            expand: None,
+        }
+    }
+
+    /// The index of the first item to return in a page of results (page offset).
+    #[must_use]
+    pub fn start_at(mut self, value: impl Into<String>) -> Self {
+        self.start_at = Some(value.into());
+
+        self
+    }
+
+    /// The maximum number of items to return per page.
+    #[must_use]
+    pub fn max_results(mut self, value: impl Into<String>) -> Self {
+        self.max_results = Some(value.into());
+
+        self
+    }
+
+    /// The list of priority IDs. To include multiple IDs, provide an ampersand-separated list. For example, `id=2&id=3`.
+    #[must_use]
+    pub fn id(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.id = Some(value.into_iter().map(Into::into).collect());
+
+        self
+    }
+
+    /// The list of projects IDs. To include multiple IDs, provide an ampersand-separated list. For example, `projectId=10010&projectId=10111`.
+    #[must_use]
+    pub fn project_id(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.project_id = Some(value.into_iter().map(Into::into).collect());
+
+        self
+    }
+
+    /// The name of priority to search for.
+    #[must_use]
+    pub fn priority_name(mut self, value: impl Into<String>) -> Self {
+        self.priority_name = Some(value.into());
+
+        self
+    }
+
+    /// Whether only the default priority is returned.
+    #[must_use]
+    pub fn only_default(mut self, value: bool) -> Self {
+        self.only_default = Some(value);
+
+        self
+    }
+
+    /// Use `schemes` to return the associated priority schemes for each priority. Limited to returning first 15 priority schemes per priority.
+    #[must_use]
+    pub fn expand(mut self, value: impl Into<String>) -> Self {
+        self.expand = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/priority/search".to_owned());
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.id {
+            config.query.push(("id".to_owned(), crate::core::QueryValue::List(value.clone())));
+        }
+
+        if let Some(value) = &self.project_id {
+            config.query.push(("projectId".to_owned(), crate::core::QueryValue::List(value.clone())));
+        }
+
+        if let Some(value) = &self.priority_name {
+            config.query.push(("priorityName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.only_default {
+            config.query.push(("onlyDefault".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Page<Priority>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns an issue priority. To fetch multiple priorities at once, use [Search priorities](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-priority/#api-rest-api-3-priority-search-get) instead.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
+pub struct GetPriorityRequest<'a> {
+    client: &'a crate::core::Client,
+    id: String,
+}
+
+impl<'a> GetPriorityRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
+        Self { client, id: id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/priority/{}", crate::core::encode_path_segment(&self.id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Priority> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Updates an issue priority.
+///
+/// At least one request body parameter must be defined.
+///
+/// **Deprecation notice:** The `iconUrl` parameter was sunset on 16th Mar 2025, and replaced with `avatarId`. See [CHANGE-1525](https://developer.atlassian.com/changelog/#CHANGE-1525).
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct UpdatePriorityRequest<'a> {
+    client: &'a crate::core::Client,
+    id: String,
+    update_priority_details: UpdatePriorityDetails,
+}
+
+impl<'a> UpdatePriorityRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        id: impl Into<String>,
+        update_priority_details: UpdatePriorityDetails,
+    ) -> Self {
+        Self { client, id: id.into(), update_priority_details }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/3/priority/{}", crate::core::encode_path_segment(&self.id)),
+        );
+
+        let body = match serde_json::to_value(&self.update_priority_details)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes an issue priority.
+///
+/// This operation is [asynchronous](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async). Follow the `location` link in the response to determine the status of the task and use [Get task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-task/#api-rest-api-3-task-taskId-get) to obtain subsequent updates.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct DeletePriorityRequest<'a> {
+    client: &'a crate::core::Client,
+    id: String,
+}
+
+impl<'a> DeletePriorityRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
+        Self { client, id: id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/3/priority/{}", crate::core::encode_path_segment(&self.id)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<TaskProgressObject> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

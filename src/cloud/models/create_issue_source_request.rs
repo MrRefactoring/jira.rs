@@ -1,0 +1,21 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The issue source type. This must be "Board", "Project" or "Filter".
+    pub enum CreateIssueSourceRequestType {
+        Board => "Board",
+        Project => "Project",
+        Filter => "Filter",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct CreateIssueSourceRequest {
+    /// The issue source type. This must be "Board", "Project" or "Filter".
+    pub r#type: CreateIssueSourceRequestType,
+    /// The issue source value. This must be a board ID if the type is "Board", a project ID if the type is "Project" or a filter ID if the type is "Filter".
+    pub value: i64,
+}

@@ -1,0 +1,19 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ReadOnlyModeUpdateRequest {
+    /// Whether read-only mode should be enabled.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// The estimated end time as a local date-time (no offset). Omit to leave unchanged; send an empty string to clear it.
+    #[serde(rename = "endTime", default, skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<String>,
+    /// The banner message shown to users while read-only mode is active. Omit to leave it unchanged; send an empty string to reset it to the default.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// The time zone id the estimated end time is expressed in. Omit to leave unchanged; send an empty string to clear it.
+    #[serde(rename = "timeZone", default, skip_serializing_if = "Option::is_none")]
+    pub time_zone: Option<String>,
+}

@@ -1,0 +1,25 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+/// A type of issue suggested for use in auto-completion.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct IssuePickerSuggestionsIssueType {
+    /// The ID of the type of issues suggested for use in auto-completion.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// A list of issues suggested for use in auto-completion.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub issues: Option<Vec<SuggestedIssue>>,
+    /// The label of the type of issues suggested for use in auto-completion.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub label: Option<String>,
+    /// If no issue suggestions are found, returns a message indicating no suggestions were found,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub msg: Option<String>,
+    /// If issue suggestions are found, returns a message indicating the number of issues suggestions found and returned.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sub: Option<String>,
+}

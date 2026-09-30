@@ -1,0 +1,20 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct StreamPage {
+    #[serde(rename = "isLast", default, skip_serializing_if = "Option::is_none")]
+    pub is_last: Option<bool>,
+    #[serde(rename = "maxResults", default, skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    #[serde(rename = "nextCursor", default, skip_serializing_if = "Option::is_none")]
+    pub next_cursor: Option<String>,
+    #[serde(rename = "nextPage", default, skip_serializing_if = "Option::is_none")]
+    pub next_page: Option<String>,
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub values: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
+}

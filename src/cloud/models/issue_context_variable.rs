@@ -1,0 +1,23 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Type of custom context variable.
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum IssueContextVariableType {
+    #[serde(rename = "issue")]
+    Issue,
+}
+
+/// An [issue](https://developer.atlassian.com/cloud/jira/platform/jira-expressions-type-reference#issue) specified by ID or key. All the fields of the issue object are available in the Jira expression.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct IssueContextVariable {
+    /// The issue ID.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<i64>,
+    /// The issue key.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// Type of custom context variable.
+    pub r#type: IssueContextVariableType,
+}

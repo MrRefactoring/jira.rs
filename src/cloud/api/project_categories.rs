@@ -1,0 +1,229 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The ProjectCategories operations.
+pub struct ProjectCategoriesService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> ProjectCategoriesService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns all project categories.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+    pub fn get_all_project_categories(&self) -> GetAllProjectCategoriesRequest<'a> {
+        GetAllProjectCategoriesRequest::new(self.client)
+    }
+
+    /// Creates a project category.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn create_project_category(&self, project_category: ProjectCategory) -> CreateProjectCategoryRequest<'a> {
+        CreateProjectCategoryRequest::new(self.client, project_category)
+    }
+
+    /// Returns a project category.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+    pub fn get_project_category_by_id(&self, id: i64) -> GetProjectCategoryByIdRequest<'a> {
+        GetProjectCategoryByIdRequest::new(self.client, id)
+    }
+
+    /// Updates a project category.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn update_project_category(&self, id: i64, body: ProjectCategory) -> UpdateProjectCategoryRequest<'a> {
+        UpdateProjectCategoryRequest::new(self.client, id, body)
+    }
+
+    /// Deletes a project category.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn remove_project_category(&self, id: i64) -> RemoveProjectCategoryRequest<'a> {
+        RemoveProjectCategoryRequest::new(self.client, id)
+    }
+}
+
+/// Returns all project categories.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
+pub struct GetAllProjectCategoriesRequest<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> GetAllProjectCategoriesRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/projectCategory".to_owned());
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Vec<ProjectCategory>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Creates a project category.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct CreateProjectCategoryRequest<'a> {
+    client: &'a crate::core::Client,
+    project_category: ProjectCategory,
+}
+
+impl<'a> CreateProjectCategoryRequest<'a> {
+    fn new(client: &'a crate::core::Client, project_category: ProjectCategory) -> Self {
+        Self { client, project_category }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/projectCategory".to_owned());
+
+        let body = match serde_json::to_value(&self.project_category)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ProjectCategory> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a project category.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** Permission to access Jira.
+#[derive(Clone)]
+pub struct GetProjectCategoryByIdRequest<'a> {
+    client: &'a crate::core::Client,
+    id: i64,
+}
+
+impl<'a> GetProjectCategoryByIdRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: i64) -> Self {
+        Self { client, id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/projectCategory/{}", self.id),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ProjectCategory> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Updates a project category.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct UpdateProjectCategoryRequest<'a> {
+    client: &'a crate::core::Client,
+    id: i64,
+    body: ProjectCategory,
+}
+
+impl<'a> UpdateProjectCategoryRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: i64, body: ProjectCategory) -> Self {
+        Self { client, id, body }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/3/projectCategory/{}", self.id),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<UpdatedProjectCategory> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes a project category.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct RemoveProjectCategoryRequest<'a> {
+    client: &'a crate::core::Client,
+    id: i64,
+}
+
+impl<'a> RemoveProjectCategoryRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: i64) -> Self {
+        Self { client, id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/3/projectCategory/{}", self.id),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

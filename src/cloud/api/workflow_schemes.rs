@@ -1,0 +1,1096 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::super::models::*;
+
+/// The WorkflowSchemes operations.
+pub struct WorkflowSchemesService<'a> {
+    client: &'a crate::core::Client,
+}
+
+impl<'a> WorkflowSchemesService<'a> {
+    pub(crate) fn new(client: &'a crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of all workflow schemes, not including draft workflow schemes.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn get_all_workflow_schemes(&self) -> GetAllWorkflowSchemesRequest<'a> {
+        GetAllWorkflowSchemesRequest::new(self.client)
+    }
+
+    /// Creates a workflow scheme.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn create_workflow_scheme(&self, workflow_scheme: WorkflowScheme) -> CreateWorkflowSchemeRequest<'a> {
+        CreateWorkflowSchemeRequest::new(self.client, workflow_scheme)
+    }
+
+    /// Returns a list of workflow schemes by providing workflow scheme IDs or project IDs.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Administer Jira* global permission to access all, including project-scoped, workflow schemes
+    ///  *  *Administer projects* project permissions to access project-scoped workflow schemes
+    pub fn read_workflow_schemes(
+        &self,
+        workflow_scheme_read_request: WorkflowSchemeReadRequest,
+    ) -> ReadWorkflowSchemesRequest<'a> {
+        ReadWorkflowSchemesRequest::new(self.client, workflow_scheme_read_request)
+    }
+
+    /// Updates company-managed and team-managed project workflow schemes. This API doesn't have a concept of draft, so any changes made to a workflow scheme are immediately available. When changing the available statuses for issue types, an [asynchronous task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async) migrates the issues as defined in the provided mappings.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Administer Jira* project permission to update all, including global-scoped, workflow schemes.
+    ///  *  *Administer projects* project permission to update project-scoped workflow schemes.
+    pub fn update_schemes(
+        &self,
+        workflow_scheme_update_request: WorkflowSchemeUpdateRequest,
+    ) -> UpdateSchemesRequest<'a> {
+        UpdateSchemesRequest::new(self.client, workflow_scheme_update_request)
+    }
+
+    /// Gets the required status mappings for the desired changes to a workflow scheme. The results are provided per issue type and workflow. When updating a workflow scheme, status mappings can be provided per issue type, per workflow, or both.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Administer Jira* permission to update all, including global-scoped, workflow schemes.
+    ///  *  *Administer projects* project permission to update project-scoped workflow schemes.
+    pub fn get_required_workflow_scheme_mappings(
+        &self,
+        workflow_scheme_update_required_mappings_request: WorkflowSchemeUpdateRequiredMappingsRequest,
+    ) -> GetRequiredWorkflowSchemeMappingsRequest<'a> {
+        GetRequiredWorkflowSchemeMappingsRequest::new(self.client, workflow_scheme_update_required_mappings_request)
+    }
+
+    /// Returns a workflow scheme.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn get_workflow_scheme(&self, id: i64) -> GetWorkflowSchemeRequest<'a> {
+        GetWorkflowSchemeRequest::new(self.client, id)
+    }
+
+    /// Updates a company-manged project workflow scheme, including the name, default workflow, issue type to project mappings, and more. If the workflow scheme is active (that is, being used by at least one project), then a draft workflow scheme is created or updated instead, provided that `updateDraftIfNeeded` is set to `true`.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn update_workflow_scheme(&self, id: i64, body: WorkflowScheme) -> UpdateWorkflowSchemeRequest<'a> {
+        UpdateWorkflowSchemeRequest::new(self.client, id, body)
+    }
+
+    /// Deletes a workflow scheme. Note that a workflow scheme cannot be deleted if it is active (that is, being used by at least one project).
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn delete_workflow_scheme(&self, id: i64) -> DeleteWorkflowSchemeRequest<'a> {
+        DeleteWorkflowSchemeRequest::new(self.client, id)
+    }
+
+    /// Returns the default workflow for a workflow scheme. The default workflow is the workflow that is assigned any issue types that have not been mapped to any other workflow. The default workflow has *All Unassigned Issue Types* listed in its issue types for the workflow scheme in Jira.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn get_default_workflow(&self, id: i64) -> GetDefaultWorkflowRequest<'a> {
+        GetDefaultWorkflowRequest::new(self.client, id)
+    }
+
+    /// Sets the default workflow for a workflow scheme.
+    ///
+    /// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` in the request object and a draft workflow scheme is created or updated with the new default workflow. The draft workflow scheme can be published in Jira.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn update_default_workflow(
+        &self,
+        id: i64,
+        default_workflow: DefaultWorkflow,
+    ) -> UpdateDefaultWorkflowRequest<'a> {
+        UpdateDefaultWorkflowRequest::new(self.client, id, default_workflow)
+    }
+
+    /// Resets the default workflow for a workflow scheme. That is, the default workflow is set to Jira's system workflow (the *jira* workflow).
+    ///
+    /// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` and a draft workflow scheme is created or updated with the default workflow reset. The draft workflow scheme can be published in Jira.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn delete_default_workflow(&self, id: i64) -> DeleteDefaultWorkflowRequest<'a> {
+        DeleteDefaultWorkflowRequest::new(self.client, id)
+    }
+
+    /// Returns the issue type-workflow mapping for an issue type in a workflow scheme.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn get_workflow_scheme_issue_type(
+        &self,
+        id: i64,
+        issue_type: impl Into<String>,
+    ) -> GetWorkflowSchemeIssueTypeRequest<'a> {
+        GetWorkflowSchemeIssueTypeRequest::new(self.client, id, issue_type)
+    }
+
+    /// Sets the workflow for an issue type in a workflow scheme.
+    ///
+    /// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` in the request body and a draft workflow scheme is created or updated with the new issue type-workflow mapping. The draft workflow scheme can be published in Jira.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn set_workflow_scheme_issue_type(
+        &self,
+        id: i64,
+        issue_type: impl Into<String>,
+        body: IssueTypeWorkflowMapping,
+    ) -> SetWorkflowSchemeIssueTypeRequest<'a> {
+        SetWorkflowSchemeIssueTypeRequest::new(self.client, id, issue_type, body)
+    }
+
+    /// Deletes the issue type-workflow mapping for an issue type in a workflow scheme.
+    ///
+    /// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` and a draft workflow scheme is created or updated with the issue type-workflow mapping deleted. The draft workflow scheme can be published in Jira.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn delete_workflow_scheme_issue_type(
+        &self,
+        id: i64,
+        issue_type: impl Into<String>,
+    ) -> DeleteWorkflowSchemeIssueTypeRequest<'a> {
+        DeleteWorkflowSchemeIssueTypeRequest::new(self.client, id, issue_type)
+    }
+
+    /// Returns the workflow-issue type mappings for a workflow scheme.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn get_workflow(&self, id: i64) -> GetWorkflowRequest<'a> {
+        GetWorkflowRequest::new(self.client, id)
+    }
+
+    /// Sets the issue types for a workflow in a workflow scheme. The workflow can also be set as the default workflow for the workflow scheme. Unmapped issues types are mapped to the default workflow.
+    ///
+    /// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` in the request body and a draft workflow scheme is created or updated with the new workflow-issue types mappings. The draft workflow scheme can be published in Jira.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn update_workflow_mapping(
+        &self,
+        id: i64,
+        workflow_name: impl Into<String>,
+        issue_types_workflow_mapping: IssueTypesWorkflowMapping,
+    ) -> UpdateWorkflowMappingRequest<'a> {
+        UpdateWorkflowMappingRequest::new(self.client, id, workflow_name, issue_types_workflow_mapping)
+    }
+
+    /// Deletes the workflow-issue type mapping for a workflow in a workflow scheme.
+    ///
+    /// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` and a draft workflow scheme is created or updated with the workflow-issue type mapping deleted. The draft workflow scheme can be published in Jira.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn delete_workflow_mapping(
+        &self,
+        id: i64,
+        workflow_name: impl Into<String>,
+    ) -> DeleteWorkflowMappingRequest<'a> {
+        DeleteWorkflowMappingRequest::new(self.client, id, workflow_name)
+    }
+
+    /// Returns a page of projects using a given workflow scheme.
+    pub fn get_project_usages_for_workflow_scheme(
+        &self,
+        workflow_scheme_id: impl Into<String>,
+    ) -> GetProjectUsagesForWorkflowSchemeRequest<'a> {
+        GetProjectUsagesForWorkflowSchemeRequest::new(self.client, workflow_scheme_id)
+    }
+}
+
+/// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of all workflow schemes, not including draft workflow schemes.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct GetAllWorkflowSchemesRequest<'a> {
+    client: &'a crate::core::Client,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
+}
+
+impl<'a> GetAllWorkflowSchemesRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self { client, start_at: None, max_results: None }
+    }
+
+    /// The index of the first item to return in a page of results (page offset).
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The maximum number of items to return per page.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/workflowscheme".to_owned());
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
+    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
+    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
+    /// required.
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<WorkflowScheme>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, offset| {
+            request.start_at = Some(offset);
+
+            request.send()
+        })
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Page<WorkflowScheme>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Creates a workflow scheme.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct CreateWorkflowSchemeRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_scheme: WorkflowScheme,
+}
+
+impl<'a> CreateWorkflowSchemeRequest<'a> {
+    fn new(client: &'a crate::core::Client, workflow_scheme: WorkflowScheme) -> Self {
+        Self { client, workflow_scheme }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/workflowscheme".to_owned());
+
+        let body = match serde_json::to_value(&self.workflow_scheme)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a list of workflow schemes by providing workflow scheme IDs or project IDs.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Administer Jira* global permission to access all, including project-scoped, workflow schemes
+///  *  *Administer projects* project permissions to access project-scoped workflow schemes
+#[derive(Clone)]
+pub struct ReadWorkflowSchemesRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_scheme_read_request: WorkflowSchemeReadRequest,
+}
+
+impl<'a> ReadWorkflowSchemesRequest<'a> {
+    fn new(client: &'a crate::core::Client, workflow_scheme_read_request: WorkflowSchemeReadRequest) -> Self {
+        Self { client, workflow_scheme_read_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/workflowscheme/read".to_owned());
+
+        let body = match serde_json::to_value(&self.workflow_scheme_read_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Vec<WorkflowSchemeReadResponse>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Updates company-managed and team-managed project workflow schemes. This API doesn't have a concept of draft, so any changes made to a workflow scheme are immediately available. When changing the available statuses for issue types, an [asynchronous task](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#async) migrates the issues as defined in the provided mappings.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Administer Jira* project permission to update all, including global-scoped, workflow schemes.
+///  *  *Administer projects* project permission to update project-scoped workflow schemes.
+#[derive(Clone)]
+pub struct UpdateSchemesRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_scheme_update_request: WorkflowSchemeUpdateRequest,
+}
+
+impl<'a> UpdateSchemesRequest<'a> {
+    fn new(client: &'a crate::core::Client, workflow_scheme_update_request: WorkflowSchemeUpdateRequest) -> Self {
+        Self { client, workflow_scheme_update_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/workflowscheme/update".to_owned());
+
+        let body = match serde_json::to_value(&self.workflow_scheme_update_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<TaskProgressObject> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Gets the required status mappings for the desired changes to a workflow scheme. The results are provided per issue type and workflow. When updating a workflow scheme, status mappings can be provided per issue type, per workflow, or both.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Administer Jira* permission to update all, including global-scoped, workflow schemes.
+///  *  *Administer projects* project permission to update project-scoped workflow schemes.
+#[derive(Clone)]
+pub struct GetRequiredWorkflowSchemeMappingsRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_scheme_update_required_mappings_request: WorkflowSchemeUpdateRequiredMappingsRequest,
+}
+
+impl<'a> GetRequiredWorkflowSchemeMappingsRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        workflow_scheme_update_required_mappings_request: WorkflowSchemeUpdateRequiredMappingsRequest,
+    ) -> Self {
+        Self { client, workflow_scheme_update_required_mappings_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            "/rest/api/3/workflowscheme/update/mappings".to_owned(),
+        );
+
+        let body = match serde_json::to_value(&self.workflow_scheme_update_required_mappings_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowSchemeUpdateRequiredMappingsResponse> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a workflow scheme.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct GetWorkflowSchemeRequest<'a> {
+    client: &'a crate::core::Client,
+    id: i64,
+    return_draft_if_exists: Option<bool>,
+}
+
+impl<'a> GetWorkflowSchemeRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: i64) -> Self {
+        Self { client, id, return_draft_if_exists: None }
+    }
+
+    /// Returns the workflow scheme's draft rather than scheme itself, if set to true. If the workflow scheme does not have a draft, then the workflow scheme is returned.
+    #[must_use]
+    pub fn return_draft_if_exists(mut self, value: bool) -> Self {
+        self.return_draft_if_exists = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/workflowscheme/{}", self.id),
+        );
+
+        if let Some(value) = &self.return_draft_if_exists {
+            config.query.push(("returnDraftIfExists".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Updates a company-manged project workflow scheme, including the name, default workflow, issue type to project mappings, and more. If the workflow scheme is active (that is, being used by at least one project), then a draft workflow scheme is created or updated instead, provided that `updateDraftIfNeeded` is set to `true`.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct UpdateWorkflowSchemeRequest<'a> {
+    client: &'a crate::core::Client,
+    id: i64,
+    body: WorkflowScheme,
+}
+
+impl<'a> UpdateWorkflowSchemeRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: i64, body: WorkflowScheme) -> Self {
+        Self { client, id, body }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/3/workflowscheme/{}", self.id),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes a workflow scheme. Note that a workflow scheme cannot be deleted if it is active (that is, being used by at least one project).
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct DeleteWorkflowSchemeRequest<'a> {
+    client: &'a crate::core::Client,
+    id: i64,
+}
+
+impl<'a> DeleteWorkflowSchemeRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: i64) -> Self {
+        Self { client, id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/3/workflowscheme/{}", self.id),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the default workflow for a workflow scheme. The default workflow is the workflow that is assigned any issue types that have not been mapped to any other workflow. The default workflow has *All Unassigned Issue Types* listed in its issue types for the workflow scheme in Jira.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct GetDefaultWorkflowRequest<'a> {
+    client: &'a crate::core::Client,
+    id: i64,
+    return_draft_if_exists: Option<bool>,
+}
+
+impl<'a> GetDefaultWorkflowRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: i64) -> Self {
+        Self { client, id, return_draft_if_exists: None }
+    }
+
+    /// Set to `true` to return the default workflow for the workflow scheme's draft rather than scheme itself. If the workflow scheme does not have a draft, then the default workflow for the workflow scheme is returned.
+    #[must_use]
+    pub fn return_draft_if_exists(mut self, value: bool) -> Self {
+        self.return_draft_if_exists = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/workflowscheme/{}/default", self.id),
+        );
+
+        if let Some(value) = &self.return_draft_if_exists {
+            config.query.push(("returnDraftIfExists".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<DefaultWorkflow> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Sets the default workflow for a workflow scheme.
+///
+/// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` in the request object and a draft workflow scheme is created or updated with the new default workflow. The draft workflow scheme can be published in Jira.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct UpdateDefaultWorkflowRequest<'a> {
+    client: &'a crate::core::Client,
+    id: i64,
+    default_workflow: DefaultWorkflow,
+}
+
+impl<'a> UpdateDefaultWorkflowRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: i64, default_workflow: DefaultWorkflow) -> Self {
+        Self { client, id, default_workflow }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/3/workflowscheme/{}/default", self.id),
+        );
+
+        let body = match serde_json::to_value(&self.default_workflow)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Resets the default workflow for a workflow scheme. That is, the default workflow is set to Jira's system workflow (the *jira* workflow).
+///
+/// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` and a draft workflow scheme is created or updated with the default workflow reset. The draft workflow scheme can be published in Jira.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct DeleteDefaultWorkflowRequest<'a> {
+    client: &'a crate::core::Client,
+    id: i64,
+    update_draft_if_needed: Option<bool>,
+}
+
+impl<'a> DeleteDefaultWorkflowRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: i64) -> Self {
+        Self { client, id, update_draft_if_needed: None }
+    }
+
+    /// Set to true to create or update the draft of a workflow scheme and delete the mapping from the draft, when the workflow scheme cannot be edited. Defaults to `false`.
+    #[must_use]
+    pub fn update_draft_if_needed(mut self, value: bool) -> Self {
+        self.update_draft_if_needed = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/3/workflowscheme/{}/default", self.id),
+        );
+
+        if let Some(value) = &self.update_draft_if_needed {
+            config.query.push(("updateDraftIfNeeded".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the issue type-workflow mapping for an issue type in a workflow scheme.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct GetWorkflowSchemeIssueTypeRequest<'a> {
+    client: &'a crate::core::Client,
+    id: i64,
+    issue_type: String,
+    return_draft_if_exists: Option<bool>,
+}
+
+impl<'a> GetWorkflowSchemeIssueTypeRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: i64, issue_type: impl Into<String>) -> Self {
+        Self { client, id, issue_type: issue_type.into(), return_draft_if_exists: None }
+    }
+
+    /// Returns the mapping from the workflow scheme's draft rather than the workflow scheme, if set to true. If no draft exists, the mapping from the workflow scheme is returned.
+    #[must_use]
+    pub fn return_draft_if_exists(mut self, value: bool) -> Self {
+        self.return_draft_if_exists = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/api/3/workflowscheme/{}/issuetype/{}",
+                self.id,
+                crate::core::encode_path_segment(&self.issue_type)
+            ),
+        );
+
+        if let Some(value) = &self.return_draft_if_exists {
+            config.query.push(("returnDraftIfExists".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<IssueTypeWorkflowMapping> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Sets the workflow for an issue type in a workflow scheme.
+///
+/// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` in the request body and a draft workflow scheme is created or updated with the new issue type-workflow mapping. The draft workflow scheme can be published in Jira.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct SetWorkflowSchemeIssueTypeRequest<'a> {
+    client: &'a crate::core::Client,
+    id: i64,
+    issue_type: String,
+    body: IssueTypeWorkflowMapping,
+}
+
+impl<'a> SetWorkflowSchemeIssueTypeRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        id: i64,
+        issue_type: impl Into<String>,
+        body: IssueTypeWorkflowMapping,
+    ) -> Self {
+        Self { client, id, issue_type: issue_type.into(), body }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!(
+                "/rest/api/3/workflowscheme/{}/issuetype/{}",
+                self.id,
+                crate::core::encode_path_segment(&self.issue_type)
+            ),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes the issue type-workflow mapping for an issue type in a workflow scheme.
+///
+/// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` and a draft workflow scheme is created or updated with the issue type-workflow mapping deleted. The draft workflow scheme can be published in Jira.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct DeleteWorkflowSchemeIssueTypeRequest<'a> {
+    client: &'a crate::core::Client,
+    id: i64,
+    issue_type: String,
+    update_draft_if_needed: Option<bool>,
+}
+
+impl<'a> DeleteWorkflowSchemeIssueTypeRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: i64, issue_type: impl Into<String>) -> Self {
+        Self { client, id, issue_type: issue_type.into(), update_draft_if_needed: None }
+    }
+
+    /// Set to true to create or update the draft of a workflow scheme and update the mapping in the draft, when the workflow scheme cannot be edited. Defaults to `false`.
+    #[must_use]
+    pub fn update_draft_if_needed(mut self, value: bool) -> Self {
+        self.update_draft_if_needed = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!(
+                "/rest/api/3/workflowscheme/{}/issuetype/{}",
+                self.id,
+                crate::core::encode_path_segment(&self.issue_type)
+            ),
+        );
+
+        if let Some(value) = &self.update_draft_if_needed {
+            config.query.push(("updateDraftIfNeeded".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns the workflow-issue type mappings for a workflow scheme.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct GetWorkflowRequest<'a> {
+    client: &'a crate::core::Client,
+    id: i64,
+    workflow_name: Option<String>,
+    return_draft_if_exists: Option<bool>,
+}
+
+impl<'a> GetWorkflowRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: i64) -> Self {
+        Self { client, id, workflow_name: None, return_draft_if_exists: None }
+    }
+
+    /// The name of a workflow in the scheme. Limits the results to the workflow-issue type mapping for the specified workflow.
+    #[must_use]
+    pub fn workflow_name(mut self, value: impl Into<String>) -> Self {
+        self.workflow_name = Some(value.into());
+
+        self
+    }
+
+    /// Returns the mapping from the workflow scheme's draft rather than the workflow scheme, if set to true. If no draft exists, the mapping from the workflow scheme is returned.
+    #[must_use]
+    pub fn return_draft_if_exists(mut self, value: bool) -> Self {
+        self.return_draft_if_exists = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/3/workflowscheme/{}/workflow", self.id),
+        );
+
+        if let Some(value) = &self.workflow_name {
+            config.query.push(("workflowName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.return_draft_if_exists {
+            config.query.push(("returnDraftIfExists".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<IssueTypesWorkflowMapping> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Sets the issue types for a workflow in a workflow scheme. The workflow can also be set as the default workflow for the workflow scheme. Unmapped issues types are mapped to the default workflow.
+///
+/// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` in the request body and a draft workflow scheme is created or updated with the new workflow-issue types mappings. The draft workflow scheme can be published in Jira.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct UpdateWorkflowMappingRequest<'a> {
+    client: &'a crate::core::Client,
+    id: i64,
+    workflow_name: String,
+    issue_types_workflow_mapping: IssueTypesWorkflowMapping,
+}
+
+impl<'a> UpdateWorkflowMappingRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        id: i64,
+        workflow_name: impl Into<String>,
+        issue_types_workflow_mapping: IssueTypesWorkflowMapping,
+    ) -> Self {
+        Self { client, id, workflow_name: workflow_name.into(), issue_types_workflow_mapping }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/3/workflowscheme/{}/workflow", self.id),
+        );
+
+        config.query.push(("workflowName".to_owned(), crate::core::QueryValue::Scalar(self.workflow_name.clone())));
+
+        let body = match serde_json::to_value(&self.issue_types_workflow_mapping)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes the workflow-issue type mapping for a workflow in a workflow scheme.
+///
+/// Note that active workflow schemes cannot be edited. If the workflow scheme is active, set `updateDraftIfNeeded` to `true` and a draft workflow scheme is created or updated with the workflow-issue type mapping deleted. The draft workflow scheme can be published in Jira.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct DeleteWorkflowMappingRequest<'a> {
+    client: &'a crate::core::Client,
+    id: i64,
+    workflow_name: String,
+    update_draft_if_needed: Option<bool>,
+}
+
+impl<'a> DeleteWorkflowMappingRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: i64, workflow_name: impl Into<String>) -> Self {
+        Self { client, id, workflow_name: workflow_name.into(), update_draft_if_needed: None }
+    }
+
+    /// Set to true to create or update the draft of a workflow scheme and delete the mapping from the draft, when the workflow scheme cannot be edited. Defaults to `false`.
+    #[must_use]
+    pub fn update_draft_if_needed(mut self, value: bool) -> Self {
+        self.update_draft_if_needed = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/3/workflowscheme/{}/workflow", self.id),
+        );
+
+        config.query.push(("workflowName".to_owned(), crate::core::QueryValue::Scalar(self.workflow_name.clone())));
+
+        if let Some(value) = &self.update_draft_if_needed {
+            config.query.push(("updateDraftIfNeeded".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a page of projects using a given workflow scheme.
+#[derive(Clone)]
+pub struct GetProjectUsagesForWorkflowSchemeRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_scheme_id: String,
+    next_page_token: Option<String>,
+    max_results: Option<i64>,
+}
+
+impl<'a> GetProjectUsagesForWorkflowSchemeRequest<'a> {
+    fn new(client: &'a crate::core::Client, workflow_scheme_id: impl Into<String>) -> Self {
+        Self { client, workflow_scheme_id: workflow_scheme_id.into(), next_page_token: None, max_results: None }
+    }
+
+    /// The cursor for pagination
+    #[must_use]
+    pub fn next_page_token(mut self, value: impl Into<String>) -> Self {
+        self.next_page_token = Some(value.into());
+
+        self
+    }
+
+    /// The maximum number of results to return. Must be an integer between 1 and 200.
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/api/3/workflowscheme/{}/projectUsages",
+                crate::core::encode_path_segment(&self.workflow_scheme_id)
+            ),
+        );
+
+        if let Some(value) = &self.next_page_token {
+            config.query.push(("nextPageToken".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowSchemeProjectUsageDTO> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}

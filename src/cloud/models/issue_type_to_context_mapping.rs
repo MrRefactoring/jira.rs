@@ -1,0 +1,18 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// Mapping of an issue type to a context.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct IssueTypeToContextMapping {
+    /// The ID of the context.
+    #[serde(rename = "contextId")]
+    pub context_id: String,
+    /// Whether the context is mapped to any issue type.
+    #[serde(rename = "isAnyIssueType", default, skip_serializing_if = "Option::is_none")]
+    pub is_any_issue_type: Option<bool>,
+    /// The ID of the issue type.
+    #[serde(rename = "issueTypeId", default, skip_serializing_if = "Option::is_none")]
+    pub issue_type_id: Option<String>,
+}

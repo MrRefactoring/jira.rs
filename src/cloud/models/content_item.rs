@@ -1,0 +1,37 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// The type of the entity to redact; It will be one of the following:
+    ///
+    ///  *  **issuefieldvalue** \- To redact in issue fields
+    ///  *  **issue-comment** \- To redact in issue comments.
+    ///  *  **issue-worklog** \- To redact in issue worklogs
+    pub enum ContentItemEntityType {
+        Issuefieldvalue => "issuefieldvalue",
+        IssueComment => "issue-comment",
+        IssueWorklog => "issue-worklog",
+    }
+}
+
+/// Represents the content to redact
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ContentItem {
+    /// The ID of the content entity.
+    ///
+    ///  *  For redacting an issue field, this will be the field ID (e.g., summary, customfield\_10000).
+    ///  *  For redacting a comment, this will be the comment ID.
+    ///  *  For redacting a worklog, this will be the worklog ID.
+    #[serde(rename = "entityId")]
+    pub entity_id: String,
+    /// The type of the entity to redact; It will be one of the following:
+    ///
+    ///  *  **issuefieldvalue** \- To redact in issue fields
+    ///  *  **issue-comment** \- To redact in issue comments.
+    ///  *  **issue-worklog** \- To redact in issue worklogs
+    #[serde(rename = "entityType")]
+    pub entity_type: ContentItemEntityType,
+    /// This would be the issue ID
+    pub id: String,
+}

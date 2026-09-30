@@ -1,0 +1,4 @@
+// @generated. Do not edit: change the generator or the specification.
+
+/// The absolute URI (RFC3986) to the avatar name of the user.
+pub type Avatar = String;

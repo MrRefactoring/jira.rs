@@ -1,0 +1,44 @@
+name: 🧱 Service Management Data Center tests
+
+on:
+  schedule:
+    - cron: '30 4 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: live-tests-jsm
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  live:
+    name: 🧱 Service Management Data Center
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: 🔄 Checkout sources
+        uses: actions/checkout@v7
+      - name: ⚙️ Install the toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: 💾 Cache the build
+        uses: Swatinem/rust-cache@v2
+      - name: 🔑 Write the timebomb licence
+        env:
+          TIMEBOMB_LICENSE: ${{ secrets.JSM_DC_TIMEBOMB_LICENSE }}
+        run: |
+          printf '%s' "$TIMEBOMB_LICENSE" > docker/jsm-dc/timebomb-license.txt
+          test -s docker/jsm-dc/timebomb-license.txt
+      - name: 🧱 Bring up Service Management Data Center
+        run: cargo xtask jsm-dc up
+      - name: 🚀 Run the Service Management suite
+        run: cargo xtask coverage jsm
+        env:
+          JSM_SERVER_BASE_URL: http://localhost:8082
+      - name: 🧹 Tear it down
+        if: always()
+        run: cargo xtask jsm-dc down

@@ -1,0 +1,38 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum ObjectAttributeValueValue {
+    Variant0(String),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
+}
+
+/// The actual value of an object attribute. The object attribute value body will have different properties populated based on the type of the object type attribute. The value will always be present.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ObjectAttributeValue {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub value: Option<ObjectAttributeValueValue>,
+    /// The value as displayable text e.g. for a date time attribute this value will be formatted to the user settings
+    #[serde(rename = "displayValue")]
+    pub display_value: String,
+    /// A value to use when searching for the specific object
+    #[serde(rename = "searchValue", default, skip_serializing_if = "Option::is_none")]
+    pub search_value: Option<String>,
+    /// The same response body as an Assets object
+    #[serde(rename = "referencedObject", default, skip_serializing_if = "Option::is_none")]
+    pub referenced_object: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub user: Option<User>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub group: Option<Group>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub status: Option<Status>,
+    #[serde(rename = "additionalValue", default, skip_serializing_if = "Option::is_none")]
+    pub additional_value: Option<String>,
+}

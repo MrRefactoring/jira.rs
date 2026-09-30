@@ -1,0 +1,25 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct SlaInformation {
+    #[serde(rename = "_links", default, skip_serializing_if = "Option::is_none")]
+    pub links: Option<SelfLink>,
+    /// List of completed cycles for the SLA.
+    #[serde(rename = "completedCycles", default, skip_serializing_if = "Option::is_none")]
+    pub completed_cycles: Option<Vec<SlaInformationCompletedCycle>>,
+    /// ID of the Service Level Agreement (SLA).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// Description of the SLA.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "ongoingCycle", default, skip_serializing_if = "Option::is_none")]
+    pub ongoing_cycle: Option<SlaInformationOngoingCycle>,
+    /// Format in which SLA is to be displayed in the UI
+    #[serde(rename = "slaDisplayFormat", default, skip_serializing_if = "Option::is_none")]
+    pub sla_display_format: Option<String>,
+}

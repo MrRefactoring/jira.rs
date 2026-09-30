@@ -1,0 +1,16 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct UserPermissions {
+    #[serde(rename = "ADD_MEMBERS")]
+    pub add_members: bool,
+    #[serde(rename = "DELETE_TEAM")]
+    pub delete_team: bool,
+    #[serde(rename = "REMOVE_MEMBERS")]
+    pub remove_members: bool,
+    #[serde(rename = "UPDATE_TEAM")]
+    pub update_team: bool,
+}

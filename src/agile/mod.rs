@@ -1,0 +1,99 @@
+// @generated. Do not edit: change the generator or the specification.
+
+//! The Agile surface.
+
+pub mod api;
+pub mod models;
+
+pub use api::*;
+pub use models::*;
+
+/// Every Agile operation, grouped the way the API documents them.
+///
+/// Build the transport once and hand it to each surface: a second client is a second set of OAuth tokens,
+/// and whichever refreshes first invalidates the other.
+pub struct AgileClient {
+    client: crate::core::Client,
+}
+
+impl AgileClient {
+    pub fn new(client: crate::core::Client) -> Self {
+        Self { client }
+    }
+
+    /// The transport underneath, for a request this surface does not describe.
+    pub fn client(&self) -> &crate::core::Client {
+        &self.client
+    }
+
+    /// The Backlog operations.
+    pub fn backlog(&self) -> BacklogService<'_> {
+        BacklogService::new(&self.client)
+    }
+
+    /// The Board operations.
+    pub fn board(&self) -> BoardService<'_> {
+        BoardService::new(&self.client)
+    }
+
+    /// The Epic operations.
+    pub fn epic(&self) -> EpicService<'_> {
+        EpicService::new(&self.client)
+    }
+
+    /// The Issue operations.
+    pub fn issue(&self) -> IssueService<'_> {
+        IssueService::new(&self.client)
+    }
+
+    /// The Sprint operations.
+    pub fn sprint(&self) -> SprintService<'_> {
+        SprintService::new(&self.client)
+    }
+
+    /// The DevelopmentInformation operations.
+    pub fn development_information(&self) -> DevelopmentInformationService<'_> {
+        DevelopmentInformationService::new(&self.client)
+    }
+
+    /// The FeatureFlags operations.
+    pub fn feature_flags(&self) -> FeatureFlagsService<'_> {
+        FeatureFlagsService::new(&self.client)
+    }
+
+    /// The Deployments operations.
+    pub fn deployments(&self) -> DeploymentsService<'_> {
+        DeploymentsService::new(&self.client)
+    }
+
+    /// The Builds operations.
+    pub fn builds(&self) -> BuildsService<'_> {
+        BuildsService::new(&self.client)
+    }
+
+    /// The RemoteLinks operations.
+    pub fn remote_links(&self) -> RemoteLinksService<'_> {
+        RemoteLinksService::new(&self.client)
+    }
+
+    /// The SecurityInformation operations.
+    pub fn security_information(&self) -> SecurityInformationService<'_> {
+        SecurityInformationService::new(&self.client)
+    }
+
+    /// The Operations operations.
+    pub fn operations(&self) -> OperationsService<'_> {
+        OperationsService::new(&self.client)
+    }
+
+    /// The DevopsComponents operations.
+    pub fn devops_components(&self) -> DevopsComponentsService<'_> {
+        DevopsComponentsService::new(&self.client)
+    }
+}
+
+impl From<crate::core::Client> for AgileClient {
+    fn from(client: crate::core::Client) -> Self {
+        Self::new(client)
+    }
+}

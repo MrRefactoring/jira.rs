@@ -1,0 +1,102 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+crate::open_enum! {
+    /// How a managed account was added to a directory.
+    ///
+    /// - **invited** – invited by an admin
+    /// - **synced** – provisioned from an identity provider
+    ///
+    /// If `null`, then the management source couldn’t be determined.
+    pub enum MultiDirectoryUserManagementSource {
+        Invited => "invited",
+        Synced => "synced",
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct MultiDirectoryUser {
+    /// Unique ID of the user's account.
+    #[serde(rename = "accountId", default, skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    #[serde(rename = "accountType", default, skip_serializing_if = "Option::is_none")]
+    pub account_type: Option<AccountType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub status: Option<Status>,
+    #[serde(rename = "accountStatus", default, skip_serializing_if = "Option::is_none")]
+    pub account_status: Option<AccountStatus>,
+    #[serde(rename = "membershipStatus", default, skip_serializing_if = "Option::is_none")]
+    pub membership_status: Option<MembershipStatus>,
+    /// The ISO-8601 date and time the user was first added to any directory the admin is permitted to view in the organization
+    #[serde(rename = "addedToOrg", default, skip_serializing_if = "Option::is_none")]
+    pub added_to_org: Option<String>,
+    /// The full name of the user.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The nickname of the user.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub nickname: Option<String>,
+    /// The email address of the user.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    /// The email verification status of the user. If true, the user verified their email after  creating their account.
+    #[serde(rename = "emailVerified", default, skip_serializing_if = "Option::is_none")]
+    pub email_verified: Option<bool>,
+    #[serde(rename = "claimStatus", default, skip_serializing_if = "Option::is_none")]
+    pub claim_status: Option<ClaimStatus>,
+    /// The admin role IDs of the user. The role IDs are used to determine the permissions of the user.
+    #[serde(rename = "platformRoles", default, skip_serializing_if = "Option::is_none")]
+    pub platform_roles: Option<Vec<PlatformRole>>,
+    /// The URL of the user's profile picture.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub picture: Option<String>,
+    /// The URL of the user's public avatar.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub avatar: Option<String>,
+    /// How a managed account was added to a directory.
+    ///
+    /// - **invited** – invited by an admin
+    /// - **synced** – provisioned from an identity provider
+    ///
+    /// If `null`, then the management source couldn’t be determined.
+    #[serde(rename = "managementSource", default, skip_serializing_if = "Option::is_none")]
+    pub management_source: Option<MultiDirectoryUserManagementSource>,
+    /// Whether or not a managed account has two-step verification enabled on their account.
+    /// If true, they have two-step verification enabled.
+    ///
+    /// By default, all accounts are returned, regardless of two-step verification status.
+    #[serde(rename = "mfaEnabled", default, skip_serializing_if = "Option::is_none")]
+    pub mfa_enabled: Option<bool>,
+    /// Job title of the user.
+    #[serde(rename = "jobTitle", default, skip_serializing_if = "Option::is_none")]
+    pub job_title: Option<String>,
+    /// Department the user belongs to.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub department: Option<String>,
+    /// Organization the user belongs to.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub organization: Option<String>,
+    /// Location of the user.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub location: Option<String>,
+    /// Time zone the user is in.
+    #[serde(rename = "timeZone", default, skip_serializing_if = "Option::is_none")]
+    pub time_zone: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub counts: Option<UserCounts>,
+    /// The user's last active timestamp for each product in the given directory. Returned only when the `productAccess` expand option is requested.
+    #[serde(rename = "productAccess", default, skip_serializing_if = "Option::is_none")]
+    pub product_access: Option<Vec<MultiDirectoryProductAccess>>,
+    /// The user's group memberships within the requested directory. Returned only when the `groups` expand option is requested.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub groups: Option<Vec<MultiDirectoryUserGroup>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub links: Option<LinkSelfCursor>,
+    #[serde(rename = "deactivatedOn", default, skip_serializing_if = "Option::is_none")]
+    pub deactivated_on: Option<String>,
+    #[serde(rename = "forDeletion", default, skip_serializing_if = "Option::is_none")]
+    pub for_deletion: Option<bool>,
+}

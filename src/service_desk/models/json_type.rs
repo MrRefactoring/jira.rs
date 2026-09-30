@@ -1,0 +1,26 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+/// The schema of a field.
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct JsonType {
+    /// If the field is a custom field, the configuration of the field.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub configuration: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// If the field is a custom field, the URI of the field.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub custom: Option<String>,
+    /// If the field is a custom field, the custom ID of the field.
+    #[serde(rename = "customId", default, skip_serializing_if = "Option::is_none")]
+    pub custom_id: Option<i64>,
+    /// When the data type is an array, the name of the field items within the array.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub items: Option<String>,
+    /// If the field is a system field, the name of the field.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub system: Option<String>,
+    /// The data type of the field.
+    pub r#type: String,
+}

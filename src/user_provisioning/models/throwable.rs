@@ -1,0 +1,19 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use super::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct Throwable {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub cause: Option<Box<Throwable>>,
+    #[serde(rename = "stackTrace", default, skip_serializing_if = "Option::is_none")]
+    pub stack_trace: Option<Vec<StackTraceElement>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    #[serde(rename = "localizedMessage", default, skip_serializing_if = "Option::is_none")]
+    pub localized_message: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub suppressed: Option<Vec<Throwable>>,
+}

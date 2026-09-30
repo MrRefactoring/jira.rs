@@ -1,0 +1,25 @@
+// @generated. Do not edit: change the generator or the specification.
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SprintCreate {
+    #[serde(rename = "autoStartStop", default, skip_serializing_if = "Option::is_none")]
+    pub auto_start_stop: Option<bool>,
+    #[serde(rename = "endDate", default, skip_serializing_if = "Option::is_none")]
+    pub end_date: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub goal: Option<String>,
+    #[serde(rename = "incompleteIssuesDestinationId", default, skip_serializing_if = "Option::is_none")]
+    pub incomplete_issues_destination_id: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "originBoardId", default, skip_serializing_if = "Option::is_none")]
+    pub origin_board_id: Option<i64>,
+    #[serde(rename = "startDate", default, skip_serializing_if = "Option::is_none")]
+    pub start_date: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub synced: Option<bool>,
+    #[serde(rename = "userProfileTimeZone", default, skip_serializing_if = "Option::is_none")]
+    pub user_profile_time_zone: Option<String>,
+}
