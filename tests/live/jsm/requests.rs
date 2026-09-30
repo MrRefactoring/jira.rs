@@ -6,7 +6,7 @@ use jira::service_desk_server::{
 use serde_json::json;
 
 use super::fixtures::{asset_name, jsm_username, service_desk_licensed, service_desk_project};
-use crate::harness::service_desk_server;
+use crate::harness::{RESOURCE_MARKER, service_desk_server};
 
 async fn raise_a_request(label: &str) -> String {
     let project = service_desk_project().await;
@@ -19,8 +19,12 @@ async fn raise_a_request(label: &str) -> String {
         .await
         .expect("a service desk lists its request types");
 
-    let request_type_id =
-        types.values.first().and_then(|kind| kind.id.clone()).expect("the template brings request types with it");
+    let request_type_id = types
+        .values
+        .iter()
+        .find(|kind| !kind.name.as_deref().is_some_and(|name| name.starts_with(RESOURCE_MARKER)))
+        .and_then(|kind| kind.id.clone())
+        .expect("the template brings request types with it");
 
     let fields: HashMap<String, serde_json::Value> = [
         ("summary".to_owned(), json!(asset_name(label))),
