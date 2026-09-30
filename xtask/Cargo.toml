@@ -6,7 +6,7 @@ publish = false
 
 [dependencies]
 jira = { path = "..", features = ["audit"] }
-regex = "1.11"
+regex = "1.13"
 reqwest = { version = "0.13", features = ["cookies", "json", "form"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

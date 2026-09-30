@@ -48,20 +48,20 @@ unsafe_code = "forbid"
 
 [dependencies]
 bytes = "1.12"
-chrono = { version = "0.4", optional = true, default-features = false, features = ["std", "serde"] }
-form_urlencoded = "1.2"
+chrono = { version = "0.4.20", optional = true, default-features = false, features = ["std", "serde"] }
+form_urlencoded = "1.2.1"
 futures-util = { version = "0.3", default-features = false, features = ["alloc"] }
 hmac = { version = "0.13", optional = true }
 httpdate = "1.0"
 reqwest = { version = "0.13", features = ["json", "multipart", "form"] }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
+serde = { version = "1.0.220", features = ["derive"] }
+serde_json = "1.0.52"
 sha2 = { version = "0.11", optional = true }
 serde_ignored = { version = "0.1", optional = true }
-serde_path_to_error = "0.1"
-thiserror = "2.0"
+serde_path_to_error = "0.1.2"
+thiserror = "2.0.3"
 tokio = { version = "1.53", features = ["fs", "sync", "time"] }
-tracing = { version = "0.1", optional = true, default-features = false, features = ["std"] }
+tracing = { version = "0.1.35", optional = true, default-features = false, features = ["std"] }
 url = "2.5"
 
 [dev-dependencies]

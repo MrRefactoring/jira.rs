@@ -92,3 +92,21 @@ jobs:
         uses: Swatinem/rust-cache@v2
       - name: 🕰️ Check
         run: cargo check --locked --all-features
+
+  minimal-versions:
+    name: 📉 Minimal dependency versions
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: 🔄 Checkout sources
+        uses: actions/checkout@v7
+      - name: ⚙️ Install the toolchain
+        uses: dtolnay/rust-toolchain@nightly
+      - name: 💾 Cache the build
+        uses: Swatinem/rust-cache@v2
+      - name: ✂️ Resolve the published crate alone, without xtask
+        run: sed -i 's/^members = \[".", "xtask"\]$/members = ["."]/' Cargo.toml
+      - name: 📉 Take the lowest version every requirement allows
+        run: cargo update -Z direct-minimal-versions
+      - name: 🔍 Check
+        run: cargo check -p jira --all-features --all-targets
