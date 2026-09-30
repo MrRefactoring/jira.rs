@@ -86,5 +86,5 @@ async fn rejects_a_column_that_does_not_exist() {
         .await
         .expect_err("a column that is not a navigable field cannot be a default");
 
-    assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
+    assert!(error.status().is_some() && error.to_string().contains("nosuchcolumn"), "{error}");
 }
