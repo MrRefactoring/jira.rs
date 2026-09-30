@@ -1,15 +1,5 @@
 use crate::harness::cloud;
 
-/// Screen schemes, tabs and tab fields — the three layers between a field and the form a user actually sees.
-///
-/// Read-only. The chain is issue type screen scheme → screen scheme → screen → tab → field, and every link is
-/// shared configuration: one screen serves many projects, so moving a field on a tab moves it for all of them. There
-/// is no project-scoped variant of any of it, which is why the destructive path is proven only through its error
-/// channel.
-///
-/// Covering the three modules together is deliberate. Individually each is a thin listing; what is worth asserting
-/// is that the chain resolves end to end, because a break anywhere in it is what makes a correctly configured field
-/// invisible.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn pages_the_screen_scheme_listing_for_an_admin_or_fails_typed() {
@@ -39,9 +29,6 @@ async fn pages_the_screen_scheme_listing_for_an_admin_or_fails_typed() {
     }
 }
 
-/// The whole chain in one walk: a scheme names a screen that exists, that screen has tabs, and a tab has the fields
-/// the user ends up looking at. Split across tests each step would refetch the step before it, and a break in the
-/// middle would read as several unrelated failures instead of one broken chain.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn resolves_a_screen_scheme_down_to_the_fields_on_a_tab() {
@@ -106,7 +93,6 @@ async fn resolves_a_screen_scheme_down_to_the_fields_on_a_tab() {
     }
 }
 
-/// The destructive path, proven through its error channel and never aimed at a scheme that exists.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_destructive_path() {
@@ -120,10 +106,6 @@ async fn fails_typed_on_the_destructive_path() {
     assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
-/// Whether the token may read the screen scheme configuration at all.
-///
-/// Every read in this chain needs *Administer Jira*. A token without it must be refused in a way the caller can
-/// recognise, so the refusal is asserted here rather than being silently swallowed by the tests that stand down.
 async fn may_read_screen_schemes() -> bool {
     match cloud().screen_schemes().get_screen_schemes().max_results(1).send().await {
         Ok(_) => true,

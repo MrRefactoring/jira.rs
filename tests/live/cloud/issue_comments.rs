@@ -1,11 +1,3 @@
-//! Ported from jira.js/tests/live/cloud/issueComments.test.ts.
-//!
-//! A full create-read-update-delete cycle on comments attached to fixture issues — safe, self-cleaning, and the
-//! densest write surface the library has.
-//!
-//! The rich-text routing these endpoints perform is covered separately in `adf_routing`. Here the concern is
-//! everything else: paging, ordering, `expand`, and that an update is a replacement.
-
 use jira::cloud::{
     Comment, CommentInput, CommentInputBody, DocumentType, GetCommentRequestExpand, GetCommentRequestExpandValue,
     GetCommentsRequestOrderBy, IssueCommentListRequest, PageOfComments,
@@ -28,7 +20,6 @@ fn comment_ids(page: &PageOfComments) -> Vec<String> {
     page.comments.iter().flatten().filter_map(|comment| comment.id.clone()).collect()
 }
 
-/// Adds a comment to the issue and registers its deletion.
 async fn add_comment(tracker: &mut ResourceTracker, issue_key: &str, text: &str) -> Comment {
     let created = cloud()
         .issue_comments()
@@ -56,10 +47,6 @@ async fn add_comment(tracker: &mut ResourceTracker, issue_key: &str, text: &str)
     created
 }
 
-/// The comment lifecycle, end to end.
-///
-/// Proves the shape creation hands back, that a read by id matches it, that an update replaces the body rather than
-/// appending to it, and that a deleted comment is gone from both the direct read and the listing.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_a_comment_through_its_lifecycle() {
@@ -114,7 +101,6 @@ async fn walks_a_comment_through_its_lifecycle() {
 
     assert!(body_text(&edited).contains("edited comment"), "{}", body_text(&edited));
     assert!(!body_text(&edited).contains("first comment"), "an update replaces the body rather than appending to it");
-    // Timestamps within one response carry the same UTC offset, so lexicographic order is chronological order.
     assert!(rendered_option(&edited.updated) > Some(created_at), "the edit moves `updated` past `created`");
 
     cloud().issue_comments().delete_comment(&issue.key, &comment_id).send().await.expect("the comment can be deleted");
@@ -139,7 +125,6 @@ async fn walks_a_comment_through_its_lifecycle() {
     tracker.cleanup().await;
 }
 
-/// `renderedBody` costs the server a rendering pass, so it arrives only when `expand` asks for it.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn renders_the_body_as_html_only_when_expand_asks() {

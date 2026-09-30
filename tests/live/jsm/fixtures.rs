@@ -1,10 +1,3 @@
-//! Everything the Service Management suites need to exist before they run.
-//!
-//! A fresh Assets holds no schema at all, and most of the surface is unreachable until one is there to point at: an
-//! object schema with one object type, one attribute and one object opens the objects, attributes, comments,
-//! attachments and history endpoints together. Built once for the whole binary, because every suite reads it and
-//! none of them may remove it.
-
 use jira::assets_server::{
     AssetObjectIn, ObjectAttributeIn, ObjectAttributeValueIn, ObjectSchemaIn, ObjectTypeAttribute, ObjectTypeIn,
 };
@@ -15,28 +8,15 @@ use crate::harness::{
     service_desk_server,
 };
 
-/// The world the suites run in, made once.
 pub struct Fixtures {
     pub schema_id: i64,
     pub object_type_id: i64,
-    /// The `Name` attribute every object type is created with, and the only one an object can be given a value for.
     pub name_attribute_id: i64,
     pub object_id: i64,
     pub object_key: String,
-    /// A global icon, which Assets ships a few dozen of and every object type needs one of.
     pub icon_id: i64,
 }
 
-/// A run-scoped name Assets will accept.
-///
-/// [`crate::harness::test_name`] cannot be used here: it brackets the run id with a colon, and Assets rejects `=;:?."`
-/// in the name of a schema, an object type or an object — a 400 calling them reserved characters, which is a good deal
-/// less obvious arriving from a fixture than from a test.
-/// The account this rig signs in as, which is the only user it is sure to have.
-///
-/// Data Center addresses a user by `name`, and the rig's administrator is whatever `JSM_SERVER_USERNAME` says — a
-/// stand set up with any other account rejects `admin` as a lead that does not exist, and every suite that goes
-/// through the service desk project falls over on it.
 pub fn jsm_username() -> String {
     require_jsm_env().username
 }
@@ -45,11 +25,6 @@ pub fn asset_name(label: &str) -> String {
     format!("{RESOURCE_MARKER}-{} {label}", run_id())
 }
 
-/// A schema key: uppercase letters only, and short.
-///
-/// Assets builds every object key out of it — `JRSABCDEFG-1` — so it has to be unique on the instance, and the
-/// instance outlives a run: the fixture schema is never removed, so the next run must not ask for the key the last one
-/// took. The label separates the fixture schema from a schema a single test makes for itself.
 pub fn schema_key(label: &str) -> String {
     format!("JRS{}", run_suffix(label, b"ABCDEFGHIJKLMNOPQRSTUVWXYZ", 7))
 }
@@ -102,18 +77,12 @@ async fn build_service_desk_project() -> ServiceDeskProject {
     ServiceDeskProject { service_desk_id, project_key }
 }
 
-/// The fixtures, built on first use and shared by every suite.
 pub async fn fixtures() -> &'static Fixtures {
     static FIXTURES: OnceCell<Fixtures> = OnceCell::const_new();
 
     FIXTURES.get_or_init(build).await
 }
 
-/// Whether Service Desk answers at all on this instance.
-///
-/// Assets ships with the image and its REST module does not check for a seat, so a Jira Software timebomb opens
-/// `/rest/assets/1.0` completely while every `/rest/servicedeskapi/` endpoint answers 403. Asked once, so the Service
-/// Desk suite can stand down visibly instead of failing over a licence.
 pub async fn service_desk_licensed() -> bool {
     static LICENSED: OnceCell<bool> = OnceCell::const_new();
 
@@ -127,7 +96,6 @@ pub async fn service_desk_licensed() -> bool {
         .await
 }
 
-/// The first attribute of an object type a caller may write to. Assets makes Key, Created and Updated itself.
 fn editable_attribute_id(attributes: &[ObjectTypeAttribute]) -> i64 {
     attributes
         .iter()
@@ -209,7 +177,6 @@ async fn build() -> Fixtures {
     }
 }
 
-/// An object of the calling test's own, and the removal of it.
 pub async fn create_object(tracker: &mut ResourceTracker, label: &str) -> jira::assets_server::AssetObject {
     let fixtures = fixtures().await;
 

@@ -1,10 +1,3 @@
-//! Ported from jira.js/tests/live/cloud/projectAvatars.test.ts.
-//!
-//! `create_project_avatar` takes image bytes, which the specification describes as an object of arbitrary keys — the
-//! shape that made this endpoint unusable before. Adding an avatar to a project is a write, but a contained one: it
-//! lands in the project's list of custom avatars and is deleted again here. `update_project_avatar`, which would
-//! select one as the project's displayed avatar, is deliberately not called — that changes what everyone sees.
-
 use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, poll_until};
 
 #[tokio::test]
@@ -15,8 +8,6 @@ async fn stores_an_avatar_for_the_project_from_image_bytes() {
     let avatar = cloud()
         .project_avatars()
         .create_project_avatar(TEST_PROJECT_KEY, png_bytes(48))
-        // Jira reads the declared media type rather than sniffing the bytes, and refuses an upload without one as
-        // "not a supported image format".
         .content_type("image/png")
         .size(48)
         .x(0)
@@ -53,7 +44,6 @@ async fn stores_an_avatar_for_the_project_from_image_bytes() {
     tracker.cleanup().await;
 }
 
-/// The endpoint decodes what it is given, so bytes that are not an image are refused rather than stored.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn refuses_bytes_that_are_not_an_image() {
@@ -69,15 +59,9 @@ async fn refuses_bytes_that_are_not_an_image() {
     assert_eq!(error.status(), Some(400), "{error}");
 }
 
-/// A valid PNG of a solid colour, built here rather than committed as a fixture.
-///
-/// The avatar endpoints read the image: Jira answers "not a supported image format" to anything it cannot decode, so
-/// a placeholder of arbitrary bytes proves nothing. Generating one keeps the suite free of a binary fixture, and
-/// keeps the size a parameter — Jira refuses an avatar smaller than the crop it is asked for.
 fn png_bytes(side: u32) -> Vec<u8> {
     let side_at = usize::try_from(side).expect("a side fits an index");
 
-    // Every row is the filter byte the format demands and then one solid-colour pixel per column.
     let mut row = vec![0u8];
 
     row.extend_from_slice(&[200, 60, 60].repeat(side_at));
@@ -113,7 +97,6 @@ fn png_chunk(kind: &[u8; 4], data: &[u8]) -> Vec<u8> {
     framed
 }
 
-/// A zlib stream of uncompressed blocks: a valid deflate encoding, and the only one expressible without a compressor.
 fn deflate_stored(data: &[u8]) -> Vec<u8> {
     let mut out = vec![0x78, 0x01];
     let mut blocks = data.chunks(0xFFFF).peekable();

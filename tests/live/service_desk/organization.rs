@@ -2,16 +2,6 @@ use jira::service_desk::CustomerCreate;
 
 use crate::harness::service_desk;
 
-/// The Service Management `organization` and `customer` APIs.
-///
-/// Both are gated behind an agent licence a site may not hold — every service-desk endpoint then answers 403 with an
-/// empty body, as the `info` suite establishes. Rather than skip into vacuity, these assert the refusal is *typed* on
-/// each endpoint a caller would reach for, which is the part the library is responsible for and the part that stays
-/// true whether or not a licence is ever added.
-///
-/// The write halves would not be exercised even with a licence: creating an organization or a customer creates a real
-/// identity on the tenant, and revoking portal-only access removes someone's access to the portal. They are proven
-/// through their error channel instead, aimed at input that cannot succeed.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_organizations_or_refuses_typed_without_an_agent_licence() {
@@ -82,8 +72,6 @@ async fn refuses_the_organization_property_reads_typed() {
     );
 }
 
-/// The identity-creating write, proven through its error channel and never allowed to complete: a customer created
-/// here would be a real account on the tenant.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_identity_creating_writes_without_ever_completing_one() {

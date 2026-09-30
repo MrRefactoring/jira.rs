@@ -6,11 +6,6 @@ use jira::cloud::{
     GetVersionRequestExpandValue, IssueFields, IssueUpdateDetails, Version, VersionMove, VersionMovePosition,
 };
 
-/// A version, from creation to merge, inside the standing test project.
-///
-/// Versions are the one piece of project configuration with genuinely interesting semantics — they order relative to
-/// each other, they merge, and deleting one has to say what happens to the issues that referenced it. All three are
-/// walked here, because none of them is visible in the types.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_a_version_through_its_lifecycle() {

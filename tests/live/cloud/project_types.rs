@@ -1,9 +1,3 @@
-//! The project type catalogue, read-only.
-//!
-//! The interesting part is the pair of "all" and "accessible" variants: they look interchangeable in the types and
-//! are not — one lists what Jira defines, the other what this site is licensed for. Asserting that the accessible set
-//! is a subset is the only way that distinction stays visible.
-
 use crate::harness::cloud;
 
 #[tokio::test]
@@ -69,7 +63,6 @@ async fn resolves_a_single_type_by_key_through_both_variants() {
     assert_eq!(accessible.formatted_key, by_key.formatted_key, "both variants describe the same type");
 }
 
-/// The key is an open enum, so a value outside it compiles: the refusal has to come from the site.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn rejects_a_key_outside_the_enum_with_a_typed_error() {

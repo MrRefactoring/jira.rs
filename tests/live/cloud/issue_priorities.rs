@@ -1,14 +1,5 @@
 use crate::harness::cloud;
 
-/// The issue priorities API, read-only.
-///
-/// Priorities are site-wide: deleting one asks Jira to migrate every issue that used it, and changing the default
-/// changes what every new issue gets. Neither belongs in a suite running against a working site, so the admin-only
-/// half is pinned only through its error channel.
-///
-/// The detail worth a live check is that `search_priorities` types its pagination as *strings* — `start_at` and
-/// `max_results` take `String` here and numbers everywhere else in the API. That is inherited from the specification,
-/// and it is the kind of thing that compiles fine and then serializes to something unexpected.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_the_site_priorities_each_fully_typed() {
@@ -29,8 +20,6 @@ async fn lists_the_site_priorities_each_fully_typed() {
     }
 }
 
-/// The search endpoint reports every priority as non-default, including the one that actually is the default.
-/// `only_default` is the parameter that answers that question; this pins that the flag on the row does not.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn does_not_mark_any_priority_as_the_default_through_this_endpoint() {
@@ -115,7 +104,6 @@ async fn surfaces_an_unknown_priority_as_not_found() {
     assert!(error.is_not_found(), "{error}");
 }
 
-/// The destructive path, proven through its error channel and never aimed at a priority that exists.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_destructive_path() {

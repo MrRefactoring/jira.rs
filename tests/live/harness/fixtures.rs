@@ -6,17 +6,10 @@ use super::naming::test_name;
 use super::poll::poll_until;
 use super::resources::ResourceTracker;
 
-/// The project every Cloud suite works in. Its issue types are `Task` and `Sub-task`.
-///
-/// Issues are created in an existing project rather than a fresh one: creating a Jira project is slow, consumes a
-/// licence slot, and often cannot be deleted cleanly by the same token that made it. A dedicated test project is the
-/// cheaper and more reliable unit of isolation, and run-scoped names keep concurrent runs apart inside it.
 pub const TEST_PROJECT_KEY: &str = "AUTOTEST";
 
-/// The issue type used unless a suite needs something else.
 pub const TEST_ISSUE_TYPE: &str = "Task";
 
-/// A minimal ADF document wrapping one line of text.
 pub fn document_of(text: &str) -> Document {
     serde_json::from_value(json!({
         "type": "doc",
@@ -26,7 +19,6 @@ pub fn document_of(text: &str) -> Document {
     .expect("a hand-built ADF paragraph is a document")
 }
 
-/// The fields every issue the suites create starts from: the test project, the default type and a summary.
 pub fn test_issue_fields(summary: String) -> IssueFields {
     IssueFields {
         project: Some(Project { key: Some(TEST_PROJECT_KEY.to_owned()), ..Project::default() }),
@@ -36,17 +28,10 @@ pub fn test_issue_fields(summary: String) -> IssueFields {
     }
 }
 
-/// Creates an issue in the test project and registers its deletion.
 pub async fn create_test_issue(tracker: &mut ResourceTracker, summary: Option<&str>) -> CreatedIssue {
     create_issue_with(tracker, test_issue_fields(summary.map_or_else(|| test_name("issue"), ToOwned::to_owned))).await
 }
 
-/// Creates an issue from the fields given, registers its deletion, and waits for it to be readable.
-///
-/// A key that `create_issue` has just answered with is not yet an issue every endpoint can see: for a second or so
-/// after the write, `getIssue`, the worklog endpoints and the watcher endpoints all answer 404 with "Issue does not
-/// exist or you do not have permission to see it". Waiting here rather than in each caller is what keeps the whole
-/// class fixed instead of the three cases that happened to fail on the day someone looked.
 pub async fn create_issue_with(tracker: &mut ResourceTracker, fields: IssueFields) -> CreatedIssue {
     let created = cloud()
         .issues()
@@ -71,28 +56,16 @@ pub async fn create_issue_with(tracker: &mut ResourceTracker, fields: IssueField
     created
 }
 
-/// Waits until the Agile lens can see an issue the platform API has already created.
-///
-/// The Agile endpoints read their own index, which catches up on Jira's schedule rather than on the write's. An issue
-/// that `create_test_issue` has just returned a key for is answered with a 404 by `agile().issue()` and with a 400 by
-/// `rank_issues` until that index has it, and both refusals say "Issue does not exist or you do not have permission to
-/// see it" — which is indistinguishable from the real thing at the call site.
 pub async fn await_agile_visibility(key: &str) {
     poll_until("the Agile index to see the issue", || async { agile().issue().get_issue(key).send().await.ok() }).await;
 }
 
-/// A scrum board over the test project, and the filter it is built on.
 #[derive(Debug, Clone, Copy)]
 pub struct TestBoard {
     pub id: i64,
     pub filter_id: i64,
 }
 
-/// Creates a scrum board over the test project and registers the removal of both it and its filter.
-///
-/// A board needs a filter, and Jira makes the filter visible to the board service a moment after it is created, so
-/// the creation is retried while it says the filter is not available yet. Without that the first attempt fails on a
-/// site that is otherwise perfectly configured.
 pub async fn create_test_board(tracker: &mut ResourceTracker) -> TestBoard {
     let filter = cloud()
         .filters()
@@ -155,7 +128,6 @@ pub async fn create_test_board(tracker: &mut ResourceTracker) -> TestBoard {
     TestBoard { id, filter_id }
 }
 
-/// The scrum board the Agile suites run against: an existing one where the site has it, a fresh one otherwise.
 pub async fn scrum_board(tracker: &mut ResourceTracker) -> i64 {
     let boards = agile()
         .board()

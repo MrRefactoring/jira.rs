@@ -1,16 +1,3 @@
-//! Ported from jira.js/tests/live/cloud/avatars.test.ts.
-//!
-//! The `avatars` surface, both directions of which carry bytes.
-//!
-//! The specification describes every one of these operations as JSON, and three of them answer with an image
-//! instead. So both halves are asserted here: an image comes back as an image rather than as a parse failure that
-//! reads like a corrupt response, and an upload is accepted as image bytes rather than as an object. Where the
-//! TypeScript suite reads the media type off the `Blob`, the Rust operations hand back a bare `bytes::Bytes` with no
-//! type attached, so the bytes themselves are what says whether an image arrived.
-//!
-//! The upload is the one write this file makes — a custom avatar added to the test project and deleted again.
-//! Nothing selects it, so what the project displays never changes.
-
 use jira::cloud::{
     Avatar, DeleteAvatarRequestType, GetAllSystemAvatarsRequestType, GetAvatarImageByIDRequestType,
     GetAvatarImageByOwnerRequestType, GetAvatarImageByTypeRequestType, GetAvatarsRequestType, StoreAvatarRequestType,
@@ -18,7 +5,6 @@ use jira::cloud::{
 
 use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, poll_until};
 
-/// The side, in pixels, of both the uploaded image and the crop asked of it.
 const AVATAR_SIDE: u32 = 48;
 
 #[tokio::test]
@@ -70,7 +56,6 @@ async fn separates_system_from_custom_avatars_for_a_project() {
     }
 }
 
-/// The operation the specification types as JSON and the API answers with a file.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn returns_an_avatar_image_as_bytes_rather_than_json() {
@@ -117,7 +102,6 @@ async fn returns_the_default_image_for_a_type_and_the_image_of_an_owner() {
     }
 }
 
-/// The one write: an avatar built from image bytes, listed as custom, served back, and deleted again.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn stores_a_custom_avatar_from_image_bytes_and_serves_it_back() {
@@ -127,8 +111,6 @@ async fn stores_a_custom_avatar_from_image_bytes_and_serves_it_back() {
     let stored = cloud()
         .avatars()
         .store_avatar(StoreAvatarRequestType::Project, &project_id, i64::from(AVATAR_SIDE), png_bytes(AVATAR_SIDE))
-        // Jira reads the declared media type rather than sniffing the bytes, and refuses an upload without one as
-        // "not a supported image format".
         .content_type("image/png")
         .x(0)
         .y(0)
@@ -174,7 +156,6 @@ async fn stores_a_custom_avatar_from_image_bytes_and_serves_it_back() {
     tracker.cleanup().await;
 }
 
-/// Two ways of asking about something that does not exist, neither of which Jira treats as an error.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn answers_an_unknown_type_and_an_unknown_entity_without_failing() {
@@ -201,7 +182,6 @@ async fn answers_an_unknown_type_and_an_unknown_entity_without_failing() {
     assert!(unknown_entity.custom.unwrap_or_default().is_empty(), "an unknown entity has no custom avatars of its own");
 }
 
-/// The destructive path, proven through its error channel and never aimed at an avatar that exists.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_destructive_path() {
@@ -215,7 +195,6 @@ async fn fails_typed_on_the_destructive_path() {
     assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "a refused delete is typed: {error}");
 }
 
-/// The id of the project the suites work in, read rather than assumed.
 async fn test_project_id() -> String {
     cloud()
         .projects()
@@ -227,7 +206,6 @@ async fn test_project_id() -> String {
         .expect("a project carries an id")
 }
 
-/// One of Jira's own project avatars, used as a fixture for the read paths.
 async fn a_system_project_avatar() -> Avatar {
     cloud()
         .avatars()
@@ -242,10 +220,6 @@ async fn a_system_project_avatar() -> Avatar {
         .expect("Jira ships at least one project avatar")
 }
 
-/// Whether the bytes open the way one of the formats Jira serves avatars in opens.
-///
-/// The response carries a media type and the operation does not hand it over, so this stands in for reading the
-/// header: PNG, GIF, JPEG and SVG all announce themselves in their first bytes.
 fn looks_like_an_image(bytes: &[u8]) -> bool {
     let leading = &bytes[..bytes.len().min(64)];
 
@@ -256,15 +230,9 @@ fn looks_like_an_image(bytes: &[u8]) -> bool {
         || leading.windows(5).any(|window| window == b"<?xml")
 }
 
-/// A valid PNG of a solid colour, built here rather than committed as a fixture.
-///
-/// The avatar endpoints read the image: Jira answers "not a supported image format" to anything it cannot decode, so
-/// a placeholder of arbitrary bytes proves nothing. Generating one keeps the suite free of a binary fixture, and
-/// keeps the size a parameter — Jira refuses an avatar smaller than the crop it is asked for.
 fn png_bytes(side: u32) -> Vec<u8> {
     let side_at = usize::try_from(side).expect("a side fits an index");
 
-    // Every row is the filter byte the format demands and then one solid-colour pixel per column.
     let mut row = vec![0u8];
 
     row.extend_from_slice(&[200, 60, 60].repeat(side_at));
@@ -300,7 +268,6 @@ fn png_chunk(kind: &[u8; 4], data: &[u8]) -> Vec<u8> {
     framed
 }
 
-/// A zlib stream of uncompressed blocks: a valid deflate encoding, and the only one expressible without a compressor.
 fn deflate_stored(data: &[u8]) -> Vec<u8> {
     let mut out = vec![0x78, 0x01];
     let mut blocks = data.chunks(0xFFFF).peekable();

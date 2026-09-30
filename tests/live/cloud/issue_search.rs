@@ -1,20 +1,9 @@
-//! Ported from jira.js/tests/live/cloud/issueSearch.test.ts.
-//!
-//! Search is the one part of Jira that is emphatically *not* read-your-write: an issue exists the moment it is
-//! created but reaches the index a moment later. Worse, the visibility is not monotonic — an issue the index has
-//! already returned once can briefly disappear from it again under load, which is why every read of the index here
-//! polls rather than trusting a single warm-up.
-//!
-//! The other thing this file pins is the field-selection contract, which surprises people: without an explicit
-//! `fields`, search answers with ids and nothing else.
-
 use jira::cloud::{Issue, IssuesAndJQLQueries, JQLCountRequest};
 use jira::futures_util::TryStreamExt;
 use jira::jql::field;
 
 use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, poll_until, test_name};
 
-/// Runs the query until the index has caught up with it, and hands back what it matched.
 async fn search(jql: &str, fields: Option<&str>) -> Vec<Issue> {
     poll_until("the issue to be indexed", || async {
         let mut request = cloud().issue_search().search_issues().jql(jql);
@@ -30,10 +19,6 @@ async fn search(jql: &str, fields: Option<&str>) -> Vec<Issue> {
     .await
 }
 
-/// The field-selection contract, which is the whole reason search results look empty to newcomers.
-///
-/// Without `fields` the index answers with identifiers alone; with it, the response carries exactly what was asked
-/// for and nothing more. The last leg proves the query is a real text search rather than a key lookup.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn returns_ids_alone_until_fields_are_asked_for() {
@@ -75,8 +60,6 @@ async fn returns_ids_alone_until_fields_are_asked_for() {
     tracker.cleanup().await;
 }
 
-/// The new search endpoint pages with an opaque token rather than an offset, so a second page is asked for by
-/// handing the first one's token back.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn pages_with_a_token_rather_than_an_offset() {
@@ -141,8 +124,6 @@ async fn counts_matches_without_returning_them() {
     tracker.cleanup().await;
 }
 
-/// `jql/match` answers per query rather than per issue, and a query that matches nothing is an empty list rather
-/// than an error entry.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn tests_issues_against_queries_without_running_a_search() {
@@ -193,8 +174,6 @@ async fn suggests_issues_through_the_picker() {
     tracker.cleanup().await;
 }
 
-/// Jira treats a string that is not JQL as free text rather than rejecting it, which is why a typo in a query
-/// silently returns nothing instead of failing.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn accepts_bare_words_as_a_text_search_rather_than_rejecting_them() {
@@ -238,11 +217,6 @@ async fn answers_an_unmatched_query_with_an_empty_result_rather_than_an_error() 
     assert!(page.issues.unwrap_or_default().is_empty(), "nothing matched, so nothing is returned");
 }
 
-/// The builder puts a value into a query without letting it become part of the query.
-///
-/// A summary carrying a quotation mark is the case a `format!`-built query cannot survive: the mark closes the
-/// literal early and Jira answers 400 for a query it cannot parse. What is asserted here is that the request is
-/// accepted at all — the escaping is the subject, and the site is the only thing that can judge it.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn a_quotation_mark_in_a_value_reaches_jira_as_a_value() {
@@ -264,7 +238,6 @@ async fn a_quotation_mark_in_a_value_reaches_jira_as_a_value() {
     tracker.cleanup().await;
 }
 
-/// The token loop, walked by the crate rather than by the caller.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn a_stream_walks_every_page_of_a_search() {
@@ -280,14 +253,8 @@ async fn a_stream_walks_every_page_of_a_search() {
     expected.sort();
 
     poll_until("the stream to end at the last page rather than at the first", || async {
-        let mut issues = cloud()
-            .issue_search()
-            .search_issues()
-            .jql(query.clone())
-            // One issue per page, so a stream that stops at the first page cannot pass this.
-            .max_results(1)
-            .fields(["summary"])
-            .stream();
+        let mut issues =
+            cloud().issue_search().search_issues().jql(query.clone()).max_results(1).fields(["summary"]).stream();
         let mut keys = Vec::new();
 
         while let Some(issue) = issues.try_next().await.expect("every page of the stream is readable") {

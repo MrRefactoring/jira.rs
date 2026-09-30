@@ -1,10 +1,3 @@
-//! The site's link types, read-only.
-//!
-//! Link types are site-wide configuration, not project state: creating one adds a permanent option to every issue on
-//! the tenant, and deleting one silently drops every link that used it. So the write half is deliberately not
-//! exercised here — the read half is asserted fully, and the writes are pinned only to the extent that they fail
-//! typed without admin rights.
-
 use crate::harness::cloud;
 
 #[tokio::test]
@@ -76,7 +69,6 @@ async fn surfaces_an_unknown_type_id_as_not_found() {
     assert!(error.is_not_found(), "{error}");
 }
 
-/// The destructive path, proven through its error channel and never aimed at a type that exists.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_destructive_path() {

@@ -1,10 +1,5 @@
-//! The smallest endpoint on the site, and for that reason the most useful one to pin precisely: it is the first call
-//! most callers make, and the cheapest place to catch a broken base URL, a broken auth header, or a schema that has
-//! drifted from what Cloud actually sends.
-
 use crate::harness::{cloud, rendered, require_live_env};
 
-/// Whether the value is a timestamp with real field values rather than merely a string of the right shape.
 fn parses_as_a_date(value: &str) -> bool {
     let Some((date, time)) = value.split_once('T') else {
         return false;

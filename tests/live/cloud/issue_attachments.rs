@@ -1,19 +1,9 @@
-//! Ported from jira.js/tests/live/cloud/issueAttachments.test.ts.
-//!
-//! The most machinery-heavy path in the library: multipart encoding, the `X-Atlassian-Token` header, and a binary
-//! response that must not be JSON-parsed. Unit tests can only prove the multipart bytes are well formed — whether
-//! Jira accepts them is a question only a real site answers, which is the entire reason this file exists.
-//!
-//! Every content shape [`Attachment`] admits is uploaded here — borrowed text, owned bytes, and a declared media type
-//! that overrides the one the filename implies — and each one's bytes are read back and compared to what went out.
-
 use jira::core::Attachment;
 
 use crate::harness::{
     ResourceTracker, await_readable, await_refused, cloud, create_test_issue, rendered_option, test_name,
 };
 
-/// Deliberately multibyte: a size measured in characters rather than bytes would not match.
 const TEXT: &str = "attachment body — с кириллицей и эмодзи 🎯";
 
 #[tokio::test]
@@ -29,11 +19,6 @@ async fn reports_the_site_attachment_settings() {
     );
 }
 
-/// An attachment from upload to deletion.
-///
-/// Proves that each content shape survives the multipart round trip byte for byte, that a declared media type wins
-/// over the one guessed from the filename, that several files go up in one request, that the issue itself lists what
-/// was uploaded, and that a removed attachment is gone from the metadata endpoint too.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_an_attachment_through_its_lifecycle() {

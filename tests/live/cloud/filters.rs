@@ -2,8 +2,6 @@ use jira::cloud::{ColumnRequestBody, Filter};
 
 use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_readable, await_refused, cloud, poll_until, test_name};
 
-/// A filter is owned by the account that created it and is private until shared, so it is one of the few pieces of
-/// Jira configuration a live test can create without affecting anyone else.
 async fn create_filter(tracker: &mut ResourceTracker, name: &str, jql: &str) -> Filter {
     let filter = cloud()
         .filters()
@@ -31,11 +29,6 @@ fn id_of(filter: &Filter) -> i64 {
     filter.id.as_deref().expect("a created filter has an id").parse().expect("a filter id is a number")
 }
 
-/// The write cycle, and the two listings a private filter is visible in.
-///
-/// Note the shape difference between the two writes: `create_filter` takes the filter itself, `update_filter` takes an
-/// id and then the filter. Getting that wrong produces a bodyless request Jira answers with 415, which reads as a
-/// transport problem rather than a mistake in the call.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn creates_reads_and_updates_a_filter() {
@@ -96,9 +89,6 @@ async fn creates_reads_and_updates_a_filter() {
     tracker.cleanup().await;
 }
 
-/// A filter stores JQL as a plain string, so how much of it is checked on save is a real question — and the answer is
-/// all of it, semantics included: a query naming a field that does not exist is refused outright, where a parse with
-/// validation off would happily accept it.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn rejects_jql_the_site_cannot_make_sense_of() {
@@ -131,8 +121,6 @@ async fn rejects_jql_the_site_cannot_make_sense_of() {
     tracker.cleanup().await;
 }
 
-/// "Favourite" is per-user state attached to a shared object, which is easy to confuse with a property of the filter
-/// itself. The flag the write echoes is the caller's, not the filter's.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn marks_the_filter_as_a_favourite() {
@@ -208,8 +196,6 @@ async fn surfaces_an_unknown_filter_as_not_found() {
     assert!(error.is_not_found(), "{error}");
 }
 
-/// A filter without columns of its own has no layout at all rather than an empty one, and Jira says so with a 404.
-/// Reading that as "the filter is gone" is the mistake this pins.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn gives_a_filter_its_own_columns_then_takes_them_away_again() {

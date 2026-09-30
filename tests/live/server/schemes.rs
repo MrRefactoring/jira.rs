@@ -1,10 +1,3 @@
-//! The configuration half of Jira: issue types, link types, screens, and the four kinds of scheme.
-//!
-//! These are the endpoints a self-hosted administrator reaches for and a Cloud one cannot have, and they are also the
-//! least exercised part of the Data Center document — most of them answer with a body it does not describe.
-//! Everything created here is registered for deletion the moment it exists, so the instance is left as the other
-//! suites expect to find it.
-
 use jira::server::{
     AddField, AssociateProjects, CustomFieldDefinitionJson, DefaultModel, GetWorkflow, IssueLinkTypeJson,
     IssueLinkTypeOrderUpdateRequest, IssueLinkTypeResetOrderRequest, IssueTypeCreate, IssueTypeCreateType,
@@ -15,15 +8,6 @@ use serde_json::json;
 
 use crate::harness::{ResourceTracker, project_key, server, test_name};
 
-/// Calls an endpoint for what its response proves, not for whether Jira agrees to do the thing.
-///
-/// Parts of this surface are administrative in a way a single throwaway node cannot satisfy: a draft of a scheme no
-/// project uses, an association to a project that is not there, a priority scheme this edition does not offer. Those
-/// operations still have request bodies that must serialise and responses that must match their schemas, and that is
-/// what a call proves — Jira answering 400 or 403 proves the request reached it in a shape it recognised.
-///
-/// A schema mismatch is never swallowed, because it is the one thing these calls exist to catch, and neither is a
-/// failure that never reached Jira at all.
 fn touch<T>(outcome: jira::Result<T>, what: &str) -> Option<T> {
     match outcome {
         Ok(value) => Some(value),
@@ -36,7 +20,6 @@ fn touch<T>(outcome: jira::Result<T>, what: &str) -> Option<T> {
     }
 }
 
-/// An issue type, from creation to the property hung off it.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn keeps_an_issue_type() {
@@ -117,7 +100,6 @@ async fn keeps_an_issue_type() {
     tracker.cleanup().await;
 }
 
-/// An issue link type, and the two calls that order the instance's list of them.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn keeps_an_issue_link_type() {
@@ -178,10 +160,6 @@ async fn keeps_an_issue_link_type() {
         assert_eq!(moved.id.as_deref(), Some(id.as_str()), "moving answers with the type that moved");
     }
 
-    // Read unmodelled on purpose. Atlassian's Data Center specification declares `IssueLinkTypes` with no properties
-    // at all, so the generated type is an empty struct and the ordering this call restores would be invisible through
-    // it. The gap belongs in the generator's patches; asserting against the body is what proves it is a gap rather
-    // than a limit of the client.
     let reset = touch(
         server().issue_link_types().reset_order(IssueLinkTypeResetOrderRequest { direction: None }).send_raw().await,
         "resetting the link type order",
@@ -194,7 +172,6 @@ async fn keeps_an_issue_link_type() {
     tracker.cleanup().await;
 }
 
-/// An issue type scheme, and the four calls that attach projects to one.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn keeps_an_issue_type_scheme_and_its_project_associations() {
@@ -252,8 +229,6 @@ async fn keeps_an_issue_type_scheme_and_its_project_associations() {
         .expect("the scheme reads back by id");
 
     assert_eq!(read.id.as_deref(), Some(scheme_id.as_str()), "the scheme read back is the scheme asked for");
-    // The instance does not expand the issue types on this read, so what the edit changed is checked through the
-    // name it also changed.
     assert!(
         read.name.as_deref().is_some_and(|name| name.contains("its2")),
         "the edit is observable on the next read: {read:?}",
@@ -266,8 +241,6 @@ async fn keeps_an_issue_type_scheme_and_its_project_associations() {
         "an issue type the read does expand is the one the edit named",
     );
 
-    // An empty association list is the shape the request has to serialise; a project key nothing on this instance
-    // answers to is what proves the removal reaches Jira rather than the client.
     let absent = project_key("its");
 
     touch(
@@ -298,7 +271,6 @@ async fn keeps_an_issue_type_scheme_and_its_project_associations() {
     tracker.cleanup().await;
 }
 
-/// A permission scheme, one grant inside it, and the attribute hung off the scheme.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn keeps_a_permission_scheme_and_a_grant_in_it() {
@@ -384,19 +356,11 @@ async fn keeps_a_permission_scheme_and_a_grant_in_it() {
         .await
         .expect("the attribute reads back by key");
 
-    // Measured against Data Center 10.3: an attribute outside the set the instance knows is accepted on the way in
-    // and answers `false` on the way out. The TypeScript suite asserts the round trip and would fail here too; what
-    // is genuinely pinned is that the write is accepted and the read answers with a value at all.
     assert!(attribute.value.is_some(), "the attribute reads back with a value: {attribute:?}");
 
     tracker.cleanup().await;
 }
 
-/// A priority scheme, where the edition offers one.
-///
-/// Priority schemes are a Data Center feature rather than a universal one, so creation is called for what its request
-/// and response prove rather than for the scheme existing afterwards. The priorities it is built from are asserted
-/// either way — an instance without those is broken in a way nothing below would explain.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn keeps_a_priority_scheme() {
@@ -458,7 +422,6 @@ async fn keeps_a_priority_scheme() {
     tracker.cleanup().await;
 }
 
-/// A workflow scheme, its issue type mappings, and the draft half that only exists once a project uses the scheme.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
@@ -549,8 +512,6 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
         .await
         .expect("the mapping can be edited by workflow name");
 
-    // Naming a workflow narrows the answer to that one mapping; leaving it out lists them all. The endpoint returns
-    // both shapes and the generated union says so.
     let for_workflow = server()
         .workflow_schemes()
         .get_workflow(scheme_id)
@@ -581,8 +542,6 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
     );
     touch(server().workflow_schemes().delete_default(scheme_id).send().await, "clearing the default workflow");
 
-    // A draft only exists once the scheme is in use by a project; every one of these is a legitimate refusal on a
-    // scheme that is not.
     touch(server().workflow_schemes().create_draft_for_parent(scheme_id).send().await, "creating a draft");
     touch(server().workflow_schemes().get_draft_by_id(scheme_id).send().await, "reading a draft");
     touch(
@@ -655,10 +614,6 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
     tracker.cleanup().await;
 }
 
-/// A tab on a screen, the fields moved around on it, and the custom field put on the default screen.
-///
-/// The custom field is made here rather than borrowed: adding a field to the default screen changes the create dialog
-/// for every user of every project, so what is added has to be something this test can take away again.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn adds_a_tab_to_a_screen_and_takes_it_away() {
@@ -755,7 +710,6 @@ async fn adds_a_tab_to_a_screen_and_takes_it_away() {
     tracker.cleanup().await;
 }
 
-/// The bulk delete, which takes its ids as one comma-separated parameter rather than as a body.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn deletes_a_custom_field_in_bulk() {

@@ -1,21 +1,7 @@
-//! The Agile DevOps modules: builds, deployments, feature flags, components, remote links, security information,
-//! operations and development information.
-//!
-//! Eight modules in one file, deliberately. They are not eight APIs so much as one shape repeated: an app pushes
-//! entities into Jira with a submit, reads one back by its own key, and deletes by key or by property. None of them
-//! has a listing endpoint, and none is reachable with user credentials — they authenticate as the app that owns the
-//! data, so a user token has nothing to identify.
-//!
-//! Written per module this would be eight near-identical assertions that a 4xx arrives. What is worth pinning is the
-//! shape they share and the two consequences of it: the entity ids are the *provider's* rather than Jira's, and every
-//! one of these endpoints is a write into someone's delivery pipeline data.
-
 use jira::agile::{SubmitBuildsRequestBuilds, SubmitDeploymentsRequestDeployments, SubmitFeatureFlagsRequestFlags};
 
 use crate::harness::agile;
 
-/// Every read in this family is addressed by the provider's own identifiers, never by a Jira id — which is why none
-/// of them can be reached with a user token, and why the refusal has to be a typed 4xx rather than a hang.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn refuses_every_read_addressed_by_a_provider_id() {
@@ -133,8 +119,6 @@ async fn refuses_the_security_and_operations_workspace_reads() {
     assert!(operations.status().is_some(), "the operations refusal carries a status: {operations}");
 }
 
-/// The part the library owns is not that these endpoints are unreachable — that is the token's doing — but that being
-/// unreachable arrives as a status a caller can branch on.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_and_promptly_rather_than_hanging() {

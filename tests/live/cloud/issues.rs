@@ -4,11 +4,6 @@ use crate::harness::{
     ResourceTracker, TEST_PROJECT_KEY, await_readable, cloud, create_test_issue, poll_until, test_name,
 };
 
-/// The issue lifecycle, end to end.
-///
-/// These assert the contract rather than that a call resolves: that what the models declare is what arrives, that a
-/// mutation is observable on the next read, that query parameters have an effect, and that a deleted issue surfaces
-/// as a typed not-found rather than an untyped failure.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_an_issue_through_its_lifecycle() {

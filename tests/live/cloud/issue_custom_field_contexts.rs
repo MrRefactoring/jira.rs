@@ -1,15 +1,5 @@
 use crate::harness::cloud;
 
-/// Custom field contexts and the options that hang off them, read-only.
-///
-/// A context decides which projects and issue types a custom field applies to, and its options are the values a
-/// select field offers. Both are shared configuration: adding an option makes it selectable everywhere the context
-/// applies, and deleting one leaves issues holding a value that no longer exists. So nothing here writes, and the
-/// destructive path is aimed only at a field that cannot exist.
-///
-/// The concept worth pinning is that a custom field is not a single thing. It has contexts, each with its own options
-/// and its own default, and "the field's value list" is meaningless without naming which context. That indirection is
-/// behind a lot of confusion about why an option appears in one project and not another.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_the_contexts_of_a_custom_field_or_refuses_typed() {
@@ -129,8 +119,6 @@ async fn reports_the_issue_types_a_context_applies_to() {
     }
 }
 
-/// The options of a context are what a select field offers. A field of any other type has none, and the endpoint says
-/// so with a 400 rather than an empty page, so both outcomes are accepted and only their shape is pinned.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_the_options_of_a_context() {
@@ -161,8 +149,6 @@ async fn lists_the_options_of_a_context() {
     }
 }
 
-/// A default belongs to a context, not to the field — which is why the same field can arrive pre-filled in one
-/// project and empty in another.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_default_values_per_context_rather_than_per_field() {
@@ -208,7 +194,6 @@ async fn surfaces_an_unknown_field_as_a_typed_error() {
     assert!(error.is_not_found() || error.is_forbidden() || error.status() == Some(400), "{error}");
 }
 
-/// The destructive path, proven through its error channel and never aimed at a context that exists.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_destructive_path_without_ever_aiming_it_at_a_real_context() {
@@ -222,11 +207,6 @@ async fn fails_typed_on_the_destructive_path_without_ever_aiming_it_at_a_real_co
     assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
-/// A custom field on the site whose contexts the token may read.
-///
-/// Reading a context needs *Administer Jira*, so a token without it must be refused in a way the caller can
-/// recognise; that refusal is asserted here rather than being silently swallowed by the tests that stand down on it.
-/// A site with no custom field at all is left to the tests to skip, which is why the field listing itself is pinned.
 async fn readable_custom_field() -> Option<String> {
     let fields = cloud().issue_fields().get_fields().send().await.expect("the site lists its fields");
 
@@ -249,7 +229,6 @@ async fn readable_custom_field() -> Option<String> {
     }
 }
 
-/// A readable custom field paired with the first of its contexts, where it has one.
 async fn a_context() -> Option<(String, i64)> {
     let field_id = readable_custom_field().await?;
 

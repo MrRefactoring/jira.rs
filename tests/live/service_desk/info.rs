@@ -1,15 +1,5 @@
 use crate::harness::service_desk;
 
-/// The Service Management `info` and `servicedesk` APIs, whose availability is not a single yes or no.
-///
-/// The product can be installed on a site — `get_info` answers with a version — while every service-desk endpoint
-/// still refuses with 403, because the account holds no agent licence. Those are two different gates, and a suite
-/// that probed only the first would report a licensing fact as a library defect.
-///
-/// So reachability is established against the listing rather than against `get_info`, and the typed refusal is
-/// asserted as a first-class outcome rather than skipped past.
-///
-/// `get_info` needs no agent licence, and no login at all.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_the_product_version_which_needs_no_agent_licence() {
@@ -22,8 +12,6 @@ async fn reports_the_product_version_which_needs_no_agent_licence() {
     );
 }
 
-/// The listing is where the licence gate shows itself: without an agent licence it is a 403, and with one it is a
-/// page of desks each tied to a project. Both outcomes are proven here rather than one of them skipped.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_the_service_desks_each_tied_to_a_project_or_refuses_typed() {
@@ -46,7 +34,6 @@ async fn lists_the_service_desks_each_tied_to_a_project_or_refuses_typed() {
     }
 }
 
-/// This surface pages with `start` and `limit`, not with the platform's `startAt` and `maxResults`.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn pages_with_start_and_limit_rather_than_start_at_and_max_results() {

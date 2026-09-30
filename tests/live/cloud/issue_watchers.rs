@@ -1,12 +1,3 @@
-//! Ported from jira.js/tests/live/cloud/issueWatchers.test.ts.
-//!
-//! Scoped entirely to fixture issues and to the authenticating account — no other user is ever added as a watcher, so
-//! the suite cannot generate mail for a real person.
-//!
-//! Note the asymmetry the API forces on callers: the watcher is *added* as a JSON body and *removed* as a query
-//! parameter. The body is a bare JSON string — the account id, quoted, on its own — which is why `add_watcher` takes
-//! a plain string rather than a model.
-
 use jira::cloud::IssueList;
 
 use crate::harness::{
@@ -24,10 +15,6 @@ async fn current_account_id() -> String {
         .expect("an authenticated user has an account id")
 }
 
-/// The watcher lifecycle, end to end.
-///
-/// Proves the list is self-consistent, that an add is observable and idempotent, that the bulk query agrees with the
-/// per-issue read, and that a removal through the query parameter actually removes.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_a_watcher_through_its_lifecycle() {

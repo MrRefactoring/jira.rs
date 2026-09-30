@@ -1,22 +1,7 @@
-//! Ported from jira.js/tests/live/cloud/filterSharing.test.ts.
-//!
-//! The sharing cycle runs in full against a filter this suite creates, so nothing anyone else owns is ever shared.
-//! That matters more here than elsewhere: sharing is the one write in this file whose effect is that *other people*
-//! can see something they could not before.
-//!
-//! `set_default_share_scope` is deliberately left alone. It is per-account rather than per-filter, and it decides
-//! whether every filter the account creates in future is private or global — a standing preference, not a scoped
-//! change. The neighbouring resolution and project-email reads sit here because they are the two other reads a
-//! filter's owner reaches for, and neither is large enough to earn a file.
-
 use jira::cloud::{Filter, SharePermissionInput, SharePermissionInputType, SharePermissionType};
 
 use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_readable, cloud, poll_until, test_name};
 
-/// The sharing cycle, end to end.
-///
-/// A share permission is reachable three ways — the listing, the single read, and the filter itself — and all three
-/// have to agree, because a caller that trusts one of them has to be able to trust the rest.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn shares_a_filter_with_one_project_and_takes_it_back() {
@@ -108,7 +93,6 @@ async fn shares_a_filter_with_one_project_and_takes_it_back() {
     tracker.cleanup().await;
 }
 
-/// Read, never written: the scope decides what every filter the account creates in future defaults to.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_the_account_default_share_scope_without_changing_it() {
@@ -135,7 +119,6 @@ async fn surfaces_sharing_of_an_unknown_filter_as_not_found() {
     assert!(error.is_not_found(), "{error}");
 }
 
-/// A resolution the site actually uses where there is one, and Jira's own first id otherwise.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn resolves_an_issue_resolution_by_id() {
@@ -154,12 +137,10 @@ async fn resolves_an_issue_resolution_by_id() {
             assert_eq!(resolution.id.as_deref(), Some(resolution_id.as_str()));
             assert!(resolution.name.as_deref().is_some_and(|name| !name.is_empty()), "{resolution:?}");
         }
-        // A site that has never configured resolutions need not define the id Jira ships with.
         Err(error) => assert!(error.is_not_found(), "a resolution that does not exist is typed as missing: {error}"),
     }
 }
 
-/// The sender address a project emails from — configured on some sites, refused on others, typed on both.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_the_project_email_address_or_refuses_typed() {
@@ -187,8 +168,6 @@ async fn test_project_id() -> String {
         .expect("a project carries an id")
 }
 
-/// A filter is owned by the account that created it and is private until shared, which is what makes it safe to
-/// share here: the only thing this suite can widen access to is something it made a moment earlier.
 async fn create_filter(tracker: &mut ResourceTracker) -> i64 {
     let filter = cloud()
         .filters()

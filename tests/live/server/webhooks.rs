@@ -1,21 +1,7 @@
-//! The webhook endpoints, which are in this client on the strength of a WADL and a measurement.
-//!
-//! Nothing else in the surface rests on that: every other operation comes from Atlassian's own document. These nine
-//! were written from the Jersey WADL a running instance serves — which describes the requests and says nothing about
-//! the bodies — and from calling each one against Jira Data Center 10.3. That makes this suite the only evidence the
-//! shapes are right, so it exercises every one of them rather than a sample.
-//!
-//! A registered webhook fires at a URL, so each one is registered for deletion the moment it exists rather than at
-//! the end of the test that made it.
-
 use jira::server::WebhookInput;
 
 use crate::harness::{ResourceTracker, server, test_name};
 
-/// One webhook, from registration to the listing to unregistering it again.
-///
-/// The Rust suite has no `beforeAll`, and the sequence shares a single webhook by nature — replacing one you have not
-/// registered proves nothing — so the whole lifecycle is one test rather than six that quietly depend on order.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn registers_a_webhook_replaces_it_and_unregisters_it() {
@@ -118,10 +104,6 @@ async fn registers_a_webhook_replaces_it_and_unregisters_it() {
     tracker.cleanup().await;
 }
 
-/// The three endpoints that report on delivery, against a webhook that has never delivered anything.
-///
-/// Its own webhook rather than the one above: what these prove is the shape of an empty history, and a webhook shared
-/// with a test that lists and replaces it is a webhook whose history depends on what ran first.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn reports_on_a_webhook_that_has_never_been_delivered() {
@@ -169,9 +151,6 @@ async fn reports_on_a_webhook_that_has_never_been_delivered() {
 
     assert!(for_event.counts.is_some(), "each entry in the summary carries its own counts");
 
-    // Both answer with a shape the WADL does not describe, so the generated operations hand back the body as it
-    // arrived. The gap belongs in the generator's patches; asserting against the body is what proves it is a gap
-    // rather than a limit of the client.
     let transitions = server()
         .webhooks()
         .get_webhook_transitions(webhook_id)
@@ -181,7 +160,6 @@ async fn reports_on_a_webhook_that_has_never_been_delivered() {
 
     assert!(transitions.is_array(), "the transitions are a list: {transitions}");
 
-    // 204 until the webhook has fired, which the transport hands back as a null body.
     let latest = server()
         .webhooks()
         .get_latest_webhook_invocation(webhook_id)

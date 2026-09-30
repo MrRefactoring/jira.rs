@@ -12,13 +12,8 @@ use super::env::{require_jsm_env, require_server_env};
 const RETRY: RetryConfig =
     RetryConfig { max_attempts: 3, initial_delay: Duration::from_millis(300), backoff_factor: 2.0 };
 
-/// The longest any one call to a rig may take. A cold Data Center instance is slow, not silent.
 const TIMEOUT: Duration = Duration::from_secs(60);
 
-/// The transport the Data Center suites use.
-///
-/// A personal access token where the instance was given one, and the administrator's password otherwise: Jira 10.3
-/// still accepts basic authentication, and the rig's throwaway instance has no other credential to offer.
 pub fn server_client() -> &'static Client {
     static CLIENT: OnceLock<Client> = OnceLock::new();
 
@@ -39,14 +34,12 @@ pub fn server_client() -> &'static Client {
     })
 }
 
-/// The Jira Data Center surface — platform and Agile in one.
 pub fn server() -> &'static ServerClient {
     static SURFACE: OnceLock<ServerClient> = OnceLock::new();
 
     SURFACE.get_or_init(|| ServerClient::new(server_client().clone()))
 }
 
-/// The transport the Service Management Data Center suites use.
 fn jsm_client() -> &'static Client {
     static CLIENT: OnceLock<Client> = OnceLock::new();
 
@@ -67,21 +60,18 @@ fn jsm_client() -> &'static Client {
     })
 }
 
-/// Assets, as a self-hosted instance serves it.
 pub fn assets_server() -> &'static AssetsServerClient {
     static SURFACE: OnceLock<AssetsServerClient> = OnceLock::new();
 
     SURFACE.get_or_init(|| AssetsServerClient::new(jsm_client().clone()))
 }
 
-/// The Jira platform on the Service Management rig, which is where a service desk project is made.
 pub fn jsm_platform() -> &'static ServerClient {
     static SURFACE: OnceLock<ServerClient> = OnceLock::new();
 
     SURFACE.get_or_init(|| ServerClient::new(jsm_client().clone()))
 }
 
-/// Service Management, as a self-hosted instance serves it.
 pub fn service_desk_server() -> &'static ServiceDeskServerClient {
     static SURFACE: OnceLock<ServiceDeskServerClient> = OnceLock::new();
 

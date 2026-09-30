@@ -1,22 +1,8 @@
-//! The Assets Cloud API.
-//!
-//! Assets needs Jira Service Management Premium. On a site without it the workspace lookup answers with an empty page,
-//! and there is nothing to point a client at — so this stands down, visibly, rather than failing five times over a
-//! plan. It comes back the moment the site is on Premium, without an edit here.
-//!
-//! The client is deliberately not the shared one. Assets is the surface that answers neither on the site's own host
-//! nor on a bare gateway, but under a path built from the workspace id — and that this suite has to build its own
-//! transport to reach it is itself the thing worth showing a reader.
-
 use jira::assets::{AssetsClient, ObjectAQLTotalCountParams};
 use jira::{Auth, Client};
 
 use crate::harness::{require_live_env, service_desk};
 
-/// The workspace the site's Service Management gives Assets, when it has one.
-///
-/// Both ways of having none assert on the way past: a site with no Service Management at all refuses the lookup
-/// rather than answering it empty, and a site on a lesser plan answers a page that says it is the only one.
 async fn workspace_id() -> Option<String> {
     match service_desk().assets().get_assets_workspaces().limit(1).send().await {
         Ok(page) => {
@@ -39,7 +25,6 @@ async fn workspace_id() -> Option<String> {
     }
 }
 
-/// A transport addressed at one Assets workspace, which is where every operation below lives.
 fn assets(workspace: &str) -> AssetsClient {
     let env = require_live_env();
 
@@ -55,7 +40,6 @@ fn assets(workspace: &str) -> AssetsClient {
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_whether_the_site_has_an_assets_workspace() {
-    // The gate every other test here runs behind, asserted once in its own right rather than only as a side effect.
     let Some(workspace) = workspace_id().await else { return };
 
     assert!(!workspace.is_empty(), "a workspace is named by an id");

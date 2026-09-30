@@ -28,9 +28,6 @@ async fn answering(body: serde_json::Value) -> MockServer {
     server
 }
 
-/// The collection is process-wide, so the cases take it in turn rather than racing over it.
-///
-/// An async lock, not a `std` one: these cases await between taking it and releasing it.
 async fn guard() -> tokio::sync::MutexGuard<'static, ()> {
     static LOCK: tokio::sync::Mutex<()> = tokio::sync::Mutex::const_new(());
 

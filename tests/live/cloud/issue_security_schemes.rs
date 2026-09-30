@@ -1,13 +1,5 @@
 use crate::harness::{TEST_PROJECT_KEY, cloud};
 
-/// The issue security schemes API and the neighbouring security level reads, read-only throughout.
-///
-/// There is no write half in this module at all — issue security schemes are created through a different, admin-only
-/// API entirely.
-///
-/// Worth its own file because issue security is the one mechanism in Jira that can make an issue *invisible* rather
-/// than merely read-only. Every other suite reads the issues it creates freely; that only holds because the test
-/// project has no security scheme attached, and this file is what establishes it rather than assuming it.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_the_site_security_schemes_or_refuses_typed_without_admin_rights() {
@@ -36,7 +28,6 @@ async fn lists_the_site_security_schemes_or_refuses_typed_without_admin_rights()
     }
 }
 
-/// The premise the rest of the live suites rest on: nothing hides the issues they create.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn confirms_the_test_project_has_no_security_scheme() {

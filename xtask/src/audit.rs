@@ -1,9 +1,3 @@
-//! The schema audit: what the API sends that the generated types do not describe.
-//!
-//! Runs the live suite with the `audit` feature, which makes the deserializer report the keys it ignored and every
-//! open enum report a value the specification never listed. Each finding is appended to a file as it is made, so a
-//! run that fails half way through still reports what it learned.
-
 use std::collections::BTreeMap;
 use std::path::PathBuf;
 use std::process::Command;
@@ -12,12 +6,6 @@ use jira::core::audit::SchemaDrift;
 
 type Failure = Box<dyn std::error::Error>;
 
-/// The whole hosted surface when nothing was named, and exactly what was named otherwise.
-///
-/// The self-hosted suites need a container brought up first, and an audit run has only the hosted credentials — left
-/// in, they fail on a connection rather than reporting what the types do not describe. The same boundary is drawn for
-/// a plain run by the `live` alias in `.cargo/config.toml`; the two are stated apart because a filter given here is
-/// meant to override it, and they have to be changed together the day a self-hosted surface is added.
 fn default_filter(arguments: &[String]) -> Vec<String> {
     if !arguments.is_empty() {
         return arguments.to_vec();
@@ -32,8 +20,6 @@ pub async fn run(workspace_root: &std::path::Path, arguments: &[String]) -> Resu
 
     let mut command = Command::new("cargo");
 
-    // Anything extra is a test filter, so it goes after the separator: `cargo xtask audit cloud::issues` audits one
-    // suite rather than asking cargo to make sense of the name.
     command
         .current_dir(workspace_root)
         .args(["test", "--test", "live", "--all-features"])
@@ -142,11 +128,6 @@ generator's patches, then regenerate.\n",
     Ok(report)
 }
 
-/// Says how many findings were written but could not be read back.
-///
-/// Findings are appended one JSON document per line as the suite makes them, so a run killed by a timeout, a cancelled
-/// workflow or the OOM killer leaves its last line half-written. The rest of the run is still worth reporting, and the
-/// count is what says the report is short.
 fn skipped_lines(unreadable: usize) -> String {
     if unreadable == 0 {
         return String::new();
@@ -155,11 +136,6 @@ fn skipped_lines(unreadable: usize) -> String {
     format!("\n{unreadable} line(s) could not be read back and were skipped; the run was cut short.\n")
 }
 
-/// Replaces the identifiers a call carried with the shape of the path it called.
-///
-/// The endpoint is recorded as it was requested, so it holds a real organization id, a real directory id and a real
-/// account id. The report is written to `GITHUB_STEP_SUMMARY`, which on a public repository is public, and it is the
-/// shape of the path that says which operation drifted — the identifiers say only whose data was read.
 fn anonymise(endpoint: &str) -> String {
     let (method, path) = match endpoint.split_once(' ') {
         Some(halves) => halves,
@@ -182,10 +158,6 @@ fn anonymise(endpoint: &str) -> String {
     if method.is_empty() { shape } else { format!("{method} {shape}") }
 }
 
-/// Whether a path segment names one thing rather than one kind of thing.
-///
-/// The `previous` segment settles the one case a shape alone cannot: `3` in `/rest/api/3/issue/10042` is the version
-/// of the API and `10042` is an issue, and both are bare numbers.
 fn is_identifier(segment: &str, previous: &str) -> bool {
     if segment.is_empty() {
         return false;
@@ -204,10 +176,6 @@ fn is_identifier(segment: &str, previous: &str) -> bool {
     segment.chars().all(|character| character.is_ascii_hexdigit() || character == '-') && hexadecimal >= 16
 }
 
-/// Collapses the index of an array element, so a finding is reported once rather than once per element.
-///
-/// `serde_ignored` names the position it walked through, so one undocumented field on a thousand-element list arrives
-/// as a thousand findings that differ only in a number. What the report is for is the field.
 fn collapse_indices(path: &str) -> String {
     path.split('.')
         .map(|segment| {

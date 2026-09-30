@@ -1,14 +1,3 @@
-//! Ported from jira.js/tests/live/cloud/webhooks.test.ts.
-//!
-//! These are app-only endpoints: they operate on the webhooks registered by a Connect or Forge app, identified by the
-//! app's own credentials. A user token has no app to speak for, so every one of them refuses — and refuses with a
-//! status that says almost nothing about why.
-//!
-//! That refusal is the whole suite. It is worth pinning because "webhooks" is a feature people reach for early, and
-//! the failure gives no hint that the problem is the *kind* of credential rather than its permissions. Registering a
-//! webhook would in any case be a standing configuration change that outlives the run — so the one call that could
-//! create something registers its removal before asserting anything.
-
 use jira::cloud::{ContainerForWebhookIDs, WebhookDetails, WebhookDetailsEvents, WebhookRegistrationDetails};
 
 use crate::harness::{ResourceTracker, cloud};
@@ -29,7 +18,6 @@ async fn refuses_to_list_webhooks_for_user_credentials() {
     assert!((400..500).contains(&status), "the refusal is the caller's, not the site's: {error}");
 }
 
-/// The payload names a project that does not exist, and Jira never gets far enough to notice.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn refuses_registration_before_validating_the_payload() {
@@ -52,8 +40,6 @@ async fn refuses_registration_before_validating_the_payload() {
         Err(error) => {
             assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "the refusal is typed: {error}")
         }
-        // Not expected from a user token, but a webhook that exists fires at a URL, so it is removed before the
-        // failure is reported rather than left behind by the panic.
         Ok(container) => {
             let ids: Vec<i64> = container
                 .webhook_registration_result
@@ -116,7 +102,6 @@ async fn refuses_the_dynamic_module_reads_too() {
     assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
-/// Failing typed rather than hanging is the part the library owns; what the status means is Atlassian's business.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_module_removal_rather_than_hanging() {

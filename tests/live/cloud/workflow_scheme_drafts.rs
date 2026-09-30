@@ -1,14 +1,3 @@
-//! Workflow scheme drafts and transition rules, plus the project permission scheme and issue panel reads that ride
-//! alongside them.
-//!
-//! Read-only. Drafts exist precisely because editing a live workflow scheme is dangerous: you edit a copy and publish
-//! it, and publishing asks Jira to migrate every in-flight issue whose status the new scheme no longer allows. Making
-//! a draft is harmless; publishing one is not, and the two are a single call apart — so publishing is pinned only
-//! through its error channel, aimed at a scheme id nothing can match.
-//!
-//! `workflow_transition_rules` is app-only on top of that: the rules it manages belong to Connect and Forge apps, so
-//! an API-token caller is refused by design. That refusal is the contract, and it is asserted as one.
-
 use jira::cloud::{
     ForgePanelProjectPinRequest, GetWorkflowTransitionRuleConfigurationsRequestTypes as RuleType, Id,
     PublishDraftWorkflowScheme,
@@ -16,7 +5,6 @@ use jira::cloud::{
 
 use crate::harness::{TEST_PROJECT_KEY, cloud};
 
-/// A scheme nobody has edited has no draft, and Jira says so with a 404 rather than an empty body.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_no_draft_for_a_scheme_that_has_never_been_edited() {
@@ -43,7 +31,6 @@ async fn surfaces_a_draft_lookup_on_an_unknown_scheme_as_a_typed_error() {
     assert!(error.is_not_found() || error.is_forbidden(), "{error}");
 }
 
-/// Publishing is the irreversible half, so it is proven only against an id nothing can match.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_publishing() {
@@ -57,8 +44,6 @@ async fn fails_typed_on_publishing() {
     assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
-/// The rules belong to Connect and Forge apps, so a site token is refused — and refused as a client error, not as a
-/// server one, which is what separates "you may not ask this" from "the site broke".
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn refuses_the_app_owned_transition_rule_reads() {
@@ -94,8 +79,6 @@ async fn reports_the_permission_scheme_assigned_to_the_test_project() {
     assert!(!scheme.name.is_empty(), "an assigned permission scheme carries a name");
 }
 
-/// Reassignment changes who may do what across a whole project, so it too is proven only against an id nothing can
-/// match.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_reassigning_a_permission_scheme() {
@@ -109,8 +92,6 @@ async fn fails_typed_on_reassigning_a_permission_scheme() {
     assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
-/// The panel write is asynchronous, and an empty project list makes it a no-op — what is asserted is that Jira hands
-/// back the task handle a caller needs to follow the work, not that anything was pinned.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn queues_the_asynchronous_issue_panel_write_returning_the_task_that_tracks_it() {
@@ -129,10 +110,6 @@ async fn queues_the_asynchronous_issue_panel_write_returning_the_task_that_track
     assert!(!task_id.is_empty() && task_id.chars().all(|c| c.is_ascii_digit()), "a task id is digits: {task_id}");
 }
 
-/// The id of some scheme the site already has, or nothing if the token may not list them.
-///
-/// Listing needs *Administer Jira*, so a token without it is refused — and that refusal is asserted here rather than
-/// being silently swallowed by the test that stands down on it.
 async fn first_scheme_id() -> Option<i64> {
     match cloud().workflow_schemes().get_all_workflow_schemes().max_results(1).send().await {
         Ok(page) => page.values.first().and_then(|scheme| scheme.id),

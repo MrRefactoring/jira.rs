@@ -1,5 +1,3 @@
-//! The Jira Cloud platform surface.
-
 mod abort;
 mod adf_routing;
 mod app_modules;

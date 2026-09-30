@@ -2,16 +2,6 @@ use jira::cloud::{ApplicationProperty, SimpleApplicationProperty};
 
 use crate::harness::cloud;
 
-/// The Jira settings API, read-only and firmly so.
-///
-/// These are site-wide switches: `set_application_property` changes behaviour for every user on the tenant, with no
-/// scope smaller than the whole site to contain a mistake. A test that flipped one and failed before restoring it
-/// would leave the site altered — so the write is pinned only through its error channel, aimed at a key that cannot
-/// exist.
-///
-/// `get_configuration` is the useful half: it reports which optional features are switched on, and several other
-/// suites only make sense in light of it — time tracking, sub-tasks and issue linking are all optional, and code that
-/// assumes them works on one tenant and breaks on the next.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_which_optional_features_the_site_has_switched_on() {
@@ -26,8 +16,6 @@ async fn reports_which_optional_features_the_site_has_switched_on() {
     assert!(configuration.time_tracking_enabled.is_some(), "the site says whether time tracking is on");
 }
 
-/// The other suites vote, watch, attach, link and log time. This asserts the site agrees those were allowed, so a
-/// switched-off feature surfaces here rather than as an unexplained failure three suites away.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn agrees_with_what_the_other_live_suites_were_able_to_do() {
@@ -78,9 +66,6 @@ async fn lists_the_advanced_settings_for_an_admin_or_fails_typed() {
     }
 }
 
-/// The `key` parameter changes the response from an array of properties to a single property object, while the
-/// declared return type stays an array. There is no tolerant mode to fall back on here: the modelled call fails, and
-/// it fails as a schema mismatch that names the endpoint and the shape it got — which is the whole point of the type.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn changes_response_shape_with_the_parameter_which_the_declared_type_does_not_survive() {
@@ -156,7 +141,6 @@ async fn surfaces_an_unknown_property_key_as_a_typed_error() {
     );
 }
 
-/// The site-wide write, proven through its error channel and never aimed at a setting that exists.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_site_wide_write() {
@@ -173,10 +157,6 @@ async fn fails_typed_on_the_site_wide_write() {
     assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
-/// The advanced settings, or `None` when the token cannot read them.
-///
-/// Every read on this page needs *Administer Jira*. The refusal is asserted here rather than being silently swallowed
-/// by the tests that stand down on it.
 async fn advanced_settings() -> Option<Vec<ApplicationProperty>> {
     match cloud().jira_settings().get_advanced_settings().send().await {
         Ok(settings) => Some(settings),

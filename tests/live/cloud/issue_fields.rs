@@ -1,14 +1,3 @@
-//! The field catalogue, read-only.
-//!
-//! A custom field is site-wide: creating one adds a column to every project's configuration, and Jira caps how many a
-//! site may have. Trashing and deleting are worse — a deleted field takes its data on every issue with it. None of
-//! that belongs in a suite running against a working site, so the write half is pinned only through its error
-//! channel, aimed at an id that cannot exist.
-//!
-//! What is worth asserting is the catalogue itself, because the rest of the API is addressed through it. Field *ids*
-//! are what `fields` parameters and JQL clauses ultimately resolve to, and the mapping from a human name to an id is
-//! neither stable nor unique — two custom fields may share a name.
-
 use jira::cloud::GetFieldsPaginatedRequestType;
 
 use crate::harness::cloud;
@@ -40,8 +29,6 @@ async fn includes_the_system_fields_the_rest_of_the_suite_reads() {
     }
 }
 
-/// A custom field is addressed by a generated id, never by the name a human gave it — two custom fields may share a
-/// name, and only the id resolves.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn distinguishes_custom_fields_by_an_id_that_is_not_their_name() {
@@ -87,8 +74,6 @@ async fn describes_what_each_field_holds_through_its_schema() {
     assert_eq!(issuetype.r#type, "issuetype", "a schema names the shape it holds, not just 'object'");
 }
 
-/// The paginated listing is administrator-only, so a token without *Administer Jira* must be refused in a way the
-/// caller can recognise rather than left to guess at an untyped failure.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn pages_the_custom_field_listing_for_an_admin_or_fails_typed() {
@@ -132,7 +117,6 @@ async fn filters_the_paginated_listing_to_custom_fields_only() {
     }
 }
 
-/// The destructive path, proven through its error channel and never aimed at a field that exists.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_destructive_path() {

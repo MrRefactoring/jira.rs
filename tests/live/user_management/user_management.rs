@@ -1,29 +1,8 @@
-//! The user management API.
-//!
-//! What this suite can prove is narrower than the surface, and the reason is measured rather than assumed. Two things
-//! stand in the way, and both belong to the organization rather than to the library:
-//!
-//! 1. **A scoped API key is refused outright.** Every operation answers `403 forbidden.insufficientScope` and names
-//!    `manage:org` among the scopes it would accept — a scope the key creation flow does not offer. The
-//!    `read:*:admin` scopes that reach the organization API reach nothing here.
-//! 2. **Nothing on this organization is manageable.** Its one account reports `claimStatus: unmanaged`, and the
-//!    organization's managed-account listing returns none. These operations act on accounts whose email domain the
-//!    organization has claimed and verified; with no claimed domain there is no subject.
-//!
-//! So the suite pins the refusal and its shape, which is worth pinning: a caller who reaches for this API with the key
-//! that works everywhere else gets a typed forbidden error naming the scope, not a silent empty answer. The rest
-//! stands down visibly. It becomes a real suite the day the organization claims a domain and an unscoped key exists.
-
 use jira::admin::{AdminClient, MultiDirectoryUserSearchRequest};
 use jira::user_management::UserManagementClient;
 
 use crate::harness::{admin_key_client, has_admin_env, org_id, user_management};
 
-/// The two clients the suite runs on, or `None` when the organization API key both need is absent.
-///
-/// CI has none, and a site API token does not substitute: these operations answer on `api.atlassian.com` and address
-/// an account rather than a site. Standing down still pins that address, so an absent key never leaves a test
-/// asserting nothing.
 fn keyed_clients() -> Option<(UserManagementClient, AdminClient)> {
     if has_admin_env() {
         return Some((
@@ -46,7 +25,6 @@ fn keyed_clients() -> Option<(UserManagementClient, AdminClient)> {
     None
 }
 
-/// One account of the organization, which is the subject every operation here needs.
 async fn some_account(admin: &AdminClient, org: &str) -> String {
     let directories =
         admin.directory().get_directories_for_org(org).send().await.expect("the organization lists its directories");
@@ -131,8 +109,6 @@ async fn has_no_managed_account_to_act_on() {
     let org = org_id().await;
     let Some((_, admin)) = keyed_clients() else { return };
 
-    // The other half of why this suite reads rather than writes: the organization manages nobody. Pinned so that the
-    // day a domain is claimed, this test fails and says the suite can be widened.
     let page = admin.users().get_users(&org).send().await.expect("the organization lists its managed accounts");
     let managed = page.data.expect("the envelope carries a listing, empty or not");
 

@@ -1,11 +1,3 @@
-//! Ported from jira.js/tests/live/cloud/projectProperties.test.ts.
-//!
-//! The same entity-property mechanism as `issue_properties`, hung off a project instead. Exercised in full because it
-//! is scoped to a namespaced key nothing else reads, and removable.
-//!
-//! Worth a suite of its own rather than trusting the issue-property one by analogy: these are four separate generated
-//! functions against four separate URLs, and "it works for issues" has never been evidence that it works for projects.
-
 use serde_json::json;
 
 use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_readable, await_refused, cloud};
@@ -16,11 +8,6 @@ fn object_of(value: &serde_json::Value) -> std::collections::HashMap<String, ser
     value.as_object().expect("a property value is an object").clone().into_iter().collect()
 }
 
-/// The project property round trip, end to end.
-///
-/// Proves that a nested value comes back byte for byte, that the listing links to what it names, that a second write
-/// replaces rather than merges, that the project can be addressed by id as well as by key, and that a deleted
-/// property is unreadable.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_a_project_property_through_its_lifecycle() {

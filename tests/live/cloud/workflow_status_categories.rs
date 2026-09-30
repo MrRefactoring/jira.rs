@@ -1,9 +1,3 @@
-//! Ported from jira.js/tests/live/cloud/workflowStatusCategories.test.ts.
-//!
-//! Status categories are the fixed four-value vocabulary every Jira workflow ultimately maps onto, so this is a rare
-//! endpoint where the exact contents can be asserted rather than merely their shape — and where a drift would break
-//! every board and report built on top of them.
-
 use jira::cloud::StatusCategory;
 
 use crate::harness::cloud;
@@ -32,7 +26,6 @@ async fn returns_the_categories_jira_defines_each_fully_typed() {
     );
 }
 
-/// Two ways of addressing the same category, and both have to give the record the listing did.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn resolves_a_single_category_by_id_and_by_key_alike() {

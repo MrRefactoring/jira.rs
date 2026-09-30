@@ -1,16 +1,5 @@
-//! The Assets index, which this file is allowed to take away from everything else.
-//!
-//! A reindex holds the index for as long as it runs and answers stale until it finishes, so nothing that finds an
-//! object through the index may run after this. The suites run in name order and this one sorts after `schemas`; the
-//! only file behind it is `service_desk`, which reads nothing out of Assets.
-
 use crate::harness::assets_server;
 
-/// The document declares `IndexPath` with no properties at all, so the generated type is empty and the path it
-/// carries is unreachable through it.
-///
-/// That gap is Atlassian's rather than the client's, and pinning it here is what makes it visible: the raw body is
-/// read instead, and the day the document grows the property this test is what says so.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jsm-dc up`"]
 async fn reports_where_the_index_lives() {

@@ -1,9 +1,3 @@
-//! Projects and everything hung off one: categories, roles, components, versions and avatars.
-//!
-//! Every test creates a project of its own, because half of what is under test here changes the project itself — its
-//! type, its permission scheme, its actors — and because a bare Data Center instance has no project to borrow. What
-//! the TypeScript suite did once in a `beforeAll` is done per test and registered for removal the moment it exists.
-
 use jira::server::{
     ActorInput, ActorsMap, Avatar, AvatarCropping, Component, CreateUpdateRoleRequest, DeleteAndReplaceVersion, Id,
     ProjectCategory, ProjectRoleActorsUpdate, ProjectUpdate, RemoteEntityLinkJson, Version, VersionMove,
@@ -14,7 +8,6 @@ use serde_json::json;
 use super::fixtures::{admin_username, business_project, property_body, property_value, tiny_avatar, touch};
 use crate::harness::{ResourceTracker, server, test_name};
 
-/// The global id the remote version links in this suite are written under.
 const VERSION_LINK_GLOBAL_ID: &str = "jrs-version-link";
 
 #[tokio::test]
@@ -70,7 +63,6 @@ async fn updates_the_project_and_its_type() {
     assert_eq!(read.name.as_deref(), Some(name.as_str()), "the rename is observable on the next read");
     assert_eq!(read.description.as_deref(), Some("changed by the suite"), "and so is the description");
 
-    // Changing a business project into a software one needs the Software application installed and licensed.
     touch(server().projects().update_project_type(&project.key, "software").send().await);
 
     tracker.cleanup().await;
@@ -116,7 +108,6 @@ async fn assigns_the_schemes_a_project_can_hold() {
 
     let priority_id = priorities.schemes.as_ref().and_then(|schemes| schemes.first()).and_then(|scheme| scheme.id);
 
-    // Priority schemes are a Data Center feature a timebomb licence does not always carry.
     if let Some(id) = priority_id {
         touch(server().projects().assign_priority_scheme(&project.key, Id { id: Some(id) }).send().await);
         touch(server().projects().unassign_priority_scheme(id, &project.key).send().await);
@@ -369,8 +360,6 @@ async fn keeps_remote_links_on_a_version() {
         .await
         .expect("a remote version link can be written under a global id of the caller's choosing");
 
-    // Without a global id Jira generates one, and the document describes the payload as a wrapper around the link
-    // rather than as the link itself — so what this proves is that the request reaches Jira in a shape it knows.
     touch(
         server()
             .project_versions()
@@ -429,7 +418,6 @@ async fn archives_and_restores() {
     let mut tracker = ResourceTracker::new();
     let project = business_project(&mut tracker, "archive subject").await;
 
-    // Archiving a project needs Data Center licensing a timebomb does not always carry.
     touch(server().projects().archive_project(&project.key).send().await);
     touch(server().projects().restore_project(&project.key).send().await);
 
@@ -481,7 +469,6 @@ async fn uploads_an_avatar_and_puts_it_back() {
     );
 
     if let Ok(id) = id.parse::<i64>() {
-        // A system avatar cannot be deleted, which is the refusal this proves is typed.
         touch(server().projects().delete_project_avatar(&project.key, id).send().await);
     }
 
@@ -548,10 +535,6 @@ async fn keeps_a_project_role_of_its_own() {
     tracker.cleanup().await;
 }
 
-/// Creates a version in the project and registers the removal of it.
-///
-/// Data Center has no plain delete for a version: the only removal is `removeAndSwap`, which is a POST with a body
-/// describing what to do with whatever pointed at the version — nothing, here, since nothing does.
 async fn create_version(tracker: &mut ResourceTracker, project_key: &str, label: &str) -> Version {
     let version = server()
         .project_versions()

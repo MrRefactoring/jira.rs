@@ -1,10 +1,3 @@
-//! The Teams API, which answers on the organization rather than on the site.
-//!
-//! Its fixtures are organization-level rather than project-level, which makes this suite the one place where the
-//! resource tracker is doing something no sweep could do afterwards: a team is not scoped to a project, so nothing in
-//! the issue purge would ever recognise it as debris. Every team is therefore registered for deletion the moment it
-//! exists, and each test creates its own rather than sharing one.
-
 use jira::teams::{
     BulkOperationRequest, MembershipFetchPayload, TeamCreationPayload, TeamCreationPayloadTeamType, TeamResponseState,
     TeamResponseWithMembers, TeamResponseWithMembersState, TeamResponseWithMembersTeamType, TeamUpdatePayload,
@@ -12,12 +5,6 @@ use jira::teams::{
 
 use crate::harness::{ResourceTracker, await_readable, await_refused, org_id, poll_until, site_id, teams, test_name};
 
-/// Creates a team on the organization and registers its deletion.
-///
-/// Unlike every other fixture in these suites the resource is organization-level rather than project-level: a team is
-/// not scoped to a project and no issue sweep will ever collect it. So the teardown is registered the moment the team
-/// exists, and it treats `410 Gone` as success — a team the test deleted itself answers that rather than `404`, and
-/// the tracker would otherwise report a resource that is demonstrably absent as leaked.
 async fn create_team(tracker: &mut ResourceTracker, org: &str, label: &str) -> TeamResponseWithMembers {
     let team = teams()
         .teams()

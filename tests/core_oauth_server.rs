@@ -174,7 +174,6 @@ async fn a_data_center_client_refreshes_before_expiry_and_sends_the_new_token() 
             client_id: Some("link-1".to_owned()),
             client_secret: Some("secret".to_owned()),
             redirect_uri: Some("https://app.example.com/cb".to_owned()),
-            // Already expired, so the first request refreshes before it goes out.
             expires_at: Some(SystemTime::now() - Duration::from_secs(10)),
             ..OAuth2ServerConfig::default()
         }))
@@ -304,8 +303,6 @@ fn data_center_oauth_needs_the_instance_it_is_talking_to() {
 
 #[test]
 fn rejects_a_half_configured_refresh_credential_set() {
-    // The access token alone would be a valid configuration. Half a refresh set alongside it is always a mistake: it
-    // looks configured, then fails on the first refresh.
     let error = Client::builder()
         .auth(Auth::oauth2(OAuth2Config {
             access_token: Some("token".to_owned()),

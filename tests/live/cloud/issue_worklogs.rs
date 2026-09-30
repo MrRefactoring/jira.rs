@@ -1,9 +1,3 @@
-//! Ported from jira.js/tests/live/cloud/issueWorklogs.test.ts.
-//!
-//! A full write cycle inside fixture issues. Two things here are worth a live site rather than a unit test: time is
-//! expressed as a human string that Jira parses server-side into seconds, and every worklog write mutates the issue's
-//! time-tracking totals — a side effect nothing in the return value mentions.
-
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use jira::cloud::{Worklog, WorklogIdsRequest, WorklogInput, WorklogInputComment};
@@ -21,7 +15,6 @@ fn worklog_of(time_spent: &str, comment: Option<&str>) -> WorklogInput {
     }
 }
 
-/// Logs time against the issue and registers the worklog's deletion.
 async fn add_worklog(
     tracker: &mut ResourceTracker,
     issue_key: &str,
@@ -47,7 +40,6 @@ async fn add_worklog(
     created
 }
 
-/// The issue's own tally of logged seconds, as the `timetracking` field reports it.
 async fn time_spent_seconds(issue_key: &str) -> Option<i64> {
     cloud()
         .issues()
@@ -61,11 +53,6 @@ async fn time_spent_seconds(issue_key: &str) -> Option<i64> {
         .and_then(|tracking| tracking.time_spent_seconds)
 }
 
-/// The worklog lifecycle, end to end.
-///
-/// The assertions that matter are the two the caller cannot see coming: `1h 30m` is parsed into 5400 seconds by the
-/// server rather than by the client, and each write moves the issue's time-tracking total, which no response body
-/// mentions.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_a_worklog_through_its_lifecycle() {
@@ -192,7 +179,6 @@ async fn fetches_worklogs_by_id_across_issues() {
     tracker.cleanup().await;
 }
 
-/// The modified-since feed is a site-wide cursor, so it is asserted on its own invariants rather than on a fixture.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_worklogs_modified_since_a_point_in_the_past() {

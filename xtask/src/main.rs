@@ -1,14 +1,3 @@
-//! Repository chores that need more than a shell line.
-//!
-//! ```sh
-//! cargo xtask jira-dc up      # start the Data Center instance the `server` suites need
-//! cargo xtask jira-dc status
-//! cargo xtask jira-dc down
-//! cargo xtask jsm-dc up       # the same for the Service Management suites
-//! cargo xtask audit           # run the live suite and report what the types do not describe
-//! cargo xtask coverage server # run a rig's suite and report which of its operations it called
-//! ```
-
 mod audit;
 mod coverage;
 mod dc_rig;

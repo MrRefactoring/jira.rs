@@ -3,11 +3,6 @@ use jira::{Auth, Client};
 
 use crate::harness::{client, require_live_env};
 
-/// The three names Atlassian's platform APIs address a site by.
-///
-/// Atlassian publishes no REST endpoint for a site's cloud id or organization id, so the GraphQL gateway is the only
-/// way the crate can answer the question at all — which makes it worth pinning against the real gateway rather than
-/// a mock. The Teams suites depend on it: without a real organization id they cannot address a single call.
 fn is_uuid(value: &str) -> bool {
     let groups: Vec<&str> = value.split('-').collect();
 
@@ -28,10 +23,6 @@ async fn resolves_the_three_names_the_platform_apis_address_this_site_by() {
     assert_eq!(Some(context.host_name.as_str()), expected.host_str());
 }
 
-/// The gateway and the site's own unauthenticated endpoint agree.
-///
-/// Two different services answering the same question, which is the only way to tell a correct answer from a
-/// well-formed one.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn agrees_with_the_unauthenticated_tenant_endpoint_about_the_cloud_id() {

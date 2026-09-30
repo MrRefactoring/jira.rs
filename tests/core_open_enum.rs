@@ -1,5 +1,4 @@
 jira::open_enum! {
-    /// How a project is administered.
     pub enum ProjectTypeKey {
         Software => "software",
         ServiceDesk => "service_desk",

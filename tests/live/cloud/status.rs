@@ -1,23 +1,9 @@
-//! The status management API, not to be confused with `workflow_statuses`.
-//!
-//! That one is the older read-only pair, this one the newer management API — and they are emphatically *not* two views
-//! of one set. They return overlapping but different collections, and they describe the ones they share differently. A
-//! caller who reaches for the wrong one gets a plausible answer missing what they were looking for, which is the main
-//! reason this suite exists alongside that one.
-//!
-//! Read-only throughout: deleting a status asks Jira to deal with every issue sitting in it, and creating one adds to
-//! site configuration.
-
 use std::collections::{HashMap, HashSet};
 
 use jira::cloud::{JiraStatusStatusCategory, PageOfStatuses, StatusScopeType};
 
 use crate::harness::{TEST_PROJECT_KEY, cloud};
 
-/// Searches statuses, or proves the refusal is the typed one an account without administrator rights receives.
-///
-/// The management API is administrator-only. A token that is not one must not turn that into a red run, so the shape
-/// of the refusal is asserted here and the caller stands down.
 async fn search_statuses(max_results: i64) -> Option<PageOfStatuses> {
     match cloud().status().search_statuses().max_results(max_results).send().await {
         Ok(page) => Some(page),
@@ -219,7 +205,6 @@ async fn surfaces_an_unknown_status_id_as_an_empty_result_rather_than_an_error()
     }
 }
 
-/// The destructive path is proven typed without ever being aimed at a real status.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_destructive_path() {

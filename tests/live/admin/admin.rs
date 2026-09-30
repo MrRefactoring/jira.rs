@@ -1,18 +1,7 @@
-//! The organization administration API.
-//!
-//! Read-only throughout, and not for want of coverage: every write here acts on a real organization's users, groups
-//! and policies, and there is no fixture to create and throw away as the project suites do. The key the suite runs on
-//! holds only the `read:` scopes, so a write would be refused rather than silently succeed.
-//!
-//! Every test stands down when no organization API key is configured — CI has none, and a site API token does not
-//! substitute: these operations answer on `api.atlassian.com` and address the organization. Standing down still pins
-//! that address, so an absent key never leaves a test asserting nothing.
-
 use jira::admin::{AdminClient, MultiDirectoryGroupSearchRequest, MultiDirectoryUserSearchRequest, OrgModelType};
 
 use crate::harness::{admin_key_client, admin_surface, has_admin_env, org_id};
 
-/// The administration client, or `None` when the organization API key the whole surface needs is absent.
 fn administration(org: &str) -> Option<AdminClient> {
     if has_admin_env() {
         return Some(AdminClient::new(admin_key_client().clone()));
@@ -29,7 +18,6 @@ fn administration(org: &str) -> Option<AdminClient> {
     None
 }
 
-/// The first directory of the organization, which is what every user and group operation is addressed to.
 async fn first_directory(admin: &AdminClient, org: &str) -> String {
     let directories =
         admin.directory().get_directories_for_org(org).send().await.expect("the organization lists its directories");
@@ -40,7 +28,6 @@ async fn first_directory(admin: &AdminClient, org: &str) -> String {
     directory.directory_id.expect("a directory is named by an id")
 }
 
-/// One account from the directory, for the operations that need a subject.
 async fn first_account(admin: &AdminClient, org: &str, directory: &str) -> String {
     let page = admin
         .users()
@@ -76,9 +63,6 @@ async fn lists_no_organizations_at_all_because_the_key_is_scoped_to_one() {
     let org = org_id().await;
     let Some(admin) = administration(&org) else { return };
 
-    // Not a defect and not an empty tenant: a key created with scopes belongs to a single organization, and the
-    // listing endpoint answers 200 with nothing while the direct read above works. Pinned so that a future empty
-    // result is read as this rather than as a broken credential.
     let page = admin.orgs().get_orgs().send().await.expect("the listing answers");
     let organizations = page.data.expect("the envelope carries a listing, empty or not");
 
@@ -202,7 +186,6 @@ async fn answers_for_the_audit_trail_empty_or_not() {
     let org = org_id().await;
     let Some(admin) = administration(&org) else { return };
 
-    // A quiet organization has no events, so the assertion is on the envelope rather than on its contents.
     let events = admin.events().get_events(&org).send().await.expect("the organization answers for its audit trail");
     let recorded = events.data.expect("the envelope carries the events, empty or not");
 
@@ -237,8 +220,6 @@ async fn refuses_what_the_key_is_not_entitled_to_as_a_typed_error() {
     let directory = first_directory(&admin, &org).await;
     let account_id = first_account(&admin, &org, &directory).await;
 
-    // Last active dates are a paid feature, and the read-scoped key is refused. What matters is that the refusal
-    // arrives typed rather than as a resolved empty answer.
     match admin.users().get_user_last_active_dates(&org, &account_id).send().await {
         Ok(activity) => assert!(activity.data.is_some(), "an entitled answer carries the product activity envelope"),
         Err(error) => assert!(error.is_forbidden(), "the refusal names the rights rather than the request: {error}"),

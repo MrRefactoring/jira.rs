@@ -1,5 +1,3 @@
-//! The Jira Software (Agile) surface.
-
 mod backlog;
 mod board;
 mod devops;

@@ -2,17 +2,6 @@ use jira::service_desk::RequestCreate;
 
 use crate::harness::service_desk;
 
-/// The Service Management `request` and `knowledgebase` APIs — the customer-facing half of the product.
-///
-/// Every endpoint here is gated behind an agent licence a site may not hold, so these assert the shape of the refusal
-/// across the whole surface rather than skipping. Two things make that worth doing.
-///
-/// First, the refusal is a 403 with an empty body — the least informative answer on any of these surfaces — so that
-/// it arrives *typed* is the only thing standing between a caller and a bare rejection they cannot classify.
-///
-/// Second, several of these endpoints would be unsafe even with a licence: creating a customer request opens a real
-/// ticket a support team would see, a request comment writes into a customer conversation, and a customer transition
-/// moves someone's request through their workflow. Those are proven through their error channel only.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_customer_requests_or_refuses_typed_without_an_agent_licence() {
@@ -111,8 +100,6 @@ async fn refuses_the_participant_and_subscription_reads_typed() {
     );
 }
 
-/// Opening a request would put a real ticket in front of a support team, so the create path is only ever aimed at a
-/// service desk that cannot exist.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn never_opens_a_real_ticket_and_fails_typed_on_the_attempt() {

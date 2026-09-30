@@ -1,12 +1,3 @@
-//! The Agile `issue` API: the same issues as the platform API, seen through the Agile lens.
-//!
-//! `get_issue` here is a *different endpoint* from `issues().get_issue()`, returning the same issue with
-//! board-specific fields attached, and a caller who reaches for the wrong one gets something that looks right and is
-//! missing what they needed.
-//!
-//! Ranking is the other half. Rank is a field no ordinary write touches: it is manipulated only through `rank_issues`,
-//! relative to another issue, and it is what a board's ordering actually is.
-
 use jira::agile::IssueRankRequest;
 
 use crate::harness::{
@@ -60,7 +51,6 @@ async fn agrees_with_the_platform_endpoint_on_the_fields_they_share() {
     tracker.cleanup().await;
 }
 
-/// Ranking, walked as one sequence because every case needs the same pair of issues to rank against each other.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn ranks_issues_relative_to_one_another() {
@@ -97,8 +87,6 @@ async fn ranks_issues_relative_to_one_another() {
         .await
         .expect("one issue can be ranked before another, and the rank answers with nothing at all");
 
-    // Ranking an issue relative to itself is the edge worth pinning: nothing in the types stops a caller writing it,
-    // and Jira accepts it rather than refusing it.
     agile()
         .issue()
         .rank_issues(IssueRankRequest {
@@ -125,8 +113,6 @@ async fn reports_the_estimation_for_the_board_or_refuses_typed() {
 
     let issue = create_test_issue(&mut tracker, Some(&test_name("estimation"))).await;
 
-    // A board that estimates by issue count has no estimation field to report, and says so with a 4xx rather than an
-    // empty answer. Either outcome is correct; an untyped failure is not.
     match agile().issue().get_issue_estimation_for_board(&issue.key).board_id(board_id).send().await {
         Ok(estimation) => assert!(
             estimation.field_id.is_some_and(|field| !field.is_empty()),

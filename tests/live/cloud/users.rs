@@ -2,11 +2,6 @@ use jira::cloud::{GetUserRequestExpand, GetUserRequestExpandValue, UserAccountTy
 
 use crate::harness::{ResourceTracker, await_readable, cloud};
 
-/// The account the token authenticates as.
-///
-/// Everything asserted here is about that one account. Creating or removing a user is an identity operation with
-/// billing consequences and no clean undo, so neither is aimed at anything real — they are pinned through their
-/// error channel alone.
 async fn current_account_id() -> String {
     cloud()
         .myself()
@@ -34,8 +29,6 @@ async fn resolves_the_authenticating_account_by_account_id() {
     assert!(link.starts_with("https://"), "a self link is absolute: {link}");
 }
 
-/// Cloud hides personal data by default, so `emailAddress` and `displayName` may legitimately be absent. Code that
-/// assumes otherwise works on one tenant and breaks on the next.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn treats_personal_data_as_optional_because_privacy_settings_make_it_so() {
@@ -89,7 +82,6 @@ async fn lists_the_groups_the_account_belongs_to() {
 
     let groups = cloud().users().get_user_groups(account_id).send().await.expect("the account's groups read back");
 
-    // Product access on Cloud is granted to groups, so a licensed account is in at least one.
     assert!(!groups.is_empty(), "an account with product access belongs to a group");
 
     for group in &groups {
@@ -121,8 +113,6 @@ async fn pages_the_site_user_listing() {
     }
 }
 
-/// The email endpoint is reserved for approved apps: user credentials are refused whatever the account, and the
-/// refusal is a 400 about the credential rather than a 403 about rights.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn refuses_to_report_an_email_to_user_credentials_at_all() {
@@ -165,8 +155,6 @@ async fn fails_typed_on_the_destructive_path_without_ever_aiming_it_at_a_real_ac
     assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
-/// The one write in this suite, and it belongs to the authenticating account alone: the issue navigator columns this
-/// account sees. The reset is deferred as well as called, so a failed assertion still leaves the account as it was.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn sets_the_calling_accounts_issue_navigator_columns_then_resets_them() {

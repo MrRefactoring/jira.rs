@@ -1,18 +1,7 @@
-//! Ported from jira.js/tests/live/cloud/issueNavigatorSettings.test.ts.
-//!
-//! The one endpoint here writes site-wide state: these are the columns every account sees in the issue navigator
-//! until it sets its own. The suite therefore reads the current list first and registers its restoration on the
-//! tracker before writing anything, so the site ends the run exactly as it started it.
-//!
-//! Worth its own file because the write is easy to get wrong in a way that looks like a transport fault. Atlassian
-//! declares the body only under a wildcard media type, which generated a shapeless object; Jira answers a bare array
-//! with 400 and a form-encoded body with 415, and accepts exactly `{ "columns": [...] }` as JSON.
-
 use jira::cloud::ColumnRequestBody;
 
 use crate::harness::{ResourceTracker, await_readable, cloud};
 
-/// Read, replace, read back — and put the site's own list back on the way out.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn replaces_the_default_navigator_columns_and_puts_them_back() {
@@ -75,7 +64,6 @@ async fn replaces_the_default_navigator_columns_and_puts_them_back() {
     tracker.cleanup().await;
 }
 
-/// A rejected write changes nothing, which is why this one needs no restoration.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn rejects_a_column_that_does_not_exist() {

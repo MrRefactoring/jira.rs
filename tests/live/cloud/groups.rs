@@ -2,11 +2,6 @@ use jira::cloud::FoundGroup;
 
 use crate::harness::cloud;
 
-/// A group that exists on this site, carrying both identifiers.
-///
-/// Every endpoint here is addressable by `groupname` or by `groupId`, and Atlassian is migrating away from the
-/// former — code written against names keeps working until a group is renamed, then fails in a way that looks like
-/// the group vanished. Both modes are exercised against the same group so the two answers can be compared.
 async fn sample_group() -> FoundGroup {
     let found = cloud().groups().find_groups().max_results(10).send().await.expect("the site answers with its groups");
 
@@ -18,9 +13,6 @@ async fn sample_group() -> FoundGroup {
         .expect("a Jira site has at least one group carrying both identifiers")
 }
 
-/// Read-only by design. Permission schemes grant rights *to groups*, so `removeGroup` takes a `swapGroup` parameter
-/// precisely because deleting a group can strip permissions from everyone who was in it. A suite has no business
-/// generating that risk on a working tenant, so membership is only ever read.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn finds_groups_on_the_site_each_carrying_both_identifiers() {

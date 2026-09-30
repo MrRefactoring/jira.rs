@@ -1,9 +1,3 @@
-//! Ported from jira.js/tests/live/cloud/userProperties.test.ts.
-//!
-//! The entity-property mechanism again, this time hung off a user. Exercised in full against the authenticating
-//! account under a namespaced key, and never against anyone else — writing a property onto another person's account
-//! is the one variant of this API with a privacy dimension.
-
 use serde_json::json;
 
 use crate::harness::{ResourceTracker, await_readable, await_refused, cloud};
@@ -14,7 +8,6 @@ fn object_of(value: &serde_json::Value) -> std::collections::HashMap<String, ser
     value.as_object().expect("a property value is an object").clone().into_iter().collect()
 }
 
-/// The account id of whoever the credentials belong to.
 async fn current_account_id() -> String {
     cloud()
         .myself()
@@ -26,11 +19,6 @@ async fn current_account_id() -> String {
         .expect("the calling user carries an account id")
 }
 
-/// `account_id` is optional in the types and mandatory in practice.
-///
-/// The specification declares the query parameter optional, so the generated setter is optional too and omitting it
-/// compiles cleanly. It looks like it should mean "the calling user". Jira refuses the request outright instead,
-/// naming a parameter the types said was unnecessary — a call that can never succeed and never fails to compile.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn refuses_a_property_write_that_omits_the_account_id() {
@@ -44,10 +32,6 @@ async fn refuses_a_property_write_that_omits_the_account_id() {
     assert_eq!(error.status(), Some(400), "{error}");
 }
 
-/// The user property round trip, end to end.
-///
-/// Proves that a named account takes a property, that the listing links to what it names, that a second write
-/// replaces rather than merges, and that a deleted property is unreadable.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_a_user_property_through_its_lifecycle() {

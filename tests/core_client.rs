@@ -44,8 +44,6 @@ fn header_of(request: &Request, name: &str) -> Option<String> {
     request.headers.get(name).map(|value| value.to_str().unwrap_or_default().to_owned())
 }
 
-// ---------------------------------------------------------------- auth headers
-
 #[tokio::test]
 async fn base64_encodes_email_and_token_for_basic_auth() {
     let server = server_answering(json!({ "displayName": "Ada" })).await;
@@ -53,7 +51,6 @@ async fn base64_encodes_email_and_token_for_basic_auth() {
 
     let _: Myself = client.get("/rest/api/3/myself").send().await.unwrap();
 
-    // `you@example.com:TOKEN`
     assert_eq!(
         header_of(&first_request(&server).await, "authorization").as_deref(),
         Some("Basic eW91QGV4YW1wbGUuY29tOlRPS0VO"),
@@ -79,7 +76,6 @@ async fn encodes_a_credential_that_is_not_ascii() {
 
     let expected = format!("Basic {}", {
         use std::fmt::Write as _;
-        // Computed the same way any other base64 implementation would, from the UTF-8 bytes.
         let mut encoded = String::new();
         let input = "ada:пароль".as_bytes();
         const ALPHABET: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -236,8 +232,6 @@ async fn does_not_loop_when_the_fresh_credentials_are_refused_as_well() {
     assert_eq!(server.received_requests().await.unwrap().len(), 2);
 }
 
-// ---------------------------------------------------------------- errors
-
 #[tokio::test]
 async fn reports_a_failure_carrying_status_and_parsed_body() {
     let server = MockServer::start().await;
@@ -269,8 +263,6 @@ async fn keeps_a_non_json_error_body_as_raw_text() {
     assert!(error.is_server());
     assert_eq!(error.body().unwrap(), &json!("upstream is down"));
 }
-
-// ---------------------------------------------------------------- responses
 
 #[tokio::test]
 async fn returns_nothing_for_a_204() {
@@ -375,8 +367,6 @@ async fn hands_back_the_json_body_unmodelled() {
     assert_eq!(value["displayName"], "Ada");
 }
 
-// ---------------------------------------------------------------- retry
-
 #[tokio::test]
 async fn retry_is_off_by_default() {
     let server = MockServer::start().await;
@@ -475,8 +465,6 @@ async fn never_retries_a_4xx() {
     assert!(error.is_not_found());
     assert_eq!(server.received_requests().await.unwrap().len(), 1);
 }
-
-// ---------------------------------------------------------------- headers and body
 
 #[tokio::test]
 async fn sets_json_content_type_for_a_body() {
@@ -632,8 +620,6 @@ async fn puts_the_query_parameters_on_the_wire() {
     assert!(!url.contains("startAt"), "{url}");
 }
 
-// ------------------------------------- credentials refused behind a status that says otherwise
-
 async fn seraph_server(status: u16, reason: &str, body: serde_json::Value) -> MockServer {
     let server = MockServer::start().await;
 
@@ -751,8 +737,6 @@ async fn gives_the_refresh_hook_the_same_single_attempt_a_401_would() {
 
     assert_eq!(myself.display_name, "Ada");
 }
-
-// ---------------------------------------------------------------- configuration
 
 #[test]
 fn host_is_required_unless_the_credentials_route_through_the_gateway() {

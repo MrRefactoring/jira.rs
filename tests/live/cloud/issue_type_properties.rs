@@ -1,19 +1,9 @@
-//! Ported from jira.js/tests/live/cloud/issueTypeProperties.test.ts.
-//!
-//! The fourth home of the same entity-property mechanism, after issues, projects and users. Exercised in full under a
-//! namespaced key.
-//!
-//! This one carries a caveat the others do not: an issue type is site-wide, so the property is visible to every
-//! project that uses that type. It is still safe — a key nothing else reads affects nothing — but it is not
-//! project-scoped, and a suite that treated it as such would be reasoning about the wrong blast radius.
-
 use serde_json::json;
 
 use crate::harness::{ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, await_readable, await_refused, cloud};
 
 const PROPERTY_KEY: &str = "jira.rs.livetest.issuetype";
 
-/// The property round trip, end to end: stored, listed, replaced, deleted, and unreadable afterwards.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_an_issue_type_property_through_its_lifecycle() {
@@ -81,7 +71,6 @@ async fn walks_an_issue_type_property_through_its_lifecycle() {
     tracker.cleanup().await;
 }
 
-/// The blast radius, pinned: the type is shared with every project that offers it, the property space is not.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn keeps_the_issue_type_property_out_of_the_project_property_space() {
@@ -128,7 +117,6 @@ fn object_of(value: &serde_json::Value) -> std::collections::HashMap<String, ser
     value.as_object().expect("a property value is an object").clone().into_iter().collect()
 }
 
-/// The id of the type the suite's fixtures use, read from the test project rather than assumed.
 async fn test_issue_type_id() -> String {
     cloud()
         .projects()
@@ -144,7 +132,6 @@ async fn test_issue_type_id() -> String {
         .expect("the test project offers the issue type its fixtures use")
 }
 
-/// Writes the property and registers its removal, so a test that fails mid-way still leaves the type as it found it.
 async fn set_property(tracker: &mut ResourceTracker, issue_type_id: &str, value: &serde_json::Value) {
     cloud()
         .issue_type_properties()

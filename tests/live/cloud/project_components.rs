@@ -6,12 +6,6 @@ use jira::cloud::{
     ProjectComponentAssigneeType,
 };
 
-/// A component, from creation to deletion, inside the standing test project.
-///
-/// Components are project-scoped and deletable by their creator, so unlike most Jira configuration they can be
-/// exercised end to end without leaving anything behind. The part that needs a live site is deletion semantics: a
-/// component can be attached to issues, and removing it has to leave those issues intact. Nothing in the types
-/// says so.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_a_component_through_its_lifecycle() {

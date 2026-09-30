@@ -2,17 +2,6 @@ use jira::cloud::{CustomFieldValueUpdateDetails, WorkflowRulesSearch};
 
 use crate::harness::cloud;
 
-/// The remaining app-only platform modules: the app-owned custom field options, values and configuration, the custom
-/// field associations, the JQL function precomputations, the app data policies and the two migration surfaces.
-///
-/// Grouped because they share one story, and eight files asserting that a 4xx arrives would say less than one file
-/// explaining why. All of them act on behalf of an installed app — its custom field types, its JQL functions, its
-/// migration state — and a user token has no app to act for.
-///
-/// Two of them are worth separating out. `issue_custom_field_options_apps` is the app-owned twin of
-/// `issue_custom_field_options`, which the context suite covers and which *is* reachable — the two look
-/// interchangeable on the client and are not. And `app_data_policies` reports whether a site restricts what apps may
-/// read, which is a governance answer a caller may legitimately need without being an app.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn refuses_the_app_owned_custom_field_option_reads() {
@@ -72,8 +61,6 @@ async fn refuses_the_jql_function_precomputation_reads() {
     assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
-/// Both migration surfaces act on an app installation that is being moved, so neither has anything to say to a user
-/// token — and neither may be aimed at a real transfer, which is why the ids are nil.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn refuses_the_migration_endpoints_which_act_on_an_app_installation() {
@@ -102,8 +89,6 @@ async fn refuses_the_migration_endpoints_which_act_on_an_app_installation() {
     assert!(forge.status().is_some_and(|status| (400..500).contains(&status)), "{forge}");
 }
 
-/// The one read in the family that is not app-gated: what an app *would* be allowed to see is a property of the site,
-/// and a site may answer it or refuse it outright.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_the_site_data_policy_which_is_not_app_gated() {
@@ -142,8 +127,6 @@ async fn reports_per_project_data_policies_alongside_the_site_one() {
     }
 }
 
-/// The part the library owns across the whole family: whatever the site answers, the failure arrives as a typed
-/// status rather than as a transport error or a hang.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_across_the_family() {

@@ -1,10 +1,3 @@
-//! Ported from jira.js/tests/live/cloud/jql.test.ts.
-//!
-//! Read-only. This is the machinery a query builder is made of: what fields exist, what values they take, and
-//! whether a string is valid before it is run. The distinction the suite pins is that parsing is *not* the same as
-//! searching — `parse_jql_queries` reports on a query without executing it, and its validation mode decides whether
-//! a suspicious but legal query is an error, a warning, or neither.
-
 use jira::cloud::{JqlQueriesToParse, ParseJqlQueriesRequestValidation};
 
 use crate::harness::{TEST_PROJECT_KEY, cloud};
@@ -46,7 +39,6 @@ async fn includes_the_fields_the_rest_of_the_suite_queries_by() {
     }
 }
 
-/// What a query builder calls as the user types: a field name and a partial value, answered with candidates.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn suggests_values_for_a_field_as_a_user_types() {
@@ -71,7 +63,6 @@ async fn suggests_values_for_a_field_as_a_user_types() {
     );
 }
 
-/// Parsing reports on a query rather than running it, and hands back the structure a builder can edit.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn parses_a_valid_query_into_its_structure_without_running_it() {
@@ -121,8 +112,6 @@ async fn reports_errors_for_a_malformed_query_instead_of_failing_the_call() {
     assert!(query.structure.is_none(), "a query that does not parse has no structure");
 }
 
-/// The same suspicious query is an error under `strict` and unremarkable under `none` — which is the difference
-/// between a builder that refuses a typo and one that lets it through.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lets_the_validation_mode_decide_how_strict_the_answer_is() {

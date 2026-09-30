@@ -1,15 +1,5 @@
-//! Ported from jira.js/tests/live/cloud/issueVotes.test.ts.
-//!
-//! A full write cycle that is genuinely safe: votes live entirely inside a disposable fixture issue, and both halves
-//! of the mutation are exercised, so the suite leaves nothing behind even before teardown runs.
-
 use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_readable, cloud, create_test_issue, test_name};
 
-/// The vote lifecycle, end to end.
-///
-/// Worth recording, because it contradicts the documented Jira Server behaviour and the intuition that comes with it:
-/// on Cloud the reporter *can* vote for their own issue. The fixture issue is reported by the authenticating account
-/// and the vote is accepted. Any caller carrying over a "reporters cannot vote" guard from Server is wrong here.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_a_vote_through_its_lifecycle() {

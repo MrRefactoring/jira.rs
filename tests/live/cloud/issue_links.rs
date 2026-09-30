@@ -1,17 +1,7 @@
-//! Links between issues, created, read and removed.
-//!
-//! Safe to run: links exist only between issues this suite created, and the delete half is exercised rather than left
-//! to teardown.
-//!
-//! The endpoint has a quirk that shapes the whole suite — creating a link answers with nothing useful, no id and no
-//! location. The only way to reach the link just made is to read it back off one of the issues, and every caller has
-//! to do the same. That indirection is the thing worth pinning.
-
 use jira::cloud::{IssueLink, IssueLinkType, LinkIssueRequest, LinkedIssue};
 
 use crate::harness::{ResourceTracker, await_refused, cloud, create_test_issue, poll_until, test_name};
 
-/// The full cycle, walked in one test because each step needs the link the step before it made.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_a_link_through_creation_reading_and_deletion() {
@@ -112,8 +102,6 @@ async fn surfaces_an_unknown_link_id_as_not_found() {
     assert!(error.is_not_found(), "{error}");
 }
 
-/// `Relates` where the site has it, and whatever it does have otherwise — the suite cares that a link type exists,
-/// not which one.
 async fn a_link_type() -> IssueLinkType {
     let types = cloud().issue_link_types().get_issue_link_types().send().await.expect("the site lists its link types");
     let mut types = types.issue_link_types.unwrap_or_default();
@@ -130,7 +118,6 @@ async fn a_link_type() -> IssueLinkType {
     }
 }
 
-/// The links an issue carries, straight off the `issuelinks` field — the only route to a link's id.
 async fn links_on(key: &str) -> Vec<IssueLink> {
     let issue = cloud()
         .issues()

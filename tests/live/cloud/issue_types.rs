@@ -1,13 +1,3 @@
-//! The site's issue types, read-only but for one write.
-//!
-//! Issue types are site-wide configuration shared by every project on the tenant: creating one adds an option
-//! everywhere, and deleting one asks Jira to migrate every issue that used it. Neither belongs in a suite that runs
-//! against a working site, so that half is pinned through its error channel and aimed only at ids that cannot exist.
-//!
-//! The avatar upload is the exception, and it is exercised because it takes image bytes — the shape the specification
-//! describes as an object of arbitrary keys, which is what made it unusable. It adds an avatar to the type's list of
-//! available avatars and deletes it again; nothing selects it, so what the type displays never changes.
-
 use jira::cloud::{DeleteAvatarRequestType, GetAvatarsRequestType, IssueTypeDetails};
 
 use crate::harness::{ResourceTracker, TEST_ISSUE_TYPE, TEST_PROJECT_KEY, cloud, poll_until};
@@ -29,8 +19,6 @@ async fn stores_an_avatar_for_an_issue_type_from_image_bytes() {
     let avatar = cloud()
         .issue_types()
         .create_issue_type_avatar(&type_id, 48, png_bytes(48))
-        // Jira reads the declared media type rather than sniffing the bytes, and refuses an upload without one as
-        // "not a supported image format".
         .content_type("image/png")
         .x(0)
         .y(0)
@@ -85,7 +73,6 @@ async fn lists_the_site_issue_types_each_fully_typed() {
     }
 }
 
-/// Two fields describe the same fact, and a caller that trusts one has to be able to trust the other.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn marks_subtask_types_consistently_across_both_fields() {
@@ -164,7 +151,6 @@ async fn surfaces_an_unknown_type_as_not_found() {
     assert!(error.is_not_found(), "{error}");
 }
 
-/// The destructive path, proven through its error channel and never aimed at a type that exists.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_destructive_path() {
@@ -182,7 +168,6 @@ async fn site_issue_types() -> Vec<IssueTypeDetails> {
     cloud().issue_types().get_issue_all_types().send().await.expect("the site lists its issue types")
 }
 
-/// The type the suite's fixtures use, or whatever the site leads with — either is a real type to address.
 async fn the_test_issue_type() -> IssueTypeDetails {
     let types = site_issue_types().await;
 
@@ -194,15 +179,9 @@ async fn the_test_issue_type() -> IssueTypeDetails {
         .expect("a site has issue types")
 }
 
-/// A valid PNG of a solid colour, built here rather than committed as a fixture.
-///
-/// The avatar endpoints read the image: Jira answers "not a supported image format" to anything it cannot decode, so
-/// a placeholder of arbitrary bytes proves nothing. Generating one keeps the suite free of a binary fixture, and
-/// keeps the size a parameter — Jira refuses an avatar smaller than the crop it is asked for.
 fn png_bytes(side: u32) -> Vec<u8> {
     let side_at = usize::try_from(side).expect("a side fits an index");
 
-    // Every row is the filter byte the format demands and then one solid-colour pixel per column.
     let mut row = vec![0u8];
 
     row.extend_from_slice(&[200, 60, 60].repeat(side_at));
@@ -238,7 +217,6 @@ fn png_chunk(kind: &[u8; 4], data: &[u8]) -> Vec<u8> {
     framed
 }
 
-/// A zlib stream of uncompressed blocks: a valid deflate encoding, and the only one expressible without a compressor.
 fn deflate_stored(data: &[u8]) -> Vec<u8> {
     let mut out = vec![0x78, 0x01];
     let mut blocks = data.chunks(0xFFFF).peekable();

@@ -1,13 +1,3 @@
-//! The Agile `sprint` API, and the board-side sprint listing it is observed through.
-//!
-//! Sprints belong to a scrum board, so everything here is gated on one existing. Where it does, a sprint is created
-//! and removed inside the run — it is board-scoped rather than site-wide, which makes it safe in a way most Agile
-//! configuration is not.
-//!
-//! The behaviour that needs a live site is the state machine. A sprint is future, active or closed, transitions are
-//! one-way, and the API expresses them as ordinary field updates — so nothing in the types stops a caller attempting
-//! a transition that cannot happen.
-
 use jira::agile::{GetAllSprintsRequestState, SprintState};
 
 use crate::harness::{ResourceTracker, agile, await_readable, scrum_board, test_name};
@@ -37,15 +27,12 @@ async fn lists_sprints_for_the_scrum_board() {
     tracker.cleanup().await;
 }
 
-/// The whole sprint lifecycle, as one sequence: every case below needs the sprint the one before it left behind, and
-/// the closing case is the transition the state machine refuses.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_a_sprint_through_its_lifecycle() {
     let mut tracker = ResourceTracker::new();
     let board_id = scrum_board(&mut tracker).await;
 
-    // Jira truncates a sprint name past 30 characters, and a truncated name would not read back as the one written.
     let name: String = test_name("sprint").chars().take(30).collect();
 
     let created = agile()

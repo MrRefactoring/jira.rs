@@ -1,12 +1,3 @@
-//! Ported from jira.js/tests/live/cloud/commentAndWorklogProperties.test.ts.
-//!
-//! The last two homes of the entity-property mechanism, after issues, projects, users and issue types. Both are
-//! exercised in full: their parents are fixture objects this suite created, so the whole cycle is contained.
-//!
-//! Grouped in one file because the point is the comparison. Six modules share this mechanism, and the interesting
-//! question is no longer "does it store JSON" — it is whether the six namespaces are genuinely separate, which is
-//! asserted here across the two that hang off the shortest-lived parents.
-
 use jira::cloud::{CommentInput, CommentInputBody, WorklogInput};
 use serde_json::json;
 
@@ -20,10 +11,6 @@ fn object_of(value: &serde_json::Value) -> std::collections::HashMap<String, ser
     value.as_object().expect("a property value is an object").clone().into_iter().collect()
 }
 
-/// Comment and worklog properties, walked side by side.
-///
-/// Proves each parent stores and returns its own value, that the two namespaces — and the issue's own — do not leak
-/// into one another, that each parent lists its key, and that deleting one leaves the other untouched.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_comment_and_worklog_properties_side_by_side() {

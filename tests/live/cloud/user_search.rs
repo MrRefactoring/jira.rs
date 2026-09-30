@@ -1,6 +1,5 @@
 use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, cloud, create_test_issue, poll_until, test_name};
 
-/// The account the token authenticates as, which every search here is expected to find.
 async fn current_account_id() -> String {
     cloud()
         .myself()
@@ -12,11 +11,6 @@ async fn current_account_id() -> String {
         .expect("the authenticating account carries an id")
 }
 
-/// Eight endpoints that all look like "search for a user" and are not interchangeable.
-///
-/// Each answers a different question — who exists, who can be assigned this issue, who can see this project — and
-/// nothing in the types distinguishes them. Picking the wrong one produces a picker that offers people who will be
-/// rejected on save.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn finds_a_user_by_exact_account_id() {
@@ -111,8 +105,6 @@ async fn scopes_assignability_to_a_project_as_well_as_to_an_issue() {
     assert!(ids.contains(&account_id), "the account the suite runs as is assignable in the test project, got {ids:?}");
 }
 
-/// Assignability is meaningless without something to be assigned to, and the API says so rather than answering with
-/// an empty list a caller would read as "nobody can be assigned".
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn requires_enough_context_to_answer_at_all() {

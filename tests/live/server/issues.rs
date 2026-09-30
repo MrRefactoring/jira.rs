@@ -1,12 +1,3 @@
-//! The write path through the issues module, end to end against a real Data Center instance.
-//!
-//! What a read can never prove is what this is for: that a body serialises the way Jira expects, that a transition
-//! moves an issue, that wiki markup goes out as a plain string where Cloud would need a document, and that what comes
-//! back matches the schema the library declares for it.
-//!
-//! Each test owns everything it touches, project included. Nothing is shared, because these tests delete, archive and
-//! transition what they create, and because there is no ambient project on a bare instance to borrow.
-
 use std::collections::HashMap;
 
 use jira::server::{
@@ -22,10 +13,8 @@ use super::fixtures::{
 };
 use crate::harness::{ResourceTracker, poll_until, server, test_name};
 
-/// The global id the remote issue links in this suite are written under.
 const REMOTE_LINK_GLOBAL_ID: &str = "jrs-remote-issue-link";
 
-/// The fields of an issue, in the map shape `IssueUpdate` takes.
 fn fields(value: serde_json::Value) -> HashMap<String, serde_json::Value> {
     value
         .as_object()
@@ -35,10 +24,6 @@ fn fields(value: serde_json::Value) -> HashMap<String, serde_json::Value> {
         .collect()
 }
 
-/// Creation, the wiki markup that goes with it, an edit, an assignment, and the metadata behind both.
-///
-/// Four of the TypeScript suite's tests in one, because they are one sequence over one issue and Rust has no
-/// `beforeAll` to build that issue once for all of them.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn creates_an_issue_in_wiki_markup_and_edits_it() {
@@ -55,8 +40,6 @@ async fn creates_an_issue_in_wiki_markup_and_edits_it() {
             "project": { "key": project.key },
             "issuetype": { "name": "Task" },
             "summary": test_name("the issues suite"),
-            // Data Center takes wiki markup as a plain string. The Cloud surface would reject this and want a
-            // document, which is why there is no `Document` type on this surface at all.
             "description": "h2. Heading\n\n*bold* and _italic_",
         }),
     )
@@ -108,8 +91,6 @@ async fn creates_an_issue_in_wiki_markup_and_edits_it() {
         "and so is the assignment",
     );
 
-    // Read unmodelled on purpose: the document declares this paginated answer as a single issue type, so the
-    // generated model has nowhere to put the page. The gap is the document's.
     let types = server()
         .issues()
         .get_create_issue_meta_project_issue_types(&project.key)
@@ -119,7 +100,6 @@ async fn creates_an_issue_in_wiki_markup_and_edits_it() {
 
     assert!(types["values"].as_array().is_some_and(|values| !values.is_empty()), "{types}");
 
-    // Read unmodelled for the same reason: `EditMeta` is declared with no properties at all.
     let meta = server().issues().get_edit_issue_meta(&key).send_raw().await.expect("the edit metadata reads");
 
     assert!(meta["fields"]["summary"].is_object(), "the summary is editable, and the metadata says so: {meta}");
@@ -367,12 +347,8 @@ async fn votes_and_watches() {
     let key = issue.key.clone().expect("a created issue carries a key");
     let username = admin_username();
 
-    // The reporter cannot vote for their own issue, which is what makes this a `touch`: the request shape is what is
-    // under test, and Jira refusing on those grounds is a correct answer.
     touch(server().issues().add_vote(&key).send().await);
 
-    // Read unmodelled on purpose: the specification declares `Vote` and `Watchers` with no properties at all, so both
-    // generated types are empty structs. The gap is the document's.
     let votes = server().issues().get_votes(&key).send_raw().await.expect("the votes read");
 
     assert!(votes["self"].as_str().is_some_and(|url| url.contains(&key)), "the votes belong to the issue: {votes}");
@@ -447,9 +423,6 @@ async fn keeps_remote_links_by_id_and_by_global_id() {
     let issue = create_task(&mut tracker, &project.key, "an issue with remote links").await;
     let key = issue.key.clone().expect("a created issue carries a key");
 
-    // Read unmodelled on purpose: the specification declares `RemoteIssueLink` with no properties at all, so the
-    // generated type is an empty struct and the id a caller needs to address the link never reaches them. The gap is
-    // the document's; the body is what proves it is a gap rather than a limit of the client.
     let link = server()
         .issues()
         .create_or_update_remote_issue_link(&key)
@@ -504,7 +477,6 @@ async fn keeps_remote_links_by_id_and_by_global_id() {
         .await
         .expect("a remote link can be removed by its global id");
 
-    // A reciprocal link wants an application on both ends of it, which a lone instance is not.
     touch(
         server()
             .issues()
@@ -599,7 +571,6 @@ async fn reads_and_moves_sub_tasks() {
     let sub_task_id = sub_tasks[0].id.clone().expect("a sub-task carries an id");
     server().issues().can_move_sub_task(&sub_task_id).send().await.expect("the move check answers with a boolean");
 
-    // One sub-task cannot be reordered against itself, which is the refusal this proves is typed.
     touch(
         server()
             .issues()
@@ -634,9 +605,6 @@ async fn attaches_a_file_and_removes_it() {
 
     assert_eq!(attachment.filename.as_deref(), Some("suite.txt"), "the file keeps the name it was uploaded under");
 
-    // Read unmodelled on purpose: the specification declares `Attachment` with no properties at all, so the
-    // generated type is an empty struct even though the upload's own answer is fully described. The gap is the
-    // document's.
     let meta = server().issue_attachments().get_attachment(&id).send_raw().await.expect("the attachment reads back");
 
     assert_eq!(meta["filename"].as_str(), Some("suite.txt"), "and reads back under it: {meta}");
@@ -663,8 +631,6 @@ async fn archives_restores_and_notifies() {
     let issue = create_task(&mut tracker, &project.key, "an issue to archive").await;
     let key = issue.key.clone().expect("a created issue carries a key");
 
-    // Archiving needs Jira Software Data Center licensing that a timebomb does not always carry, and notifying needs
-    // a mail server the rig has none of, so what is under test here is the request rather than the outcome.
     touch(server().issues().archive_issue(&key).send().await);
     touch(server().issues().restore_issue(&key).send().await);
     touch(server().issues().archive_issues().body(key.clone()).send().await);
@@ -753,7 +719,6 @@ async fn finds_the_issue_by_jql_and_through_the_picker() {
     tracker.cleanup().await;
 }
 
-/// A remote link to somewhere outside Jira, under the global id this suite writes its links with.
 fn remote_link(url: &str, title: &str) -> RemoteIssueLinkCreateOrUpdateRequest {
     RemoteIssueLinkCreateOrUpdateRequest {
         global_id: Some(REMOTE_LINK_GLOBAL_ID.to_owned()),

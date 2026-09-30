@@ -1,15 +1,3 @@
-//! Boards, sprints, epics and the backlog, driven against a real Data Center instance.
-//!
-//! Unlike Cloud, Data Center publishes its agile endpoints in the same document as the platform ones, so they are
-//! part of the same client — and they are the half most likely to be missing from a self-hosted deployment, since a
-//! Jira without the Software application refuses all of them outright. Reaching them at all is part of what this
-//! proves.
-//!
-//! Every board here comes from a Scrum project the test created, which is the only way to have one on a bare
-//! instance; the template makes the board a moment after the project, which is what `board_of` waits for. A test
-//! that needs a board covers a whole sequence, because paying for a project and a board once per assertion would
-//! spend minutes proving nothing extra.
-
 use jira::server::{
     BoardCreate, BooleanSetting, EpicRankRequest, EpicUpdate, FieldEdit, IssueAssignRequest, IssueRankRequest,
     SharePermissionInput, Sprint, SprintCreate, SprintSwap, UnmapSprints,
@@ -32,7 +20,6 @@ async fn creates_a_board_over_a_filter_of_its_own() {
     let filter = create_test_filter(&mut tracker, "board filter", &format!("project = {}", project.key)).await;
     let filter_id = filter.id.clone().expect("a created filter carries an id");
 
-    // A board needs a filter shared with someone; on a private instance that is everyone signed in.
     server()
         .filters()
         .add_share_permission(&filter_id)
@@ -68,7 +55,6 @@ async fn creates_a_board_over_a_filter_of_its_own() {
     tracker.cleanup().await;
 }
 
-/// The board the Scrum template makes, everything readable about it, and the property it can hold.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn reads_the_board_the_template_made() {
@@ -90,16 +76,11 @@ async fn reads_the_board_the_template_made() {
     assert_eq!(configuration.id, Some(board_id), "the configuration belongs to that board");
     assert!(configuration.filter.is_some(), "and it names the filter the board is built on");
 
-    // Asked for by name rather than scanned out of the first page: an instance accumulates boards, the listing pages
-    // at fifty, and a suite that reads page one is testing how recently the instance was cleaned.
     let boards =
         server().board().get_all_boards().name(&project.key).send().await.expect("the boards of an instance list");
 
     assert!(boards.values.iter().any(|board| board.id == Some(board_id)), "the board is in the instance listing");
 
-    // Read unmodelled: the Data Center document declares this write as answering with `EntityPropertiesKeys`, and
-    // the instance answers `null`. The gap is the document's — `jira.js` carries the same wrong return type and only
-    // survives it because its default is to warn and hand the body back.
     server()
         .board()
         .set_board_property("suite", board_id, property_body())
@@ -114,7 +95,6 @@ async fn reads_the_board_the_template_made() {
 
     server().board().delete_board_property("suite", board_id).send().await.expect("the property can be removed");
 
-    // Refined velocity is a Data Center setting a board only carries where the Software application allows it.
     touch(server().board().set_refined_velocity(board_id, BooleanSetting { value: Some(true) }).send().await);
 
     let velocity = touch(server().board().get_refined_velocity(board_id).send().await);
@@ -124,7 +104,6 @@ async fn reads_the_board_the_template_made() {
     tracker.cleanup().await;
 }
 
-/// A sprint, an issue moved into it and back out, and everything a sprint can be told to do while it exists.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
@@ -215,7 +194,6 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
 
     assert_eq!(read.name.as_deref(), Some(renamed.as_str()), "the rename is observable on the next read");
 
-    // A full update replaces the sprint, so every field it validates has to be present — `state` among them.
     let replaced = server()
         .sprint()
         .update_sprint(
@@ -237,7 +215,6 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
         "the replacement carries the goal it was given",
     );
 
-    // Swapping and unmapping are for sprints a board no longer wants, which a single fresh sprint is not.
     touch(
         server()
             .sprint()
@@ -302,7 +279,6 @@ async fn moves_an_issue_into_an_epic_and_renames_it() {
 
     assert_eq!(updated.summary.as_deref(), Some(renamed.as_str()), "the epic carries the summary it was given");
 
-    // Ranking an epic against itself is the one arrangement Jira refuses, which is what makes this a `touch`.
     touch(
         server()
             .epic()
@@ -331,8 +307,6 @@ async fn ranks_and_estimates_an_issue() {
     let key = issue.key.clone().expect("a created issue carries a key");
     let other_key = other.key.clone().expect("a created issue carries a key");
 
-    // Rank and estimate are stored in custom fields the Software application owns, and a board configured without
-    // them refuses both — which is a refusal about configuration, not about the request.
     touch(
         server()
             .issues()

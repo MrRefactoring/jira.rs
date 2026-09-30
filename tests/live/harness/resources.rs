@@ -4,18 +4,8 @@ use std::time::Duration;
 
 type Cleanup = Box<dyn Fn() -> Pin<Box<dyn Future<Output = jira::Result<()>> + Send>> + Send>;
 
-/// How many times a teardown is attempted before the resource is reported as leaked.
 const CLEANUP_ATTEMPTS: u32 = 4;
 
-/// A LIFO cleanup stack for live-test resources.
-///
-/// Suites register teardown closures as they create things and call [`ResourceTracker::cleanup`] at the end. Cleanup
-/// runs in reverse creation order — children before parents — and retries each closure a few times, because Jira
-/// Cloud deletes are frequently asynchronous and a just-created resource can briefly answer 404 or 409 to its own
-/// deletion.
-///
-/// A teardown is `Fn` rather than `FnOnce` for exactly that reason: a closure that can only run once cannot be
-/// retried, and a retry loop around one is a loop that reports success it did not have.
 #[derive(Default)]
 pub struct ResourceTracker {
     stack: Vec<Cleanup>,
@@ -26,7 +16,6 @@ impl ResourceTracker {
         ResourceTracker::default()
     }
 
-    /// Registers a teardown closure. It runs before everything deferred before it.
     pub fn defer<F, Fut>(&mut self, teardown: F)
     where
         F: Fn() -> Fut + Send + 'static,
@@ -35,11 +24,6 @@ impl ResourceTracker {
         self.stack.push(Box::new(move || Box::pin(teardown())));
     }
 
-    /// Runs every deferred closure in reverse order, retrying what fails.
-    ///
-    /// Best-effort by design: deleting an issue needs the *Delete Issues* project permission, and a token without it
-    /// must not turn cleanup into a failing run. What is left behind is reported instead, so the leak is visible
-    /// rather than silent.
     pub async fn cleanup(&mut self) {
         let mut leaked = 0;
 
@@ -52,7 +36,6 @@ impl ResourceTracker {
                         failure = None;
                         break;
                     }
-                    // Already gone is the outcome the teardown wanted, however it got there.
                     Err(error) if error.is_not_found() => {
                         failure = None;
                         break;

@@ -2,14 +2,6 @@ use jira::cloud::GetAllDashboardsRequestFilter;
 
 use crate::harness::cloud;
 
-/// The dashboards API, read-only.
-///
-/// A dashboard is a shared workspace: creating one puts it in other people's listings, and the gadget properties hang
-/// off gadget ids that only exist on a dashboard someone has configured. Neither is something to manufacture on a
-/// working site, so nothing here writes.
-///
-/// The pairing worth pinning is `get_all_dashboards` against `get_dashboards_paginated` — two listings of the same
-/// thing with different pagination contracts and different filters, easy to reach for interchangeably.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_dashboards_with_the_older_offset_pagination() {
@@ -33,7 +25,6 @@ async fn lists_dashboards_with_the_older_offset_pagination() {
     }
 }
 
-/// The same dashboards under the newer pagination contract, which answers `isLast` rather than a running total.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_the_same_dashboards_under_a_different_shape_when_paginated() {
@@ -66,8 +57,6 @@ async fn filters_to_the_dashboards_the_account_owns() {
     assert!(owned <= visible, "the account cannot own more dashboards than it can see, {owned} of {visible}");
 }
 
-/// Favourites are per-user state rather than site configuration, so the flag is asserted on every row the filter
-/// returns rather than on how many there are.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn filters_to_favourites_which_is_per_user_state() {

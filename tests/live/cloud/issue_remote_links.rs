@@ -1,29 +1,13 @@
-//! Ported from jira.js/tests/live/cloud/issueRemoteLinks.test.ts.
-//!
-//! A full write cycle against a fixture issue. Remote links point at things outside Jira — a URL and a label — so
-//! nothing is created anywhere else and the whole cycle is contained.
-//!
-//! The behaviour that makes this API unusual, and that only a live site demonstrates: one endpoint both creates and
-//! updates, and which of the two happens is decided by `globalId`. Reusing a `globalId` overwrites; omitting it makes
-//! a new link every time. That is a silent difference between "my retry was safe" and "I now have six links".
-//!
-//! Both deletes are exercised through the client because this API demands a `Content-Type` header even on a bodyless
-//! DELETE, and answers 415 to a request that omits one.
-
 use jira::cloud::{GetRemoteIssueLinks, RemoteIssueLink, RemoteIssueLinkRequest, RemoteObject};
 
 use crate::harness::{
     ResourceTracker, TEST_PROJECT_KEY, await_readable, await_refused, cloud, create_test_issue, run_id, test_name,
 };
 
-/// The listing answers with a single object when filtered by `globalId` and an array otherwise, so both shapes are
-/// flattened to the same thing.
 fn listed(links: GetRemoteIssueLinks) -> Vec<RemoteIssueLink> {
     match links {
         GetRemoteIssueLinks::Variant0(links) => links,
         GetRemoteIssueLinks::RemoteIssueLink(link) => vec![link],
-        // Every generated union carries a catch-all for a shape the specification does not describe. Reaching it
-        // here would mean Jira answered with neither of the two documented shapes, which is worth a failure.
         other => panic!("the remote link listing answered with an undescribed shape: {other:?}"),
     }
 }
@@ -49,11 +33,6 @@ async fn links_of(issue_key: &str) -> Vec<RemoteIssueLink> {
     listed(links)
 }
 
-/// The remote link lifecycle, end to end.
-///
-/// The sequence is the point: a fresh issue has none, a create hands back a resolvable identity, a reused `globalId`
-/// overwrites the link rather than adding one, an omitted `globalId` adds one, the listing can be filtered down to a
-/// single link, and a delete by `globalId` removes exactly that link and leaves the other.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_a_remote_link_through_its_lifecycle() {

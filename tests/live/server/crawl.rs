@@ -1,33 +1,3 @@
-//! Calls every readable Data Center endpoint the crate generates and reports which ones nothing can reach.
-//!
-//! This is the breadth instrument for the `server` surface, and it exists because the Data Center document is
-//! generated from Java annotations rather than written: it is far less accurate than the Cloud one, and the
-//! inaccuracies are spread thin across four hundred operations rather than concentrated where a hand-written test
-//! would look. Two hundred GETs answered by a real instance sweep further in one run than a month of hand-written
-//! assertions.
-//!
-//! What counts as a failure is only a request that never reached Jira. An endpoint answering 404 or 403 is Jira
-//! telling the truth about this instance — there is no cluster on a single node, no index snapshot on a fresh install
-//! — and treating that as breakage would drown the signal the crawl exists to produce.
-//!
-//! The set of endpoints is read out of the generated sources rather than kept in a list here. Each operation declares
-//! its method and its URL as literals inside `RequestConfig::new`, so the crate's own `src/server/api` is the
-//! register, and the crawl cannot drift out of step with what the client actually ships.
-//!
-//! # What the TypeScript twin does that this cannot
-//!
-//! `crawl.test.ts` calls each *generated function*, reached by name off the API namespace at run time, and its real
-//! subject is the schema check that call performs: every response is deserialized against the model the generator
-//! wrote for it, and the run's verdict is the list of endpoints whose body did not match. Rust has no equivalent
-//! handle. There is no reflection over functions and no way to dispatch to a generated deserializer from a string, so
-//! a call made generically can only be a raw one — `send_raw`, which hands back the body unmodelled and therefore
-//! skips the very check the crawl is for. Reproducing that half would mean writing out two hundred typed calls by
-//! hand, which is precisely the list the TypeScript crawl refuses to keep.
-//!
-//! So what is here is the reachability half: the register is read the same way, the same table of where each path
-//! parameter's value comes from feeds the same multi-pass sweep, and every URL is called. Schema drift stays the
-//! business of the hand-written suites, where the typed call is what makes the check happen.
-
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 
@@ -37,31 +7,21 @@ use serde_json::{Value, json};
 use super::fixtures::software_licensed;
 use crate::harness::{ResourceTracker, run_suffix, server, server_client, test_name};
 
-/// Where the generated operations live, as the crate compiles them.
 const GENERATED_SOURCES: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/src/server/api");
 
-/// The scope of a value that is good on any URL.
 const ANYWHERE: &str = "*";
 
-/// Names the crawl has to be able to spell without being told what this run happened to create.
 const PROPERTY_KEY: &str = "jirars";
 const ATTRIBUTE_KEY: &str = "jirars.probe";
 
-/// One generated operation, as its source declares it.
 struct Endpoint {
-    /// The URL with `{}` where the operation interpolates a path parameter.
     url: String,
-    /// The path parameters it interpolates, in the order they appear.
     parameters: Vec<String>,
 }
 
-/// What reading the generated sources found.
 struct Generated {
-    /// Every `RequestConfig` the sources declare, whatever its method.
     declared: usize,
-    /// The files holding a declaration whose method or URL could not be read as a literal.
     unreadable: BTreeSet<String>,
-    /// The `GET` operations, which are the ones a crawl may call.
     readable: Vec<Endpoint>,
 }
 
@@ -100,14 +60,12 @@ fn read_generated() -> Generated {
     generated
 }
 
-/// The method, the URL and the path parameters one declaration spells out, read from just after its opening bracket.
 fn read_declaration(source: &str) -> Option<(String, String, Vec<String>)> {
     let rest = source.trim_start().strip_prefix("crate::core::Method::")?;
     let method: String =
         rest.chars().take_while(|character| character.is_ascii_alphanumeric() || *character == '_').collect();
     let rest = rest[method.len()..].trim_start().strip_prefix(',')?.trim_start();
 
-    // A URL with no path parameters is a plain literal; one with them is a `format!` over the same literal.
     if let Some(literal) = rest.strip_prefix('"') {
         let end = literal.find('"')?;
 
@@ -120,7 +78,6 @@ fn read_declaration(source: &str) -> Option<(String, String, Vec<String>)> {
     Some((method, literal[..end].to_owned(), read_interpolations(&literal[end + 1..])))
 }
 
-/// The `self.…` fields a `format!` interpolates, in the order they appear.
 fn read_interpolations(source: &str) -> Vec<String> {
     let bytes = source.as_bytes();
     let mut parameters = Vec::new();
@@ -139,7 +96,6 @@ fn read_interpolations(source: &str) -> Vec<String> {
             }
             _ => {
                 if let Some(field) = source[index..].strip_prefix("self.") {
-                    // `r#type` is one of them: a parameter whose name collides with a keyword.
                     let field = field.strip_prefix("r#").unwrap_or(field);
                     let name: String = field
                         .chars()
@@ -159,13 +115,6 @@ fn read_interpolations(source: &str) -> Vec<String> {
     parameters
 }
 
-/// Where each path parameter's value comes from, endpoint by endpoint: the listing URL, the parameter it feeds, the
-/// field to read it out of, and the URL prefix the value is good for.
-///
-/// A parameter name alone does not identify what it wants. Seventeen different resources spell their identifier `id`,
-/// and `scheme_id` means a permission scheme under one path and an issue type scheme under another — feeding one
-/// value to both reaches neither, it only earns two 404s that read like the endpoints are unsupported. The longest
-/// matching scope wins, and [`ANYWHERE`] is the fallback.
 const SOURCES: &[(&str, &str, &str, &str)] = &[
     ("/rest/agile/1.0/board", "board_id", "id", ANYWHERE),
     ("/rest/agile/1.0/board/{}/sprint", "sprint_id", "id", ANYWHERE),
@@ -202,14 +151,12 @@ const SOURCES: &[(&str, &str, &str, &str)] = &[
     ("/rest/jira-webhook/1.0/webhooks", "webhook_id", "id", ANYWHERE),
 ];
 
-/// Values by parameter name and by the URL prefix they are good for.
 #[derive(Default)]
 struct Values {
     entries: Vec<(String, String, String)>,
 }
 
 impl Values {
-    /// Keeps the first value offered for a parameter in a scope, so a seed always beats what a listing later hands up.
     fn remember(&mut self, parameter: &str, value: impl Into<String>, scope: &str) {
         let value = value.into();
 
@@ -224,7 +171,6 @@ impl Values {
         self.entries.push((scope.to_owned(), parameter.to_owned(), value));
     }
 
-    /// The most specific value for this parameter on this URL: a matching scope beats a shorter one beats the global.
     fn resolve(&self, url: &str, parameter: &str) -> Option<&str> {
         let mut best: Option<&(String, String, String)> = None;
 
@@ -247,11 +193,6 @@ impl Values {
     }
 }
 
-/// The first list in a response, whatever the endpoint calls it.
-///
-/// Data Center wraps its collections under a dozen different names — `values`, `issues`, `comments`, `links`,
-/// `permissionSchemes` — and naming each one here would be a table that has to be kept in step with the API for no
-/// gain. What every one of them has in common is being the only array in the body.
 fn first_list(body: &Value) -> Option<&Vec<Value>> {
     if let Some(items) = body.as_array() {
         return Some(items);
@@ -284,20 +225,10 @@ enum Outcome {
     Failed(String),
 }
 
-/// A project key of this file's own making.
-///
-/// `project_key` derives its key from the run id alone, so every call to it in a run answers with the same key — and
-/// the other Data Center suites use it for the project they create. The `"crawl"` label is what keeps this key off
-/// theirs; hashing rather than trimming is what keeps it off the key the same suite made an hour ago.
 fn crawl_project_key() -> String {
     format!("JRSX{}", run_suffix("crawl", b"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", 6))
 }
 
-/// The world the crawl points at.
-///
-/// A bare instance has one administrator and nothing else, and the parameterised half of the surface has nothing to
-/// name until something exists. What is created here is the cheapest set that opens the most paths: a project, an
-/// issue inside it with a comment and a property, a version, a filter and a workflow scheme.
 struct Fixture {
     project_key: String,
     project_id: String,
@@ -350,7 +281,6 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
                     ("project".to_owned(), json!({ "key": project_key })),
                     ("issuetype".to_owned(), json!({ "name": "Task" })),
                     ("summary".to_owned(), json!(test_name("crawl issue"))),
-                    // Rich text on a self-hosted instance is wiki markup as a plain string, not ADF.
                     ("description".to_owned(), json!("h2. Fixture\n\nCreated by the crawl.")),
                 ]
                 .into_iter()
@@ -371,7 +301,6 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
         async move { server().issues().delete_issue(key).send().await }
     });
 
-    // The comment and the property are not registered separately: both belong to the issue and go when it does.
     server()
         .issues()
         .add_comment(&issue_key)
@@ -391,8 +320,6 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
         .await
         .expect("the issue takes a property");
 
-    // A version belongs to the project and goes with it, and the Data Center API offers no plain delete for one
-    // anyway — only a delete that swaps every issue's fix version over to another.
     let version = server()
         .project_versions()
         .create_version(Version {
@@ -429,8 +356,6 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
         async move { server().filters().delete_filter(id).send().await }
     });
 
-    // A fresh instance has no workflow scheme that is not the default, and eight read endpoints — the drafts among
-    // them — take a scheme id.
     let scheme = server()
         .workflow_schemes()
         .create_scheme(WorkflowScheme {
@@ -449,7 +374,6 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
     Fixture { project_key, project_id, issue_key, version_id, filter_id, workflow_scheme_id }
 }
 
-/// The seeds nothing on the instance can be asked for, plus the ones the fixture just made.
 fn seed(fixture: &Fixture) -> Values {
     let mut values = Values::default();
 
@@ -469,8 +393,6 @@ fn seed(fixture: &Fixture) -> Values {
     values.remember("version_id", fixture.version_id.clone(), ANYWHERE);
     values.remember("owning_object_id", fixture.project_id.clone(), ANYWHERE);
 
-    // Chosen rather than discovered: the crawl has to be able to spell these without being told what this particular
-    // run created.
     values.remember("property_key", PROPERTY_KEY, ANYWHERE);
     values.remember("attribute_key", ATTRIBUTE_KEY, ANYWHERE);
     values.remember("global_id", "jirars-remote-version-link", "/rest/api/2/version");
@@ -480,7 +402,6 @@ fn seed(fixture: &Fixture) -> Values {
     values
 }
 
-/// One URL with every `{}` filled in, or nothing if some parameter has no value yet.
 fn fill(endpoint: &Endpoint, values: &Values) -> Option<String> {
     let mut parts = endpoint.url.split("{}");
     let mut filled = parts.next()?.to_owned();
@@ -498,8 +419,6 @@ fn fill(endpoint: &Endpoint, values: &Values) -> Option<String> {
 async fn reads_every_endpoint_whose_path_parameters_it_can_supply() {
     let generated = read_generated();
 
-    // Every generated operation writes both as literals. A miss means the generator started building its URLs some
-    // other way, and a crawl that silently skipped those endpoints would look like a clean run.
     assert!(
         generated.unreadable.is_empty(),
         "every generated operation declares its method and its url as literals; these files hold one that does not: \
@@ -518,9 +437,6 @@ async fn reads_every_endpoint_whose_path_parameters_it_can_supply() {
     let mut values = seed(&fixture);
     let mut outcomes: BTreeMap<&str, Outcome> = BTreeMap::new();
 
-    // Passes rather than one sweep, because reaching an endpoint can be what supplies the next one's parameter: a
-    // sprint id is listed only by a board endpoint, and the board id only by the endpoint that lists boards. Looping
-    // until a pass adds nothing turns that chain into coverage without hard-coding an order.
     for _ in 0..6 {
         let reachable: Vec<&Endpoint> = generated
             .readable
@@ -540,16 +456,12 @@ async fn reads_every_endpoint_whose_path_parameters_it_can_supply() {
                 continue;
             };
 
-            // Raw on purpose, and the one thing this crawl cannot do: a call made from a URL rather than from a
-            // generated operation has no model to deserialize into, so nothing here checks a response against its
-            // schema. See the note at the top of the file.
             let outcome = match server_client().get(&url).send_raw().await {
                 Ok(body) => {
                     harvest(&endpoint.url, &body, &mut values);
 
                     Outcome::Answered
                 }
-                // Jira answering "no" is an answer. Only a request that never reached it is this crawl's business.
                 Err(error) if error.status().is_some() => Outcome::Refused,
                 Err(error) => Outcome::Failed(error.to_string()),
             };

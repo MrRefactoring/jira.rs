@@ -2,15 +2,6 @@ use jira::cloud::ProjectCategory;
 
 use crate::harness::{ResourceTracker, await_readable, await_refused, cloud, test_name};
 
-/// A project category, from creation to removal.
-///
-/// A category is site-wide but inert: it is a label projects can be grouped by, it affects no permission and no
-/// behaviour, and removing one leaves the projects that referenced it untouched. That combination makes it one of the
-/// few pieces of site configuration a test can safely create. It is deliberately never attached to a project — that
-/// would be a write against the project every other suite depends on.
-///
-/// Creation needs *Administer Jira*, so a token without it is expected to be refused typed rather than to fail the
-/// run.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_a_project_category_through_its_lifecycle() {

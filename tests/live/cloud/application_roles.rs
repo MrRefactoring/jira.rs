@@ -2,11 +2,6 @@ use jira::cloud::ApplicationRole;
 
 use crate::harness::cloud;
 
-/// The application roles API, read-only and admin-gated.
-///
-/// Both operations need site administration. A token without it must be refused *typed* — that is the part worth
-/// pinning, because an untyped rejection here is indistinguishable from a network fault to calling code. Where the
-/// token does hold admin, the full shape is asserted instead.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_the_application_roles_for_an_admin_or_fails_forbidden() {
@@ -57,10 +52,6 @@ async fn surfaces_an_unknown_role_key_as_a_typed_error() {
     assert!(error.is_not_found() || error.is_forbidden(), "an unknown role is refused typed, never untyped: {error}");
 }
 
-/// The role listing, or `None` when the token cannot read it.
-///
-/// The refusal is asserted here rather than being silently swallowed by the tests that stand down on it: a token
-/// without *Administer Jira* must be told so in a way the caller can branch on.
 async fn application_roles() -> Option<Vec<ApplicationRole>> {
     match cloud().application_roles().get_all_application_roles().send().await {
         Ok(roles) => Some(roles),

@@ -2,13 +2,6 @@ use jira::cloud::GetAllIssueTypeSchemesRequestOrderBy;
 
 use crate::harness::{TEST_ISSUE_TYPE, TEST_PROJECT_KEY, cloud};
 
-/// Issue type schemes, read-only.
-///
-/// A scheme decides which issue types a project offers, and schemes are shared: adding the Epic type to the test
-/// project would mean editing a scheme other projects depend on, which is why no suite here does it. This file is
-/// the other half of that story — it shows the mapping that made the decision.
-///
-/// Every read needs *Administer Jira*, so each test first proves the token either has it or is refused typed.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn pages_the_scheme_listing_for_an_admin_or_fails_typed() {
@@ -72,8 +65,6 @@ async fn names_the_scheme_the_test_project_is_attached_to() {
     );
 }
 
-/// The mapping is the authority on what a project offers, so it has to agree with the project itself. A scheme that
-/// listed types the project does not show — or the reverse — is the exact failure that makes a create dialog wrong.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn explains_which_issue_types_the_project_offers() {
@@ -164,7 +155,6 @@ async fn orders_the_listing_by_name_in_both_directions() {
     assert_eq!(forwards, backwards, "reversing the sort reverses the page");
 }
 
-/// The destructive path, proven through its error channel and never aimed at a scheme that exists.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_destructive_path() {
@@ -178,7 +168,6 @@ async fn fails_typed_on_the_destructive_path() {
     assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
-/// The numeric id of the project every Cloud suite works in, which is what the scheme lookups take.
 async fn test_project_id() -> i64 {
     cloud()
         .projects()
@@ -192,10 +181,6 @@ async fn test_project_id() -> i64 {
         .expect("a project id is a number")
 }
 
-/// Whether the token may read the issue type scheme configuration at all.
-///
-/// A token without *Administer Jira* must be refused in a way the caller can recognise, so the refusal is asserted
-/// here rather than being silently swallowed by the tests that stand down on it.
 async fn may_read_issue_type_schemes() -> bool {
     match cloud().issue_type_schemes().get_all_issue_type_schemes().max_results(1).send().await {
         Ok(_) => true,

@@ -1,10 +1,3 @@
-//! The instance-level endpoints: the ones an administrator reaches rather than a project member.
-//!
-//! Much of what is here cannot succeed on a single unclustered node — a cluster with no nodes, an upgrade that is not
-//! pending, an index snapshot with nowhere to write. What each call proves is that the request serialises and that
-//! whatever comes back matches the schema; Jira refusing on its own terms is a correct answer, and `touch` accepts it
-//! while still insisting the refusal carries a status.
-
 use jira::server::{
     AppMonitoringRestEntity, ApplicationPropertyValue, AuthParams, AvatarCropping, IpdMonitoringRestEntity,
     ReadOnlyModeUpdateRequest, TerminologyRequest,
@@ -13,11 +6,6 @@ use jira::server::{
 use super::fixtures::{business_project, create_task, tiny_avatar, touch};
 use crate::harness::{ResourceTracker, require_server_env, server};
 
-/// The write is asserted rather than touched, which is the whole point of it being here.
-///
-/// The document declares this operation with a path parameter and no request body, so a generated call can be written
-/// that sends none — and Jira answers 400, which `touch` would accept as one of the refusals a single node is
-/// entitled to make. Reading the value out of the response is what proves the body arrived.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn reads_and_writes_an_application_property() {
@@ -68,8 +56,6 @@ async fn reads_and_writes_an_application_role() {
 
     assert_eq!(read.key.as_deref(), Some(key.as_str()), "the role read back is the one asked for");
 
-    // Both writes want an `If-Match` a caller cannot know, so a refusal is the expected answer and the shape of the
-    // request is what is under test.
     touch(server().application_roles().update_application_role(key).body(role.clone()).send().await);
     touch(server().application_roles().put_bulk().body([role]).send().await);
 }
@@ -89,8 +75,6 @@ async fn sets_the_base_url_and_the_default_columns() {
         .await
         .expect("the default columns can be set");
 
-    // Read unmodelled on purpose: the Data Center specification declares `ColumnOptions` with no properties at all,
-    // so the generated type is an empty struct and the labels never reach a caller. The gap is the document's.
     let columns = server()
         .jira_settings()
         .get_issue_navigator_default_columns()
@@ -99,9 +83,6 @@ async fn sets_the_base_url_and_the_default_columns() {
         .expect("the default columns read back");
 
     assert!(columns.as_array().is_some_and(|columns| !columns.is_empty()), "{columns}");
-    // `summary` is written and does not come back: measured against Data Center 10.3, the instance accepts
-    // the request and silently drops that column from the navigator defaults, keeping the rest. Asserting on
-    // a column it does keep is what makes this a test of the write rather than of Jira's column policy.
     assert!(columns.to_string().contains("status"), "the columns just set are the columns read back: {columns}");
 }
 
@@ -156,8 +137,6 @@ async fn turns_the_monitoring_switches() {
     touch(server().monitoring().start().send().await);
     touch(server().monitoring().stop().send().await);
 
-    // The switches answer with nothing, so the read is what carries the assertion: whichever way an instance is
-    // configured, it says so with a boolean rather than an absent field.
     let state = server().monitoring().is_app_monitoring_enabled().send().await.expect("the switch reads back");
 
     assert!(state.enabled.is_some(), "app monitoring reports whether it is on");
@@ -166,7 +145,6 @@ async fn turns_the_monitoring_switches() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn asks_the_cluster_about_itself() {
-    // A single node is not a cluster, and Jira says so with a 405 rather than an empty list.
     let nodes = touch(server().cluster().get_all_nodes().send().await);
 
     assert!(
@@ -189,16 +167,11 @@ async fn asks_the_cluster_about_itself() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn handles_the_email_templates() {
-    // "Creates a zip file containing email templates at local home and returns the file", and then the document
-    // describes no body — so the operation could be typed as returning nothing and the zip thrown away. The magic
-    // number is the assertion: a zip begins `PK\x03\x04`, and nothing else this API answers with does.
     let templates = server().email_templates().download_email_templates().send().await.expect("the templates download");
 
     assert!(!templates.is_empty(), "a zip of email templates is not empty");
     assert!(templates.starts_with(b"PK\x03\x04"), "the bytes are a zip, not a JSON error");
 
-    // The upload takes the zip the download just answered with, which is the round trip the pair exists for. The
-    // document types that body as a JSON object; a patch in the generator says it is bytes, and this is what proves it.
     touch(server().email_templates().upload_email_templates(templates).send().await);
     touch(server().email_templates().apply_email_templates().send().await);
     touch(server().email_templates().revert_email_templates_to_default().send().await);
@@ -223,8 +196,6 @@ async fn keeps_an_avatar_through_the_universal_endpoints() {
             .await,
     );
 
-    // Called whether or not the upload took: what is under test is the request, and a temporary avatar that is not
-    // there is one of the answers this endpoint gives.
     assert!(
         temporary.is_none_or(|cropping| cropping.url.is_some() || cropping.needs_cropping.is_some()),
         "a temporary avatar answers with somewhere to crop it",
@@ -277,7 +248,6 @@ async fn keeps_an_avatar_through_the_universal_endpoints() {
 async fn runs_the_upgrade_tasks() {
     touch(server().upgrade().run_upgrades_now().send().await);
 
-    // 404 until an upgrade has actually run, which on a freshly created instance it has not.
     let result = touch(server().upgrade().get_upgrade_result().send().await);
 
     assert!(
@@ -291,8 +261,6 @@ async fn runs_the_upgrade_tasks() {
 async fn signs_in_and_out_through_the_session_endpoints() {
     let env = require_server_env();
 
-    // Read unmodelled on purpose: the specification declares `CurrentUser` with no properties at all, so the
-    // generated type is an empty struct. The gap is the document's, and the body is what proves it.
     let session = server().session().current_user().send_raw().await.expect("the instance names the current session");
 
     assert_eq!(
@@ -301,8 +269,6 @@ async fn signs_in_and_out_through_the_session_endpoints() {
         "the session belongs to the account that signed in",
     );
 
-    // A fresh session rather than the one the suite authenticates with, so signing out of it costs nothing — the
-    // client sends its credentials on every request and never carries the cookie this hands back.
     touch(
         server()
             .session()
@@ -322,7 +288,6 @@ async fn asks_for_an_index_snapshot_and_a_reindex() {
     let issue = create_task(&mut tracker, &project.key, "an issue to reindex").await;
     let key = issue.key.clone().expect("a created issue carries a key");
 
-    // A snapshot needs somewhere to write it, which a single node with no shared home does not have.
     touch(server().indexing().create_index_snapshot().send().await);
 
     let requested = touch(server().indexing().reindex_issues().issue_id([key]).send().await);
@@ -339,11 +304,6 @@ async fn asks_for_an_index_snapshot_and_a_reindex() {
     tracker.cleanup().await;
 }
 
-/// Read-only mode is written but never turned on.
-///
-/// The Data Center API has no endpoint that takes the instance out of read-only mode again, and Rust decides for
-/// itself in what order the tests of a binary run — so a suite that enabled it would strand whichever suites happen
-/// to run afterwards. The request body, the switch and the read are the same either way; only the value differs.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn writes_the_read_only_mode_switch() {

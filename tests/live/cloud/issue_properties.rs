@@ -1,10 +1,3 @@
-//! Ported from jira.js/tests/live/cloud/issueProperties.test.ts.
-//!
-//! Entity properties are arbitrary JSON hung off an issue, which makes them the cleanest write surface in the whole
-//! API — scoped to a fixture issue, removable, and with no side effects on anything Jira renders. So the round trip
-//! is exercised in full, including the part that is easy to get wrong: a nested value must survive verbatim, not
-//! flattened or stringified on the way through.
-
 use jira::cloud::{BulkIssuePropertyUpdateRequest, IssueFilterForBulkPropertySet};
 use serde_json::json;
 
@@ -14,7 +7,6 @@ use crate::harness::{
 
 const PROPERTY_KEY: &str = "jira.rs.livetest";
 
-/// Deliberately nested and mixed-type — a serializer that mangles anything will show up here.
 fn value() -> serde_json::Value {
     json!({
         "nested": { "deep": [1, 2, { "flag": true }] },
@@ -28,11 +20,6 @@ fn object_of(value: &serde_json::Value) -> std::collections::HashMap<String, ser
     value.as_object().expect("a property value is an object").clone().into_iter().collect()
 }
 
-/// The property round trip, end to end.
-///
-/// Proves that a fresh issue carries none, that a nested value comes back byte for byte, that the listing links to
-/// what it names, that a second write replaces rather than merges, and that a deleted property is gone from both the
-/// direct read and the listing.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn walks_a_property_through_its_lifecycle() {
@@ -123,7 +110,6 @@ async fn walks_a_property_through_its_lifecycle() {
     tracker.cleanup().await;
 }
 
-/// One property, several issues, one call — and the write lands asynchronously, so the reads wait for it.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn sets_one_property_across_several_issues_in_a_single_bulk_call() {

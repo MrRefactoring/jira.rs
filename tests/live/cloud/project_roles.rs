@@ -1,22 +1,11 @@
-//! The project role catalogue, read-only.
-//!
-//! Roles are the layer between a permission scheme and a person: the scheme grants a permission to a role, and role
-//! membership is per-project. That indirection is what makes this suite worth having — the live credentials reach
-//! this project's issues *because* the account sits in a role here, and these tests make that chain visible rather
-//! than folklore.
-//!
-//! Creating or deleting a role is site-wide configuration, so neither is exercised.
-
 use std::collections::HashMap;
 
 use crate::harness::{TEST_PROJECT_KEY, cloud};
 
-/// The roles of the test project, as name-to-URL pairs.
 async fn project_roles() -> HashMap<String, String> {
     cloud().project_roles().get_project_roles(TEST_PROJECT_KEY).send().await.expect("the test project lists its roles")
 }
 
-/// The id of the `Administrators` role, which the listing only carries as the last segment of the role's URL.
 fn administrators_id(roles: &HashMap<String, String>) -> i64 {
     roles
         .get("Administrators")
@@ -58,7 +47,6 @@ async fn resolves_a_role_by_the_id_embedded_in_that_url() {
     assert!(role.actors.is_some(), "a role read in a project context carries its membership");
 }
 
-/// The permission chain the whole live suite depends on, stated once.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn shows_the_account_holding_the_role_that_grants_it_access_here() {
@@ -129,7 +117,6 @@ async fn narrows_the_details_to_roles_the_caller_is_actually_in() {
     assert!(names.iter().any(|name| name == "Administrators"), "Administrators is one of them: {names:?}");
 }
 
-/// The site-wide role catalogue needs *Administer Jira*, which a project admin does not have.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_the_site_role_catalogue_for_an_admin_or_fails_typed() {

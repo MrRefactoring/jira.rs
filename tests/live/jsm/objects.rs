@@ -1,8 +1,3 @@
-//! The objects an Assets instance is for, and everything hung off one.
-//!
-//! The fixture object is read here and written to; anything these tests create for themselves they also remove, so a
-//! developer iterating on one file does not accumulate a schema full of debris.
-
 use std::collections::HashMap;
 
 use jira::assets_server::{
@@ -187,10 +182,6 @@ async fn archives_in_bulk_by_key_and_restores_by_id() {
     tracker.cleanup().await;
 }
 
-/// `ql_query_search` is a flag rather than the query — the query goes in `ql_query_params`.
-///
-/// The document has this right and the shape reads backwards, so it is worth pinning: passing the query where the
-/// flag goes earns a 400 about deserialising a Boolean.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jsm-dc up`"]
 async fn archives_by_filter_and_restores_by_filter() {
@@ -294,7 +285,6 @@ async fn sets_reports_and_clears_the_import_source_of_an_object() {
         .expect("an import source can be cleared");
 }
 
-/// The navigator list, which takes the object type and the schema together rather than one filtered by the other.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jsm-dc up`"]
 async fn finds_objects_through_the_navigator_list() {

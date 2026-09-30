@@ -4,15 +4,6 @@ use jira::cloud::{
 
 use crate::harness::cloud;
 
-/// The notification schemes API, read-only.
-///
-/// A notification scheme decides who receives mail when an issue changes, and it is shared across projects. Adding a
-/// notification is how you accidentally start sending mail to a group that never asked for it — the one category of
-/// configuration write whose blast radius reaches people's inboxes rather than a database. So the write half is
-/// pinned only through its error channel, and never aimed at a scheme that exists.
-///
-/// The read half is worth pinning because the shape is unusual: notifications hang off *events*, and the same holder
-/// can appear under many of them, so the useful unit is the event-to-holder pairing rather than a flat list.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn pages_the_scheme_listing_or_refuses_typed_without_rights() {
@@ -38,8 +29,6 @@ async fn pages_the_scheme_listing_or_refuses_typed_without_rights() {
     }
 }
 
-/// The events are the whole content of a scheme and they are absent until asked for, which is the trap this endpoint
-/// sets for anyone reading a scheme and finding it empty.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn returns_the_notification_events_only_when_expanded() {
@@ -132,7 +121,6 @@ async fn surfaces_an_unknown_scheme_as_a_typed_error() {
     assert!(error.is_not_found() || error.is_forbidden(), "{error}");
 }
 
-/// The write, proven through its error channel and never aimed at a scheme that exists.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_write_without_ever_aiming_it_at_a_real_scheme() {
@@ -149,11 +137,6 @@ async fn fails_typed_on_the_write_without_ever_aiming_it_at_a_real_scheme() {
     assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
-/// The first notification scheme the token can see, where it can see any.
-///
-/// The listing returns only schemes attached to a project the token may administer, so an account with no such
-/// project is refused or answered with nothing. Both are legitimate; the refusal is asserted typed here rather than
-/// being silently swallowed by the tests that stand down on it.
 async fn first_scheme_id() -> Option<i64> {
     let page = match cloud().issue_notification_schemes().get_notification_schemes().max_results("5").send().await {
         Ok(page) => page,

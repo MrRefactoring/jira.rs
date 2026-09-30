@@ -1,18 +1,7 @@
-//! Ported from jira.js/tests/live/cloud/issueBulkOperations.test.ts.
-//!
-//! These are the only endpoints in the platform API that are genuinely asynchronous: a submit answers with a task id
-//! and the work happens later. That shape is the whole point of the suite — a caller who treats the 2xx as "done"
-//! will read stale data immediately afterwards and have no idea why.
-//!
-//! Writes are confined to fixture issues, and the reversible operations are preferred: watch leaves nothing behind,
-//! while bulk delete is only ever submitted with an empty selection, which Jira refuses. Bulk change is also a global
-//! permission a site can withhold, so the reads stand down on a typed refusal rather than failing the run.
-
 use jira::cloud::{BulkOperationProgressStatus, IssueBulkDeletePayload, IssueBulkWatchOrUnwatchPayload};
 
 use crate::harness::{ResourceTracker, cloud, create_test_issue, poll_until, test_name};
 
-/// Both bulk reads over one pair of issues: what can be edited across them, and what they can all transition to.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_the_fields_and_transitions_a_pair_of_issues_has_in_common() {
@@ -59,7 +48,6 @@ async fn reports_the_fields_and_transitions_a_pair_of_issues_has_in_common() {
     tracker.cleanup().await;
 }
 
-/// The asynchronous contract: the submit answers with a task, and the effect appears afterwards.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn answers_a_bulk_watch_with_a_task_and_applies_it_afterwards() {
@@ -77,8 +65,6 @@ async fn answers_a_bulk_watch_with_a_task_and_applies_it_afterwards() {
 
     let submitted = match submitted {
         Ok(submitted) => submitted,
-        // Bulk change is a global permission a site can withhold; the refusal is still typed, which is the part the
-        // library owns.
         Err(error) => {
             assert!(
                 error.status().is_some_and(|status| (400..500).contains(&status)),

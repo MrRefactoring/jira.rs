@@ -1,19 +1,3 @@
-//! Ported from jira.js/tests/live/cloud/adfRouting.test.ts.
-//!
-//! The rich-text shapes, against a real Jira.
-//!
-//! Jira Cloud's v3 endpoints take Atlassian Document Format where v2 took wiki markup, and the two are not
-//! interchangeable: v3 refuses a string, v2 refuses a document. What this suite pins is which shape reaches which
-//! endpoint and what survives the round trip — that a document handed to a comment, a worklog or a description comes
-//! back a document with the structure it went in with, and that the same stored text still reads as markup through
-//! v2. Nothing about the last part is guaranteed by the specification; it was established by measurement, and this
-//! is the test that keeps it established.
-//!
-//! The other half of the source suite is the conversion: a plain string body is routed to the v2 endpoint so that
-//! Jira parses the markup and hands the parsed document back. The generated Rust operations route the same way —
-//! a string description, environment, comment or worklog goes to `/rest/api/2`, everything else to `/rest/api/3` —
-//! and the tests below pin that the conversion happens at creation, at edit and in a comment.
-
 use jira::cloud::{
     Comment, CommentInput, CommentInputBody, Document, IssueFields, IssueFieldsDescription, IssueUpdateDetails,
     Worklog, WorklogInput, WorklogInputComment,
@@ -25,7 +9,6 @@ use crate::harness::{
     test_issue_fields, test_name,
 };
 
-/// Every node type in the tree, in document order, so a shape can be asserted without pinning exact output.
 fn node_types(document: &Document) -> Vec<String> {
     let value = serde_json::to_value(document).expect("a document is serialisable");
     let mut types = Vec::new();
@@ -53,7 +36,6 @@ fn rendered(document: &Document) -> String {
     serde_json::to_string(document).expect("a document is serialisable")
 }
 
-/// Adds a document as a comment and registers its deletion.
 async fn add_comment(tracker: &mut ResourceTracker, issue_key: &str, text: &str) -> Comment {
     let created = cloud()
         .issue_comments()
@@ -81,7 +63,6 @@ async fn add_comment(tracker: &mut ResourceTracker, issue_key: &str, text: &str)
     created
 }
 
-/// A document reaches v3 whole, and is still whole when it is read back.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn sends_a_document_to_v3_and_reads_the_same_document_back() {
@@ -110,7 +91,6 @@ async fn sends_a_document_to_v3_and_reads_the_same_document_back() {
     tracker.cleanup().await;
 }
 
-/// The other end of the routing: what v3 stored as a document, v2 hands back as a string of markup.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn leaves_the_stored_document_readable_through_v2_as_markup() {
@@ -119,8 +99,6 @@ async fn leaves_the_stored_document_readable_through_v2_as_markup() {
     let created = add_comment(&mut tracker, &issue.key, "still markup").await;
     let comment_id = created.id.clone().expect("a created comment carries an id");
 
-    // No generated operation addresses v2 from the Cloud surface, so the request is built on the transport directly
-    // — which is the whole point: the same comment, the same credentials, the other representation.
     let raw = client()
         .get(format!("/rest/api/2/issue/{}/comment/{comment_id}", issue.key))
         .send_raw()
@@ -174,7 +152,6 @@ async fn routes_a_worklog_comment_the_same_way() {
     tracker.cleanup().await;
 }
 
-/// Creation takes a document too, in a field the caller fills in by hand rather than through a typed body.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn accepts_a_document_as_a_description_at_issue_creation() {
@@ -252,12 +229,6 @@ async fn converts_wiki_markup_written_as_a_description_at_edit_into_a_document()
     tracker.cleanup().await;
 }
 
-/// Wiki markup, written as a plain string, comes back as the document Jira made of it.
-///
-/// Jira v3 accepts only Atlassian Document Format in rich-text fields, and answers a string with a 400. Rather than
-/// parse `h2.` and `*bold*` here — a markup parser inside an API client is a liability — a string body is sent to the
-/// v2 twin of the endpoint, which converts it server-side, and the result is read back through v3. What this proves
-/// is that the conversion happens at all and that the caller still receives ADF.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn converts_wiki_markup_written_as_a_string_into_a_document() {
@@ -277,8 +248,6 @@ async fn converts_wiki_markup_written_as_a_string_into_a_document() {
         .await
         .expect("a comment written as wiki markup is accepted");
 
-    // The declared return type is already a document: what the re-read buys is that it holds one at all rather
-    // than the string that was written.
     let document = comment.body.expect("a comment written through v2 reads back as a document");
 
     let rendered = serde_json::to_string(&document).expect("a document serializes");

@@ -5,7 +5,6 @@ use jira::cloud::{
 
 use crate::harness::{TEST_PROJECT_KEY, cloud};
 
-/// Every permission the API returns carries a key and a type; `havePermission` is what callers branch on.
 fn assert_well_formed(permission: &UserPermission) {
     let key = permission.key.as_deref().expect("a permission carries a key");
 
@@ -19,15 +18,10 @@ fn assert_well_formed(permission: &UserPermission) {
     );
 }
 
-/// Whether the caller holds the permission, as the entry reports it.
 fn have_permission(permission: &UserPermission) -> Option<bool> {
     permission.have_permission
 }
 
-/// What the token can actually do, pinned in one place.
-///
-/// Several other suites gate their write paths on exactly these answers, so a silent loss of a permission would
-/// otherwise surface as a confusing 403 three files away.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn answers_for_a_named_permission_in_the_scope_of_the_test_project() {
@@ -75,8 +69,6 @@ async fn narrows_to_exactly_the_permissions_asked_for_not_the_whole_catalogue() 
     assert_eq!(keys, ["BROWSE_PROJECTS"]);
 }
 
-/// A project permission means something different in and out of project scope: globally it is "in any project", in a
-/// project it is "in this one". Callers that conflate the two ship a UI that offers actions the save will reject.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_project_permissions_differently_in_and_out_of_project_scope() {

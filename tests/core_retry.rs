@@ -118,8 +118,6 @@ async fn a_client_future_can_be_moved_between_threads() {
         .await;
 
     let client = Client::builder().host(server.uri()).build().unwrap();
-    // The point of the test is that this compiles: `tokio::spawn` demands a `Send` future, and holding a non-`Send`
-    // value across an await inside the transport would take that away from every caller.
     let value = tokio::spawn(async move { client.get("/rest/api/3/myself").send::<serde_json::Value>().await })
         .await
         .unwrap()

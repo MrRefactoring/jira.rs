@@ -1,8 +1,3 @@
-//! The structure an Assets object lives in: the schema, its object types, and the attributes those declare.
-//!
-//! The fixture schema is read here. Anything written to is made and removed by the test that needs it, so a failure
-//! leaves the fixtures intact for the files that run after.
-
 use jira::assets_server::{
     JSTreePosition, ObjectAttributeIn, ObjectAttributeValueIn, ObjectSchema, ObjectSchemaIn, ObjectTypeAttributeIn,
     ObjectTypeIn,
@@ -174,7 +169,6 @@ async fn creates_updates_repositions_and_deletes_an_object_type() {
         "the name the body carried is the name that stuck",
     );
 
-    // The tree takes a position relative to a sibling, so the fixture type is what this one is placed against.
     assets_server()
         .object_types()
         .change_order_object_type(id.to_string())
@@ -186,10 +180,6 @@ async fn creates_updates_repositions_and_deletes_an_object_type() {
     tracker.cleanup().await;
 }
 
-/// Setting an attribute on an object one attribute at a time, rather than through the whole object.
-///
-/// The endpoint is `create`, and it updates: the pair of an object and an object type attribute is the identity, so
-/// calling it twice on the same pair replaces the value instead of adding a second one.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jsm-dc up`"]
 async fn writes_one_attribute_of_an_object_on_its_own() {

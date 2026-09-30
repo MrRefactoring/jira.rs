@@ -1,13 +1,5 @@
 use crate::harness::service_desk;
 
-/// The Service Management `assets` API, which is two endpoints that once did the same thing under two names.
-///
-/// Insight was renamed Assets and the older path was kept for compatibility. It no longer is: on Cloud today
-/// `/assets/workspace` answers and `/insight/workspace` is gone, so what used to be worth asserting about the pair —
-/// that they behave identically — is simply false, and these pin the deprecation instead.
-///
-/// Both are gated behind the same agent licence as the rest of the surface, so an instance without one refuses rather
-/// than answers, and either outcome is accepted as long as the refusal is typed.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn answers_the_assets_workspace_lookup_or_refuses_typed() {
@@ -33,10 +25,6 @@ async fn answers_the_assets_workspace_lookup_or_refuses_typed() {
     }
 }
 
-/// The retired path answers `403` with an HTML error page rather than the JSON every other refusal on this surface
-/// carries. That is what makes this worth keeping now that the paths have diverged: it is the only live assertion
-/// that a non-JSON body still arrives as a typed error with its status intact, instead of failing inside the response
-/// parser.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 #[allow(deprecated, reason = "the point of the case is that the retired path still answers with a typed error")]

@@ -1,12 +1,3 @@
-//! Users, groups and the account the suite is signed in as.
-//!
-//! This is where Data Center differs from Cloud most plainly: a self-hosted Jira owns its directory, so it creates
-//! users, sets their passwords and anonymises them — none of which the Cloud API offers — and it identifies them by
-//! `name` and `key` rather than by an `accountId`.
-//!
-//! Each test creates the user it needs and removes it. What it does to the signed-in account it leaves alone, except
-//! for the password, which it never changes: the rest of the run authenticates with it.
-
 use jira::server::{
     Avatar, AvatarCropping, DefaultShareScope, DefaultShareScopeScope, Filter, Password, PasswordPolicyCreateUser,
     PasswordPolicyUpdateUser, SharePermissionInput, UpdateUserToGroup, UserAnonymizationRequest,
@@ -20,7 +11,6 @@ use super::fixtures::{
 };
 use crate::harness::{ResourceTracker, server};
 
-/// The key the preference test writes under.
 const PREFERENCE_KEY: &str = "jira.rs.suite";
 
 #[tokio::test]
@@ -163,7 +153,6 @@ async fn moves_the_user_in_and_out_of_an_application() {
         .and_then(|role| role.key.clone())
         .expect("a licensed Jira has at least one application to belong to");
 
-    // A timebomb licence has a seat count a suite cannot assume is free.
     touch(server().users().add_user_to_application().username(&name).application_key(&key).send().await);
     touch(server().users().remove_user_from_application().username(&name).application_key(key).send().await);
 
@@ -219,14 +208,9 @@ async fn sets_and_resets_the_columns_a_user_sees() {
         .await
         .expect("the columns a user sees can be set");
 
-    // Read unmodelled on purpose: the specification declares `ColumnOptions` with no properties at all, so the
-    // generated type is an empty struct and the labels never reach a caller. The gap is the document's.
     let columns = server().users().default_columns().username(&name).send_raw().await.expect("the columns read back");
 
     assert!(columns.as_array().is_some_and(|columns| !columns.is_empty()), "{columns}");
-    // `summary` is written and does not come back: measured against Data Center 10.3, the instance accepts
-    // the request and silently drops that column from the navigator defaults, keeping the rest. Asserting on
-    // a column it does keep is what makes this a test of the write rather than of Jira's column policy.
     assert!(columns.to_string().contains("status"), "the columns just set are the columns read back: {columns}");
 
     server().users().reset_user_columns().username(&name).send().await.expect("and can be reset to the default");
@@ -240,7 +224,6 @@ async fn validates_and_schedules_an_anonymisation() {
     let mut tracker = ResourceTracker::new();
     let name = create_test_user(&mut tracker).await;
 
-    // Anonymisation is keyed by the user's key, which the directory assigns and which need not be the username.
     let user = server().users().get_user().username(&name).send().await.expect("the user reads back");
     let key = user.key.clone().unwrap_or_else(|| name.clone());
 
@@ -290,7 +273,6 @@ async fn ends_the_user_session() {
     let mut tracker = ResourceTracker::new();
     let name = create_test_user(&mut tracker).await;
 
-    // A user who has never signed in has no session to end, which is the refusal this proves is typed.
     touch(server().users().delete_session(&name).send().await);
 
     let user = server().users().get_user().username(&name).send().await.expect("the user outlives its session");
@@ -329,8 +311,6 @@ async fn keeps_an_avatar_for_the_user() {
 
     let id = system.first().and_then(|avatar| avatar.id.clone()).expect("a system avatar is addressed by an id");
 
-    // Read unmodelled: the document declares this write as answering with an `Avatar`, and the instance answers
-    // nothing readable as one. The gap is the document's, and reading the body is what proves the write reached Jira.
     touch(
         server()
             .users()
@@ -341,7 +321,6 @@ async fn keeps_an_avatar_for_the_user() {
     );
 
     if let Ok(id) = id.parse::<i64>() {
-        // A system avatar cannot be deleted, which is the refusal this proves is typed.
         touch(server().users().delete_user_avatar(id).username(&name).send().await);
     }
 
@@ -357,8 +336,6 @@ async fn reads_and_writes_the_signed_in_account() {
     assert_eq!(me.name.as_deref(), Some(username.as_str()), "the account is the one the credentials belong to");
     assert!(me.active.unwrap_or(false), "and it is an active one");
 
-    // Data Center validates the whole user on this endpoint, password included, so what it refuses is a partial
-    // update rather than a badly-shaped one.
     touch(
         server()
             .myself()
@@ -370,8 +347,6 @@ async fn reads_and_writes_the_signed_in_account() {
             .await,
     );
 
-    // Never actually changed: the rest of the run signs in with this password. A wrong current password is a fair
-    // answer, and it is the request shape that is under test.
     touch(
         server()
             .myself()
@@ -396,8 +371,6 @@ async fn keeps_a_preference() {
         .await
         .expect("a preference can be stored");
 
-    // Read unmodelled on purpose: a preference is whatever was stored under the key, and the document types that as
-    // a string — so `true` comes back as a JSON boolean and the modelled read cannot hold it.
     let preference =
         server().my_preferences().get_preference().key(PREFERENCE_KEY).send_raw().await.expect("it reads back");
 

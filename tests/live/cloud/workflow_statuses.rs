@@ -1,9 +1,3 @@
-//! The older status pair, `get_statuses` and `get_status`.
-//!
-//! Read-only by nature — this endpoint pair has no write half. What is worth asserting is the join: every status
-//! carries a `statusCategory`, and that nested object is what a caller actually renders. A status whose category
-//! failed to deserialize would still typecheck, because the model marks it optional.
-
 use std::collections::HashSet;
 
 use crate::harness::cloud;
@@ -27,7 +21,6 @@ async fn returns_every_status_on_the_site_each_joined_to_a_status_category() {
     }
 }
 
-/// A board groups its columns by status category, so the terminal one has to be present or nothing renders as done.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn covers_the_categories_a_board_needs_to_render() {

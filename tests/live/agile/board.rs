@@ -1,17 +1,8 @@
-//! The Agile `board` API: the listing and its filters, a board's configuration, its projects and its issues.
-//!
-//! The Agile API is a different surface with its own base path, so this file exists first of all to prove that one
-//! client reaches both — the same transport drives the platform calls and these.
-//!
-//! A board is not a container of its own: it is a saved filter over issues that live in projects. Boards are
-//! therefore only read here, never created or deleted — deleting one strips a team of its working view.
-
 use jira::agile::{BoardType, GetAllBoardsRequestType};
 use jira::futures_util::TryStreamExt;
 
 use crate::harness::{TEST_PROJECT_KEY, agile, cloud};
 
-/// A board over the test project, where the site has one.
 async fn any_board() -> Option<i64> {
     let boards = agile()
         .board()
@@ -25,7 +16,6 @@ async fn any_board() -> Option<i64> {
     boards.values.first().and_then(|board| board.id)
 }
 
-/// The shape of every Jira issue key: a project key, a hyphen, a number.
 fn is_issue_key(key: &str) -> bool {
     key.split_once('-').is_some_and(|(project, number)| {
         project.starts_with(|character: char| character.is_ascii_uppercase())
@@ -35,8 +25,6 @@ fn is_issue_key(key: &str) -> bool {
     })
 }
 
-/// One client, two base paths: the platform surface answers on `/rest/api/3` and the Agile one on `/rest/agile/1.0`,
-/// and both are reached from the transport the harness builds once.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reaches_the_platform_and_the_agile_surface_from_one_client() {

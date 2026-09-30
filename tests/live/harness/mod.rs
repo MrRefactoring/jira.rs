@@ -1,10 +1,3 @@
-//! What every live suite is built on: credentials, shared clients, run-scoped names and cleanup.
-//!
-//! The suites run against a real Jira site and create real issues, so nothing here is a mock. Two rules keep that
-//! honest. Every resource carries a run-scoped marker in its name, so concurrent runs cannot collide and a crashed
-//! run leaves debris the sweep can recognise. And every resource is registered for deletion the moment it exists,
-//! rather than at the end of the test that made it.
-
 pub mod client;
 pub mod entitlement;
 pub mod env;

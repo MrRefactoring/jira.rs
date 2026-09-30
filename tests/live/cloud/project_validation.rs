@@ -1,12 +1,3 @@
-//! Ported from jira.js/tests/live/cloud/projectValidation.test.ts.
-//!
-//! Both APIs here are pure read helpers with no write half at all — they exist to answer a question a form asks while
-//! the user is still typing, which is why they are grouped together.
-//!
-//! The behaviour worth pinning is that validation does not fail. `validate_project_key` answers 200 with a list of
-//! complaints, and `get_valid_project_key` goes further and *invents* a different key rather than refusing — so a
-//! caller who ignores the response and uses their own key is not creating the project they think they are.
-
 use jira::cloud::{CustomTemplatesProjectDetails, ErrorCollection, ProjectCustomTemplateCreateRequestDTO};
 
 use crate::harness::{TEST_PROJECT_KEY, cloud, project_key};
@@ -156,7 +147,6 @@ async fn lists_the_avatars_available_to_a_project() {
     assert!(!avatars.system.unwrap_or_default().is_empty(), "a project always has Jira's own avatars to choose from");
 }
 
-/// The destructive path, proven through its error channel and aimed at details no site would accept.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_project_creation_from_a_template_without_ever_creating_one() {
@@ -178,7 +168,6 @@ async fn fails_typed_on_project_creation_from_a_template_without_ever_creating_o
     assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
-/// The two channels validation answers on, flattened: free-text messages and complaints keyed by parameter.
 fn complaints(result: &ErrorCollection) -> Vec<String> {
     let messages = result.error_messages.clone().unwrap_or_default();
     let by_parameter = result.errors.clone().unwrap_or_default().into_values().map(|value| value.to_string());

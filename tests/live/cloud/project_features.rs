@@ -1,13 +1,3 @@
-//! The per-project feature toggles, read-only.
-//!
-//! Toggling a feature changes what a project's users see — turning off the backlog or the board removes it from their
-//! navigation — and the change is scoped to nothing smaller than the project. The test project is the one every other
-//! live suite runs in, so a failed restore would break them all; the toggle is therefore only ever pointed at a
-//! feature key that does not exist.
-//!
-//! The read half is worth having because it explains what several other suites find: whether a project has a board, a
-//! backlog or sprints at all is a per-project toggle, not a property of the site.
-
 use jira::cloud::{ProjectFeatureState, ProjectFeatureState2, ProjectFeatureStateState};
 
 use crate::harness::{TEST_PROJECT_KEY, cloud};
@@ -130,7 +120,6 @@ async fn surfaces_an_unknown_project_as_a_typed_not_found() {
     assert!(error.is_not_found(), "{error}");
 }
 
-/// The toggle is pinned through its error channel only: a real feature key would change what every other suite sees.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_toggle_without_ever_aiming_it_at_a_real_feature() {

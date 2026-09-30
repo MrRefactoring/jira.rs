@@ -3,11 +3,6 @@ use jira::futures_util::TryStreamExt;
 
 use crate::harness::{TEST_PROJECT_KEY, cloud};
 
-/// The projects surface, read-only against the standing test project.
-///
-/// Deliberately read-only: creating a project on Cloud is slow, consumes a licence slot, and frequently cannot be
-/// deleted by the token that made it, so a suite that made one per run would leave debris on a real tenant. The
-/// destructive endpoints are still pinned, but only through their error channel and never aimed at a real project.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn describes_the_test_project_the_whole_live_suite_runs_in() {
@@ -39,7 +34,6 @@ async fn resolves_the_project_by_id_as_well_as_by_key() {
     assert_eq!(by_id.id.as_deref(), Some(id.as_str()));
 }
 
-/// The parameter documents that description, issue types and lead are in every response, expanded or not.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn already_returns_lead_and_description_without_being_asked() {
@@ -164,7 +158,6 @@ async fn lists_the_statuses_available_per_issue_type() {
     }
 }
 
-/// The hierarchy endpoint is team-managed only; a company-managed project answers a 404 that says so.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn describes_the_issue_type_hierarchy_or_refuses_for_a_company_managed_project() {
@@ -233,7 +226,6 @@ async fn is_case_sensitive_about_project_keys() {
     assert!(error.is_not_found(), "{error}");
 }
 
-/// The destructive path is pinned through its error channel, never aimed at a real project.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_destructive_path() {

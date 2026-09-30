@@ -11,21 +11,11 @@ use jira::{Auth, Client, RetryConfig};
 
 use super::env::require_live_env;
 
-/// Rides out the occasional transient reset or gateway error Jira Cloud throws, without masking a real 4xx.
 const RETRY: RetryConfig =
     RetryConfig { max_attempts: 3, initial_delay: Duration::from_millis(300), backoff_factor: 2.0 };
 
-/// The longest any one live call may take before the suite gives up on it.
-///
-/// `RETRY` only covers a request that fails; a connection that accepts and then says nothing is not a failure, and
-/// reqwest has no timeout of its own. Without this a single hung call holds the runner until GitHub's six-hour limit,
-/// and `cancel-in-progress: false` puts the next night's run in the queue behind it.
 const TIMEOUT: Duration = Duration::from_secs(60);
 
-/// The one transport every surface is built from.
-///
-/// Deliberately shared: two clients would mean two auth states, which under OAuth 2.0 is a live bug rather than
-/// waste. That every suite works off this instance is the proof the sharing works.
 pub fn client() -> &'static Client {
     static CLIENT: OnceLock<Client> = OnceLock::new();
 
@@ -54,34 +44,24 @@ macro_rules! surface {
 }
 
 surface!(
-    /// The Jira Cloud platform surface.
     cloud -> CloudClient
 );
 surface!(
-    /// The Jira Software (Agile) surface.
     agile -> AgileClient
 );
 surface!(
-    /// The Jira Service Management surface.
     service_desk -> ServiceDeskClient
 );
 surface!(
-    /// The Teams surface, which answers on the organization rather than on the site.
     teams -> TeamsClient
 );
 surface!(
-    /// The organization administration surface.
     admin_surface -> AdminClient
 );
 surface!(
-    /// The user management surface.
     user_management -> UserManagementClient
 );
 
-/// The organization the site belongs to.
-///
-/// Read from the environment when it was pinned there, and asked of the site otherwise — a new tenant needs no secret
-/// added anywhere.
 pub async fn org_id() -> String {
     static ORG_ID: tokio::sync::OnceCell<String> = tokio::sync::OnceCell::const_new();
 
@@ -108,9 +88,6 @@ pub async fn site_id() -> String {
         .clone()
 }
 
-/// A client authenticated with the organization API key, for the surfaces a site token cannot reach.
-///
-/// Shared like the others: a fresh client per call is a fresh connection pool per call.
 pub fn admin_key_client() -> &'static Client {
     static CLIENT: OnceLock<Client> = OnceLock::new();
 

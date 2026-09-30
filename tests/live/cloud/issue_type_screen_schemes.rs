@@ -1,13 +1,5 @@
 use crate::harness::{TEST_PROJECT_KEY, cloud};
 
-/// Issue type screen schemes, read-only.
-///
-/// This is the top of the chain the screen scheme suite walks: a project has one issue type screen scheme, which
-/// maps each issue type to a screen scheme, which maps each operation to a screen. Reassigning it changes every form
-/// in the project at once, so nothing here writes.
-///
-/// It is covered apart from the screen schemes for one reason: this is the only layer that is project-associated, so
-/// it is where "which forms does *this* project use" is actually answered.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn pages_the_listing_for_an_admin_or_fails_typed() {
@@ -134,7 +126,6 @@ async fn lists_the_projects_a_scheme_is_used_by() {
     );
 }
 
-/// The destructive path, proven through its error channel and never aimed at a scheme that exists.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_destructive_path() {
@@ -148,7 +139,6 @@ async fn fails_typed_on_the_destructive_path() {
     assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
-/// The numeric id of the project every Cloud suite works in, which is what the association lookups take.
 async fn test_project_id() -> i64 {
     cloud()
         .projects()
@@ -162,9 +152,6 @@ async fn test_project_id() -> i64 {
         .expect("a project id is a number")
 }
 
-/// The issue type screen scheme the test project is associated with, or nothing when the site refuses the lookup.
-///
-/// A refusal is asserted to be typed here, so a test that stands down on it has still proven something.
 async fn project_scheme_id() -> Option<i64> {
     let project_id = test_project_id().await;
 
@@ -187,10 +174,6 @@ async fn project_scheme_id() -> Option<i64> {
         .map(|association| association.issue_type_screen_scheme.id.parse().expect("a scheme id is a number"))
 }
 
-/// Whether the token may read the issue type screen scheme configuration at all.
-///
-/// A token without *Administer Jira* must be refused in a way the caller can recognise, so the refusal is asserted
-/// here rather than being silently swallowed by the tests that stand down on it.
 async fn may_read_issue_type_screen_schemes() -> bool {
     match cloud().issue_type_screen_schemes().get_issue_type_screen_schemes().max_results(1).send().await {
         Ok(_) => true,

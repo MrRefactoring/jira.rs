@@ -1,5 +1,3 @@
-//! What an instance is configured with rather than what it holds: status types, and the counts it reports.
-
 use jira::assets_server::StatusType;
 
 use super::fixtures::{asset_name, fixtures};
@@ -14,7 +12,6 @@ async fn lists_the_status_types_the_instance_ships_with() {
     assert!(statuses.iter().all(|status| status.name.is_some()), "every status type is named");
 }
 
-/// The name is capped at thirty characters by Assets, which the run id already spends half of.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jsm-dc up`"]
 async fn creates_loads_updates_and_deletes_a_status_type() {

@@ -1,13 +1,5 @@
-//! The Agile `backlog` API, and the board-side reads that are the only way to see what it did.
-//!
-//! The backlog is not a container an issue is put into: it is where an issue sits when it belongs to no sprint, so
-//! "move to backlog" is really "remove from sprint". The two endpoints differ only in whether ranking is possible —
-//! the board-scoped one accepts `rankBeforeIssue`, the global one does not — and both answer 204, which is why what
-//! is asserted here is a read taken afterwards rather than anything the write hands back.
-
 use crate::harness::{ResourceTracker, agile, create_test_issue, scrum_board, test_name};
 
-/// The shape of every Jira issue key: a project key, a hyphen, a number.
 fn is_issue_key(key: &str) -> bool {
     key.split_once('-').is_some_and(|(project, number)| {
         project.starts_with(|character: char| character.is_ascii_uppercase())
@@ -35,8 +27,6 @@ async fn moves_an_issue_to_the_backlog_and_reads_the_board_back() {
         backlog.issues.iter().map(|row| row.key.as_str()).collect::<Vec<_>>(),
     );
 
-    // The count is a separate endpoint a site can refuse; what matters is that the refusal is typed rather than a
-    // body that fails to parse.
     match agile().board().get_approximate_issue_count_for_backlog(board_id).send().await {
         Ok(count) => assert!(count.count.is_some(), "a count endpoint answers with a count"),
         Err(error) => assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}"),

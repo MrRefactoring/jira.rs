@@ -1,6 +1,3 @@
-//! Labels are site-wide and derived state: nothing creates a label directly, they come into existence by being put on
-//! an issue. So the suite makes one for real and asserts it surfaces in the global listing, and that paging behaves.
-
 use jira::cloud::IssueFields;
 
 use crate::harness::{ResourceTracker, cloud, create_issue_with, poll_until, run_id, test_issue_fields, test_name};
@@ -23,7 +20,6 @@ async fn returns_a_well_formed_page_of_site_wide_labels() {
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn eventually_lists_the_label_just_put_on_an_issue() {
-    // Jira labels may not contain whitespace; run-scoped so concurrent runs cannot collide.
     let label = format!("jrs{}label", run_id());
     let mut tracker = ResourceTracker::new();
 

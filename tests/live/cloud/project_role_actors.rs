@@ -1,14 +1,3 @@
-//! Role membership, read-mostly.
-//!
-//! This is the one module where the restraint is not about blast radius but about self-preservation: these endpoints
-//! edit membership of the very project role that grants this suite its permissions. `set_actors` replaces the
-//! membership list wholesale, so one call with the wrong payload would drop the test account from the Administrators
-//! role and leave every other suite unable to clean up after itself. It is therefore never sent.
-//!
-//! What is asserted instead is the read side and the shape of the refusals. Role actor writes are a paid-plan
-//! feature, so a site on a Free plan refuses them whatever they say; those tests assert the refusal is typed and
-//! then stand down.
-
 use std::collections::HashMap;
 
 use jira::cloud::ActorsMap;
@@ -19,7 +8,6 @@ async fn project_roles() -> HashMap<String, String> {
     cloud().project_roles().get_project_roles(TEST_PROJECT_KEY).send().await.expect("the test project lists its roles")
 }
 
-/// The id of the `Administrators` role, which the listing only carries as the last segment of the role's URL.
 fn administrators_id(roles: &HashMap<String, String>) -> i64 {
     roles
         .get("Administrators")
@@ -73,7 +61,6 @@ async fn finds_the_test_account_among_them_which_is_why_teardown_works() {
     );
 }
 
-/// The default actors are the membership a role hands to *new* projects — site configuration, not this project's.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_the_default_actors_a_role_gives_new_projects() {
@@ -117,7 +104,6 @@ async fn rejects_an_actor_addition_naming_nobody() {
 
     assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 
-    // A Free plan refuses every role actor write, so the refusal here would say nothing about the empty payload.
     if is_not_entitled(&error) {
         return;
     }
@@ -125,10 +111,6 @@ async fn rejects_an_actor_addition_naming_nobody() {
     assert!(!error.is_not_found(), "an empty payload is a bad request, not a missing role: {error}");
 }
 
-/// Removing somebody who is not in the role is a no-op rather than an error — and must leave the membership intact.
-///
-/// The restoration is registered before the removal is attempted, so even a removal that hit the wrong account would
-/// be undone by teardown rather than left for the next suite to discover.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn silently_succeeds_when_removing_an_actor_that_is_not_in_the_role() {

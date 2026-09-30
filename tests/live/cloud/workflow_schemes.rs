@@ -1,15 +1,3 @@
-//! Workflow schemes and the projects they are bound to.
-//!
-//! Read-only. A workflow scheme binds issue types to workflows for a project, and one scheme serves many projects —
-//! reassigning it changes how issues move for all of them, and Jira asks for a migration when in-flight issues no
-//! longer have a valid status. So the writes are pinned only through their error channel, aimed at an id nothing can
-//! match.
-//!
-//! The legacy listing and the newer `read_workflow_schemes` are both exercised. The newer one is the one that used to
-//! break: its response declares `description` as a plain string, and a model that made it an ADF document turned every
-//! call into a deserialization failure. That is why the read half is asserted not to be a schema mismatch rather than
-//! merely asserted to fail.
-
 use jira::cloud::{Page, WorkflowScheme, WorkflowSchemeReadRequest};
 
 use crate::harness::{TEST_PROJECT_KEY, await_readable, cloud};
@@ -68,7 +56,6 @@ async fn names_the_scheme_the_test_project_is_associated_with() {
     }
 }
 
-/// The mapping is what a scheme *is*: an issue type either has its own workflow or falls through to the default one.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn maps_issue_types_to_workflows_within_a_scheme() {
@@ -95,7 +82,6 @@ async fn maps_issue_types_to_workflows_within_a_scheme() {
     );
 }
 
-/// The newer read endpoint, which is where the string-versus-document defect lived.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reads_schemes_through_the_newer_endpoint_without_a_schema_mismatch() {
@@ -111,8 +97,6 @@ async fn reads_schemes_through_the_newer_endpoint_without_a_schema_mismatch() {
             for scheme in &schemes {
                 assert!(!scheme.id.is_empty(), "a scheme carries an id");
                 assert!(!scheme.name.is_empty(), "a scheme carries a name");
-                // That the description is a `String` at all is the point: the older endpoint models it as a
-                // document. Emptiness is the site's business — a scheme nobody described has an empty one.
                 assert!(scheme.description.is_some(), "the newer endpoint reports a description, as a plain string",);
             }
         }
@@ -139,7 +123,6 @@ async fn surfaces_an_unknown_scheme_as_a_typed_error() {
     assert!(error.is_not_found() || error.is_forbidden(), "{error}");
 }
 
-/// The destructive path, proven typed and never aimed at a scheme that exists.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_destructive_path() {
@@ -153,7 +136,6 @@ async fn fails_typed_on_the_destructive_path() {
     assert!(error.status().is_some_and(|status| (400..500).contains(&status)), "{error}");
 }
 
-/// The numeric id of the project every suite works in, which is what the association endpoints take.
 async fn test_project_id() -> i64 {
     let project =
         await_readable("the test project is readable", || cloud().projects().get_project(TEST_PROJECT_KEY).send())
@@ -163,10 +145,6 @@ async fn test_project_id() -> i64 {
     id.parse().expect("a project id is a number")
 }
 
-/// Whether the token may read the workflow scheme configuration at all.
-///
-/// Every listing here needs *Administer Jira*. A token without it must be refused in a way the caller can recognise,
-/// so the refusal is asserted here rather than being silently swallowed by the tests that stand down on it.
 async fn list_schemes(max_results: i64) -> Option<Page<WorkflowScheme>> {
     match cloud().workflow_schemes().get_all_workflow_schemes().max_results(max_results).send().await {
         Ok(page) => Some(page),

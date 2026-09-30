@@ -1,12 +1,3 @@
-//! The Agile `epic` API, and the board-side listing of what belongs to no epic.
-//!
-//! An epic is not a separate kind of object: it is an ordinary issue of the Epic type, which is why this API sits
-//! beside the platform one rather than replacing it. What the Agile surface adds is the *membership* relation — which
-//! issues belong to which epic — and that is expressed nowhere in the platform API's issue payload.
-//!
-//! The cycle is one test rather than six. Six tests each gated on the project offering an Epic type would report six
-//! passes while verifying nothing where it does not, which is the failure mode this suite exists to avoid.
-
 use jira::agile::EpicUpdate;
 use jira::cloud::{IssueFields, IssueTypeDetails, IssueUpdateDetails};
 
@@ -15,7 +6,6 @@ use crate::harness::{
     scrum_board, test_issue_fields, test_name,
 };
 
-/// The id of the project's Epic issue type, where its issue type scheme carries one.
 async fn epic_type_id() -> Option<String> {
     let project = cloud().projects().get_project(TEST_PROJECT_KEY).send().await.expect("the test project reads back");
 
@@ -27,9 +17,6 @@ async fn epic_type_id() -> Option<String> {
         .and_then(|issue_type| issue_type.id)
 }
 
-/// What the cycle below is gated on: the test project ships with Task and Sub-task, and the site's Epic type is not
-/// in its issue type scheme. Adding it would mean editing a scheme shared with other projects, which is exactly the
-/// kind of write this suite refuses to make.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn records_the_issue_types_the_test_project_offers() {
@@ -44,7 +31,6 @@ async fn records_the_issue_types_the_test_project_offers() {
 #[ignore = "live: needs a Jira site"]
 async fn runs_the_whole_epic_cycle_where_an_epic_type_is_available() {
     let Some(epic_type) = epic_type_id().await else {
-        // No Epic type in the project, so there is no epic to hang a membership relation off.
         return;
     };
 
@@ -63,8 +49,6 @@ async fn runs_the_whole_epic_cycle_where_an_epic_type_is_available() {
         .send()
         .await;
 
-    // A project can offer the Epic type and still refuse the issue — a classic project asks for the Epic Name field,
-    // which has no default. That is project configuration rather than anything the library did.
     let Ok(created) = created else {
         tracker.cleanup().await;
 

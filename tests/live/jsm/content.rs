@@ -1,5 +1,3 @@
-//! The bytes and prose hung off an object: comments, attachments, the icon it wears and the QR code it prints.
-
 use jira::assets_server::Comment;
 
 use super::fixtures::{asset_name, fixtures};
@@ -94,11 +92,6 @@ async fn lists_the_icons_a_schema_declares_of_its_own() {
     assert!(icons.iter().all(|icon| icon.id.is_some()), "every icon a schema declares is addressable by an id");
 }
 
-/// The one endpoint on this surface that answers with an image.
-///
-/// The document declares an empty `application/json` body for it, so what is proven here is that the bytes arrive as
-/// a PNG rather than through the JSON parser — a generated call that trusted the declared media type would fail on
-/// the first byte.
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jsm-dc up`"]
 async fn prints_an_object_as_a_qr_code() {

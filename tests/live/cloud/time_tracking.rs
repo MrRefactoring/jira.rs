@@ -2,15 +2,6 @@ use jira::cloud::{AnnouncementBannerConfigurationUpdate, TimeTrackingProvider};
 
 use crate::harness::cloud;
 
-/// Time tracking and the neighbouring site-wide settings, read-only.
-///
-/// Every write here is site-wide with no smaller scope: changing the time-tracking provider silently reinterprets
-/// every worklog on the tenant, the default navigator columns change what every user sees in search results, and the
-/// announcement banner is displayed to everyone on every page. So the writes are pinned only through their error
-/// channel, aimed at values that cannot be accepted.
-///
-/// The configuration read here is not incidental — the worklogs suite logs `1h 30m` and asserts 5400 seconds, and
-/// that arithmetic holds only because of the working-hours settings this file reads.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_the_shared_time_tracking_configuration() {
@@ -32,7 +23,6 @@ async fn reports_the_shared_time_tracking_configuration() {
     assert!(configuration.working_days_per_week >= 0.0, "a working week is a real number of days");
 }
 
-/// What the worklogs suite's `1h 30m` arithmetic rests on.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn agrees_with_what_the_worklog_suite_depends_on() {
@@ -73,10 +63,6 @@ async fn lists_the_available_time_tracking_providers() {
     }
 }
 
-/// The operation is declared to return nothing and returns the selected provider anyway.
-///
-/// Both halves are asserted: the modelled call succeeds against a body the schema says is empty, and the unmodelled
-/// one shows what actually arrived.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn returns_the_selected_provider_despite_being_declared_to_return_nothing() {
@@ -150,7 +136,6 @@ async fn reports_the_announcement_banner_configuration() {
     }
 }
 
-/// The site-wide writes, proven through their error channel and never aimed at a value that would take effect.
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn fails_typed_on_the_site_wide_writes() {
