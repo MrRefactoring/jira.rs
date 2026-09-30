@@ -5,7 +5,6 @@ use sha2::Sha256;
 
 use crate::core::{Error, Result};
 
-/// How a signature was computed. Jira sends `sha256`; nothing else is accepted.
 const ALGORITHM: &str = "sha256";
 
 /// Whether `body` carries a signature that `secret` produces.
@@ -62,10 +61,6 @@ pub fn verify_signature(body: &[u8], secret: &str, signature: Option<&str>) -> R
     Ok(mac.verify_slice(&sent).is_ok())
 }
 
-/// The bytes a hexadecimal digest spells, or `None` if it does not spell one.
-///
-/// The digits are checked before they are read. [`u8::from_str_radix`] accepts a leading sign, so `+a` would parse
-/// as ten and `sha256=+abc` would be taken for a digest it is not.
 fn from_hex(hex: &str) -> Option<Vec<u8>> {
     if hex.is_empty() || !hex.len().is_multiple_of(2) || !hex.bytes().all(|byte| byte.is_ascii_hexdigit()) {
         return None;

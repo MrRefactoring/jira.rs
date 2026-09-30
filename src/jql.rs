@@ -216,8 +216,6 @@ impl Field {
             && self.0.starts_with(|character: char| character.is_ascii_alphabetic())
             && self.0.chars().all(|character| character.is_ascii_alphanumeric() || character == '_');
 
-        // A custom field is written `cf[10001]`, brackets and all, and quoting it would make it a name to look up
-        // rather than the field it addresses.
         if plain || is_custom_field(&self.0) {
             return self.0.clone();
         }
@@ -312,10 +310,6 @@ impl Node {
         clauses.iter().map(Node::grouped).collect::<Vec<_>>().join(operator)
     }
 
-    /// Renders a clause with the brackets its place in the tree calls for.
-    ///
-    /// `AND` binds tighter than `OR` in JQL, so a tree read back from an unbracketed rendering is not always the tree
-    /// that was written. Bracketing every composite is a spelling of the same query that cannot be misread.
     fn grouped(&self) -> String {
         match self {
             Node::Comparison(text) => text.clone(),
@@ -324,7 +318,6 @@ impl Node {
     }
 }
 
-/// Wraps a value in quotation marks, with what JQL needs escaped inside them escaped.
 fn quote(value: &str) -> String {
     let mut quoted = String::with_capacity(value.len() + 2);
 

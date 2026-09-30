@@ -1,11 +1,3 @@
-/// Content type for an attachment, guessed from its filename.
-///
-/// Atlassian stores whatever content type the upload declares, and it decides whether a browser previews the file or
-/// offers it as a download. Sending `application/octet-stream` for everything turns every screenshot into an
-/// anonymous blob, which is why this exists.
-///
-/// The table is deliberately short: the formats people actually attach to issues. An unknown extension falls back to
-/// `application/octet-stream`, which is what the upload would have said anyway.
 const MIME_TYPES: &[(&str, &str)] = &[
     ("png", "image/png"),
     ("jpg", "image/jpeg"),

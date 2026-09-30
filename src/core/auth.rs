@@ -219,9 +219,6 @@ impl Auth {
         }
     }
 
-    /// The `Authorization` header for the credentials that carry one on their own.
-    ///
-    /// Both OAuth strategies are absent: their header comes from a manager, which refreshes first.
     pub(crate) async fn authorization_header(&self) -> Result<Option<String>> {
         match self {
             Auth::Basic { username, password } => {
@@ -273,10 +270,6 @@ fn validate_oauth2(access_token: Option<&str>, refresh_set: &[(&str, Option<&str
 
 const BASE64_ALPHABET: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-/// Base64 for the Basic auth header.
-///
-/// Written out rather than pulled in: it is fourteen lines against a dependency in every consumer's tree, and this is
-/// the only place the crate encodes anything.
 pub(crate) fn encode_base64(input: &[u8]) -> String {
     let mut encoded = String::with_capacity(input.len().div_ceil(3) * 4);
 

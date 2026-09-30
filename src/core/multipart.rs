@@ -70,7 +70,6 @@ impl MultipartBody {
         MultipartBody::new("file", attachments)
     }
 
-    /// Builds the form afresh, so a retried request can send the same body again.
     pub(crate) fn to_form(&self) -> reqwest::multipart::Form {
         let mut form = reqwest::multipart::Form::new();
 

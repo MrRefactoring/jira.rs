@@ -184,8 +184,6 @@ pub async fn get_accessible_resources(
     get_accessible_resources_at(ACCESSIBLE_RESOURCES_URL, access_token, http).await
 }
 
-/// The same lookup against a named URL. The endpoint is Atlassian's and fixed; naming it is what lets the manager's
-/// own tests answer for it.
 pub(crate) async fn get_accessible_resources_at(
     url: &str,
     access_token: &str,
@@ -285,7 +283,6 @@ was not initiated by this session — discard it.",
     Ok(CallbackParams { code, state })
 }
 
-/// Constant-time string comparison, so a mismatch leaks nothing through timing.
 fn timing_safe_equals(left: &str, right: &str) -> bool {
     if left.len() != right.len() {
         return false;
@@ -336,9 +333,6 @@ pub(crate) async fn post_form(
         }
     };
 
-    // Encoded into a `String` before the request is sent: the serializer holds a non-`Send` encoding callback, and
-    // keeping it alive across the await would make every caller's future non-`Send` — no `tokio::spawn`, no
-    // concurrent requests.
     let body = {
         let mut serializer = form_urlencoded::Serializer::new(String::new());
 
@@ -365,7 +359,6 @@ fn oauth_transport_error(url: &str, error: &reqwest::Error) -> Error {
     Error::oauth(format!("Request to {url} failed before a response arrived: {error}"), OAuthErrorDetails::default())
 }
 
-/// The transport does not fail on a non-2xx status, so the status is checked here and turned into an OAuth error.
 async fn read_json<T: serde::de::DeserializeOwned>(url: &str, response: reqwest::Response) -> Result<T> {
     let status = response.status();
     let text = response.text().await.unwrap_or_default();

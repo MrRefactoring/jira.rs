@@ -91,8 +91,6 @@ explicit `host` instead.",
         return Ok(context);
     }
 
-    // The gateway answers 200 and reports the failure in the body, so the transport has already let this through as a
-    // success. The real status rides in `extensions`.
     if let Some(failure) = response.errors.and_then(|errors| errors.into_iter().next()) {
         let message = failure.message.unwrap_or_else(|| "the GraphQL gateway reported an error".to_owned());
         let status = failure.extensions.and_then(|extensions| extensions.status_code).unwrap_or(502);

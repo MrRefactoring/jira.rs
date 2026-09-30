@@ -4,10 +4,6 @@ use crate::core::error::Result;
 use crate::core::oauth::helpers::{post_form, post_json};
 use crate::core::oauth::types::TokenResponse;
 
-/// Data Center is its own authorization server.
-///
-/// Nothing here goes near `auth.atlassian.com` or `api.atlassian.com`: a self-hosted instance issues its own tokens
-/// on its own domain, so every call takes the site as an argument. There is no cloud id and no gateway.
 const AUTHORIZE_PATH: &str = "/rest/oauth2/latest/authorize";
 pub(crate) const TOKEN_PATH: &str = "/rest/oauth2/latest/token";
 
@@ -178,7 +174,6 @@ pub async fn refresh_server_oauth2_token(params: &ServerRefreshTokenParams) -> R
     .await
 }
 
-/// Kept next to its sibling so the two token calls read together; the Cloud one is JSON, this one is a form.
 pub(crate) async fn refresh_cloud_token(
     http: Option<&reqwest::Client>,
     token_url: &str,

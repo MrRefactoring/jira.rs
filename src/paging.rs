@@ -1,5 +1,3 @@
-//! Following a paginated search to its end.
-
 use futures_util::stream::{self, BoxStream, StreamExt, TryStreamExt};
 
 use crate::cloud::{Issue, SearchIssuesRequest};

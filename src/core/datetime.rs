@@ -2,16 +2,6 @@ use chrono::{DateTime, NaiveDate, NaiveDateTime, SecondsFormat, TimeZone, Utc};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_json::Value;
 
-/// The two offset-bearing shapes Jira writes a `date-time` in, tried in this order.
-///
-/// The first is the one Atlassian's own documentation gives and the one nearly every Cloud endpoint sends. It is not
-/// RFC 3339 — that spelling wants `+00:00` and this one writes `+0000` — so a reader that only knows the standard
-/// would reject the format the API actually uses. The second differs only in the colon.
-///
-/// These are not the whole cascade, and the order across it matters: RFC 3339 is tried before this list, the
-/// offset-less form the self-hosted products send is tried after it, and a bare date last. Adding a spelling here
-/// puts it after RFC 3339 and before the offset-less form — anywhere a `%z` and a `%:z` disagree, the earlier one
-/// wins silently, so the order is part of the behaviour rather than a detail of the constant.
 const LAYOUTS: &[&str] = &["%Y-%m-%dT%H:%M:%S%.f%z", "%Y-%m-%dT%H:%M:%S%.f%:z"];
 
 /// A `date-time` as an instant, or nothing when it was written in a way this does not read.
@@ -22,8 +12,6 @@ const LAYOUTS: &[&str] = &["%Y-%m-%dT%H:%M:%S%.f%z", "%Y-%m-%dT%H:%M:%S%.f%:z"];
 /// something the suite can find rather than something a caller has to notice.
 pub fn parse(value: &Value) -> Option<DateTime<Utc>> {
     match value {
-        // The bulk queue answers `"created": 1787521555310` — epoch milliseconds, as a JSON integer, on a field the
-        // document calls a string.
         Value::Number(number) => number.as_i64().and_then(|millis| Utc.timestamp_millis_opt(millis).single()),
         Value::String(text) => parse_text(text),
         _ => None,
@@ -41,20 +29,16 @@ fn parse_text(text: &str) -> Option<DateTime<Utc>> {
         }
     }
 
-    // An instant without an offset is read as UTC. Jira's self-hosted products write local time this way and say
-    // nowhere which zone that is, so any other choice would be a guess dressed up as a conversion.
     if let Ok(naive) = NaiveDateTime::parse_from_str(text, "%Y-%m-%dT%H:%M:%S%.f") {
         return Some(Utc.from_utc_datetime(&naive));
     }
 
-    // A `date` is a `date-time` at midnight: `duedate` is declared one way and read alongside the others.
     NaiveDate::parse_from_str(text, "%Y-%m-%d")
         .ok()
         .and_then(|date| date.and_hms_opt(0, 0, 0))
         .map(|naive| Utc.from_utc_datetime(&naive))
 }
 
-/// Reads a `date-time` field, keeping a value it cannot read out of the way rather than failing the response.
 pub fn deserialize_datetime<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Option<DateTime<Utc>>, D::Error> {
     let Some(value) = Option::<Value>::deserialize(deserializer)? else {
         return Ok(None);
@@ -74,10 +58,6 @@ pub fn deserialize_datetime<'de, D: Deserializer<'de>>(deserializer: D) -> Resul
     Ok(parsed)
 }
 
-/// Writes a `date-time` back in the spelling Atlassian's documentation gives.
-///
-/// Not RFC 3339: an instant read from Jira and sent back unchanged has to reach it in the form it came in, and the
-/// form it came in writes the offset without a colon.
 pub fn serialize_datetime<S: Serializer>(value: &Option<DateTime<Utc>>, serializer: S) -> Result<S::Ok, S::Error> {
     match value {
         Some(instant) => instant.format("%Y-%m-%dT%H:%M:%S%.3f%z").to_string().serialize(serializer),

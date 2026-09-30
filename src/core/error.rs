@@ -9,14 +9,11 @@ use crate::core::product::SCOPE_HINT;
 /// The result of anything this crate does.
 pub type Result<T> = std::result::Result<T, Error>;
 
-/// Node/undici error codes that signal a recoverable transport-layer failure.
 const TRANSIENT_NETWORK_MARKERS: &[&str] =
     &["ECONNRESET", "ECONNREFUSED", "ETIMEDOUT", "ENOTFOUND", "EAI_AGAIN", "EPIPE"];
 
-/// HTTP statuses that signal a recoverable upstream failure. The single source of truth for both retry paths.
 pub const TRANSIENT_HTTP_STATUSES: &[u16] = &[502, 503, 504];
 
-/// Whether a status is one of the gateway failures worth retrying.
 pub fn is_transient_status(status: u16) -> bool {
     TRANSIENT_HTTP_STATUSES.contains(&status)
 }
@@ -354,10 +351,6 @@ impl Error {
     }
 }
 
-/// Whether a transport failure is worth retrying.
-///
-/// `reqwest` does not expose the operating system's error code, so the chain is rendered and matched instead. Broken
-/// TLS sessions count, as do the connect and read timeouts the client itself imposes.
 pub fn is_transient_transport_failure(err: &reqwest::Error) -> bool {
     if err.is_timeout() || err.is_connect() {
         return true;
@@ -387,15 +380,12 @@ pub fn is_transient_transport_failure(err: &reqwest::Error) -> bool {
         || upper.contains("ERR_SSL")
 }
 
-/// Wrap whatever the transport rejected with into [`Error::Network`], preserving the original as the source.
 pub fn to_network_error(err: reqwest::Error, url: &str) -> Error {
     let transient = is_transient_transport_failure(&err);
 
     Error::Network { message: format!("Request to {url} failed: {err}"), transient, source: err }
 }
 
-/// `Retry-After` as a duration. The header is either delta-seconds or an HTTP date; both are accepted, and anything
-/// else is ignored rather than guessed at.
 pub fn parse_retry_after(header: Option<&str>, now: SystemTime) -> Option<Duration> {
     let header = header?.trim();
 
@@ -410,10 +400,6 @@ pub fn parse_retry_after(header: Option<&str>, now: SystemTime) -> Option<Durati
     Some(date.duration_since(now).unwrap_or(Duration::ZERO))
 }
 
-/// Whether a 401 is really a missing scope.
-///
-/// The API says so in the body — `{"code":401,"message":"Unauthorized; scope does not match"}` — and nowhere else.
-/// Matched loosely, since the wording is Atlassian's to change; a miss only costs the caller a plain auth error.
 fn is_scope_mismatch(body: &Value) -> bool {
     let message = match body {
         Value::Object(map) => map.get("message").and_then(Value::as_str),
@@ -424,7 +410,6 @@ fn is_scope_mismatch(body: &Value) -> bool {
     message.is_some_and(|message| message.to_lowercase().contains("scope does not match"))
 }
 
-/// Build the error that matches the status, so callers can branch on a kind instead of a number.
 pub fn create_api_error(
     message: String,
     status: u16,
@@ -550,7 +535,6 @@ mod tests {
         let error = api_error(401, json!({ "code": 401, "message": "Unauthorized; scope does not match" }));
 
         assert!(error.is_scope());
-        // Still a 401, so anything catching an auth failure keeps catching this one.
         assert!(error.is_auth());
     }
 

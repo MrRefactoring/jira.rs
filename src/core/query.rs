@@ -99,7 +99,6 @@ impl QueryValue {
     }
 }
 
-/// One list item, as the query string spells it: a string as itself, anything else as its JSON.
 fn render_scalar(value: Value) -> String {
     match value {
         Value::String(text) => text,
@@ -107,20 +106,11 @@ fn render_scalar(value: Value) -> String {
     }
 }
 
-/// The header value for anything that can be written as JSON.
-///
-/// A header is text, so a string goes as itself; everything else is written the way JSON would write it, which for
-/// the enums Jira declares as header parameters is the value the API named.
 #[allow(dead_code)]
 pub fn header_value<T: serde::Serialize>(value: &T) -> Result<String, serde_json::Error> {
     Ok(render_scalar(serde_json::to_value(value)?))
 }
 
-/// Appends the query string to `base_url`, leaving it untouched when there is nothing to append.
-///
-/// An array becomes a repeated key rather than a comma-joined string, because that is what Jira's list parameters
-/// read: `columns=summary&columns=status` sets two columns, `columns=summary,status` sets one with a comma in its
-/// name.
 pub fn build_url_with_search_params(base_url: &str, params: &[(String, QueryValue)]) -> String {
     let mut serializer = form_urlencoded::Serializer::new(String::new());
     let mut any = false;

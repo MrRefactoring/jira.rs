@@ -12,13 +12,8 @@ use crate::core::oauth::server::{
 use crate::core::oauth::types::{AccessibleResource, TokenRefreshEvent};
 use crate::core::product::GATEWAY_SLUG;
 
-/// Refresh this long before expiry, to absorb clock skew and in-flight latency.
 const EXPIRY_SKEW: Duration = Duration::from_secs(60);
 
-/// The Atlassian endpoints the Cloud flow talks to.
-///
-/// A field rather than a constant so the manager's own tests can answer for them; there is no way to set it from
-/// outside the crate, because there is no other Atlassian to point it at.
 #[derive(Debug, Clone)]
 pub(crate) struct OAuthEndpoints {
     pub token_url: String,
@@ -34,13 +29,9 @@ impl Default for OAuthEndpoints {
     }
 }
 
-/// Which deployment the tokens belong to, and what only that deployment needs.
 #[derive(Debug, Clone)]
 enum Deployment {
-    /// Cloud 3LO: tokens are minted by `auth.atlassian.com` and accepted only through the Atlassian gateway, so the
-    /// base URL is derived from a cloud id.
     Cloud { site_url: Option<String> },
-    /// Data Center: the instance is its own authorization server and its own API host.
     Server { host: String, redirect_uri: Option<String> },
 }
 
@@ -49,7 +40,6 @@ struct TokenState {
     access_token: Option<String>,
     refresh_token: Option<String>,
     expires_at: Option<SystemTime>,
-    /// Bumped on every successful refresh, so a concurrent 401 can tell "refresh this" from "someone already did".
     generation: u64,
 }
 
@@ -64,13 +54,6 @@ struct Inner {
     cloud_id: Mutex<Option<String>>,
 }
 
-/// Holds the OAuth 2.0 token state for one client: refreshes before expiry, resolves the cloud id once, and reports
-/// rotated refresh tokens onwards.
-///
-/// The refresh is single-flighted by its mutex, so N concurrent requests hitting an expired token produce one token
-/// call, not N — which is what stops N of them rotating the refresh token past each other. The cloud-id lookup holds
-/// nothing while it runs, so two callers racing the very first one can both ask; the answer is the same either way,
-/// and the first to finish is the one that is kept.
 #[derive(Clone)]
 pub(crate) struct OAuth2Manager {
     inner: Arc<Inner>,
@@ -124,7 +107,6 @@ impl OAuth2Manager {
         }
     }
 
-    /// Whether a refresh is even possible — it needs the whole credential set.
     pub(crate) async fn can_refresh(&self) -> bool {
         let has_redirect_uri = match &self.inner.deployment {
             Deployment::Cloud { .. } => true,
@@ -137,10 +119,6 @@ impl OAuth2Manager {
             && self.inner.tokens.lock().await.refresh_token.is_some()
     }
 
-    /// `Bearer <token>`, refreshing first if the token is missing or within the skew window of expiry.
-    ///
-    /// The generation that comes back names the token that was handed out, so a 401 on this request can ask for a
-    /// refresh without racing another request that already got one.
     pub(crate) async fn authorization_header(&self) -> Result<(String, u64)> {
         let mut tokens = self.inner.tokens.lock().await;
 
@@ -161,7 +139,6 @@ the full refresh credentials.",
         Ok((format!("Bearer {token}"), generation))
     }
 
-    /// Refresh unless someone already did since `seen_generation` was handed out. Used by the 401 retry path.
     pub(crate) async fn force_refresh(&self, seen_generation: u64) -> Result<()> {
         let mut tokens = self.inner.tokens.lock().await;
 
@@ -177,7 +154,6 @@ the full refresh credentials.",
         Ok(())
     }
 
-    /// The base URL every request goes to: the gateway for a resolved cloud id, or the instance itself.
     pub(crate) async fn base_url(&self) -> Result<String> {
         match &self.inner.deployment {
             Deployment::Server { host, .. } => Ok(host.clone()),
@@ -289,11 +265,6 @@ required, and a Data Center instance validates the redirect URI as well.",
         Ok(self.inner.cloud_id.lock().await.get_or_insert(resolved).clone())
     }
 
-    /// The sites this token can reach, refreshing once if the token turns out to be stale.
-    ///
-    /// This lookup runs before the request loop, so the client's own 401-and-retry never covers it. Without this, a
-    /// token whose expiry is unknown — the shape a caller supplying only an access token produces — would fail the
-    /// cloud-id lookup permanently instead of refreshing the way any other request would.
     async fn list_resources(&self) -> Result<Vec<AccessibleResource>> {
         let (header, generation) = self.authorization_header().await?;
         let token = header.trim_start_matches("Bearer ").to_owned();
@@ -423,7 +394,6 @@ mod tests {
         let server = MockServer::start().await;
         token_endpoint(&server, json!({ "access_token": "minted", "expires_in": 3600, "token_type": "bearer" })).await;
 
-        // Thirty seconds of life left, which is inside the minute of skew the manager keeps.
         let config = refreshable(Some("stale"), Some(SystemTime::now() + Duration::from_secs(30)));
 
         let (header, generation) = manager(&config, &server).authorization_header().await.unwrap();
@@ -539,7 +509,6 @@ mod tests {
         let manager = manager(&refreshable(Some("stale"), None), &server);
 
         manager.force_refresh(0).await.unwrap();
-        // A second caller holding the same stale generation must not burn another rotation.
         manager.force_refresh(0).await.unwrap();
 
         assert_eq!(server.received_requests().await.unwrap().len(), 1);
@@ -740,7 +709,6 @@ mod tests {
             .mount(&server)
             .await;
 
-        // No expiry, so nothing says the token is stale until the lookup refuses it.
         let config = OAuth2Config { cloud_id: None, ..refreshable(Some("stale"), None) };
 
         assert_eq!(manager(&config, &server).base_url().await.unwrap(), "https://api.atlassian.com/ex/jira/cloud-9");

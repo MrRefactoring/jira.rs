@@ -59,17 +59,11 @@ impl RequestConfig {
         RequestConfig { method, url: url.into(), ..RequestConfig::default() }
     }
 
-    /// Method and path, without the query string — what an error names the endpoint by.
     fn endpoint(&self) -> String {
         format!("{} {}", self.method, self.url)
     }
 }
 
-/// The `X-Seraph-LoginReason` values that mean the credentials were presented and refused.
-///
-/// `AUTHORISATION_FAILED` is deliberately absent: it means the user is who they claim and merely lacks a permission,
-/// which the status already says. `OUT` is absent for the same kind of reason — a Data Center instance behind SSO
-/// sets it on responses that are perfectly legitimate.
 const SERAPH_LOGIN_FAILURES: &[&str] = &["AUTHENTICATED_FAILED", "AUTHENTICATION_DENIED"];
 
 macro_rules! debug {
@@ -175,8 +169,6 @@ impl Client {
             });
         }
 
-        // A body the API labelled as JSON and did not send as JSON falls back to text rather than failing here:
-        // Jira mislabels a handful of plain-text responses, and an endpoint typed as a string still reads them.
         let value: Value = serde_json::from_slice(&response.body).unwrap_or_else(|_| Value::String(response.text()));
 
         #[cfg(feature = "audit")]
@@ -207,7 +199,6 @@ impl Client {
         self.execute(config).await.map(|_| ())
     }
 
-    /// The whole request loop: auth, retry, re-authentication and the error the status maps to.
     async fn execute(&self, config: &RequestConfig) -> Result<RawResponse> {
         let request = self.perform(config);
 
@@ -313,8 +304,6 @@ impl Client {
             }
         };
 
-        // Ahead of the status, because the whole point is a `200` that is really a rejection: left to the branch
-        // below, an anonymous-scope body would be handed back as a successful result.
         if credentials_rejected(&response.headers, self.inner.auth.is_some()) {
             return Err(rejected_credentials_error(&response));
         }
@@ -345,8 +334,6 @@ impl Client {
         let mut request = self.inner.http.request(config.method.clone(), url);
         let mut headers: Vec<(String, String)> = vec![("accept".to_owned(), "application/json".to_owned())];
 
-        // A declared media type wins outright; a form body states its own, and a multipart body needs the transport
-        // to set the boundary.
         match (&config.content_type, &config.body) {
             (Some(_), Some(Body::Form(_)) | Some(Body::Multipart(_))) => {}
             (Some(content_type), _) => headers.push(("content-type".to_owned(), content_type.clone())),
@@ -444,7 +431,6 @@ impl RawResponse {
         String::from_utf8_lossy(&self.body).into_owned()
     }
 
-    /// Atlassian's error payload, parsed when it was JSON and the raw text when it was not.
     fn json_body(&self) -> Value {
         serde_json::from_slice(&self.body).unwrap_or_else(|_| Value::String(self.text()))
     }
@@ -466,10 +452,6 @@ fn reject_unsendable_headers<'a>(headers: impl Iterator<Item = &'a (String, Stri
     Ok(())
 }
 
-/// Whether the credentials were refused, whatever status the response carries.
-///
-/// An endpoint that permits anonymous access answers `200` with an anonymous-scope body when the API token is expired
-/// or wrong — an empty list where the caller expected their own data — and says so nowhere but this header.
 fn credentials_rejected(headers: &HeaderMap, has_auth: bool) -> bool {
     if !has_auth {
         return false;
@@ -483,8 +465,6 @@ fn credentials_rejected(headers: &HeaderMap, has_auth: bool) -> bool {
 
 fn rejected_credentials_error(response: &RawResponse) -> Error {
     let reason = response.header("x-seraph-loginreason").unwrap_or_default();
-    // Data Center adds this after too many failed sign-ins and then refuses the right password too, naming the page a
-    // human has to visit. Advice about an expired token would send that caller looking in the wrong place.
     let challenge = response.header("x-authentication-denied-reason");
     let advice = challenge.map_or_else(
         || "The API token or password may be expired, revoked or mistyped.".to_owned(),
@@ -499,9 +479,6 @@ fn rejected_credentials_error(response: &RawResponse) -> Error {
     let anonymously = if (200..300).contains(&response.status) { " and answered as an anonymous user" } else { "" };
     let suffix = if text.is_empty() { String::new() } else { format!(" - {text}") };
 
-    // The status is the one that crossed the wire, not 401: an endpoint permitting anonymous access reports the
-    // refusal on a `200`, and recording 401 there would name a status that never happened. The kind stays `Auth`
-    // regardless, because that is what went wrong.
     Error::Api {
         message: format!(
             "Request failed: Jira rejected the credentials (x-seraph-loginreason: {reason}){anonymously}. \
@@ -517,7 +494,6 @@ fn rejected_credentials_error(response: &RawResponse) -> Error {
     }
 }
 
-/// Whether this 401 means "missing scope" rather than "stale token". Refreshing cannot fix the former.
 fn is_scope_mismatch_body(body: &Bytes) -> bool {
     String::from_utf8_lossy(body).to_lowercase().contains("scope does not match")
 }
@@ -543,11 +519,6 @@ fn deserialize_at<T: DeserializeOwned>(endpoint: &str, value: &Value) -> Result<
     }
 }
 
-/// The value at a dotted path, named by its type rather than quoted.
-///
-/// The report is meant to be pasted into a bug report, and the body it describes belongs to whoever ran the request —
-/// issue summaries, account names, custom field contents. A report that leaks those turns a schema bug into someone
-/// else's incident.
 fn describe_value_at_path(value: &Value, path: &str) -> String {
     let mut target = value;
 
