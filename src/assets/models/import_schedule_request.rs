@@ -21,7 +21,7 @@ pub struct ImportScheduleRequest {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub start_time: Option<chrono::DateTime<chrono::Utc>>,
     /// The date and time when the first import should execute, in ISO 8601 format (e.g., '2024-01-15T02:00:00Z'). Must be in the future.

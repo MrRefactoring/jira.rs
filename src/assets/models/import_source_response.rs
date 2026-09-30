@@ -135,7 +135,7 @@ pub struct ImportSourceResponseImportSourceOTEntries {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub created: Option<chrono::DateTime<chrono::Utc>>,
     /// Creation timestamp
@@ -148,7 +148,7 @@ pub struct ImportSourceResponseImportSourceOTEntries {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub updated: Option<chrono::DateTime<chrono::Utc>>,
     /// Last update timestamp
@@ -205,7 +205,7 @@ pub struct ImportSourceResponse {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub created: Option<chrono::DateTime<chrono::Utc>>,
     /// Timestamp when the import source was created
@@ -218,7 +218,7 @@ pub struct ImportSourceResponse {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub updated: Option<chrono::DateTime<chrono::Utc>>,
     /// Timestamp when the import source was last updated

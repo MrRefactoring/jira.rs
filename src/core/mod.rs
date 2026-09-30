@@ -36,7 +36,7 @@ pub use client::{AuthRefresher, Client, ClientBuilder, RequestBuilder, RequestCo
 #[cfg(feature = "chrono")]
 pub use datetime::parse as parse_datetime;
 #[cfg(feature = "chrono")]
-pub(crate) use datetime::{deserialize_datetime, serialize_datetime};
+pub(crate) use datetime::{deserialize_datetime, serialize_datetime, serialize_datetime_rfc3339};
 pub use error::{
     ApiErrorDetails, ApiErrorKind, Error, OAuthErrorDetails, Result, SchemaMismatchIssue, SchemaMismatchReport,
 };

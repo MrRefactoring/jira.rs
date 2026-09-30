@@ -41,7 +41,7 @@ pub struct ProgressOut {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub start_date: Option<chrono::DateTime<chrono::Utc>>,
     #[cfg(not(feature = "chrono"))]
@@ -58,7 +58,7 @@ pub struct ProgressOut {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub finished_date: Option<chrono::DateTime<chrono::Utc>>,
     #[cfg(not(feature = "chrono"))]
@@ -75,7 +75,7 @@ pub struct ProgressOut {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub estimated_finish_date: Option<chrono::DateTime<chrono::Utc>>,
     #[cfg(not(feature = "chrono"))]

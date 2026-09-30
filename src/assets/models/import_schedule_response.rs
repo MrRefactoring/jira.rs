@@ -28,7 +28,7 @@ pub struct ImportScheduleResponse {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub start_time: Option<chrono::DateTime<chrono::Utc>>,
     /// The start time of the schedule in ISO 8601 format
@@ -49,7 +49,7 @@ pub struct ImportScheduleResponse {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub created: Option<chrono::DateTime<chrono::Utc>>,
     /// Timestamp when the schedule was created
@@ -62,7 +62,7 @@ pub struct ImportScheduleResponse {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub updated: Option<chrono::DateTime<chrono::Utc>>,
     /// Timestamp when the schedule was last updated

@@ -1,4 +1,4 @@
-use chrono::{DateTime, NaiveDate, NaiveDateTime, TimeZone, Utc};
+use chrono::{DateTime, NaiveDate, NaiveDateTime, SecondsFormat, TimeZone, Utc};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_json::Value;
 
@@ -85,6 +85,16 @@ pub fn serialize_datetime<S: Serializer>(value: &Option<DateTime<Utc>>, serializ
     }
 }
 
+pub fn serialize_datetime_rfc3339<S: Serializer>(
+    value: &Option<DateTime<Utc>>,
+    serializer: S,
+) -> Result<S::Ok, S::Error> {
+    match value {
+        Some(instant) => instant.to_rfc3339_opts(SecondsFormat::Millis, true).serialize(serializer),
+        None => serializer.serialize_none(),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -145,9 +155,23 @@ mod tests {
         assert_eq!(written["at"], "2024-01-15T10:30:00.000+0000");
     }
 
+    #[test]
+    fn writes_rfc_3339_for_the_apis_that_read_only_that() {
+        let parsed = at("2026-09-30T09:59:45.487+0000");
+        let written = serde_json::to_value(Rfc3339Wrapper { at: parsed }).expect("an instant is serializable");
+
+        assert_eq!(written["at"], "2026-09-30T09:59:45.487Z");
+    }
+
     #[derive(Serialize)]
     struct Wrapper {
         #[serde(serialize_with = "serialize_datetime")]
+        at: Option<DateTime<Utc>>,
+    }
+
+    #[derive(Serialize)]
+    struct Rfc3339Wrapper {
+        #[serde(serialize_with = "serialize_datetime_rfc3339")]
         at: Option<DateTime<Utc>>,
     }
 }

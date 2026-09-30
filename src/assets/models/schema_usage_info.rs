@@ -22,7 +22,7 @@ pub struct SchemaUsageInfo {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub schema_created_at: Option<chrono::DateTime<chrono::Utc>>,
     /// The timestamp when the schema was created (ISO 8601).

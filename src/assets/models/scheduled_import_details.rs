@@ -25,7 +25,7 @@ pub struct ScheduledImportDetails {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub start_time: Option<chrono::DateTime<chrono::Utc>>,
     /// When the schedule starts
@@ -47,7 +47,7 @@ pub struct ScheduledImportDetails {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub next_scheduled_time: Option<chrono::DateTime<chrono::Utc>>,
     /// Next scheduled execution time
@@ -66,7 +66,7 @@ pub struct ScheduledImportDetails {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub created_at: Option<chrono::DateTime<chrono::Utc>>,
     /// When the schedule was created

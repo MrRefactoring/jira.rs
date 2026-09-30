@@ -22,7 +22,7 @@ pub struct AssetObject {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub archived_date: Option<chrono::DateTime<chrono::Utc>>,
     #[cfg(not(feature = "chrono"))]
@@ -40,7 +40,7 @@ pub struct AssetObject {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub created: Option<chrono::DateTime<chrono::Utc>>,
     #[cfg(not(feature = "chrono"))]
@@ -51,7 +51,7 @@ pub struct AssetObject {
         default,
         skip_serializing_if = "Option::is_none",
         deserialize_with = "crate::core::deserialize_datetime",
-        serialize_with = "crate::core::serialize_datetime"
+        serialize_with = "crate::core::serialize_datetime_rfc3339"
     )]
     pub updated: Option<chrono::DateTime<chrono::Utc>>,
     #[cfg(not(feature = "chrono"))]
