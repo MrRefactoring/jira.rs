@@ -1,12 +1,12 @@
 // @generated. Do not edit: change the generator or the specification.
 
-use super::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct FormAnswer {
+    /// Answer in Atlassian Document Format (ADF)
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub adf: Option<JsonNode>,
+    pub adf: Option<serde_json::Value>,
     /// IDs of selected choices
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub choices: Option<Vec<String>>,

@@ -18,13 +18,16 @@ pub struct PageOfComments {
     /// The number of items returned.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub total: Option<i64>,
+    /// The URL of the comments of the issue.
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
     /// Keys the specification does not describe, kept rather than dropped.
     #[serde(flatten)]
     pub additional: std::collections::HashMap<String, serde_json::Value>,
 }
 
 impl crate::core::Extensible for PageOfComments {
-    const FIELDS: &'static [&'static str] = &["comments", "maxResults", "startAt", "total"];
+    const FIELDS: &'static [&'static str] = &["comments", "maxResults", "startAt", "total", "self"];
 
     fn additional(&self) -> &std::collections::HashMap<String, serde_json::Value> {
         &self.additional

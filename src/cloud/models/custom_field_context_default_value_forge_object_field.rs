@@ -10,7 +10,6 @@ pub enum CustomFieldContextDefaultValueForgeObjectFieldType {
 
 /// The default value for a Forge object custom field.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueForgeObjectField {
     /// The ID of the context.
     #[serde(rename = "contextId")]

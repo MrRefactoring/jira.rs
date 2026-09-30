@@ -84,8 +84,12 @@ impl<'a> QueuesService<'a> {
     /// **Permissions:**
     ///
     /// The calling user must have permission to reorder the queue, i.e. they must be an admin of the service project that the queue belongs to.
-    pub fn reorder_queues(&self, service_desk_id: impl Into<String>) -> ReorderQueuesRequest<'a> {
-        ReorderQueuesRequest::new(self.client, service_desk_id)
+    pub fn reorder_queues(
+        &self,
+        service_desk_id: impl Into<String>,
+        body: impl IntoIterator<Item = i64>,
+    ) -> ReorderQueuesRequest<'a> {
+        ReorderQueuesRequest::new(self.client, service_desk_id, body)
     }
 }
 
@@ -487,19 +491,16 @@ impl<'a> GetIssuesInQueueRequest<'a> {
 pub struct ReorderQueuesRequest<'a> {
     client: &'a crate::core::Client,
     service_desk_id: String,
-    body: Option<Vec<i64>>,
+    body: Vec<i64>,
 }
 
 impl<'a> ReorderQueuesRequest<'a> {
-    fn new(client: &'a crate::core::Client, service_desk_id: impl Into<String>) -> Self {
-        Self { client, service_desk_id: service_desk_id.into(), body: None }
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: impl IntoIterator<Item = i64>) -> Self {
-        self.body = Some(value.into_iter().collect());
-
-        self
+    fn new(
+        client: &'a crate::core::Client,
+        service_desk_id: impl Into<String>,
+        body: impl IntoIterator<Item = i64>,
+    ) -> Self {
+        Self { client, service_desk_id: service_desk_id.into(), body: body.into_iter().collect() }
     }
 
     /// The request as the transport will send it.

@@ -16,6 +16,8 @@ pub struct ObjectTypeAttribute {
     pub object_type: Option<ObjectType>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    #[serde(rename = "displayName", default, skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
     pub label: bool,
     /// | Value | Description|
     /// | ----- | ----------- |

@@ -7,6 +7,8 @@ use serde::{Deserialize, Serialize};
 pub struct ObjectSchemaUpdate {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    #[serde(rename = "displayName", default, skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
     #[serde(rename = "objectSchemaKey", default, skip_serializing_if = "Option::is_none")]
     pub object_schema_key: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

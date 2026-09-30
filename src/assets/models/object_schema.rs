@@ -11,6 +11,8 @@ pub struct ObjectSchema {
     pub global_id: String,
     pub id: String,
     pub name: String,
+    #[serde(rename = "displayName", default, skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
     #[serde(rename = "objectSchemaKey")]
     pub object_schema_key: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]

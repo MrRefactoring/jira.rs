@@ -23,6 +23,18 @@ impl<'a> IssuePanelsService<'a> {
     ) -> BulkPinUnpinProjectsAsyncRequest<'a> {
         BulkPinUnpinProjectsAsyncRequest::new(self.client, forge_panel_project_pin_request)
     }
+
+    /// Get the pin status of an issue panel (added by a Forge app) for multiple projects.
+    ///
+    /// The operation is read-only and runs synchronously. Projects that do not exist, or that you do not have permission to access, are returned in the response with the panel reported as not pinned and the reason in the `error` field; the request itself still succeeds.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+    pub fn get_bulk_pin_status(
+        &self,
+        forge_panel_project_pin_status_request: ForgePanelProjectPinStatusRequest,
+    ) -> GetBulkPinStatusRequest<'a> {
+        GetBulkPinStatusRequest::new(self.client, forge_panel_project_pin_status_request)
+    }
 }
 
 /// Bulk pin or unpin an issue panel (added by a Forge app) to or from multiple projects.
@@ -60,6 +72,53 @@ impl<'a> BulkPinUnpinProjectsAsyncRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<ForgePanelProjectPinAsyncResponse> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Get the pin status of an issue panel (added by a Forge app) for multiple projects.
+///
+/// The operation is read-only and runs synchronously. Projects that do not exist, or that you do not have permission to access, are returned in the response with the panel reported as not pinned and the reason in the `error` field; the request itself still succeeds.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+#[derive(Clone)]
+pub struct GetBulkPinStatusRequest<'a> {
+    client: &'a crate::core::Client,
+    forge_panel_project_pin_status_request: ForgePanelProjectPinStatusRequest,
+}
+
+impl<'a> GetBulkPinStatusRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        forge_panel_project_pin_status_request: ForgePanelProjectPinStatusRequest,
+    ) -> Self {
+        Self { client, forge_panel_project_pin_status_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            "/rest/api/3/forge/panel/action/bulk/status".to_owned(),
+        );
+
+        let body = match serde_json::to_value(&self.forge_panel_project_pin_status_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<ForgePanelProjectPinStatusResponse> {
         self.client.send(&self.config()?).await
     }
 

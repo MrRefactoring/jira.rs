@@ -17,7 +17,7 @@ crate::open_enum! {
 }
 
 crate::open_enum! {
-    pub enum EvaluateJSISJiraExpressionRequestExpandValue {
+    pub enum EvaluateExpressionRequestExpandValue {
         MetaComplexity => "meta.complexity",
     }
 }
@@ -26,9 +26,9 @@ crate::open_enum! {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
-pub enum EvaluateJSISJiraExpressionRequestExpand {
-    One(EvaluateJSISJiraExpressionRequestExpandValue),
-    Many(Vec<EvaluateJSISJiraExpressionRequestExpandValue>),
+pub enum EvaluateExpressionRequestExpand {
+    One(EvaluateExpressionRequestExpandValue),
+    Many(Vec<EvaluateExpressionRequestExpandValue>),
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
@@ -86,11 +86,11 @@ impl<'a> JiraExpressionsService<'a> {
     ///
     /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required**: None. However, an expression may return different results for different users depending on their permissions. For example, different users may see different comments on the same issue.
     /// Permission to access Jira Software is required to access Jira Software context variables (`board` and `sprint`) or fields (for example, `issue.sprint`).
-    pub fn evaluate_jsis_jira_expression(
+    pub fn evaluate_expression(
         &self,
         jira_expression_evaluate_request: JiraExpressionEvaluateRequest,
-    ) -> EvaluateJSISJiraExpressionRequest<'a> {
-        EvaluateJSISJiraExpressionRequest::new(self.client, jira_expression_evaluate_request)
+    ) -> EvaluateExpressionRequest<'a> {
+        EvaluateExpressionRequest::new(self.client, jira_expression_evaluate_request)
     }
 }
 
@@ -185,20 +185,20 @@ impl<'a> AnalyseExpressionRequest<'a> {
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required**: None. However, an expression may return different results for different users depending on their permissions. For example, different users may see different comments on the same issue.
 /// Permission to access Jira Software is required to access Jira Software context variables (`board` and `sprint`) or fields (for example, `issue.sprint`).
 #[derive(Clone)]
-pub struct EvaluateJSISJiraExpressionRequest<'a> {
+pub struct EvaluateExpressionRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<EvaluateJSISJiraExpressionRequestExpand>,
+    expand: Option<EvaluateExpressionRequestExpand>,
     jira_expression_evaluate_request: JiraExpressionEvaluateRequest,
 }
 
-impl<'a> EvaluateJSISJiraExpressionRequest<'a> {
+impl<'a> EvaluateExpressionRequest<'a> {
     fn new(client: &'a crate::core::Client, jira_expression_evaluate_request: JiraExpressionEvaluateRequest) -> Self {
         Self { client, jira_expression_evaluate_request, expand: None }
     }
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts `meta.complexity` that returns information about the expression complexity. For example, the number of expensive operations used by the expression and how close the expression is to reaching the [complexity limit](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#restrictions). Useful when designing and debugging your expressions.
     #[must_use]
-    pub fn expand(mut self, value: EvaluateJSISJiraExpressionRequestExpand) -> Self {
+    pub fn expand(mut self, value: EvaluateExpressionRequestExpand) -> Self {
         self.expand = Some(value);
 
         self

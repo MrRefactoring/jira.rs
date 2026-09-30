@@ -1,6 +1,5 @@
 // @generated. Do not edit: change the generator or the specification.
 
-use super::*;
 use serde::{Deserialize, Serialize};
 
 crate::open_enum! {
@@ -39,8 +38,9 @@ pub struct TaskProgressJsonNode {
     pub message: Option<String>,
     /// The progress of the task, as a percentage complete.
     pub progress: i64,
+    /// The result of the task execution.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub result: Option<JsonNode>,
+    pub result: Option<serde_json::Value>,
     /// The URL of the task.
     #[serde(rename = "self")]
     pub self_: String,

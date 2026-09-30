@@ -64,8 +64,8 @@ crate::open_enum! {
         Software => "software",
         ServiceDesk => "service_desk",
         Business => "business",
-        ProductDiscovery => "product_discovery",
         CustomerService => "customer_service",
+        ProductDiscovery => "product_discovery",
     }
 }
 

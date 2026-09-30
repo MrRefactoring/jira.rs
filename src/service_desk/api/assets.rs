@@ -20,7 +20,11 @@ impl<'a> AssetsService<'a> {
     }
 
     /// This endpoint is deprecated, please use /assets/workspace/.
-    #[deprecated(note = "This endpoint is deprecated, please use /assets/workspace/.")]
+    ///
+    /// Use [`get_assets_workspaces`](Self::get_assets_workspaces) instead.
+    #[deprecated(
+        note = "This endpoint is deprecated, please use /assets/workspace/. In this crate that is `get_assets_workspaces`."
+    )]
     pub fn get_insight_workspaces(&self) -> GetInsightWorkspacesRequest<'a> {
         GetInsightWorkspacesRequest::new(self.client)
     }

@@ -707,6 +707,18 @@ impl<'a> WorkflowsService<'a> {
         WorkflowCapabilitiesRequest::new(self.client)
     }
 
+    /// Copies an existing workflow, and the statuses it uses, into a new workflow with the given name. The copy is created in the same scope as the workflow it is copied from. If no description is provided, the copy is created with an empty description.
+    ///
+    /// Copying a workflow requires permission both to read the workflow being copied and to create the copy, which is created in the same scope as its source.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+    ///
+    ///  *  *Administer Jira* global permission to copy all, including project-scoped, workflows
+    ///  *  To copy a project-scoped workflow, either the *Edit workflows* project permission, or both the *View (read-only) workflow* and *Administer projects* project permissions
+    pub fn copy_workflow(&self, workflow_copy_request: WorkflowCopyRequest) -> CopyWorkflowRequest<'a> {
+        CopyWorkflowRequest::new(self.client, workflow_copy_request)
+    }
+
     /// Create workflows and related statuses.
     ///
     /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
@@ -1762,6 +1774,51 @@ impl<'a> WorkflowCapabilitiesRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<WorkflowCapabilities> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Copies an existing workflow, and the statuses it uses, into a new workflow with the given name. The copy is created in the same scope as the workflow it is copied from. If no description is provided, the copy is created with an empty description.
+///
+/// Copying a workflow requires permission both to read the workflow being copied and to create the copy, which is created in the same scope as its source.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:**
+///
+///  *  *Administer Jira* global permission to copy all, including project-scoped, workflows
+///  *  To copy a project-scoped workflow, either the *Edit workflows* project permission, or both the *View (read-only) workflow* and *Administer projects* project permissions
+#[derive(Clone)]
+pub struct CopyWorkflowRequest<'a> {
+    client: &'a crate::core::Client,
+    workflow_copy_request: WorkflowCopyRequest,
+}
+
+impl<'a> CopyWorkflowRequest<'a> {
+    fn new(client: &'a crate::core::Client, workflow_copy_request: WorkflowCopyRequest) -> Self {
+        Self { client, workflow_copy_request }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/workflows/copy".to_owned());
+
+        let body = match serde_json::to_value(&self.workflow_copy_request)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<WorkflowCreateResponse> {
         self.client.send(&self.config()?).await
     }
 

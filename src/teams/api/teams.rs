@@ -13,8 +13,8 @@ impl<'a> TeamsService<'a> {
     }
 
     /// This returns a list of all teams contained under an organization. This may be used as an option to export teams data within your organization. Callers must continue querying with the returned cursor until the cursor is null.
-    pub fn query_teams(&self, org_id: impl Into<String>) -> QueryTeamsRequest<'a> {
-        QueryTeamsRequest::new(self.client, org_id)
+    pub fn query_teams(&self, org_id: impl Into<String>, site_id: impl Into<String>) -> QueryTeamsRequest<'a> {
+        QueryTeamsRequest::new(self.client, org_id, site_id)
     }
 
     /// Creates a team, and adds the requesting user as the initial member.
@@ -79,22 +79,14 @@ impl<'a> TeamsService<'a> {
 pub struct QueryTeamsRequest<'a> {
     client: &'a crate::core::Client,
     org_id: String,
-    site_id: Option<String>,
+    site_id: String,
     size: Option<i64>,
     cursor: Option<String>,
 }
 
 impl<'a> QueryTeamsRequest<'a> {
-    fn new(client: &'a crate::core::Client, org_id: impl Into<String>) -> Self {
-        Self { client, org_id: org_id.into(), site_id: None, size: None, cursor: None }
-    }
-
-    /// \[Optional\] The ID of the site to retrieve teams which are site scoped. Please note that if the org is site-scoped, teams will not be included in response if siteId is not provided. \[Deprecated\] Omitting siteId is deprecated. With the introduction of Units, orgId alone is no longer sufficient to resolve the scope of teams. Always provide a valid siteId to ensure this operation continues to work in the future.
-    #[must_use]
-    pub fn site_id(mut self, value: impl Into<String>) -> Self {
-        self.site_id = Some(value.into());
-
-        self
+    fn new(client: &'a crate::core::Client, org_id: impl Into<String>, site_id: impl Into<String>) -> Self {
+        Self { client, org_id: org_id.into(), site_id: site_id.into(), size: None, cursor: None }
     }
 
     /// The page size for the number of teams to return (max 300)
@@ -120,9 +112,7 @@ impl<'a> QueryTeamsRequest<'a> {
             format!("/gateway/api/public/teams/v1/org/{}/teams", crate::core::encode_path_segment(&self.org_id)),
         );
 
-        if let Some(value) = &self.site_id {
-            config.query.push(("siteId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
+        config.query.push(("siteId".to_owned(), crate::core::QueryValue::Scalar(self.site_id.clone())));
 
         if let Some(value) = &self.size {
             config.query.push(("size".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));

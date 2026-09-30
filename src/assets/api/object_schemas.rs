@@ -61,6 +61,7 @@ impl<'a> ObjectSchemasService<'a> {
 #[derive(Clone)]
 pub struct FindSchemasRequest<'a> {
     client: &'a crate::core::Client,
+    query: Option<String>,
     start_at: Option<i64>,
     max_results: Option<i64>,
     include_counts: Option<bool>,
@@ -68,7 +69,15 @@ pub struct FindSchemasRequest<'a> {
 
 impl<'a> FindSchemasRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, start_at: None, max_results: None, include_counts: None }
+        Self { client, query: None, start_at: None, max_results: None, include_counts: None }
+    }
+
+    /// A case-insensitive query used to filter object schemas whose name or display name contains the value
+    #[must_use]
+    pub fn query(mut self, value: impl Into<String>) -> Self {
+        self.query = Some(value.into());
+
+        self
     }
 
     /// The starting index for the next page of results
@@ -98,6 +107,10 @@ impl<'a> FindSchemasRequest<'a> {
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/objectschema/list".to_owned());
+
+        if let Some(value) = &self.query {
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
 
         if let Some(value) = &self.start_at {
             config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
@@ -300,7 +313,7 @@ impl<'a> FindSchemaAttributesRequest<'a> {
         self
     }
 
-    /// A query that will be used to filter object type attributes by their name
+    /// A case-insensitive query used to filter object type attributes whose name or display name contains the value
     #[must_use]
     pub fn query(mut self, value: impl Into<String>) -> Self {
         self.query = Some(value.into());
@@ -392,7 +405,7 @@ impl<'a> FindSchemaObjectTypesRequest<'a> {
 pub struct FindSchemaObjectTypesFlatRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
-    query: Option<bool>,
+    query: Option<String>,
     exclude: Option<String>,
     include_object_counts: Option<bool>,
 }
@@ -402,15 +415,15 @@ impl<'a> FindSchemaObjectTypesFlatRequest<'a> {
         Self { client, id: id.into(), query: None, exclude: None, include_object_counts: None }
     }
 
-    /// Object Type Names to search for
+    /// A case-insensitive query used to filter object types whose name or display name starts with the value
     #[must_use]
-    pub fn query(mut self, value: bool) -> Self {
-        self.query = Some(value);
+    pub fn query(mut self, value: impl Into<String>) -> Self {
+        self.query = Some(value.into());
 
         self
     }
 
-    /// Exclude objects with this name
+    /// Exclude object types whose name or display name exactly matches this value, ignoring case
     #[must_use]
     pub fn exclude(mut self, value: impl Into<String>) -> Self {
         self.exclude = Some(value.into());
@@ -434,7 +447,7 @@ impl<'a> FindSchemaObjectTypesFlatRequest<'a> {
         );
 
         if let Some(value) = &self.query {
-            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         if let Some(value) = &self.exclude {

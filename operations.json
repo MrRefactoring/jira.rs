@@ -1911,7 +1911,7 @@
     "surface": "cloud",
     "method": "POST",
     "path": "/rest/api/3/expression/evaluate",
-    "operation": "evaluateJSISJiraExpression"
+    "operation": "evaluateExpression"
   },
   {
     "surface": "cloud",
@@ -2020,6 +2020,12 @@
     "method": "GET",
     "path": "/rest/api/3/field/{fieldId}/context/defaultValues",
     "operation": "getContextDefaultValues"
+  },
+  {
+    "surface": "cloud",
+    "method": "PUT",
+    "path": "/rest/api/3/field/{fieldId}/context/defaultValues",
+    "operation": "setContextDefaultValues"
   },
   {
     "surface": "cloud",
@@ -2248,6 +2254,12 @@
     "method": "POST",
     "path": "/rest/api/3/forge/panel/action/bulk/async",
     "operation": "bulkPinUnpinProjectsAsync"
+  },
+  {
+    "surface": "cloud",
+    "method": "POST",
+    "path": "/rest/api/3/forge/panel/action/bulk/status",
+    "operation": "getBulkPinStatus"
   },
   {
     "surface": "cloud",
@@ -3675,7 +3687,7 @@
     "surface": "cloud",
     "method": "GET",
     "path": "/rest/api/3/statuses/search",
-    "operation": "search"
+    "operation": "searchStatuses"
   },
   {
     "surface": "cloud",
@@ -4042,6 +4054,12 @@
     "method": "GET",
     "path": "/rest/api/3/workflows/capabilities",
     "operation": "workflowCapabilities"
+  },
+  {
+    "surface": "cloud",
+    "method": "POST",
+    "path": "/rest/api/3/workflows/copy",
+    "operation": "copyWorkflow"
   },
   {
     "surface": "cloud",
@@ -7330,6 +7348,12 @@
     "method": "POST",
     "path": "/rest/servicedeskapi/request/{issueIdOrKey}/transition",
     "operation": "performCustomerTransition"
+  },
+  {
+    "surface": "serviceDesk",
+    "method": "POST",
+    "path": "/rest/servicedeskapi/request/skip-login-check",
+    "operation": "createCustomerRequestSkippingLoginCheck"
   },
   {
     "surface": "serviceDesk",

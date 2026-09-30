@@ -75,8 +75,8 @@ impl<'a> StatusService<'a> {
     ///
     ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
     ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
-    pub fn search(&self) -> SearchRequest2<'a> {
-        SearchRequest2::new(self.client)
+    pub fn search_statuses(&self) -> SearchStatusesRequest<'a> {
+        SearchStatusesRequest::new(self.client)
     }
 
     /// Returns a page of issue types in a project using a given status.
@@ -320,7 +320,7 @@ impl<'a> GetStatusesByNameRequest<'a> {
 ///  *  *Administer projects* [project permission.](https://confluence.atlassian.com/x/yodKLg)
 ///  *  *Administer Jira* [project permission.](https://confluence.atlassian.com/x/yodKLg)
 #[derive(Clone)]
-pub struct SearchRequest2<'a> {
+pub struct SearchStatusesRequest<'a> {
     client: &'a crate::core::Client,
     project_id: Option<String>,
     start_at: Option<i64>,
@@ -330,7 +330,7 @@ pub struct SearchRequest2<'a> {
     include_global_statuses: Option<bool>,
 }
 
-impl<'a> SearchRequest2<'a> {
+impl<'a> SearchStatusesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
         Self {
             client,

@@ -131,7 +131,7 @@ pub struct Project {
     /// The [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes) of the project.
     #[serde(rename = "projectTypeKey", default, skip_serializing_if = "Option::is_none")]
     pub project_type_key: Option<ProjectProjectTypeKey>,
-    /// Map of project properties
+    /// Map of project properties. Only the properties named in the request's properties query parameter are returned, so this is an empty object when that parameter is omitted.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub properties: Option<std::collections::HashMap<String, serde_json::Value>>,
     /// The date when the project is deleted permanently.

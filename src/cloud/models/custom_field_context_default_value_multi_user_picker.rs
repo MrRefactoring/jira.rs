@@ -10,7 +10,6 @@ pub enum CustomFieldContextDefaultValueMultiUserPickerType {
 
 /// The default value for a User Picker (multiple) custom field.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueMultiUserPicker {
     /// The IDs of the default users.
     #[serde(rename = "accountIds")]

@@ -4,7 +4,6 @@ use serde::{Deserialize, Serialize};
 
 /// Filter for a User Picker (single) custom field.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-#[non_exhaustive]
 pub struct UserFilter {
     /// Whether the filter is enabled.
     pub enabled: bool,

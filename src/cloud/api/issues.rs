@@ -228,8 +228,12 @@ impl<'a> IssuesService<'a> {
     ///
     ///  *  *Browse Projects* and *Assign Issues* [ project permission](https://confluence.atlassian.com/x/yodKLg) for the project that the issue is in.
     ///  *  If [issue-level security](https://confluence.atlassian.com/x/J4lKLg) is configured, issue-level security permission to view the issue.
-    pub fn assign_issue(&self, issue_id_or_key: impl Into<String>, user: User) -> AssignIssueRequest<'a> {
-        AssignIssueRequest::new(self.client, issue_id_or_key, user)
+    pub fn assign_issue(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        account_id: Option<String>,
+    ) -> AssignIssueRequest<'a> {
+        AssignIssueRequest::new(self.client, issue_id_or_key, account_id)
     }
 
     /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of all changelogs for an issue sorted by date, starting from the oldest.
@@ -1091,12 +1095,12 @@ impl<'a> DeleteIssueRequest<'a> {
 pub struct AssignIssueRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    user: User,
+    account_id: Option<String>,
 }
 
 impl<'a> AssignIssueRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, user: User) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), user }
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, account_id: Option<String>) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), account_id }
     }
 
     /// The request as the transport will send it.
@@ -1106,10 +1110,9 @@ impl<'a> AssignIssueRequest<'a> {
             format!("/rest/api/3/issue/{}/assignee", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
-        let body = match serde_json::to_value(&self.user)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
+        let mut body = serde_json::Map::new();
+
+        body.insert("accountId".to_owned(), serde_json::to_value(&self.account_id)?);
 
         config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
 

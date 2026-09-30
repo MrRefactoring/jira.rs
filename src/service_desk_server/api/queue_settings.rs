@@ -19,29 +19,37 @@ impl<'a> QueueSettingsService<'a> {
     }
 
     /// Allows to set whether service project queues should include the issue count on the Queues page. This is a global setting that if disabled will override any project level settings. The default value is always true. The intention of this method is that if you are experiencing performance issues with queue rendering on agent pages, then this setting might be of use to try toggling the queue count on/off. The queue count executes a JQL query that may take time on instances with many projects/issues.
-    pub fn set_should_queues_include_count_globally(&self) -> SetShouldQueuesIncludeCountGloballyRequest<'a> {
-        SetShouldQueuesIncludeCountGloballyRequest::new(self.client)
+    pub fn set_should_queues_include_count_globally(
+        &self,
+        body: bool,
+    ) -> SetShouldQueuesIncludeCountGloballyRequest<'a> {
+        SetShouldQueuesIncludeCountGloballyRequest::new(self.client, body)
     }
 
     /// Allows to set whether service project queues should include the issue count on the Queues page for specified project. This is a project level setting, and it's enabled state can be overrided by the global setting. To enable queue count this and the global setting must be true. The default value is always true. The intention of this method is that if you are experiencing performance issues with queue rendering on agent pages, then this setting might be of use to try toggling the queue count on/off. The queue count executes a JQL query that may take time on instances with many projects/issues.
     pub fn set_should_queues_include_count_on_project(
         &self,
         project_key: impl Into<String>,
+        body: bool,
     ) -> SetShouldQueuesIncludeCountOnProjectRequest<'a> {
-        SetShouldQueuesIncludeCountOnProjectRequest::new(self.client, project_key)
+        SetShouldQueuesIncludeCountOnProjectRequest::new(self.client, project_key, body)
     }
 
     /// Allows to set whether service project queues should always return as soon as possible, and schedule the queue count to happen off-thread. This is a global setting that if disabled will override any project level settings. The default value is always false. The intention of this method is that if you are experiencing performance issues with queue rendering on agent pages, then this setting might be of use to try toggling the queue count on/off. With this enabled, any project that also enables this setting, will return the latest cached value (up to a expiry time limit) and schedule a new count to occur in a new thread. That new thread will update the cache value when done, and subsequent update of the queue view, through polling or refresh, will take that as the latest cache value. When no cache value, or it has expired, the queue count will be blank. The queue count will still be specific to the agent viewing the queue, so any view restrictions will remain. This setting is an option to try if would are having some performance issues, but do not want to turn queue count off completely, and are happy with an approximate value.
-    pub fn set_should_queues_use_count_cache_globally(&self) -> SetShouldQueuesUseCountCacheGloballyRequest<'a> {
-        SetShouldQueuesUseCountCacheGloballyRequest::new(self.client)
+    pub fn set_should_queues_use_count_cache_globally(
+        &self,
+        body: bool,
+    ) -> SetShouldQueuesUseCountCacheGloballyRequest<'a> {
+        SetShouldQueuesUseCountCacheGloballyRequest::new(self.client, body)
     }
 
     /// Allows to set whether service project queues should include the issue count on the Queues page for specified project. This is a project level setting, and it's enabled state can be overrided by the global setting. To enable queue count this and the global setting must be true. The default value is always true. The intention of this method is that if you are experiencing performance issues with queue rendering on agent pages, then this setting might be of use to try toggling the queue count on/off. With this enabled, if the global setting is also enabled, queues for project will return the latest cached value (up to a expiry time limit) and schedule a new count to occur in a new thread. That new thread will update the cache value when done, and subsequent update of the queue view, through polling or refresh, will take that as the latest cache value. When no cache value, or it has expired, the queue count will be blank. The queue count will still be specific to the agent viewing the queue, so any view restrictions will remain. This setting is an option to try if would are having some performance issues, but do not want to turn queue count off completely, and are happy with an approximate value.
     pub fn set_should_queues_use_count_cache_on_project(
         &self,
         project_key: impl Into<String>,
+        body: bool,
     ) -> SetShouldQueuesUseCountCacheOnProjectRequest<'a> {
-        SetShouldQueuesUseCountCacheOnProjectRequest::new(self.client, project_key)
+        SetShouldQueuesUseCountCacheOnProjectRequest::new(self.client, project_key, body)
     }
 }
 
@@ -82,19 +90,12 @@ impl<'a> GetQueueSettingsOnProjectRequest<'a> {
 #[derive(Clone)]
 pub struct SetShouldQueuesIncludeCountGloballyRequest<'a> {
     client: &'a crate::core::Client,
-    body: Option<bool>,
+    body: bool,
 }
 
 impl<'a> SetShouldQueuesIncludeCountGloballyRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, body: None }
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: bool) -> Self {
-        self.body = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, body: bool) -> Self {
+        Self { client, body }
     }
 
     /// The request as the transport will send it.
@@ -125,19 +126,12 @@ impl<'a> SetShouldQueuesIncludeCountGloballyRequest<'a> {
 pub struct SetShouldQueuesIncludeCountOnProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_key: String,
-    body: Option<bool>,
+    body: bool,
 }
 
 impl<'a> SetShouldQueuesIncludeCountOnProjectRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_key: impl Into<String>) -> Self {
-        Self { client, project_key: project_key.into(), body: None }
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: bool) -> Self {
-        self.body = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, project_key: impl Into<String>, body: bool) -> Self {
+        Self { client, project_key: project_key.into(), body }
     }
 
     /// The request as the transport will send it.
@@ -170,19 +164,12 @@ impl<'a> SetShouldQueuesIncludeCountOnProjectRequest<'a> {
 #[derive(Clone)]
 pub struct SetShouldQueuesUseCountCacheGloballyRequest<'a> {
     client: &'a crate::core::Client,
-    body: Option<bool>,
+    body: bool,
 }
 
 impl<'a> SetShouldQueuesUseCountCacheGloballyRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, body: None }
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: bool) -> Self {
-        self.body = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, body: bool) -> Self {
+        Self { client, body }
     }
 
     /// The request as the transport will send it.
@@ -213,19 +200,12 @@ impl<'a> SetShouldQueuesUseCountCacheGloballyRequest<'a> {
 pub struct SetShouldQueuesUseCountCacheOnProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_key: String,
-    body: Option<bool>,
+    body: bool,
 }
 
 impl<'a> SetShouldQueuesUseCountCacheOnProjectRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_key: impl Into<String>) -> Self {
-        Self { client, project_key: project_key.into(), body: None }
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: bool) -> Self {
-        self.body = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, project_key: impl Into<String>, body: bool) -> Self {
+        Self { client, project_key: project_key.into(), body }
     }
 
     /// The request as the transport will send it.

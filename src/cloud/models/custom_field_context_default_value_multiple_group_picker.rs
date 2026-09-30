@@ -10,7 +10,6 @@ pub enum CustomFieldContextDefaultValueMultipleGroupPickerType {
 
 /// The default value for a multiple group picker custom field.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueMultipleGroupPicker {
     /// The ID of the context.
     #[serde(rename = "contextId")]

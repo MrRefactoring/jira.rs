@@ -65,8 +65,8 @@ crate::open_enum! {
         Software => "software",
         ServiceDesk => "service_desk",
         Business => "business",
-        ProductDiscovery => "product_discovery",
         CustomerService => "customer_service",
+        ProductDiscovery => "product_discovery",
     }
 }
 
@@ -283,6 +283,7 @@ impl<'a> ProjectsService<'a> {
     ///  *  Jira Core, the default, enables `business` projects.
     ///  *  Jira Service Management enables `service_desk` projects.
     ///  *  Jira Software enables `software` projects.
+    ///  *  Jira Customer Service enables `customer_service` projects.
     ///
     /// To determine which features are installed, go to **Jira settings** > **Apps** > **Manage apps** and review the System Apps list. To add Jira Software or Jira Service Management into a JIRA instance, use **Jira settings** > **Apps** > **Finding new apps**. For more information, see [ Managing add-ons](https://confluence.atlassian.com/x/S31NLg).
     ///
@@ -393,6 +394,7 @@ impl<'a> ProjectsService<'a> {
 ///  *  Jira Core, the default, enables `business` projects.
 ///  *  Jira Service Management enables `service_desk` projects.
 ///  *  Jira Software enables `software` projects.
+///  *  Jira Customer Service enables `customer_service` projects.
 ///
 /// To determine which features are installed, go to **Jira settings** > **Apps** > **Manage apps** and review the System Apps list. To add Jira Software or Jira Service Management into a JIRA instance, use **Jira settings** > **Apps** > **Finding new apps**. For more information, see [ Managing add-ons](https://confluence.atlassian.com/x/S31NLg).
 ///
@@ -946,7 +948,7 @@ impl<'a> GetProjectRequest<'a> {
         self
     }
 
-    /// A list of project properties to return for the project. This parameter accepts a comma-separated list.
+    /// A list of project properties to return for the project. This parameter accepts a comma-separated list. Note that only the properties named here are returned in `properties` in the response; that object is empty when this parameter is omitted.
     #[must_use]
     pub fn properties(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
         self.properties = Some(value.into_iter().map(Into::into).collect());

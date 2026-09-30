@@ -97,7 +97,7 @@ impl<'a> GroupsService<'a> {
 
     /// Add a user to a group. This gives the user the same app access and permissions as the group. The user must be in the same directory as the group.
     ///
-    /// **Note:** Adding a user to the org-admin group through this API will return an error after the Units rollout. The org-admin group will no longer grant organization admin access after the rollout. To grant organization admin, use the [Assign organization-level role endpoint](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-users/#api-v1-orgs-orgid-users-userid-role-assignments-assign-post) instead. This applies to all organizations, not just unit organizations.
+    /// **Note:** Adding a user to the org-admins group through this API no longer grants organization admin access. To assign organization admin access, use the [Assign organization-level role endpoint](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-users/#api-v1-orgs-orgid-users-userid-role-assignments-assign-post) instead. This change applies to all organizations. For more information, see this [community post](https://community.atlassian.com/forums/discussion/3287720/coming-soon-use-direct-assignment-for-organization-admin-access).
     ///
     /// You can’t add a user to a group synced from an identity provider. Manage this group in your identity provider instead.
     ///
@@ -113,6 +113,8 @@ impl<'a> GroupsService<'a> {
     }
 
     /// Remove a user from a group. This removes any app access and permissions granted by this group, but the user may still be in other groups that grant the same app access and permissions.
+    ///
+    /// **Note:** Removing a user from the org-admins group through this API will no longer revoke organization admin access. To revoke the organization admin role, use the [Remove organization-level role endpoint](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-users/#api-v1-orgs-orgid-users-userid-role-assignments-revoke-post) instead. This applies to all organizations. For more information, see this [community post](https://community.atlassian.com/forums/discussion/3287720/coming-soon-use-direct-assignment-for-organization-admin-access).
     pub fn remove_user_from_group(
         &self,
         org_id: impl Into<String>,
@@ -523,7 +525,7 @@ impl<'a> RevokeGroupAccessRequest<'a> {
 
 /// Add a user to a group. This gives the user the same app access and permissions as the group. The user must be in the same directory as the group.
 ///
-/// **Note:** Adding a user to the org-admin group through this API will return an error after the Units rollout. The org-admin group will no longer grant organization admin access after the rollout. To grant organization admin, use the [Assign organization-level role endpoint](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-users/#api-v1-orgs-orgid-users-userid-role-assignments-assign-post) instead. This applies to all organizations, not just unit organizations.
+/// **Note:** Adding a user to the org-admins group through this API no longer grants organization admin access. To assign organization admin access, use the [Assign organization-level role endpoint](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-users/#api-v1-orgs-orgid-users-userid-role-assignments-assign-post) instead. This change applies to all organizations. For more information, see this [community post](https://community.atlassian.com/forums/discussion/3287720/coming-soon-use-direct-assignment-for-organization-admin-access).
 ///
 /// You can’t add a user to a group synced from an identity provider. Manage this group in your identity provider instead.
 ///
@@ -587,6 +589,8 @@ impl<'a> AddUserToGroupRequest<'a> {
 }
 
 /// Remove a user from a group. This removes any app access and permissions granted by this group, but the user may still be in other groups that grant the same app access and permissions.
+///
+/// **Note:** Removing a user from the org-admins group through this API will no longer revoke organization admin access. To revoke the organization admin role, use the [Remove organization-level role endpoint](https://developer.atlassian.com/cloud/admin/organization/rest/api-group-users/#api-v1-orgs-orgid-users-userid-role-assignments-revoke-post) instead. This applies to all organizations. For more information, see this [community post](https://community.atlassian.com/forums/discussion/3287720/coming-soon-use-direct-assignment-for-organization-admin-access).
 #[derive(Clone)]
 pub struct RemoveUserFromGroupRequest<'a> {
     client: &'a crate::core::Client,

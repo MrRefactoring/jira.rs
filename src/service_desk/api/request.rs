@@ -39,6 +39,25 @@ impl<'a> RequestService<'a> {
         CreateCustomerRequestRequest::new(self.client, request_create)
     }
 
+    /// This method creates a customer request in a service desk.
+    ///
+    /// The JSON request must include the service desk and customer request type, as well as any fields that are required for the request type. A list of the fields required by a customer request type can be obtained using [servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/field](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-servicedesk-serviceDeskId-requesttype-requestTypeId-field-get).
+    ///
+    /// The fields required for a customer request type depend on the user's permissions:
+    ///
+    ///  *  `raiseOnBehalfOf` is not available to Users who have the customer permission only.
+    ///  *  `requestParticipants` is not available to Users who have the customer permission only or if the feature is turned off for customers.
+    ///
+    /// `requestFieldValues` is a map of Jira field IDs and their values. See [Field input formats](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#fieldformats), for details of each field's JSON semantics and the values they can take.
+    ///
+    /// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to create requests in the specified service desk.
+    pub fn create_customer_request_skipping_login_check(
+        &self,
+        request_create: RequestCreate,
+    ) -> CreateCustomerRequestSkippingLoginCheckRequest<'a> {
+        CreateCustomerRequestSkippingLoginCheckRequest::new(self.client, request_create)
+    }
+
     /// Validates a customer request payload without creating (persisting) a request.
     ///
     /// This endpoint runs exactly the same structural and semantic validations as [Create customer request](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-request-post) — including ProForma form validation — but performs **no mutation**: no issue is created and no side effects (attachments, comments, analytics) run.
@@ -549,6 +568,57 @@ impl<'a> CreateCustomerRequestRequest<'a> {
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/servicedeskapi/request".to_owned());
+
+        let body = match serde_json::to_value(&self.request_create)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<CustomerRequest> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// This method creates a customer request in a service desk.
+///
+/// The JSON request must include the service desk and customer request type, as well as any fields that are required for the request type. A list of the fields required by a customer request type can be obtained using [servicedesk/{serviceDeskId}/requesttype/{requestTypeId}/field](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#api-servicedesk-serviceDeskId-requesttype-requestTypeId-field-get).
+///
+/// The fields required for a customer request type depend on the user's permissions:
+///
+///  *  `raiseOnBehalfOf` is not available to Users who have the customer permission only.
+///  *  `requestParticipants` is not available to Users who have the customer permission only or if the feature is turned off for customers.
+///
+/// `requestFieldValues` is a map of Jira field IDs and their values. See [Field input formats](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#fieldformats), for details of each field's JSON semantics and the values they can take.
+///
+/// **[Permissions](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#permissions) required**: Permission to create requests in the specified service desk.
+#[derive(Clone)]
+pub struct CreateCustomerRequestSkippingLoginCheckRequest<'a> {
+    client: &'a crate::core::Client,
+    request_create: RequestCreate,
+}
+
+impl<'a> CreateCustomerRequestSkippingLoginCheckRequest<'a> {
+    fn new(client: &'a crate::core::Client, request_create: RequestCreate) -> Self {
+        Self { client, request_create }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::POST,
+            "/rest/servicedeskapi/request/skip-login-check".to_owned(),
+        );
 
         let body = match serde_json::to_value(&self.request_create)? {
             serde_json::Value::Object(object) => object,

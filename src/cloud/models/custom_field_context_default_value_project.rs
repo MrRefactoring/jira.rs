@@ -10,7 +10,6 @@ pub enum CustomFieldContextDefaultValueProjectType {
 
 /// The default value for a project custom field.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueProject {
     /// The ID of the context.
     #[serde(rename = "contextId")]

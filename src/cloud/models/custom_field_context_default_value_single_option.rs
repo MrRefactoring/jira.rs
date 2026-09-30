@@ -10,7 +10,6 @@ pub enum CustomFieldContextDefaultValueSingleOptionType {
 
 /// The default value for a single select custom field.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[non_exhaustive]
 pub struct CustomFieldContextDefaultValueSingleOption {
     /// The ID of the context.
     #[serde(rename = "contextId")]

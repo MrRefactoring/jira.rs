@@ -11,7 +11,6 @@ pub enum CustomFieldContextSingleUserPickerDefaultsType {
 
 /// Defaults for a User Picker (single) custom field.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-#[non_exhaustive]
 pub struct CustomFieldContextSingleUserPickerDefaults {
     /// The ID of the default user.
     #[serde(rename = "accountId")]

@@ -3,7 +3,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-/// A document in Atlassian Document Format, or a string of wiki markup — a string is sent to the v2 endpoint that parses it, and Jira stores the document it made of it.
+/// A document in Atlassian Document Format, or a string of wiki markup — a string is sent to the v2 endpoint that parses it, and Jira stores the document it made of it. One write goes to one endpoint, so `description`, `environment`, the comment bodies and the worklog comments in `update` are all markup or all documents; a multi-line custom field is not looked at and has to be given in the same form as them.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
@@ -14,7 +14,7 @@ pub enum IssueFieldsDescription {
     Other(serde_json::Value),
 }
 
-/// A document in Atlassian Document Format, or a string of wiki markup — a string is sent to the v2 endpoint that parses it, and Jira stores the document it made of it.
+/// A document in Atlassian Document Format, or a string of wiki markup — a string is sent to the v2 endpoint that parses it, and Jira stores the document it made of it. One write goes to one endpoint, so `description`, `environment`, the comment bodies and the worklog comments in `update` are all markup or all documents; a multi-line custom field is not looked at and has to be given in the same form as them.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
@@ -31,10 +31,10 @@ pub struct IssueFields {
     /// The one-line title.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub summary: Option<String>,
-    /// A document in Atlassian Document Format, or a string of wiki markup — a string is sent to the v2 endpoint that parses it, and Jira stores the document it made of it.
+    /// A document in Atlassian Document Format, or a string of wiki markup — a string is sent to the v2 endpoint that parses it, and Jira stores the document it made of it. One write goes to one endpoint, so `description`, `environment`, the comment bodies and the worklog comments in `update` are all markup or all documents; a multi-line custom field is not looked at and has to be given in the same form as them.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<IssueFieldsDescription>,
-    /// A document in Atlassian Document Format, or a string of wiki markup — a string is sent to the v2 endpoint that parses it, and Jira stores the document it made of it.
+    /// A document in Atlassian Document Format, or a string of wiki markup — a string is sent to the v2 endpoint that parses it, and Jira stores the document it made of it. One write goes to one endpoint, so `description`, `environment`, the comment bodies and the worklog comments in `update` are all markup or all documents; a multi-line custom field is not looked at and has to be given in the same form as them.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub environment: Option<IssueFieldsEnvironment>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -43,6 +43,8 @@ pub struct IssueFields {
     pub project: Option<Project>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub status: Option<StatusDetails>,
+    #[serde(rename = "statusCategory", default, skip_serializing_if = "Option::is_none")]
+    pub status_category: Option<StatusCategory>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub priority: Option<Priority>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -194,6 +196,7 @@ impl crate::core::Extensible for IssueFields {
         "issuetype",
         "project",
         "status",
+        "statusCategory",
         "priority",
         "resolution",
         "assignee",

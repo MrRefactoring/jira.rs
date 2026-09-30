@@ -43,7 +43,7 @@ pub struct ImportSourceResponseImportStatus {
     pub validation_status_type: Option<ImportSourceResponseImportStatusValidationStatusType>,
     /// Map of reasons for invalidity
     #[serde(rename = "reasonForInvalidity", default, skip_serializing_if = "Option::is_none")]
-    pub reason_for_invalidity: Option<std::collections::HashMap<String, String>>,
+    pub reason_for_invalidity: Option<std::collections::HashMap<String, serde_json::Value>>,
     /// Status name (computed from configurationStatusType)
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -68,6 +68,9 @@ pub struct ImportSourceResponseImportSourceOTEntriesObjectType {
     /// Object type name
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// Object type display name
+    #[serde(rename = "displayName", default, skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
 }
 
 crate::open_enum! {
@@ -99,7 +102,7 @@ pub struct ImportSourceResponseImportSourceOTEntriesImportStatus {
     pub validation_status_type: Option<ImportSourceResponseImportSourceOTEntriesImportStatusValidationStatusType>,
     /// Reasons for invalidity
     #[serde(rename = "reasonForInvalidity", default, skip_serializing_if = "Option::is_none")]
-    pub reason_for_invalidity: Option<std::collections::HashMap<String, String>>,
+    pub reason_for_invalidity: Option<std::collections::HashMap<String, serde_json::Value>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -108,6 +111,9 @@ pub struct ImportSourceResponseImportSourceOTEntriesImportSourceOTAttrEntries {
     /// Attribute mapping ID
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// Object type attribute display name
+    #[serde(rename = "objectTypeAttributeDisplayName", default, skip_serializing_if = "Option::is_none")]
+    pub object_type_attribute_display_name: Option<String>,
 }
 
 /// Import source object type configuration
@@ -173,7 +179,7 @@ pub struct ImportSourceResponseImportSourceOTEntries {
     /// Import status for this object type
     #[serde(rename = "importStatus", default, skip_serializing_if = "Option::is_none")]
     pub import_status: Option<ImportSourceResponseImportSourceOTEntriesImportStatus>,
-    /// List of object type attribute mappings
+    /// List of object type attribute mappings. Entries can include `objectTypeAttributeDisplayName`.
     #[serde(rename = "importSourceOTAttrEntries", default, skip_serializing_if = "Option::is_none")]
     pub import_source_ot_attr_entries: Option<Vec<ImportSourceResponseImportSourceOTEntriesImportSourceOTAttrEntries>>,
     /// Whether to ignore case when matching identifiers
@@ -249,7 +255,7 @@ pub struct ImportSourceResponse {
     /// Import-specific configuration as JSON string
     #[serde(rename = "importSpecificConfiguration", default, skip_serializing_if = "Option::is_none")]
     pub import_specific_configuration: Option<String>,
-    /// List of object type mappings for this import source
+    /// List of object type mappings for this import source. Object types and object type attributes can include display names. Missing-object configuration can include display names for the selected attribute, target object type, and reference object type.
     #[serde(rename = "importSourceOTEntries", default, skip_serializing_if = "Option::is_none")]
     pub import_source_ot_entries: Option<Vec<ImportSourceResponseImportSourceOTEntries>>,
     /// Whether a token has been generated for this import source

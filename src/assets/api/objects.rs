@@ -158,7 +158,7 @@ impl<'a> DeleteObjectRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<serde_json::Value> {
+    pub async fn send(self) -> crate::core::Result<AssetObject> {
         self.client.send(&self.config()?).await
     }
 

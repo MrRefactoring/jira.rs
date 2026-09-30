@@ -50,6 +50,19 @@ impl<'a> IssueCustomFieldContextsService<'a> {
         GetContextDefaultValuesRequest::new(self.client, field_id)
     }
 
+    /// Updates default values for individual issue types in custom field contexts.
+    ///
+    /// Only tenants enrolled in the early access program (EAP) can access this resource. See the [EAP announcement](https://ecosystem.atlassian.net/browse/CHANGE-3082) for details.
+    ///
+    /// Each entry targets either one issue type through `issueTypeId`, or the catch-all configuration through `isAnyIssueType=true`. A null value removes the default for that target. Entries not included in the request are left unchanged.
+    pub fn set_context_default_values(
+        &self,
+        field_id: impl Into<String>,
+        custom_field_context_default_values_update: CustomFieldContextDefaultValuesUpdate,
+    ) -> SetContextDefaultValuesRequest<'a> {
+        SetContextDefaultValuesRequest::new(self.client, field_id, custom_field_context_default_values_update)
+    }
+
     /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of context to issue type mappings for a custom field. Mappings are returned for all contexts or a list of contexts. Mappings are ordered first by context ID and then by issue type ID.
     ///
     /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
@@ -462,6 +475,55 @@ impl<'a> GetContextDefaultValuesRequest<'a> {
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<Page<ContextDefaultValues>> {
         self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Updates default values for individual issue types in custom field contexts.
+///
+/// Only tenants enrolled in the early access program (EAP) can access this resource. See the [EAP announcement](https://ecosystem.atlassian.net/browse/CHANGE-3082) for details.
+///
+/// Each entry targets either one issue type through `issueTypeId`, or the catch-all configuration through `isAnyIssueType=true`. A null value removes the default for that target. Entries not included in the request are left unchanged.
+#[derive(Clone)]
+pub struct SetContextDefaultValuesRequest<'a> {
+    client: &'a crate::core::Client,
+    field_id: String,
+    custom_field_context_default_values_update: CustomFieldContextDefaultValuesUpdate,
+}
+
+impl<'a> SetContextDefaultValuesRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        field_id: impl Into<String>,
+        custom_field_context_default_values_update: CustomFieldContextDefaultValuesUpdate,
+    ) -> Self {
+        Self { client, field_id: field_id.into(), custom_field_context_default_values_update }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/3/field/{}/context/defaultValues", crate::core::encode_path_segment(&self.field_id)),
+        );
+
+        let body = match serde_json::to_value(&self.custom_field_context_default_values_update)? {
+            serde_json::Value::Object(object) => object,
+            _ => serde_json::Map::new(),
+        };
+
+        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
     }
 
     /// Sends the request and hands back the body unmodelled.
