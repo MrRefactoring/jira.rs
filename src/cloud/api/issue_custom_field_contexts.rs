@@ -126,7 +126,7 @@ impl<'a> IssueCustomFieldContextsService<'a> {
 
     /// Adds issue types to a custom field context, appending the issue types to the issue types list.
     ///
-    /// A custom field context without any issue types applies to all issue types. Adding issue types to such a custom field context would result in it applying to only the listed issue types.
+    /// A custom field context without any issue types applies to all issue types. Adding issue types replaces the any-issue-type mapping unless `isAnyIssueType` is true. A supplied `defaultValue` applies to newly added mappings. If omitted, the default value of the first existing issue type mapping is copied. Existing mappings retain their defaults.
     ///
     /// If any of the issue types exists in the custom field context, the operation fails and no issue types are added.
     ///
@@ -137,9 +137,9 @@ impl<'a> IssueCustomFieldContextsService<'a> {
         &self,
         field_id: impl Into<String>,
         context_id: i64,
-        issue_type_ids: IssueTypeIds,
+        add_issue_types_to_context: AddIssueTypesToContext,
     ) -> AddIssueTypesToContextRequest<'a> {
-        AddIssueTypesToContextRequest::new(self.client, field_id, context_id, issue_type_ids)
+        AddIssueTypesToContextRequest::new(self.client, field_id, context_id, add_issue_types_to_context)
     }
 
     /// Removes issue types from a custom field context.
@@ -906,7 +906,7 @@ impl<'a> DeleteCustomFieldContextRequest<'a> {
 
 /// Adds issue types to a custom field context, appending the issue types to the issue types list.
 ///
-/// A custom field context without any issue types applies to all issue types. Adding issue types to such a custom field context would result in it applying to only the listed issue types.
+/// A custom field context without any issue types applies to all issue types. Adding issue types replaces the any-issue-type mapping unless `isAnyIssueType` is true. A supplied `defaultValue` applies to newly added mappings. If omitted, the default value of the first existing issue type mapping is copied. Existing mappings retain their defaults.
 ///
 /// If any of the issue types exists in the custom field context, the operation fails and no issue types are added.
 ///
@@ -918,7 +918,7 @@ pub struct AddIssueTypesToContextRequest<'a> {
     client: &'a crate::core::Client,
     field_id: String,
     context_id: i64,
-    issue_type_ids: IssueTypeIds,
+    add_issue_types_to_context: AddIssueTypesToContext,
 }
 
 impl<'a> AddIssueTypesToContextRequest<'a> {
@@ -926,9 +926,9 @@ impl<'a> AddIssueTypesToContextRequest<'a> {
         client: &'a crate::core::Client,
         field_id: impl Into<String>,
         context_id: i64,
-        issue_type_ids: IssueTypeIds,
+        add_issue_types_to_context: AddIssueTypesToContext,
     ) -> Self {
-        Self { client, field_id: field_id.into(), context_id, issue_type_ids }
+        Self { client, field_id: field_id.into(), context_id, add_issue_types_to_context }
     }
 
     /// The request as the transport will send it.
@@ -942,7 +942,7 @@ impl<'a> AddIssueTypesToContextRequest<'a> {
             ),
         );
 
-        let body = match serde_json::to_value(&self.issue_type_ids)? {
+        let body = match serde_json::to_value(&self.add_issue_types_to_context)? {
             serde_json::Value::Object(object) => object,
             _ => serde_json::Map::new(),
         };
