@@ -2,7 +2,7 @@ name: 🧱 Service Management Data Center tests
 
 on:
   schedule:
-    - cron: '30 4 * * *'
+    - cron: '41 4 * * *'
   workflow_dispatch:
 
 concurrency:
