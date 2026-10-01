@@ -145,6 +145,18 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
         "the issue just moved is in the sprint",
     );
 
+    let on_board = server()
+        .board()
+        .get_issues_for_board_sprint(sprint_id, board_id)
+        .send()
+        .await
+        .expect("the sprint's issues read through the board");
+
+    assert!(
+        on_board.issues.iter().flatten().any(|issue| issue.key.as_deref() == Some(key.as_str())),
+        "the board sees the same sprint",
+    );
+
     server()
         .backlog()
         .move_issues_to_backlog(IssueAssignRequest { issues: Some(vec![key.clone()]) })
@@ -253,6 +265,24 @@ async fn moves_an_issue_into_an_epic_and_renames_it() {
     assert!(
         in_epic.issues.iter().flatten().any(|issue| issue.key.as_deref() == Some(key.as_str())),
         "the issue just moved is in the epic",
+    );
+
+    let read = server().epic().get_epic(&epic_key).send().await.expect("the epic reads by key");
+
+    assert_eq!(read.key.as_deref(), Some(epic_key.as_str()), "the epic read is the epic created");
+
+    let board_id = board_of(&project.key).await;
+    let epic_id = epic.id.clone().expect("a created epic carries an id").parse().expect("an epic id is a number");
+    let on_board = server()
+        .board()
+        .get_issues_for_board_epic(epic_id, board_id)
+        .send()
+        .await
+        .expect("the epic's issues read through the board");
+
+    assert!(
+        on_board.issues.iter().flatten().any(|issue| issue.key.as_deref() == Some(key.as_str())),
+        "the board sees the same epic",
     );
 
     server()

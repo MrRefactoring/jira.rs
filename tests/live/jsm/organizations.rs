@@ -133,21 +133,36 @@ async fn attaches_an_organization_to_a_service_desk_and_detaches_it() {
 
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jsm-dc up`"]
-async fn the_cleanup_endpoints_are_declared_and_not_served() {
+async fn previews_and_cleans_up_an_organization_nobody_uses() {
     if !service_desk_licensed().await {
         return;
     }
 
-    let refused = service_desk_server()
+    let id = create_organization("empty organization").await;
+
+    let preview = service_desk_server()
         .organizations()
         .preview_clean_up_organizations()
         .send()
         .await
-        .expect_err("Service Management 10.3 does not route the organization cleanup the document declares");
+        .expect("the cleanup can be previewed");
 
     assert!(
-        refused.status().is_some_and(|status| (400..500).contains(&status)),
-        "the refusal is typed rather than a parse failure: the instance answers 500 wrapping its own 404, which is \
-         what an endpoint the document declares and the build does not carry looks like",
+        preview.iter().any(|organization| organization.id.as_deref() == Some(id.to_string().as_str())),
+        "an organization with no users and no service desk is among those the cleanup would delete",
     );
+
+    let deleted =
+        service_desk_server().organizations().clean_up_organizations().send().await.expect("the cleanup runs");
+
+    assert!(deleted >= 1.0, "the cleanup reports how many it deleted: {deleted}");
+
+    let refused = service_desk_server()
+        .organizations()
+        .get_organization(id.to_string())
+        .send()
+        .await
+        .expect_err("a cleaned up organization cannot be read");
+
+    assert!(refused.is_not_found(), "{refused}");
 }

@@ -483,7 +483,7 @@ async fn keeps_remote_links_by_id_and_by_global_id() {
             .create_reciprocal_remote_issue_link()
             .remote_reciprocal_issue_link_create_request(RemoteReciprocalIssueLinkCreateRequest {
                 source: Some(remote_link("https://example.com/four", "four")),
-                ..RemoteReciprocalIssueLinkCreateRequest::default()
+                target: Some(remote_link("https://example.com/five", "five")),
             })
             .send()
             .await,

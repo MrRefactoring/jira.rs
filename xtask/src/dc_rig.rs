@@ -264,6 +264,56 @@ async fn run_wizard(http: &reqwest::Client, rig: &Rig) -> Result<(), Failure> {
     Err("The setup wizard did not finish within twelve steps. Open the instance and look at what it asks.".into())
 }
 
+async fn allow_basic_auth(http: &reqwest::Client, rig: &Rig) -> Result<(), Failure> {
+    let myself = format!("{}/rest/api/2/myself", rig.base_url);
+    let probe = http.get(&myself).basic_auth(rig.admin_username, Some(rig.admin_password)).send().await?;
+
+    if probe.status().is_success() {
+        return Ok(());
+    }
+
+    println!("▸ allowing basic authentication on API calls");
+
+    http.post(format!("{}/rest/tsv/1.0/authenticate", rig.base_url))
+        .header("X-Atlassian-Token", "no-check")
+        .json(&serde_json::json!({
+            "username": rig.admin_username,
+            "password": rig.admin_password,
+            "rememberMe": false,
+            "targetUrl": "",
+        }))
+        .send()
+        .await?
+        .error_for_status()?;
+
+    http.post(format!("{}/secure/admin/WebSudoAuthenticate.jspa", rig.base_url))
+        .header("X-Atlassian-Token", "no-check")
+        .form(&[("webSudoPassword", rig.admin_password)])
+        .send()
+        .await?
+        .error_for_status()?;
+
+    http.put(format!("{}/rest/basicauth/1.0/config", rig.base_url))
+        .header("X-Atlassian-Token", "no-check")
+        .json(&serde_json::json!({
+            "block-requests": false,
+            "allowed-paths": [],
+            "allowed-users": [],
+            "show-warning-message": true,
+        }))
+        .send()
+        .await?
+        .error_for_status()?;
+
+    let probe = http.get(&myself).basic_auth(rig.admin_username, Some(rig.admin_password)).send().await?;
+
+    if !probe.status().is_success() {
+        return Err(format!("Basic authentication is still refused after allowing it: {}", probe.status()).into());
+    }
+
+    Ok(())
+}
+
 pub async fn run(rig: &Rig, command: &str) -> Result<(), Failure> {
     let http = reqwest::Client::builder().cookie_store(true).build()?;
 
@@ -288,6 +338,8 @@ pub async fn run(rig: &Rig, command: &str) -> Result<(), Failure> {
             } else {
                 println!("▸ already set up");
             }
+
+            allow_basic_auth(&http, rig).await?;
 
             println!("✔ ready at {} — sign in as {}", rig.base_url, rig.admin_username);
         }
