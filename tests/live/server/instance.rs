@@ -10,7 +10,7 @@ fn created_from_temporary<T>(outcome: jira::Result<T>) {
     if let Err(error) = outcome {
         assert!(
             error.is_server() || error.status().is_some_and(|status| (400..500).contains(&status)),
-            "Jira 10 answers 500 here whatever it is sent, and the crate reports that as a server error: {error}",
+            "Jira Data Center 10 and 11 answer 500 here whatever they are sent, and the crate reports that as a server error: {error}",
         );
     }
 }
