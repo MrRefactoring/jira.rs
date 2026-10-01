@@ -5,6 +5,28 @@ All notable changes to this crate are documented here. The format follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html) — before `1.0.0`, a breaking change raises the minor
 version.
 
+## [0.1.1] - 2026-10-01
+
+### Changed
+
+- An operation Jira may answer with no body now hands back an `Option` of its model, and the empty answer is `None`.
+  Before, the empty answer failed the schema check although the operation had succeeded. This changes the return
+  type of eight operations, so code that names the old type no longer compiles; the old type could not describe the
+  answer Jira gives on success, so it ships as a fix rather than a minor release:
+  - Agile: `move_issues_to_board`
+  - Cloud: `update_precomputations`, `get_selected_time_tracking_implementation`, `publish_draft_workflow_scheme`,
+    `update_schemes`
+  - Data Center: `rank_issues`, `set_board_property`, `get_error`
+- Cloud: `add_issue_types_to_context` takes `AddIssueTypesToContext`, which adds `isAnyIssueType` and a default value
+  beside the issue type ids, following the specification Atlassian published.
+
+### Fixed
+
+- Service Management Data Center: a customer organization id is the string the instance sends, not a number.
+- `audit`: a value met while an untagged enum tried a variant it then dropped is no longer reported. The
+  `CompoundClauseOperator` value `=` was the operator of a field clause, read while the compound clause was tried first.
+- The readme examples are whole snippets, without the lines only rustdoc hides.
+
 ## [0.1.0] - 2026-09-30
 
 ### Added
@@ -85,4 +107,5 @@ version.
 - Harold Dost published `0.0.1` of this crate name in 2021. That release shares no code with this one, but it kept
   the name alive.
 
+[0.1.1]: https://github.com/MrRefactoring/jira.rs/releases/tag/v0.1.1
 [0.1.0]: https://github.com/MrRefactoring/jira.rs/releases/tag/v0.1.0

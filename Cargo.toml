@@ -3,7 +3,7 @@ members = [".", "xtask"]
 
 [package]
 name = "jira"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 rust-version = "1.91"
 description = "Modern Jira REST API client for Rust: Jira Cloud platform, Agile, Service Management, Assets and self-hosted Data Center APIs"
