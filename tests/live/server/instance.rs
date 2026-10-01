@@ -6,6 +6,15 @@ use jira::server::{
 use super::fixtures::{business_project, create_task, tiny_avatar, touch};
 use crate::harness::{ResourceTracker, require_server_env, server};
 
+fn created_from_temporary<T>(outcome: jira::Result<T>) {
+    if let Err(error) = outcome {
+        assert!(
+            error.is_server() || error.status().is_some_and(|status| (400..500).contains(&status)),
+            "Jira 10 answers 500 here whatever it is sent, and the crate reports that as a server error: {error}",
+        );
+    }
+}
+
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn reads_and_writes_an_application_property() {
@@ -201,7 +210,7 @@ async fn keeps_an_avatar_through_the_universal_endpoints() {
         "a temporary avatar answers with somewhere to crop it",
     );
 
-    touch(server().avatars().create_avatar_from_temporary("project", owner.clone()).send().await);
+    created_from_temporary(server().avatars().create_avatar_from_temporary("project", owner.clone()).send().await);
 
     let avatars = server().avatars().get_avatars("project", owner.clone()).send().await.expect("a project has avatars");
 
@@ -219,7 +228,7 @@ async fn keeps_an_avatar_through_the_universal_endpoints() {
             .send()
             .await,
     );
-    touch(
+    created_from_temporary(
         server()
             .issue_types()
             .create_issue_type_avatar_from_temporary(
@@ -229,7 +238,7 @@ async fn keeps_an_avatar_through_the_universal_endpoints() {
             .send()
             .await,
     );
-    touch(
+    created_from_temporary(
         server()
             .projects()
             .create_project_avatar_from_temporary(
