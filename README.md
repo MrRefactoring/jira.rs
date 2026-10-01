@@ -47,28 +47,28 @@ Build the transport **once** and share it between surfaces. Under OAuth 2.0 each
 Atlassian rotates the refresh token on every refresh, so a second transport would invalidate the first.
 
 ```rust,no_run
-# use jira::{Auth, Client};
-# fn example(client: Client) {
-let jira = jira::cloud::CloudClient::new(client.clone());
-let agile = jira::agile::AgileClient::new(client);
-# }
+use jira::Client;
+
+fn surfaces(client: Client) {
+    let jira = jira::cloud::CloudClient::new(client.clone());
+    let agile = jira::agile::AgileClient::new(client);
+}
 ```
 
 Every operation is a builder: required parameters are arguments, optional ones are methods.
 
 ```rust,no_run
-# use jira::cloud::CloudClient;
-# async fn example(jira: &CloudClient) -> jira::Result<()> {
-let issues = jira
-    .issue_search()
-    .search_issues()
-    .jql("project = PROJ ORDER BY created DESC")
-    .max_results(50)
-    .fields(["summary", "status"])
-    .send()
-    .await?;
-# Ok(())
-# }
+use jira::cloud::{CloudClient, SearchAndReconcileResults};
+
+async fn latest_issues(jira: &CloudClient) -> jira::Result<SearchAndReconcileResults> {
+    jira.issue_search()
+        .search_issues()
+        .jql("project = PROJ ORDER BY created DESC")
+        .max_results(50)
+        .fields(["summary", "status"])
+        .send()
+        .await
+}
 ```
 
 ## Searching with JQL
@@ -76,72 +76,75 @@ let issues = jira
 `jira::jql` builds a query with every value quoted and escaped, so user input cannot change its structure.
 
 ```rust,no_run
-# use jira::cloud::CloudClient;
+use jira::cloud::{CloudClient, SearchAndReconcileResults};
 use jira::jql::{field, func};
 
-# async fn example(jira: &CloudClient, typed: &str) -> jira::Result<()> {
-let query = field("project").eq("PROJ")
-    .and(field("summary").contains(typed))
-    .and(field("status").not_in(["Done", "Closed"]))
-    .and(field("assignee").eq(func("currentUser")))
-    .order_by_desc("created");
+async fn my_open_issues(jira: &CloudClient, typed: &str) -> jira::Result<SearchAndReconcileResults> {
+    let query = field("project").eq("PROJ")
+        .and(field("summary").contains(typed))
+        .and(field("status").not_in(["Done", "Closed"]))
+        .and(field("assignee").eq(func("currentUser")))
+        .order_by_desc("created");
 
-let page = jira.issue_search().search_issues().jql(query).fields(["summary", "status"]).send().await?;
-# Ok(())
-# }
+    jira.issue_search().search_issues().jql(query).fields(["summary", "status"]).send().await
+}
 ```
 
 Without `fields` the search returns only identifiers. System fields are typed; custom fields arrive under their
 site-specific keys, and `Extensible::custom` reads them into a type of your own:
 
 ```rust,no_run
-# use jira::Extensible;
-# use jira::cloud::SearchAndReconcileResults;
-# use serde::Deserialize;
+use jira::Extensible;
+use jira::cloud::SearchAndReconcileResults;
+use serde::Deserialize;
+
 #[derive(Deserialize)]
 struct Estimation {
     #[serde(rename = "customfield_10016")]
     story_points: Option<f64>,
 }
 
-# fn example(page: SearchAndReconcileResults) -> Result<(), serde_json::Error> {
-for issue in page.issues.unwrap_or_default() {
-    let fields = issue.fields.unwrap_or_default();
-    let estimation: Estimation = fields.custom()?;
+fn print_estimates(page: SearchAndReconcileResults) -> Result<(), serde_json::Error> {
+    for issue in page.issues.unwrap_or_default() {
+        let fields = issue.fields.unwrap_or_default();
+        let estimation: Estimation = fields.custom()?;
 
-    println!("{} — {} ({:?})", issue.key.unwrap_or_default(), fields.summary.unwrap_or_default(), estimation.story_points);
+        println!("{} — {} ({:?})", issue.key.unwrap_or_default(), fields.summary.unwrap_or_default(), estimation.story_points);
+    }
+
+    Ok(())
 }
-# Ok(())
-# }
 ```
 
 Writes take the same struct; `with_custom` adds your fields to it:
 
 ```rust,no_run
-# use jira::Extensible;
-# use jira::cloud::{CloudClient, IssueFields, IssueTypeDetails, IssueUpdateDetails, Project};
-# use serde::Serialize;
-# #[derive(Serialize)]
-# struct Estimation {
-#     #[serde(rename = "customfield_10016", skip_serializing_if = "Option::is_none")]
-#     story_points: Option<f64>,
-# }
-# async fn example(jira: &CloudClient) -> jira::Result<()> {
-let fields = IssueFields {
-    project: Some(Project { key: Some("PROJ".into()), ..Default::default() }),
-    issuetype: Some(IssueTypeDetails { name: Some("Task".into()), ..Default::default() }),
-    summary: Some("Rotate the signing key".into()),
-    ..Default::default()
-}
-.with_custom(Estimation { story_points: Some(5.0) })?;
+use jira::Extensible;
+use jira::cloud::{CloudClient, IssueFields, IssueTypeDetails, IssueUpdateDetails, Project};
+use serde::Serialize;
 
-let created = jira
-    .issues()
-    .create_issue(IssueUpdateDetails { fields: Some(fields), ..Default::default() })
-    .send()
-    .await?;
-# Ok(())
-# }
+#[derive(Serialize)]
+struct Estimation {
+    #[serde(rename = "customfield_10016")]
+    story_points: Option<f64>,
+}
+
+async fn create_estimated_task(jira: &CloudClient) -> jira::Result<()> {
+    let fields = IssueFields {
+        project: Some(Project { key: Some("PROJ".into()), ..Default::default() }),
+        issuetype: Some(IssueTypeDetails { name: Some("Task".into()), ..Default::default() }),
+        summary: Some("Rotate the signing key".into()),
+        ..Default::default()
+    }
+    .with_custom(Estimation { story_points: Some(5.0) })?;
+
+    jira.issues()
+        .create_issue(IssueUpdateDetails { fields: Some(fields), ..Default::default() })
+        .send()
+        .await?;
+
+    Ok(())
+}
 ```
 
 A key the struct already has, such as `summary`, is refused. `with` sets a single key.
@@ -149,39 +152,41 @@ A key the struct already has, such as `summary`, is refused. `with` sets a singl
 `stream` follows the search's page token to the last page:
 
 ```rust,no_run
-# use jira::cloud::CloudClient;
-# use jira::jql::field;
+use jira::cloud::CloudClient;
 use jira::futures_util::TryStreamExt;
+use jira::jql::field;
 
-# async fn example(jira: &CloudClient) -> jira::Result<()> {
-let mut issues = jira
-    .issue_search()
-    .search_issues()
-    .jql(field("project").eq("PROJ").order_by_desc("created"))
-    .fields(["summary"])
-    .stream();
+async fn print_issue_keys(jira: &CloudClient) -> jira::Result<()> {
+    let mut issues = jira
+        .issue_search()
+        .search_issues()
+        .jql(field("project").eq("PROJ").order_by_desc("created"))
+        .fields(["summary"])
+        .stream();
 
-while let Some(issue) = issues.try_next().await? {
-    println!("{}", issue.key.unwrap_or_default());
+    while let Some(issue) = issues.try_next().await? {
+        println!("{}", issue.key.unwrap_or_default());
+    }
+
+    Ok(())
 }
-# Ok(())
-# }
 ```
 
 Every paginated listing has `stream` too, including projects, users, filters, dashboards, boards, sprints and queues:
 
 ```rust,no_run
-# use jira::cloud::CloudClient;
+use jira::cloud::CloudClient;
 use jira::futures_util::TryStreamExt;
 
-# async fn example(jira: &CloudClient) -> jira::Result<()> {
-let mut projects = jira.projects().search_projects().stream();
+async fn print_project_keys(jira: &CloudClient) -> jira::Result<()> {
+    let mut projects = jira.projects().search_projects().stream();
 
-while let Some(project) = projects.try_next().await? {
-    println!("{}", project.key.unwrap_or_default());
+    while let Some(project) = projects.try_next().await? {
+        println!("{}", project.key.unwrap_or_default());
+    }
+
+    Ok(())
 }
-# Ok(())
-# }
 ```
 
 ## Authentication
@@ -225,16 +230,17 @@ refresh fails.
 Every failure is a `jira::Error`. Its predicates read the HTTP status and the OAuth error code, so match on them:
 
 ```rust,no_run
-# use jira::{Client, Error};
-# async fn example(client: &Client) {
-match client.get("/rest/api/3/issue/PROJ-1").send::<serde_json::Value>().await {
-    Ok(issue) => println!("{issue}"),
-    Err(error) if error.is_not_found() => println!("no such issue, or no permission to know"),
-    Err(error) if error.is_rate_limit() => println!("wait {:?}", error.retry_after()),
-    Err(error) if error.is_reauthorization_required() => println!("the grant is gone; authorize again"),
-    Err(error) => eprintln!("{error}"),
+use jira::Client;
+
+async fn read_issue(client: &Client) {
+    match client.get("/rest/api/3/issue/PROJ-1").send::<serde_json::Value>().await {
+        Ok(issue) => println!("{issue}"),
+        Err(error) if error.is_not_found() => println!("no such issue, or no permission to know"),
+        Err(error) if error.is_rate_limit() => println!("wait {:?}", error.retry_after()),
+        Err(error) if error.is_reauthorization_required() => println!("the grant is gone; authorize again"),
+        Err(error) => eprintln!("{error}"),
+    }
 }
-# }
 ```
 
 | Predicate | Means |
@@ -258,13 +264,15 @@ Retry is off by default. When enabled, it retries transient transport failures a
 never retries a 4xx, a 429 or a 500:
 
 ```rust,no_run
-# use jira::{Client, RetryConfig};
-# use std::time::Duration;
-let client = Client::builder()
-    .host("https://your-domain.atlassian.net")
-    .retry(RetryConfig { max_attempts: 3, initial_delay: Duration::from_millis(500), backoff_factor: 2.0 })
-    .build()?;
-# Ok::<(), jira::Error>(())
+use jira::{Client, RetryConfig};
+use std::time::Duration;
+
+fn retrying_client() -> jira::Result<Client> {
+    Client::builder()
+        .host("https://your-domain.atlassian.net")
+        .retry(RetryConfig { max_attempts: 3, initial_delay: Duration::from_millis(500), backoff_factor: 2.0 })
+        .build()
+}
 ```
 
 `jira::with_retry` applies the same policy around a call you already have.
@@ -275,14 +283,16 @@ To cancel a request, drop its future or wrap it in `tokio::time::timeout`. Proxi
 settings go through your own `reqwest::Client`:
 
 ```rust,no_run
-# use jira::Client;
-let http = reqwest::Client::builder()
-    .proxy(reqwest::Proxy::all("http://proxy.internal:8080")?)
-    .timeout(std::time::Duration::from_secs(30))
-    .build()?;
+use jira::Client;
 
-let client = Client::builder().host("https://your-domain.atlassian.net").http_client(http).build()?;
-# Ok::<(), Box<dyn std::error::Error>>(())
+fn proxied_client() -> Result<Client, Box<dyn std::error::Error>> {
+    let http = reqwest::Client::builder()
+        .proxy(reqwest::Proxy::all("http://proxy.internal:8080")?)
+        .timeout(std::time::Duration::from_secs(30))
+        .build()?;
+
+    Ok(Client::builder().host("https://your-domain.atlassian.net").http_client(http).build()?)
+}
 ```
 
 ## Feature flags

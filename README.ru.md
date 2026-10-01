@@ -46,28 +46,28 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 Atlassian ротирует refresh-токен при каждом обновлении, поэтому второй транспорт обесценит первый.
 
 ```rust,no_run
-# use jira::{Auth, Client};
-# fn example(client: Client) {
-let jira = jira::cloud::CloudClient::new(client.clone());
-let agile = jira::agile::AgileClient::new(client);
-# }
+use jira::Client;
+
+fn surfaces(client: Client) {
+    let jira = jira::cloud::CloudClient::new(client.clone());
+    let agile = jira::agile::AgileClient::new(client);
+}
 ```
 
 Каждая операция — билдер: обязательные параметры передаются аргументами, необязательные задаются методами.
 
 ```rust,no_run
-# use jira::cloud::CloudClient;
-# async fn example(jira: &CloudClient) -> jira::Result<()> {
-let issues = jira
-    .issue_search()
-    .search_issues()
-    .jql("project = PROJ ORDER BY created DESC")
-    .max_results(50)
-    .fields(["summary", "status"])
-    .send()
-    .await?;
-# Ok(())
-# }
+use jira::cloud::{CloudClient, SearchAndReconcileResults};
+
+async fn latest_issues(jira: &CloudClient) -> jira::Result<SearchAndReconcileResults> {
+    jira.issue_search()
+        .search_issues()
+        .jql("project = PROJ ORDER BY created DESC")
+        .max_results(50)
+        .fields(["summary", "status"])
+        .send()
+        .await
+}
 ```
 
 ## Поиск по JQL
@@ -76,72 +76,75 @@ let issues = jira
 не может изменить его структуру.
 
 ```rust,no_run
-# use jira::cloud::CloudClient;
+use jira::cloud::{CloudClient, SearchAndReconcileResults};
 use jira::jql::{field, func};
 
-# async fn example(jira: &CloudClient, typed: &str) -> jira::Result<()> {
-let query = field("project").eq("PROJ")
-    .and(field("summary").contains(typed))
-    .and(field("status").not_in(["Done", "Closed"]))
-    .and(field("assignee").eq(func("currentUser")))
-    .order_by_desc("created");
+async fn my_open_issues(jira: &CloudClient, typed: &str) -> jira::Result<SearchAndReconcileResults> {
+    let query = field("project").eq("PROJ")
+        .and(field("summary").contains(typed))
+        .and(field("status").not_in(["Done", "Closed"]))
+        .and(field("assignee").eq(func("currentUser")))
+        .order_by_desc("created");
 
-let page = jira.issue_search().search_issues().jql(query).fields(["summary", "status"]).send().await?;
-# Ok(())
-# }
+    jira.issue_search().search_issues().jql(query).fields(["summary", "status"]).send().await
+}
 ```
 
 Без `fields` поиск возвращает только идентификаторы. Системные поля типизированы, кастомные приходят под ключами
 конкретного сайта, и `Extensible::custom` читает их в ваш собственный тип:
 
 ```rust,no_run
-# use jira::Extensible;
-# use jira::cloud::SearchAndReconcileResults;
-# use serde::Deserialize;
+use jira::Extensible;
+use jira::cloud::SearchAndReconcileResults;
+use serde::Deserialize;
+
 #[derive(Deserialize)]
 struct Estimation {
     #[serde(rename = "customfield_10016")]
     story_points: Option<f64>,
 }
 
-# fn example(page: SearchAndReconcileResults) -> Result<(), serde_json::Error> {
-for issue in page.issues.unwrap_or_default() {
-    let fields = issue.fields.unwrap_or_default();
-    let estimation: Estimation = fields.custom()?;
+fn print_estimates(page: SearchAndReconcileResults) -> Result<(), serde_json::Error> {
+    for issue in page.issues.unwrap_or_default() {
+        let fields = issue.fields.unwrap_or_default();
+        let estimation: Estimation = fields.custom()?;
 
-    println!("{} — {} ({:?})", issue.key.unwrap_or_default(), fields.summary.unwrap_or_default(), estimation.story_points);
+        println!("{} — {} ({:?})", issue.key.unwrap_or_default(), fields.summary.unwrap_or_default(), estimation.story_points);
+    }
+
+    Ok(())
 }
-# Ok(())
-# }
 ```
 
 Запись принимает ту же структуру, `with_custom` добавляет в неё ваши поля:
 
 ```rust,no_run
-# use jira::Extensible;
-# use jira::cloud::{CloudClient, IssueFields, IssueTypeDetails, IssueUpdateDetails, Project};
-# use serde::Serialize;
-# #[derive(Serialize)]
-# struct Estimation {
-#     #[serde(rename = "customfield_10016", skip_serializing_if = "Option::is_none")]
-#     story_points: Option<f64>,
-# }
-# async fn example(jira: &CloudClient) -> jira::Result<()> {
-let fields = IssueFields {
-    project: Some(Project { key: Some("PROJ".into()), ..Default::default() }),
-    issuetype: Some(IssueTypeDetails { name: Some("Task".into()), ..Default::default() }),
-    summary: Some("Ротировать ключ подписи".into()),
-    ..Default::default()
-}
-.with_custom(Estimation { story_points: Some(5.0) })?;
+use jira::Extensible;
+use jira::cloud::{CloudClient, IssueFields, IssueTypeDetails, IssueUpdateDetails, Project};
+use serde::Serialize;
 
-let created = jira
-    .issues()
-    .create_issue(IssueUpdateDetails { fields: Some(fields), ..Default::default() })
-    .send()
-    .await?;
-# Ok(())
-# }
+#[derive(Serialize)]
+struct Estimation {
+    #[serde(rename = "customfield_10016")]
+    story_points: Option<f64>,
+}
+
+async fn create_estimated_task(jira: &CloudClient) -> jira::Result<()> {
+    let fields = IssueFields {
+        project: Some(Project { key: Some("PROJ".into()), ..Default::default() }),
+        issuetype: Some(IssueTypeDetails { name: Some("Task".into()), ..Default::default() }),
+        summary: Some("Ротировать ключ подписи".into()),
+        ..Default::default()
+    }
+    .with_custom(Estimation { story_points: Some(5.0) })?;
+
+    jira.issues()
+        .create_issue(IssueUpdateDetails { fields: Some(fields), ..Default::default() })
+        .send()
+        .await?;
+
+    Ok(())
+}
 ```
 
 Ключ, который уже есть в структуре, например `summary`, отклоняется. `with` задаёт один ключ.
@@ -149,40 +152,42 @@ let created = jira
 `stream` проходит поиск по токену страниц до последней страницы:
 
 ```rust,no_run
-# use jira::cloud::CloudClient;
-# use jira::jql::field;
+use jira::cloud::CloudClient;
 use jira::futures_util::TryStreamExt;
+use jira::jql::field;
 
-# async fn example(jira: &CloudClient) -> jira::Result<()> {
-let mut issues = jira
-    .issue_search()
-    .search_issues()
-    .jql(field("project").eq("PROJ").order_by_desc("created"))
-    .fields(["summary"])
-    .stream();
+async fn print_issue_keys(jira: &CloudClient) -> jira::Result<()> {
+    let mut issues = jira
+        .issue_search()
+        .search_issues()
+        .jql(field("project").eq("PROJ").order_by_desc("created"))
+        .fields(["summary"])
+        .stream();
 
-while let Some(issue) = issues.try_next().await? {
-    println!("{}", issue.key.unwrap_or_default());
+    while let Some(issue) = issues.try_next().await? {
+        println!("{}", issue.key.unwrap_or_default());
+    }
+
+    Ok(())
 }
-# Ok(())
-# }
 ```
 
 `stream` есть у каждого постраничного списка, включая проекты, пользователей, фильтры, дашборды, доски, спринты и
 очереди:
 
 ```rust,no_run
-# use jira::cloud::CloudClient;
+use jira::cloud::CloudClient;
 use jira::futures_util::TryStreamExt;
 
-# async fn example(jira: &CloudClient) -> jira::Result<()> {
-let mut projects = jira.projects().search_projects().stream();
+async fn print_project_keys(jira: &CloudClient) -> jira::Result<()> {
+    let mut projects = jira.projects().search_projects().stream();
 
-while let Some(project) = projects.try_next().await? {
-    println!("{}", project.key.unwrap_or_default());
+    while let Some(project) = projects.try_next().await? {
+        println!("{}", project.key.unwrap_or_default());
+    }
+
+    Ok(())
 }
-# Ok(())
-# }
 ```
 
 ## Аутентификация
@@ -226,16 +231,17 @@ Atlassian ротирует refresh-токен при каждом обновле
 Любая неудача — это `jira::Error`. Её предикаты сами читают HTTP-статус и код ошибки OAuth, поэтому проверяйте их:
 
 ```rust,no_run
-# use jira::{Client, Error};
-# async fn example(client: &Client) {
-match client.get("/rest/api/3/issue/PROJ-1").send::<serde_json::Value>().await {
-    Ok(issue) => println!("{issue}"),
-    Err(error) if error.is_not_found() => println!("такой задачи нет — или нет прав о ней знать"),
-    Err(error) if error.is_rate_limit() => println!("подождать {:?}", error.retry_after()),
-    Err(error) if error.is_reauthorization_required() => println!("грант мёртв, нужна повторная авторизация"),
-    Err(error) => eprintln!("{error}"),
+use jira::Client;
+
+async fn read_issue(client: &Client) {
+    match client.get("/rest/api/3/issue/PROJ-1").send::<serde_json::Value>().await {
+        Ok(issue) => println!("{issue}"),
+        Err(error) if error.is_not_found() => println!("такой задачи нет — или нет прав о ней знать"),
+        Err(error) if error.is_rate_limit() => println!("подождать {:?}", error.retry_after()),
+        Err(error) if error.is_reauthorization_required() => println!("грант мёртв, нужна повторная авторизация"),
+        Err(error) => eprintln!("{error}"),
+    }
 }
-# }
 ```
 
 | Предикат | Что означает |
@@ -259,13 +265,15 @@ match client.get("/rest/api/3/issue/PROJ-1").send::<serde_json::Value>().await {
 никогда не повторяют 4xx, 429 и 500:
 
 ```rust,no_run
-# use jira::{Client, RetryConfig};
-# use std::time::Duration;
-let client = Client::builder()
-    .host("https://your-domain.atlassian.net")
-    .retry(RetryConfig { max_attempts: 3, initial_delay: Duration::from_millis(500), backoff_factor: 2.0 })
-    .build()?;
-# Ok::<(), jira::Error>(())
+use jira::{Client, RetryConfig};
+use std::time::Duration;
+
+fn retrying_client() -> jira::Result<Client> {
+    Client::builder()
+        .host("https://your-domain.atlassian.net")
+        .retry(RetryConfig { max_attempts: 3, initial_delay: Duration::from_millis(500), backoff_factor: 2.0 })
+        .build()
+}
 ```
 
 `jira::with_retry` применяет ту же политику вокруг уже готового вызова.
@@ -276,14 +284,16 @@ let client = Client::builder()
 настройки транспорта задаются через собственный `reqwest::Client`:
 
 ```rust,no_run
-# use jira::Client;
-let http = reqwest::Client::builder()
-    .proxy(reqwest::Proxy::all("http://proxy.internal:8080")?)
-    .timeout(std::time::Duration::from_secs(30))
-    .build()?;
+use jira::Client;
 
-let client = Client::builder().host("https://your-domain.atlassian.net").http_client(http).build()?;
-# Ok::<(), Box<dyn std::error::Error>>(())
+fn proxied_client() -> Result<Client, Box<dyn std::error::Error>> {
+    let http = reqwest::Client::builder()
+        .proxy(reqwest::Proxy::all("http://proxy.internal:8080")?)
+        .timeout(std::time::Duration::from_secs(30))
+        .build()?;
+
+    Ok(Client::builder().host("https://your-domain.atlassian.net").http_client(http).build()?)
+}
 ```
 
 ## Флаги сборки
