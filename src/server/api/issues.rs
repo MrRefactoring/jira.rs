@@ -483,7 +483,7 @@ impl<'a> RankIssuesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<PartialSuccess> {
+    pub async fn send(self) -> crate::core::Result<Option<PartialSuccess>> {
         self.client.send(&self.config()?).await
     }
 

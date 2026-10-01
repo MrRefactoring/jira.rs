@@ -386,7 +386,7 @@ impl<'a> UpdateSchemesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<TaskProgressObject> {
+    pub async fn send(self) -> crate::core::Result<Option<TaskProgressObject>> {
         self.client.send(&self.config()?).await
     }
 

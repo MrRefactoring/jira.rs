@@ -78,7 +78,7 @@ impl<'a> GetSelectedTimeTrackingImplementationRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<TimeTrackingProvider> {
+    pub async fn send(self) -> crate::core::Result<Option<TimeTrackingProvider>> {
         self.client.send(&self.config()?).await
     }
 

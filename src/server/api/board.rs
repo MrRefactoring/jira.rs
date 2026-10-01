@@ -1279,7 +1279,7 @@ impl<'a> SetBoardPropertyRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<EntityPropertiesKeys> {
+    pub async fn send(self) -> crate::core::Result<Option<EntityPropertiesKeys>> {
         self.client.send(&self.config()?).await
     }
 

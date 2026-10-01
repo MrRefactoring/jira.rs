@@ -257,7 +257,7 @@ impl<'a> GetErrorRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<ResponseValue> {
+    pub async fn send(self) -> crate::core::Result<Option<ResponseValue>> {
         self.client.send(&self.config()?).await
     }
 

@@ -1411,7 +1411,7 @@ impl<'a> MoveIssuesToBoardRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<MoveIssuesToBoard> {
+    pub async fn send(self) -> crate::core::Result<Option<MoveIssuesToBoard>> {
         self.client.send(&self.config()?).await
     }
 

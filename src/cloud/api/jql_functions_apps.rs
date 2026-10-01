@@ -255,7 +255,7 @@ impl<'a> UpdatePrecomputationsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<JqlFunctionPrecomputationUpdateResponse> {
+    pub async fn send(self) -> crate::core::Result<Option<JqlFunctionPrecomputationUpdateResponse>> {
         self.client.send(&self.config()?).await
     }
 
