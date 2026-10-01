@@ -1,7 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetUiModificationsRequestExpandValue {
@@ -14,7 +14,7 @@ crate::open_enum! {
 ///
 ///  *  `data` Returns UI modification data.
 ///  *  `contexts` Returns UI modification contexts.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetUiModificationsRequestExpand {
@@ -23,6 +23,8 @@ pub enum GetUiModificationsRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetUiModificationsRequestExpand { One, Many, Other });
 
 /// The UIModificationsApps operations.
 pub struct UIModificationsAppsService<'a> {

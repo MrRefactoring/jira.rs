@@ -1,7 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetNotificationSchemesRequestExpandValue {
@@ -22,7 +22,7 @@ crate::open_enum! {
 ///  *  `notificationSchemeEvents` Returns a list of event associations. This list is returned for all expandable information
 ///  *  `projectRole` Returns information about any project roles assigned to receive an event
 ///  *  `user` Returns information about any users assigned to receive an event
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetNotificationSchemesRequestExpand {
@@ -31,6 +31,8 @@ pub enum GetNotificationSchemesRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetNotificationSchemesRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     pub enum GetNotificationSchemeRequestExpandValue {
@@ -51,7 +53,7 @@ crate::open_enum! {
 ///  *  `notificationSchemeEvents` Returns a list of event associations. This list is returned for all expandable information
 ///  *  `projectRole` Returns information about any project roles assigned to receive an event
 ///  *  `user` Returns information about any users assigned to receive an event
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetNotificationSchemeRequestExpand {
@@ -60,6 +62,8 @@ pub enum GetNotificationSchemeRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetNotificationSchemeRequestExpand { One, Many, Other });
 
 /// The IssueNotificationSchemes operations.
 pub struct IssueNotificationSchemesService<'a> {

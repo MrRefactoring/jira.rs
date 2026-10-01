@@ -1,7 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetAssignedPermissionSchemeRequestExpandValue {
@@ -22,7 +22,7 @@ crate::open_enum! {
 ///  *  `permissions` Returns all permission grants for each permission scheme.
 ///  *  `projectRole` Returns information about the project role granted the permission.
 ///  *  `user` Returns information about the user who is granted the permission.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetAssignedPermissionSchemeRequestExpand {
@@ -31,6 +31,8 @@ pub enum GetAssignedPermissionSchemeRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetAssignedPermissionSchemeRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     pub enum AssignPermissionSchemeRequestExpandValue {
@@ -51,7 +53,7 @@ crate::open_enum! {
 ///  *  `permissions` Returns all permission grants for each permission scheme.
 ///  *  `projectRole` Returns information about the project role granted the permission.
 ///  *  `user` Returns information about the user who is granted the permission.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum AssignPermissionSchemeRequestExpand {
@@ -60,6 +62,8 @@ pub enum AssignPermissionSchemeRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(AssignPermissionSchemeRequestExpand { One, Many, Other });
 
 /// The ProjectPermissionSchemes operations.
 pub struct ProjectPermissionSchemesService<'a> {

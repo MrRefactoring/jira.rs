@@ -61,7 +61,7 @@ pub struct WorkspaceModelAttributes {
     pub unit: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum WorkspaceModelRelationships {
@@ -71,6 +71,13 @@ pub enum WorkspaceModelRelationships {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(WorkspaceModelRelationships {
+    PolicyModelV2,
+    EntitlementModelV2,
+    FeatureModelV2,
+    Other
+});
 
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 #[non_exhaustive]

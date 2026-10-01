@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 /// Comma-separated list of Security Workspace IDs to delete. All data associated with the given workspaces will eventually be removed from Jira. Example: workspaceIds=111-222-333,444-555-666.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum DeleteLinkedWorkspacesRequestWorkspaceIds {
@@ -13,6 +13,8 @@ pub enum DeleteLinkedWorkspacesRequestWorkspaceIds {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(DeleteLinkedWorkspacesRequestWorkspaceIds { One, Many, Other });
 
 crate::open_enum! {
     /// Indicates the operation being performed by the provider system when sending this data. "NORMAL" - Data received during real-time, user-triggered actions (e.g. user closed or updated a vulnerability). "SCAN" - Data sent through some automated process (e.g. some periodically scheduled repository scan). "BACKFILL" - Data received while backfilling existing data (e.g. pushing historical vulnerabilities when re-connect a workspace). Default is "NORMAL". "NORMAL" traffic has higher priority but tighter rate limits, "SCAN" traffic has medium priority and looser limits, "BACKFILL" has lower priority and much looser limits
@@ -102,7 +104,7 @@ pub struct SubmitVulnerabilitiesRequestVulnerabilitiesAdditionalInfo {
     pub url: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitVulnerabilitiesRequestVulnerabilitiesAddAssociations {
@@ -111,7 +113,12 @@ pub enum SubmitVulnerabilitiesRequestVulnerabilitiesAddAssociations {
     Other(serde_json::Value),
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+crate::core::untagged::untagged!(SubmitVulnerabilitiesRequestVulnerabilitiesAddAssociations {
+    IssueIdOrKeysAssociation,
+    Other
+});
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitVulnerabilitiesRequestVulnerabilitiesRemoveAssociations {
@@ -119,6 +126,11 @@ pub enum SubmitVulnerabilitiesRequestVulnerabilitiesRemoveAssociations {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(SubmitVulnerabilitiesRequestVulnerabilitiesRemoveAssociations {
+    IssueIdOrKeysAssociation,
+    Other
+});
 
 /// Data related to a specific vulnerability in a specific workspace that the vulnerability is present in. Must specify at least one association.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

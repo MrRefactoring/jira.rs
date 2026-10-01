@@ -1,10 +1,10 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetAgileIssueRequestExpand {
@@ -14,8 +14,10 @@ pub enum GetAgileIssueRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetAgileIssueRequestExpand { One, Many, Other });
+
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetAgileIssueRequestFields {
@@ -24,6 +26,8 @@ pub enum GetAgileIssueRequestFields {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetAgileIssueRequestFields { One, Many, Other });
 
 /// The Issues operations.
 pub struct IssuesService<'a> {

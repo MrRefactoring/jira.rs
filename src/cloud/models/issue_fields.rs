@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A document in Atlassian Document Format, or a string of wiki markup — a string is sent to the v2 endpoint that parses it, and Jira stores the document it made of it. One write goes to one endpoint, so `description`, `environment`, the comment bodies and the worklog comments in `update` are all markup or all documents; a multi-line custom field is not looked at and has to be given in the same form as them.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum IssueFieldsDescription {
@@ -14,8 +14,10 @@ pub enum IssueFieldsDescription {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(IssueFieldsDescription { Document, Variant1, Other });
+
 /// A document in Atlassian Document Format, or a string of wiki markup — a string is sent to the v2 endpoint that parses it, and Jira stores the document it made of it. One write goes to one endpoint, so `description`, `environment`, the comment bodies and the worklog comments in `update` are all markup or all documents; a multi-line custom field is not looked at and has to be given in the same form as them.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum IssueFieldsEnvironment {
@@ -24,6 +26,8 @@ pub enum IssueFieldsEnvironment {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(IssueFieldsEnvironment { Document, Variant1, Other });
 
 /// The fields of an issue: the system fields by name, and every custom field by its `customfield_` key alongside them. Reading one, the fields the request did not ask for are absent; writing one, the fields left out are left as they were.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]

@@ -13,7 +13,7 @@ pub struct SubmitDeploymentsRequestProperties {
     pub properties: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitDeploymentsRequestDeploymentsAssociations {
@@ -23,6 +23,13 @@ pub enum SubmitDeploymentsRequestDeploymentsAssociations {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(SubmitDeploymentsRequestDeploymentsAssociations {
+    IssueIdOrKeysAssociation,
+    ServiceIdOrKeysAssociation,
+    EntityAssociation,
+    Other
+});
 
 crate::open_enum! {
     /// The state of the deployment

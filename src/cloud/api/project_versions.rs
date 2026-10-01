@@ -1,7 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 crate::open_enum! {
     /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
@@ -31,7 +31,7 @@ crate::open_enum! {
 }
 
 /// A list of status values used to filter the results by version status. This parameter accepts a comma-separated list. The status values are `released`, `unreleased`, and `archived`.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetProjectVersionsPaginatedRequestStatus {
@@ -40,6 +40,8 @@ pub enum GetProjectVersionsPaginatedRequestStatus {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetProjectVersionsPaginatedRequestStatus { One, Many, Other });
 
 crate::open_enum! {
     pub enum GetProjectVersionsPaginatedRequestExpandValue {
@@ -56,7 +58,7 @@ crate::open_enum! {
 ///  *  `operations` Returns actions that can be performed on the specified version.
 ///  *  `driver` Returns the Atlassian account ID of the version driver.
 ///  *  `approvers` Returns a list containing the approvers for this version.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetProjectVersionsPaginatedRequestExpand {
@@ -66,6 +68,8 @@ pub enum GetProjectVersionsPaginatedRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetProjectVersionsPaginatedRequestExpand { One, Many, Other });
+
 crate::open_enum! {
     pub enum GetProjectVersionsRequestExpandValue {
         Operations => "operations",
@@ -73,7 +77,7 @@ crate::open_enum! {
 }
 
 /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts `operations`, which returns actions that can be performed on the version.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetProjectVersionsRequestExpand {
@@ -82,6 +86,8 @@ pub enum GetProjectVersionsRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetProjectVersionsRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     pub enum GetVersionRequestExpandValue {
@@ -98,7 +104,7 @@ crate::open_enum! {
 ///  *  `issuesstatus` Returns the count of issues in this version for each of the status categories *to do*, *in progress*, *done*, and *unmapped*. The *unmapped* property represents the number of issues with a status other than *to do*, *in progress*, and *done*.
 ///  *  `driver` Returns the Atlassian account ID of the version driver.
 ///  *  `approvers` Returns a list containing the Atlassian account IDs of approvers for this version.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetVersionRequestExpand {
@@ -107,6 +113,8 @@ pub enum GetVersionRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetVersionRequestExpand { One, Many, Other });
 
 /// The ProjectVersions operations.
 pub struct ProjectVersionsService<'a> {

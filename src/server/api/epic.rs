@@ -1,10 +1,10 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesWithoutEpicRequestExpand {
@@ -14,8 +14,10 @@ pub enum GetIssuesWithoutEpicRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetIssuesWithoutEpicRequestExpand { One, Many, Other });
+
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesWithoutEpicRequestFields {
@@ -25,8 +27,10 @@ pub enum GetIssuesWithoutEpicRequestFields {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetIssuesWithoutEpicRequestFields { One, Many, Other });
+
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForEpicRequestExpand {
@@ -36,8 +40,10 @@ pub enum GetIssuesForEpicRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetIssuesForEpicRequestExpand { One, Many, Other });
+
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForEpicRequestFields {
@@ -46,6 +52,8 @@ pub enum GetIssuesForEpicRequestFields {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetIssuesForEpicRequestFields { One, Many, Other });
 
 /// The Epic operations.
 pub struct EpicService<'a> {

@@ -1,7 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 crate::open_enum! {
     /// The filter applied to the list of dashboards. Valid values are:
@@ -77,7 +77,7 @@ crate::open_enum! {
 ///  *  `sharePermissions` Returns details of the share permissions defined for the dashboard.
 ///  *  `editPermissions` Returns details of the edit permissions defined for the dashboard.
 ///  *  `isWritable` Returns whether the current user has permission to edit the dashboard.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetDashboardsPaginatedRequestExpand {
@@ -86,6 +86,8 @@ pub enum GetDashboardsPaginatedRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetDashboardsPaginatedRequestExpand { One, Many, Other });
 
 /// The Dashboards operations.
 pub struct DashboardsService<'a> {

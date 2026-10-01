@@ -1,10 +1,10 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 /// Filters results to boards of the specified type. Valid values: scrum, kanban.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetAllBoardsRequestType {
@@ -14,8 +14,10 @@ pub enum GetAllBoardsRequestType {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetAllBoardsRequestType { One, Many, Other });
+
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForBacklogRequestFields {
@@ -25,8 +27,10 @@ pub enum GetIssuesForBacklogRequestFields {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetIssuesForBacklogRequestFields { One, Many, Other });
+
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesWithoutEpicForBoardRequestExpand {
@@ -36,8 +40,10 @@ pub enum GetIssuesWithoutEpicForBoardRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetIssuesWithoutEpicForBoardRequestExpand { One, Many, Other });
+
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesWithoutEpicForBoardRequestFields {
@@ -47,8 +53,10 @@ pub enum GetIssuesWithoutEpicForBoardRequestFields {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetIssuesWithoutEpicForBoardRequestFields { One, Many, Other });
+
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForBoardEpicRequestExpand {
@@ -58,8 +66,10 @@ pub enum GetIssuesForBoardEpicRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetIssuesForBoardEpicRequestExpand { One, Many, Other });
+
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForBoardEpicRequestFields {
@@ -69,8 +79,10 @@ pub enum GetIssuesForBoardEpicRequestFields {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetIssuesForBoardEpicRequestFields { One, Many, Other });
+
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForBoardRequestFields {
@@ -80,8 +92,10 @@ pub enum GetIssuesForBoardRequestFields {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetIssuesForBoardRequestFields { One, Many, Other });
+
 /// Filters results to sprints in specified states. Valid values: future, active, closed. You can define multiple states separated by commas, e.g. state=active,closed
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetAllSprintsRequestState {
@@ -91,8 +105,10 @@ pub enum GetAllSprintsRequestState {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetAllSprintsRequestState { One, Many, Other });
+
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForBoardSprintRequestExpand {
@@ -102,8 +118,10 @@ pub enum GetIssuesForBoardSprintRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetIssuesForBoardSprintRequestExpand { One, Many, Other });
+
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForBoardSprintRequestFields {
@@ -112,6 +130,8 @@ pub enum GetIssuesForBoardSprintRequestFields {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetIssuesForBoardSprintRequestFields { One, Many, Other });
 
 /// The Board operations.
 pub struct BoardService<'a> {

@@ -1,10 +1,10 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetPermissionSchemesRequestExpand {
@@ -14,8 +14,10 @@ pub enum GetPermissionSchemesRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetPermissionSchemesRequestExpand { One, Many, Other });
+
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum CreatePermissionSchemeRequestExpand {
@@ -25,8 +27,10 @@ pub enum CreatePermissionSchemeRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(CreatePermissionSchemeRequestExpand { One, Many, Other });
+
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetPermissionSchemeRequestExpand {
@@ -36,8 +40,10 @@ pub enum GetPermissionSchemeRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetPermissionSchemeRequestExpand { One, Many, Other });
+
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum UpdatePermissionSchemeRequestExpand {
@@ -47,8 +53,10 @@ pub enum UpdatePermissionSchemeRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(UpdatePermissionSchemeRequestExpand { One, Many, Other });
+
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetPermissionSchemeGrantsRequestExpand {
@@ -58,8 +66,10 @@ pub enum GetPermissionSchemeGrantsRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetPermissionSchemeGrantsRequestExpand { One, Many, Other });
+
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum CreatePermissionGrantRequestExpand {
@@ -69,8 +79,10 @@ pub enum CreatePermissionGrantRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(CreatePermissionGrantRequestExpand { One, Many, Other });
+
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetPermissionSchemeGrantRequestExpand {
@@ -79,6 +91,8 @@ pub enum GetPermissionSchemeGrantRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetPermissionSchemeGrantRequestExpand { One, Many, Other });
 
 /// The PermissionSchemes operations.
 pub struct PermissionSchemesService<'a> {

@@ -30,7 +30,7 @@ pub struct EntityAssociationValuesValue2 {
     pub repository_id: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum EntityAssociationValues {
@@ -39,6 +39,8 @@ pub enum EntityAssociationValues {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(EntityAssociationValues { Variant0, Variant1, Other });
 
 /// An association type referencing another entity
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

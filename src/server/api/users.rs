@@ -1,10 +1,10 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 /// the keys of the projects we are finding assignable users for, comma-separated
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum FindBulkAssignableUsersRequestProjectKeys {
@@ -13,6 +13,8 @@ pub enum FindBulkAssignableUsersRequestProjectKeys {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(FindBulkAssignableUsersRequestProjectKeys { One, Many, Other });
 
 /// The Users operations.
 pub struct UsersService<'a> {

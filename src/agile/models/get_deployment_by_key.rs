@@ -3,7 +3,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetDeploymentByKeyAssociations {
@@ -13,6 +13,13 @@ pub enum GetDeploymentByKeyAssociations {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetDeploymentByKeyAssociations {
+    IssueIdOrKeysAssociation,
+    ServiceIdOrKeysAssociation,
+    EntityAssociation,
+    Other
+});
 
 crate::open_enum! {
     /// The state of the deployment

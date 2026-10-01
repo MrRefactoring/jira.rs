@@ -127,3 +127,49 @@ async fn forgets_what_it_collected_when_asked() {
 
     assert!(collected().is_empty());
 }
+
+#[cfg(feature = "cloud")]
+#[tokio::test]
+async fn records_nothing_for_a_variant_an_untagged_enum_tried_and_dropped() {
+    let _guard = guard().await;
+
+    reset();
+
+    let server = answering(json!({
+        "field": { "name": "project" },
+        "operator": "=",
+        "operand": { "value": "PROJ" },
+    }))
+    .await;
+    let client = Client::builder().host(server.uri()).build().unwrap();
+
+    let clause: jira::cloud::JqlQueryClause = client.get("/rest/api/3/jql/parse").send().await.unwrap();
+
+    assert!(matches!(clause, jira::cloud::JqlQueryClause::FieldValueClause(_)), "{clause:?}");
+    assert!(collected().is_empty(), "{:?}", collected());
+}
+
+#[cfg(feature = "cloud")]
+#[tokio::test]
+async fn records_a_value_inside_the_variant_an_untagged_enum_settled_on() {
+    let _guard = guard().await;
+
+    reset();
+
+    let server = answering(json!({ "clauses": [], "operator": "xor" })).await;
+    let client = Client::builder().host(server.uri()).build().unwrap();
+
+    let clause: jira::cloud::JqlQueryClause = client.get("/rest/api/3/jql/parse").send().await.unwrap();
+
+    assert!(matches!(clause, jira::cloud::JqlQueryClause::CompoundClause(_)), "{clause:?}");
+
+    let drift = collected();
+
+    assert!(
+        drift.iter().any(|entry| matches!(
+            entry,
+            SchemaDrift::UndocumentedValue { type_name, value, .. } if type_name == "CompoundClauseOperator" && value == "xor"
+        )),
+        "{drift:?}",
+    );
+}

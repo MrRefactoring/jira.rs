@@ -14,7 +14,7 @@ pub struct SubmitRemoteLinksRejectedRemoteLinks {
     pub error_trace_id: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitRemoteLinksUnknownAssociations {
@@ -23,6 +23,12 @@ pub enum SubmitRemoteLinksUnknownAssociations {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(SubmitRemoteLinksUnknownAssociations {
+    IssueIdOrKeysAssociation,
+    ServiceIdOrKeysAssociation,
+    Other
+});
 
 /// The result of a successful `submitRemoteLinks` request.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]

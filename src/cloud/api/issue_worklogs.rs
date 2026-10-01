@@ -1,7 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetIssueWorklogRequestExpandValue {
@@ -10,7 +10,7 @@ crate::open_enum! {
 }
 
 /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts`properties`, which returns worklog properties.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssueWorklogRequestExpand {
@@ -19,6 +19,8 @@ pub enum GetIssueWorklogRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetIssueWorklogRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// Defines how to update the issue's time estimate, the options are:
@@ -42,7 +44,7 @@ crate::open_enum! {
 }
 
 /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about work logs in the response. This parameter accepts `properties`, which returns worklog properties.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum AddWorklogRequestExpand {
@@ -51,6 +53,8 @@ pub enum AddWorklogRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(AddWorklogRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     pub enum GetWorklogRequestExpandValue {
@@ -61,7 +65,7 @@ crate::open_enum! {
 /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about work logs in the response. This parameter accepts
 ///
 /// `properties`, which returns worklog properties.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetWorklogRequestExpand {
@@ -70,6 +74,8 @@ pub enum GetWorklogRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetWorklogRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// Defines how to update the issue's time estimate, the options are:
@@ -92,7 +98,7 @@ crate::open_enum! {
 }
 
 /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties`, which returns worklog properties.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum UpdateWorklogRequestExpand {
@@ -101,6 +107,8 @@ pub enum UpdateWorklogRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(UpdateWorklogRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// Defines how to update the issue's time estimate, the options are:
@@ -124,7 +132,7 @@ crate::open_enum! {
 }
 
 /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetWorklogsForIdsRequestExpand {
@@ -134,6 +142,8 @@ pub enum GetWorklogsForIdsRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetWorklogsForIdsRequestExpand { One, Many, Other });
+
 crate::open_enum! {
     pub enum GetIdsOfWorklogsModifiedSinceRequestExpandValue {
         Properties => "properties",
@@ -141,7 +151,7 @@ crate::open_enum! {
 }
 
 /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIdsOfWorklogsModifiedSinceRequestExpand {
@@ -150,6 +160,8 @@ pub enum GetIdsOfWorklogsModifiedSinceRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetIdsOfWorklogsModifiedSinceRequestExpand { One, Many, Other });
 
 /// The IssueWorklogs operations.
 pub struct IssueWorklogsService<'a> {

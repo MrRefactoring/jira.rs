@@ -56,7 +56,7 @@ pub struct SubmitDeploymentsRejectedDeployments {
     pub errors: Vec<SubmitDeploymentsRejectedDeploymentsErrors>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitDeploymentsUnknownAssociations {
@@ -66,6 +66,13 @@ pub enum SubmitDeploymentsUnknownAssociations {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(SubmitDeploymentsUnknownAssociations {
+    IssueIdOrKeysAssociation,
+    ServiceIdOrKeysAssociation,
+    EntityAssociation,
+    Other
+});
 
 /// The result of a successful submitDeployments request.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]

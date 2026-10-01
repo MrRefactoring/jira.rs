@@ -7,6 +7,7 @@
 //! value outside a documented set is the same gap one level down: the field is described, its list of values is not
 //! complete.
 
+use std::cell::RefCell;
 use std::io::Write;
 use std::sync::{Mutex, OnceLock};
 
@@ -54,7 +55,34 @@ fn store() -> &'static Mutex<Vec<SchemaDrift>> {
     STORE.get_or_init(|| Mutex::new(Vec::new()))
 }
 
+thread_local! {
+    static TRIALS: RefCell<Vec<Vec<SchemaDrift>>> = const { RefCell::new(Vec::new()) };
+}
+
+pub(crate) fn trial<T>(attempt: impl FnOnce() -> Option<T>) -> Option<T> {
+    TRIALS.with_borrow_mut(|trials| trials.push(Vec::new()));
+
+    let outcome = attempt();
+    let staged = TRIALS.with_borrow_mut(Vec::pop).unwrap_or_default();
+
+    if outcome.is_some() {
+        staged.into_iter().for_each(record);
+    }
+
+    outcome
+}
+
 fn record(entry: SchemaDrift) {
+    let Some(entry) = TRIALS.with_borrow_mut(|trials| match trials.last_mut() {
+        Some(staged) => {
+            staged.push(entry);
+            None
+        }
+        None => Some(entry),
+    }) else {
+        return;
+    };
+
     let Ok(mut collected) = store().lock() else { return };
 
     if collected.contains(&entry) {

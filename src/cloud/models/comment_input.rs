@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// A document in Atlassian Document Format, or a string of wiki markup — a string is sent to the v2 endpoint that parses it, and the result is read back as a document.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum CommentInputBody {
@@ -13,6 +13,8 @@ pub enum CommentInputBody {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(CommentInputBody { Document, Variant1, Other });
 
 /// A comment.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]

@@ -1,7 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 crate::open_enum! {
     /// Filters results to boards of the specified types. Valid values: scrum, kanban, simple.
@@ -29,7 +29,7 @@ crate::open_enum! {
 }
 
 /// List of fields to expand for each board. Valid values: admins, permissions.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetAllBoardsRequestExpand {
@@ -39,8 +39,10 @@ pub enum GetAllBoardsRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetAllBoardsRequestExpand { One, Many, Other });
+
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForBacklogRequestExpand {
@@ -50,8 +52,10 @@ pub enum GetIssuesForBacklogRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetIssuesForBacklogRequestExpand { One, Many, Other });
+
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesWithoutEpicForBoardRequestExpand {
@@ -61,8 +65,10 @@ pub enum GetIssuesWithoutEpicForBoardRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetIssuesWithoutEpicForBoardRequestExpand { One, Many, Other });
+
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetBoardIssuesForEpicRequestExpand {
@@ -72,8 +78,10 @@ pub enum GetBoardIssuesForEpicRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetBoardIssuesForEpicRequestExpand { One, Many, Other });
+
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetIssuesForBoardRequestExpand {
@@ -82,6 +90,8 @@ pub enum GetIssuesForBoardRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetIssuesForBoardRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// Filters results to sprints in specified states. Valid values: future, active, closed. You can define multiple states separated by commas, e.g. state=active,closed
@@ -93,7 +103,7 @@ crate::open_enum! {
 }
 
 /// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetBoardIssuesForSprintRequestExpand {
@@ -102,6 +112,8 @@ pub enum GetBoardIssuesForSprintRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetBoardIssuesForSprintRequestExpand { One, Many, Other });
 
 /// The Board operations.
 pub struct BoardService<'a> {

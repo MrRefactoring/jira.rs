@@ -33,7 +33,7 @@ crate::open_enum! {
 }
 
 /// Rule of the Policy
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum PolicyModelAttributesRule {
@@ -42,6 +42,8 @@ pub enum PolicyModelAttributesRule {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(PolicyModelAttributesRule { AllowIfContainedRule, Variant1, Other });
 
 /// Attributes of this object
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

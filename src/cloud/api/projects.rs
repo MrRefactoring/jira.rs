@@ -1,7 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 crate::open_enum! {
     /// The default assignee when creating issues for this project.
@@ -110,7 +110,7 @@ crate::open_enum! {
 }
 
 /// Orders results by the [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes). This parameter accepts a comma-separated list. Valid values are `business`, `service_desk`, and `software`.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SearchProjectsRequestTypeKey {
@@ -119,6 +119,8 @@ pub enum SearchProjectsRequestTypeKey {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(SearchProjectsRequestTypeKey { One, Many, Other });
 
 crate::open_enum! {
     /// Filter results by projects for which the user can:
@@ -161,7 +163,7 @@ crate::open_enum! {
 ///  *  `issueTypes` Returns all issue types associated with the project.
 ///  *  `url` Returns the URL associated with the project.
 ///  *  `insight` EXPERIMENTAL. Returns the insight details of total issue count and last issue update time for the project.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SearchProjectsRequestExpand {
@@ -170,6 +172,8 @@ pub enum SearchProjectsRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(SearchProjectsRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     pub enum SearchProjectsRequestStatus {
@@ -196,7 +200,7 @@ crate::open_enum! {
 ///  *  `lead` The project lead.
 ///  *  `projectKeys` All project keys associated with the project.
 ///  *  `issueTypeHierarchy` The project issue type hierarchy.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetProjectRequestExpand {
@@ -205,6 +209,8 @@ pub enum GetProjectRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetProjectRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     pub enum UpdateProjectRequestExpandValue {
@@ -221,7 +227,7 @@ crate::open_enum! {
 ///  *  `issueTypes` The issue types associated with the project.
 ///  *  `lead` The project lead.
 ///  *  `projectKeys` All project keys associated with the project.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum UpdateProjectRequestExpand {
@@ -230,6 +236,8 @@ pub enum UpdateProjectRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(UpdateProjectRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     pub enum GetNotificationSchemeForProjectRequestExpandValue {
@@ -250,7 +258,7 @@ crate::open_enum! {
 ///  *  `notificationSchemeEvents` Returns a list of event associations. This list is returned for all expandable information
 ///  *  `projectRole` Returns information about any project roles assigned to receive an event
 ///  *  `user` Returns information about any users assigned to receive an event
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetNotificationSchemeForProjectRequestExpand {
@@ -259,6 +267,8 @@ pub enum GetNotificationSchemeForProjectRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetNotificationSchemeForProjectRequestExpand { One, Many, Other });
 
 /// The Projects operations.
 pub struct ProjectsService<'a> {

@@ -1,7 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetCommentsByIdsRequestExpandValue {
@@ -14,7 +14,7 @@ crate::open_enum! {
 ///
 ///  *  `renderedBody` Returns the comment body rendered in HTML.
 ///  *  `properties` Returns the comment's properties.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetCommentsByIdsRequestExpand {
@@ -23,6 +23,8 @@ pub enum GetCommentsByIdsRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetCommentsByIdsRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field. Accepts *created* to sort comments by their created date.
@@ -40,7 +42,7 @@ crate::open_enum! {
 }
 
 /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetCommentsRequestExpand {
@@ -50,6 +52,8 @@ pub enum GetCommentsRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetCommentsRequestExpand { One, Many, Other });
+
 crate::open_enum! {
     pub enum AddCommentRequestExpandValue {
         RenderedBody => "renderedBody",
@@ -57,7 +61,7 @@ crate::open_enum! {
 }
 
 /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum AddCommentRequestExpand {
@@ -67,6 +71,8 @@ pub enum AddCommentRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(AddCommentRequestExpand { One, Many, Other });
+
 crate::open_enum! {
     pub enum GetCommentRequestExpandValue {
         RenderedBody => "renderedBody",
@@ -74,7 +80,7 @@ crate::open_enum! {
 }
 
 /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetCommentRequestExpand {
@@ -84,6 +90,8 @@ pub enum GetCommentRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetCommentRequestExpand { One, Many, Other });
+
 crate::open_enum! {
     pub enum UpdateCommentRequestExpandValue {
         RenderedBody => "renderedBody",
@@ -91,7 +99,7 @@ crate::open_enum! {
 }
 
 /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum UpdateCommentRequestExpand {
@@ -100,6 +108,8 @@ pub enum UpdateCommentRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(UpdateCommentRequestExpand { One, Many, Other });
 
 /// The IssueComments operations.
 pub struct IssueCommentsService<'a> {

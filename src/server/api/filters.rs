@@ -1,9 +1,9 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum CreateFilterRequestExpand {
@@ -13,7 +13,9 @@ pub enum CreateFilterRequestExpand {
     Other(serde_json::Value),
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+crate::core::untagged::untagged!(CreateFilterRequestExpand { One, Many, Other });
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetFavouriteFiltersRequestExpand {
@@ -23,7 +25,9 @@ pub enum GetFavouriteFiltersRequestExpand {
     Other(serde_json::Value),
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+crate::core::untagged::untagged!(GetFavouriteFiltersRequestExpand { One, Many, Other });
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetFilterRequestExpand {
@@ -33,7 +37,9 @@ pub enum GetFilterRequestExpand {
     Other(serde_json::Value),
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+crate::core::untagged::untagged!(GetFilterRequestExpand { One, Many, Other });
+
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum EditFilterRequestExpand {
@@ -42,6 +48,8 @@ pub enum EditFilterRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(EditFilterRequestExpand { One, Many, Other });
 
 /// The Filters operations.
 pub struct FiltersService<'a> {

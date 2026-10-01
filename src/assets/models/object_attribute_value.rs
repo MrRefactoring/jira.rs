@@ -3,7 +3,7 @@
 use super::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum ObjectAttributeValueValue {
@@ -11,6 +11,8 @@ pub enum ObjectAttributeValueValue {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(ObjectAttributeValueValue { Variant0, Other });
 
 /// The actual value of an object attribute. The object attribute value body will have different properties populated based on the type of the object type attribute. The value will always be present.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]

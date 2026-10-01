@@ -1,10 +1,10 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 /// A comma-separated list of case-insensitive prefixes; an attribute is included when its name or display name starts with any value
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum FindObjectTypeAttributesRequestQuery {
@@ -13,6 +13,8 @@ pub enum FindObjectTypeAttributesRequestQuery {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(FindObjectTypeAttributesRequestQuery { One, Many, Other });
 
 /// The ObjectTypes operations.
 pub struct ObjectTypesService<'a> {

@@ -1,7 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 crate::open_enum! {
     /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
@@ -29,7 +29,7 @@ crate::open_enum! {
 ///
 ///  *  `projects` For each issue type schemes, returns information about the projects the issue type scheme is assigned to.
 ///  *  `issueTypes` For each issue type schemes, returns information about the issueTypes the issue type scheme have.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetAllIssueTypeSchemesRequestExpand {
@@ -38,6 +38,8 @@ pub enum GetAllIssueTypeSchemesRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetAllIssueTypeSchemesRequestExpand { One, Many, Other });
 
 /// The IssueTypeSchemes operations.
 pub struct IssueTypeSchemesService<'a> {

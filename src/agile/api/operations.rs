@@ -4,7 +4,7 @@ use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
 /// Comma-separated list of Operations Workspace IDs to delete. All data associated with the given workspaces will eventually be removed from Jira. Example: workspaceIds=111-222-333,444-555-666.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum DeleteWorkspacesRequestWorkspaceIds {
@@ -13,6 +13,8 @@ pub enum DeleteWorkspacesRequestWorkspaceIds {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(DeleteWorkspacesRequestWorkspaceIds { One, Many, Other });
 
 crate::open_enum! {
     /// The IncidentData schema version used for this incident data.
@@ -270,7 +272,7 @@ pub struct SubmitEntityRequestBodyValue2 {
     pub reviews: Option<Vec<SubmitEntityRequestBodyVariant1Reviews>>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitEntityRequestBody {
@@ -279,6 +281,8 @@ pub enum SubmitEntityRequestBody {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(SubmitEntityRequestBody { Variant0, Variant1, Other });
 
 /// The Operations operations.
 pub struct OperationsService<'a> {

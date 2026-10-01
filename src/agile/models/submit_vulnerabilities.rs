@@ -14,7 +14,7 @@ pub struct SubmitVulnerabilitiesFailedVulnerabilities {
     pub error_trace_id: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SubmitVulnerabilitiesUnknownAssociations {
@@ -22,6 +22,8 @@ pub enum SubmitVulnerabilitiesUnknownAssociations {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(SubmitVulnerabilitiesUnknownAssociations { IssueIdOrKeysAssociation, Other });
 
 /// The result of a successful submitVulnerabilities request.
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]

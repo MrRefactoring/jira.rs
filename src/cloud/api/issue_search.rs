@@ -1,7 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 crate::open_enum! {
     pub enum SearchIssuesRequestExpandValue {
@@ -28,7 +28,7 @@ crate::open_enum! {
 ///  *  `versionedRepresentations` Instead of `fields`, returns `versionedRepresentations` a JSON array containing each version of a field's value, with the highest numbered item representing the most recent version.
 ///
 /// Examples: `"names,changelog"` Returns the display name of each field as well as a list of recent updates to an issue.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum SearchIssuesRequestExpand {
@@ -37,6 +37,8 @@ pub enum SearchIssuesRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(SearchIssuesRequestExpand { One, Many, Other });
 
 /// The IssueSearch operations.
 pub struct IssueSearchService<'a> {

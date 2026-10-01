@@ -1,7 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetWorkflowTransitionRuleConfigurationsRequestTypes {
@@ -18,7 +18,7 @@ crate::open_enum! {
 }
 
 /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts `transition`, which, for each rule, returns information about the transition the rule is assigned to.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetWorkflowTransitionRuleConfigurationsRequestExpand {
@@ -27,6 +27,8 @@ pub enum GetWorkflowTransitionRuleConfigurationsRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(GetWorkflowTransitionRuleConfigurationsRequestExpand { One, Many, Other });
 
 /// The WorkflowTransitionRules operations.
 pub struct WorkflowTransitionRulesService<'a> {

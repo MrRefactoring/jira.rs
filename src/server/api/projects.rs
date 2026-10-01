@@ -1,10 +1,10 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 /// Use expand to include additional information about permission schemes in the response. This parameter accepts a comma-separated list of expandable options. Expand options include: all and field.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum GetAssignedPermissionSchemeRequestExpand {
@@ -14,8 +14,10 @@ pub enum GetAssignedPermissionSchemeRequestExpand {
     Other(serde_json::Value),
 }
 
+crate::core::untagged::untagged!(GetAssignedPermissionSchemeRequestExpand { One, Many, Other });
+
 /// Use expand to include additional information about permission schemes in the response. This parameter accepts a comma-separated list of expandable options. Expand options include: all and field.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum AssignPermissionSchemeRequestExpand {
@@ -24,6 +26,8 @@ pub enum AssignPermissionSchemeRequestExpand {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(AssignPermissionSchemeRequestExpand { One, Many, Other });
 
 /// The Projects operations.
 pub struct ProjectsService<'a> {

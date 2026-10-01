@@ -264,7 +264,7 @@ pub struct DefaultTypeValue13 {
 /// | 9 | Textarea |
 /// | 10 | Select |
 /// | 11 | IP Address |
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum DefaultType {
@@ -284,3 +284,20 @@ pub enum DefaultType {
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(DefaultType {
+    Variant0,
+    Variant1,
+    Variant2,
+    Variant3,
+    Variant4,
+    Variant5,
+    Variant6,
+    Variant7,
+    Variant8,
+    Variant9,
+    Variant10,
+    Variant11,
+    Variant12,
+    Other
+});
