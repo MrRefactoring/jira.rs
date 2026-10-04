@@ -528,17 +528,17 @@ impl<'a> GetAllBoardsRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Board>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, Some(page.total), None))
         })
     }
 
@@ -651,17 +651,17 @@ impl<'a> GetBoardByFilterIdRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<BoardFilter>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, Some(page.total), None))
         })
     }
 
@@ -871,6 +871,22 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let items = page.issues;
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), page.is_last))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<SoftwareIssueResults> {
         self.client.send(&self.config()?).await
@@ -1031,6 +1047,28 @@ impl<'a> GetEpicsRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Epic>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(
+                items,
+                page.start_at.unwrap_or(position),
+                page.is_last.unwrap_or(false),
+                page.total,
+                None,
+            ))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<GetEpics> {
         self.client.send(&self.config()?).await
@@ -1169,6 +1207,22 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let items = page.issues;
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), page.is_last))
+        })
     }
 
     /// Sends the request.
@@ -1311,6 +1365,22 @@ impl<'a> GetBoardIssuesForEpicRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let items = page.issues;
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), page.is_last))
+        })
     }
 
     /// Sends the request.
@@ -1562,6 +1632,22 @@ impl<'a> GetIssuesForBoardRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let items = page.issues;
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), page.is_last))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<SoftwareIssueResults> {
         self.client.send(&self.config()?).await
@@ -1671,6 +1757,28 @@ impl<'a> GetProjectsRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<ProjectDetails>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(
+                items,
+                page.start_at.unwrap_or(position),
+                page.is_last.unwrap_or(false),
+                page.total,
+                None,
+            ))
+        })
     }
 
     /// Sends the request.
@@ -1928,17 +2036,17 @@ impl<'a> GetAllQuickFiltersRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<QuickFilter>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, Some(page.total), None))
         })
     }
 
@@ -2078,6 +2186,28 @@ impl<'a> GetAllSprintsRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Sprint>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(
+                items,
+                page.start_at.unwrap_or(position),
+                page.is_last.unwrap_or(false),
+                page.total,
+                None,
+            ))
+        })
     }
 
     /// Sends the request.
@@ -2222,6 +2352,22 @@ impl<'a> GetBoardIssuesForSprintRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let items = page.issues;
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), page.is_last))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<SoftwareIssueResults> {
         self.client.send(&self.config()?).await
@@ -2292,6 +2438,28 @@ impl<'a> GetAllVersionsRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Version>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(
+                items,
+                page.start_at.unwrap_or(position),
+                page.is_last.unwrap_or(false),
+                page.total,
+                None,
+            ))
+        })
     }
 
     /// Sends the request.

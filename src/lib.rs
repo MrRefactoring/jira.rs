@@ -23,9 +23,6 @@ pub mod core;
 
 pub mod jql;
 
-#[cfg(feature = "cloud")]
-mod paging;
-
 #[cfg(feature = "admin")]
 #[cfg_attr(docsrs, doc(cfg(feature = "admin")))]
 pub mod admin;

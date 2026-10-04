@@ -1624,6 +1624,34 @@ impl<'a> GetUserListRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(
+        self,
+    ) -> futures_util::stream::BoxStream<'a, crate::core::Result<std::collections::HashMap<String, serde_json::Value>>>
+    {
+        let first = self.cursor.map(|value| value.to_string());
+
+        crate::core::stream_pages(self, first, |request, position| async move {
+            let mut config = request.config()?;
+            config.query.retain(|(name, _)| name != "cursor");
+            if let Some(token) = &position {
+                config.query.push(("cursor".to_owned(), crate::core::QueryValue::Scalar(token.clone())));
+            }
+            let page: StreamPage = request.client.send(&config).await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::cursor(
+                items,
+                &position,
+                page.next_cursor.map(Some),
+                page.is_last.unwrap_or(false),
+            ))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<StreamPage> {
         self.client.send(&self.config()?).await
