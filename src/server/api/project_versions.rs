@@ -245,7 +245,7 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<RustPageVersion> {
+    pub async fn send(self) -> crate::core::Result<PageOfVersions> {
         self.client.send(&self.config()?).await
     }
 

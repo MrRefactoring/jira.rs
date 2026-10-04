@@ -155,7 +155,7 @@ impl<'a> GetNotificationSchemesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<RustPageNotificationScheme> {
+    pub async fn send(self) -> crate::core::Result<PageOfNotificationSchemes> {
         self.client.send(&self.config()?).await
     }
 
