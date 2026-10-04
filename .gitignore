@@ -4,3 +4,4 @@
 .env
 docker/*/timebomb-license.txt
 .DS_Store
+.orchestration/
