@@ -28,7 +28,7 @@ pub struct FindObjectsRequest<'a> {
     result_per_page: Option<String>,
     include_attributes: Option<String>,
     ql_query: Option<String>,
-    page: Option<String>,
+    page: Option<i64>,
     include_extended_info: Option<String>,
 }
 
@@ -98,8 +98,8 @@ impl<'a> FindObjectsRequest<'a> {
 
     /// The page to fetch when paginating through the response.
     #[must_use]
-    pub fn page(mut self, value: impl Into<String>) -> Self {
-        self.page = Some(value.into());
+    pub fn page(mut self, value: i64) -> Self {
+        self.page = Some(value);
 
         self
     }
@@ -142,7 +142,7 @@ impl<'a> FindObjectsRequest<'a> {
         }
 
         if let Some(value) = &self.page {
-            config.query.push(("page".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("page".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.include_extended_info {
@@ -150,6 +150,27 @@ impl<'a> FindObjectsRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<AssetObject>> {
+        let first = (self.page.unwrap_or(1), 0_i64);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.page = Some(position.0);
+            let page = request.send().await?;
+            let items = page.object_entries.unwrap_or_default();
+            let count = items.len() as i64;
+            Ok(crate::core::PageStep::new(
+                items,
+                (count > 0 && page.total_filter_count.is_none_or(|total| position.1 + count < total))
+                    .then_some((position.0 + 1, position.1 + count)),
+            ))
+        })
     }
 
     /// Sends the request.

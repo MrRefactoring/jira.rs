@@ -1,4 +1,4 @@
-#![cfg(all(feature = "server", feature = "agile", feature = "cloud"))]
+#![cfg(all(feature = "server", feature = "agile", feature = "cloud", feature = "assets-server"))]
 
 use futures_util::TryStreamExt;
 use jira::core::Client;
@@ -174,6 +174,33 @@ suite!(
     ["a", "b", "c"]
 );
 
+#[tokio::test]
+async fn server_find_users_walks_two_pages_then_an_empty_page() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/rest/api/2/user/search"))
+        .respond_with(|request: &Request| match query(request, "startAt").as_deref() {
+            Some("0") => ResponseTemplate::new(200).set_body_json(json!([{"name": "a"}, {"name": "b"}])),
+            Some("2") => ResponseTemplate::new(200).set_body_json(json!([{"name": "c"}, {"name": "d"}])),
+            Some("4") => ResponseTemplate::new(200).set_body_json(json!([])),
+            _ => ResponseTemplate::new(500),
+        })
+        .mount(&server)
+        .await;
+
+    let api = jira::server::ServerClient::new(client_for(&server));
+    let users: Vec<_> = api.users().find_users().max_results(2).stream().try_collect().await.unwrap();
+
+    assert_eq!(
+        users.iter().map(|user| user.name.as_deref()).collect::<Vec<_>>(),
+        [Some("a"), Some("b"), Some("c"), Some("d")]
+    );
+    assert_eq!(
+        server.received_requests().await.unwrap().iter().map(|request| query(request, "startAt")).collect::<Vec<_>>(),
+        [Some("0".to_owned()), Some("2".to_owned()), Some("4".to_owned())]
+    );
+}
+
 suite!(
     cloud_search,
     jira::cloud::CloudClient::new,
@@ -193,15 +220,25 @@ fn requested_stream_signatures_compile() {
     let client = Client::builder().host("https://example.invalid").build().unwrap();
     let server = jira::server::ServerClient::new(client.clone());
     let cloud = jira::cloud::CloudClient::new(client.clone());
+    let assets_server = jira::assets_server::AssetsServerClient::new(client.clone());
     let agile = jira::agile::AgileClient::new(client);
 
     drop(server.issue_search().search().stream());
     drop(server.sprint().get_issues_for_sprint(1).stream());
     drop(server.issues().get_issue_worklog("X-1").stream());
     drop(server.users().get_user_list().stream());
+    drop(server.users().find_users().stream());
+    drop(server.dashboards().list().start_at(50).stream());
+    drop(server.issues().get_comments("X-1").max_results(10).stream());
+    drop(server.screens().get_all_screens().stream());
+    drop(server.groups().get_users_from_group("g").stream());
     drop(cloud.issue_worklogs().get_issue_worklog("X-1").stream());
     drop(cloud.issue_comments().get_comments("X-1").stream());
     drop(cloud.user_search().find_users().stream());
+    drop(cloud.issue_notification_schemes().get_notification_schemes().start_at(0).stream());
+    drop(cloud.issue_priorities().search_priorities().stream());
+    drop(assets_server.aql().find_objects().stream());
+    drop(assets_server.objects().get_archived_objects().stream());
     drop(agile.board().get_all_sprints(1).stream());
     drop(agile.sprint().get_issues_for_sprint(1).stream());
 }

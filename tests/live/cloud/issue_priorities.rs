@@ -37,7 +37,7 @@ async fn honours_pagination_typed_as_strings_rather_than_numbers() {
     let page = cloud()
         .issue_priorities()
         .search_priorities()
-        .max_results("1")
+        .max_results(1)
         .send()
         .await
         .expect("a page size given as a string is accepted");

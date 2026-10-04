@@ -966,7 +966,7 @@ impl<'a> FindBulkAssignableUsersRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<User> {
+    pub async fn send(self) -> crate::core::Result<Vec<User>> {
         self.client.send(&self.config()?).await
     }
 
@@ -1059,7 +1059,7 @@ impl<'a> FindAssignableUsersRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<User> {
+    pub async fn send(self) -> crate::core::Result<Vec<User>> {
         self.client.send(&self.config()?).await
     }
 
@@ -2135,8 +2135,24 @@ impl<'a> FindUsersRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<User>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.clone().send().await?;
+            let items = page;
+            Ok(crate::core::PageStep::offset(items, position, false, None, request.max_results))
+        })
+    }
+
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<User> {
+    pub async fn send(self) -> crate::core::Result<Vec<User>> {
         self.client.send(&self.config()?).await
     }
 
@@ -2251,7 +2267,7 @@ impl<'a> FindUsersWithBrowsePermissionRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<User> {
+    pub async fn send(self) -> crate::core::Result<Vec<User>> {
         self.client.send(&self.config()?).await
     }
 

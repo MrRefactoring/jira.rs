@@ -141,9 +141,9 @@ impl<'a> RemoveGroupRequest<'a> {
 pub struct GetUsersFromGroupRequest<'a> {
     client: &'a crate::core::Client,
     include_inactive_users: Option<String>,
-    max_results: Option<String>,
+    max_results: Option<i64>,
     groupname: String,
-    start_at: Option<String>,
+    start_at: Option<i64>,
 }
 
 impl<'a> GetUsersFromGroupRequest<'a> {
@@ -161,16 +161,16 @@ impl<'a> GetUsersFromGroupRequest<'a> {
 
     /// The maximum number of users to return.
     #[must_use]
-    pub fn max_results(mut self, value: impl Into<String>) -> Self {
-        self.max_results = Some(value.into());
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
 
         self
     }
 
     /// The index of the first user in group to return.
     #[must_use]
-    pub fn start_at(mut self, value: impl Into<String>) -> Self {
-        self.start_at = Some(value.into());
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
 
         self
     }
@@ -185,16 +185,38 @@ impl<'a> GetUsersFromGroupRequest<'a> {
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         config.query.push(("groupname".to_owned(), crate::core::QueryValue::Scalar(self.groupname.clone())));
 
         if let Some(value) = &self.start_at {
-            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<UserJson>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(
+                items,
+                page.start_at.unwrap_or(position),
+                page.is_last.unwrap_or(false),
+                page.total,
+                None,
+            ))
+        })
     }
 
     /// Sends the request.
@@ -296,7 +318,7 @@ impl<'a> RemoveUserFromGroupRequest<'a> {
 #[derive(Clone)]
 pub struct FindGroupsRequest<'a> {
     client: &'a crate::core::Client,
-    max_results: Option<String>,
+    max_results: Option<i64>,
     query: Option<String>,
     exclude: Option<String>,
     user_name: Option<String>,
@@ -309,8 +331,8 @@ impl<'a> FindGroupsRequest<'a> {
 
     /// Maximum number of results to return
     #[must_use]
-    pub fn max_results(mut self, value: impl Into<String>) -> Self {
-        self.max_results = Some(value.into());
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
 
         self
     }
@@ -345,7 +367,7 @@ impl<'a> FindGroupsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/groups/picker".to_owned());
 
         if let Some(value) = &self.max_results {
-            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.query {

@@ -45,12 +45,12 @@ pub struct GetCustomFieldsRequest<'a> {
     sort_column: Option<String>,
     types: Option<String>,
     search: Option<String>,
-    max_results: Option<String>,
+    max_results: Option<i64>,
     sort_order: Option<String>,
     screen_ids: Option<String>,
     last_value_update: Option<String>,
     project_ids: Option<String>,
-    start_at: Option<String>,
+    start_at: Option<i64>,
 }
 
 impl<'a> GetCustomFieldsRequest<'a> {
@@ -95,8 +95,8 @@ impl<'a> GetCustomFieldsRequest<'a> {
 
     /// The maximum number of custom fields to return.
     #[must_use]
-    pub fn max_results(mut self, value: impl Into<String>) -> Self {
-        self.max_results = Some(value.into());
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
 
         self
     }
@@ -135,8 +135,8 @@ impl<'a> GetCustomFieldsRequest<'a> {
 
     /// The starting index of the returned custom fields.
     #[must_use]
-    pub fn start_at(mut self, value: impl Into<String>) -> Self {
-        self.start_at = Some(value.into());
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
 
         self
     }
@@ -159,7 +159,7 @@ impl<'a> GetCustomFieldsRequest<'a> {
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.sort_order {
@@ -179,10 +179,26 @@ impl<'a> GetCustomFieldsRequest<'a> {
         }
 
         if let Some(value) = &self.start_at {
-            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<CustomField>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, page.total, None))
+        })
     }
 
     /// Sends the request.
@@ -233,13 +249,13 @@ impl<'a> BulkDeleteCustomFieldsRequest<'a> {
 #[derive(Clone)]
 pub struct GetCustomFieldOptionsRequest<'a> {
     client: &'a crate::core::Client,
-    max_results: Option<String>,
+    max_results: Option<i64>,
     issue_type_ids: Option<String>,
     query: Option<String>,
     sort_by_option_name: Option<String>,
     custom_field_id: String,
     use_all_contexts: Option<String>,
-    page: Option<String>,
+    page: Option<i64>,
     project_ids: Option<String>,
 }
 
@@ -260,8 +276,8 @@ impl<'a> GetCustomFieldOptionsRequest<'a> {
 
     /// The maximum number of results to return.
     #[must_use]
-    pub fn max_results(mut self, value: impl Into<String>) -> Self {
-        self.max_results = Some(value.into());
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
 
         self
     }
@@ -300,8 +316,8 @@ impl<'a> GetCustomFieldOptionsRequest<'a> {
 
     /// The page of options to return.
     #[must_use]
-    pub fn page(mut self, value: impl Into<String>) -> Self {
-        self.page = Some(value.into());
+    pub fn page(mut self, value: i64) -> Self {
+        self.page = Some(value);
 
         self
     }
@@ -322,7 +338,7 @@ impl<'a> GetCustomFieldOptionsRequest<'a> {
         );
 
         if let Some(value) = &self.max_results {
-            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.issue_type_ids {
@@ -342,7 +358,7 @@ impl<'a> GetCustomFieldOptionsRequest<'a> {
         }
 
         if let Some(value) = &self.page {
-            config.query.push(("page".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("page".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.project_ids {
@@ -350,6 +366,27 @@ impl<'a> GetCustomFieldOptionsRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<CustomFieldOption>> {
+        let first = (self.page.unwrap_or(1), 0_i64);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.page = Some(position.0);
+            let page = request.send().await?;
+            let items = page.options.unwrap_or_default();
+            let count = items.len() as i64;
+            Ok(crate::core::PageStep::new(
+                items,
+                (count > 0 && page.total.is_none_or(|total| position.1 + count < total))
+                    .then_some((position.0 + 1, position.1 + count)),
+            ))
+        })
     }
 
     /// Sends the request.

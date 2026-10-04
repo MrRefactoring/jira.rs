@@ -23,7 +23,7 @@ impl<'a> GroupAndUserPickerService<'a> {
 pub struct FindUsersAndGroupsRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_id: Option<String>,
-    max_results: Option<String>,
+    max_results: Option<i64>,
     query: Option<String>,
     show_avatar: Option<String>,
     project_id: Option<String>,
@@ -53,8 +53,8 @@ impl<'a> FindUsersAndGroupsRequest<'a> {
 
     /// The maximum number of users to return
     #[must_use]
-    pub fn max_results(mut self, value: impl Into<String>) -> Self {
-        self.max_results = Some(value.into());
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
 
         self
     }
@@ -101,7 +101,7 @@ impl<'a> FindUsersAndGroupsRequest<'a> {
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.query {
