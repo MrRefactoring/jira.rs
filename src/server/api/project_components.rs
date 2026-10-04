@@ -41,6 +41,11 @@ impl<'a> ProjectComponentsService<'a> {
     pub fn get_component_related_issues(&self, id: impl Into<String>) -> GetComponentRelatedIssuesRequest<'a> {
         GetComponentRelatedIssuesRequest::new(self.client, id)
     }
+
+    /// Contains a full representation of the specified project's components.
+    pub fn get_project_components(&self, project_id_or_key: impl Into<String>) -> GetProjectComponentsRequest<'a> {
+        GetProjectComponentsRequest::new(self.client, project_id_or_key)
+    }
 }
 
 /// Create a component via POST.
@@ -340,6 +345,39 @@ impl<'a> GetComponentRelatedIssuesRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<ComponentIssueCounts> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Contains a full representation of the specified project's components.
+#[derive(Clone)]
+pub struct GetProjectComponentsRequest<'a> {
+    client: &'a crate::core::Client,
+    project_id_or_key: String,
+}
+
+impl<'a> GetProjectComponentsRequest<'a> {
+    fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
+        Self { client, project_id_or_key: project_id_or_key.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/2/project/{}/components", crate::core::encode_path_segment(&self.project_id_or_key)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Vec<Component>> {
         self.client.send(&self.config()?).await
     }
 

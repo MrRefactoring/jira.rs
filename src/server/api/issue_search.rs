@@ -7,27 +7,27 @@ use serde::Serialize;
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
-pub enum SearchRequest2Expand {
+pub enum SearchIssuesRequestExpand {
     One(String),
     Many(Vec<String>),
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
 
-crate::core::untagged::untagged!(SearchRequest2Expand { One, Many, Other });
+crate::core::untagged::untagged!(SearchIssuesRequestExpand { One, Many, Other });
 
 /// the list of fields to return for each issue
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
-pub enum SearchRequest2Fields {
+pub enum SearchIssuesRequestFields {
     One(String),
     Many(Vec<String>),
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
 
-crate::core::untagged::untagged!(SearchRequest2Fields { One, Many, Other });
+crate::core::untagged::untagged!(SearchIssuesRequestFields { One, Many, Other });
 
 /// The IssueSearch operations.
 pub struct IssueSearchService<'a> {
@@ -37,6 +37,11 @@ pub struct IssueSearchService<'a> {
 impl<'a> IssueSearchService<'a> {
     pub(crate) fn new(client: &'a crate::core::Client) -> Self {
         Self { client }
+    }
+
+    /// Get issue picker resource
+    pub fn get_issue_picker_resource(&self) -> GetIssuePickerResourceRequest<'a> {
+        GetIssuePickerResourceRequest::new(self.client)
     }
 
     /// Searches for issues using JQL.
@@ -61,18 +66,134 @@ impl<'a> IssueSearchService<'a> {
     /// in to this resources.
     /// For instance, to expand the changelog for all the issues on the search result, it is necessary to
     /// specify changelog as one of the values to expand.
-    pub fn search(&self) -> SearchRequest2<'a> {
-        SearchRequest2::new(self.client)
+    pub fn search_issues(&self) -> SearchIssuesRequest<'a> {
+        SearchIssuesRequest::new(self.client)
     }
 
     /// Performs a search using JQL.
-    pub fn search_using_search_request(&self, search_request: SearchRequest) -> SearchUsingSearchRequestRequest<'a> {
-        SearchUsingSearchRequestRequest::new(self.client, search_request)
+    pub fn search_issues_post(&self, search_request: SearchRequest) -> SearchIssuesPostRequest<'a> {
+        SearchIssuesPostRequest::new(self.client, search_request)
     }
 
     /// Available since Jira Data Center 11.3.
     pub fn get_error(&self) -> GetErrorRequest<'a> {
         GetErrorRequest::new(self.client)
+    }
+}
+
+/// Get issue picker resource
+#[derive(Clone)]
+pub struct GetIssuePickerResourceRequest<'a> {
+    client: &'a crate::core::Client,
+    current_project_id: Option<String>,
+    query: Option<String>,
+    current_issue_key: Option<String>,
+    show_sub_tasks: Option<String>,
+    current_jql: Option<String>,
+    show_sub_task_parent: Option<String>,
+}
+
+impl<'a> GetIssuePickerResourceRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self {
+            client,
+            current_project_id: None,
+            query: None,
+            current_issue_key: None,
+            show_sub_tasks: None,
+            current_jql: None,
+            show_sub_task_parent: None,
+        }
+    }
+
+    /// the id of the project in context of which the request is executed
+    #[must_use]
+    pub fn current_project_id(mut self, value: impl Into<String>) -> Self {
+        self.current_project_id = Some(value.into());
+
+        self
+    }
+
+    /// the query
+    #[must_use]
+    pub fn query(mut self, value: impl Into<String>) -> Self {
+        self.query = Some(value.into());
+
+        self
+    }
+
+    /// the key of the issue in context of which the request is executed
+    #[must_use]
+    pub fn current_issue_key(mut self, value: impl Into<String>) -> Self {
+        self.current_issue_key = Some(value.into());
+
+        self
+    }
+
+    /// if set to false, subtasks will not be included in the list
+    #[must_use]
+    pub fn show_sub_tasks(mut self, value: impl Into<String>) -> Self {
+        self.show_sub_tasks = Some(value.into());
+
+        self
+    }
+
+    /// the JQL in context of which the request is executed
+    #[must_use]
+    pub fn current_jql(mut self, value: impl Into<String>) -> Self {
+        self.current_jql = Some(value.into());
+
+        self
+    }
+
+    /// if set to false and request is executed in context of a subtask, the parent issue will not be included in the auto-completion result, even if it matches the query
+    #[must_use]
+    pub fn show_sub_task_parent(mut self, value: impl Into<String>) -> Self {
+        self.show_sub_task_parent = Some(value.into());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/issue/picker".to_owned());
+
+        if let Some(value) = &self.current_project_id {
+            config.query.push(("currentProjectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.query {
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.current_issue_key {
+            config.query.push(("currentIssueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.show_sub_tasks {
+            config.query.push(("showSubTasks".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.current_jql {
+            config.query.push(("currentJQL".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.show_sub_task_parent {
+            config.query.push(("showSubTaskParent".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<IssuePickerResult> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
     }
 }
 
@@ -99,24 +220,24 @@ impl<'a> IssueSearchService<'a> {
 /// For instance, to expand the changelog for all the issues on the search result, it is necessary to
 /// specify changelog as one of the values to expand.
 #[derive(Clone)]
-pub struct SearchRequest2<'a> {
+pub struct SearchIssuesRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<SearchRequest2Expand>,
+    expand: Option<SearchIssuesRequestExpand>,
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
-    fields: Option<SearchRequest2Fields>,
+    fields: Option<SearchIssuesRequestFields>,
     start_at: Option<i64>,
 }
 
-impl<'a> SearchRequest2<'a> {
+impl<'a> SearchIssuesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
         Self { client, expand: None, jql: None, max_results: None, validate_query: None, fields: None, start_at: None }
     }
 
     /// A comma-separated list of the parameters to expand
     #[must_use]
-    pub fn expand(mut self, value: SearchRequest2Expand) -> Self {
+    pub fn expand(mut self, value: SearchIssuesRequestExpand) -> Self {
         self.expand = Some(value);
 
         self
@@ -148,7 +269,7 @@ impl<'a> SearchRequest2<'a> {
 
     /// the list of fields to return for each issue
     #[must_use]
-    pub fn fields(mut self, value: SearchRequest2Fields) -> Self {
+    pub fn fields(mut self, value: SearchIssuesRequestFields) -> Self {
         self.fields = Some(value);
 
         self
@@ -222,12 +343,12 @@ impl<'a> SearchRequest2<'a> {
 
 /// Performs a search using JQL.
 #[derive(Clone)]
-pub struct SearchUsingSearchRequestRequest<'a> {
+pub struct SearchIssuesPostRequest<'a> {
     client: &'a crate::core::Client,
     search_request: SearchRequest,
 }
 
-impl<'a> SearchUsingSearchRequestRequest<'a> {
+impl<'a> SearchIssuesPostRequest<'a> {
     fn new(client: &'a crate::core::Client, search_request: SearchRequest) -> Self {
         Self { client, search_request }
     }

@@ -13,13 +13,13 @@ impl<'a> WorkflowSchemesService<'a> {
     }
 
     /// Create a new workflow scheme. The body contains a representation of the new scheme. Values not passed are assumed to be set to their defaults.
-    pub fn create_scheme(&self, workflow_scheme: WorkflowScheme) -> CreateSchemeRequest<'a> {
-        CreateSchemeRequest::new(self.client, workflow_scheme)
+    pub fn create_workflow_scheme(&self, workflow_scheme: WorkflowScheme) -> CreateWorkflowSchemeRequest<'a> {
+        CreateWorkflowSchemeRequest::new(self.client, workflow_scheme)
     }
 
     /// Returns the requested workflow scheme to the caller.
-    pub fn get_by_id(&self, id: i64) -> GetByIdRequest<'a> {
-        GetByIdRequest::new(self.client, id)
+    pub fn get_workflow_scheme(&self, id: i64) -> GetWorkflowSchemeRequest<'a> {
+        GetWorkflowSchemeRequest::new(self.client, id)
     }
 
     /// Update the passed workflow scheme. The body of the request is a representation of the workflow scheme. Values not passed are assumed to indicate no change for that field.
@@ -31,100 +31,25 @@ impl<'a> WorkflowSchemesService<'a> {
     }
 
     /// Delete the passed workflow scheme.
-    pub fn delete_scheme(&self, id: i64) -> DeleteSchemeRequest<'a> {
-        DeleteSchemeRequest::new(self.client, id)
-    }
-
-    /// Create a draft for the passed scheme. The draft will be a copy of the state of the parent.
-    pub fn create_draft_for_parent(&self, id: i64) -> CreateDraftForParentRequest<'a> {
-        CreateDraftForParentRequest::new(self.client, id)
+    pub fn delete_workflow_scheme(&self, id: i64) -> DeleteWorkflowSchemeRequest<'a> {
+        DeleteWorkflowSchemeRequest::new(self.client, id)
     }
 
     /// Return the default workflow from the passed workflow scheme.
-    pub fn get_default(&self, id: i64) -> GetDefaultRequest<'a> {
-        GetDefaultRequest::new(self.client, id)
+    pub fn get_default_workflow(&self, id: i64) -> GetDefaultWorkflowRequest<'a> {
+        GetDefaultWorkflowRequest::new(self.client, id)
     }
 
     /// Set the default workflow for the passed workflow scheme. The passed representation can have its
     /// updateDraftIfNeeded flag set to true to indicate that the draft should be created/updated when the actual scheme
     /// cannot be edited.
-    pub fn update_default(&self, id: i64, default: DefaultModel) -> UpdateDefaultRequest<'a> {
-        UpdateDefaultRequest::new(self.client, id, default)
+    pub fn update_default_workflow(&self, id: i64, default: DefaultModel) -> UpdateDefaultWorkflowRequest<'a> {
+        UpdateDefaultWorkflowRequest::new(self.client, id, default)
     }
 
     /// Remove the default workflow from the passed workflow scheme.
-    pub fn delete_default(&self, id: i64) -> DeleteDefaultRequest<'a> {
-        DeleteDefaultRequest::new(self.client, id)
-    }
-
-    /// Returns the requested draft workflow scheme to the caller.
-    pub fn get_draft_by_id(&self, id: i64) -> GetDraftByIdRequest<'a> {
-        GetDraftByIdRequest::new(self.client, id)
-    }
-
-    /// Update a draft workflow scheme. The draft will created if necessary. The body of the request is a representation of the workflow scheme. Values not passed are assumed to indicate no change for that field.
-    pub fn update_draft(&self, id: i64, body: WorkflowScheme) -> UpdateDraftRequest<'a> {
-        UpdateDraftRequest::new(self.client, id, body)
-    }
-
-    /// Delete the passed draft workflow scheme.
-    pub fn delete_draft_by_id(&self, id: i64) -> DeleteDraftByIdRequest<'a> {
-        DeleteDraftByIdRequest::new(self.client, id)
-    }
-
-    /// Return the default workflow from the passed draft workflow scheme to the caller.
-    pub fn get_draft_default(&self, id: i64) -> GetDraftDefaultRequest<'a> {
-        GetDraftDefaultRequest::new(self.client, id)
-    }
-
-    /// Set the default workflow for the passed draft workflow scheme.
-    pub fn update_draft_default(&self, id: i64, default: DefaultModel) -> UpdateDraftDefaultRequest<'a> {
-        UpdateDraftDefaultRequest::new(self.client, id, default)
-    }
-
-    /// Remove the default workflow from the passed draft workflow scheme.
-    pub fn delete_draft_default(&self, id: i64) -> DeleteDraftDefaultRequest<'a> {
-        DeleteDraftDefaultRequest::new(self.client, id)
-    }
-
-    /// Returns the issue type mapping for the passed draft workflow scheme.
-    pub fn get_draft_issue_type(&self, issue_type: impl Into<String>, id: i64) -> GetDraftIssueTypeRequest<'a> {
-        GetDraftIssueTypeRequest::new(self.client, issue_type, id)
-    }
-
-    /// Set the issue type mapping for the passed draft scheme. The passed representation can have its updateDraftIfNeeded flag set to true to indicate that
-    /// the draft should be created/updated when the actual scheme cannot be edited.
-    pub fn set_draft_issue_type(
-        &self,
-        issue_type: impl Into<String>,
-        id: i64,
-        body: IssueTypeMapping,
-    ) -> SetDraftIssueTypeRequest<'a> {
-        SetDraftIssueTypeRequest::new(self.client, issue_type, id, body)
-    }
-
-    /// Remove the specified issue type mapping from the draft scheme.
-    pub fn delete_draft_issue_type(&self, issue_type: impl Into<String>, id: i64) -> DeleteDraftIssueTypeRequest<'a> {
-        DeleteDraftIssueTypeRequest::new(self.client, issue_type, id)
-    }
-
-    /// Returns the draft workflow mappings or requested mapping to the caller.
-    pub fn get_draft_workflow(&self, id: i64) -> GetDraftWorkflowRequest<'a> {
-        GetDraftWorkflowRequest::new(self.client, id)
-    }
-
-    /// Update the draft scheme to include the passed mapping. The body is a representation of the workflow mapping. Values not passed are assumed to indicate no change for that field.
-    pub fn update_draft_workflow_mapping(
-        &self,
-        id: i64,
-        workflow_mapping: WorkflowMapping,
-    ) -> UpdateDraftWorkflowMappingRequest<'a> {
-        UpdateDraftWorkflowMappingRequest::new(self.client, id, workflow_mapping)
-    }
-
-    /// Delete the passed workflow from the draft workflow scheme.
-    pub fn delete_draft_workflow_mapping(&self, id: i64) -> DeleteDraftWorkflowMappingRequest<'a> {
-        DeleteDraftWorkflowMappingRequest::new(self.client, id)
+    pub fn delete_default_workflow(&self, id: i64) -> DeleteDefaultWorkflowRequest<'a> {
+        DeleteDefaultWorkflowRequest::new(self.client, id)
     }
 
     /// Returns the issue type mapping for the passed workflow scheme.
@@ -138,13 +63,13 @@ impl<'a> WorkflowSchemesService<'a> {
 
     /// Set the issue type mapping for the passed scheme. The passed representation can have its updateDraftIfNeeded flag set to true to indicate that
     /// the draft should be created/updated when the actual scheme cannot be edited.
-    pub fn set_issue_type(
+    pub fn set_workflow_scheme_issue_type(
         &self,
         issue_type: impl Into<String>,
         id: i64,
         body: IssueTypeMapping,
-    ) -> SetIssueTypeRequest<'a> {
-        SetIssueTypeRequest::new(self.client, issue_type, id, body)
+    ) -> SetWorkflowSchemeIssueTypeRequest<'a> {
+        SetWorkflowSchemeIssueTypeRequest::new(self.client, issue_type, id, body)
     }
 
     /// Remove the specified issue type mapping from the scheme.
@@ -180,12 +105,12 @@ impl<'a> WorkflowSchemesService<'a> {
 
 /// Create a new workflow scheme. The body contains a representation of the new scheme. Values not passed are assumed to be set to their defaults.
 #[derive(Clone)]
-pub struct CreateSchemeRequest<'a> {
+pub struct CreateWorkflowSchemeRequest<'a> {
     client: &'a crate::core::Client,
     workflow_scheme: WorkflowScheme,
 }
 
-impl<'a> CreateSchemeRequest<'a> {
+impl<'a> CreateWorkflowSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, workflow_scheme: WorkflowScheme) -> Self {
         Self { client, workflow_scheme }
     }
@@ -218,13 +143,13 @@ impl<'a> CreateSchemeRequest<'a> {
 
 /// Returns the requested workflow scheme to the caller.
 #[derive(Clone)]
-pub struct GetByIdRequest<'a> {
+pub struct GetWorkflowSchemeRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
     return_draft_if_exists: Option<bool>,
 }
 
-impl<'a> GetByIdRequest<'a> {
+impl<'a> GetWorkflowSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
         Self { client, id, return_draft_if_exists: None }
     }
@@ -303,12 +228,12 @@ impl<'a> UpdateWorkflowSchemeRequest<'a> {
 
 /// Delete the passed workflow scheme.
 #[derive(Clone)]
-pub struct DeleteSchemeRequest<'a> {
+pub struct DeleteWorkflowSchemeRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
 }
 
-impl<'a> DeleteSchemeRequest<'a> {
+impl<'a> DeleteWorkflowSchemeRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
         Self { client, id }
     }
@@ -334,48 +259,15 @@ impl<'a> DeleteSchemeRequest<'a> {
     }
 }
 
-/// Create a draft for the passed scheme. The draft will be a copy of the state of the parent.
-#[derive(Clone)]
-pub struct CreateDraftForParentRequest<'a> {
-    client: &'a crate::core::Client,
-    id: i64,
-}
-
-impl<'a> CreateDraftForParentRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self { client, id }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            format!("/rest/api/2/workflowscheme/{}/createdraft", self.id),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
 /// Return the default workflow from the passed workflow scheme.
 #[derive(Clone)]
-pub struct GetDefaultRequest<'a> {
+pub struct GetDefaultWorkflowRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
     return_draft_if_exists: Option<bool>,
 }
 
-impl<'a> GetDefaultRequest<'a> {
+impl<'a> GetDefaultWorkflowRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
         Self { client, id, return_draft_if_exists: None }
     }
@@ -417,13 +309,13 @@ impl<'a> GetDefaultRequest<'a> {
 /// updateDraftIfNeeded flag set to true to indicate that the draft should be created/updated when the actual scheme
 /// cannot be edited.
 #[derive(Clone)]
-pub struct UpdateDefaultRequest<'a> {
+pub struct UpdateDefaultWorkflowRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
     default: DefaultModel,
 }
 
-impl<'a> UpdateDefaultRequest<'a> {
+impl<'a> UpdateDefaultWorkflowRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64, default: DefaultModel) -> Self {
         Self { client, id, default }
     }
@@ -458,13 +350,13 @@ impl<'a> UpdateDefaultRequest<'a> {
 
 /// Remove the default workflow from the passed workflow scheme.
 #[derive(Clone)]
-pub struct DeleteDefaultRequest<'a> {
+pub struct DeleteDefaultWorkflowRequest<'a> {
     client: &'a crate::core::Client,
     update_draft_if_needed: Option<bool>,
     id: i64,
 }
 
-impl<'a> DeleteDefaultRequest<'a> {
+impl<'a> DeleteDefaultWorkflowRequest<'a> {
     fn new(client: &'a crate::core::Client, id: i64) -> Self {
         Self { client, id, update_draft_if_needed: None }
     }
@@ -486,479 +378,6 @@ impl<'a> DeleteDefaultRequest<'a> {
 
         if let Some(value) = &self.update_draft_if_needed {
             config.query.push(("updateDraftIfNeeded".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
-        }
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns the requested draft workflow scheme to the caller.
-#[derive(Clone)]
-pub struct GetDraftByIdRequest<'a> {
-    client: &'a crate::core::Client,
-    id: i64,
-}
-
-impl<'a> GetDraftByIdRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self { client, id }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/workflowscheme/{}/draft", self.id),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Update a draft workflow scheme. The draft will created if necessary. The body of the request is a representation of the workflow scheme. Values not passed are assumed to indicate no change for that field.
-#[derive(Clone)]
-pub struct UpdateDraftRequest<'a> {
-    client: &'a crate::core::Client,
-    id: i64,
-    body: WorkflowScheme,
-}
-
-impl<'a> UpdateDraftRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: i64, body: WorkflowScheme) -> Self {
-        Self { client, id, body }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            format!("/rest/api/2/workflowscheme/{}/draft", self.id),
-        );
-
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Delete the passed draft workflow scheme.
-#[derive(Clone)]
-pub struct DeleteDraftByIdRequest<'a> {
-    client: &'a crate::core::Client,
-    id: i64,
-}
-
-impl<'a> DeleteDraftByIdRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self { client, id }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!("/rest/api/2/workflowscheme/{}/draft", self.id),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Return the default workflow from the passed draft workflow scheme to the caller.
-#[derive(Clone)]
-pub struct GetDraftDefaultRequest<'a> {
-    client: &'a crate::core::Client,
-    id: i64,
-}
-
-impl<'a> GetDraftDefaultRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self { client, id }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/workflowscheme/{}/draft/default", self.id),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Set the default workflow for the passed draft workflow scheme.
-#[derive(Clone)]
-pub struct UpdateDraftDefaultRequest<'a> {
-    client: &'a crate::core::Client,
-    id: i64,
-    default: DefaultModel,
-}
-
-impl<'a> UpdateDraftDefaultRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: i64, default: DefaultModel) -> Self {
-        Self { client, id, default }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            format!("/rest/api/2/workflowscheme/{}/draft/default", self.id),
-        );
-
-        let body = match serde_json::to_value(&self.default)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Remove the default workflow from the passed draft workflow scheme.
-#[derive(Clone)]
-pub struct DeleteDraftDefaultRequest<'a> {
-    client: &'a crate::core::Client,
-    id: i64,
-}
-
-impl<'a> DeleteDraftDefaultRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self { client, id }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!("/rest/api/2/workflowscheme/{}/draft/default", self.id),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns the issue type mapping for the passed draft workflow scheme.
-#[derive(Clone)]
-pub struct GetDraftIssueTypeRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_type: String,
-    id: i64,
-}
-
-impl<'a> GetDraftIssueTypeRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_type: impl Into<String>, id: i64) -> Self {
-        Self { client, issue_type: issue_type.into(), id }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!(
-                "/rest/api/2/workflowscheme/{}/draft/issuetype/{}",
-                self.id,
-                crate::core::encode_path_segment(&self.issue_type)
-            ),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<IssueTypeMapping> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Set the issue type mapping for the passed draft scheme. The passed representation can have its updateDraftIfNeeded flag set to true to indicate that
-/// the draft should be created/updated when the actual scheme cannot be edited.
-#[derive(Clone)]
-pub struct SetDraftIssueTypeRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_type: String,
-    id: i64,
-    body: IssueTypeMapping,
-}
-
-impl<'a> SetDraftIssueTypeRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_type: impl Into<String>, id: i64, body: IssueTypeMapping) -> Self {
-        Self { client, issue_type: issue_type.into(), id, body }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            format!(
-                "/rest/api/2/workflowscheme/{}/draft/issuetype/{}",
-                self.id,
-                crate::core::encode_path_segment(&self.issue_type)
-            ),
-        );
-
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Remove the specified issue type mapping from the draft scheme.
-#[derive(Clone)]
-pub struct DeleteDraftIssueTypeRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_type: String,
-    id: i64,
-}
-
-impl<'a> DeleteDraftIssueTypeRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_type: impl Into<String>, id: i64) -> Self {
-        Self { client, issue_type: issue_type.into(), id }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!(
-                "/rest/api/2/workflowscheme/{}/draft/issuetype/{}",
-                self.id,
-                crate::core::encode_path_segment(&self.issue_type)
-            ),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns the draft workflow mappings or requested mapping to the caller.
-#[derive(Clone)]
-pub struct GetDraftWorkflowRequest<'a> {
-    client: &'a crate::core::Client,
-    workflow_name: Option<String>,
-    id: i64,
-}
-
-impl<'a> GetDraftWorkflowRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self { client, id, workflow_name: None }
-    }
-
-    /// The workflow mapping to return. Null can be passed to return all mappings. Must be a valid workflow name.
-    #[must_use]
-    pub fn workflow_name(mut self, value: impl Into<String>) -> Self {
-        self.workflow_name = Some(value.into());
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/workflowscheme/{}/draft/workflow", self.id),
-        );
-
-        if let Some(value) = &self.workflow_name {
-            config.query.push(("workflowName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Update the draft scheme to include the passed mapping. The body is a representation of the workflow mapping. Values not passed are assumed to indicate no change for that field.
-#[derive(Clone)]
-pub struct UpdateDraftWorkflowMappingRequest<'a> {
-    client: &'a crate::core::Client,
-    workflow_name: Option<String>,
-    id: i64,
-    workflow_mapping: WorkflowMapping,
-}
-
-impl<'a> UpdateDraftWorkflowMappingRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: i64, workflow_mapping: WorkflowMapping) -> Self {
-        Self { client, id, workflow_mapping, workflow_name: None }
-    }
-
-    /// The name of the workflow mapping to update.
-    #[must_use]
-    pub fn workflow_name(mut self, value: impl Into<String>) -> Self {
-        self.workflow_name = Some(value.into());
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            format!("/rest/api/2/workflowscheme/{}/draft/workflow", self.id),
-        );
-
-        if let Some(value) = &self.workflow_name {
-            config.query.push(("workflowName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        let body = match serde_json::to_value(&self.workflow_mapping)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<WorkflowScheme> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Delete the passed workflow from the draft workflow scheme.
-#[derive(Clone)]
-pub struct DeleteDraftWorkflowMappingRequest<'a> {
-    client: &'a crate::core::Client,
-    workflow_name: Option<String>,
-    id: i64,
-}
-
-impl<'a> DeleteDraftWorkflowMappingRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self { client, id, workflow_name: None }
-    }
-
-    /// The name of the workflow to delete.
-    #[must_use]
-    pub fn workflow_name(mut self, value: impl Into<String>) -> Self {
-        self.workflow_name = Some(value.into());
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!("/rest/api/2/workflowscheme/{}/draft/workflow", self.id),
-        );
-
-        if let Some(value) = &self.workflow_name {
-            config.query.push(("workflowName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)
@@ -1029,14 +448,14 @@ impl<'a> GetWorkflowSchemeIssueTypeRequest<'a> {
 /// Set the issue type mapping for the passed scheme. The passed representation can have its updateDraftIfNeeded flag set to true to indicate that
 /// the draft should be created/updated when the actual scheme cannot be edited.
 #[derive(Clone)]
-pub struct SetIssueTypeRequest<'a> {
+pub struct SetWorkflowSchemeIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_type: String,
     id: i64,
     body: IssueTypeMapping,
 }
 
-impl<'a> SetIssueTypeRequest<'a> {
+impl<'a> SetWorkflowSchemeIssueTypeRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_type: impl Into<String>, id: i64, body: IssueTypeMapping) -> Self {
         Self { client, issue_type: issue_type.into(), id, body }
     }

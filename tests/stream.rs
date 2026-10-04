@@ -103,7 +103,7 @@ suite!(
     server_search,
     jira::server::ServerClient::new,
     api,
-    api.issue_search().search(),
+    api.issue_search().search_issues(),
     "/rest/api/2/search",
     "startAt",
     [Some("0"), Some("1")],
@@ -189,7 +189,7 @@ async fn server_find_users_walks_two_pages_then_an_empty_page() {
         .await;
 
     let api = jira::server::ServerClient::new(client_for(&server));
-    let users: Vec<_> = api.users().find_users().max_results(2).stream().try_collect().await.unwrap();
+    let users: Vec<_> = api.user_search().find_users().max_results(2).stream().try_collect().await.unwrap();
 
     assert_eq!(
         users.iter().map(|user| user.name.as_deref()).collect::<Vec<_>>(),
@@ -223,14 +223,14 @@ fn requested_stream_signatures_compile() {
     let assets_server = jira::assets_server::AssetsServerClient::new(client.clone());
     let agile = jira::agile::AgileClient::new(client);
 
-    drop(server.issue_search().search().stream());
+    drop(server.issue_search().search_issues().stream());
     drop(server.sprint().get_issues_for_sprint(1).stream());
-    drop(server.issues().get_issue_worklog("X-1").stream());
+    drop(server.issue_worklogs().get_issue_worklog("X-1").stream());
     drop(server.users().get_user_list().stream());
-    drop(server.users().find_users().stream());
-    drop(server.dashboards().list().start_at(50).stream());
-    drop(server.issues().get_comments("X-1").max_results(10).stream());
-    drop(server.screens().get_all_screens().stream());
+    drop(server.user_search().find_users().stream());
+    drop(server.dashboards().get_all_dashboards().start_at(50).stream());
+    drop(server.issue_comments().get_comments("X-1").max_results(10).stream());
+    drop(server.screens().get_screens().stream());
     drop(server.groups().get_users_from_group("g").stream());
     drop(cloud.issue_worklogs().get_issue_worklog("X-1").stream());
     drop(cloud.issue_comments().get_comments("X-1").stream());

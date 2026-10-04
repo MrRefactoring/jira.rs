@@ -41,9 +41,9 @@ impl ServerClient {
         EpicService::new(&self.client)
     }
 
-    /// The Issues operations.
-    pub fn issues(&self) -> IssuesService<'_> {
-        IssuesService::new(&self.client)
+    /// The Issue operations.
+    pub fn issue(&self) -> IssueService<'_> {
+        IssueService::new(&self.client)
     }
 
     /// The Sprint operations.
@@ -51,9 +51,9 @@ impl ServerClient {
         SprintService::new(&self.client)
     }
 
-    /// The ApplicationProperties operations.
-    pub fn application_properties(&self) -> ApplicationPropertiesService<'_> {
-        ApplicationPropertiesService::new(&self.client)
+    /// The JiraSettings operations.
+    pub fn jira_settings(&self) -> JiraSettingsService<'_> {
+        JiraSettingsService::new(&self.client)
     }
 
     /// The ApplicationRoles operations.
@@ -76,19 +76,14 @@ impl ServerClient {
         ClusterService::new(&self.client)
     }
 
-    /// The IssueComments operations.
-    pub fn issue_comments(&self) -> IssueCommentsService<'_> {
-        IssueCommentsService::new(&self.client)
+    /// The IssueCommentProperties operations.
+    pub fn issue_comment_properties(&self) -> IssueCommentPropertiesService<'_> {
+        IssueCommentPropertiesService::new(&self.client)
     }
 
     /// The ProjectComponents operations.
     pub fn project_components(&self) -> ProjectComponentsService<'_> {
         ProjectComponentsService::new(&self.client)
-    }
-
-    /// The Configuration operations.
-    pub fn configuration(&self) -> ConfigurationService<'_> {
-        ConfigurationService::new(&self.client)
     }
 
     /// The IssueCustomFieldOptions operations.
@@ -116,6 +111,11 @@ impl ServerClient {
         FiltersService::new(&self.client)
     }
 
+    /// The FilterSharing operations.
+    pub fn filter_sharing(&self) -> FilterSharingService<'_> {
+        FilterSharingService::new(&self.client)
+    }
+
     /// The Groups operations.
     pub fn groups(&self) -> GroupsService<'_> {
         GroupsService::new(&self.client)
@@ -129,6 +129,46 @@ impl ServerClient {
     /// The Indexing operations.
     pub fn indexing(&self) -> IndexingService<'_> {
         IndexingService::new(&self.client)
+    }
+
+    /// The Issues operations.
+    pub fn issues(&self) -> IssuesService<'_> {
+        IssuesService::new(&self.client)
+    }
+
+    /// The IssueSearch operations.
+    pub fn issue_search(&self) -> IssueSearchService<'_> {
+        IssueSearchService::new(&self.client)
+    }
+
+    /// The IssueComments operations.
+    pub fn issue_comments(&self) -> IssueCommentsService<'_> {
+        IssueCommentsService::new(&self.client)
+    }
+
+    /// The IssueProperties operations.
+    pub fn issue_properties(&self) -> IssuePropertiesService<'_> {
+        IssuePropertiesService::new(&self.client)
+    }
+
+    /// The IssueRemoteLinks operations.
+    pub fn issue_remote_links(&self) -> IssueRemoteLinksService<'_> {
+        IssueRemoteLinksService::new(&self.client)
+    }
+
+    /// The IssueVotes operations.
+    pub fn issue_votes(&self) -> IssueVotesService<'_> {
+        IssueVotesService::new(&self.client)
+    }
+
+    /// The IssueWatchers operations.
+    pub fn issue_watchers(&self) -> IssueWatchersService<'_> {
+        IssueWatchersService::new(&self.client)
+    }
+
+    /// The IssueWorklogs operations.
+    pub fn issue_worklogs(&self) -> IssueWorklogsService<'_> {
+        IssueWorklogsService::new(&self.client)
     }
 
     /// The IssueLinks operations.
@@ -149,6 +189,11 @@ impl ServerClient {
     /// The IssueTypes operations.
     pub fn issue_types(&self) -> IssueTypesService<'_> {
         IssueTypesService::new(&self.client)
+    }
+
+    /// The IssueTypeProperties operations.
+    pub fn issue_type_properties(&self) -> IssueTypePropertiesService<'_> {
+        IssueTypePropertiesService::new(&self.client)
     }
 
     /// The IssueTypeSchemes operations.
@@ -174,11 +219,6 @@ impl ServerClient {
     /// The Permissions operations.
     pub fn permissions(&self) -> PermissionsService<'_> {
         PermissionsService::new(&self.client)
-    }
-
-    /// The MyPreferences operations.
-    pub fn my_preferences(&self) -> MyPreferencesService<'_> {
-        MyPreferencesService::new(&self.client)
     }
 
     /// The Myself operations.
@@ -216,6 +256,41 @@ impl ServerClient {
         ProjectsService::new(&self.client)
     }
 
+    /// The ProjectTypes operations.
+    pub fn project_types(&self) -> ProjectTypesService<'_> {
+        ProjectTypesService::new(&self.client)
+    }
+
+    /// The ProjectAvatars operations.
+    pub fn project_avatars(&self) -> ProjectAvatarsService<'_> {
+        ProjectAvatarsService::new(&self.client)
+    }
+
+    /// The ProjectProperties operations.
+    pub fn project_properties(&self) -> ProjectPropertiesService<'_> {
+        ProjectPropertiesService::new(&self.client)
+    }
+
+    /// The ProjectRoles operations.
+    pub fn project_roles(&self) -> ProjectRolesService<'_> {
+        ProjectRolesService::new(&self.client)
+    }
+
+    /// The ProjectRoleActors operations.
+    pub fn project_role_actors(&self) -> ProjectRoleActorsService<'_> {
+        ProjectRoleActorsService::new(&self.client)
+    }
+
+    /// The ProjectVersions operations.
+    pub fn project_versions(&self) -> ProjectVersionsService<'_> {
+        ProjectVersionsService::new(&self.client)
+    }
+
+    /// The ProjectPermissionSchemes operations.
+    pub fn project_permission_schemes(&self) -> ProjectPermissionSchemesService<'_> {
+        ProjectPermissionSchemesService::new(&self.client)
+    }
+
     /// The ProjectCategories operations.
     pub fn project_categories(&self) -> ProjectCategoriesService<'_> {
         ProjectCategoriesService::new(&self.client)
@@ -236,19 +311,19 @@ impl ServerClient {
         IssueResolutionsService::new(&self.client)
     }
 
-    /// The ProjectRoles operations.
-    pub fn project_roles(&self) -> ProjectRolesService<'_> {
-        ProjectRolesService::new(&self.client)
-    }
-
     /// The Screens operations.
     pub fn screens(&self) -> ScreensService<'_> {
         ScreensService::new(&self.client)
     }
 
-    /// The IssueSearch operations.
-    pub fn issue_search(&self) -> IssueSearchService<'_> {
-        IssueSearchService::new(&self.client)
+    /// The ScreenTabs operations.
+    pub fn screen_tabs(&self) -> ScreenTabsService<'_> {
+        ScreenTabsService::new(&self.client)
+    }
+
+    /// The ScreenTabFields operations.
+    pub fn screen_tab_fields(&self) -> ScreenTabFieldsService<'_> {
+        ScreenTabFieldsService::new(&self.client)
     }
 
     /// The SearchLimits operations.
@@ -266,9 +341,9 @@ impl ServerClient {
         ServerInfoService::new(&self.client)
     }
 
-    /// The JiraSettings operations.
-    pub fn jira_settings(&self) -> JiraSettingsService<'_> {
-        JiraSettingsService::new(&self.client)
+    /// The IssueNavigatorSettings operations.
+    pub fn issue_navigator_settings(&self) -> IssueNavigatorSettingsService<'_> {
+        IssueNavigatorSettingsService::new(&self.client)
     }
 
     /// The WorkflowStatuses operations.
@@ -296,9 +371,14 @@ impl ServerClient {
         UsersService::new(&self.client)
     }
 
-    /// The ProjectVersions operations.
-    pub fn project_versions(&self) -> ProjectVersionsService<'_> {
-        ProjectVersionsService::new(&self.client)
+    /// The UserSearch operations.
+    pub fn user_search(&self) -> UserSearchService<'_> {
+        UserSearchService::new(&self.client)
+    }
+
+    /// The UserProperties operations.
+    pub fn user_properties(&self) -> UserPropertiesService<'_> {
+        UserPropertiesService::new(&self.client)
     }
 
     /// The Workflows operations.
@@ -311,9 +391,9 @@ impl ServerClient {
         WorkflowSchemesService::new(&self.client)
     }
 
-    /// The IssueWorklogs operations.
-    pub fn issue_worklogs(&self) -> IssueWorklogsService<'_> {
-        IssueWorklogsService::new(&self.client)
+    /// The WorkflowSchemeDrafts operations.
+    pub fn workflow_scheme_drafts(&self) -> WorkflowSchemeDraftsService<'_> {
+        WorkflowSchemeDraftsService::new(&self.client)
     }
 
     /// The Session operations.

@@ -13,8 +13,8 @@ impl<'a> ApplicationRolesService<'a> {
     }
 
     /// Returns all application roles in the system.
-    pub fn get_all(&self) -> GetAllRequest<'a> {
-        GetAllRequest::new(self.client)
+    pub fn get_all_application_roles(&self) -> GetAllApplicationRolesRequest<'a> {
+        GetAllApplicationRolesRequest::new(self.client)
     }
 
     /// Updates the ApplicationRoles with the passed data if the version hash is the same as the server. Only the groups and default groups setting of the role may be updated. Requests to change the key or the name of the role will be silently ignored. It is acceptable to pass only the roles that are updated as roles that are present in the server but not in data to update with, will not be deleted.
@@ -35,11 +35,11 @@ impl<'a> ApplicationRolesService<'a> {
 
 /// Returns all application roles in the system.
 #[derive(Clone)]
-pub struct GetAllRequest<'a> {
+pub struct GetAllApplicationRolesRequest<'a> {
     client: &'a crate::core::Client,
 }
 
-impl<'a> GetAllRequest<'a> {
+impl<'a> GetAllApplicationRolesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
         Self { client }
     }

@@ -303,8 +303,8 @@ impl<'a> ProjectsService<'a> {
         key: impl Into<String>,
         lead_account_id: impl Into<String>,
         name: impl Into<String>,
-    ) -> CreateProjectRequest2<'a> {
-        CreateProjectRequest2::new(self.client, key, lead_account_id, name)
+    ) -> ProjectsCreateProjectRequest<'a> {
+        ProjectsCreateProjectRequest::new(self.client, key, lead_account_id, name)
     }
 
     /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of projects visible to the user.
@@ -410,7 +410,7 @@ impl<'a> ProjectsService<'a> {
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 #[derive(Clone)]
-pub struct CreateProjectRequest2<'a> {
+pub struct ProjectsCreateProjectRequest<'a> {
     client: &'a crate::core::Client,
     assignee_type: Option<CreateProjectRequest2AssigneeType>,
     avatar_id: Option<i64>,
@@ -431,7 +431,7 @@ pub struct CreateProjectRequest2<'a> {
     workflow_scheme: Option<i64>,
 }
 
-impl<'a> CreateProjectRequest2<'a> {
+impl<'a> ProjectsCreateProjectRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
         key: impl Into<String>,

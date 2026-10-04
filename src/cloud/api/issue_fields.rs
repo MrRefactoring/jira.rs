@@ -133,8 +133,11 @@ impl<'a> IssueFieldsService<'a> {
     /// Creates a custom field.
     ///
     /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-    pub fn create_custom_field(&self, custom_field_definition: CustomFieldDefinition) -> CreateCustomFieldRequest2<'a> {
-        CreateCustomFieldRequest2::new(self.client, custom_field_definition)
+    pub fn create_custom_field(
+        &self,
+        custom_field_definition: CustomFieldDefinition,
+    ) -> IssueFieldsCreateCustomFieldRequest<'a> {
+        IssueFieldsCreateCustomFieldRequest::new(self.client, custom_field_definition)
     }
 
     /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of fields for Classic Jira projects. The list can include:
@@ -238,12 +241,12 @@ impl<'a> GetFieldsRequest<'a> {
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 #[derive(Clone)]
-pub struct CreateCustomFieldRequest2<'a> {
+pub struct IssueFieldsCreateCustomFieldRequest<'a> {
     client: &'a crate::core::Client,
     custom_field_definition: CustomFieldDefinition,
 }
 
-impl<'a> CreateCustomFieldRequest2<'a> {
+impl<'a> IssueFieldsCreateCustomFieldRequest<'a> {
     fn new(client: &'a crate::core::Client, custom_field_definition: CustomFieldDefinition) -> Self {
         Self { client, custom_field_definition }
     }

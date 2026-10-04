@@ -67,8 +67,8 @@ impl<'a> IndexingService<'a> {
     }
 
     /// Kicks off a reindex. Need Admin permissions to perform this reindex.
-    pub fn reindex(&self) -> ReindexRequest2<'a> {
-        ReindexRequest2::new(self.client)
+    pub fn reindex(&self) -> IndexingReindexRequest<'a> {
+        IndexingReindexRequest::new(self.client)
     }
 
     /// Reindexes one or more individual issues. Indexing is performed synchronously - the call returns when indexing of the issues has completed or a failure occurs.
@@ -290,7 +290,7 @@ impl<'a> GetReindexInfoRequest<'a> {
 
 /// Kicks off a reindex. Need Admin permissions to perform this reindex.
 #[derive(Clone)]
-pub struct ReindexRequest2<'a> {
+pub struct IndexingReindexRequest<'a> {
     client: &'a crate::core::Client,
     index_change_history: Option<bool>,
     r#type: Option<String>,
@@ -298,7 +298,7 @@ pub struct ReindexRequest2<'a> {
     index_comments: Option<bool>,
 }
 
-impl<'a> ReindexRequest2<'a> {
+impl<'a> IndexingReindexRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
         Self { client, index_change_history: None, r#type: None, index_worklogs: None, index_comments: None }
     }

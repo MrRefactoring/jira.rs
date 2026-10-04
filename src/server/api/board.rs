@@ -59,27 +59,27 @@ crate::core::untagged::untagged!(GetIssuesWithoutEpicForBoardRequestFields { One
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForBoardEpicRequestExpand {
+pub enum GetBoardIssuesForEpicRequestExpand {
     One(String),
     Many(Vec<String>),
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
 
-crate::core::untagged::untagged!(GetIssuesForBoardEpicRequestExpand { One, Many, Other });
+crate::core::untagged::untagged!(GetBoardIssuesForEpicRequestExpand { One, Many, Other });
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForBoardEpicRequestFields {
+pub enum GetBoardIssuesForEpicRequestFields {
     One(String),
     Many(Vec<String>),
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
 
-crate::core::untagged::untagged!(GetIssuesForBoardEpicRequestFields { One, Many, Other });
+crate::core::untagged::untagged!(GetBoardIssuesForEpicRequestFields { One, Many, Other });
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
 #[derive(Debug, Clone, PartialEq, Serialize)]
@@ -111,27 +111,27 @@ crate::core::untagged::untagged!(GetAllSprintsRequestState { One, Many, Other })
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForBoardSprintRequestExpand {
+pub enum GetBoardIssuesForSprintRequestExpand {
     One(String),
     Many(Vec<String>),
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
 
-crate::core::untagged::untagged!(GetIssuesForBoardSprintRequestExpand { One, Many, Other });
+crate::core::untagged::untagged!(GetBoardIssuesForSprintRequestExpand { One, Many, Other });
 
 /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForBoardSprintRequestFields {
+pub enum GetBoardIssuesForSprintRequestFields {
     One(String),
     Many(Vec<String>),
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
 
-crate::core::untagged::untagged!(GetIssuesForBoardSprintRequestFields { One, Many, Other });
+crate::core::untagged::untagged!(GetBoardIssuesForSprintRequestFields { One, Many, Other });
 
 /// The Board operations.
 pub struct BoardService<'a> {
@@ -191,8 +191,8 @@ impl<'a> BoardService<'a> {
     /// Note, estimates for an issue can be updated by a PUT /rest/api/2/issue/{issueIdOrKey} request, however the fields must be on the screen.
     /// "timeoriginalestimate" field will never be on the screen, so in order to update it "originalEstimate" in "timetracking" field should be updated.
     /// - ranking - Contains information about custom field used for ranking in the given board.
-    pub fn get_board_configuration(&self, board_id: i64) -> GetBoardConfigurationRequest<'a> {
-        GetBoardConfigurationRequest::new(self.client, board_id)
+    pub fn get_configuration(&self, board_id: i64) -> BoardGetConfigurationRequest<'a> {
+        BoardGetConfigurationRequest::new(self.client, board_id)
     }
 
     /// Returns all epics from the board, for the given board Id. This only includes epics that the user has permission to view. Note, if the user does not have permission to view the board, no epics will be returned at all.
@@ -206,8 +206,8 @@ impl<'a> BoardService<'a> {
     }
 
     /// Returns all issues that belong to an epic on the board, for the given epic Id and the board Id.
-    pub fn get_issues_for_board_epic(&self, epic_id: i64, board_id: i64) -> GetIssuesForBoardEpicRequest<'a> {
-        GetIssuesForBoardEpicRequest::new(self.client, epic_id, board_id)
+    pub fn get_board_issues_for_epic(&self, epic_id: i64, board_id: i64) -> GetBoardIssuesForEpicRequest<'a> {
+        GetBoardIssuesForEpicRequest::new(self.client, epic_id, board_id)
     }
 
     /// Returns all issues from a board, for a given board Id. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
@@ -269,8 +269,8 @@ impl<'a> BoardService<'a> {
     }
 
     /// Get all issues you have access to that belong to the sprint from the board. Issue returned from this resource contains additional fields like: sprint, closedSprints, flagged and epic. Issues are returned ordered by rank. JQL order has higher priority than default rank.
-    pub fn get_issues_for_board_sprint(&self, sprint_id: i64, board_id: i64) -> GetIssuesForBoardSprintRequest<'a> {
-        GetIssuesForBoardSprintRequest::new(self.client, sprint_id, board_id)
+    pub fn get_board_issues_for_sprint(&self, sprint_id: i64, board_id: i64) -> GetBoardIssuesForSprintRequest<'a> {
+        GetBoardIssuesForSprintRequest::new(self.client, sprint_id, board_id)
     }
 
     /// Returns all versions from a board, for a given board Id. This only includes versions that the user has permission to view. Note, if the user does not have permission to view the board, no versions will be returned at all. Returned versions are ordered by the name of the project from which they belong and then by sequence defined by user.
@@ -652,12 +652,12 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
 /// "timeoriginalestimate" field will never be on the screen, so in order to update it "originalEstimate" in "timetracking" field should be updated.
 /// - ranking - Contains information about custom field used for ranking in the given board.
 #[derive(Clone)]
-pub struct GetBoardConfigurationRequest<'a> {
+pub struct BoardGetConfigurationRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
 }
 
-impl<'a> GetBoardConfigurationRequest<'a> {
+impl<'a> BoardGetConfigurationRequest<'a> {
     fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
         Self { client, board_id }
     }
@@ -909,19 +909,19 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
 
 /// Returns all issues that belong to an epic on the board, for the given epic Id and the board Id.
 #[derive(Clone)]
-pub struct GetIssuesForBoardEpicRequest<'a> {
+pub struct GetBoardIssuesForEpicRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetIssuesForBoardEpicRequestExpand>,
+    expand: Option<GetBoardIssuesForEpicRequestExpand>,
     jql: Option<String>,
     epic_id: i64,
     max_results: Option<i64>,
     validate_query: Option<bool>,
     board_id: i64,
-    fields: Option<GetIssuesForBoardEpicRequestFields>,
+    fields: Option<GetBoardIssuesForEpicRequestFields>,
     start_at: Option<i64>,
 }
 
-impl<'a> GetIssuesForBoardEpicRequest<'a> {
+impl<'a> GetBoardIssuesForEpicRequest<'a> {
     fn new(client: &'a crate::core::Client, epic_id: i64, board_id: i64) -> Self {
         Self {
             client,
@@ -938,7 +938,7 @@ impl<'a> GetIssuesForBoardEpicRequest<'a> {
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetIssuesForBoardEpicRequestExpand) -> Self {
+    pub fn expand(mut self, value: GetBoardIssuesForEpicRequestExpand) -> Self {
         self.expand = Some(value);
 
         self
@@ -970,7 +970,7 @@ impl<'a> GetIssuesForBoardEpicRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: GetIssuesForBoardEpicRequestFields) -> Self {
+    pub fn fields(mut self, value: GetBoardIssuesForEpicRequestFields) -> Self {
         self.fields = Some(value);
 
         self
@@ -1575,19 +1575,19 @@ impl<'a> GetAllSprintsRequest<'a> {
 
 /// Get all issues you have access to that belong to the sprint from the board. Issue returned from this resource contains additional fields like: sprint, closedSprints, flagged and epic. Issues are returned ordered by rank. JQL order has higher priority than default rank.
 #[derive(Clone)]
-pub struct GetIssuesForBoardSprintRequest<'a> {
+pub struct GetBoardIssuesForSprintRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,
-    expand: Option<GetIssuesForBoardSprintRequestExpand>,
+    expand: Option<GetBoardIssuesForSprintRequestExpand>,
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
     board_id: i64,
-    fields: Option<GetIssuesForBoardSprintRequestFields>,
+    fields: Option<GetBoardIssuesForSprintRequestFields>,
     start_at: Option<i64>,
 }
 
-impl<'a> GetIssuesForBoardSprintRequest<'a> {
+impl<'a> GetBoardIssuesForSprintRequest<'a> {
     fn new(client: &'a crate::core::Client, sprint_id: i64, board_id: i64) -> Self {
         Self {
             client,
@@ -1604,7 +1604,7 @@ impl<'a> GetIssuesForBoardSprintRequest<'a> {
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetIssuesForBoardSprintRequestExpand) -> Self {
+    pub fn expand(mut self, value: GetBoardIssuesForSprintRequestExpand) -> Self {
         self.expand = Some(value);
 
         self
@@ -1636,7 +1636,7 @@ impl<'a> GetIssuesForBoardSprintRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: GetIssuesForBoardSprintRequestFields) -> Self {
+    pub fn fields(mut self, value: GetBoardIssuesForSprintRequestFields) -> Self {
         self.fields = Some(value);
 
         self

@@ -13,8 +13,8 @@ impl<'a> DashboardsService<'a> {
     }
 
     /// Returns a list of all dashboards, optionally filtering them.
-    pub fn list(&self) -> ListRequest<'a> {
-        ListRequest::new(self.client)
+    pub fn get_all_dashboards(&self) -> GetAllDashboardsRequest<'a> {
+        GetAllDashboardsRequest::new(self.client)
     }
 
     /// Returns the keys of all properties for the dashboard item identified by the id.
@@ -65,14 +65,14 @@ impl<'a> DashboardsService<'a> {
 
 /// Returns a list of all dashboards, optionally filtering them.
 #[derive(Clone)]
-pub struct ListRequest<'a> {
+pub struct GetAllDashboardsRequest<'a> {
     client: &'a crate::core::Client,
     filter: Option<String>,
     max_results: Option<i64>,
     start_at: Option<i64>,
 }
 
-impl<'a> ListRequest<'a> {
+impl<'a> GetAllDashboardsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
         Self { client, filter: None, max_results: None, start_at: None }
     }

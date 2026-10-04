@@ -3,8 +3,8 @@ use std::collections::HashMap;
 use jira::server::{
     CommentJson, IssueLinkTypeJson, IssueRefJson, IssueSubTaskMovePosition, IssueUpdate, IssuesUpdate,
     LinkIssueRequestJson, NotificationJson, RemoteIssueLinkCreateOrUpdateRequest, RemoteObject,
-    RemoteReciprocalIssueLinkCreateRequest, SearchRequest, SearchRequest2Fields, ToJson, Transition, User, Worklog,
-    WorklogIdsRequest,
+    RemoteReciprocalIssueLinkCreateRequest, SearchIssuesRequestFields, SearchRequest, ToJson, Transition, User,
+    Worklog, WorklogIdsRequest,
 };
 use serde_json::json;
 
@@ -71,7 +71,7 @@ async fn creates_an_issue_in_wiki_markup_and_edits_it() {
 
     server()
         .issues()
-        .assign(&key)
+        .assign_issue(&key)
         .user(User { name: Some(username.clone()), ..User::default() })
         .send()
         .await
@@ -93,7 +93,7 @@ async fn creates_an_issue_in_wiki_markup_and_edits_it() {
 
     let types = server()
         .issues()
-        .get_create_issue_meta_project_issue_types(&project.key)
+        .get_create_issue_meta_issue_types(&project.key)
         .send_raw()
         .await
         .expect("the create metadata reads");
@@ -216,7 +216,7 @@ async fn adds_updates_pins_and_deletes_a_comment() {
     let body = test_name("a comment");
 
     let comment = server()
-        .issues()
+        .issue_comments()
         .add_comment(&key)
         .comment_json(CommentJson { body: Some(body.clone()), ..CommentJson::default() })
         .send()
@@ -228,7 +228,7 @@ async fn adds_updates_pins_and_deletes_a_comment() {
     assert_eq!(comment.body.as_deref(), Some(body.as_str()), "a comment is plain wiki markup on this surface");
 
     let updated = server()
-        .issues()
+        .issue_comments()
         .update_comment(&key, &id)
         .body(CommentJson { body: Some(format!("{body} — edited")), ..CommentJson::default() })
         .send()
@@ -237,7 +237,7 @@ async fn adds_updates_pins_and_deletes_a_comment() {
 
     assert!(updated.body.as_deref().is_some_and(|body| body.contains("edited")), "the edit is in the answer");
 
-    let read = server().issues().get_comment(&key, &id).send().await.expect("the comment reads back by id");
+    let read = server().issue_comments().get_comment(&key, &id).send().await.expect("the comment reads back by id");
 
     assert_eq!(read.id.as_deref(), Some(id.as_str()), "the comment read back is the one written");
 
@@ -253,21 +253,31 @@ async fn adds_updates_pins_and_deletes_a_comment() {
     );
 
     server()
-        .issue_comments()
+        .issue_comment_properties()
         .set_comment_property("suite", &id, property_body())
         .send()
         .await
         .expect("a comment takes a property");
 
-    let property =
-        server().issue_comments().get_comment_property("suite", &id).send().await.expect("the property reads back");
+    let property = server()
+        .issue_comment_properties()
+        .get_comment_property("suite", &id)
+        .send()
+        .await
+        .expect("the property reads back");
 
     assert_eq!(property.value, Some(property_value()), "the value survives the round trip untouched");
 
-    server().issue_comments().delete_comment_property("suite", &id).send().await.expect("the property can be removed");
-    server().issues().delete_comment(&key, &id).send().await.expect("the comment can be removed");
+    server()
+        .issue_comment_properties()
+        .delete_comment_property("suite", &id)
+        .send()
+        .await
+        .expect("the property can be removed");
+    server().issue_comments().delete_comment(&key, &id).send().await.expect("the comment can be removed");
 
-    let error = server().issues().get_comment(&key, &id).send().await.expect_err("a deleted comment cannot be read");
+    let error =
+        server().issue_comments().get_comment(&key, &id).send().await.expect_err("a deleted comment cannot be read");
 
     assert!(error.is_not_found(), "{error}");
 
@@ -286,7 +296,7 @@ async fn logs_work_and_edits_it() {
     let key = issue.key.clone().expect("a created issue carries a key");
 
     let worklog = server()
-        .issues()
+        .issue_worklogs()
         .add_worklog(&key)
         .worklog(Worklog {
             time_spent: Some("2h".to_owned()),
@@ -302,18 +312,18 @@ async fn logs_work_and_edits_it() {
     assert_eq!(worklog.time_spent.as_deref(), Some("2h"), "the time logged is the time asked for");
 
     server()
-        .issues()
+        .issue_worklogs()
         .update_worklog(&key, &id)
         .body(Worklog { time_spent: Some("3h".to_owned()), ..Worklog::default() })
         .send()
         .await
         .expect("a worklog can be edited");
 
-    let read = server().issues().get_worklog(&key, &id).send().await.expect("the worklog reads back");
+    let read = server().issue_worklogs().get_worklog(&key, &id).send().await.expect("the worklog reads back");
 
     assert_eq!(read.time_spent.as_deref(), Some("3h"), "the edit is observable on the next read");
 
-    let all = server().issues().get_issue_worklog(&key).send().await.expect("the worklogs of an issue read");
+    let all = server().issue_worklogs().get_issue_worklog(&key).send().await.expect("the worklogs of an issue read");
 
     assert!(
         all.worklogs.iter().flatten().any(|worklog| worklog.id.as_deref() == Some(id.as_str())),
@@ -330,7 +340,7 @@ async fn logs_work_and_edits_it() {
 
     assert!(bulk.iter().any(|worklog| worklog.id.as_deref() == Some(id.as_str())), "the bulk read finds it too");
 
-    server().issues().delete_worklog(&key, &id).send().await.expect("a worklog can be removed");
+    server().issue_worklogs().delete_worklog(&key, &id).send().await.expect("a worklog can be removed");
 
     tracker.cleanup().await;
 }
@@ -347,24 +357,30 @@ async fn votes_and_watches() {
     let key = issue.key.clone().expect("a created issue carries a key");
     let username = admin_username();
 
-    touch(server().issues().add_vote(&key).send().await);
+    touch(server().issue_votes().add_vote(&key).send().await);
 
-    let votes = server().issues().get_votes(&key).send_raw().await.expect("the votes read");
+    let votes = server().issue_votes().get_votes(&key).send_raw().await.expect("the votes read");
 
     assert!(votes["self"].as_str().is_some_and(|url| url.contains(&key)), "the votes belong to the issue: {votes}");
 
-    touch(server().issues().remove_vote(&key).send().await);
+    touch(server().issue_votes().remove_vote(&key).send().await);
 
-    server().issues().add_watcher(&key).body(username.clone()).send().await.expect("a watcher can be added by name");
+    server()
+        .issue_watchers()
+        .add_watcher(&key)
+        .body(username.clone())
+        .send()
+        .await
+        .expect("a watcher can be added by name");
 
-    let watchers = server().issues().get_issue_watchers(&key).send_raw().await.expect("the watchers read");
+    let watchers = server().issue_watchers().get_issue_watchers(&key).send_raw().await.expect("the watchers read");
 
     assert!(
         watchers["watchCount"].as_i64().is_some_and(|count| count > 0),
         "the watcher just added is counted: {watchers}",
     );
 
-    server().issues().remove_watcher(&key).username(username).send().await.expect("a watcher can be removed");
+    server().issue_watchers().remove_watcher(&key).username(username).send().await.expect("a watcher can be removed");
 
     tracker.cleanup().await;
 }
@@ -381,27 +397,28 @@ async fn stores_and_removes_a_property() {
     let key = issue.key.clone().expect("a created issue carries a key");
 
     server()
-        .issues()
+        .issue_properties()
         .set_issue_property("suite", &key, property_body())
         .send()
         .await
         .expect("an issue takes a property of the caller's own");
 
-    let property = server().issues().get_issue_property("suite", &key).send().await.expect("the property reads back");
+    let property =
+        server().issue_properties().get_issue_property("suite", &key).send().await.expect("the property reads back");
 
     assert_eq!(property.value, Some(property_value()), "the value survives the round trip untouched");
 
-    let keys = server().issues().get_issue_property_keys(&key).send().await.expect("the property keys read");
+    let keys = server().issue_properties().get_issue_property_keys(&key).send().await.expect("the property keys read");
 
     assert!(
         keys.keys.iter().flatten().any(|entry| entry.key.as_deref() == Some("suite")),
         "the key just written is in the listing",
     );
 
-    server().issues().delete_issue_property("suite", &key).send().await.expect("the property can be removed");
+    server().issue_properties().delete_issue_property("suite", &key).send().await.expect("the property can be removed");
 
     let error = server()
-        .issues()
+        .issue_properties()
         .get_issue_property("suite", &key)
         .send()
         .await
@@ -424,7 +441,7 @@ async fn keeps_remote_links_by_id_and_by_global_id() {
     let key = issue.key.clone().expect("a created issue carries a key");
 
     let link = server()
-        .issues()
+        .issue_remote_links()
         .create_or_update_remote_issue_link(&key)
         .remote_issue_link_create_or_update_request(remote_link("https://example.com/one", "one"))
         .send_raw()
@@ -434,7 +451,7 @@ async fn keeps_remote_links_by_id_and_by_global_id() {
     let link_id = link["id"].as_i64().expect("a created remote link carries an id").to_string();
 
     server()
-        .issues()
+        .issue_remote_links()
         .update_remote_issue_link(&link_id, &key)
         .remote_issue_link_create_or_update_request(remote_link("https://example.com/two", "two"))
         .send()
@@ -442,7 +459,7 @@ async fn keeps_remote_links_by_id_and_by_global_id() {
         .expect("a remote link can be updated");
 
     let read = server()
-        .issues()
+        .issue_remote_links()
         .get_remote_issue_link_by_id(&link_id, &key)
         .send_raw()
         .await
@@ -450,20 +467,24 @@ async fn keeps_remote_links_by_id_and_by_global_id() {
 
     assert_eq!(read["object"]["url"].as_str(), Some("https://example.com/two"), "the update is observable: {read}");
 
-    let all =
-        server().issues().get_remote_issue_links(&key).send_raw().await.expect("the remote links of an issue read");
+    let all = server()
+        .issue_remote_links()
+        .get_remote_issue_links(&key)
+        .send_raw()
+        .await
+        .expect("the remote links of an issue read");
 
     assert!(all.as_array().is_some_and(|links| !links.is_empty()), "the link just written is in the listing: {all}");
 
     server()
-        .issues()
+        .issue_remote_links()
         .delete_remote_issue_link_by_id(&link_id, &key)
         .send()
         .await
         .expect("a remote link can be removed by id");
 
     server()
-        .issues()
+        .issue_remote_links()
         .create_or_update_remote_issue_link(&key)
         .remote_issue_link_create_or_update_request(remote_link("https://example.com/three", "three"))
         .send_raw()
@@ -471,7 +492,7 @@ async fn keeps_remote_links_by_id_and_by_global_id() {
         .expect("and written again under the same global id");
 
     server()
-        .issues()
+        .issue_remote_links()
         .delete_remote_issue_link_by_global_id(&key, REMOTE_LINK_GLOBAL_ID)
         .send()
         .await
@@ -594,7 +615,7 @@ async fn attaches_a_file_and_removes_it() {
     let key = issue.key.clone().expect("a created issue carries a key");
 
     let attached = server()
-        .issues()
+        .issue_attachments()
         .add_attachment(&key, [jira::Attachment::new("suite.txt", "written by the issues suite")])
         .send()
         .await
@@ -669,7 +690,7 @@ async fn finds_the_issue_by_jql_and_through_the_picker() {
     let found = poll_until("the issue to be indexed", || async {
         let page = server()
             .issue_search()
-            .search_using_search_request(SearchRequest {
+            .search_issues_post(SearchRequest {
                 jql: Some(format!("project = {}", project.key)),
                 max_results: Some(5),
                 fields: Some(vec!["summary".to_owned()]),
@@ -690,9 +711,9 @@ async fn finds_the_issue_by_jql_and_through_the_picker() {
 
     let results = server()
         .issue_search()
-        .search()
+        .search_issues()
         .jql(format!("key = {key}"))
-        .fields(SearchRequest2Fields::Many(vec!["summary".to_owned()]))
+        .fields(SearchIssuesRequestFields::Many(vec!["summary".to_owned()]))
         .send()
         .await
         .expect("a JQL search is accepted as query parameters too");
@@ -704,7 +725,7 @@ async fn finds_the_issue_by_jql_and_through_the_picker() {
     );
 
     let picker = server()
-        .issues()
+        .issue_search()
         .get_issue_picker_resource()
         .query(key.clone())
         .send()

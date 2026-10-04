@@ -302,7 +302,7 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
     });
 
     server()
-        .issues()
+        .issue_comments()
         .add_comment(&issue_key)
         .comment_json(CommentJson { body: Some("created by the crawl".to_owned()), ..CommentJson::default() })
         .send()
@@ -310,7 +310,7 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
         .expect("the issue takes a comment");
 
     server()
-        .issues()
+        .issue_properties()
         .set_issue_property(
             PROPERTY_KEY,
             &issue_key,
@@ -358,7 +358,7 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
 
     let scheme = server()
         .workflow_schemes()
-        .create_scheme(WorkflowScheme {
+        .create_workflow_scheme(WorkflowScheme {
             name: Some(test_name("crawl workflow scheme")),
             description: Some("created by the crawl".to_owned()),
             ..WorkflowScheme::default()
@@ -369,7 +369,9 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
 
     let workflow_scheme_id = scheme.id.expect("a created workflow scheme carries an id");
 
-    tracker.defer(move || async move { server().workflow_schemes().delete_scheme(workflow_scheme_id).send().await });
+    tracker.defer(move || async move {
+        server().workflow_schemes().delete_workflow_scheme(workflow_scheme_id).send().await
+    });
 
     Fixture { project_key, project_id, issue_key, version_id, filter_id, workflow_scheme_id }
 }

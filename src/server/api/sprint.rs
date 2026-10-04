@@ -102,41 +102,37 @@ impl<'a> SprintService<'a> {
     }
 
     /// Moves issues to a sprint, for a given sprint Id. Issues can only be moved to open or active sprints. The maximum number of issues that can be moved in one operation is 50.
-    pub fn move_issues_to_sprint(
+    pub fn move_issues_to_sprint_and_rank(
         &self,
         sprint_id: i64,
         issue_assign_request: IssueAssignRequest,
-    ) -> MoveIssuesToSprintRequest<'a> {
-        MoveIssuesToSprintRequest::new(self.client, sprint_id, issue_assign_request)
+    ) -> MoveIssuesToSprintAndRankRequest<'a> {
+        MoveIssuesToSprintAndRankRequest::new(self.client, sprint_id, issue_assign_request)
     }
 
     /// Returns the keys of all properties for the sprint identified by the id. The user who retrieves the property keys is required to have permissions to view the sprint.
-    pub fn get_sprint_property_keys(&self, sprint_id: i64) -> GetSprintPropertyKeysRequest<'a> {
-        GetSprintPropertyKeysRequest::new(self.client, sprint_id)
+    pub fn get_properties_keys(&self, sprint_id: i64) -> GetPropertiesKeysRequest<'a> {
+        GetPropertiesKeysRequest::new(self.client, sprint_id)
     }
 
     /// Returns the value of the property with a given key from the sprint identified by the provided id. The user who retrieves the property is required to have permissions to view the sprint.
-    pub fn get_sprint_property(&self, property_key: impl Into<String>, sprint_id: i64) -> GetSprintPropertyRequest<'a> {
-        GetSprintPropertyRequest::new(self.client, property_key, sprint_id)
+    pub fn get_property(&self, property_key: impl Into<String>, sprint_id: i64) -> GetPropertyRequest<'a> {
+        GetPropertyRequest::new(self.client, property_key, sprint_id)
     }
 
     /// Sets the value of the specified sprint's property. You can use this resource to store a custom data against the sprint identified by the id. The user who stores the data is required to have permissions to modify the sprint.
-    pub fn set_sprint_property(
+    pub fn set_property(
         &self,
         property_key: impl Into<String>,
         sprint_id: i64,
         body: std::collections::HashMap<String, serde_json::Value>,
-    ) -> SetSprintPropertyRequest<'a> {
-        SetSprintPropertyRequest::new(self.client, property_key, sprint_id, body)
+    ) -> SetPropertyRequest<'a> {
+        SetPropertyRequest::new(self.client, property_key, sprint_id, body)
     }
 
     /// Removes the property from the sprint identified by the id. Ths user removing the property is required to have permissions to modify the sprint.
-    pub fn delete_sprint_property(
-        &self,
-        property_key: impl Into<String>,
-        sprint_id: i64,
-    ) -> DeleteSprintPropertyRequest<'a> {
-        DeleteSprintPropertyRequest::new(self.client, property_key, sprint_id)
+    pub fn delete_property(&self, property_key: impl Into<String>, sprint_id: i64) -> DeletePropertyRequest<'a> {
+        DeletePropertyRequest::new(self.client, property_key, sprint_id)
     }
 
     /// Swap the position of the sprint with the second sprint.
@@ -559,13 +555,13 @@ impl<'a> GetIssuesForSprintRequest<'a> {
 
 /// Moves issues to a sprint, for a given sprint Id. Issues can only be moved to open or active sprints. The maximum number of issues that can be moved in one operation is 50.
 #[derive(Clone)]
-pub struct MoveIssuesToSprintRequest<'a> {
+pub struct MoveIssuesToSprintAndRankRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,
     issue_assign_request: IssueAssignRequest,
 }
 
-impl<'a> MoveIssuesToSprintRequest<'a> {
+impl<'a> MoveIssuesToSprintAndRankRequest<'a> {
     fn new(client: &'a crate::core::Client, sprint_id: i64, issue_assign_request: IssueAssignRequest) -> Self {
         Self { client, sprint_id, issue_assign_request }
     }
@@ -600,12 +596,12 @@ impl<'a> MoveIssuesToSprintRequest<'a> {
 
 /// Returns the keys of all properties for the sprint identified by the id. The user who retrieves the property keys is required to have permissions to view the sprint.
 #[derive(Clone)]
-pub struct GetSprintPropertyKeysRequest<'a> {
+pub struct GetPropertiesKeysRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,
 }
 
-impl<'a> GetSprintPropertyKeysRequest<'a> {
+impl<'a> GetPropertiesKeysRequest<'a> {
     fn new(client: &'a crate::core::Client, sprint_id: i64) -> Self {
         Self { client, sprint_id }
     }
@@ -633,13 +629,13 @@ impl<'a> GetSprintPropertyKeysRequest<'a> {
 
 /// Returns the value of the property with a given key from the sprint identified by the provided id. The user who retrieves the property is required to have permissions to view the sprint.
 #[derive(Clone)]
-pub struct GetSprintPropertyRequest<'a> {
+pub struct GetPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
     sprint_id: i64,
 }
 
-impl<'a> GetSprintPropertyRequest<'a> {
+impl<'a> GetPropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, property_key: impl Into<String>, sprint_id: i64) -> Self {
         Self { client, property_key: property_key.into(), sprint_id }
     }
@@ -671,14 +667,14 @@ impl<'a> GetSprintPropertyRequest<'a> {
 
 /// Sets the value of the specified sprint's property. You can use this resource to store a custom data against the sprint identified by the id. The user who stores the data is required to have permissions to modify the sprint.
 #[derive(Clone)]
-pub struct SetSprintPropertyRequest<'a> {
+pub struct SetPropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
     sprint_id: i64,
     body: std::collections::HashMap<String, serde_json::Value>,
 }
 
-impl<'a> SetSprintPropertyRequest<'a> {
+impl<'a> SetPropertyRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
         property_key: impl Into<String>,
@@ -717,13 +713,13 @@ impl<'a> SetSprintPropertyRequest<'a> {
 
 /// Removes the property from the sprint identified by the id. Ths user removing the property is required to have permissions to modify the sprint.
 #[derive(Clone)]
-pub struct DeleteSprintPropertyRequest<'a> {
+pub struct DeletePropertyRequest<'a> {
     client: &'a crate::core::Client,
     property_key: String,
     sprint_id: i64,
 }
 
-impl<'a> DeleteSprintPropertyRequest<'a> {
+impl<'a> DeletePropertyRequest<'a> {
     fn new(client: &'a crate::core::Client, property_key: impl Into<String>, sprint_id: i64) -> Self {
         Self { client, property_key: property_key.into(), sprint_id }
     }

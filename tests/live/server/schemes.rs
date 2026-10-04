@@ -75,7 +75,7 @@ async fn keeps_an_issue_type() {
     let for_cleanup = id.clone();
 
     server()
-        .issue_types()
+        .issue_type_properties()
         .set_issue_type_property(property_key, &id, [("written".to_owned(), json!(true))].into_iter().collect())
         .send()
         .await
@@ -84,11 +84,11 @@ async fn keeps_an_issue_type() {
     tracker.defer(move || {
         let id = for_cleanup.clone();
 
-        async move { server().issue_types().delete_issue_type_property(property_key, id).send().await }
+        async move { server().issue_type_properties().delete_issue_type_property(property_key, id).send().await }
     });
 
     let property = server()
-        .issue_types()
+        .issue_type_properties()
         .get_issue_type_property(property_key, &id)
         .send()
         .await
@@ -429,7 +429,7 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
 
     let created = server()
         .workflow_schemes()
-        .create_scheme(WorkflowScheme {
+        .create_workflow_scheme(WorkflowScheme {
             name: Some(test_name("wf")),
             description: Some("created by the suite".to_owned()),
             ..WorkflowScheme::default()
@@ -440,7 +440,7 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
 
     let scheme_id = created.id.expect("a created workflow scheme carries an id");
 
-    tracker.defer(move || async move { server().workflow_schemes().delete_scheme(scheme_id).send().await });
+    tracker.defer(move || async move { server().workflow_schemes().delete_workflow_scheme(scheme_id).send().await });
 
     let workflows = server().workflows().get_all_workflows().send().await.expect("the instance lists its workflows");
     let workflow = workflows
@@ -464,12 +464,16 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
 
     server()
         .workflow_schemes()
-        .update_default(scheme_id, DefaultModel { workflow: Some(workflow.clone()), update_draft_if_needed: None })
+        .update_default_workflow(
+            scheme_id,
+            DefaultModel { workflow: Some(workflow.clone()), update_draft_if_needed: None },
+        )
         .send()
         .await
         .expect("the scheme takes a default workflow");
 
-    let by_id = server().workflow_schemes().get_by_id(scheme_id).send().await.expect("the scheme reads back by id");
+    let by_id =
+        server().workflow_schemes().get_workflow_scheme(scheme_id).send().await.expect("the scheme reads back by id");
 
     assert_eq!(by_id.id, Some(scheme_id), "the scheme read back is the scheme asked for");
     assert_eq!(by_id.default_workflow.as_deref(), Some(workflow.as_str()), "the default workflow is the one set");
@@ -479,7 +483,7 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
 
     server()
         .workflow_schemes()
-        .set_issue_type(
+        .set_workflow_scheme_issue_type(
             &issue_type,
             scheme_id,
             IssueTypeMapping {
@@ -540,22 +544,28 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
         server().workflow_schemes().delete_workflow_mapping(scheme_id).workflow_name(&workflow).send().await,
         "deleting a workflow mapping",
     );
-    touch(server().workflow_schemes().delete_default(scheme_id).send().await, "clearing the default workflow");
+    touch(server().workflow_schemes().delete_default_workflow(scheme_id).send().await, "clearing the default workflow");
 
-    touch(server().workflow_schemes().create_draft_for_parent(scheme_id).send().await, "creating a draft");
-    touch(server().workflow_schemes().get_draft_by_id(scheme_id).send().await, "reading a draft");
+    touch(
+        server().workflow_scheme_drafts().create_workflow_scheme_draft_from_parent(scheme_id).send().await,
+        "creating a draft",
+    );
+    touch(server().workflow_scheme_drafts().get_workflow_scheme_draft(scheme_id).send().await, "reading a draft");
     touch(
         server()
-            .workflow_schemes()
-            .update_draft(scheme_id, WorkflowScheme { name: Some(test_name("wf3")), ..WorkflowScheme::default() })
+            .workflow_scheme_drafts()
+            .update_workflow_scheme_draft(
+                scheme_id,
+                WorkflowScheme { name: Some(test_name("wf3")), ..WorkflowScheme::default() },
+            )
             .send()
             .await,
         "editing a draft",
     );
     touch(
         server()
-            .workflow_schemes()
-            .update_draft_default(
+            .workflow_scheme_drafts()
+            .update_draft_default_workflow(
                 scheme_id,
                 DefaultModel { workflow: Some(workflow.clone()), update_draft_if_needed: None },
             )
@@ -563,11 +573,14 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
             .await,
         "setting a draft's default workflow",
     );
-    touch(server().workflow_schemes().get_draft_default(scheme_id).send().await, "reading a draft's default workflow");
+    touch(
+        server().workflow_scheme_drafts().get_draft_default_workflow(scheme_id).send().await,
+        "reading a draft's default workflow",
+    );
     touch(
         server()
-            .workflow_schemes()
-            .set_draft_issue_type(
+            .workflow_scheme_drafts()
+            .set_workflow_scheme_draft_issue_type(
                 &issue_type,
                 scheme_id,
                 IssueTypeMapping {
@@ -581,12 +594,12 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
         "mapping an issue type in a draft",
     );
     touch(
-        server().workflow_schemes().get_draft_issue_type(&issue_type, scheme_id).send().await,
+        server().workflow_scheme_drafts().get_workflow_scheme_draft_issue_type(&issue_type, scheme_id).send().await,
         "reading a draft's issue type mapping",
     );
     touch(
         server()
-            .workflow_schemes()
+            .workflow_scheme_drafts()
             .update_draft_workflow_mapping(
                 scheme_id,
                 WorkflowMapping { workflow: Some(workflow.clone()), ..WorkflowMapping::default() },
@@ -596,20 +609,25 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
             .await,
         "editing a draft's workflow mapping",
     );
-    touch(server().workflow_schemes().get_draft_workflow(scheme_id).send().await, "reading a draft's mappings");
+    touch(server().workflow_scheme_drafts().get_draft_workflow(scheme_id).send().await, "reading a draft's mappings");
     touch(
-        server().workflow_schemes().delete_draft_issue_type(&issue_type, scheme_id).send().await,
+        server().workflow_scheme_drafts().delete_workflow_scheme_draft_issue_type(&issue_type, scheme_id).send().await,
         "unmapping an issue type in a draft",
     );
     touch(
-        server().workflow_schemes().delete_draft_workflow_mapping(scheme_id).workflow_name(&workflow).send().await,
+        server()
+            .workflow_scheme_drafts()
+            .delete_draft_workflow_mapping(scheme_id)
+            .workflow_name(&workflow)
+            .send()
+            .await,
         "deleting a draft's workflow mapping",
     );
     touch(
-        server().workflow_schemes().delete_draft_default(scheme_id).send().await,
+        server().workflow_scheme_drafts().delete_draft_default_workflow(scheme_id).send().await,
         "clearing a draft's default workflow",
     );
-    touch(server().workflow_schemes().delete_draft_by_id(scheme_id).send().await, "deleting a draft");
+    touch(server().workflow_scheme_drafts().delete_workflow_scheme_draft(scheme_id).send().await, "deleting a draft");
 
     tracker.cleanup().await;
 }
@@ -619,12 +637,12 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
 async fn adds_a_tab_to_a_screen_and_takes_it_away() {
     let mut tracker = ResourceTracker::new();
 
-    let screens = server().screens().get_all_screens().send().await.expect("the instance lists its screens");
+    let screens = server().screens().get_screens().send().await.expect("the instance lists its screens");
     let screen_id = screens.first().and_then(|screen| screen.id).expect("a Jira instance always ships with screens");
 
     let tab = server()
-        .screens()
-        .add_tab(screen_id)
+        .screen_tabs()
+        .add_screen_tab(screen_id)
         .screenable_tab(ScreenableTab { name: Some(test_name("tab")), id: None })
         .send()
         .await
@@ -632,12 +650,12 @@ async fn adds_a_tab_to_a_screen_and_takes_it_away() {
 
     let tab_id = tab.id.expect("a created tab carries an id");
 
-    tracker.defer(move || async move { server().screens().delete_tab(tab_id, screen_id).send().await });
+    tracker.defer(move || async move { server().screen_tabs().delete_screen_tab(tab_id, screen_id).send().await });
 
     let renamed_to = test_name("tab2");
     let renamed = server()
-        .screens()
-        .rename_tab(tab_id, screen_id)
+        .screen_tabs()
+        .rename_screen_tab(tab_id, screen_id)
         .screenable_tab(ScreenableTab { name: Some(renamed_to.clone()), id: None })
         .send()
         .await
@@ -645,16 +663,20 @@ async fn adds_a_tab_to_a_screen_and_takes_it_away() {
 
     assert_eq!(renamed.name.as_deref(), Some(renamed_to.as_str()), "renaming answers with the new name");
 
-    touch(server().screens().move_tab(tab_id, screen_id, 0).send().await, "moving the tab to the front");
+    touch(server().screen_tabs().move_screen_tab(tab_id, screen_id, 0).send().await, "moving the tab to the front");
 
-    let available =
-        server().screens().get_fields_to_add(screen_id).send().await.expect("the fields not yet on the screen list");
+    let available = server()
+        .screens()
+        .get_available_screen_fields(screen_id)
+        .send()
+        .await
+        .expect("the fields not yet on the screen list");
 
     if let Some(field_id) = available.first().and_then(|field| field.id.clone()) {
         touch(
             server()
-                .screens()
-                .add_field(tab_id, screen_id)
+                .screen_tab_fields()
+                .add_screen_tab_field(tab_id, screen_id)
                 .add_field(AddField { field_id: Some(field_id.clone()) })
                 .send()
                 .await,
@@ -662,8 +684,8 @@ async fn adds_a_tab_to_a_screen_and_takes_it_away() {
         );
         touch(
             server()
-                .screens()
-                .move_field(tab_id, screen_id, &field_id)
+                .screen_tab_fields()
+                .move_screen_tab_field(tab_id, screen_id, &field_id)
                 .move_field(MoveField { position: Some(MoveFieldPosition::First), after: None })
                 .send()
                 .await,
@@ -674,7 +696,7 @@ async fn adds_a_tab_to_a_screen_and_takes_it_away() {
             "showing the field when it is empty",
         );
         touch(
-            server().screens().remove_field(tab_id, screen_id, &field_id).send().await,
+            server().screen_tab_fields().remove_screen_tab_field(tab_id, screen_id, &field_id).send().await,
             "taking the field off the tab",
         );
     }

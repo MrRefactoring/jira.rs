@@ -29,7 +29,7 @@ async fn reads_the_project_it_created_and_what_belongs_to_it() {
         "and every issue type of a project carries the statuses its workflow allows",
     );
 
-    let roles = server().projects().get_project_roles(&project.key).send().await.expect("the roles read");
+    let roles = server().project_roles().get_project_roles(&project.key).send().await.expect("the roles read");
 
     assert!(!roles.is_empty(), "a project has roles");
     assert!(roles.values().all(|url| url.contains("/role/")), "each role is named by the url that addresses it");
@@ -74,7 +74,7 @@ async fn assigns_the_schemes_a_project_can_hold() {
     let mut tracker = ResourceTracker::new();
     let project = business_project(&mut tracker, "scheme holder").await;
 
-    let schemes = server().permission_schemes().get_permission_schemes().send().await.expect("the schemes read");
+    let schemes = server().permission_schemes().get_all_permission_schemes().send().await.expect("the schemes read");
     let scheme_id = schemes
         .permission_schemes
         .as_ref()
@@ -83,14 +83,14 @@ async fn assigns_the_schemes_a_project_can_hold() {
         .expect("a Jira instance ships a default permission scheme");
 
     server()
-        .projects()
+        .project_permission_schemes()
         .assign_permission_scheme(&project.key, Id { id: Some(scheme_id) })
         .send()
         .await
         .expect("a permission scheme can be assigned to a project");
 
     let assigned = server()
-        .projects()
+        .project_permission_schemes()
         .get_assigned_permission_scheme(&project.key)
         .send()
         .await
@@ -123,26 +123,30 @@ async fn stores_a_property_on_the_project() {
     let project = business_project(&mut tracker, "property holder").await;
 
     server()
-        .projects()
+        .project_properties()
         .set_project_property("suite", &project.key, property_body())
         .send()
         .await
         .expect("a project takes a property of the caller's own");
 
-    let property =
-        server().projects().get_project_property("suite", &project.key).send().await.expect("the property reads back");
+    let property = server()
+        .project_properties()
+        .get_project_property("suite", &project.key)
+        .send()
+        .await
+        .expect("the property reads back");
 
     assert_eq!(property.value, Some(property_value()), "the value survives the round trip untouched");
 
     server()
-        .projects()
+        .project_properties()
         .delete_project_property("suite", &project.key)
         .send()
         .await
         .expect("the property can be removed");
 
     let error = server()
-        .projects()
+        .project_properties()
         .get_project_property("suite", &project.key)
         .send()
         .await
@@ -160,14 +164,14 @@ async fn puts_actors_in_a_role_and_takes_them_out() {
     let project = business_project(&mut tracker, "role holder").await;
     let username = admin_username();
 
-    let roles = server().projects().get_project_roles(&project.key).send().await.expect("the roles read");
+    let roles = server().project_roles().get_project_roles(&project.key).send().await.expect("the roles read");
     let url = roles.values().next().expect("a project has at least one role");
     let role_id: i64 =
         url.rsplit('/').next().and_then(|tail| tail.parse().ok()).expect("a role url ends in the role's id");
 
     touch(
         server()
-            .projects()
+            .project_role_actors()
             .add_actor_users(
                 &project.key,
                 role_id,
@@ -178,7 +182,7 @@ async fn puts_actors_in_a_role_and_takes_them_out() {
     );
     touch(
         server()
-            .projects()
+            .project_role_actors()
             .set_actors(
                 &project.key,
                 role_id,
@@ -193,11 +197,12 @@ async fn puts_actors_in_a_role_and_takes_them_out() {
             .await,
     );
 
-    let role = server().projects().get_project_role(&project.key, role_id).send().await.expect("the role reads back");
+    let role =
+        server().project_roles().get_project_role(&project.key, role_id).send().await.expect("the role reads back");
 
     assert_eq!(role.id, Some(role_id), "the role read back is the one addressed");
 
-    touch(server().projects().delete_actor(&project.key, role_id).user(username).send().await);
+    touch(server().project_role_actors().delete_actor(&project.key, role_id).user(username).send().await);
 
     tracker.cleanup().await;
 }
@@ -332,7 +337,12 @@ async fn keeps_a_version_moves_it_and_merges_it_away() {
     let other = create_version(&mut tracker, &project.key, "v2").await;
     let other_id = other.id.clone().expect("a created version carries an id");
 
-    server().project_versions().merge(&other_id, &id).send().await.expect("one version can be merged into another");
+    server()
+        .project_versions()
+        .merge_versions(&other_id, &id)
+        .send()
+        .await
+        .expect("one version can be merged into another");
 
     tracker.cleanup().await;
 }
@@ -452,8 +462,12 @@ async fn uploads_an_avatar_and_puts_it_back() {
         );
     }
 
-    let avatars =
-        server().projects().get_all_project_avatars(&project.key).send().await.expect("the avatars of a project read");
+    let avatars = server()
+        .project_avatars()
+        .get_all_project_avatars(&project.key)
+        .send()
+        .await
+        .expect("the avatars of a project read");
     let system = avatars.system.as_ref().expect("a project has system avatars");
 
     assert!(!system.is_empty(), "every Jira instance ships system avatars");
@@ -462,14 +476,14 @@ async fn uploads_an_avatar_and_puts_it_back() {
 
     touch(
         server()
-            .projects()
+            .project_avatars()
             .update_project_avatar(&project.key, Avatar { id: Some(id.clone()), ..Avatar::default() })
             .send()
             .await,
     );
 
     if let Ok(id) = id.parse::<i64>() {
-        touch(server().projects().delete_project_avatar(&project.key, id).send().await);
+        touch(server().project_avatars().delete_project_avatar(&project.key, id).send().await);
     }
 
     tracker.cleanup().await;
@@ -524,13 +538,13 @@ async fn keeps_a_project_role_of_its_own() {
 
     touch(
         server()
-            .project_roles()
+            .project_role_actors()
             .add_project_role_actors_to_role(id)
             .actor_input(ActorInput { user: Some(vec![username.clone()]), ..ActorInput::default() })
             .send()
             .await,
     );
-    touch(server().project_roles().delete_project_role_actors_from_role(id).user(username).send().await);
+    touch(server().project_role_actors().delete_project_role_actors_from_role(id).user(username).send().await);
 
     tracker.cleanup().await;
 }
@@ -553,7 +567,7 @@ async fn create_version(tracker: &mut ResourceTracker, project_key: &str, label:
         let id = id.clone();
 
         async move {
-            server().project_versions().delete_version_and_swap(id, DeleteAndReplaceVersion::default()).send().await
+            server().project_versions().delete_and_replace_version(id, DeleteAndReplaceVersion::default()).send().await
         }
     });
 

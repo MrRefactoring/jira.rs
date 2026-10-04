@@ -27,8 +27,8 @@ impl<'a> IssuePrioritiesService<'a> {
     pub fn set_default_priority(
         &self,
         set_default_priority_request: SetDefaultPriorityRequest,
-    ) -> SetDefaultPriorityRequest2<'a> {
-        SetDefaultPriorityRequest2::new(self.client, set_default_priority_request)
+    ) -> IssuePrioritiesSetDefaultPriorityRequest<'a> {
+        IssuePrioritiesSetDefaultPriorityRequest::new(self.client, set_default_priority_request)
     }
 
     /// Changes the order of issue priorities.
@@ -130,12 +130,12 @@ impl<'a> CreatePriorityRequest<'a> {
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 #[derive(Clone)]
-pub struct SetDefaultPriorityRequest2<'a> {
+pub struct IssuePrioritiesSetDefaultPriorityRequest<'a> {
     client: &'a crate::core::Client,
     set_default_priority_request: SetDefaultPriorityRequest,
 }
 
-impl<'a> SetDefaultPriorityRequest2<'a> {
+impl<'a> IssuePrioritiesSetDefaultPriorityRequest<'a> {
     fn new(client: &'a crate::core::Client, set_default_priority_request: SetDefaultPriorityRequest) -> Self {
         Self { client, set_default_priority_request }
     }

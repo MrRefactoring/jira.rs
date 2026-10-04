@@ -7,14 +7,14 @@ use serde::Serialize;
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
-pub enum GetPermissionSchemesRequestExpand {
+pub enum GetAllPermissionSchemesRequestExpand {
     One(String),
     Many(Vec<String>),
     /// A shape the specification does not describe.
     Other(serde_json::Value),
 }
 
-crate::core::untagged::untagged!(GetPermissionSchemesRequestExpand { One, Many, Other });
+crate::core::untagged::untagged!(GetAllPermissionSchemesRequestExpand { One, Many, Other });
 
 /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
 #[derive(Debug, Clone, PartialEq, Serialize)]
@@ -105,8 +105,8 @@ impl<'a> PermissionSchemesService<'a> {
     }
 
     /// Returns a list of all permission schemes. By default only shortened beans are returned. If you want to include permissions of all the schemes, then specify the permissions expand parameter. Permissions will be included also if you specify any other expand parameter.
-    pub fn get_permission_schemes(&self) -> GetPermissionSchemesRequest<'a> {
-        GetPermissionSchemesRequest::new(self.client)
+    pub fn get_all_permission_schemes(&self) -> GetAllPermissionSchemesRequest<'a> {
+        GetAllPermissionSchemesRequest::new(self.client)
     }
 
     /// Create a new permission scheme. This method can create schemes with a defined permission set, or without.
@@ -178,19 +178,19 @@ impl<'a> PermissionSchemesService<'a> {
 
 /// Returns a list of all permission schemes. By default only shortened beans are returned. If you want to include permissions of all the schemes, then specify the permissions expand parameter. Permissions will be included also if you specify any other expand parameter.
 #[derive(Clone)]
-pub struct GetPermissionSchemesRequest<'a> {
+pub struct GetAllPermissionSchemesRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetPermissionSchemesRequestExpand>,
+    expand: Option<GetAllPermissionSchemesRequestExpand>,
 }
 
-impl<'a> GetPermissionSchemesRequest<'a> {
+impl<'a> GetAllPermissionSchemesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
         Self { client, expand: None }
     }
 
     /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
     #[must_use]
-    pub fn expand(mut self, value: GetPermissionSchemesRequestExpand) -> Self {
+    pub fn expand(mut self, value: GetAllPermissionSchemesRequestExpand) -> Self {
         self.expand = Some(value);
 
         self

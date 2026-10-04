@@ -19,8 +19,8 @@ fn created_from_temporary<T>(outcome: jira::Result<T>) {
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn reads_and_writes_an_application_property() {
     let properties = server()
-        .application_properties()
-        .get_application_properties()
+        .jira_settings()
+        .get_application_property()
         .key_filter("jira.clone.prefix")
         .send()
         .await
@@ -32,8 +32,8 @@ async fn reads_and_writes_an_application_property() {
     assert_eq!(id, "jira.clone.prefix", "the filter narrowed the listing to the property asked for");
 
     let written = server()
-        .application_properties()
-        .set_property_via_restful_table(
+        .jira_settings()
+        .set_application_property(
             id.clone(),
             ApplicationPropertyValue { id: Some(id), value: Some("DUPLICATE - ".to_owned()) },
         )
@@ -43,8 +43,7 @@ async fn reads_and_writes_an_application_property() {
 
     assert_eq!(written.value.as_deref(), Some("DUPLICATE - "), "the value the body carried is the value that stuck");
 
-    let advanced =
-        server().application_properties().get_advanced_settings().send().await.expect("the advanced settings read");
+    let advanced = server().jira_settings().get_advanced_settings().send().await.expect("the advanced settings read");
 
     assert!(advanced.iter().all(|setting| setting.id.is_some()), "every advanced setting is addressable by an id");
 }
@@ -52,7 +51,12 @@ async fn reads_and_writes_an_application_property() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn reads_and_writes_an_application_role() {
-    let roles = server().application_roles().get_all().send().await.expect("the instance lists its application roles");
+    let roles = server()
+        .application_roles()
+        .get_all_application_roles()
+        .send()
+        .await
+        .expect("the instance lists its application roles");
     let role = roles.first().expect("a licensed Jira has at least one application role").clone();
     let key = role.key.clone().expect("an application role is addressed by its key");
 
@@ -77,15 +81,15 @@ async fn sets_the_base_url_and_the_default_columns() {
     touch(server().jira_settings().set_base_url().body(env.host).send().await);
 
     server()
-        .jira_settings()
-        .set_issue_navigator_default_columns_form()
+        .issue_navigator_settings()
+        .set_issue_navigator_default_columns()
         .columns(["summary", "status"])
         .send()
         .await
         .expect("the default columns can be set");
 
     let columns = server()
-        .jira_settings()
+        .issue_navigator_settings()
         .get_issue_navigator_default_columns()
         .send_raw()
         .await
