@@ -137,7 +137,7 @@ impl<'a> GetAllDashboardsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Dashboards> {
+    pub async fn send(self) -> crate::core::Result<PageOfDashboards> {
         self.client.send(&self.config()?).await
     }
 
@@ -175,7 +175,7 @@ impl<'a> GetDashboardItemPropertyKeysRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<EntityPropertiesKeys> {
+    pub async fn send(self) -> crate::core::Result<PropertyKeys> {
         self.client.send(&self.config()?).await
     }
 

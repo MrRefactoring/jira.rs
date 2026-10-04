@@ -1,7 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 
-use jira::server::{CommentJson, Filter, IssueUpdate, ProjectInput, Version, WorkflowScheme};
+use jira::server::{Comment, Filter, IssueUpdateDetails, ProjectInput, Version, WorkflowScheme};
 use serde_json::{Value, json};
 
 use super::fixtures::software_licensed;
@@ -274,7 +274,7 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
 
     let issue = server()
         .issues()
-        .create_issue(IssueUpdate {
+        .create_issue(IssueUpdateDetails {
             fields: Some(
                 [
                     ("project".to_owned(), json!({ "key": project_key })),
@@ -285,7 +285,7 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
                 .into_iter()
                 .collect(),
             ),
-            ..IssueUpdate::default()
+            ..IssueUpdateDetails::default()
         })
         .send()
         .await
@@ -302,10 +302,7 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
 
     server()
         .issue_comments()
-        .add_comment(
-            &issue_key,
-            CommentJson { body: Some("created by the crawl".to_owned()), ..CommentJson::default() },
-        )
+        .add_comment(&issue_key, Comment { body: Some("created by the crawl".to_owned()), ..Comment::default() })
         .send()
         .await
         .expect("the issue takes a comment");

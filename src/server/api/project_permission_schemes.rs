@@ -99,7 +99,7 @@ impl<'a> GetProjectIssueSecuritySchemeRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<SecuritySchemeJson> {
+    pub async fn send(self) -> crate::core::Result<SecurityScheme> {
         self.client.send(&self.config()?).await
     }
 
@@ -238,7 +238,7 @@ impl<'a> GetSecurityLevelsForProjectRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<SecurityListLevelJson> {
+    pub async fn send(self) -> crate::core::Result<ProjectIssueSecurityLevels> {
         self.client.send(&self.config()?).await
     }
 

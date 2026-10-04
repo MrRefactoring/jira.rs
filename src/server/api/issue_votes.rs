@@ -51,7 +51,7 @@ impl<'a> GetVotesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vote> {
+    pub async fn send(self) -> crate::core::Result<Votes> {
         self.client.send(&self.config()?).await
     }
 

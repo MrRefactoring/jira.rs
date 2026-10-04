@@ -46,7 +46,7 @@ impl<'a> IssueCommentsService<'a> {
     }
 
     /// Adds a new comment to an issue.
-    pub fn add_comment(&self, issue_id_or_key: impl Into<String>, comment_input: CommentJson) -> AddCommentRequest<'a> {
+    pub fn add_comment(&self, issue_id_or_key: impl Into<String>, comment_input: Comment) -> AddCommentRequest<'a> {
         AddCommentRequest::new(self.client, issue_id_or_key, comment_input)
     }
 
@@ -60,7 +60,7 @@ impl<'a> IssueCommentsService<'a> {
         &self,
         issue_id_or_key: impl Into<String>,
         id: impl Into<String>,
-        body: CommentJson,
+        body: Comment,
     ) -> UpdateCommentRequest<'a> {
         UpdateCommentRequest::new(self.client, issue_id_or_key, id, body)
     }
@@ -161,7 +161,7 @@ impl<'a> GetCommentsRequest<'a> {
     /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
     /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
-    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<CommentJson>> {
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Comment>> {
         let first = self.start_at.unwrap_or(0);
 
         crate::core::stream_pages(self, first, |mut request, position| async move {
@@ -173,7 +173,7 @@ impl<'a> GetCommentsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<CommentsWithPaginationJson> {
+    pub async fn send(self) -> crate::core::Result<PageOfComments> {
         self.client.send(&self.config()?).await
     }
 
@@ -189,11 +189,11 @@ pub struct AddCommentRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<AddCommentRequestExpand>,
     issue_id_or_key: String,
-    comment_input: CommentJson,
+    comment_input: Comment,
 }
 
 impl<'a> AddCommentRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, comment_input: CommentJson) -> Self {
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, comment_input: Comment) -> Self {
         Self { client, issue_id_or_key: issue_id_or_key.into(), comment_input, expand: None }
     }
 
@@ -222,7 +222,7 @@ impl<'a> AddCommentRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<CommentJson> {
+    pub async fn send(self) -> crate::core::Result<Comment> {
         self.client.send(&self.config()?).await
     }
 
@@ -273,7 +273,7 @@ impl<'a> GetCommentRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<CommentJson> {
+    pub async fn send(self) -> crate::core::Result<Comment> {
         self.client.send(&self.config()?).await
     }
 
@@ -290,7 +290,7 @@ pub struct UpdateCommentRequest<'a> {
     expand: Option<UpdateCommentRequestExpand>,
     issue_id_or_key: String,
     id: String,
-    body: CommentJson,
+    body: Comment,
 }
 
 impl<'a> UpdateCommentRequest<'a> {
@@ -298,7 +298,7 @@ impl<'a> UpdateCommentRequest<'a> {
         client: &'a crate::core::Client,
         issue_id_or_key: impl Into<String>,
         id: impl Into<String>,
-        body: CommentJson,
+        body: Comment,
     ) -> Self {
         Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into(), body, expand: None }
     }
@@ -332,7 +332,7 @@ impl<'a> UpdateCommentRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<CommentJson> {
+    pub async fn send(self) -> crate::core::Result<Comment> {
         self.client.send(&self.config()?).await
     }
 

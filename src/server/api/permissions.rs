@@ -95,7 +95,7 @@ impl<'a> GetMyPermissionsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<PermissionsJson> {
+    pub async fn send(self) -> crate::core::Result<Permissions> {
         self.client.send(&self.config()?).await
     }
 
@@ -124,7 +124,7 @@ impl<'a> GetAllPermissionsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<PermissionsJson> {
+    pub async fn send(self) -> crate::core::Result<Permissions> {
         self.client.send(&self.config()?).await
     }
 

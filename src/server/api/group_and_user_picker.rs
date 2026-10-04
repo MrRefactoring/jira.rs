@@ -114,7 +114,7 @@ impl<'a> FindUsersAndGroupsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<UsersAndGroups> {
+    pub async fn send(self) -> crate::core::Result<FoundUsersAndGroups> {
         self.client.send(&self.config()?).await
     }
 

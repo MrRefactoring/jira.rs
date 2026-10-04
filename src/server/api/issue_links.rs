@@ -13,7 +13,7 @@ impl<'a> IssueLinksService<'a> {
     }
 
     /// Creates an issue link between two issues.
-    pub fn link_issues(&self, link_issue_request: LinkIssueRequestJson) -> LinkIssuesRequest<'a> {
+    pub fn link_issues(&self, link_issue_request: LinkIssueRequest) -> LinkIssuesRequest<'a> {
         LinkIssuesRequest::new(self.client, link_issue_request)
     }
 
@@ -32,11 +32,11 @@ impl<'a> IssueLinksService<'a> {
 #[derive(Clone)]
 pub struct LinkIssuesRequest<'a> {
     client: &'a crate::core::Client,
-    link_issue_request: LinkIssueRequestJson,
+    link_issue_request: LinkIssueRequest,
 }
 
 impl<'a> LinkIssuesRequest<'a> {
-    fn new(client: &'a crate::core::Client, link_issue_request: LinkIssueRequestJson) -> Self {
+    fn new(client: &'a crate::core::Client, link_issue_request: LinkIssueRequest) -> Self {
         Self { client, link_issue_request }
     }
 

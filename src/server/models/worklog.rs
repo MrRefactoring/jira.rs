@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct Worklog {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub author: Option<UserJson>,
+    pub author: Option<UserDetails>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -24,9 +24,9 @@ pub struct Worklog {
     #[serde(rename = "timeSpentSeconds", default, skip_serializing_if = "Option::is_none")]
     pub time_spent_seconds: Option<i64>,
     #[serde(rename = "updateAuthor", default, skip_serializing_if = "Option::is_none")]
-    pub update_author: Option<UserJson>,
+    pub update_author: Option<UserDetails>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub updated: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub visibility: Option<VisibilityJson>,
+    pub visibility: Option<Visibility>,
 }

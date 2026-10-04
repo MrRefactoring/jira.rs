@@ -67,7 +67,7 @@ impl<'a> WorkflowSchemesService<'a> {
         &self,
         id: i64,
         issue_type: impl Into<String>,
-        body: IssueTypeMapping,
+        body: IssueTypeWorkflowMapping,
     ) -> SetWorkflowSchemeIssueTypeRequest<'a> {
         SetWorkflowSchemeIssueTypeRequest::new(self.client, id, issue_type, body)
     }
@@ -430,7 +430,7 @@ impl<'a> GetWorkflowSchemeIssueTypeRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<IssueTypeMapping> {
+    pub async fn send(self) -> crate::core::Result<IssueTypeWorkflowMapping> {
         self.client.send(&self.config()?).await
     }
 
@@ -447,11 +447,16 @@ pub struct SetWorkflowSchemeIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
     issue_type: String,
-    body: IssueTypeMapping,
+    body: IssueTypeWorkflowMapping,
 }
 
 impl<'a> SetWorkflowSchemeIssueTypeRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: i64, issue_type: impl Into<String>, body: IssueTypeMapping) -> Self {
+    fn new(
+        client: &'a crate::core::Client,
+        id: i64,
+        issue_type: impl Into<String>,
+        body: IssueTypeWorkflowMapping,
+    ) -> Self {
         Self { client, id, issue_type: issue_type.into(), body }
     }
 

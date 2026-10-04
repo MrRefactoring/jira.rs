@@ -18,7 +18,7 @@ impl<'a> IssueLinkTypesService<'a> {
     }
 
     /// Create a new issue link type.
-    pub fn create_issue_link_type(&self, issue_link_type: IssueLinkTypeJson) -> CreateIssueLinkTypeRequest<'a> {
+    pub fn create_issue_link_type(&self, issue_link_type: IssueLinkType) -> CreateIssueLinkTypeRequest<'a> {
         CreateIssueLinkTypeRequest::new(self.client, issue_link_type)
     }
 
@@ -41,7 +41,7 @@ impl<'a> IssueLinkTypesService<'a> {
     pub fn update_issue_link_type(
         &self,
         issue_link_type_id: impl Into<String>,
-        issue_link_type: IssueLinkTypeJson,
+        issue_link_type: IssueLinkType,
     ) -> UpdateIssueLinkTypeRequest<'a> {
         UpdateIssueLinkTypeRequest::new(self.client, issue_link_type_id, issue_link_type)
     }
@@ -96,11 +96,11 @@ impl<'a> GetIssueLinkTypesRequest<'a> {
 #[derive(Clone)]
 pub struct CreateIssueLinkTypeRequest<'a> {
     client: &'a crate::core::Client,
-    issue_link_type: IssueLinkTypeJson,
+    issue_link_type: IssueLinkType,
 }
 
 impl<'a> CreateIssueLinkTypeRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_link_type: IssueLinkTypeJson) -> Self {
+    fn new(client: &'a crate::core::Client, issue_link_type: IssueLinkType) -> Self {
         Self { client, issue_link_type }
     }
 
@@ -115,7 +115,7 @@ impl<'a> CreateIssueLinkTypeRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<IssueLinkTypeJson> {
+    pub async fn send(self) -> crate::core::Result<IssueLinkType> {
         self.client.send(&self.config()?).await
     }
 
@@ -191,7 +191,7 @@ impl<'a> GetIssueLinkTypeRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<IssueLinkTypeJson> {
+    pub async fn send(self) -> crate::core::Result<IssueLinkType> {
         self.client.send(&self.config()?).await
     }
 
@@ -206,14 +206,14 @@ impl<'a> GetIssueLinkTypeRequest<'a> {
 pub struct UpdateIssueLinkTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_link_type_id: String,
-    issue_link_type: IssueLinkTypeJson,
+    issue_link_type: IssueLinkType,
 }
 
 impl<'a> UpdateIssueLinkTypeRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
         issue_link_type_id: impl Into<String>,
-        issue_link_type: IssueLinkTypeJson,
+        issue_link_type: IssueLinkType,
     ) -> Self {
         Self { client, issue_link_type_id: issue_link_type_id.into(), issue_link_type }
     }
@@ -231,7 +231,7 @@ impl<'a> UpdateIssueLinkTypeRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<IssueLinkTypeJson> {
+    pub async fn send(self) -> crate::core::Result<IssueLinkType> {
         self.client.send(&self.config()?).await
     }
 
@@ -311,7 +311,7 @@ impl<'a> MoveIssueLinkTypeRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<IssueLinkTypeJson> {
+    pub async fn send(self) -> crate::core::Result<IssueLinkType> {
         self.client.send(&self.config()?).await
     }
 

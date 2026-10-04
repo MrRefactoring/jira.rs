@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
 use jira::server::{
-    CommentJson, IssueLinkTypeJson, IssueRefJson, IssueSubTaskMovePosition, IssueUpdate, IssuesUpdate,
-    LinkIssueRequestJson, NotificationJson, RemoteIssueLinkCreateOrUpdateRequest, RemoteObject,
-    RemoteReciprocalIssueLinkCreateRequest, SearchRequest, ToJson, Transition, User, Worklog, WorklogIdsRequest,
+    Comment, IssueLinkType, IssueRefJson, IssueSubTaskMovePosition, IssueUpdateDetails, IssuesUpdate, LinkIssueRequest,
+    Notification, RemoteIssueLinkRequest, RemoteObject, RemoteReciprocalIssueLinkCreateRequest, SearchRequest, ToJson,
+    Transition, User, Worklog, WorklogIdsRequest,
 };
 use serde_json::json;
 
@@ -62,7 +62,10 @@ async fn creates_an_issue_in_wiki_markup_and_edits_it() {
 
     server()
         .issues()
-        .edit_issue(&key, IssueUpdate { fields: Some(fields(json!({ "summary": summary }))), ..IssueUpdate::default() })
+        .edit_issue(
+            &key,
+            IssueUpdateDetails { fields: Some(fields(json!({ "summary": summary }))), ..IssueUpdateDetails::default() },
+        )
         .send()
         .await
         .expect("a field can be edited");
@@ -115,13 +118,13 @@ async fn creates_issues_in_bulk() {
 
     let updates = ["bulk one", "bulk two"]
         .into_iter()
-        .map(|label| IssueUpdate {
+        .map(|label| IssueUpdateDetails {
             fields: Some(fields(json!({
                 "project": { "key": project.key },
                 "issuetype": { "name": "Task" },
                 "summary": test_name(label),
             }))),
-            ..IssueUpdate::default()
+            ..IssueUpdateDetails::default()
         })
         .collect();
 
@@ -176,9 +179,9 @@ async fn moves_the_issue_through_a_transition() {
         .issues()
         .do_transition(
             &key,
-            IssueUpdate {
+            IssueUpdateDetails {
                 transition: Some(Transition { id: transition.id.clone(), ..Transition::default() }),
-                ..IssueUpdate::default()
+                ..IssueUpdateDetails::default()
             },
         )
         .send()
@@ -215,7 +218,7 @@ async fn adds_updates_pins_and_deletes_a_comment() {
 
     let comment = server()
         .issue_comments()
-        .add_comment(&key, CommentJson { body: Some(body.clone()), ..CommentJson::default() })
+        .add_comment(&key, Comment { body: Some(body.clone()), ..Comment::default() })
         .send()
         .await
         .expect("a comment can be added");
@@ -226,7 +229,7 @@ async fn adds_updates_pins_and_deletes_a_comment() {
 
     let updated = server()
         .issue_comments()
-        .update_comment(&key, &id, CommentJson { body: Some(format!("{body} — edited")), ..CommentJson::default() })
+        .update_comment(&key, &id, Comment { body: Some(format!("{body} — edited")), ..Comment::default() })
         .send()
         .await
         .expect("a comment can be edited");
@@ -512,11 +515,11 @@ async fn links_two_issues_and_unlinks_them() {
 
     server()
         .issue_links()
-        .link_issues(LinkIssueRequestJson {
-            r#type: Some(IssueLinkTypeJson { name: Some("Relates".to_owned()), ..IssueLinkTypeJson::default() }),
+        .link_issues(LinkIssueRequest {
+            r#type: Some(IssueLinkType { name: Some("Relates".to_owned()), ..IssueLinkType::default() }),
             inward_issue: Some(IssueRefJson { key: Some(key.clone()), ..IssueRefJson::default() }),
             outward_issue: Some(IssueRefJson { key: Some(other_key), ..IssueRefJson::default() }),
-            ..LinkIssueRequestJson::default()
+            ..LinkIssueRequest::default()
         })
         .send()
         .await
@@ -644,11 +647,11 @@ async fn archives_restores_and_notifies() {
             .issues()
             .notify(
                 &key,
-                NotificationJson {
+                Notification {
                     subject: Some(test_name("a notification")),
                     text_body: Some("sent by the Data Center suite".to_owned()),
                     to: Some(ToJson { reporter: Some(true), ..ToJson::default() }),
-                    ..NotificationJson::default()
+                    ..Notification::default()
                 },
             )
             .send()
@@ -726,14 +729,14 @@ async fn finds_the_issue_by_jql_and_through_the_picker() {
     tracker.cleanup().await;
 }
 
-fn remote_link(url: &str, title: &str) -> RemoteIssueLinkCreateOrUpdateRequest {
-    RemoteIssueLinkCreateOrUpdateRequest {
+fn remote_link(url: &str, title: &str) -> RemoteIssueLinkRequest {
+    RemoteIssueLinkRequest {
         global_id: Some(REMOTE_LINK_GLOBAL_ID.to_owned()),
         object: Some(RemoteObject {
             url: Some(url.to_owned()),
             title: Some(title.to_owned()),
             ..RemoteObject::default()
         }),
-        ..RemoteIssueLinkCreateOrUpdateRequest::default()
+        ..RemoteIssueLinkRequest::default()
     }
 }

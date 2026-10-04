@@ -133,7 +133,7 @@ impl<'a> GetIssueWorklogRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<WorklogWithPagination> {
+    pub async fn send(self) -> crate::core::Result<PageOfWorklogs> {
         self.client.send(&self.config()?).await
     }
 
@@ -484,7 +484,7 @@ impl<'a> GetIdsOfWorklogsDeletedSinceRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<WorklogChangedSince> {
+    pub async fn send(self) -> crate::core::Result<ChangedWorklogs> {
         self.client.send(&self.config()?).await
     }
 
@@ -586,7 +586,7 @@ impl<'a> GetIdsOfWorklogsModifiedSinceRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<WorklogChangedSince> {
+    pub async fn send(self) -> crate::core::Result<ChangedWorklogs> {
         self.client.send(&self.config()?).await
     }
 

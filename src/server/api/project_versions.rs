@@ -742,7 +742,7 @@ impl<'a> GetVersionUnresolvedIssuesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<VersionUnresolvedIssueCounts> {
+    pub async fn send(self) -> crate::core::Result<VersionUnresolvedIssuesCount> {
         self.client.send(&self.config()?).await
     }
 

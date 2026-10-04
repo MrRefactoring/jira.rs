@@ -26,7 +26,7 @@ impl<'a> JiraSettingsService<'a> {
     pub fn set_application_property(
         &self,
         id: impl Into<String>,
-        body: ApplicationPropertyValue,
+        body: SimpleApplicationProperty,
     ) -> SetApplicationPropertyRequest<'a> {
         SetApplicationPropertyRequest::new(self.client, id, body)
     }
@@ -151,11 +151,11 @@ impl<'a> GetAdvancedSettingsRequest<'a> {
 pub struct SetApplicationPropertyRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
-    body: ApplicationPropertyValue,
+    body: SimpleApplicationProperty,
 }
 
 impl<'a> SetApplicationPropertyRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: impl Into<String>, body: ApplicationPropertyValue) -> Self {
+    fn new(client: &'a crate::core::Client, id: impl Into<String>, body: SimpleApplicationProperty) -> Self {
         Self { client, id: id.into(), body }
     }
 

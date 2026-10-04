@@ -17,5 +17,5 @@ pub struct GetUsersFromGroup {
     #[serde(rename = "isLast", default, skip_serializing_if = "Option::is_none")]
     pub is_last: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub values: Option<Vec<UserJson>>,
+    pub values: Option<Vec<UserDetails>>,
 }

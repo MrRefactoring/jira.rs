@@ -422,7 +422,7 @@ impl<'a> GetFieldsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<Field>> {
+    pub async fn send(self) -> crate::core::Result<Vec<FieldDetails>> {
         self.client.send(&self.config()?).await
     }
 
@@ -454,7 +454,7 @@ impl<'a> CreateCustomFieldRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Field> {
+    pub async fn send(self) -> crate::core::Result<FieldDetails> {
         self.client.send(&self.config()?).await
     }
 

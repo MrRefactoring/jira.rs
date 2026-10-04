@@ -72,7 +72,7 @@ impl<'a> GetIssueTypePropertyKeysRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<EntityPropertiesKeys> {
+    pub async fn send(self) -> crate::core::Result<PropertyKeys> {
         self.client.send(&self.config()?).await
     }
 

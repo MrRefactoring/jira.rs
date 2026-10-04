@@ -24,7 +24,7 @@ pub struct Filter {
     #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
     pub self_: Option<String>,
     #[serde(rename = "sharePermissions", default, skip_serializing_if = "Option::is_none")]
-    pub share_permissions: Option<Vec<FilterPermission>>,
+    pub share_permissions: Option<Vec<SharePermission>>,
     #[serde(rename = "sharedUsers", default, skip_serializing_if = "Option::is_none")]
     pub shared_users: Option<UserListWrapper>,
     #[serde(rename = "viewUrl", default, skip_serializing_if = "Option::is_none")]

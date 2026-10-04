@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 #[non_exhaustive]
 pub struct ChangeHistory {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub author: Option<UserJson>,
+    pub author: Option<UserDetails>,
     #[cfg(feature = "chrono")]
     #[serde(
         default,

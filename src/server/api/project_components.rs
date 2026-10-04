@@ -13,7 +13,7 @@ impl<'a> ProjectComponentsService<'a> {
     }
 
     /// Create a component via POST.
-    pub fn create_component(&self, project_component: Component) -> CreateComponentRequest<'a> {
+    pub fn create_component(&self, project_component: ProjectComponent) -> CreateComponentRequest<'a> {
         CreateComponentRequest::new(self.client, project_component)
     }
 
@@ -28,7 +28,7 @@ impl<'a> ProjectComponentsService<'a> {
     }
 
     /// Modify a component via PUT. Any fields present in the PUT will override existing values. As a convenience, if a field is not present, it is silently ignored.
-    pub fn update_component(&self, id: impl Into<String>, body: Component) -> UpdateComponentRequest<'a> {
+    pub fn update_component(&self, id: impl Into<String>, body: ProjectComponent) -> UpdateComponentRequest<'a> {
         UpdateComponentRequest::new(self.client, id, body)
     }
 
@@ -52,11 +52,11 @@ impl<'a> ProjectComponentsService<'a> {
 #[derive(Clone)]
 pub struct CreateComponentRequest<'a> {
     client: &'a crate::core::Client,
-    project_component: Component,
+    project_component: ProjectComponent,
 }
 
 impl<'a> CreateComponentRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_component: Component) -> Self {
+    fn new(client: &'a crate::core::Client, project_component: ProjectComponent) -> Self {
         Self { client, project_component }
     }
 
@@ -70,7 +70,7 @@ impl<'a> CreateComponentRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Component> {
+    pub async fn send(self) -> crate::core::Result<ProjectComponent> {
         self.client.send(&self.config()?).await
     }
 
@@ -210,7 +210,7 @@ impl<'a> GetComponentRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Component> {
+    pub async fn send(self) -> crate::core::Result<ProjectComponent> {
         self.client.send(&self.config()?).await
     }
 
@@ -225,11 +225,11 @@ impl<'a> GetComponentRequest<'a> {
 pub struct UpdateComponentRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
-    body: Component,
+    body: ProjectComponent,
 }
 
 impl<'a> UpdateComponentRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: impl Into<String>, body: Component) -> Self {
+    fn new(client: &'a crate::core::Client, id: impl Into<String>, body: ProjectComponent) -> Self {
         Self { client, id: id.into(), body }
     }
 
@@ -246,7 +246,7 @@ impl<'a> UpdateComponentRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Component> {
+    pub async fn send(self) -> crate::core::Result<ProjectComponent> {
         self.client.send(&self.config()?).await
     }
 
@@ -325,7 +325,7 @@ impl<'a> GetComponentRelatedIssuesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<ComponentIssueCounts> {
+    pub async fn send(self) -> crate::core::Result<ComponentIssuesCount> {
         self.client.send(&self.config()?).await
     }
 
@@ -358,7 +358,7 @@ impl<'a> GetProjectComponentsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<Component>> {
+    pub async fn send(self) -> crate::core::Result<Vec<ProjectComponent>> {
         self.client.send(&self.config()?).await
     }
 

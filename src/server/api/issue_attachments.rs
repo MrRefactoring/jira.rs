@@ -73,7 +73,7 @@ impl<'a> GetAttachmentMetaRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<AttachmentMeta> {
+    pub async fn send(self) -> crate::core::Result<AttachmentSettings> {
         self.client.send(&self.config()?).await
     }
 

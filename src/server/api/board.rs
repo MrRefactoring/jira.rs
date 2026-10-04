@@ -608,7 +608,7 @@ impl<'a> BoardGetConfigurationRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<BoardConfig> {
+    pub async fn send(self) -> crate::core::Result<GetConfiguration> {
         self.client.send(&self.config()?).await
     }
 
@@ -1214,7 +1214,7 @@ impl<'a> GetBoardPropertyKeysRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<EntityPropertiesKeys> {
+    pub async fn send(self) -> crate::core::Result<PropertyKeys> {
         self.client.send(&self.config()?).await
     }
 
@@ -1298,7 +1298,7 @@ impl<'a> SetBoardPropertyRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Option<EntityPropertiesKeys>> {
+    pub async fn send(self) -> crate::core::Result<Option<PropertyKeys>> {
         self.client.send(&self.config()?).await
     }
 

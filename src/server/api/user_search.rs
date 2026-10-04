@@ -337,7 +337,7 @@ impl<'a> FindUsersForPickerRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<UserPickerResults> {
+    pub async fn send(self) -> crate::core::Result<FoundUsers> {
         self.client.send(&self.config()?).await
     }
 

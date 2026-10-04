@@ -1,6 +1,6 @@
 use jira::server::{
-    AppMonitoringRestEntity, ApplicationPropertyValue, AuthParams, AvatarCropping, IpdMonitoringRestEntity,
-    ReadOnlyModeUpdateRequest, TerminologyRequest,
+    AppMonitoringRestEntity, AuthParams, AvatarCropping, IpdMonitoringRestEntity, ReadOnlyModeUpdateRequest,
+    SimpleApplicationProperty, TerminologyRequest,
 };
 
 use super::fixtures::{business_project, create_task, tiny_avatar, touch};
@@ -35,7 +35,7 @@ async fn reads_and_writes_an_application_property() {
         .jira_settings()
         .set_application_property(
             id.clone(),
-            ApplicationPropertyValue { id: Some(id), value: Some("DUPLICATE - ".to_owned()) },
+            SimpleApplicationProperty { id: Some(id), value: Some("DUPLICATE - ".to_owned()) },
         )
         .send()
         .await

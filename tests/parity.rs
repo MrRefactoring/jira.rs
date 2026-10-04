@@ -3,6 +3,30 @@
 use jira::core::Client;
 
 macro_rules! parity {
+    ($name:ident, $left:path, $right:path, $left_module:path, $right_module:path, |$jira:ident, $surface:ident| $body:block) => {
+        mod $name {
+            use super::*;
+
+            fn left() {
+                use $left_module as $surface;
+                let client = Client::builder().host("https://example.com").build().unwrap();
+                let $jira = <$left>::new(client);
+                $body
+            }
+
+            fn right() {
+                use $right_module as $surface;
+                let client = Client::builder().host("https://example.com").build().unwrap();
+                let $jira = <$right>::new(client);
+                $body
+            }
+
+            #[test]
+            fn both_compile() {
+                let _ = (left as fn(), right as fn());
+            }
+        }
+    };
     ($name:ident, $left:path, $right:path, |$jira:ident| $body:block) => {
         mod $name {
             use super::*;
@@ -27,6 +51,116 @@ macro_rules! parity {
         }
     };
 }
+
+parity!(
+    typed_projects,
+    jira::cloud::CloudClient,
+    jira::server::ServerClient,
+    jira::cloud,
+    jira::server,
+    |jira, surface| {
+        use futures_util::StreamExt;
+        drop(async {
+            let item: surface::Project = jira.projects().search_projects().stream().next().await.unwrap().unwrap();
+            let _ = item;
+        });
+    }
+);
+
+parity!(
+    typed_issues,
+    jira::cloud::CloudClient,
+    jira::server::ServerClient,
+    jira::cloud,
+    jira::server,
+    |jira, surface| {
+        use futures_util::StreamExt;
+        drop(async {
+            let item: surface::Issue = jira.issue_search().search_issues().stream().next().await.unwrap().unwrap();
+            let _ = item.key;
+        });
+    }
+);
+
+parity!(
+    typed_comment,
+    jira::cloud::CloudClient,
+    jira::server::ServerClient,
+    jira::cloud,
+    jira::server,
+    |jira, surface| {
+        drop(async {
+            let _: surface::Comment = jira.issue_comments().get_comment("X-1", "1").send().await.unwrap();
+        });
+    }
+);
+
+parity!(
+    typed_worklog,
+    jira::cloud::CloudClient,
+    jira::server::ServerClient,
+    jira::cloud,
+    jira::server,
+    |jira, surface| {
+        drop(async {
+            let _: surface::Worklog = jira.issue_worklogs().get_worklog("X-1", "1").send().await.unwrap();
+        });
+    }
+);
+
+parity!(
+    typed_version,
+    jira::cloud::CloudClient,
+    jira::server::ServerClient,
+    jira::cloud,
+    jira::server,
+    |jira, surface| {
+        drop(async {
+            let _: surface::Version = jira.project_versions().get_version("1").send().await.unwrap();
+        });
+    }
+);
+
+parity!(
+    typed_sprint,
+    jira::agile::AgileClient,
+    jira::server::ServerClient,
+    jira::agile,
+    jira::server,
+    |jira, surface| {
+        drop(async {
+            let _: surface::Sprint = jira.sprint().get_sprint(1).send().await.unwrap();
+        });
+    }
+);
+
+parity!(
+    typed_board,
+    jira::agile::AgileClient,
+    jira::server::ServerClient,
+    jira::agile,
+    jira::server,
+    |jira, surface| {
+        use futures_util::StreamExt;
+        drop(async {
+            let _: surface::Board = jira.board().get_all_boards().stream().next().await.unwrap().unwrap();
+        });
+    }
+);
+
+parity!(
+    typed_user,
+    jira::cloud::CloudClient,
+    jira::server::ServerClient,
+    jira::cloud,
+    jira::server,
+    |jira, surface| {
+        use futures_util::StreamExt;
+        drop(async {
+            let _: surface::User = jira.user_search().find_users().stream().next().await.unwrap().unwrap();
+        });
+    }
+);
 
 macro_rules! parity_with_value {
     ($name:ident, $left:path, $right:path, $left_value:expr, $right_value:expr, |$jira:ident, $value:ident| $body:block) => {
@@ -156,7 +290,7 @@ parity_with_value!(
     jira::cloud::CloudClient,
     jira::server::ServerClient,
     serde_json::from_value::<jira::cloud::models::CommentInput>(serde_json::json!({})).unwrap(),
-    serde_json::from_value::<jira::server::models::CommentJson>(serde_json::json!({})).unwrap(),
+    serde_json::from_value::<jira::server::models::Comment>(serde_json::json!({})).unwrap(),
     |jira, body| {
         drop(jira.issue_comments().add_comment("X-1", body));
     }

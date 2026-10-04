@@ -1,7 +1,7 @@
 use jira::server::{
-    ActorInput, ActorsMap, Avatar, AvatarCropping, Component, CreateUpdateRoleRequest, DeleteAndReplaceVersion, Id,
-    ProjectCategory, ProjectRoleActorsUpdate, ProjectUpdate, RemoteEntityLinkJson, Version, VersionMove,
-    VersionMovePosition,
+    ActorInput, ActorsMap, Avatar, AvatarCropping, CreateUpdateRoleRequest, DeleteAndReplaceVersion, Id,
+    ProjectCategory, ProjectComponent, ProjectRoleActorsUpdate, RemoteEntityLinkJson, UpdateProjectDetails, Version,
+    VersionMove, VersionMovePosition,
 };
 use serde_json::json;
 
@@ -48,10 +48,10 @@ async fn updates_the_project_and_its_type() {
         .projects()
         .update_project(
             &project.key,
-            ProjectUpdate {
+            UpdateProjectDetails {
                 name: Some(name.clone()),
                 description: Some("changed by the suite".to_owned()),
-                ..ProjectUpdate::default()
+                ..UpdateProjectDetails::default()
             },
         )
         .send()
@@ -258,11 +258,11 @@ async fn keeps_a_component() {
 
     let component = server()
         .project_components()
-        .create_component(Component {
+        .create_component(ProjectComponent {
             name: Some(test_name("component")),
             project: Some(project.key.clone()),
             description: Some("created by the suite".to_owned()),
-            ..Component::default()
+            ..ProjectComponent::default()
         })
         .send()
         .await
@@ -281,7 +281,7 @@ async fn keeps_a_component() {
         .project_components()
         .update_component(
             &id,
-            Component { description: Some("changed by the suite".to_owned()), ..Component::default() },
+            ProjectComponent { description: Some("changed by the suite".to_owned()), ..ProjectComponent::default() },
         )
         .send()
         .await

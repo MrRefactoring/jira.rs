@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 #[non_exhaustive]
 pub struct PinnedCommentJson {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub comment: Option<CommentJson>,
+    pub comment: Option<Comment>,
     #[serde(rename = "pinnedBy", default, skip_serializing_if = "Option::is_none")]
     pub pinned_by: Option<String>,
     #[serde(rename = "pinnedDate", default, skip_serializing_if = "Option::is_none")]

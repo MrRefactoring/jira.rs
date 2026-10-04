@@ -6,5 +6,5 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IssuesUpdate {
     #[serde(rename = "issueUpdates", default, skip_serializing_if = "Option::is_none")]
-    pub issue_updates: Option<Vec<IssueUpdate>>,
+    pub issue_updates: Option<Vec<IssueUpdateDetails>>,
 }

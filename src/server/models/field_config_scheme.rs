@@ -15,13 +15,13 @@ pub struct FieldConfigScheme {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub field: Option<Field>,
+    pub field: Option<FieldDetails>,
     #[serde(rename = "fieldConfigIds", default, skip_serializing_if = "Option::is_none")]
     pub field_config_ids: Option<Vec<i64>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
     #[serde(rename = "issueTypes", default, skip_serializing_if = "Option::is_none")]
-    pub issue_types: Option<Vec<IssueTypeJson>>,
+    pub issue_types: Option<Vec<IssueTypeDetails>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 #[non_exhaustive]
 pub struct AttachmentJson {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub author: Option<UserJson>,
+    pub author: Option<UserDetails>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
     #[cfg(feature = "chrono")]

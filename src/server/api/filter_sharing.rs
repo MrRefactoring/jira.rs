@@ -137,7 +137,7 @@ impl<'a> GetSharePermissionsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<FilterPermission>> {
+    pub async fn send(self) -> crate::core::Result<Vec<SharePermission>> {
         self.client.send(&self.config()?).await
     }
 
@@ -173,7 +173,7 @@ impl<'a> AddSharePermissionRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<FilterPermission>> {
+    pub async fn send(self) -> crate::core::Result<Vec<SharePermission>> {
         self.client.send(&self.config()?).await
     }
 
@@ -207,7 +207,7 @@ impl<'a> GetSharePermissionRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<FilterPermission> {
+    pub async fn send(self) -> crate::core::Result<SharePermission> {
         self.client.send(&self.config()?).await
     }
 

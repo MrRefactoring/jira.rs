@@ -43,7 +43,7 @@ impl<'a> IssuesService<'a> {
     /// - you must provide a parent field in the issue create request containing the id or key of the parent issue.
     /// The updateHistory param adds the project that this issue is created in, to the current user's project history, if set to true (by default, the project history is not updated).
     /// You can view the project history in the Jira application, via the Projects dropdown.
-    pub fn create_issue(&self, issue_update_details: IssueUpdate) -> CreateIssueRequest<'a> {
+    pub fn create_issue(&self, issue_update_details: IssueUpdateDetails) -> CreateIssueRequest<'a> {
         CreateIssueRequest::new(self.client, issue_update_details)
     }
 
@@ -133,7 +133,7 @@ impl<'a> IssuesService<'a> {
     pub fn edit_issue(
         &self,
         issue_id_or_key: impl Into<String>,
-        issue_update_details: IssueUpdate,
+        issue_update_details: IssueUpdateDetails,
     ) -> EditIssueRequest<'a> {
         EditIssueRequest::new(self.client, issue_id_or_key, issue_update_details)
     }
@@ -169,7 +169,7 @@ impl<'a> IssuesService<'a> {
     }
 
     /// Sends a notification (email) to the list or recipients defined in the request.
-    pub fn notify(&self, issue_id_or_key: impl Into<String>, notification: NotificationJson) -> NotifyRequest<'a> {
+    pub fn notify(&self, issue_id_or_key: impl Into<String>, notification: Notification) -> NotifyRequest<'a> {
         NotifyRequest::new(self.client, issue_id_or_key, notification)
     }
 
@@ -219,7 +219,7 @@ impl<'a> IssuesService<'a> {
     pub fn do_transition(
         &self,
         issue_id_or_key: impl Into<String>,
-        issue_update_details: IssueUpdate,
+        issue_update_details: IssueUpdateDetails,
     ) -> DoTransitionRequest<'a> {
         DoTransitionRequest::new(self.client, issue_id_or_key, issue_update_details)
     }
@@ -238,11 +238,11 @@ impl<'a> IssuesService<'a> {
 pub struct CreateIssueRequest<'a> {
     client: &'a crate::core::Client,
     update_history: Option<bool>,
-    issue_update_details: IssueUpdate,
+    issue_update_details: IssueUpdateDetails,
 }
 
 impl<'a> CreateIssueRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_update_details: IssueUpdate) -> Self {
+    fn new(client: &'a crate::core::Client, issue_update_details: IssueUpdateDetails) -> Self {
         Self { client, issue_update_details, update_history: None }
     }
 
@@ -267,7 +267,7 @@ impl<'a> CreateIssueRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<IssueCreateResponse> {
+    pub async fn send(self) -> crate::core::Result<CreatedIssue> {
         self.client.send(&self.config()?).await
     }
 
@@ -356,7 +356,7 @@ impl<'a> CreateIssuesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<IssuesCreateResponse> {
+    pub async fn send(self) -> crate::core::Result<CreatedIssues> {
         self.client.send(&self.config()?).await
     }
 
@@ -726,14 +726,14 @@ pub struct EditIssueRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
     notify_users: Option<bool>,
-    issue_update_details: IssueUpdate,
+    issue_update_details: IssueUpdateDetails,
 }
 
 impl<'a> EditIssueRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
         issue_id_or_key: impl Into<String>,
-        issue_update_details: IssueUpdate,
+        issue_update_details: IssueUpdateDetails,
     ) -> Self {
         Self { client, issue_id_or_key: issue_id_or_key.into(), issue_update_details, notify_users: None }
     }
@@ -970,7 +970,7 @@ impl<'a> GetEditIssueMetaRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<EditMeta> {
+    pub async fn send(self) -> crate::core::Result<IssueUpdateMetadata> {
         self.client.send(&self.config()?).await
     }
 
@@ -985,15 +985,11 @@ impl<'a> GetEditIssueMetaRequest<'a> {
 pub struct NotifyRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    notification: NotificationJson,
+    notification: Notification,
 }
 
 impl<'a> NotifyRequest<'a> {
-    fn new(
-        client: &'a crate::core::Client,
-        issue_id_or_key: impl Into<String>,
-        notification: NotificationJson,
-    ) -> Self {
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, notification: Notification) -> Self {
         Self { client, issue_id_or_key: issue_id_or_key.into(), notification }
     }
 
@@ -1249,7 +1245,7 @@ impl<'a> GetTransitionsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<TransitionsMeta> {
+    pub async fn send(self) -> crate::core::Result<Transitions> {
         self.client.send(&self.config()?).await
     }
 
@@ -1269,14 +1265,14 @@ impl<'a> GetTransitionsRequest<'a> {
 pub struct DoTransitionRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    issue_update_details: IssueUpdate,
+    issue_update_details: IssueUpdateDetails,
 }
 
 impl<'a> DoTransitionRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
         issue_id_or_key: impl Into<String>,
-        issue_update_details: IssueUpdate,
+        issue_update_details: IssueUpdateDetails,
     ) -> Self {
         Self { client, issue_id_or_key: issue_id_or_key.into(), issue_update_details }
     }

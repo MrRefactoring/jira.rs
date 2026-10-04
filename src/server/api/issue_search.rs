@@ -174,7 +174,7 @@ impl<'a> GetIssuePickerResourceRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<IssuePickerResult> {
+    pub async fn send(self) -> crate::core::Result<IssuePickerSuggestions> {
         self.client.send(&self.config()?).await
     }
 

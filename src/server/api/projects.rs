@@ -41,7 +41,7 @@ impl<'a> ProjectsService<'a> {
     pub fn update_project(
         &self,
         project_id_or_key: impl Into<String>,
-        update_project_details: ProjectUpdate,
+        update_project_details: UpdateProjectDetails,
     ) -> UpdateProjectRequest<'a> {
         UpdateProjectRequest::new(self.client, project_id_or_key, update_project_details)
     }
@@ -275,7 +275,7 @@ impl<'a> CreateProjectRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<ProjectIdentity> {
+    pub async fn send(self) -> crate::core::Result<ProjectIdentifiers> {
         self.client.send(&self.config()?).await
     }
 
@@ -337,14 +337,14 @@ pub struct UpdateProjectRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
     project_id_or_key: String,
-    update_project_details: ProjectUpdate,
+    update_project_details: UpdateProjectDetails,
 }
 
 impl<'a> UpdateProjectRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
         project_id_or_key: impl Into<String>,
-        update_project_details: ProjectUpdate,
+        update_project_details: UpdateProjectDetails,
     ) -> Self {
         Self { client, project_id_or_key: project_id_or_key.into(), update_project_details, expand: None }
     }
@@ -618,7 +618,7 @@ impl<'a> GetAllStatusesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<IssueTypeWithStatusJson>> {
+    pub async fn send(self) -> crate::core::Result<Vec<IssueTypeWithStatus>> {
         self.client.send(&self.config()?).await
     }
 

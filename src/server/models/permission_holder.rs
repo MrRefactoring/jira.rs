@@ -8,9 +8,9 @@ pub struct PermissionHolder {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub expand: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub field: Option<Field>,
+    pub field: Option<FieldDetails>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub group: Option<GroupJson>,
+    pub group: Option<GroupName>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub parameter: Option<String>,
     #[serde(rename = "projectRole", default, skip_serializing_if = "Option::is_none")]
@@ -18,5 +18,5 @@ pub struct PermissionHolder {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub r#type: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub user: Option<UserJson>,
+    pub user: Option<UserDetails>,
 }

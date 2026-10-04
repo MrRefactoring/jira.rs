@@ -47,7 +47,7 @@ impl<'a> GetStatusesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<StatusJson>> {
+    pub async fn send(self) -> crate::core::Result<Vec<StatusDetails>> {
         self.client.send(&self.config()?).await
     }
 
@@ -146,7 +146,7 @@ impl<'a> GetPaginatedStatusesRequest<'a> {
     /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
     /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
-    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<StatusJson>> {
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<StatusDetails>> {
         let first = self.start_at.unwrap_or(0);
 
         crate::core::stream_pages(self, first, |mut request, position| async move {
@@ -158,7 +158,7 @@ impl<'a> GetPaginatedStatusesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Page<StatusJson>> {
+    pub async fn send(self) -> crate::core::Result<Page<StatusDetails>> {
         self.client.send(&self.config()?).await
     }
 
@@ -191,7 +191,7 @@ impl<'a> GetStatusRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<StatusJson> {
+    pub async fn send(self) -> crate::core::Result<StatusDetails> {
         self.client.send(&self.config()?).await
     }
 

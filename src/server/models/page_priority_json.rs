@@ -2,4 +2,4 @@
 
 use super::*;
 
-pub type PagePriorityJson = Page<PriorityJson>;
+pub type PagePriorityJson = Page<Priority>;

@@ -11,7 +11,7 @@ pub struct PagedListWrapperUserJsonApplicationUser {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub callback: Option<ListWrapperCallbackUserJson>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub items: Option<Vec<UserJson>>,
+    pub items: Option<Vec<UserDetails>>,
     #[serde(rename = "maxResults", default, skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
     #[serde(rename = "pagingCallback", default, skip_serializing_if = "Option::is_none")]

@@ -1,8 +1,9 @@
 use jira::server::{
-    AddField, AssociateProjects, CustomFieldDefinitionJson, DefaultModel, GetWorkflow, IssueLinkTypeJson,
+    AddField, AssociateProjects, CustomFieldDefinitionJson, DefaultModel, GetWorkflow, IssueLinkType,
     IssueLinkTypeOrderUpdateRequest, IssueLinkTypeResetOrderRequest, IssueTypeCreate, IssueTypeCreateType,
-    IssueTypeMapping, IssueTypeSchemeCreateUpdate, IssueTypeUpdate, MoveField, MoveFieldPosition, PermissionGrant,
-    PermissionHolder, PermissionScheme, PrioritySchemeUpdate, ScreenableTab, WorkflowMapping, WorkflowScheme,
+    IssueTypeSchemeCreateUpdate, IssueTypeUpdate, IssueTypeWorkflowMapping, MoveField, MoveFieldPosition,
+    PermissionGrant, PermissionHolder, PermissionScheme, PrioritySchemeUpdate, ScreenableTab, WorkflowMapping,
+    WorkflowScheme,
 };
 use serde_json::json;
 
@@ -107,11 +108,11 @@ async fn keeps_an_issue_link_type() {
 
     let created = server()
         .issue_link_types()
-        .create_issue_link_type(IssueLinkTypeJson {
+        .create_issue_link_type(IssueLinkType {
             name: Some(test_name("link")),
             inward: Some("is blocked by".to_owned()),
             outward: Some("blocks".to_owned()),
-            ..IssueLinkTypeJson::default()
+            ..IssueLinkType::default()
         })
         .send()
         .await
@@ -130,11 +131,11 @@ async fn keeps_an_issue_link_type() {
         .issue_link_types()
         .update_issue_link_type(
             &id,
-            IssueLinkTypeJson {
+            IssueLinkType {
                 name: Some(test_name("link2")),
                 inward: Some("depends on".to_owned()),
                 outward: Some("is depended on by".to_owned()),
-                ..IssueLinkTypeJson::default()
+                ..IssueLinkType::default()
             },
         )
         .send()
@@ -495,7 +496,7 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
         .set_workflow_scheme_issue_type(
             scheme_id,
             &issue_type,
-            IssueTypeMapping {
+            IssueTypeWorkflowMapping {
                 issue_type: Some(issue_type.clone()),
                 workflow: Some(workflow.clone()),
                 update_draft_if_needed: Some(true),
@@ -592,7 +593,7 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
             .set_workflow_scheme_draft_issue_type(
                 scheme_id,
                 &issue_type,
-                IssueTypeMapping {
+                IssueTypeWorkflowMapping {
                     issue_type: Some(issue_type.clone()),
                     workflow: Some(workflow.clone()),
                     update_draft_if_needed: None,

@@ -21,7 +21,7 @@ impl<'a> IssueRemoteLinksService<'a> {
     pub fn create_or_update_remote_issue_link(
         &self,
         issue_id_or_key: impl Into<String>,
-        remote_issue_link_request: RemoteIssueLinkCreateOrUpdateRequest,
+        remote_issue_link_request: RemoteIssueLinkRequest,
     ) -> CreateOrUpdateRemoteIssueLinkRequest<'a> {
         CreateOrUpdateRemoteIssueLinkRequest::new(self.client, issue_id_or_key, remote_issue_link_request)
     }
@@ -49,7 +49,7 @@ impl<'a> IssueRemoteLinksService<'a> {
         &self,
         issue_id_or_key: impl Into<String>,
         link_id: impl Into<String>,
-        remote_issue_link_request: RemoteIssueLinkCreateOrUpdateRequest,
+        remote_issue_link_request: RemoteIssueLinkRequest,
     ) -> UpdateRemoteIssueLinkRequest<'a> {
         UpdateRemoteIssueLinkRequest::new(self.client, issue_id_or_key, link_id, remote_issue_link_request)
     }
@@ -115,14 +115,14 @@ impl<'a> GetRemoteIssueLinksRequest<'a> {
 pub struct CreateOrUpdateRemoteIssueLinkRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    remote_issue_link_request: RemoteIssueLinkCreateOrUpdateRequest,
+    remote_issue_link_request: RemoteIssueLinkRequest,
 }
 
 impl<'a> CreateOrUpdateRemoteIssueLinkRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
         issue_id_or_key: impl Into<String>,
-        remote_issue_link_request: RemoteIssueLinkCreateOrUpdateRequest,
+        remote_issue_link_request: RemoteIssueLinkRequest,
     ) -> Self {
         Self { client, issue_id_or_key: issue_id_or_key.into(), remote_issue_link_request }
     }
@@ -230,7 +230,7 @@ pub struct UpdateRemoteIssueLinkRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
     link_id: String,
-    remote_issue_link_request: RemoteIssueLinkCreateOrUpdateRequest,
+    remote_issue_link_request: RemoteIssueLinkRequest,
 }
 
 impl<'a> UpdateRemoteIssueLinkRequest<'a> {
@@ -238,7 +238,7 @@ impl<'a> UpdateRemoteIssueLinkRequest<'a> {
         client: &'a crate::core::Client,
         issue_id_or_key: impl Into<String>,
         link_id: impl Into<String>,
-        remote_issue_link_request: RemoteIssueLinkCreateOrUpdateRequest,
+        remote_issue_link_request: RemoteIssueLinkRequest,
     ) -> Self {
         Self { client, issue_id_or_key: issue_id_or_key.into(), link_id: link_id.into(), remote_issue_link_request }
     }

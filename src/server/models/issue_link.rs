@@ -15,5 +15,5 @@ pub struct IssueLink {
     #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
     pub self_: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub r#type: Option<IssueLinkTypeJson>,
+    pub r#type: Option<IssueLinkType>,
 }

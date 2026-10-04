@@ -41,7 +41,7 @@ impl<'a> GetIssueSecurityLevelRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<SecurityLevelJson> {
+    pub async fn send(self) -> crate::core::Result<SecurityLevel> {
         self.client.send(&self.config()?).await
     }
 
