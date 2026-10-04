@@ -18,23 +18,28 @@ impl<'a> ScreenTabsService<'a> {
     }
 
     /// Creates tab for given screen.
-    pub fn add_screen_tab(&self, screen_id: i64) -> AddScreenTabRequest<'a> {
-        AddScreenTabRequest::new(self.client, screen_id)
+    pub fn add_screen_tab(&self, screen_id: i64, screenable_tab: ScreenableTab) -> AddScreenTabRequest<'a> {
+        AddScreenTabRequest::new(self.client, screen_id, screenable_tab)
     }
 
     /// Renames tab on given screen.
-    pub fn rename_screen_tab(&self, tab_id: i64, screen_id: i64) -> RenameScreenTabRequest<'a> {
-        RenameScreenTabRequest::new(self.client, tab_id, screen_id)
+    pub fn rename_screen_tab(
+        &self,
+        screen_id: i64,
+        tab_id: i64,
+        screenable_tab: ScreenableTab,
+    ) -> RenameScreenTabRequest<'a> {
+        RenameScreenTabRequest::new(self.client, screen_id, tab_id, screenable_tab)
     }
 
     /// Deletes tab from given screen.
-    pub fn delete_screen_tab(&self, tab_id: i64, screen_id: i64) -> DeleteScreenTabRequest<'a> {
-        DeleteScreenTabRequest::new(self.client, tab_id, screen_id)
+    pub fn delete_screen_tab(&self, screen_id: i64, tab_id: i64) -> DeleteScreenTabRequest<'a> {
+        DeleteScreenTabRequest::new(self.client, screen_id, tab_id)
     }
 
     /// Moves tab position.
-    pub fn move_screen_tab(&self, tab_id: i64, screen_id: i64, pos: i64) -> MoveScreenTabRequest<'a> {
-        MoveScreenTabRequest::new(self.client, tab_id, screen_id, pos)
+    pub fn move_screen_tab(&self, screen_id: i64, tab_id: i64, pos: i64) -> MoveScreenTabRequest<'a> {
+        MoveScreenTabRequest::new(self.client, screen_id, tab_id, pos)
     }
 }
 
@@ -89,19 +94,12 @@ impl<'a> GetAllScreenTabsRequest<'a> {
 pub struct AddScreenTabRequest<'a> {
     client: &'a crate::core::Client,
     screen_id: i64,
-    screenable_tab: Option<ScreenableTab>,
+    screenable_tab: ScreenableTab,
 }
 
 impl<'a> AddScreenTabRequest<'a> {
-    fn new(client: &'a crate::core::Client, screen_id: i64) -> Self {
-        Self { client, screen_id, screenable_tab: None }
-    }
-
-    #[must_use]
-    pub fn screenable_tab(mut self, value: ScreenableTab) -> Self {
-        self.screenable_tab = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, screen_id: i64, screenable_tab: ScreenableTab) -> Self {
+        Self { client, screen_id, screenable_tab }
     }
 
     /// The request as the transport will send it.
@@ -111,12 +109,7 @@ impl<'a> AddScreenTabRequest<'a> {
             format!("/rest/api/2/screens/{}/tabs", self.screen_id),
         );
 
-        let body = match serde_json::to_value(&self.screenable_tab)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.screenable_tab)?));
 
         Ok(config)
     }
@@ -136,21 +129,14 @@ impl<'a> AddScreenTabRequest<'a> {
 #[derive(Clone)]
 pub struct RenameScreenTabRequest<'a> {
     client: &'a crate::core::Client,
-    tab_id: i64,
     screen_id: i64,
-    screenable_tab: Option<ScreenableTab>,
+    tab_id: i64,
+    screenable_tab: ScreenableTab,
 }
 
 impl<'a> RenameScreenTabRequest<'a> {
-    fn new(client: &'a crate::core::Client, tab_id: i64, screen_id: i64) -> Self {
-        Self { client, tab_id, screen_id, screenable_tab: None }
-    }
-
-    #[must_use]
-    pub fn screenable_tab(mut self, value: ScreenableTab) -> Self {
-        self.screenable_tab = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, screen_id: i64, tab_id: i64, screenable_tab: ScreenableTab) -> Self {
+        Self { client, screen_id, tab_id, screenable_tab }
     }
 
     /// The request as the transport will send it.
@@ -160,12 +146,7 @@ impl<'a> RenameScreenTabRequest<'a> {
             format!("/rest/api/2/screens/{}/tabs/{}", self.screen_id, self.tab_id),
         );
 
-        let body = match serde_json::to_value(&self.screenable_tab)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.screenable_tab)?));
 
         Ok(config)
     }
@@ -185,13 +166,13 @@ impl<'a> RenameScreenTabRequest<'a> {
 #[derive(Clone)]
 pub struct DeleteScreenTabRequest<'a> {
     client: &'a crate::core::Client,
-    tab_id: i64,
     screen_id: i64,
+    tab_id: i64,
 }
 
 impl<'a> DeleteScreenTabRequest<'a> {
-    fn new(client: &'a crate::core::Client, tab_id: i64, screen_id: i64) -> Self {
-        Self { client, tab_id, screen_id }
+    fn new(client: &'a crate::core::Client, screen_id: i64, tab_id: i64) -> Self {
+        Self { client, screen_id, tab_id }
     }
 
     /// The request as the transport will send it.
@@ -219,14 +200,14 @@ impl<'a> DeleteScreenTabRequest<'a> {
 #[derive(Clone)]
 pub struct MoveScreenTabRequest<'a> {
     client: &'a crate::core::Client,
-    tab_id: i64,
     screen_id: i64,
+    tab_id: i64,
     pos: i64,
 }
 
 impl<'a> MoveScreenTabRequest<'a> {
-    fn new(client: &'a crate::core::Client, tab_id: i64, screen_id: i64, pos: i64) -> Self {
-        Self { client, tab_id, screen_id, pos }
+    fn new(client: &'a crate::core::Client, screen_id: i64, tab_id: i64, pos: i64) -> Self {
+        Self { client, screen_id, tab_id, pos }
     }
 
     /// The request as the transport will send it.

@@ -2,6 +2,35 @@
 
 use super::super::models::*;
 
+crate::open_enum! {
+    /// Allows you to provide specific instructions to update the remaining time estimate of the issue. Valid values are: new, leave, manual, auto
+    pub enum AddWorklogRequestAdjustEstimate {
+        New => "new",
+        Leave => "leave",
+        Manual => "manual",
+        Auto => "auto",
+    }
+}
+
+crate::open_enum! {
+    /// allows you to provide specific instructions to update the remaining time estimate of the issue. Valid values are: new, leave, auto
+    pub enum UpdateWorklogRequestAdjustEstimate {
+        New => "new",
+        Leave => "leave",
+        Auto => "auto",
+    }
+}
+
+crate::open_enum! {
+    /// Allows you to provide specific instructions to update the remaining time estimate of the issue. Valid values are: new, leave, manual, auto
+    pub enum DeleteWorklogRequestAdjustEstimate {
+        New => "new",
+        Leave => "leave",
+        Manual => "manual",
+        Auto => "auto",
+    }
+}
+
 /// The IssueWorklogs operations.
 pub struct IssueWorklogsService<'a> {
     client: &'a crate::core::Client,
@@ -18,8 +47,8 @@ impl<'a> IssueWorklogsService<'a> {
     }
 
     /// Adds a new worklog entry to an issue.
-    pub fn add_worklog(&self, issue_id_or_key: impl Into<String>) -> AddWorklogRequest<'a> {
-        AddWorklogRequest::new(self.client, issue_id_or_key)
+    pub fn add_worklog(&self, issue_id_or_key: impl Into<String>, worklog_input: Worklog) -> AddWorklogRequest<'a> {
+        AddWorklogRequest::new(self.client, issue_id_or_key, worklog_input)
     }
 
     /// Returns a specific worklog. The work log won't be returned if the Log work field is hidden for the project.
@@ -36,8 +65,9 @@ impl<'a> IssueWorklogsService<'a> {
         &self,
         issue_id_or_key: impl Into<String>,
         id: impl Into<String>,
+        body: Worklog,
     ) -> UpdateWorklogRequest<'a> {
-        UpdateWorklogRequest::new(self.client, issue_id_or_key, id)
+        UpdateWorklogRequest::new(self.client, issue_id_or_key, id, body)
     }
 
     /// Deletes an existing worklog entry.
@@ -118,21 +148,21 @@ impl<'a> GetIssueWorklogRequest<'a> {
 pub struct AddWorklogRequest<'a> {
     client: &'a crate::core::Client,
     new_estimate: Option<String>,
-    adjust_estimate: Option<String>,
+    adjust_estimate: Option<AddWorklogRequestAdjustEstimate>,
     reduce_by: Option<String>,
     issue_id_or_key: String,
-    worklog: Option<Worklog>,
+    worklog_input: Worklog,
 }
 
 impl<'a> AddWorklogRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, worklog_input: Worklog) -> Self {
         Self {
             client,
             issue_id_or_key: issue_id_or_key.into(),
+            worklog_input,
             new_estimate: None,
             adjust_estimate: None,
             reduce_by: None,
-            worklog: None,
         }
     }
 
@@ -146,7 +176,7 @@ impl<'a> AddWorklogRequest<'a> {
 
     /// Allows you to provide specific instructions to update the remaining time estimate of the issue. Valid values are: new, leave, manual, auto
     #[must_use]
-    pub fn adjust_estimate(mut self, value: impl Into<String>) -> Self {
+    pub fn adjust_estimate(mut self, value: impl Into<AddWorklogRequestAdjustEstimate>) -> Self {
         self.adjust_estimate = Some(value.into());
 
         self
@@ -156,13 +186,6 @@ impl<'a> AddWorklogRequest<'a> {
     #[must_use]
     pub fn reduce_by(mut self, value: impl Into<String>) -> Self {
         self.reduce_by = Some(value.into());
-
-        self
-    }
-
-    #[must_use]
-    pub fn worklog(mut self, value: Worklog) -> Self {
-        self.worklog = Some(value);
 
         self
     }
@@ -179,19 +202,14 @@ impl<'a> AddWorklogRequest<'a> {
         }
 
         if let Some(value) = &self.adjust_estimate {
-            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.reduce_by {
             config.query.push(("reduceBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
-        let body = match serde_json::to_value(&self.worklog)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.worklog_input)?));
 
         Ok(config)
     }
@@ -254,21 +272,26 @@ impl<'a> GetWorklogRequest<'a> {
 pub struct UpdateWorklogRequest<'a> {
     client: &'a crate::core::Client,
     new_estimate: Option<String>,
-    adjust_estimate: Option<String>,
+    adjust_estimate: Option<UpdateWorklogRequestAdjustEstimate>,
     issue_id_or_key: String,
     id: String,
-    body: Option<Worklog>,
+    body: Worklog,
 }
 
 impl<'a> UpdateWorklogRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
+    fn new(
+        client: &'a crate::core::Client,
+        issue_id_or_key: impl Into<String>,
+        id: impl Into<String>,
+        body: Worklog,
+    ) -> Self {
         Self {
             client,
             issue_id_or_key: issue_id_or_key.into(),
             id: id.into(),
+            body,
             new_estimate: None,
             adjust_estimate: None,
-            body: None,
         }
     }
 
@@ -282,15 +305,8 @@ impl<'a> UpdateWorklogRequest<'a> {
 
     /// allows you to provide specific instructions to update the remaining time estimate of the issue. Valid values are: new, leave, auto
     #[must_use]
-    pub fn adjust_estimate(mut self, value: impl Into<String>) -> Self {
+    pub fn adjust_estimate(mut self, value: impl Into<UpdateWorklogRequestAdjustEstimate>) -> Self {
         self.adjust_estimate = Some(value.into());
-
-        self
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: Worklog) -> Self {
-        self.body = Some(value);
 
         self
     }
@@ -311,7 +327,7 @@ impl<'a> UpdateWorklogRequest<'a> {
         }
 
         if let Some(value) = &self.adjust_estimate {
-            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -335,7 +351,7 @@ impl<'a> UpdateWorklogRequest<'a> {
 pub struct DeleteWorklogRequest<'a> {
     client: &'a crate::core::Client,
     new_estimate: Option<String>,
-    adjust_estimate: Option<String>,
+    adjust_estimate: Option<DeleteWorklogRequestAdjustEstimate>,
     issue_id_or_key: String,
     id: String,
     increase_by: Option<String>,
@@ -363,7 +379,7 @@ impl<'a> DeleteWorklogRequest<'a> {
 
     /// Allows you to provide specific instructions to update the remaining time estimate of the issue. Valid values are: new, leave, manual, auto
     #[must_use]
-    pub fn adjust_estimate(mut self, value: impl Into<String>) -> Self {
+    pub fn adjust_estimate(mut self, value: impl Into<DeleteWorklogRequestAdjustEstimate>) -> Self {
         self.adjust_estimate = Some(value.into());
 
         self
@@ -393,7 +409,7 @@ impl<'a> DeleteWorklogRequest<'a> {
         }
 
         if let Some(value) = &self.adjust_estimate {
-            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.increase_by {

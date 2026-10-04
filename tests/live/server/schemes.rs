@@ -204,13 +204,19 @@ async fn keeps_an_issue_type_scheme_and_its_project_associations() {
     tracker.defer(move || {
         let scheme_id = for_cleanup.clone();
 
-        async move { server().issue_type_schemes().delete_issue_type_scheme(scheme_id).send().await }
+        async move {
+            server()
+                .issue_type_schemes()
+                .delete_issue_type_scheme(scheme_id.parse().expect("a scheme id is a number"))
+                .send()
+                .await
+        }
     });
 
     server()
         .issue_type_schemes()
         .update_issue_type_scheme(
-            &scheme_id,
+            scheme_id.parse().expect("a scheme id is a number"),
             IssueTypeSchemeCreateUpdate {
                 name: Some(test_name("its2")),
                 issue_type_ids: Some(vec![standard_id.clone()]),
@@ -278,8 +284,7 @@ async fn keeps_a_permission_scheme_and_a_grant_in_it() {
 
     let created = server()
         .permission_schemes()
-        .create_permission_scheme()
-        .body(PermissionScheme {
+        .create_permission_scheme(PermissionScheme {
             name: Some(test_name("perm")),
             description: Some("created by the suite".to_owned()),
             ..PermissionScheme::default()
@@ -297,12 +302,14 @@ async fn keeps_a_permission_scheme_and_a_grant_in_it() {
 
     let updated = server()
         .permission_schemes()
-        .update_permission_scheme(scheme_id)
-        .body(PermissionScheme {
-            name: Some(test_name("perm2")),
-            description: Some("changed by the suite".to_owned()),
-            ..PermissionScheme::default()
-        })
+        .update_permission_scheme(
+            scheme_id,
+            PermissionScheme {
+                name: Some(test_name("perm2")),
+                description: Some("changed by the suite".to_owned()),
+                ..PermissionScheme::default()
+            },
+        )
         .send()
         .await
         .expect("the scheme can be edited");
@@ -311,12 +318,14 @@ async fn keeps_a_permission_scheme_and_a_grant_in_it() {
 
     let grant = server()
         .permission_schemes()
-        .create_permission_grant(scheme_id)
-        .permission_grant(PermissionGrant {
-            permission: Some("BROWSE_PROJECTS".to_owned()),
-            holder: Some(PermissionHolder { r#type: Some("anyone".to_owned()), ..PermissionHolder::default() }),
-            ..PermissionGrant::default()
-        })
+        .create_permission_grant(
+            scheme_id,
+            PermissionGrant {
+                permission: Some("BROWSE_PROJECTS".to_owned()),
+                holder: Some(PermissionHolder { r#type: Some("anyone".to_owned()), ..PermissionHolder::default() }),
+                ..PermissionGrant::default()
+            },
+        )
         .send()
         .await
         .expect("the scheme accepts a grant");
@@ -484,8 +493,8 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
     server()
         .workflow_schemes()
         .set_workflow_scheme_issue_type(
-            &issue_type,
             scheme_id,
+            &issue_type,
             IssueTypeMapping {
                 issue_type: Some(issue_type.clone()),
                 workflow: Some(workflow.clone()),
@@ -498,7 +507,7 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
 
     let mapping = server()
         .workflow_schemes()
-        .get_workflow_scheme_issue_type(&issue_type, scheme_id)
+        .get_workflow_scheme_issue_type(scheme_id, &issue_type)
         .send()
         .await
         .expect("the mapping reads back");
@@ -537,7 +546,7 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
     assert!(matches!(&all, GetWorkflow::Many(_)), "leaving the workflow out lists them all, got {all:?}");
 
     touch(
-        server().workflow_schemes().delete_workflow_scheme_issue_type(&issue_type, scheme_id).send().await,
+        server().workflow_schemes().delete_workflow_scheme_issue_type(scheme_id, &issue_type).send().await,
         "unmapping an issue type",
     );
     touch(
@@ -581,8 +590,8 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
         server()
             .workflow_scheme_drafts()
             .set_workflow_scheme_draft_issue_type(
-                &issue_type,
                 scheme_id,
+                &issue_type,
                 IssueTypeMapping {
                     issue_type: Some(issue_type.clone()),
                     workflow: Some(workflow.clone()),
@@ -594,7 +603,7 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
         "mapping an issue type in a draft",
     );
     touch(
-        server().workflow_scheme_drafts().get_workflow_scheme_draft_issue_type(&issue_type, scheme_id).send().await,
+        server().workflow_scheme_drafts().get_workflow_scheme_draft_issue_type(scheme_id, &issue_type).send().await,
         "reading a draft's issue type mapping",
     );
     touch(
@@ -611,7 +620,7 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
     );
     touch(server().workflow_scheme_drafts().get_draft_workflow(scheme_id).send().await, "reading a draft's mappings");
     touch(
-        server().workflow_scheme_drafts().delete_workflow_scheme_draft_issue_type(&issue_type, scheme_id).send().await,
+        server().workflow_scheme_drafts().delete_workflow_scheme_draft_issue_type(scheme_id, &issue_type).send().await,
         "unmapping an issue type in a draft",
     );
     touch(
@@ -642,8 +651,7 @@ async fn adds_a_tab_to_a_screen_and_takes_it_away() {
 
     let tab = server()
         .screen_tabs()
-        .add_screen_tab(screen_id)
-        .screenable_tab(ScreenableTab { name: Some(test_name("tab")), id: None })
+        .add_screen_tab(screen_id, ScreenableTab { name: Some(test_name("tab")), id: None })
         .send()
         .await
         .expect("the screen accepts a new tab");
@@ -655,8 +663,7 @@ async fn adds_a_tab_to_a_screen_and_takes_it_away() {
     let renamed_to = test_name("tab2");
     let renamed = server()
         .screen_tabs()
-        .rename_screen_tab(tab_id, screen_id)
-        .screenable_tab(ScreenableTab { name: Some(renamed_to.clone()), id: None })
+        .rename_screen_tab(tab_id, screen_id, ScreenableTab { name: Some(renamed_to.clone()), id: None })
         .send()
         .await
         .expect("the tab can be renamed");
@@ -676,8 +683,7 @@ async fn adds_a_tab_to_a_screen_and_takes_it_away() {
         touch(
             server()
                 .screen_tab_fields()
-                .add_screen_tab_field(tab_id, screen_id)
-                .add_field(AddField { field_id: Some(field_id.clone()) })
+                .add_screen_tab_field(tab_id, screen_id, AddField { field_id: Some(field_id.clone()) })
                 .send()
                 .await,
             "adding a field to the tab",
@@ -685,14 +691,18 @@ async fn adds_a_tab_to_a_screen_and_takes_it_away() {
         touch(
             server()
                 .screen_tab_fields()
-                .move_screen_tab_field(tab_id, screen_id, &field_id)
-                .move_field(MoveField { position: Some(MoveFieldPosition::First), after: None })
+                .move_screen_tab_field(
+                    tab_id,
+                    screen_id,
+                    &field_id,
+                    MoveField { position: Some(MoveFieldPosition::First), after: None },
+                )
                 .send()
                 .await,
             "moving a field to the front of the tab",
         );
         touch(
-            server().screens().update_show_when_empty_indicator(tab_id, screen_id, true, &field_id).send().await,
+            server().screens().update_show_when_empty_indicator(screen_id, tab_id, &field_id, true).send().await,
             "showing the field when it is empty",
         );
         touch(
@@ -703,8 +713,7 @@ async fn adds_a_tab_to_a_screen_and_takes_it_away() {
 
     let custom_field = server()
         .issue_fields()
-        .create_custom_field()
-        .custom_field_definition_json(CustomFieldDefinitionJson {
+        .create_custom_field(CustomFieldDefinitionJson {
             name: Some(test_name("screen field")),
             description: Some("created by the suite".to_owned()),
             r#type: Some("com.atlassian.jira.plugin.system.customfieldtypes:textfield".to_owned()),
@@ -739,8 +748,7 @@ async fn deletes_a_custom_field_in_bulk() {
 
     let created = server()
         .issue_fields()
-        .create_custom_field()
-        .custom_field_definition_json(CustomFieldDefinitionJson {
+        .create_custom_field(CustomFieldDefinitionJson {
             name: Some(test_name("bulk field")),
             description: Some("created by the suite".to_owned()),
             r#type: Some("com.atlassian.jira.plugin.system.customfieldtypes:textfield".to_owned()),

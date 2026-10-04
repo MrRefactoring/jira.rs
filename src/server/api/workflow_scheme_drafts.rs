@@ -41,9 +41,9 @@ impl<'a> WorkflowSchemeDraftsService<'a> {
     pub fn update_draft_default_workflow(
         &self,
         id: i64,
-        default: DefaultModel,
+        default_workflow: DefaultModel,
     ) -> UpdateDraftDefaultWorkflowRequest<'a> {
-        UpdateDraftDefaultWorkflowRequest::new(self.client, id, default)
+        UpdateDraftDefaultWorkflowRequest::new(self.client, id, default_workflow)
     }
 
     /// Remove the default workflow from the passed draft workflow scheme.
@@ -54,30 +54,30 @@ impl<'a> WorkflowSchemeDraftsService<'a> {
     /// Returns the issue type mapping for the passed draft workflow scheme.
     pub fn get_workflow_scheme_draft_issue_type(
         &self,
-        issue_type: impl Into<String>,
         id: i64,
+        issue_type: impl Into<String>,
     ) -> GetWorkflowSchemeDraftIssueTypeRequest<'a> {
-        GetWorkflowSchemeDraftIssueTypeRequest::new(self.client, issue_type, id)
+        GetWorkflowSchemeDraftIssueTypeRequest::new(self.client, id, issue_type)
     }
 
     /// Set the issue type mapping for the passed draft scheme. The passed representation can have its updateDraftIfNeeded flag set to true to indicate that
     /// the draft should be created/updated when the actual scheme cannot be edited.
     pub fn set_workflow_scheme_draft_issue_type(
         &self,
-        issue_type: impl Into<String>,
         id: i64,
+        issue_type: impl Into<String>,
         body: IssueTypeMapping,
     ) -> SetWorkflowSchemeDraftIssueTypeRequest<'a> {
-        SetWorkflowSchemeDraftIssueTypeRequest::new(self.client, issue_type, id, body)
+        SetWorkflowSchemeDraftIssueTypeRequest::new(self.client, id, issue_type, body)
     }
 
     /// Remove the specified issue type mapping from the draft scheme.
     pub fn delete_workflow_scheme_draft_issue_type(
         &self,
-        issue_type: impl Into<String>,
         id: i64,
+        issue_type: impl Into<String>,
     ) -> DeleteWorkflowSchemeDraftIssueTypeRequest<'a> {
-        DeleteWorkflowSchemeDraftIssueTypeRequest::new(self.client, issue_type, id)
+        DeleteWorkflowSchemeDraftIssueTypeRequest::new(self.client, id, issue_type)
     }
 
     /// Returns the draft workflow mappings or requested mapping to the caller.
@@ -273,12 +273,12 @@ impl<'a> GetDraftDefaultWorkflowRequest<'a> {
 pub struct UpdateDraftDefaultWorkflowRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
-    default: DefaultModel,
+    default_workflow: DefaultModel,
 }
 
 impl<'a> UpdateDraftDefaultWorkflowRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: i64, default: DefaultModel) -> Self {
-        Self { client, id, default }
+    fn new(client: &'a crate::core::Client, id: i64, default_workflow: DefaultModel) -> Self {
+        Self { client, id, default_workflow }
     }
 
     /// The request as the transport will send it.
@@ -288,12 +288,7 @@ impl<'a> UpdateDraftDefaultWorkflowRequest<'a> {
             format!("/rest/api/2/workflowscheme/{}/draft/default", self.id),
         );
 
-        let body = match serde_json::to_value(&self.default)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.default_workflow)?));
 
         Ok(config)
     }
@@ -346,13 +341,13 @@ impl<'a> DeleteDraftDefaultWorkflowRequest<'a> {
 #[derive(Clone)]
 pub struct GetWorkflowSchemeDraftIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
-    issue_type: String,
     id: i64,
+    issue_type: String,
 }
 
 impl<'a> GetWorkflowSchemeDraftIssueTypeRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_type: impl Into<String>, id: i64) -> Self {
-        Self { client, issue_type: issue_type.into(), id }
+    fn new(client: &'a crate::core::Client, id: i64, issue_type: impl Into<String>) -> Self {
+        Self { client, id, issue_type: issue_type.into() }
     }
 
     /// The request as the transport will send it.
@@ -385,14 +380,14 @@ impl<'a> GetWorkflowSchemeDraftIssueTypeRequest<'a> {
 #[derive(Clone)]
 pub struct SetWorkflowSchemeDraftIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
-    issue_type: String,
     id: i64,
+    issue_type: String,
     body: IssueTypeMapping,
 }
 
 impl<'a> SetWorkflowSchemeDraftIssueTypeRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_type: impl Into<String>, id: i64, body: IssueTypeMapping) -> Self {
-        Self { client, issue_type: issue_type.into(), id, body }
+    fn new(client: &'a crate::core::Client, id: i64, issue_type: impl Into<String>, body: IssueTypeMapping) -> Self {
+        Self { client, id, issue_type: issue_type.into(), body }
     }
 
     /// The request as the transport will send it.
@@ -426,13 +421,13 @@ impl<'a> SetWorkflowSchemeDraftIssueTypeRequest<'a> {
 #[derive(Clone)]
 pub struct DeleteWorkflowSchemeDraftIssueTypeRequest<'a> {
     client: &'a crate::core::Client,
-    issue_type: String,
     id: i64,
+    issue_type: String,
 }
 
 impl<'a> DeleteWorkflowSchemeDraftIssueTypeRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_type: impl Into<String>, id: i64) -> Self {
-        Self { client, issue_type: issue_type.into(), id }
+    fn new(client: &'a crate::core::Client, id: i64, issue_type: impl Into<String>) -> Self {
+        Self { client, id, issue_type: issue_type.into() }
     }
 
     /// The request as the transport will send it.

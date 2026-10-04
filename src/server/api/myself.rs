@@ -13,18 +13,18 @@ impl<'a> MyselfService<'a> {
     }
 
     /// Returns preference of the currently logged in user. Preference key must be provided as input parameter (key). The value is returned exactly as it is. If key parameter is not provided or wrong - status code 404. If value is found  - status code 200.
-    pub fn get_preference(&self) -> GetPreferenceRequest<'a> {
-        GetPreferenceRequest::new(self.client)
+    pub fn get_preference(&self, key: impl Into<String>) -> GetPreferenceRequest<'a> {
+        GetPreferenceRequest::new(self.client, key)
     }
 
     /// Sets preference of the currently logged in user. Preference key must be provided as input parameters (key). Value must be provided as post body. If key or value parameter is not provided - status code 404. If preference is set - status code 204.
-    pub fn set_preference(&self) -> SetPreferenceRequest<'a> {
-        SetPreferenceRequest::new(self.client)
+    pub fn set_preference(&self, key: impl Into<String>, body: impl Into<String>) -> SetPreferenceRequest<'a> {
+        SetPreferenceRequest::new(self.client, key, body)
     }
 
     /// Removes preference of the currently logged in user. Preference key must be provided as input parameters (key). If key parameter is not provided or wrong - status code 404. If preference is unset - status code 204.
-    pub fn remove_preference(&self) -> RemovePreferenceRequest<'a> {
-        RemovePreferenceRequest::new(self.client)
+    pub fn remove_preference(&self, key: impl Into<String>) -> RemovePreferenceRequest<'a> {
+        RemovePreferenceRequest::new(self.client, key)
     }
 
     /// Returns currently logged user. This resource cannot be accessed anonymously
@@ -47,20 +47,12 @@ impl<'a> MyselfService<'a> {
 #[derive(Clone)]
 pub struct GetPreferenceRequest<'a> {
     client: &'a crate::core::Client,
-    key: Option<String>,
+    key: String,
 }
 
 impl<'a> GetPreferenceRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, key: None }
-    }
-
-    /// Key of the preference to be returned.
-    #[must_use]
-    pub fn key(mut self, value: impl Into<String>) -> Self {
-        self.key = Some(value.into());
-
-        self
+    fn new(client: &'a crate::core::Client, key: impl Into<String>) -> Self {
+        Self { client, key: key.into() }
     }
 
     /// The request as the transport will send it.
@@ -68,9 +60,7 @@ impl<'a> GetPreferenceRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/mypreferences".to_owned());
 
-        if let Some(value) = &self.key {
-            config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
+        config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(self.key.clone())));
 
         Ok(config)
     }
@@ -90,28 +80,13 @@ impl<'a> GetPreferenceRequest<'a> {
 #[derive(Clone)]
 pub struct SetPreferenceRequest<'a> {
     client: &'a crate::core::Client,
-    key: Option<String>,
-    body: Option<String>,
+    key: String,
+    body: String,
 }
 
 impl<'a> SetPreferenceRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, key: None, body: None }
-    }
-
-    /// Key of the preference to be set.
-    #[must_use]
-    pub fn key(mut self, value: impl Into<String>) -> Self {
-        self.key = Some(value.into());
-
-        self
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: impl Into<String>) -> Self {
-        self.body = Some(value.into());
-
-        self
+    fn new(client: &'a crate::core::Client, key: impl Into<String>, body: impl Into<String>) -> Self {
+        Self { client, key: key.into(), body: body.into() }
     }
 
     /// The request as the transport will send it.
@@ -119,9 +94,7 @@ impl<'a> SetPreferenceRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::PUT, "/rest/api/2/mypreferences".to_owned());
 
-        if let Some(value) = &self.key {
-            config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
+        config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(self.key.clone())));
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
 
@@ -143,20 +116,12 @@ impl<'a> SetPreferenceRequest<'a> {
 #[derive(Clone)]
 pub struct RemovePreferenceRequest<'a> {
     client: &'a crate::core::Client,
-    key: Option<String>,
+    key: String,
 }
 
 impl<'a> RemovePreferenceRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, key: None }
-    }
-
-    /// Key of the preference to be removed.
-    #[must_use]
-    pub fn key(mut self, value: impl Into<String>) -> Self {
-        self.key = Some(value.into());
-
-        self
+    fn new(client: &'a crate::core::Client, key: impl Into<String>) -> Self {
+        Self { client, key: key.into() }
     }
 
     /// The request as the transport will send it.
@@ -164,9 +129,7 @@ impl<'a> RemovePreferenceRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::DELETE, "/rest/api/2/mypreferences".to_owned());
 
-        if let Some(value) = &self.key {
-            config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
+        config.query.push(("key".to_owned(), crate::core::QueryValue::Scalar(self.key.clone())));
 
         Ok(config)
     }

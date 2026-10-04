@@ -2,6 +2,26 @@
 
 use super::super::models::*;
 
+crate::open_enum! {
+    /// Optional information to be expanded in the response: group, user, projectRole or field.
+    pub enum GetNotificationSchemesRequestExpand {
+        Group => "group",
+        User => "user",
+        ProjectRole => "projectRole",
+        Field => "field",
+    }
+}
+
+crate::open_enum! {
+    /// Optional information to be expanded in the response: group, user, projectRole or field.
+    pub enum GetNotificationSchemeRequestExpand {
+        Group => "group",
+        User => "user",
+        ProjectRole => "projectRole",
+        Field => "field",
+    }
+}
+
 /// The IssueNotificationSchemes operations.
 pub struct IssueNotificationSchemesService<'a> {
     client: &'a crate::core::Client,
@@ -58,7 +78,7 @@ impl<'a> IssueNotificationSchemesService<'a> {
 #[derive(Clone)]
 pub struct GetNotificationSchemesRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<GetNotificationSchemesRequestExpand>,
     max_results: Option<i64>,
     start_at: Option<i64>,
 }
@@ -70,7 +90,7 @@ impl<'a> GetNotificationSchemesRequest<'a> {
 
     /// Optional information to be expanded in the response: group, user, projectRole or field.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
+    pub fn expand(mut self, value: impl Into<GetNotificationSchemesRequestExpand>) -> Self {
         self.expand = Some(value.into());
 
         self
@@ -98,7 +118,7 @@ impl<'a> GetNotificationSchemesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/notificationscheme".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.max_results {
@@ -117,10 +137,7 @@ impl<'a> GetNotificationSchemesRequest<'a> {
     /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
     /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
-    pub fn stream(
-        self,
-    ) -> futures_util::stream::BoxStream<'a, crate::core::Result<std::collections::HashMap<String, serde_json::Value>>>
-    {
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<NotificationScheme>> {
         let first = self.start_at.unwrap_or(0);
 
         crate::core::stream_pages(self, first, |mut request, position| async move {
@@ -138,7 +155,7 @@ impl<'a> GetNotificationSchemesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<PagedResults> {
+    pub async fn send(self) -> crate::core::Result<RustPageNotificationScheme> {
         self.client.send(&self.config()?).await
     }
 
@@ -175,7 +192,7 @@ impl<'a> GetNotificationSchemesRequest<'a> {
 #[derive(Clone)]
 pub struct GetNotificationSchemeRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<GetNotificationSchemeRequestExpand>,
     id: i64,
 }
 
@@ -186,7 +203,7 @@ impl<'a> GetNotificationSchemeRequest<'a> {
 
     /// Optional information to be expanded in the response: group, user, projectRole or field.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
+    pub fn expand(mut self, value: impl Into<GetNotificationSchemeRequestExpand>) -> Self {
         self.expand = Some(value.into());
 
         self
@@ -200,7 +217,7 @@ impl<'a> GetNotificationSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)

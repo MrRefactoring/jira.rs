@@ -13,8 +13,8 @@ impl<'a> GroupAndUserPickerService<'a> {
     }
 
     /// Returns a list of users and groups matching query with highlighting
-    pub fn find_users_and_groups(&self) -> FindUsersAndGroupsRequest<'a> {
-        FindUsersAndGroupsRequest::new(self.client)
+    pub fn find_users_and_groups(&self, query: impl Into<String>) -> FindUsersAndGroupsRequest<'a> {
+        FindUsersAndGroupsRequest::new(self.client, query)
     }
 }
 
@@ -24,19 +24,19 @@ pub struct FindUsersAndGroupsRequest<'a> {
     client: &'a crate::core::Client,
     issue_type_id: Option<String>,
     max_results: Option<i64>,
-    query: Option<String>,
-    show_avatar: Option<String>,
+    query: String,
+    show_avatar: Option<bool>,
     project_id: Option<String>,
     field_id: Option<String>,
 }
 
 impl<'a> FindUsersAndGroupsRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
+    fn new(client: &'a crate::core::Client, query: impl Into<String>) -> Self {
         Self {
             client,
+            query: query.into(),
             issue_type_id: None,
             max_results: None,
-            query: None,
             show_avatar: None,
             project_id: None,
             field_id: None,
@@ -59,18 +59,10 @@ impl<'a> FindUsersAndGroupsRequest<'a> {
         self
     }
 
-    /// A string used to search username, Name or e-mail address
-    #[must_use]
-    pub fn query(mut self, value: impl Into<String>) -> Self {
-        self.query = Some(value.into());
-
-        self
-    }
-
     /// Show avatar
     #[must_use]
-    pub fn show_avatar(mut self, value: impl Into<String>) -> Self {
-        self.show_avatar = Some(value.into());
+    pub fn show_avatar(mut self, value: bool) -> Self {
+        self.show_avatar = Some(value);
 
         self
     }
@@ -104,12 +96,10 @@ impl<'a> FindUsersAndGroupsRequest<'a> {
             config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
-        if let Some(value) = &self.query {
-            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
+        config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(self.query.clone())));
 
         if let Some(value) = &self.show_avatar {
-            config.query.push(("showAvatar".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("showAvatar".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.project_id {

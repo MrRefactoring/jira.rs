@@ -110,8 +110,8 @@ impl<'a> PermissionSchemesService<'a> {
     }
 
     /// Create a new permission scheme. This method can create schemes with a defined permission set, or without.
-    pub fn create_permission_scheme(&self) -> CreatePermissionSchemeRequest<'a> {
-        CreatePermissionSchemeRequest::new(self.client)
+    pub fn create_permission_scheme(&self, body: PermissionScheme) -> CreatePermissionSchemeRequest<'a> {
+        CreatePermissionSchemeRequest::new(self.client, body)
     }
 
     /// Returns the attribute for a permission scheme specified by permission scheme id and attribute key.
@@ -138,8 +138,12 @@ impl<'a> PermissionSchemesService<'a> {
     }
 
     /// Updates a permission scheme. If the permissions list is present then it will be set in the permission scheme, which basically means it will overwrite any permission grants that existed in the permission scheme. Sending an empty list will remove all permission grants from the permission scheme. To update just the name and description, do not send permissions list at all. To add or remove a single permission grant instead of updating the whole list at once use the {schemeId}/permission/ resource.
-    pub fn update_permission_scheme(&self, scheme_id: i64) -> UpdatePermissionSchemeRequest<'a> {
-        UpdatePermissionSchemeRequest::new(self.client, scheme_id)
+    pub fn update_permission_scheme(
+        &self,
+        scheme_id: i64,
+        body: PermissionScheme,
+    ) -> UpdatePermissionSchemeRequest<'a> {
+        UpdatePermissionSchemeRequest::new(self.client, scheme_id, body)
     }
 
     /// Deletes a permission scheme identified by the given id.
@@ -153,26 +157,30 @@ impl<'a> PermissionSchemesService<'a> {
     }
 
     /// Creates a permission grant in a permission scheme.
-    pub fn create_permission_grant(&self, scheme_id: i64) -> CreatePermissionGrantRequest<'a> {
-        CreatePermissionGrantRequest::new(self.client, scheme_id)
+    pub fn create_permission_grant(
+        &self,
+        scheme_id: i64,
+        permission_grant: PermissionGrant,
+    ) -> CreatePermissionGrantRequest<'a> {
+        CreatePermissionGrantRequest::new(self.client, scheme_id, permission_grant)
     }
 
     /// Returns a permission grant identified by the given id.
     pub fn get_permission_scheme_grant(
         &self,
-        permission_id: i64,
         scheme_id: i64,
+        permission_id: i64,
     ) -> GetPermissionSchemeGrantRequest<'a> {
-        GetPermissionSchemeGrantRequest::new(self.client, permission_id, scheme_id)
+        GetPermissionSchemeGrantRequest::new(self.client, scheme_id, permission_id)
     }
 
     /// Deletes a permission grant from a permission scheme.
     pub fn delete_permission_scheme_entity(
         &self,
-        permission_id: i64,
         scheme_id: i64,
+        permission_id: i64,
     ) -> DeletePermissionSchemeEntityRequest<'a> {
-        DeletePermissionSchemeEntityRequest::new(self.client, permission_id, scheme_id)
+        DeletePermissionSchemeEntityRequest::new(self.client, scheme_id, permission_id)
     }
 }
 
@@ -224,25 +232,18 @@ impl<'a> GetAllPermissionSchemesRequest<'a> {
 pub struct CreatePermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<CreatePermissionSchemeRequestExpand>,
-    body: Option<PermissionScheme>,
+    body: PermissionScheme,
 }
 
 impl<'a> CreatePermissionSchemeRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, expand: None, body: None }
+    fn new(client: &'a crate::core::Client, body: PermissionScheme) -> Self {
+        Self { client, body, expand: None }
     }
 
     /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
     #[must_use]
     pub fn expand(mut self, value: CreatePermissionSchemeRequestExpand) -> Self {
         self.expand = Some(value);
-
-        self
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: PermissionScheme) -> Self {
-        self.body = Some(value);
 
         self
     }
@@ -412,25 +413,18 @@ pub struct UpdatePermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<UpdatePermissionSchemeRequestExpand>,
     scheme_id: i64,
-    body: Option<PermissionScheme>,
+    body: PermissionScheme,
 }
 
 impl<'a> UpdatePermissionSchemeRequest<'a> {
-    fn new(client: &'a crate::core::Client, scheme_id: i64) -> Self {
-        Self { client, scheme_id, expand: None, body: None }
+    fn new(client: &'a crate::core::Client, scheme_id: i64, body: PermissionScheme) -> Self {
+        Self { client, scheme_id, body, expand: None }
     }
 
     /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
     #[must_use]
     pub fn expand(mut self, value: UpdatePermissionSchemeRequestExpand) -> Self {
         self.expand = Some(value);
-
-        self
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: PermissionScheme) -> Self {
-        self.body = Some(value);
 
         self
     }
@@ -547,25 +541,18 @@ pub struct CreatePermissionGrantRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<CreatePermissionGrantRequestExpand>,
     scheme_id: i64,
-    permission_grant: Option<PermissionGrant>,
+    permission_grant: PermissionGrant,
 }
 
 impl<'a> CreatePermissionGrantRequest<'a> {
-    fn new(client: &'a crate::core::Client, scheme_id: i64) -> Self {
-        Self { client, scheme_id, expand: None, permission_grant: None }
+    fn new(client: &'a crate::core::Client, scheme_id: i64, permission_grant: PermissionGrant) -> Self {
+        Self { client, scheme_id, permission_grant, expand: None }
     }
 
     /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
     #[must_use]
     pub fn expand(mut self, value: CreatePermissionGrantRequestExpand) -> Self {
         self.expand = Some(value);
-
-        self
-    }
-
-    #[must_use]
-    pub fn permission_grant(mut self, value: PermissionGrant) -> Self {
-        self.permission_grant = Some(value);
 
         self
     }
@@ -581,12 +568,7 @@ impl<'a> CreatePermissionGrantRequest<'a> {
             config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
-        let body = match serde_json::to_value(&self.permission_grant)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.permission_grant)?));
 
         Ok(config)
     }
@@ -606,14 +588,14 @@ impl<'a> CreatePermissionGrantRequest<'a> {
 #[derive(Clone)]
 pub struct GetPermissionSchemeGrantRequest<'a> {
     client: &'a crate::core::Client,
-    permission_id: i64,
-    expand: Option<GetPermissionSchemeGrantRequestExpand>,
     scheme_id: i64,
+    expand: Option<GetPermissionSchemeGrantRequestExpand>,
+    permission_id: i64,
 }
 
 impl<'a> GetPermissionSchemeGrantRequest<'a> {
-    fn new(client: &'a crate::core::Client, permission_id: i64, scheme_id: i64) -> Self {
-        Self { client, permission_id, scheme_id, expand: None }
+    fn new(client: &'a crate::core::Client, scheme_id: i64, permission_id: i64) -> Self {
+        Self { client, scheme_id, permission_id, expand: None }
     }
 
     /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
@@ -653,13 +635,13 @@ impl<'a> GetPermissionSchemeGrantRequest<'a> {
 #[derive(Clone)]
 pub struct DeletePermissionSchemeEntityRequest<'a> {
     client: &'a crate::core::Client,
-    permission_id: i64,
     scheme_id: i64,
+    permission_id: i64,
 }
 
 impl<'a> DeletePermissionSchemeEntityRequest<'a> {
-    fn new(client: &'a crate::core::Client, permission_id: i64, scheme_id: i64) -> Self {
-        Self { client, permission_id, scheme_id }
+    fn new(client: &'a crate::core::Client, scheme_id: i64, permission_id: i64) -> Self {
+        Self { client, scheme_id, permission_id }
     }
 
     /// The request as the transport will send it.

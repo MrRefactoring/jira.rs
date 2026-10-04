@@ -82,8 +82,9 @@ async fn sets_the_base_url_and_the_default_columns() {
 
     server()
         .issue_navigator_settings()
-        .set_issue_navigator_default_columns()
-        .columns(["summary", "status"])
+        .set_issue_navigator_default_columns(jira::server::SetIssueNavigatorDefaultColumnsRequestColumnRequestBody {
+            columns: Some(vec!["summary".to_owned(), "status".to_owned()]),
+        })
         .send()
         .await
         .expect("the default columns can be set");
@@ -223,7 +224,7 @@ async fn keeps_an_avatar_through_the_universal_endpoints() {
         "every Jira instance ships system avatars for a project",
     );
 
-    touch(server().avatars().delete_avatar(1, "project", owner).send().await);
+    touch(server().avatars().delete_avatar("project", owner, 1).send().await);
 
     touch(
         server()

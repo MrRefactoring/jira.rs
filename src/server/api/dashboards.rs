@@ -20,41 +20,41 @@ impl<'a> DashboardsService<'a> {
     /// Returns the keys of all properties for the dashboard item identified by the id.
     pub fn get_dashboard_item_property_keys(
         &self,
-        item_id: impl Into<String>,
         dashboard_id: impl Into<String>,
+        item_id: impl Into<String>,
     ) -> GetDashboardItemPropertyKeysRequest<'a> {
-        GetDashboardItemPropertyKeysRequest::new(self.client, item_id, dashboard_id)
+        GetDashboardItemPropertyKeysRequest::new(self.client, dashboard_id, item_id)
     }
 
     /// Returns the value of the property with a given key from the dashboard item identified by the id.
     pub fn get_dashboard_item_property(
         &self,
-        property_key: impl Into<String>,
-        item_id: impl Into<String>,
         dashboard_id: impl Into<String>,
+        item_id: impl Into<String>,
+        property_key: impl Into<String>,
     ) -> GetDashboardItemPropertyRequest<'a> {
-        GetDashboardItemPropertyRequest::new(self.client, property_key, item_id, dashboard_id)
+        GetDashboardItemPropertyRequest::new(self.client, dashboard_id, item_id, property_key)
     }
 
     /// Sets the value of the property with a given key on the dashboard item identified by the id.
     pub fn set_dashboard_item_property(
         &self,
-        property_key: impl Into<String>,
-        item_id: impl Into<String>,
         dashboard_id: impl Into<String>,
+        item_id: impl Into<String>,
+        property_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> SetDashboardItemPropertyRequest<'a> {
-        SetDashboardItemPropertyRequest::new(self.client, property_key, item_id, dashboard_id, body)
+        SetDashboardItemPropertyRequest::new(self.client, dashboard_id, item_id, property_key, body)
     }
 
     /// Removes the property from the dashboard item identified by the key or by the id.
     pub fn delete_dashboard_item_property(
         &self,
-        property_key: impl Into<String>,
-        item_id: impl Into<String>,
         dashboard_id: impl Into<String>,
+        item_id: impl Into<String>,
+        property_key: impl Into<String>,
     ) -> DeleteDashboardItemPropertyRequest<'a> {
-        DeleteDashboardItemPropertyRequest::new(self.client, property_key, item_id, dashboard_id)
+        DeleteDashboardItemPropertyRequest::new(self.client, dashboard_id, item_id, property_key)
     }
 
     /// Returns a single dashboard.
@@ -151,13 +151,13 @@ impl<'a> GetAllDashboardsRequest<'a> {
 #[derive(Clone)]
 pub struct GetDashboardItemPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
-    item_id: String,
     dashboard_id: String,
+    item_id: String,
 }
 
 impl<'a> GetDashboardItemPropertyKeysRequest<'a> {
-    fn new(client: &'a crate::core::Client, item_id: impl Into<String>, dashboard_id: impl Into<String>) -> Self {
-        Self { client, item_id: item_id.into(), dashboard_id: dashboard_id.into() }
+    fn new(client: &'a crate::core::Client, dashboard_id: impl Into<String>, item_id: impl Into<String>) -> Self {
+        Self { client, dashboard_id: dashboard_id.into(), item_id: item_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -189,19 +189,19 @@ impl<'a> GetDashboardItemPropertyKeysRequest<'a> {
 #[derive(Clone)]
 pub struct GetDashboardItemPropertyRequest<'a> {
     client: &'a crate::core::Client,
-    property_key: String,
-    item_id: String,
     dashboard_id: String,
+    item_id: String,
+    property_key: String,
 }
 
 impl<'a> GetDashboardItemPropertyRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
-        property_key: impl Into<String>,
-        item_id: impl Into<String>,
         dashboard_id: impl Into<String>,
+        item_id: impl Into<String>,
+        property_key: impl Into<String>,
     ) -> Self {
-        Self { client, property_key: property_key.into(), item_id: item_id.into(), dashboard_id: dashboard_id.into() }
+        Self { client, dashboard_id: dashboard_id.into(), item_id: item_id.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -234,25 +234,25 @@ impl<'a> GetDashboardItemPropertyRequest<'a> {
 #[derive(Clone)]
 pub struct SetDashboardItemPropertyRequest<'a> {
     client: &'a crate::core::Client,
-    property_key: String,
-    item_id: String,
     dashboard_id: String,
+    item_id: String,
+    property_key: String,
     body: std::collections::HashMap<String, serde_json::Value>,
 }
 
 impl<'a> SetDashboardItemPropertyRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
-        property_key: impl Into<String>,
-        item_id: impl Into<String>,
         dashboard_id: impl Into<String>,
+        item_id: impl Into<String>,
+        property_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
         Self {
             client,
-            property_key: property_key.into(),
-            item_id: item_id.into(),
             dashboard_id: dashboard_id.into(),
+            item_id: item_id.into(),
+            property_key: property_key.into(),
             body,
         }
     }
@@ -289,19 +289,19 @@ impl<'a> SetDashboardItemPropertyRequest<'a> {
 #[derive(Clone)]
 pub struct DeleteDashboardItemPropertyRequest<'a> {
     client: &'a crate::core::Client,
-    property_key: String,
-    item_id: String,
     dashboard_id: String,
+    item_id: String,
+    property_key: String,
 }
 
 impl<'a> DeleteDashboardItemPropertyRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
-        property_key: impl Into<String>,
-        item_id: impl Into<String>,
         dashboard_id: impl Into<String>,
+        item_id: impl Into<String>,
+        property_key: impl Into<String>,
     ) -> Self {
-        Self { client, property_key: property_key.into(), item_id: item_id.into(), dashboard_id: dashboard_id.into() }
+        Self { client, dashboard_id: dashboard_id.into(), item_id: item_id.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.

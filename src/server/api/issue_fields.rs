@@ -33,8 +33,11 @@ impl<'a> IssueFieldsService<'a> {
     }
 
     /// Creates a custom field using a definition
-    pub fn create_custom_field(&self) -> CreateCustomFieldRequest<'a> {
-        CreateCustomFieldRequest::new(self.client)
+    pub fn create_custom_field(
+        &self,
+        custom_field_definition: CustomFieldDefinitionJson,
+    ) -> CreateCustomFieldRequest<'a> {
+        CreateCustomFieldRequest::new(self.client, custom_field_definition)
     }
 }
 
@@ -433,31 +436,19 @@ impl<'a> GetFieldsRequest<'a> {
 #[derive(Clone)]
 pub struct CreateCustomFieldRequest<'a> {
     client: &'a crate::core::Client,
-    custom_field_definition_json: Option<CustomFieldDefinitionJson>,
+    custom_field_definition: CustomFieldDefinitionJson,
 }
 
 impl<'a> CreateCustomFieldRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, custom_field_definition_json: None }
-    }
-
-    #[must_use]
-    pub fn custom_field_definition_json(mut self, value: CustomFieldDefinitionJson) -> Self {
-        self.custom_field_definition_json = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, custom_field_definition: CustomFieldDefinitionJson) -> Self {
+        Self { client, custom_field_definition }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/field".to_owned());
 
-        let body = match serde_json::to_value(&self.custom_field_definition_json)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.custom_field_definition)?));
 
         Ok(config)
     }

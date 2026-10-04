@@ -43,8 +43,12 @@ impl<'a> ProjectRoleActorsService<'a> {
     }
 
     /// Adds default actors to the given role. The request data should contain a list of usernames or a list of groups to add.
-    pub fn add_project_role_actors_to_role(&self, id: i64) -> AddProjectRoleActorsToRoleRequest<'a> {
-        AddProjectRoleActorsToRoleRequest::new(self.client, id)
+    pub fn add_project_role_actors_to_role(
+        &self,
+        id: i64,
+        actor_input: ActorInput,
+    ) -> AddProjectRoleActorsToRoleRequest<'a> {
+        AddProjectRoleActorsToRoleRequest::new(self.client, id, actor_input)
     }
 
     /// Removes default actor from the given role.
@@ -250,19 +254,12 @@ impl<'a> GetProjectRoleActorsForRoleRequest<'a> {
 pub struct AddProjectRoleActorsToRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
-    actor_input: Option<ActorInput>,
+    actor_input: ActorInput,
 }
 
 impl<'a> AddProjectRoleActorsToRoleRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self { client, id, actor_input: None }
-    }
-
-    #[must_use]
-    pub fn actor_input(mut self, value: ActorInput) -> Self {
-        self.actor_input = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, id: i64, actor_input: ActorInput) -> Self {
+        Self { client, id, actor_input }
     }
 
     /// The request as the transport will send it.
@@ -270,12 +267,7 @@ impl<'a> AddProjectRoleActorsToRoleRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::POST, format!("/rest/api/2/role/{}/actors", self.id));
 
-        let body = match serde_json::to_value(&self.actor_input)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.actor_input)?));
 
         Ok(config)
     }

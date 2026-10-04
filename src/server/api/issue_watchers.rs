@@ -18,8 +18,8 @@ impl<'a> IssueWatchersService<'a> {
     }
 
     /// Adds a user to an issue's watcher list.
-    pub fn add_watcher(&self, issue_id_or_key: impl Into<String>) -> AddWatcherRequest<'a> {
-        AddWatcherRequest::new(self.client, issue_id_or_key)
+    pub fn add_watcher(&self, issue_id_or_key: impl Into<String>, body: impl Into<String>) -> AddWatcherRequest<'a> {
+        AddWatcherRequest::new(self.client, issue_id_or_key, body)
     }
 
     /// Removes a user from an issue's watcher list.
@@ -67,25 +67,18 @@ pub struct AddWatcherRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
     user_name: Option<String>,
-    body: Option<String>,
+    body: String,
 }
 
 impl<'a> AddWatcherRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), user_name: None, body: None }
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, body: impl Into<String>) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), body: body.into(), user_name: None }
     }
 
     /// The name of the user to add to the watcher list. If no name is specified, the current user is added.
     #[must_use]
     pub fn user_name(mut self, value: impl Into<String>) -> Self {
         self.user_name = Some(value.into());
-
-        self
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: impl Into<String>) -> Self {
-        self.body = Some(value.into());
 
         self
     }

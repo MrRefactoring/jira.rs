@@ -274,8 +274,7 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
 
     let issue = server()
         .issues()
-        .create_issue()
-        .issue_update(IssueUpdate {
+        .create_issue(IssueUpdate {
             fields: Some(
                 [
                     ("project".to_owned(), json!({ "key": project_key })),
@@ -303,8 +302,10 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
 
     server()
         .issue_comments()
-        .add_comment(&issue_key)
-        .comment_json(CommentJson { body: Some("created by the crawl".to_owned()), ..CommentJson::default() })
+        .add_comment(
+            &issue_key,
+            CommentJson { body: Some("created by the crawl".to_owned()), ..CommentJson::default() },
+        )
         .send()
         .await
         .expect("the issue takes a comment");
@@ -336,8 +337,7 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
 
     let filter = server()
         .filters()
-        .create_filter()
-        .filter(Filter {
+        .create_filter(Filter {
             name: Some(test_name("filter")),
             jql: Some(format!("project = {project_key}")),
             description: Some("created by the crawl".to_owned()),
@@ -353,7 +353,7 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
     tracker.defer(move || {
         let id = for_cleanup.clone();
 
-        async move { server().filters().delete_filter(id).send().await }
+        async move { server().filters().delete_filter(id.parse().expect("a filter id is a number")).send().await }
     });
 
     let scheme = server()

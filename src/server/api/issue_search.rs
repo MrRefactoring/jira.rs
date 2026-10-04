@@ -16,19 +16,6 @@ pub enum SearchIssuesRequestExpand {
 
 crate::core::untagged::untagged!(SearchIssuesRequestExpand { One, Many, Other });
 
-/// the list of fields to return for each issue
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum SearchIssuesRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(SearchIssuesRequestFields { One, Many, Other });
-
 /// The IssueSearch operations.
 pub struct IssueSearchService<'a> {
     client: &'a crate::core::Client,
@@ -71,8 +58,8 @@ impl<'a> IssueSearchService<'a> {
     }
 
     /// Performs a search using JQL.
-    pub fn search_issues_post(&self, search_request: SearchRequest) -> SearchIssuesPostRequest<'a> {
-        SearchIssuesPostRequest::new(self.client, search_request)
+    pub fn search_issues_post(&self, search_and_reconcile_request: SearchRequest) -> SearchIssuesPostRequest<'a> {
+        SearchIssuesPostRequest::new(self.client, search_and_reconcile_request)
     }
 
     /// Available since Jira Data Center 11.3.
@@ -88,9 +75,9 @@ pub struct GetIssuePickerResourceRequest<'a> {
     current_project_id: Option<String>,
     query: Option<String>,
     current_issue_key: Option<String>,
-    show_sub_tasks: Option<String>,
+    show_sub_tasks: Option<bool>,
     current_jql: Option<String>,
-    show_sub_task_parent: Option<String>,
+    show_sub_task_parent: Option<bool>,
 }
 
 impl<'a> GetIssuePickerResourceRequest<'a> {
@@ -132,8 +119,8 @@ impl<'a> GetIssuePickerResourceRequest<'a> {
 
     /// if set to false, subtasks will not be included in the list
     #[must_use]
-    pub fn show_sub_tasks(mut self, value: impl Into<String>) -> Self {
-        self.show_sub_tasks = Some(value.into());
+    pub fn show_sub_tasks(mut self, value: bool) -> Self {
+        self.show_sub_tasks = Some(value);
 
         self
     }
@@ -148,8 +135,8 @@ impl<'a> GetIssuePickerResourceRequest<'a> {
 
     /// if set to false and request is executed in context of a subtask, the parent issue will not be included in the auto-completion result, even if it matches the query
     #[must_use]
-    pub fn show_sub_task_parent(mut self, value: impl Into<String>) -> Self {
-        self.show_sub_task_parent = Some(value.into());
+    pub fn show_sub_task_parent(mut self, value: bool) -> Self {
+        self.show_sub_task_parent = Some(value);
 
         self
     }
@@ -172,7 +159,7 @@ impl<'a> GetIssuePickerResourceRequest<'a> {
         }
 
         if let Some(value) = &self.show_sub_tasks {
-            config.query.push(("showSubTasks".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("showSubTasks".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.current_jql {
@@ -180,7 +167,7 @@ impl<'a> GetIssuePickerResourceRequest<'a> {
         }
 
         if let Some(value) = &self.show_sub_task_parent {
-            config.query.push(("showSubTaskParent".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("showSubTaskParent".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
@@ -226,7 +213,7 @@ pub struct SearchIssuesRequest<'a> {
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
-    fields: Option<SearchIssuesRequestFields>,
+    fields: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
@@ -269,8 +256,8 @@ impl<'a> SearchIssuesRequest<'a> {
 
     /// the list of fields to return for each issue
     #[must_use]
-    pub fn fields(mut self, value: SearchIssuesRequestFields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -304,7 +291,7 @@ impl<'a> SearchIssuesRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.start_at {
@@ -345,24 +332,19 @@ impl<'a> SearchIssuesRequest<'a> {
 #[derive(Clone)]
 pub struct SearchIssuesPostRequest<'a> {
     client: &'a crate::core::Client,
-    search_request: SearchRequest,
+    search_and_reconcile_request: SearchRequest,
 }
 
 impl<'a> SearchIssuesPostRequest<'a> {
-    fn new(client: &'a crate::core::Client, search_request: SearchRequest) -> Self {
-        Self { client, search_request }
+    fn new(client: &'a crate::core::Client, search_and_reconcile_request: SearchRequest) -> Self {
+        Self { client, search_and_reconcile_request }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/search".to_owned());
 
-        let body = match serde_json::to_value(&self.search_request)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.search_and_reconcile_request)?));
 
         Ok(config)
     }

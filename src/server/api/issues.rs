@@ -2,6 +2,28 @@
 
 use super::super::models::*;
 
+crate::open_enum! {
+    /// The expand param is used to include, hidden by default, parts of response. This can be used to include: renderedFields, names, schema, transitions, operations, editmeta, changelog, versionedRepresentations.
+    pub enum IssuesGetIssueRequestExpand {
+        RenderedFields => "renderedFields",
+        Names => "names",
+        Schema => "schema",
+        Transitions => "transitions",
+        Operations => "operations",
+        Editmeta => "editmeta",
+        Changelog => "changelog",
+        VersionedRepresentations => "versionedRepresentations",
+    }
+}
+
+crate::open_enum! {
+    /// A String of true or false indicating that any subtasks should also be deleted. If the issue has no subtasks this parameter is ignored. If the issue has subtasks and this parameter is missing or false, then the issue will not be deleted and an error will be returned.
+    pub enum DeleteIssueRequestDeleteSubtasks {
+        True => "true",
+        False => "false",
+    }
+}
+
 /// The Issues operations.
 pub struct IssuesService<'a> {
     client: &'a crate::core::Client,
@@ -21,8 +43,8 @@ impl<'a> IssuesService<'a> {
     /// - you must provide a parent field in the issue create request containing the id or key of the parent issue.
     /// The updateHistory param adds the project that this issue is created in, to the current user's project history, if set to true (by default, the project history is not updated).
     /// You can view the project history in the Jira application, via the Projects dropdown.
-    pub fn create_issue(&self) -> CreateIssueRequest<'a> {
-        CreateIssueRequest::new(self.client)
+    pub fn create_issue(&self, issue_update_details: IssueUpdate) -> CreateIssueRequest<'a> {
+        CreateIssueRequest::new(self.client, issue_update_details)
     }
 
     /// Archives a list of issues.
@@ -32,8 +54,8 @@ impl<'a> IssuesService<'a> {
 
     /// Creates issues or sub-tasks from a JSON representation. Creates many issues in one bulk operation.
     /// Creating a sub-task is similar to creating a regular issue. More details can be found in createIssue section.
-    pub fn create_issues(&self) -> CreateIssuesRequest<'a> {
-        CreateIssuesRequest::new(self.client)
+    pub fn create_issues(&self, issues_update: IssuesUpdate) -> CreateIssuesRequest<'a> {
+        CreateIssuesRequest::new(self.client, issues_update)
     }
 
     /// Returns the metadata for issue types used for creating issues. Data will not be returned if the user does not have permission to create issues in that project.
@@ -47,10 +69,10 @@ impl<'a> IssuesService<'a> {
     /// Returns the metadata for issue types used for creating issues. Data will not be returned if the user does not have permission to create issues in that project.
     pub fn get_create_issue_meta_issue_type_id(
         &self,
-        issue_type_id: impl Into<String>,
         project_id_or_key: impl Into<String>,
+        issue_type_id: impl Into<String>,
     ) -> GetCreateIssueMetaIssueTypeIdRequest<'a> {
-        GetCreateIssueMetaIssueTypeIdRequest::new(self.client, issue_type_id, project_id_or_key)
+        GetCreateIssueMetaIssueTypeIdRequest::new(self.client, project_id_or_key, issue_type_id)
     }
 
     /// Create reciprocal remote issue link from a JSON representation. Jira will create two issue links, source -> target and target -> source.
@@ -108,8 +130,12 @@ impl<'a> IssuesService<'a> {
     }
 
     /// Edits an issue from a JSON representation. The issue can either be updated by setting explicit the field value(s) or by using an operation to change the field value.
-    pub fn edit_issue(&self, issue_id_or_key: impl Into<String>) -> EditIssueRequest<'a> {
-        EditIssueRequest::new(self.client, issue_id_or_key)
+    pub fn edit_issue(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        issue_update_details: IssueUpdate,
+    ) -> EditIssueRequest<'a> {
+        EditIssueRequest::new(self.client, issue_id_or_key, issue_update_details)
     }
 
     /// Deletes an issue. If the issue has subtasks you must set the parameter deleteSubtasks=true to delete the issue. You cannot delete an issue without its subtasks also being deleted.
@@ -123,8 +149,8 @@ impl<'a> IssuesService<'a> {
     }
 
     /// Assign an issue to a user.
-    pub fn assign_issue(&self, issue_id_or_key: impl Into<String>) -> AssignIssueRequest<'a> {
-        AssignIssueRequest::new(self.client, issue_id_or_key)
+    pub fn assign_issue(&self, issue_id_or_key: impl Into<String>, user: User) -> AssignIssueRequest<'a> {
+        AssignIssueRequest::new(self.client, issue_id_or_key, user)
     }
 
     /// Pins a comment to the top of the comment list.
@@ -143,8 +169,8 @@ impl<'a> IssuesService<'a> {
     }
 
     /// Sends a notification (email) to the list or recipients defined in the request.
-    pub fn notify(&self, issue_id_or_key: impl Into<String>) -> NotifyRequest<'a> {
-        NotifyRequest::new(self.client, issue_id_or_key)
+    pub fn notify(&self, issue_id_or_key: impl Into<String>, notification: NotificationJson) -> NotifyRequest<'a> {
+        NotifyRequest::new(self.client, issue_id_or_key, notification)
     }
 
     /// Returns all pinned to the issue comments.
@@ -190,8 +216,12 @@ impl<'a> IssuesService<'a> {
     /// If a field is not configured to appear on the transition screen, then it will not be in the transition metadata, and a field validation error will occur if it is submitted.
     /// The updateHistory param adds the issues retrieved by this method to the current user's issue history, if set to true (by default, the issue history does not include issues retrieved via the REST API).
     /// You can view the issue history in the Jira application, via the Issues dropdown or by using the lastViewed JQL field in an issue search.
-    pub fn do_transition(&self, issue_id_or_key: impl Into<String>) -> DoTransitionRequest<'a> {
-        DoTransitionRequest::new(self.client, issue_id_or_key)
+    pub fn do_transition(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        issue_update_details: IssueUpdate,
+    ) -> DoTransitionRequest<'a> {
+        DoTransitionRequest::new(self.client, issue_id_or_key, issue_update_details)
     }
 }
 
@@ -208,24 +238,17 @@ impl<'a> IssuesService<'a> {
 pub struct CreateIssueRequest<'a> {
     client: &'a crate::core::Client,
     update_history: Option<bool>,
-    issue_update: Option<IssueUpdate>,
+    issue_update_details: IssueUpdate,
 }
 
 impl<'a> CreateIssueRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, update_history: None, issue_update: None }
+    fn new(client: &'a crate::core::Client, issue_update_details: IssueUpdate) -> Self {
+        Self { client, issue_update_details, update_history: None }
     }
 
     #[must_use]
     pub fn update_history(mut self, value: bool) -> Self {
         self.update_history = Some(value);
-
-        self
-    }
-
-    #[must_use]
-    pub fn issue_update(mut self, value: IssueUpdate) -> Self {
-        self.issue_update = Some(value);
 
         self
     }
@@ -238,12 +261,7 @@ impl<'a> CreateIssueRequest<'a> {
             config.query.push(("updateHistory".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
-        let body = match serde_json::to_value(&self.issue_update)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.issue_update_details)?));
 
         Ok(config)
     }
@@ -319,19 +337,12 @@ impl<'a> ArchiveIssuesRequest<'a> {
 #[derive(Clone)]
 pub struct CreateIssuesRequest<'a> {
     client: &'a crate::core::Client,
-    issues_update: Option<IssuesUpdate>,
+    issues_update: IssuesUpdate,
 }
 
 impl<'a> CreateIssuesRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, issues_update: None }
-    }
-
-    #[must_use]
-    pub fn issues_update(mut self, value: IssuesUpdate) -> Self {
-        self.issues_update = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, issues_update: IssuesUpdate) -> Self {
+        Self { client, issues_update }
     }
 
     /// The request as the transport will send it.
@@ -339,12 +350,7 @@ impl<'a> CreateIssuesRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/issue/bulk".to_owned());
 
-        let body = match serde_json::to_value(&self.issues_update)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.issues_update)?));
 
         Ok(config)
     }
@@ -442,8 +448,8 @@ impl<'a> GetCreateIssueMetaIssueTypesRequest<'a> {
 #[derive(Clone)]
 pub struct GetCreateIssueMetaIssueTypeIdRequest<'a> {
     client: &'a crate::core::Client,
-    issue_type_id: String,
     project_id_or_key: String,
+    issue_type_id: String,
     max_results: Option<i64>,
     start_at: Option<i64>,
 }
@@ -451,13 +457,13 @@ pub struct GetCreateIssueMetaIssueTypeIdRequest<'a> {
 impl<'a> GetCreateIssueMetaIssueTypeIdRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
-        issue_type_id: impl Into<String>,
         project_id_or_key: impl Into<String>,
+        issue_type_id: impl Into<String>,
     ) -> Self {
         Self {
             client,
-            issue_type_id: issue_type_id.into(),
             project_id_or_key: project_id_or_key.into(),
+            issue_type_id: issue_type_id.into(),
             max_results: None,
             start_at: None,
         }
@@ -626,10 +632,10 @@ impl<'a> CreateReciprocalRemoteIssueLinkRequest<'a> {
 #[derive(Clone)]
 pub struct IssuesGetIssueRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<IssuesGetIssueRequestExpand>,
     issue_id_or_key: String,
     fields: Option<String>,
-    update_history: Option<String>,
+    update_history: Option<bool>,
     properties: Option<String>,
 }
 
@@ -647,7 +653,7 @@ impl<'a> IssuesGetIssueRequest<'a> {
 
     /// The expand param is used to include, hidden by default, parts of response. This can be used to include: renderedFields, names, schema, transitions, operations, editmeta, changelog, versionedRepresentations.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
+    pub fn expand(mut self, value: impl Into<IssuesGetIssueRequestExpand>) -> Self {
         self.expand = Some(value.into());
 
         self
@@ -663,8 +669,8 @@ impl<'a> IssuesGetIssueRequest<'a> {
 
     /// The updateHistory param adds the issues retrieved by this method to the current user's issue history
     #[must_use]
-    pub fn update_history(mut self, value: impl Into<String>) -> Self {
-        self.update_history = Some(value.into());
+    pub fn update_history(mut self, value: bool) -> Self {
+        self.update_history = Some(value);
 
         self
     }
@@ -685,7 +691,7 @@ impl<'a> IssuesGetIssueRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.fields {
@@ -693,7 +699,7 @@ impl<'a> IssuesGetIssueRequest<'a> {
         }
 
         if let Some(value) = &self.update_history {
-            config.query.push(("updateHistory".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("updateHistory".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.properties {
@@ -719,26 +725,23 @@ impl<'a> IssuesGetIssueRequest<'a> {
 pub struct EditIssueRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    notify_users: Option<String>,
-    issue_update: Option<IssueUpdate>,
+    notify_users: Option<bool>,
+    issue_update_details: IssueUpdate,
 }
 
 impl<'a> EditIssueRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), notify_users: None, issue_update: None }
+    fn new(
+        client: &'a crate::core::Client,
+        issue_id_or_key: impl Into<String>,
+        issue_update_details: IssueUpdate,
+    ) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), issue_update_details, notify_users: None }
     }
 
     /// Send the email with notification that the issue was updated to users that watch it. Admin or project admin permissions are required to disable the notification.
     #[must_use]
-    pub fn notify_users(mut self, value: impl Into<String>) -> Self {
-        self.notify_users = Some(value.into());
-
-        self
-    }
-
-    #[must_use]
-    pub fn issue_update(mut self, value: IssueUpdate) -> Self {
-        self.issue_update = Some(value);
+    pub fn notify_users(mut self, value: bool) -> Self {
+        self.notify_users = Some(value);
 
         self
     }
@@ -751,15 +754,10 @@ impl<'a> EditIssueRequest<'a> {
         );
 
         if let Some(value) = &self.notify_users {
-            config.query.push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
-        let body = match serde_json::to_value(&self.issue_update)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.issue_update_details)?));
 
         Ok(config)
     }
@@ -779,7 +777,7 @@ impl<'a> EditIssueRequest<'a> {
 #[derive(Clone)]
 pub struct DeleteIssueRequest<'a> {
     client: &'a crate::core::Client,
-    delete_subtasks: Option<String>,
+    delete_subtasks: Option<DeleteIssueRequestDeleteSubtasks>,
     issue_id_or_key: String,
 }
 
@@ -790,7 +788,7 @@ impl<'a> DeleteIssueRequest<'a> {
 
     /// A String of true or false indicating that any subtasks should also be deleted. If the issue has no subtasks this parameter is ignored. If the issue has subtasks and this parameter is missing or false, then the issue will not be deleted and an error will be returned.
     #[must_use]
-    pub fn delete_subtasks(mut self, value: impl Into<String>) -> Self {
+    pub fn delete_subtasks(mut self, value: impl Into<DeleteIssueRequestDeleteSubtasks>) -> Self {
         self.delete_subtasks = Some(value.into());
 
         self
@@ -804,7 +802,7 @@ impl<'a> DeleteIssueRequest<'a> {
         );
 
         if let Some(value) = &self.delete_subtasks {
-            config.query.push(("deleteSubtasks".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("deleteSubtasks".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -872,19 +870,12 @@ impl<'a> ArchiveIssueRequest<'a> {
 pub struct AssignIssueRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    user: Option<User>,
+    user: User,
 }
 
 impl<'a> AssignIssueRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), user: None }
-    }
-
-    #[must_use]
-    pub fn user(mut self, value: User) -> Self {
-        self.user = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, user: User) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), user }
     }
 
     /// The request as the transport will send it.
@@ -894,12 +885,7 @@ impl<'a> AssignIssueRequest<'a> {
             format!("/rest/api/2/issue/{}/assignee", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
-        let body = match serde_json::to_value(&self.user)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.user)?));
 
         Ok(config)
     }
@@ -999,19 +985,16 @@ impl<'a> GetEditIssueMetaRequest<'a> {
 pub struct NotifyRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    notification_json: Option<NotificationJson>,
+    notification: NotificationJson,
 }
 
 impl<'a> NotifyRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), notification_json: None }
-    }
-
-    #[must_use]
-    pub fn notification_json(mut self, value: NotificationJson) -> Self {
-        self.notification_json = Some(value);
-
-        self
+    fn new(
+        client: &'a crate::core::Client,
+        issue_id_or_key: impl Into<String>,
+        notification: NotificationJson,
+    ) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), notification }
     }
 
     /// The request as the transport will send it.
@@ -1021,12 +1004,7 @@ impl<'a> NotifyRequest<'a> {
             format!("/rest/api/2/issue/{}/notify", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
-        let body = match serde_json::to_value(&self.notification_json)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.notification)?));
 
         Ok(config)
     }
@@ -1291,19 +1269,16 @@ impl<'a> GetTransitionsRequest<'a> {
 pub struct DoTransitionRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    issue_update: Option<IssueUpdate>,
+    issue_update_details: IssueUpdate,
 }
 
 impl<'a> DoTransitionRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), issue_update: None }
-    }
-
-    #[must_use]
-    pub fn issue_update(mut self, value: IssueUpdate) -> Self {
-        self.issue_update = Some(value);
-
-        self
+    fn new(
+        client: &'a crate::core::Client,
+        issue_id_or_key: impl Into<String>,
+        issue_update_details: IssueUpdate,
+    ) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), issue_update_details }
     }
 
     /// The request as the transport will send it.
@@ -1313,12 +1288,7 @@ impl<'a> DoTransitionRequest<'a> {
             format!("/rest/api/2/issue/{}/transitions", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
-        let body = match serde_json::to_value(&self.issue_update)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.issue_update_details)?));
 
         Ok(config)
     }

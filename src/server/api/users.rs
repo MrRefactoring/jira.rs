@@ -1,6 +1,15 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetUserColumnsRequestUserColumnRequestBody {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub username: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub columns: Option<Vec<String>>,
+}
 
 /// The Users operations.
 pub struct UsersService<'a> {
@@ -18,8 +27,8 @@ impl<'a> UsersService<'a> {
     }
 
     /// Create user. By default created user will not be notified with email. If password field is not set then password will be randomly generated.
-    pub fn create_user(&self, user_write: UserWrite) -> CreateUserRequest<'a> {
-        CreateUserRequest::new(self.client, user_write)
+    pub fn create_user(&self, new_user_details: UserWrite) -> CreateUserRequest<'a> {
+        CreateUserRequest::new(self.client, new_user_details)
     }
 
     /// Modify user. The 'value' fields present will override the existing value. Fields skipped in request will not be changed.
@@ -125,8 +134,11 @@ impl<'a> UsersService<'a> {
     }
 
     /// Sets the default columns for the given user. Admin permission will be required to get columns for a user other than the currently logged in user.
-    pub fn set_user_columns(&self) -> SetUserColumnsRequest<'a> {
-        SetUserColumnsRequest::new(self.client)
+    pub fn set_user_columns(
+        &self,
+        user_column_request_body: SetUserColumnsRequestUserColumnRequestBody,
+    ) -> SetUserColumnsRequest<'a> {
+        SetUserColumnsRequest::new(self.client, user_column_request_body)
     }
 
     /// Reset the default columns for the given user to the system default. Admin permission will be required to get columns for a user other than the currently logged in user.
@@ -255,24 +267,19 @@ impl<'a> GetUserRequest<'a> {
 #[derive(Clone)]
 pub struct CreateUserRequest<'a> {
     client: &'a crate::core::Client,
-    user_write: UserWrite,
+    new_user_details: UserWrite,
 }
 
 impl<'a> CreateUserRequest<'a> {
-    fn new(client: &'a crate::core::Client, user_write: UserWrite) -> Self {
-        Self { client, user_write }
+    fn new(client: &'a crate::core::Client, new_user_details: UserWrite) -> Self {
+        Self { client, new_user_details }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/user".to_owned());
 
-        let body = match serde_json::to_value(&self.user_write)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.new_user_details)?));
 
         Ok(config)
     }
@@ -1143,27 +1150,15 @@ impl<'a> GetUserDefaultColumnsRequest<'a> {
 #[derive(Clone)]
 pub struct SetUserColumnsRequest<'a> {
     client: &'a crate::core::Client,
-    username: Option<String>,
-    columns: Option<Vec<String>>,
+    user_column_request_body: SetUserColumnsRequestUserColumnRequestBody,
 }
 
 impl<'a> SetUserColumnsRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, username: None, columns: None }
-    }
-
-    #[must_use]
-    pub fn username(mut self, value: impl Into<String>) -> Self {
-        self.username = Some(value.into());
-
-        self
-    }
-
-    #[must_use]
-    pub fn columns(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
-        self.columns = Some(value.into_iter().map(Into::into).collect());
-
-        self
+    fn new(
+        client: &'a crate::core::Client,
+        user_column_request_body: SetUserColumnsRequestUserColumnRequestBody,
+    ) -> Self {
+        Self { client, user_column_request_body }
     }
 
     /// The request as the transport will send it.
@@ -1171,17 +1166,7 @@ impl<'a> SetUserColumnsRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::PUT, "/rest/api/2/user/columns".to_owned());
 
-        let mut body = serde_json::Map::new();
-
-        if let Some(value) = &self.username {
-            body.insert("username".to_owned(), serde_json::to_value(value)?);
-        }
-
-        if let Some(value) = &self.columns {
-            body.insert("columns".to_owned(), serde_json::to_value(value)?);
-        }
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.user_column_request_body)?));
 
         config.content_type = Some("application/x-www-form-urlencoded".to_owned());
 

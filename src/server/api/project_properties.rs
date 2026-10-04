@@ -20,29 +20,29 @@ impl<'a> ProjectPropertiesService<'a> {
     /// Returns the value of the property with a given key from the project identified by the key or by the id.
     pub fn get_project_property(
         &self,
-        property_key: impl Into<String>,
         project_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
     ) -> GetProjectPropertyRequest<'a> {
-        GetProjectPropertyRequest::new(self.client, property_key, project_id_or_key)
+        GetProjectPropertyRequest::new(self.client, project_id_or_key, property_key)
     }
 
     /// Sets the value of the specified project's property. You can use this resource to store a custom data against the project identified by the key or by the id. The user who stores the data is required to have permissions to administer the project.
     pub fn set_project_property(
         &self,
-        property_key: impl Into<String>,
         project_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> SetProjectPropertyRequest<'a> {
-        SetProjectPropertyRequest::new(self.client, property_key, project_id_or_key, body)
+        SetProjectPropertyRequest::new(self.client, project_id_or_key, property_key, body)
     }
 
     /// Removes the property from the project identified by the key or by the id.
     pub fn delete_project_property(
         &self,
-        property_key: impl Into<String>,
         project_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
     ) -> DeleteProjectPropertyRequest<'a> {
-        DeleteProjectPropertyRequest::new(self.client, property_key, project_id_or_key)
+        DeleteProjectPropertyRequest::new(self.client, project_id_or_key, property_key)
     }
 }
 
@@ -83,17 +83,17 @@ impl<'a> GetProjectPropertyKeysRequest<'a> {
 #[derive(Clone)]
 pub struct GetProjectPropertyRequest<'a> {
     client: &'a crate::core::Client,
-    property_key: String,
     project_id_or_key: String,
+    property_key: String,
 }
 
 impl<'a> GetProjectPropertyRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
-        property_key: impl Into<String>,
         project_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
     ) -> Self {
-        Self { client, property_key: property_key.into(), project_id_or_key: project_id_or_key.into() }
+        Self { client, project_id_or_key: project_id_or_key.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -125,19 +125,19 @@ impl<'a> GetProjectPropertyRequest<'a> {
 #[derive(Clone)]
 pub struct SetProjectPropertyRequest<'a> {
     client: &'a crate::core::Client,
-    property_key: String,
     project_id_or_key: String,
+    property_key: String,
     body: std::collections::HashMap<String, serde_json::Value>,
 }
 
 impl<'a> SetProjectPropertyRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
-        property_key: impl Into<String>,
         project_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self { client, property_key: property_key.into(), project_id_or_key: project_id_or_key.into(), body }
+        Self { client, project_id_or_key: project_id_or_key.into(), property_key: property_key.into(), body }
     }
 
     /// The request as the transport will send it.
@@ -171,17 +171,17 @@ impl<'a> SetProjectPropertyRequest<'a> {
 #[derive(Clone)]
 pub struct DeleteProjectPropertyRequest<'a> {
     client: &'a crate::core::Client,
-    property_key: String,
     project_id_or_key: String,
+    property_key: String,
 }
 
 impl<'a> DeleteProjectPropertyRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
-        property_key: impl Into<String>,
         project_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
     ) -> Self {
-        Self { client, property_key: property_key.into(), project_id_or_key: project_id_or_key.into() }
+        Self { client, project_id_or_key: project_id_or_key.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.

@@ -5606,20 +5606,20 @@
   {
     "surface": "server",
     "method": "DELETE",
-    "path": "/rest/api/2/issuetypescheme/{schemeId}",
+    "path": "/rest/api/2/issuetypescheme/{issueTypeSchemeId}",
     "operation": "deleteIssueTypeScheme"
+  },
+  {
+    "surface": "server",
+    "method": "PUT",
+    "path": "/rest/api/2/issuetypescheme/{issueTypeSchemeId}",
+    "operation": "updateIssueTypeScheme"
   },
   {
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/issuetypescheme/{schemeId}",
     "operation": "getIssueTypeScheme"
-  },
-  {
-    "surface": "server",
-    "method": "PUT",
-    "path": "/rest/api/2/issuetypescheme/{schemeId}",
-    "operation": "updateIssueTypeScheme"
   },
   {
     "surface": "server",
@@ -6494,7 +6494,7 @@
   {
     "surface": "server",
     "method": "GET",
-    "path": "/rest/api/2/universal_avatar/type/{type}/owner/{owningObjectId}",
+    "path": "/rest/api/2/universal_avatar/type/{type}/owner/{entityId}",
     "operation": "getAvatars"
   },
   {

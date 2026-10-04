@@ -18,35 +18,31 @@ impl<'a> FilterSharingService<'a> {
     }
 
     /// Sets the default share scope of the logged-in user. Available values are: AUTHENTICATED (for sharing with all logged-in users) and PRIVATE (for no shares).
-    pub fn set_default_share_scope(&self) -> SetDefaultShareScopeRequest<'a> {
-        SetDefaultShareScopeRequest::new(self.client)
+    pub fn set_default_share_scope(&self, default_share_scope: DefaultShareScope) -> SetDefaultShareScopeRequest<'a> {
+        SetDefaultShareScopeRequest::new(self.client, default_share_scope)
     }
 
     /// Returns all share permissions of the given filter
-    pub fn get_share_permissions(&self, id: impl Into<String>) -> GetSharePermissionsRequest<'a> {
+    pub fn get_share_permissions(&self, id: i64) -> GetSharePermissionsRequest<'a> {
         GetSharePermissionsRequest::new(self.client, id)
     }
 
     /// Adds a share permissions to the given filter. Adding a global permission removes all previous permissions from the filter
-    pub fn add_share_permission(&self, id: impl Into<String>) -> AddSharePermissionRequest<'a> {
-        AddSharePermissionRequest::new(self.client, id)
+    pub fn add_share_permission(
+        &self,
+        id: i64,
+        share_permission_input: SharePermissionInput,
+    ) -> AddSharePermissionRequest<'a> {
+        AddSharePermissionRequest::new(self.client, id, share_permission_input)
     }
 
     /// Returns a single share permission of the given filter
-    pub fn get_share_permission(
-        &self,
-        permission_id: impl Into<String>,
-        id: impl Into<String>,
-    ) -> GetSharePermissionRequest<'a> {
-        GetSharePermissionRequest::new(self.client, permission_id, id)
+    pub fn get_share_permission(&self, id: i64, permission_id: i64) -> GetSharePermissionRequest<'a> {
+        GetSharePermissionRequest::new(self.client, id, permission_id)
     }
 
     /// Removes a share permissions from the given filter
-    pub fn delete_share_permission(
-        &self,
-        id: impl Into<String>,
-        permission_id: impl Into<String>,
-    ) -> DeleteSharePermissionRequest<'a> {
+    pub fn delete_share_permission(&self, id: i64, permission_id: i64) -> DeleteSharePermissionRequest<'a> {
         DeleteSharePermissionRequest::new(self.client, id, permission_id)
     }
 }
@@ -87,19 +83,12 @@ impl<'a> GetDefaultShareScopeRequest<'a> {
 #[derive(Clone)]
 pub struct SetDefaultShareScopeRequest<'a> {
     client: &'a crate::core::Client,
-    default_share_scope: Option<DefaultShareScope>,
+    default_share_scope: DefaultShareScope,
 }
 
 impl<'a> SetDefaultShareScopeRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, default_share_scope: None }
-    }
-
-    #[must_use]
-    pub fn default_share_scope(mut self, value: DefaultShareScope) -> Self {
-        self.default_share_scope = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, default_share_scope: DefaultShareScope) -> Self {
+        Self { client, default_share_scope }
     }
 
     /// The request as the transport will send it.
@@ -109,12 +98,7 @@ impl<'a> SetDefaultShareScopeRequest<'a> {
             "/rest/api/2/filter/defaultShareScope".to_owned(),
         );
 
-        let body = match serde_json::to_value(&self.default_share_scope)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.default_share_scope)?));
 
         Ok(config)
     }
@@ -134,19 +118,19 @@ impl<'a> SetDefaultShareScopeRequest<'a> {
 #[derive(Clone)]
 pub struct GetSharePermissionsRequest<'a> {
     client: &'a crate::core::Client,
-    id: String,
+    id: i64,
 }
 
 impl<'a> GetSharePermissionsRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self { client, id: id.into() }
+    fn new(client: &'a crate::core::Client, id: i64) -> Self {
+        Self { client, id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/filter/{}/permission", crate::core::encode_path_segment(&self.id)),
+            format!("/rest/api/2/filter/{}/permission", self.id),
         );
 
         Ok(config)
@@ -167,35 +151,23 @@ impl<'a> GetSharePermissionsRequest<'a> {
 #[derive(Clone)]
 pub struct AddSharePermissionRequest<'a> {
     client: &'a crate::core::Client,
-    id: String,
-    share_permission_input: Option<SharePermissionInput>,
+    id: i64,
+    share_permission_input: SharePermissionInput,
 }
 
 impl<'a> AddSharePermissionRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self { client, id: id.into(), share_permission_input: None }
-    }
-
-    #[must_use]
-    pub fn share_permission_input(mut self, value: SharePermissionInput) -> Self {
-        self.share_permission_input = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, id: i64, share_permission_input: SharePermissionInput) -> Self {
+        Self { client, id, share_permission_input }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::POST,
-            format!("/rest/api/2/filter/{}/permission", crate::core::encode_path_segment(&self.id)),
+            format!("/rest/api/2/filter/{}/permission", self.id),
         );
 
-        let body = match serde_json::to_value(&self.share_permission_input)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.share_permission_input)?));
 
         Ok(config)
     }
@@ -215,24 +187,20 @@ impl<'a> AddSharePermissionRequest<'a> {
 #[derive(Clone)]
 pub struct GetSharePermissionRequest<'a> {
     client: &'a crate::core::Client,
-    permission_id: String,
-    id: String,
+    id: i64,
+    permission_id: i64,
 }
 
 impl<'a> GetSharePermissionRequest<'a> {
-    fn new(client: &'a crate::core::Client, permission_id: impl Into<String>, id: impl Into<String>) -> Self {
-        Self { client, permission_id: permission_id.into(), id: id.into() }
+    fn new(client: &'a crate::core::Client, id: i64, permission_id: i64) -> Self {
+        Self { client, id, permission_id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!(
-                "/rest/api/2/filter/{}/permission/{}",
-                crate::core::encode_path_segment(&self.id),
-                crate::core::encode_path_segment(&self.permission_id)
-            ),
+            format!("/rest/api/2/filter/{}/permission/{}", self.id, self.permission_id),
         );
 
         Ok(config)
@@ -253,24 +221,20 @@ impl<'a> GetSharePermissionRequest<'a> {
 #[derive(Clone)]
 pub struct DeleteSharePermissionRequest<'a> {
     client: &'a crate::core::Client,
-    id: String,
-    permission_id: String,
+    id: i64,
+    permission_id: i64,
 }
 
 impl<'a> DeleteSharePermissionRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: impl Into<String>, permission_id: impl Into<String>) -> Self {
-        Self { client, id: id.into(), permission_id: permission_id.into() }
+    fn new(client: &'a crate::core::Client, id: i64, permission_id: i64) -> Self {
+        Self { client, id, permission_id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!(
-                "/rest/api/2/filter/{}/permission/{}",
-                crate::core::encode_path_segment(&self.id),
-                crate::core::encode_path_segment(&self.permission_id)
-            ),
+            format!("/rest/api/2/filter/{}/permission/{}", self.id, self.permission_id),
         );
 
         Ok(config)

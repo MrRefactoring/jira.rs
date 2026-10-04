@@ -13,8 +13,8 @@ impl<'a> ProjectComponentsService<'a> {
     }
 
     /// Create a component via POST.
-    pub fn create_component(&self) -> CreateComponentRequest<'a> {
-        CreateComponentRequest::new(self.client)
+    pub fn create_component(&self, project_component: Component) -> CreateComponentRequest<'a> {
+        CreateComponentRequest::new(self.client, project_component)
     }
 
     /// Returns paginated list of filtered active components
@@ -28,8 +28,8 @@ impl<'a> ProjectComponentsService<'a> {
     }
 
     /// Modify a component via PUT. Any fields present in the PUT will override existing values. As a convenience, if a field is not present, it is silently ignored.
-    pub fn update_component(&self, id: impl Into<String>) -> UpdateComponentRequest<'a> {
-        UpdateComponentRequest::new(self.client, id)
+    pub fn update_component(&self, id: impl Into<String>, body: Component) -> UpdateComponentRequest<'a> {
+        UpdateComponentRequest::new(self.client, id, body)
     }
 
     /// Delete a project component.
@@ -52,31 +52,19 @@ impl<'a> ProjectComponentsService<'a> {
 #[derive(Clone)]
 pub struct CreateComponentRequest<'a> {
     client: &'a crate::core::Client,
-    component: Option<Component>,
+    project_component: Component,
 }
 
 impl<'a> CreateComponentRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, component: None }
-    }
-
-    #[must_use]
-    pub fn component(mut self, value: Component) -> Self {
-        self.component = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, project_component: Component) -> Self {
+        Self { client, project_component }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/component".to_owned());
 
-        let body = match serde_json::to_value(&self.component)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.project_component)?));
 
         Ok(config)
     }
@@ -237,19 +225,12 @@ impl<'a> GetComponentRequest<'a> {
 pub struct UpdateComponentRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
-    body: Option<Component>,
+    body: Component,
 }
 
 impl<'a> UpdateComponentRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self { client, id: id.into(), body: None }
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: Component) -> Self {
-        self.body = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, id: impl Into<String>, body: Component) -> Self {
+        Self { client, id: id.into(), body }
     }
 
     /// The request as the transport will send it.

@@ -22,11 +22,10 @@ async fn creates_a_board_over_a_filter_of_its_own() {
 
     server()
         .filter_sharing()
-        .add_share_permission(&filter_id)
-        .share_permission_input(SharePermissionInput {
-            r#type: Some("authenticated".to_owned()),
-            ..SharePermissionInput::default()
-        })
+        .add_share_permission(
+            filter_id.parse().expect("a filter id is a number"),
+            SharePermissionInput { r#type: Some("authenticated".to_owned()), ..SharePermissionInput::default() },
+        )
         .send()
         .await
         .expect("the filter can be shared with everyone signed in");
@@ -82,17 +81,26 @@ async fn reads_the_board_the_template_made() {
 
     server()
         .board()
-        .set_board_property("suite", board_id, property_body())
+        .set_board_property(board_id.to_string(), "suite", property_body())
         .send_raw()
         .await
         .expect("a board takes a property of the caller's own");
 
-    let property =
-        server().board().get_board_property("suite", board_id).send().await.expect("the property reads back");
+    let property = server()
+        .board()
+        .get_board_property(board_id.to_string(), "suite")
+        .send()
+        .await
+        .expect("the property reads back");
 
     assert_eq!(property.value, Some(property_value()), "the value survives the round trip untouched");
 
-    server().board().delete_board_property("suite", board_id).send().await.expect("the property can be removed");
+    server()
+        .board()
+        .delete_board_property(board_id.to_string(), "suite")
+        .send()
+        .await
+        .expect("the property can be removed");
 
     touch(server().board().set_refined_velocity(board_id, BooleanSetting { value: Some(true) }).send().await);
 
@@ -173,23 +181,30 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
 
     server()
         .sprint()
-        .set_property("suite", sprint_id, property_body())
+        .set_property(sprint_id.to_string(), "suite", property_body())
         .send()
         .await
         .expect("a sprint takes a property of the caller's own");
 
-    let property = server().sprint().get_property("suite", sprint_id).send().await.expect("the property reads back");
+    let property =
+        server().sprint().get_property(sprint_id.to_string(), "suite").send().await.expect("the property reads back");
 
     assert_eq!(property.value, Some(property_value()), "the value survives the round trip untouched");
 
-    let keys = server().sprint().get_properties_keys(sprint_id).send().await.expect("the property keys read");
+    let keys =
+        server().sprint().get_properties_keys(sprint_id.to_string()).send().await.expect("the property keys read");
 
     assert!(
         keys.keys.iter().flatten().any(|entry| entry.key.as_deref() == Some("suite")),
         "the key just written is in the listing",
     );
 
-    server().sprint().delete_property("suite", sprint_id).send().await.expect("the property can be removed");
+    server()
+        .sprint()
+        .delete_property(sprint_id.to_string(), "suite")
+        .send()
+        .await
+        .expect("the property can be removed");
 
     let renamed = test_name("spr2");
 

@@ -27,8 +27,11 @@ impl<'a> UserSearchService<'a> {
     }
 
     /// Returns a list of users that match the search string and can be assigned issues for all the given projects.
-    pub fn find_bulk_assignable_users(&self) -> FindBulkAssignableUsersRequest<'a> {
-        FindBulkAssignableUsersRequest::new(self.client)
+    pub fn find_bulk_assignable_users(
+        &self,
+        project_keys: FindBulkAssignableUsersRequestProjectKeys,
+    ) -> FindBulkAssignableUsersRequest<'a> {
+        FindBulkAssignableUsersRequest::new(self.client, project_keys)
     }
 
     /// Returns a list of users that match the search string. This resource cannot be accessed anonymously. Please note that this resource should be called with an issue key when a list of assignable users is retrieved. For create only a project key should be supplied. The list of assignable users may be incorrect if it's called with the project key for editing.
@@ -37,8 +40,8 @@ impl<'a> UserSearchService<'a> {
     }
 
     /// Returns a list of users matching query with highlighting.
-    pub fn find_users_for_picker(&self) -> FindUsersForPickerRequest<'a> {
-        FindUsersForPickerRequest::new(self.client)
+    pub fn find_users_for_picker(&self, query: impl Into<String>) -> FindUsersForPickerRequest<'a> {
+        FindUsersForPickerRequest::new(self.client, query)
     }
 
     /// Finds users.
@@ -57,27 +60,19 @@ impl<'a> UserSearchService<'a> {
 pub struct FindBulkAssignableUsersRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<i64>,
-    project_keys: Option<FindBulkAssignableUsersRequestProjectKeys>,
+    project_keys: FindBulkAssignableUsersRequestProjectKeys,
     username: Option<String>,
 }
 
 impl<'a> FindBulkAssignableUsersRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, max_results: None, project_keys: None, username: None }
+    fn new(client: &'a crate::core::Client, project_keys: FindBulkAssignableUsersRequestProjectKeys) -> Self {
+        Self { client, project_keys, max_results: None, username: None }
     }
 
     /// The maximum number of users to return (defaults to 50). The maximum allowed value is 100 (The combination of maxResults and startAt is limited to the first 100 results). If you specify a value that is higher than this number, your search results will be truncated. If you send a request with startAt=98 and maxResults=20, it will only return 2 users.
     #[must_use]
     pub fn max_results(mut self, value: i64) -> Self {
         self.max_results = Some(value);
-
-        self
-    }
-
-    /// the keys of the projects we are finding assignable users for, comma-separated
-    #[must_use]
-    pub fn project_keys(mut self, value: FindBulkAssignableUsersRequestProjectKeys) -> Self {
-        self.project_keys = Some(value);
 
         self
     }
@@ -101,9 +96,7 @@ impl<'a> FindBulkAssignableUsersRequest<'a> {
             config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
-        if let Some(value) = &self.project_keys {
-            config.query.push(("projectKeys".to_owned(), crate::core::QueryValue::from_serializable(value)?));
-        }
+        config.query.push(("projectKeys".to_owned(), crate::core::QueryValue::from_serializable(&self.project_keys)?));
 
         if let Some(value) = &self.username {
             config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
@@ -221,28 +214,20 @@ impl<'a> FindAssignableUsersRequest<'a> {
 pub struct FindUsersForPickerRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<i64>,
-    query: Option<String>,
+    query: String,
     exclude: Option<Vec<String>>,
     show_avatar: Option<bool>,
 }
 
 impl<'a> FindUsersForPickerRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, max_results: None, query: None, exclude: None, show_avatar: None }
+    fn new(client: &'a crate::core::Client, query: impl Into<String>) -> Self {
+        Self { client, query: query.into(), max_results: None, exclude: None, show_avatar: None }
     }
 
     /// The maximum number of users to return (defaults to 50). The maximum allowed value is 100 (The combination of maxResults and startAt is limited to the first 100 results). If you specify a value that is higher than this number, your search results will be truncated. If you send a request with startAt=98 and maxResults=20, it will only return 2 users.
     #[must_use]
     pub fn max_results(mut self, value: i64) -> Self {
         self.max_results = Some(value);
-
-        self
-    }
-
-    /// A string used to search username, Name or e-mail address
-    #[must_use]
-    pub fn query(mut self, value: impl Into<String>) -> Self {
-        self.query = Some(value.into());
 
         self
     }
@@ -272,9 +257,7 @@ impl<'a> FindUsersForPickerRequest<'a> {
             config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
-        if let Some(value) = &self.query {
-            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
+        config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(self.query.clone())));
 
         if let Some(value) = &self.exclude {
             config.query.push(("exclude".to_owned(), crate::core::QueryValue::List(value.clone())));

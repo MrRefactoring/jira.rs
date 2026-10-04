@@ -2,6 +2,16 @@
 
 use super::super::models::*;
 
+crate::open_enum! {
+    /// Optional information to be expanded in the response: group, user, projectRole or field.
+    pub enum GetNotificationSchemeForProjectRequestExpand {
+        Group => "group",
+        User => "user",
+        ProjectRole => "projectRole",
+        Field => "field",
+    }
+}
+
 /// The Projects operations.
 pub struct ProjectsService<'a> {
     client: &'a crate::core::Client,
@@ -31,9 +41,9 @@ impl<'a> ProjectsService<'a> {
     pub fn update_project(
         &self,
         project_id_or_key: impl Into<String>,
-        project_update: ProjectUpdate,
+        update_project_details: ProjectUpdate,
     ) -> UpdateProjectRequest<'a> {
-        UpdateProjectRequest::new(self.client, project_id_or_key, project_update)
+        UpdateProjectRequest::new(self.client, project_id_or_key, update_project_details)
     }
 
     /// Deletes a project
@@ -116,10 +126,10 @@ impl<'a> ProjectsService<'a> {
     /// Unassigns project from priority scheme. Operation will fail for defualt priority scheme, project is not found or project is not associated with provided priority scheme. All project keys associated with the priority scheme will only be returned if additional query parameter is provided expand=projectKeys.
     pub fn unassign_priority_scheme(
         &self,
-        scheme_id: i64,
         project_key_or_id: impl Into<String>,
+        scheme_id: i64,
     ) -> UnassignPrioritySchemeRequest<'a> {
-        UnassignPrioritySchemeRequest::new(self.client, scheme_id, project_key_or_id)
+        UnassignPrioritySchemeRequest::new(self.client, project_key_or_id, scheme_id)
     }
 
     /// Returns the workflow scheme that is associated with requested project.
@@ -327,16 +337,16 @@ pub struct UpdateProjectRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<String>,
     project_id_or_key: String,
-    project_update: ProjectUpdate,
+    update_project_details: ProjectUpdate,
 }
 
 impl<'a> UpdateProjectRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
         project_id_or_key: impl Into<String>,
-        project_update: ProjectUpdate,
+        update_project_details: ProjectUpdate,
     ) -> Self {
-        Self { client, project_id_or_key: project_id_or_key.into(), project_update, expand: None }
+        Self { client, project_id_or_key: project_id_or_key.into(), update_project_details, expand: None }
     }
 
     /// Parameters to expand
@@ -358,12 +368,7 @@ impl<'a> UpdateProjectRequest<'a> {
             config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
-        let body = match serde_json::to_value(&self.project_update)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.update_project_details)?));
 
         Ok(config)
     }
@@ -669,7 +674,7 @@ impl<'a> UpdateProjectTypeRequest<'a> {
 #[derive(Clone)]
 pub struct GetNotificationSchemeForProjectRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<GetNotificationSchemeForProjectRequestExpand>,
     project_key_or_id: String,
 }
 
@@ -680,7 +685,7 @@ impl<'a> GetNotificationSchemeForProjectRequest<'a> {
 
     /// Optional information to be expanded in the response: group, user, projectRole or field.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
+    pub fn expand(mut self, value: impl Into<GetNotificationSchemeForProjectRequestExpand>) -> Self {
         self.expand = Some(value.into());
 
         self
@@ -697,7 +702,7 @@ impl<'a> GetNotificationSchemeForProjectRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -792,13 +797,13 @@ impl<'a> AssignPrioritySchemeRequest<'a> {
 #[derive(Clone)]
 pub struct UnassignPrioritySchemeRequest<'a> {
     client: &'a crate::core::Client,
-    scheme_id: i64,
     project_key_or_id: String,
+    scheme_id: i64,
 }
 
 impl<'a> UnassignPrioritySchemeRequest<'a> {
-    fn new(client: &'a crate::core::Client, scheme_id: i64, project_key_or_id: impl Into<String>) -> Self {
-        Self { client, scheme_id, project_key_or_id: project_key_or_id.into() }
+    fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>, scheme_id: i64) -> Self {
+        Self { client, project_key_or_id: project_key_or_id.into(), scheme_id }
     }
 
     /// The request as the transport will send it.

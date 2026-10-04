@@ -20,29 +20,29 @@ impl<'a> IssuePropertiesService<'a> {
     /// Returns the value of the property with a given key from the issue identified by the key or by the id.
     pub fn get_issue_property(
         &self,
-        property_key: impl Into<String>,
         issue_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
     ) -> GetIssuePropertyRequest<'a> {
-        GetIssuePropertyRequest::new(self.client, property_key, issue_id_or_key)
+        GetIssuePropertyRequest::new(self.client, issue_id_or_key, property_key)
     }
 
     /// Sets the value of the specified issue's property.
     pub fn set_issue_property(
         &self,
-        property_key: impl Into<String>,
         issue_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> SetIssuePropertyRequest<'a> {
-        SetIssuePropertyRequest::new(self.client, property_key, issue_id_or_key, body)
+        SetIssuePropertyRequest::new(self.client, issue_id_or_key, property_key, body)
     }
 
     /// Removes the property from the issue identified by the key or by the id.
     pub fn delete_issue_property(
         &self,
-        property_key: impl Into<String>,
         issue_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
     ) -> DeleteIssuePropertyRequest<'a> {
-        DeleteIssuePropertyRequest::new(self.client, property_key, issue_id_or_key)
+        DeleteIssuePropertyRequest::new(self.client, issue_id_or_key, property_key)
     }
 }
 
@@ -83,17 +83,17 @@ impl<'a> GetIssuePropertyKeysRequest<'a> {
 #[derive(Clone)]
 pub struct GetIssuePropertyRequest<'a> {
     client: &'a crate::core::Client,
-    property_key: String,
     issue_id_or_key: String,
+    property_key: String,
 }
 
 impl<'a> GetIssuePropertyRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
-        property_key: impl Into<String>,
         issue_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
     ) -> Self {
-        Self { client, property_key: property_key.into(), issue_id_or_key: issue_id_or_key.into() }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -125,19 +125,19 @@ impl<'a> GetIssuePropertyRequest<'a> {
 #[derive(Clone)]
 pub struct SetIssuePropertyRequest<'a> {
     client: &'a crate::core::Client,
-    property_key: String,
     issue_id_or_key: String,
+    property_key: String,
     body: std::collections::HashMap<String, serde_json::Value>,
 }
 
 impl<'a> SetIssuePropertyRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
-        property_key: impl Into<String>,
         issue_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self { client, property_key: property_key.into(), issue_id_or_key: issue_id_or_key.into(), body }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), property_key: property_key.into(), body }
     }
 
     /// The request as the transport will send it.
@@ -171,17 +171,17 @@ impl<'a> SetIssuePropertyRequest<'a> {
 #[derive(Clone)]
 pub struct DeleteIssuePropertyRequest<'a> {
     client: &'a crate::core::Client,
-    property_key: String,
     issue_id_or_key: String,
+    property_key: String,
 }
 
 impl<'a> DeleteIssuePropertyRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
-        property_key: impl Into<String>,
         issue_id_or_key: impl Into<String>,
+        property_key: impl Into<String>,
     ) -> Self {
-        Self { client, property_key: property_key.into(), issue_id_or_key: issue_id_or_key.into() }
+        Self { client, issue_id_or_key: issue_id_or_key.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.

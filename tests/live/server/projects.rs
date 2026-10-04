@@ -110,7 +110,7 @@ async fn assigns_the_schemes_a_project_can_hold() {
 
     if let Some(id) = priority_id {
         touch(server().projects().assign_priority_scheme(&project.key, Id { id: Some(id) }).send().await);
-        touch(server().projects().unassign_priority_scheme(id, &project.key).send().await);
+        touch(server().projects().unassign_priority_scheme(&project.key, id).send().await);
     }
 
     tracker.cleanup().await;
@@ -258,8 +258,7 @@ async fn keeps_a_component() {
 
     let component = server()
         .project_components()
-        .create_component()
-        .component(Component {
+        .create_component(Component {
             name: Some(test_name("component")),
             project: Some(project.key.clone()),
             description: Some("created by the suite".to_owned()),
@@ -280,8 +279,10 @@ async fn keeps_a_component() {
 
     server()
         .project_components()
-        .update_component(&id)
-        .body(Component { description: Some("changed by the suite".to_owned()), ..Component::default() })
+        .update_component(
+            &id,
+            Component { description: Some("changed by the suite".to_owned()), ..Component::default() },
+        )
         .send()
         .await
         .expect("a component can be changed");
@@ -511,11 +512,13 @@ async fn keeps_a_project_role_of_its_own() {
 
     server()
         .project_roles()
-        .partial_update_project_role(id)
-        .create_update_role_request(CreateUpdateRoleRequest {
-            description: Some("changed by the suite".to_owned()),
-            ..CreateUpdateRoleRequest::default()
-        })
+        .partial_update_project_role(
+            id,
+            CreateUpdateRoleRequest {
+                description: Some("changed by the suite".to_owned()),
+                ..CreateUpdateRoleRequest::default()
+            },
+        )
         .send()
         .await
         .expect("a role can be changed in part");
@@ -524,11 +527,13 @@ async fn keeps_a_project_role_of_its_own() {
 
     let replaced = server()
         .project_roles()
-        .fully_update_project_role(id)
-        .create_update_role_request(CreateUpdateRoleRequest {
-            name: Some(renamed.clone()),
-            description: Some("replaced by the suite".to_owned()),
-        })
+        .fully_update_project_role(
+            id,
+            CreateUpdateRoleRequest {
+                name: Some(renamed.clone()),
+                description: Some("replaced by the suite".to_owned()),
+            },
+        )
         .send()
         .await
         .expect("a role can be replaced wholesale");
@@ -539,8 +544,10 @@ async fn keeps_a_project_role_of_its_own() {
     touch(
         server()
             .project_role_actors()
-            .add_project_role_actors_to_role(id)
-            .actor_input(ActorInput { user: Some(vec![username.clone()]), ..ActorInput::default() })
+            .add_project_role_actors_to_role(
+                id,
+                ActorInput { user: Some(vec![username.clone()]), ..ActorInput::default() },
+            )
             .send()
             .await,
     );

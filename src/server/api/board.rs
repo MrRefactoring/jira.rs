@@ -94,18 +94,14 @@ pub enum GetIssuesForBoardRequestFields {
 
 crate::core::untagged::untagged!(GetIssuesForBoardRequestFields { One, Many, Other });
 
-/// Filters results to sprints in specified states. Valid values: future, active, closed. You can define multiple states separated by commas, e.g. state=active,closed
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetAllSprintsRequestState {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
+crate::open_enum! {
+    /// Filters results to sprints in specified states. Valid values: future, active, closed. You can define multiple states separated by commas, e.g. state=active,closed
+    pub enum GetAllSprintsRequestState {
+        Future => "future",
+        Active => "active",
+        Closed => "closed",
+    }
 }
-
-crate::core::untagged::untagged!(GetAllSprintsRequestState { One, Many, Other });
 
 /// A comma-separated list of the parameters to expand.
 #[derive(Debug, Clone, PartialEq, Serialize)]
@@ -206,8 +202,8 @@ impl<'a> BoardService<'a> {
     }
 
     /// Returns all issues that belong to an epic on the board, for the given epic Id and the board Id.
-    pub fn get_board_issues_for_epic(&self, epic_id: i64, board_id: i64) -> GetBoardIssuesForEpicRequest<'a> {
-        GetBoardIssuesForEpicRequest::new(self.client, epic_id, board_id)
+    pub fn get_board_issues_for_epic(&self, board_id: i64, epic_id: i64) -> GetBoardIssuesForEpicRequest<'a> {
+        GetBoardIssuesForEpicRequest::new(self.client, board_id, epic_id)
     }
 
     /// Returns all issues from a board, for a given board Id. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
@@ -221,32 +217,36 @@ impl<'a> BoardService<'a> {
     }
 
     /// Returns the keys of all properties for the board identified by the id. The user who retrieves the property keys is required to have permissions to view the board.
-    pub fn get_board_property_keys(&self, board_id: i64) -> GetBoardPropertyKeysRequest<'a> {
+    pub fn get_board_property_keys(&self, board_id: impl Into<String>) -> GetBoardPropertyKeysRequest<'a> {
         GetBoardPropertyKeysRequest::new(self.client, board_id)
     }
 
     /// Returns the value of the property with a given key from the board identified by the provided id. The user who retrieves the property is required to have permissions to view the board.
-    pub fn get_board_property(&self, property_key: impl Into<String>, board_id: i64) -> GetBoardPropertyRequest<'a> {
-        GetBoardPropertyRequest::new(self.client, property_key, board_id)
+    pub fn get_board_property(
+        &self,
+        board_id: impl Into<String>,
+        property_key: impl Into<String>,
+    ) -> GetBoardPropertyRequest<'a> {
+        GetBoardPropertyRequest::new(self.client, board_id, property_key)
     }
 
     /// Sets the value of the specified board's property. You can use this resource to store a custom data against the board identified by the id. The user who stores the data is required to have permissions to modify the board.
     pub fn set_board_property(
         &self,
+        board_id: impl Into<String>,
         property_key: impl Into<String>,
-        board_id: i64,
-        body: std::collections::HashMap<String, serde_json::Value>,
+        property_value: std::collections::HashMap<String, serde_json::Value>,
     ) -> SetBoardPropertyRequest<'a> {
-        SetBoardPropertyRequest::new(self.client, property_key, board_id, body)
+        SetBoardPropertyRequest::new(self.client, board_id, property_key, property_value)
     }
 
     /// Removes the property from the board identified by the id. Ths user removing the property is required to have permissions to modify the board.
     pub fn delete_board_property(
         &self,
+        board_id: impl Into<String>,
         property_key: impl Into<String>,
-        board_id: i64,
     ) -> DeleteBoardPropertyRequest<'a> {
-        DeleteBoardPropertyRequest::new(self.client, property_key, board_id)
+        DeleteBoardPropertyRequest::new(self.client, board_id, property_key)
     }
 
     /// Returns the value of the setting for refined velocity chart
@@ -269,8 +269,8 @@ impl<'a> BoardService<'a> {
     }
 
     /// Get all issues you have access to that belong to the sprint from the board. Issue returned from this resource contains additional fields like: sprint, closedSprints, flagged and epic. Issues are returned ordered by rank. JQL order has higher priority than default rank.
-    pub fn get_board_issues_for_sprint(&self, sprint_id: i64, board_id: i64) -> GetBoardIssuesForSprintRequest<'a> {
-        GetBoardIssuesForSprintRequest::new(self.client, sprint_id, board_id)
+    pub fn get_board_issues_for_sprint(&self, board_id: i64, sprint_id: i64) -> GetBoardIssuesForSprintRequest<'a> {
+        GetBoardIssuesForSprintRequest::new(self.client, board_id, sprint_id)
     }
 
     /// Returns all versions from a board, for a given board Id. This only includes versions that the user has permission to view. Note, if the user does not have permission to view the board, no versions will be returned at all. Returned versions are ordered by the name of the project from which they belong and then by sequence defined by user.
@@ -913,20 +913,20 @@ pub struct GetBoardIssuesForEpicRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetBoardIssuesForEpicRequestExpand>,
     jql: Option<String>,
-    epic_id: i64,
+    board_id: i64,
     max_results: Option<i64>,
     validate_query: Option<bool>,
-    board_id: i64,
+    epic_id: i64,
     fields: Option<GetBoardIssuesForEpicRequestFields>,
     start_at: Option<i64>,
 }
 
 impl<'a> GetBoardIssuesForEpicRequest<'a> {
-    fn new(client: &'a crate::core::Client, epic_id: i64, board_id: i64) -> Self {
+    fn new(client: &'a crate::core::Client, board_id: i64, epic_id: i64) -> Self {
         Self {
             client,
-            epic_id,
             board_id,
+            epic_id,
             expand: None,
             jql: None,
             max_results: None,
@@ -1260,19 +1260,19 @@ impl<'a> GetProjectsRequest<'a> {
 #[derive(Clone)]
 pub struct GetBoardPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
-    board_id: i64,
+    board_id: String,
 }
 
 impl<'a> GetBoardPropertyKeysRequest<'a> {
-    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
-        Self { client, board_id }
+    fn new(client: &'a crate::core::Client, board_id: impl Into<String>) -> Self {
+        Self { client, board_id: board_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/agile/1.0/board/{}/properties", self.board_id),
+            format!("/rest/agile/1.0/board/{}/properties", crate::core::encode_path_segment(&self.board_id)),
         );
 
         Ok(config)
@@ -1293,13 +1293,13 @@ impl<'a> GetBoardPropertyKeysRequest<'a> {
 #[derive(Clone)]
 pub struct GetBoardPropertyRequest<'a> {
     client: &'a crate::core::Client,
+    board_id: String,
     property_key: String,
-    board_id: i64,
 }
 
 impl<'a> GetBoardPropertyRequest<'a> {
-    fn new(client: &'a crate::core::Client, property_key: impl Into<String>, board_id: i64) -> Self {
-        Self { client, property_key: property_key.into(), board_id }
+    fn new(client: &'a crate::core::Client, board_id: impl Into<String>, property_key: impl Into<String>) -> Self {
+        Self { client, board_id: board_id.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -1308,7 +1308,7 @@ impl<'a> GetBoardPropertyRequest<'a> {
             crate::core::Method::GET,
             format!(
                 "/rest/agile/1.0/board/{}/properties/{}",
-                self.board_id,
+                crate::core::encode_path_segment(&self.board_id),
                 crate::core::encode_path_segment(&self.property_key)
             ),
         );
@@ -1331,19 +1331,19 @@ impl<'a> GetBoardPropertyRequest<'a> {
 #[derive(Clone)]
 pub struct SetBoardPropertyRequest<'a> {
     client: &'a crate::core::Client,
+    board_id: String,
     property_key: String,
-    board_id: i64,
-    body: std::collections::HashMap<String, serde_json::Value>,
+    property_value: std::collections::HashMap<String, serde_json::Value>,
 }
 
 impl<'a> SetBoardPropertyRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
+        board_id: impl Into<String>,
         property_key: impl Into<String>,
-        board_id: i64,
-        body: std::collections::HashMap<String, serde_json::Value>,
+        property_value: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self { client, property_key: property_key.into(), board_id, body }
+        Self { client, board_id: board_id.into(), property_key: property_key.into(), property_value }
     }
 
     /// The request as the transport will send it.
@@ -1352,12 +1352,12 @@ impl<'a> SetBoardPropertyRequest<'a> {
             crate::core::Method::PUT,
             format!(
                 "/rest/agile/1.0/board/{}/properties/{}",
-                self.board_id,
+                crate::core::encode_path_segment(&self.board_id),
                 crate::core::encode_path_segment(&self.property_key)
             ),
         );
 
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.property_value)?));
 
         Ok(config)
     }
@@ -1377,13 +1377,13 @@ impl<'a> SetBoardPropertyRequest<'a> {
 #[derive(Clone)]
 pub struct DeleteBoardPropertyRequest<'a> {
     client: &'a crate::core::Client,
+    board_id: String,
     property_key: String,
-    board_id: i64,
 }
 
 impl<'a> DeleteBoardPropertyRequest<'a> {
-    fn new(client: &'a crate::core::Client, property_key: impl Into<String>, board_id: i64) -> Self {
-        Self { client, property_key: property_key.into(), board_id }
+    fn new(client: &'a crate::core::Client, board_id: impl Into<String>, property_key: impl Into<String>) -> Self {
+        Self { client, board_id: board_id.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -1392,7 +1392,7 @@ impl<'a> DeleteBoardPropertyRequest<'a> {
             crate::core::Method::DELETE,
             format!(
                 "/rest/agile/1.0/board/{}/properties/{}",
-                self.board_id,
+                crate::core::encode_path_segment(&self.board_id),
                 crate::core::encode_path_segment(&self.property_key)
             ),
         );
@@ -1510,8 +1510,8 @@ impl<'a> GetAllSprintsRequest<'a> {
 
     /// Filters results to sprints in specified states. Valid values: future, active, closed. You can define multiple states separated by commas, e.g. state=active,closed
     #[must_use]
-    pub fn state(mut self, value: GetAllSprintsRequestState) -> Self {
-        self.state = Some(value);
+    pub fn state(mut self, value: impl Into<GetAllSprintsRequestState>) -> Self {
+        self.state = Some(value.into());
 
         self
     }
@@ -1577,22 +1577,22 @@ impl<'a> GetAllSprintsRequest<'a> {
 #[derive(Clone)]
 pub struct GetBoardIssuesForSprintRequest<'a> {
     client: &'a crate::core::Client,
-    sprint_id: i64,
+    board_id: i64,
     expand: Option<GetBoardIssuesForSprintRequestExpand>,
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
-    board_id: i64,
+    sprint_id: i64,
     fields: Option<GetBoardIssuesForSprintRequestFields>,
     start_at: Option<i64>,
 }
 
 impl<'a> GetBoardIssuesForSprintRequest<'a> {
-    fn new(client: &'a crate::core::Client, sprint_id: i64, board_id: i64) -> Self {
+    fn new(client: &'a crate::core::Client, board_id: i64, sprint_id: i64) -> Self {
         Self {
             client,
-            sprint_id,
             board_id,
+            sprint_id,
             expand: None,
             jql: None,
             max_results: None,

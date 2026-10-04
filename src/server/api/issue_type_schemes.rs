@@ -20,28 +20,14 @@ impl<'a> IssueTypeSchemesService<'a> {
     /// Creates an issue type scheme from a JSON representation
     pub fn create_issue_type_scheme(
         &self,
-        issue_type_scheme_create_update: IssueTypeSchemeCreateUpdate,
+        issue_type_scheme_details: IssueTypeSchemeCreateUpdate,
     ) -> CreateIssueTypeSchemeRequest<'a> {
-        CreateIssueTypeSchemeRequest::new(self.client, issue_type_scheme_create_update)
+        CreateIssueTypeSchemeRequest::new(self.client, issue_type_scheme_details)
     }
 
     /// Returns a full representation of the issue type scheme that has the given id
     pub fn get_issue_type_scheme(&self, scheme_id: impl Into<String>) -> GetIssueTypeSchemeRequest<'a> {
         GetIssueTypeSchemeRequest::new(self.client, scheme_id)
-    }
-
-    /// Updates the specified issue type scheme from a JSON representation
-    pub fn update_issue_type_scheme(
-        &self,
-        scheme_id: impl Into<String>,
-        issue_type_scheme_create_update: IssueTypeSchemeCreateUpdate,
-    ) -> UpdateIssueTypeSchemeRequest<'a> {
-        UpdateIssueTypeSchemeRequest::new(self.client, scheme_id, issue_type_scheme_create_update)
-    }
-
-    /// Deletes the specified issue type scheme. Any projects associated with this IssueTypeScheme will be automatically associated with the global default IssueTypeScheme.
-    pub fn delete_issue_type_scheme(&self, scheme_id: impl Into<String>) -> DeleteIssueTypeSchemeRequest<'a> {
-        DeleteIssueTypeSchemeRequest::new(self.client, scheme_id)
     }
 
     /// For the specified issue type scheme, returns all of the associated projects
@@ -78,10 +64,24 @@ impl<'a> IssueTypeSchemesService<'a> {
     /// For the specified issue type scheme, removes the given project association
     pub fn remove_project_association(
         &self,
-        proj_id_or_key: impl Into<String>,
         scheme_id: impl Into<String>,
+        proj_id_or_key: impl Into<String>,
     ) -> RemoveProjectAssociationRequest<'a> {
-        RemoveProjectAssociationRequest::new(self.client, proj_id_or_key, scheme_id)
+        RemoveProjectAssociationRequest::new(self.client, scheme_id, proj_id_or_key)
+    }
+
+    /// Updates the specified issue type scheme from a JSON representation
+    pub fn update_issue_type_scheme(
+        &self,
+        issue_type_scheme_id: i64,
+        issue_type_scheme_update_details: IssueTypeSchemeCreateUpdate,
+    ) -> UpdateIssueTypeSchemeRequest<'a> {
+        UpdateIssueTypeSchemeRequest::new(self.client, issue_type_scheme_id, issue_type_scheme_update_details)
+    }
+
+    /// Deletes the specified issue type scheme. Any projects associated with this IssueTypeScheme will be automatically associated with the global default IssueTypeScheme.
+    pub fn delete_issue_type_scheme(&self, issue_type_scheme_id: i64) -> DeleteIssueTypeSchemeRequest<'a> {
+        DeleteIssueTypeSchemeRequest::new(self.client, issue_type_scheme_id)
     }
 }
 
@@ -119,12 +119,12 @@ impl<'a> GetAllIssueTypeSchemesRequest<'a> {
 #[derive(Clone)]
 pub struct CreateIssueTypeSchemeRequest<'a> {
     client: &'a crate::core::Client,
-    issue_type_scheme_create_update: IssueTypeSchemeCreateUpdate,
+    issue_type_scheme_details: IssueTypeSchemeCreateUpdate,
 }
 
 impl<'a> CreateIssueTypeSchemeRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_type_scheme_create_update: IssueTypeSchemeCreateUpdate) -> Self {
-        Self { client, issue_type_scheme_create_update }
+    fn new(client: &'a crate::core::Client, issue_type_scheme_details: IssueTypeSchemeCreateUpdate) -> Self {
+        Self { client, issue_type_scheme_details }
     }
 
     /// The request as the transport will send it.
@@ -132,12 +132,7 @@ impl<'a> CreateIssueTypeSchemeRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/issuetypescheme".to_owned());
 
-        let body = match serde_json::to_value(&self.issue_type_scheme_create_update)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.issue_type_scheme_details)?));
 
         Ok(config)
     }
@@ -178,84 +173,6 @@ impl<'a> GetIssueTypeSchemeRequest<'a> {
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<IssueTypeScheme> {
         self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Updates the specified issue type scheme from a JSON representation
-#[derive(Clone)]
-pub struct UpdateIssueTypeSchemeRequest<'a> {
-    client: &'a crate::core::Client,
-    scheme_id: String,
-    issue_type_scheme_create_update: IssueTypeSchemeCreateUpdate,
-}
-
-impl<'a> UpdateIssueTypeSchemeRequest<'a> {
-    fn new(
-        client: &'a crate::core::Client,
-        scheme_id: impl Into<String>,
-        issue_type_scheme_create_update: IssueTypeSchemeCreateUpdate,
-    ) -> Self {
-        Self { client, scheme_id: scheme_id.into(), issue_type_scheme_create_update }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            format!("/rest/api/2/issuetypescheme/{}", crate::core::encode_path_segment(&self.scheme_id)),
-        );
-
-        let body = match serde_json::to_value(&self.issue_type_scheme_create_update)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<IssueTypeScheme> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Deletes the specified issue type scheme. Any projects associated with this IssueTypeScheme will be automatically associated with the global default IssueTypeScheme.
-#[derive(Clone)]
-pub struct DeleteIssueTypeSchemeRequest<'a> {
-    client: &'a crate::core::Client,
-    scheme_id: String,
-}
-
-impl<'a> DeleteIssueTypeSchemeRequest<'a> {
-    fn new(client: &'a crate::core::Client, scheme_id: impl Into<String>) -> Self {
-        Self { client, scheme_id: scheme_id.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!("/rest/api/2/issuetypescheme/{}", crate::core::encode_path_segment(&self.scheme_id)),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
     }
 
     /// Sends the request and hands back the body unmodelled.
@@ -436,13 +353,13 @@ impl<'a> RemoveAllProjectAssociationsRequest<'a> {
 #[derive(Clone)]
 pub struct RemoveProjectAssociationRequest<'a> {
     client: &'a crate::core::Client,
-    proj_id_or_key: String,
     scheme_id: String,
+    proj_id_or_key: String,
 }
 
 impl<'a> RemoveProjectAssociationRequest<'a> {
-    fn new(client: &'a crate::core::Client, proj_id_or_key: impl Into<String>, scheme_id: impl Into<String>) -> Self {
-        Self { client, proj_id_or_key: proj_id_or_key.into(), scheme_id: scheme_id.into() }
+    fn new(client: &'a crate::core::Client, scheme_id: impl Into<String>, proj_id_or_key: impl Into<String>) -> Self {
+        Self { client, scheme_id: scheme_id.into(), proj_id_or_key: proj_id_or_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -454,6 +371,79 @@ impl<'a> RemoveProjectAssociationRequest<'a> {
                 crate::core::encode_path_segment(&self.scheme_id),
                 crate::core::encode_path_segment(&self.proj_id_or_key)
             ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<()> {
+        self.client.send_empty(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Updates the specified issue type scheme from a JSON representation
+#[derive(Clone)]
+pub struct UpdateIssueTypeSchemeRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_type_scheme_id: i64,
+    issue_type_scheme_update_details: IssueTypeSchemeCreateUpdate,
+}
+
+impl<'a> UpdateIssueTypeSchemeRequest<'a> {
+    fn new(
+        client: &'a crate::core::Client,
+        issue_type_scheme_id: i64,
+        issue_type_scheme_update_details: IssueTypeSchemeCreateUpdate,
+    ) -> Self {
+        Self { client, issue_type_scheme_id, issue_type_scheme_update_details }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::PUT,
+            format!("/rest/api/2/issuetypescheme/{}", self.issue_type_scheme_id),
+        );
+
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.issue_type_scheme_update_details)?));
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<IssueTypeScheme> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Deletes the specified issue type scheme. Any projects associated with this IssueTypeScheme will be automatically associated with the global default IssueTypeScheme.
+#[derive(Clone)]
+pub struct DeleteIssueTypeSchemeRequest<'a> {
+    client: &'a crate::core::Client,
+    issue_type_scheme_id: i64,
+}
+
+impl<'a> DeleteIssueTypeSchemeRequest<'a> {
+    fn new(client: &'a crate::core::Client, issue_type_scheme_id: i64) -> Self {
+        Self { client, issue_type_scheme_id }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::DELETE,
+            format!("/rest/api/2/issuetypescheme/{}", self.issue_type_scheme_id),
         );
 
         Ok(config)

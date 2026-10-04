@@ -18,8 +18,8 @@ impl<'a> IssueLinkTypesService<'a> {
     }
 
     /// Create a new issue link type.
-    pub fn create_issue_link_type(&self, issue_link_type_json: IssueLinkTypeJson) -> CreateIssueLinkTypeRequest<'a> {
-        CreateIssueLinkTypeRequest::new(self.client, issue_link_type_json)
+    pub fn create_issue_link_type(&self, issue_link_type: IssueLinkTypeJson) -> CreateIssueLinkTypeRequest<'a> {
+        CreateIssueLinkTypeRequest::new(self.client, issue_link_type)
     }
 
     /// Resets the order of issue link types alphabetically.
@@ -41,9 +41,9 @@ impl<'a> IssueLinkTypesService<'a> {
     pub fn update_issue_link_type(
         &self,
         issue_link_type_id: impl Into<String>,
-        issue_link_type_json: IssueLinkTypeJson,
+        issue_link_type: IssueLinkTypeJson,
     ) -> UpdateIssueLinkTypeRequest<'a> {
-        UpdateIssueLinkTypeRequest::new(self.client, issue_link_type_id, issue_link_type_json)
+        UpdateIssueLinkTypeRequest::new(self.client, issue_link_type_id, issue_link_type)
     }
 
     /// Delete the specified issue link type.
@@ -96,12 +96,12 @@ impl<'a> GetIssueLinkTypesRequest<'a> {
 #[derive(Clone)]
 pub struct CreateIssueLinkTypeRequest<'a> {
     client: &'a crate::core::Client,
-    issue_link_type_json: IssueLinkTypeJson,
+    issue_link_type: IssueLinkTypeJson,
 }
 
 impl<'a> CreateIssueLinkTypeRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_link_type_json: IssueLinkTypeJson) -> Self {
-        Self { client, issue_link_type_json }
+    fn new(client: &'a crate::core::Client, issue_link_type: IssueLinkTypeJson) -> Self {
+        Self { client, issue_link_type }
     }
 
     /// The request as the transport will send it.
@@ -109,12 +109,7 @@ impl<'a> CreateIssueLinkTypeRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/issueLinkType".to_owned());
 
-        let body = match serde_json::to_value(&self.issue_link_type_json)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.issue_link_type)?));
 
         Ok(config)
     }
@@ -211,16 +206,16 @@ impl<'a> GetIssueLinkTypeRequest<'a> {
 pub struct UpdateIssueLinkTypeRequest<'a> {
     client: &'a crate::core::Client,
     issue_link_type_id: String,
-    issue_link_type_json: IssueLinkTypeJson,
+    issue_link_type: IssueLinkTypeJson,
 }
 
 impl<'a> UpdateIssueLinkTypeRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
         issue_link_type_id: impl Into<String>,
-        issue_link_type_json: IssueLinkTypeJson,
+        issue_link_type: IssueLinkTypeJson,
     ) -> Self {
-        Self { client, issue_link_type_id: issue_link_type_id.into(), issue_link_type_json }
+        Self { client, issue_link_type_id: issue_link_type_id.into(), issue_link_type }
     }
 
     /// The request as the transport will send it.
@@ -230,12 +225,7 @@ impl<'a> UpdateIssueLinkTypeRequest<'a> {
             format!("/rest/api/2/issueLinkType/{}", crate::core::encode_path_segment(&self.issue_link_type_id)),
         );
 
-        let body = match serde_json::to_value(&self.issue_link_type_json)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.issue_link_type)?));
 
         Ok(config)
     }

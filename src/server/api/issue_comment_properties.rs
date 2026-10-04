@@ -20,29 +20,29 @@ impl<'a> IssueCommentPropertiesService<'a> {
     /// Returns the value of the property with a given key from the comment identified by the key or by the id. The user who retrieves the property is required to have permissions to read the comment.
     pub fn get_comment_property(
         &self,
-        property_key: impl Into<String>,
         comment_id: impl Into<String>,
+        property_key: impl Into<String>,
     ) -> GetCommentPropertyRequest<'a> {
-        GetCommentPropertyRequest::new(self.client, property_key, comment_id)
+        GetCommentPropertyRequest::new(self.client, comment_id, property_key)
     }
 
     /// Sets the value of the specified comment's property.
     pub fn set_comment_property(
         &self,
-        property_key: impl Into<String>,
         comment_id: impl Into<String>,
+        property_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> SetCommentPropertyRequest<'a> {
-        SetCommentPropertyRequest::new(self.client, property_key, comment_id, body)
+        SetCommentPropertyRequest::new(self.client, comment_id, property_key, body)
     }
 
     /// Removes the property from the comment identified by the key or by the id. Ths user removing the property is required to have permissions to administer the comment.
     pub fn delete_comment_property(
         &self,
-        property_key: impl Into<String>,
         comment_id: impl Into<String>,
+        property_key: impl Into<String>,
     ) -> DeleteCommentPropertyRequest<'a> {
-        DeleteCommentPropertyRequest::new(self.client, property_key, comment_id)
+        DeleteCommentPropertyRequest::new(self.client, comment_id, property_key)
     }
 }
 
@@ -83,13 +83,13 @@ impl<'a> GetCommentPropertyKeysRequest<'a> {
 #[derive(Clone)]
 pub struct GetCommentPropertyRequest<'a> {
     client: &'a crate::core::Client,
-    property_key: String,
     comment_id: String,
+    property_key: String,
 }
 
 impl<'a> GetCommentPropertyRequest<'a> {
-    fn new(client: &'a crate::core::Client, property_key: impl Into<String>, comment_id: impl Into<String>) -> Self {
-        Self { client, property_key: property_key.into(), comment_id: comment_id.into() }
+    fn new(client: &'a crate::core::Client, comment_id: impl Into<String>, property_key: impl Into<String>) -> Self {
+        Self { client, comment_id: comment_id.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -121,19 +121,19 @@ impl<'a> GetCommentPropertyRequest<'a> {
 #[derive(Clone)]
 pub struct SetCommentPropertyRequest<'a> {
     client: &'a crate::core::Client,
-    property_key: String,
     comment_id: String,
+    property_key: String,
     body: std::collections::HashMap<String, serde_json::Value>,
 }
 
 impl<'a> SetCommentPropertyRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
-        property_key: impl Into<String>,
         comment_id: impl Into<String>,
+        property_key: impl Into<String>,
         body: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self { client, property_key: property_key.into(), comment_id: comment_id.into(), body }
+        Self { client, comment_id: comment_id.into(), property_key: property_key.into(), body }
     }
 
     /// The request as the transport will send it.
@@ -167,13 +167,13 @@ impl<'a> SetCommentPropertyRequest<'a> {
 #[derive(Clone)]
 pub struct DeleteCommentPropertyRequest<'a> {
     client: &'a crate::core::Client,
-    property_key: String,
     comment_id: String,
+    property_key: String,
 }
 
 impl<'a> DeleteCommentPropertyRequest<'a> {
-    fn new(client: &'a crate::core::Client, property_key: impl Into<String>, comment_id: impl Into<String>) -> Self {
-        Self { client, property_key: property_key.into(), comment_id: comment_id.into() }
+    fn new(client: &'a crate::core::Client, comment_id: impl Into<String>, property_key: impl Into<String>) -> Self {
+        Self { client, comment_id: comment_id.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.

@@ -21,8 +21,9 @@ impl<'a> IssueRemoteLinksService<'a> {
     pub fn create_or_update_remote_issue_link(
         &self,
         issue_id_or_key: impl Into<String>,
+        remote_issue_link_request: RemoteIssueLinkCreateOrUpdateRequest,
     ) -> CreateOrUpdateRemoteIssueLinkRequest<'a> {
-        CreateOrUpdateRemoteIssueLinkRequest::new(self.client, issue_id_or_key)
+        CreateOrUpdateRemoteIssueLinkRequest::new(self.client, issue_id_or_key, remote_issue_link_request)
     }
 
     /// Delete the remote issue link with the given global id on the issue.
@@ -37,28 +38,29 @@ impl<'a> IssueRemoteLinksService<'a> {
     /// Get a remote issue link by its id.
     pub fn get_remote_issue_link_by_id(
         &self,
-        link_id: impl Into<String>,
         issue_id_or_key: impl Into<String>,
+        link_id: impl Into<String>,
     ) -> GetRemoteIssueLinkByIdRequest<'a> {
-        GetRemoteIssueLinkByIdRequest::new(self.client, link_id, issue_id_or_key)
+        GetRemoteIssueLinkByIdRequest::new(self.client, issue_id_or_key, link_id)
     }
 
     /// Updates a remote issue link from a JSON representation. Any fields not provided are set to null.
     pub fn update_remote_issue_link(
         &self,
-        link_id: impl Into<String>,
         issue_id_or_key: impl Into<String>,
+        link_id: impl Into<String>,
+        remote_issue_link_request: RemoteIssueLinkCreateOrUpdateRequest,
     ) -> UpdateRemoteIssueLinkRequest<'a> {
-        UpdateRemoteIssueLinkRequest::new(self.client, link_id, issue_id_or_key)
+        UpdateRemoteIssueLinkRequest::new(self.client, issue_id_or_key, link_id, remote_issue_link_request)
     }
 
     /// Delete the remote issue link with the given id on the issue.
     pub fn delete_remote_issue_link_by_id(
         &self,
-        link_id: impl Into<String>,
         issue_id_or_key: impl Into<String>,
+        link_id: impl Into<String>,
     ) -> DeleteRemoteIssueLinkByIdRequest<'a> {
-        DeleteRemoteIssueLinkByIdRequest::new(self.client, link_id, issue_id_or_key)
+        DeleteRemoteIssueLinkByIdRequest::new(self.client, issue_id_or_key, link_id)
     }
 }
 
@@ -113,19 +115,16 @@ impl<'a> GetRemoteIssueLinksRequest<'a> {
 pub struct CreateOrUpdateRemoteIssueLinkRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    remote_issue_link_create_or_update_request: Option<RemoteIssueLinkCreateOrUpdateRequest>,
+    remote_issue_link_request: RemoteIssueLinkCreateOrUpdateRequest,
 }
 
 impl<'a> CreateOrUpdateRemoteIssueLinkRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), remote_issue_link_create_or_update_request: None }
-    }
-
-    #[must_use]
-    pub fn remote_issue_link_create_or_update_request(mut self, value: RemoteIssueLinkCreateOrUpdateRequest) -> Self {
-        self.remote_issue_link_create_or_update_request = Some(value);
-
-        self
+    fn new(
+        client: &'a crate::core::Client,
+        issue_id_or_key: impl Into<String>,
+        remote_issue_link_request: RemoteIssueLinkCreateOrUpdateRequest,
+    ) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), remote_issue_link_request }
     }
 
     /// The request as the transport will send it.
@@ -135,12 +134,7 @@ impl<'a> CreateOrUpdateRemoteIssueLinkRequest<'a> {
             format!("/rest/api/2/issue/{}/remotelink", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
-        let body = match serde_json::to_value(&self.remote_issue_link_create_or_update_request)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.remote_issue_link_request)?));
 
         Ok(config)
     }
@@ -196,13 +190,13 @@ impl<'a> DeleteRemoteIssueLinkByGlobalIdRequest<'a> {
 #[derive(Clone)]
 pub struct GetRemoteIssueLinkByIdRequest<'a> {
     client: &'a crate::core::Client,
-    link_id: String,
     issue_id_or_key: String,
+    link_id: String,
 }
 
 impl<'a> GetRemoteIssueLinkByIdRequest<'a> {
-    fn new(client: &'a crate::core::Client, link_id: impl Into<String>, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, link_id: link_id.into(), issue_id_or_key: issue_id_or_key.into() }
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, link_id: impl Into<String>) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), link_id: link_id.into() }
     }
 
     /// The request as the transport will send it.
@@ -234,26 +228,19 @@ impl<'a> GetRemoteIssueLinkByIdRequest<'a> {
 #[derive(Clone)]
 pub struct UpdateRemoteIssueLinkRequest<'a> {
     client: &'a crate::core::Client,
-    link_id: String,
     issue_id_or_key: String,
-    remote_issue_link_create_or_update_request: Option<RemoteIssueLinkCreateOrUpdateRequest>,
+    link_id: String,
+    remote_issue_link_request: RemoteIssueLinkCreateOrUpdateRequest,
 }
 
 impl<'a> UpdateRemoteIssueLinkRequest<'a> {
-    fn new(client: &'a crate::core::Client, link_id: impl Into<String>, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            link_id: link_id.into(),
-            issue_id_or_key: issue_id_or_key.into(),
-            remote_issue_link_create_or_update_request: None,
-        }
-    }
-
-    #[must_use]
-    pub fn remote_issue_link_create_or_update_request(mut self, value: RemoteIssueLinkCreateOrUpdateRequest) -> Self {
-        self.remote_issue_link_create_or_update_request = Some(value);
-
-        self
+    fn new(
+        client: &'a crate::core::Client,
+        issue_id_or_key: impl Into<String>,
+        link_id: impl Into<String>,
+        remote_issue_link_request: RemoteIssueLinkCreateOrUpdateRequest,
+    ) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), link_id: link_id.into(), remote_issue_link_request }
     }
 
     /// The request as the transport will send it.
@@ -267,12 +254,7 @@ impl<'a> UpdateRemoteIssueLinkRequest<'a> {
             ),
         );
 
-        let body = match serde_json::to_value(&self.remote_issue_link_create_or_update_request)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.remote_issue_link_request)?));
 
         Ok(config)
     }
@@ -292,13 +274,13 @@ impl<'a> UpdateRemoteIssueLinkRequest<'a> {
 #[derive(Clone)]
 pub struct DeleteRemoteIssueLinkByIdRequest<'a> {
     client: &'a crate::core::Client,
-    link_id: String,
     issue_id_or_key: String,
+    link_id: String,
 }
 
 impl<'a> DeleteRemoteIssueLinkByIdRequest<'a> {
-    fn new(client: &'a crate::core::Client, link_id: impl Into<String>, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, link_id: link_id.into(), issue_id_or_key: issue_id_or_key.into() }
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, link_id: impl Into<String>) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), link_id: link_id.into() }
     }
 
     /// The request as the transport will send it.

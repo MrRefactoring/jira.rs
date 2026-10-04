@@ -30,12 +30,12 @@ impl<'a> ScreensService<'a> {
     /// Update 'showWhenEmptyIndicator' for given field on screen.
     pub fn update_show_when_empty_indicator(
         &self,
-        tab_id: i64,
         screen_id: i64,
-        new_value: bool,
+        tab_id: i64,
         id: impl Into<String>,
+        new_value: bool,
     ) -> UpdateShowWhenEmptyIndicatorRequest<'a> {
-        UpdateShowWhenEmptyIndicatorRequest::new(self.client, tab_id, screen_id, new_value, id)
+        UpdateShowWhenEmptyIndicatorRequest::new(self.client, screen_id, tab_id, id, new_value)
     }
 }
 
@@ -202,21 +202,21 @@ impl<'a> GetAvailableScreenFieldsRequest<'a> {
 #[derive(Clone)]
 pub struct UpdateShowWhenEmptyIndicatorRequest<'a> {
     client: &'a crate::core::Client,
-    tab_id: i64,
     screen_id: i64,
-    new_value: bool,
+    tab_id: i64,
     id: String,
+    new_value: bool,
 }
 
 impl<'a> UpdateShowWhenEmptyIndicatorRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
-        tab_id: i64,
         screen_id: i64,
-        new_value: bool,
+        tab_id: i64,
         id: impl Into<String>,
+        new_value: bool,
     ) -> Self {
-        Self { client, tab_id, screen_id, new_value, id: id.into() }
+        Self { client, screen_id, tab_id, id: id.into(), new_value }
     }
 
     /// The request as the transport will send it.

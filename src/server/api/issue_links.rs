@@ -13,8 +13,8 @@ impl<'a> IssueLinksService<'a> {
     }
 
     /// Creates an issue link between two issues.
-    pub fn link_issues(&self, link_issue_request_json: LinkIssueRequestJson) -> LinkIssuesRequest<'a> {
-        LinkIssuesRequest::new(self.client, link_issue_request_json)
+    pub fn link_issues(&self, link_issue_request: LinkIssueRequestJson) -> LinkIssuesRequest<'a> {
+        LinkIssuesRequest::new(self.client, link_issue_request)
     }
 
     /// Returns an issue link with the specified id.
@@ -32,24 +32,19 @@ impl<'a> IssueLinksService<'a> {
 #[derive(Clone)]
 pub struct LinkIssuesRequest<'a> {
     client: &'a crate::core::Client,
-    link_issue_request_json: LinkIssueRequestJson,
+    link_issue_request: LinkIssueRequestJson,
 }
 
 impl<'a> LinkIssuesRequest<'a> {
-    fn new(client: &'a crate::core::Client, link_issue_request_json: LinkIssueRequestJson) -> Self {
-        Self { client, link_issue_request_json }
+    fn new(client: &'a crate::core::Client, link_issue_request: LinkIssueRequestJson) -> Self {
+        Self { client, link_issue_request }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/issueLink".to_owned());
 
-        let body = match serde_json::to_value(&self.link_issue_request_json)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.link_issue_request)?));
 
         Ok(config)
     }

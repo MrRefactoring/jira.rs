@@ -3,8 +3,7 @@ use std::collections::HashMap;
 use jira::server::{
     CommentJson, IssueLinkTypeJson, IssueRefJson, IssueSubTaskMovePosition, IssueUpdate, IssuesUpdate,
     LinkIssueRequestJson, NotificationJson, RemoteIssueLinkCreateOrUpdateRequest, RemoteObject,
-    RemoteReciprocalIssueLinkCreateRequest, SearchIssuesRequestFields, SearchRequest, ToJson, Transition, User,
-    Worklog, WorklogIdsRequest,
+    RemoteReciprocalIssueLinkCreateRequest, SearchRequest, ToJson, Transition, User, Worklog, WorklogIdsRequest,
 };
 use serde_json::json;
 
@@ -63,16 +62,14 @@ async fn creates_an_issue_in_wiki_markup_and_edits_it() {
 
     server()
         .issues()
-        .edit_issue(&key)
-        .issue_update(IssueUpdate { fields: Some(fields(json!({ "summary": summary }))), ..IssueUpdate::default() })
+        .edit_issue(&key, IssueUpdate { fields: Some(fields(json!({ "summary": summary }))), ..IssueUpdate::default() })
         .send()
         .await
         .expect("a field can be edited");
 
     server()
         .issues()
-        .assign_issue(&key)
-        .user(User { name: Some(username.clone()), ..User::default() })
+        .assign_issue(&key, User { name: Some(username.clone()), ..User::default() })
         .send()
         .await
         .expect("an issue can be assigned by name, which is how Data Center addresses a user");
@@ -130,8 +127,7 @@ async fn creates_issues_in_bulk() {
 
     let bulk = server()
         .issues()
-        .create_issues()
-        .issues_update(IssuesUpdate { issue_updates: Some(updates) })
+        .create_issues(IssuesUpdate { issue_updates: Some(updates) })
         .send()
         .await
         .expect("two issues can be created in one request");
@@ -178,11 +174,13 @@ async fn moves_the_issue_through_a_transition() {
 
     server()
         .issues()
-        .do_transition(&key)
-        .issue_update(IssueUpdate {
-            transition: Some(Transition { id: transition.id.clone(), ..Transition::default() }),
-            ..IssueUpdate::default()
-        })
+        .do_transition(
+            &key,
+            IssueUpdate {
+                transition: Some(Transition { id: transition.id.clone(), ..Transition::default() }),
+                ..IssueUpdate::default()
+            },
+        )
         .send()
         .await
         .expect("an issue can be moved through a transition");
@@ -217,8 +215,7 @@ async fn adds_updates_pins_and_deletes_a_comment() {
 
     let comment = server()
         .issue_comments()
-        .add_comment(&key)
-        .comment_json(CommentJson { body: Some(body.clone()), ..CommentJson::default() })
+        .add_comment(&key, CommentJson { body: Some(body.clone()), ..CommentJson::default() })
         .send()
         .await
         .expect("a comment can be added");
@@ -229,8 +226,7 @@ async fn adds_updates_pins_and_deletes_a_comment() {
 
     let updated = server()
         .issue_comments()
-        .update_comment(&key, &id)
-        .body(CommentJson { body: Some(format!("{body} — edited")), ..CommentJson::default() })
+        .update_comment(&key, &id, CommentJson { body: Some(format!("{body} — edited")), ..CommentJson::default() })
         .send()
         .await
         .expect("a comment can be edited");
@@ -297,12 +293,10 @@ async fn logs_work_and_edits_it() {
 
     let worklog = server()
         .issue_worklogs()
-        .add_worklog(&key)
-        .worklog(Worklog {
-            time_spent: Some("2h".to_owned()),
-            comment: Some(test_name("worklog")),
-            ..Worklog::default()
-        })
+        .add_worklog(
+            &key,
+            Worklog { time_spent: Some("2h".to_owned()), comment: Some(test_name("worklog")), ..Worklog::default() },
+        )
         .send()
         .await
         .expect("work can be logged");
@@ -313,8 +307,7 @@ async fn logs_work_and_edits_it() {
 
     server()
         .issue_worklogs()
-        .update_worklog(&key, &id)
-        .body(Worklog { time_spent: Some("3h".to_owned()), ..Worklog::default() })
+        .update_worklog(&key, &id, Worklog { time_spent: Some("3h".to_owned()), ..Worklog::default() })
         .send()
         .await
         .expect("a worklog can be edited");
@@ -365,13 +358,7 @@ async fn votes_and_watches() {
 
     touch(server().issue_votes().remove_vote(&key).send().await);
 
-    server()
-        .issue_watchers()
-        .add_watcher(&key)
-        .body(username.clone())
-        .send()
-        .await
-        .expect("a watcher can be added by name");
+    server().issue_watchers().add_watcher(&key, username.clone()).send().await.expect("a watcher can be added by name");
 
     let watchers = server().issue_watchers().get_issue_watchers(&key).send_raw().await.expect("the watchers read");
 
@@ -442,8 +429,7 @@ async fn keeps_remote_links_by_id_and_by_global_id() {
 
     let link = server()
         .issue_remote_links()
-        .create_or_update_remote_issue_link(&key)
-        .remote_issue_link_create_or_update_request(remote_link("https://example.com/one", "one"))
+        .create_or_update_remote_issue_link(&key, remote_link("https://example.com/one", "one"))
         .send_raw()
         .await
         .expect("a remote link can be created");
@@ -452,8 +438,7 @@ async fn keeps_remote_links_by_id_and_by_global_id() {
 
     server()
         .issue_remote_links()
-        .update_remote_issue_link(&link_id, &key)
-        .remote_issue_link_create_or_update_request(remote_link("https://example.com/two", "two"))
+        .update_remote_issue_link(&link_id, &key, remote_link("https://example.com/two", "two"))
         .send()
         .await
         .expect("a remote link can be updated");
@@ -485,8 +470,7 @@ async fn keeps_remote_links_by_id_and_by_global_id() {
 
     server()
         .issue_remote_links()
-        .create_or_update_remote_issue_link(&key)
-        .remote_issue_link_create_or_update_request(remote_link("https://example.com/three", "three"))
+        .create_or_update_remote_issue_link(&key, remote_link("https://example.com/three", "three"))
         .send_raw()
         .await
         .expect("and written again under the same global id");
@@ -658,13 +642,15 @@ async fn archives_restores_and_notifies() {
     touch(
         server()
             .issues()
-            .notify(&key)
-            .notification_json(NotificationJson {
-                subject: Some(test_name("a notification")),
-                text_body: Some("sent by the Data Center suite".to_owned()),
-                to: Some(ToJson { reporter: Some(true), ..ToJson::default() }),
-                ..NotificationJson::default()
-            })
+            .notify(
+                &key,
+                NotificationJson {
+                    subject: Some(test_name("a notification")),
+                    text_body: Some("sent by the Data Center suite".to_owned()),
+                    to: Some(ToJson { reporter: Some(true), ..ToJson::default() }),
+                    ..NotificationJson::default()
+                },
+            )
             .send()
             .await,
     );
@@ -713,7 +699,7 @@ async fn finds_the_issue_by_jql_and_through_the_picker() {
         .issue_search()
         .search_issues()
         .jql(format!("key = {key}"))
-        .fields(SearchIssuesRequestFields::Many(vec!["summary".to_owned()]))
+        .fields(["summary"])
         .send()
         .await
         .expect("a JQL search is accepted as query parameters too");

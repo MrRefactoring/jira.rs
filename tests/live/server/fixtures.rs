@@ -116,8 +116,7 @@ pub async fn create_issue(tracker: &mut ResourceTracker, fields: serde_json::Val
 
     let created = server()
         .issues()
-        .create_issue()
-        .issue_update(IssueUpdate { fields: Some(fields), ..IssueUpdate::default() })
+        .create_issue(IssueUpdate { fields: Some(fields), ..IssueUpdate::default() })
         .send()
         .await
         .expect("the project accepts a new issue");
@@ -188,8 +187,7 @@ pub async fn board_of(project_key: &str) -> i64 {
 pub async fn create_test_filter(tracker: &mut ResourceTracker, label: &str, jql: &str) -> Filter {
     let filter = server()
         .filters()
-        .create_filter()
-        .filter(Filter { name: Some(test_name(label)), jql: Some(jql.to_owned()), ..Filter::default() })
+        .create_filter(Filter { name: Some(test_name(label)), jql: Some(jql.to_owned()), ..Filter::default() })
         .send()
         .await
         .expect("the account may create a filter of its own");
@@ -200,7 +198,7 @@ pub async fn create_test_filter(tracker: &mut ResourceTracker, label: &str, jql:
     tracker.defer(move || {
         let id = doomed.clone();
 
-        async move { server().filters().delete_filter(id).send().await }
+        async move { server().filters().delete_filter(id.parse().expect("a filter id is a number")).send().await }
     });
 
     filter
@@ -244,8 +242,7 @@ pub async fn create_test_group(tracker: &mut ResourceTracker) -> String {
 
     server()
         .groups()
-        .create_group()
-        .add_group(AddGroup { name: Some(name.clone()) })
+        .create_group(AddGroup { name: Some(name.clone()) })
         .send()
         .await
         .expect("the administrator may create a group");

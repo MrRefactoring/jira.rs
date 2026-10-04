@@ -1,7 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
@@ -51,6 +51,12 @@ pub enum UpdateFilterRequestExpand {
 
 crate::core::untagged::untagged!(UpdateFilterRequestExpand { One, Many, Other });
 
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetColumnsRequestColumnRequestBody {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub columns: Option<Vec<String>>,
+}
+
 /// The Filters operations.
 pub struct FiltersService<'a> {
     client: &'a crate::core::Client,
@@ -62,8 +68,8 @@ impl<'a> FiltersService<'a> {
     }
 
     /// Creates a new filter, and returns newly created filter. Currently sets permissions just using the users default sharing permissions
-    pub fn create_filter(&self) -> CreateFilterRequest<'a> {
-        CreateFilterRequest::new(self.client)
+    pub fn create_filter(&self, filter: Filter) -> CreateFilterRequest<'a> {
+        CreateFilterRequest::new(self.client, filter)
     }
 
     /// Returns the favourite filters of the logged-in user
@@ -72,32 +78,36 @@ impl<'a> FiltersService<'a> {
     }
 
     /// Returns a filter given an id
-    pub fn get_filter(&self, id: impl Into<String>) -> GetFilterRequest<'a> {
+    pub fn get_filter(&self, id: i64) -> GetFilterRequest<'a> {
         GetFilterRequest::new(self.client, id)
     }
 
     /// Updates an existing filter, and returns its new value. The following properties of a filter can be updated: 'jql', 'name', 'description'. Additionally, administrators can also update the 'owner' field. To get, set or unset 'favourite', use rest/api/1.0/filters/{id}/favourite with GET, PUT and DELETE methods instead.
-    pub fn update_filter(&self, id: impl Into<String>) -> UpdateFilterRequest<'a> {
-        UpdateFilterRequest::new(self.client, id)
+    pub fn update_filter(&self, id: i64, body: Filter) -> UpdateFilterRequest<'a> {
+        UpdateFilterRequest::new(self.client, id, body)
     }
 
     /// Delete a filter
-    pub fn delete_filter(&self, id: impl Into<String>) -> DeleteFilterRequest<'a> {
+    pub fn delete_filter(&self, id: i64) -> DeleteFilterRequest<'a> {
         DeleteFilterRequest::new(self.client, id)
     }
 
     /// Returns the default columns for the given filter. Currently logged in user will be used as the user making such request.
-    pub fn get_columns(&self, id: impl Into<String>) -> GetColumnsRequest<'a> {
+    pub fn get_columns(&self, id: i64) -> GetColumnsRequest<'a> {
         GetColumnsRequest::new(self.client, id)
     }
 
     /// Sets the default columns for the given filter
-    pub fn set_columns(&self, id: impl Into<String>) -> SetColumnsRequest<'a> {
-        SetColumnsRequest::new(self.client, id)
+    pub fn set_columns(
+        &self,
+        id: i64,
+        column_request_body: SetColumnsRequestColumnRequestBody,
+    ) -> SetColumnsRequest<'a> {
+        SetColumnsRequest::new(self.client, id, column_request_body)
     }
 
     /// Resets the columns for the given filter such that the filter no longer has its own column config
-    pub fn reset_columns(&self, id: impl Into<String>) -> ResetColumnsRequest<'a> {
+    pub fn reset_columns(&self, id: i64) -> ResetColumnsRequest<'a> {
         ResetColumnsRequest::new(self.client, id)
     }
 }
@@ -107,24 +117,17 @@ impl<'a> FiltersService<'a> {
 pub struct CreateFilterRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<CreateFilterRequestExpand>,
-    filter: Option<Filter>,
+    filter: Filter,
 }
 
 impl<'a> CreateFilterRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, expand: None, filter: None }
+    fn new(client: &'a crate::core::Client, filter: Filter) -> Self {
+        Self { client, filter, expand: None }
     }
 
     #[must_use]
     pub fn expand(mut self, value: CreateFilterRequestExpand) -> Self {
         self.expand = Some(value);
-
-        self
-    }
-
-    #[must_use]
-    pub fn filter(mut self, value: Filter) -> Self {
-        self.filter = Some(value);
 
         self
     }
@@ -137,12 +140,7 @@ impl<'a> CreateFilterRequest<'a> {
             config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
-        let body = match serde_json::to_value(&self.filter)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.filter)?));
 
         Ok(config)
     }
@@ -205,12 +203,12 @@ impl<'a> GetFavouriteFiltersRequest<'a> {
 pub struct GetFilterRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<GetFilterRequestExpand>,
-    id: String,
+    id: i64,
 }
 
 impl<'a> GetFilterRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self { client, id: id.into(), expand: None }
+    fn new(client: &'a crate::core::Client, id: i64) -> Self {
+        Self { client, id, expand: None }
     }
 
     #[must_use]
@@ -222,10 +220,8 @@ impl<'a> GetFilterRequest<'a> {
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/filter/{}", crate::core::encode_path_segment(&self.id)),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/2/filter/{}", self.id));
 
         if let Some(value) = &self.expand {
             config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
@@ -250,13 +246,13 @@ impl<'a> GetFilterRequest<'a> {
 pub struct UpdateFilterRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<UpdateFilterRequestExpand>,
-    id: String,
-    body: Option<Filter>,
+    id: i64,
+    body: Filter,
 }
 
 impl<'a> UpdateFilterRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self { client, id: id.into(), expand: None, body: None }
+    fn new(client: &'a crate::core::Client, id: i64, body: Filter) -> Self {
+        Self { client, id, body, expand: None }
     }
 
     #[must_use]
@@ -266,19 +262,10 @@ impl<'a> UpdateFilterRequest<'a> {
         self
     }
 
-    #[must_use]
-    pub fn body(mut self, value: Filter) -> Self {
-        self.body = Some(value);
-
-        self
-    }
-
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            format!("/rest/api/2/filter/{}", crate::core::encode_path_segment(&self.id)),
-        );
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/rest/api/2/filter/{}", self.id));
 
         if let Some(value) = &self.expand {
             config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
@@ -304,20 +291,18 @@ impl<'a> UpdateFilterRequest<'a> {
 #[derive(Clone)]
 pub struct DeleteFilterRequest<'a> {
     client: &'a crate::core::Client,
-    id: String,
+    id: i64,
 }
 
 impl<'a> DeleteFilterRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self { client, id: id.into() }
+    fn new(client: &'a crate::core::Client, id: i64) -> Self {
+        Self { client, id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!("/rest/api/2/filter/{}", crate::core::encode_path_segment(&self.id)),
-        );
+        let config =
+            crate::core::RequestConfig::new(crate::core::Method::DELETE, format!("/rest/api/2/filter/{}", self.id));
 
         Ok(config)
     }
@@ -337,19 +322,19 @@ impl<'a> DeleteFilterRequest<'a> {
 #[derive(Clone)]
 pub struct GetColumnsRequest<'a> {
     client: &'a crate::core::Client,
-    id: String,
+    id: i64,
 }
 
 impl<'a> GetColumnsRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self { client, id: id.into() }
+    fn new(client: &'a crate::core::Client, id: i64) -> Self {
+        Self { client, id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/filter/{}/columns", crate::core::encode_path_segment(&self.id)),
+            format!("/rest/api/2/filter/{}/columns", self.id),
         );
 
         Ok(config)
@@ -370,36 +355,23 @@ impl<'a> GetColumnsRequest<'a> {
 #[derive(Clone)]
 pub struct SetColumnsRequest<'a> {
     client: &'a crate::core::Client,
-    id: String,
-    columns: Option<Vec<String>>,
+    id: i64,
+    column_request_body: SetColumnsRequestColumnRequestBody,
 }
 
 impl<'a> SetColumnsRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self { client, id: id.into(), columns: None }
-    }
-
-    #[must_use]
-    pub fn columns(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
-        self.columns = Some(value.into_iter().map(Into::into).collect());
-
-        self
+    fn new(client: &'a crate::core::Client, id: i64, column_request_body: SetColumnsRequestColumnRequestBody) -> Self {
+        Self { client, id, column_request_body }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(
             crate::core::Method::PUT,
-            format!("/rest/api/2/filter/{}/columns", crate::core::encode_path_segment(&self.id)),
+            format!("/rest/api/2/filter/{}/columns", self.id),
         );
 
-        let mut body = serde_json::Map::new();
-
-        if let Some(value) = &self.columns {
-            body.insert("columns".to_owned(), serde_json::to_value(value)?);
-        }
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.column_request_body)?));
 
         Ok(config)
     }
@@ -419,19 +391,19 @@ impl<'a> SetColumnsRequest<'a> {
 #[derive(Clone)]
 pub struct ResetColumnsRequest<'a> {
     client: &'a crate::core::Client,
-    id: String,
+    id: i64,
 }
 
 impl<'a> ResetColumnsRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self { client, id: id.into() }
+    fn new(client: &'a crate::core::Client, id: i64) -> Self {
+        Self { client, id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::DELETE,
-            format!("/rest/api/2/filter/{}/columns", crate::core::encode_path_segment(&self.id)),
+            format!("/rest/api/2/filter/{}/columns", self.id),
         );
 
         Ok(config)

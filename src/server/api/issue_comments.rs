@@ -2,6 +2,34 @@
 
 use super::super::models::*;
 
+crate::open_enum! {
+    /// Optional flags: renderedBody (provides body rendered in HTML)
+    pub enum GetCommentsRequestExpand {
+        RenderedBody => "renderedBody",
+    }
+}
+
+crate::open_enum! {
+    /// Optional flags: renderedBody (provides body rendered in HTML)
+    pub enum AddCommentRequestExpand {
+        RenderedBody => "renderedBody",
+    }
+}
+
+crate::open_enum! {
+    /// Optional flags: renderedBody (provides body rendered in HTML)
+    pub enum GetCommentRequestExpand {
+        RenderedBody => "renderedBody",
+    }
+}
+
+crate::open_enum! {
+    /// Optional flags: renderedBody (provides body rendered in HTML)
+    pub enum UpdateCommentRequestExpand {
+        RenderedBody => "renderedBody",
+    }
+}
+
 /// The IssueComments operations.
 pub struct IssueCommentsService<'a> {
     client: &'a crate::core::Client,
@@ -18,8 +46,8 @@ impl<'a> IssueCommentsService<'a> {
     }
 
     /// Adds a new comment to an issue.
-    pub fn add_comment(&self, issue_id_or_key: impl Into<String>) -> AddCommentRequest<'a> {
-        AddCommentRequest::new(self.client, issue_id_or_key)
+    pub fn add_comment(&self, issue_id_or_key: impl Into<String>, comment_input: CommentJson) -> AddCommentRequest<'a> {
+        AddCommentRequest::new(self.client, issue_id_or_key, comment_input)
     }
 
     /// Returns a single comment.
@@ -32,8 +60,9 @@ impl<'a> IssueCommentsService<'a> {
         &self,
         issue_id_or_key: impl Into<String>,
         id: impl Into<String>,
+        body: CommentJson,
     ) -> UpdateCommentRequest<'a> {
-        UpdateCommentRequest::new(self.client, issue_id_or_key, id)
+        UpdateCommentRequest::new(self.client, issue_id_or_key, id, body)
     }
 
     /// Deletes an existing comment.
@@ -50,7 +79,7 @@ impl<'a> IssueCommentsService<'a> {
 #[derive(Clone)]
 pub struct GetCommentsRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<GetCommentsRequestExpand>,
     max_results: Option<i64>,
     issue_id_or_key: String,
     order_by: Option<String>,
@@ -71,7 +100,7 @@ impl<'a> GetCommentsRequest<'a> {
 
     /// Optional flags: renderedBody (provides body rendered in HTML)
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
+    pub fn expand(mut self, value: impl Into<GetCommentsRequestExpand>) -> Self {
         self.expand = Some(value.into());
 
         self
@@ -109,7 +138,7 @@ impl<'a> GetCommentsRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         if let Some(value) = &self.max_results {
@@ -158,27 +187,20 @@ impl<'a> GetCommentsRequest<'a> {
 #[derive(Clone)]
 pub struct AddCommentRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<AddCommentRequestExpand>,
     issue_id_or_key: String,
-    comment_json: Option<CommentJson>,
+    comment_input: CommentJson,
 }
 
 impl<'a> AddCommentRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), expand: None, comment_json: None }
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, comment_input: CommentJson) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), comment_input, expand: None }
     }
 
     /// Optional flags: renderedBody (provides body rendered in HTML)
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
+    pub fn expand(mut self, value: impl Into<AddCommentRequestExpand>) -> Self {
         self.expand = Some(value.into());
-
-        self
-    }
-
-    #[must_use]
-    pub fn comment_json(mut self, value: CommentJson) -> Self {
-        self.comment_json = Some(value);
 
         self
     }
@@ -191,15 +213,10 @@ impl<'a> AddCommentRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
-        let body = match serde_json::to_value(&self.comment_json)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.comment_input)?));
 
         Ok(config)
     }
@@ -219,7 +236,7 @@ impl<'a> AddCommentRequest<'a> {
 #[derive(Clone)]
 pub struct GetCommentRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<GetCommentRequestExpand>,
     issue_id_or_key: String,
     id: String,
 }
@@ -231,7 +248,7 @@ impl<'a> GetCommentRequest<'a> {
 
     /// Optional flags: renderedBody (provides body rendered in HTML)
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
+    pub fn expand(mut self, value: impl Into<GetCommentRequestExpand>) -> Self {
         self.expand = Some(value.into());
 
         self
@@ -249,7 +266,7 @@ impl<'a> GetCommentRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -270,28 +287,26 @@ impl<'a> GetCommentRequest<'a> {
 #[derive(Clone)]
 pub struct UpdateCommentRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<UpdateCommentRequestExpand>,
     issue_id_or_key: String,
     id: String,
-    body: Option<CommentJson>,
+    body: CommentJson,
 }
 
 impl<'a> UpdateCommentRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into(), expand: None, body: None }
+    fn new(
+        client: &'a crate::core::Client,
+        issue_id_or_key: impl Into<String>,
+        id: impl Into<String>,
+        body: CommentJson,
+    ) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into(), body, expand: None }
     }
 
     /// Optional flags: renderedBody (provides body rendered in HTML)
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
+    pub fn expand(mut self, value: impl Into<UpdateCommentRequestExpand>) -> Self {
         self.expand = Some(value.into());
-
-        self
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: CommentJson) -> Self {
-        self.body = Some(value);
 
         self
     }
@@ -308,7 +323,7 @@ impl<'a> UpdateCommentRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));

@@ -51,8 +51,8 @@ impl<'a> ProjectVersionsService<'a> {
     }
 
     /// Merge versions
-    pub fn merge_versions(&self, move_issues_to: impl Into<String>, id: impl Into<String>) -> MergeVersionsRequest<'a> {
-        MergeVersionsRequest::new(self.client, move_issues_to, id)
+    pub fn merge_versions(&self, id: impl Into<String>, move_issues_to: impl Into<String>) -> MergeVersionsRequest<'a> {
+        MergeVersionsRequest::new(self.client, id, move_issues_to)
     }
 
     /// Modify a version's sequence within a project.
@@ -227,10 +227,7 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
     /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
     /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
-    pub fn stream(
-        self,
-    ) -> futures_util::stream::BoxStream<'a, crate::core::Result<std::collections::HashMap<String, serde_json::Value>>>
-    {
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Version>> {
         let first = self.start_at.unwrap_or(0);
 
         crate::core::stream_pages(self, first, |mut request, position| async move {
@@ -248,7 +245,7 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<PagedResults> {
+    pub async fn send(self) -> crate::core::Result<RustPageVersion> {
         self.client.send(&self.config()?).await
     }
 
@@ -566,13 +563,13 @@ impl<'a> UpdateVersionRequest<'a> {
 #[derive(Clone)]
 pub struct MergeVersionsRequest<'a> {
     client: &'a crate::core::Client,
-    move_issues_to: String,
     id: String,
+    move_issues_to: String,
 }
 
 impl<'a> MergeVersionsRequest<'a> {
-    fn new(client: &'a crate::core::Client, move_issues_to: impl Into<String>, id: impl Into<String>) -> Self {
-        Self { client, move_issues_to: move_issues_to.into(), id: id.into() }
+    fn new(client: &'a crate::core::Client, id: impl Into<String>, move_issues_to: impl Into<String>) -> Self {
+        Self { client, id: id.into(), move_issues_to: move_issues_to.into() }
     }
 
     /// The request as the transport will send it.

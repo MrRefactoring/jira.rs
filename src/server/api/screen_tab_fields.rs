@@ -13,33 +13,39 @@ impl<'a> ScreenTabFieldsService<'a> {
     }
 
     /// Gets all fields for a given tab.
-    pub fn get_all_screen_tab_fields(&self, tab_id: i64, screen_id: i64) -> GetAllScreenTabFieldsRequest<'a> {
-        GetAllScreenTabFieldsRequest::new(self.client, tab_id, screen_id)
+    pub fn get_all_screen_tab_fields(&self, screen_id: i64, tab_id: i64) -> GetAllScreenTabFieldsRequest<'a> {
+        GetAllScreenTabFieldsRequest::new(self.client, screen_id, tab_id)
     }
 
     /// Adds field to the given tab.
-    pub fn add_screen_tab_field(&self, tab_id: i64, screen_id: i64) -> AddScreenTabFieldRequest<'a> {
-        AddScreenTabFieldRequest::new(self.client, tab_id, screen_id)
+    pub fn add_screen_tab_field(
+        &self,
+        screen_id: i64,
+        tab_id: i64,
+        add_field: AddField,
+    ) -> AddScreenTabFieldRequest<'a> {
+        AddScreenTabFieldRequest::new(self.client, screen_id, tab_id, add_field)
     }
 
     /// Removes field from given tab.
     pub fn remove_screen_tab_field(
         &self,
-        tab_id: i64,
         screen_id: i64,
+        tab_id: i64,
         id: impl Into<String>,
     ) -> RemoveScreenTabFieldRequest<'a> {
-        RemoveScreenTabFieldRequest::new(self.client, tab_id, screen_id, id)
+        RemoveScreenTabFieldRequest::new(self.client, screen_id, tab_id, id)
     }
 
     /// Moves field on the given tab.
     pub fn move_screen_tab_field(
         &self,
-        tab_id: i64,
         screen_id: i64,
+        tab_id: i64,
         id: impl Into<String>,
+        move_field: MoveField,
     ) -> MoveScreenTabFieldRequest<'a> {
-        MoveScreenTabFieldRequest::new(self.client, tab_id, screen_id, id)
+        MoveScreenTabFieldRequest::new(self.client, screen_id, tab_id, id, move_field)
     }
 }
 
@@ -47,14 +53,14 @@ impl<'a> ScreenTabFieldsService<'a> {
 #[derive(Clone)]
 pub struct GetAllScreenTabFieldsRequest<'a> {
     client: &'a crate::core::Client,
-    tab_id: i64,
     screen_id: i64,
+    tab_id: i64,
     project_key: Option<String>,
 }
 
 impl<'a> GetAllScreenTabFieldsRequest<'a> {
-    fn new(client: &'a crate::core::Client, tab_id: i64, screen_id: i64) -> Self {
-        Self { client, tab_id, screen_id, project_key: None }
+    fn new(client: &'a crate::core::Client, screen_id: i64, tab_id: i64) -> Self {
+        Self { client, screen_id, tab_id, project_key: None }
     }
 
     /// the key of the project; this parameter is optional
@@ -94,21 +100,14 @@ impl<'a> GetAllScreenTabFieldsRequest<'a> {
 #[derive(Clone)]
 pub struct AddScreenTabFieldRequest<'a> {
     client: &'a crate::core::Client,
-    tab_id: i64,
     screen_id: i64,
-    add_field: Option<AddField>,
+    tab_id: i64,
+    add_field: AddField,
 }
 
 impl<'a> AddScreenTabFieldRequest<'a> {
-    fn new(client: &'a crate::core::Client, tab_id: i64, screen_id: i64) -> Self {
-        Self { client, tab_id, screen_id, add_field: None }
-    }
-
-    #[must_use]
-    pub fn add_field(mut self, value: AddField) -> Self {
-        self.add_field = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, screen_id: i64, tab_id: i64, add_field: AddField) -> Self {
+        Self { client, screen_id, tab_id, add_field }
     }
 
     /// The request as the transport will send it.
@@ -118,12 +117,7 @@ impl<'a> AddScreenTabFieldRequest<'a> {
             format!("/rest/api/2/screens/{}/tabs/{}/fields", self.screen_id, self.tab_id),
         );
 
-        let body = match serde_json::to_value(&self.add_field)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.add_field)?));
 
         Ok(config)
     }
@@ -143,14 +137,14 @@ impl<'a> AddScreenTabFieldRequest<'a> {
 #[derive(Clone)]
 pub struct RemoveScreenTabFieldRequest<'a> {
     client: &'a crate::core::Client,
-    tab_id: i64,
     screen_id: i64,
+    tab_id: i64,
     id: String,
 }
 
 impl<'a> RemoveScreenTabFieldRequest<'a> {
-    fn new(client: &'a crate::core::Client, tab_id: i64, screen_id: i64, id: impl Into<String>) -> Self {
-        Self { client, tab_id, screen_id, id: id.into() }
+    fn new(client: &'a crate::core::Client, screen_id: i64, tab_id: i64, id: impl Into<String>) -> Self {
+        Self { client, screen_id, tab_id, id: id.into() }
     }
 
     /// The request as the transport will send it.
@@ -183,22 +177,21 @@ impl<'a> RemoveScreenTabFieldRequest<'a> {
 #[derive(Clone)]
 pub struct MoveScreenTabFieldRequest<'a> {
     client: &'a crate::core::Client,
-    tab_id: i64,
     screen_id: i64,
+    tab_id: i64,
     id: String,
-    move_field: Option<MoveField>,
+    move_field: MoveField,
 }
 
 impl<'a> MoveScreenTabFieldRequest<'a> {
-    fn new(client: &'a crate::core::Client, tab_id: i64, screen_id: i64, id: impl Into<String>) -> Self {
-        Self { client, tab_id, screen_id, id: id.into(), move_field: None }
-    }
-
-    #[must_use]
-    pub fn move_field(mut self, value: MoveField) -> Self {
-        self.move_field = Some(value);
-
-        self
+    fn new(
+        client: &'a crate::core::Client,
+        screen_id: i64,
+        tab_id: i64,
+        id: impl Into<String>,
+        move_field: MoveField,
+    ) -> Self {
+        Self { client, screen_id, tab_id, id: id.into(), move_field }
     }
 
     /// The request as the transport will send it.
@@ -213,12 +206,7 @@ impl<'a> MoveScreenTabFieldRequest<'a> {
             ),
         );
 
-        let body = match serde_json::to_value(&self.move_field)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.move_field)?));
 
         Ok(config)
     }

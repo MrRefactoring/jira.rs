@@ -18,7 +18,7 @@ impl<'a> IssueSecuritySchemesService<'a> {
     }
 
     /// Returns the issue security scheme along with that are defined.
-    pub fn get_issue_security_scheme(&self, id: impl Into<String>) -> GetIssueSecuritySchemeRequest<'a> {
+    pub fn get_issue_security_scheme(&self, id: i64) -> GetIssueSecuritySchemeRequest<'a> {
         GetIssueSecuritySchemeRequest::new(self.client, id)
     }
 }
@@ -57,19 +57,19 @@ impl<'a> GetIssueSecuritySchemesRequest<'a> {
 #[derive(Clone)]
 pub struct GetIssueSecuritySchemeRequest<'a> {
     client: &'a crate::core::Client,
-    id: String,
+    id: i64,
 }
 
 impl<'a> GetIssueSecuritySchemeRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self { client, id: id.into() }
+    fn new(client: &'a crate::core::Client, id: i64) -> Self {
+        Self { client, id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/api/2/issuesecurityschemes/{}", crate::core::encode_path_segment(&self.id)),
+            format!("/rest/api/2/issuesecurityschemes/{}", self.id),
         );
 
         Ok(config)

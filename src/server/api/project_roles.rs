@@ -41,13 +41,21 @@ impl<'a> ProjectRolesService<'a> {
     }
 
     /// Partially updates a roles name or description.
-    pub fn partial_update_project_role(&self, id: i64) -> PartialUpdateProjectRoleRequest<'a> {
-        PartialUpdateProjectRoleRequest::new(self.client, id)
+    pub fn partial_update_project_role(
+        &self,
+        id: i64,
+        create_update_role_request: CreateUpdateRoleRequest,
+    ) -> PartialUpdateProjectRoleRequest<'a> {
+        PartialUpdateProjectRoleRequest::new(self.client, id, create_update_role_request)
     }
 
     /// Fully updates a roles. Both name and description must be given.
-    pub fn fully_update_project_role(&self, id: i64) -> FullyUpdateProjectRoleRequest<'a> {
-        FullyUpdateProjectRoleRequest::new(self.client, id)
+    pub fn fully_update_project_role(
+        &self,
+        id: i64,
+        create_update_role_request: CreateUpdateRoleRequest,
+    ) -> FullyUpdateProjectRoleRequest<'a> {
+        FullyUpdateProjectRoleRequest::new(self.client, id, create_update_role_request)
     }
 
     /// Deletes a role. May return 403 in the future
@@ -228,19 +236,12 @@ impl<'a> GetProjectRoleByIdRequest<'a> {
 pub struct PartialUpdateProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
-    create_update_role_request: Option<CreateUpdateRoleRequest>,
+    create_update_role_request: CreateUpdateRoleRequest,
 }
 
 impl<'a> PartialUpdateProjectRoleRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self { client, id, create_update_role_request: None }
-    }
-
-    #[must_use]
-    pub fn create_update_role_request(mut self, value: CreateUpdateRoleRequest) -> Self {
-        self.create_update_role_request = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, id: i64, create_update_role_request: CreateUpdateRoleRequest) -> Self {
+        Self { client, id, create_update_role_request }
     }
 
     /// The request as the transport will send it.
@@ -248,12 +249,7 @@ impl<'a> PartialUpdateProjectRoleRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::POST, format!("/rest/api/2/role/{}", self.id));
 
-        let body = match serde_json::to_value(&self.create_update_role_request)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.create_update_role_request)?));
 
         Ok(config)
     }
@@ -274,19 +270,12 @@ impl<'a> PartialUpdateProjectRoleRequest<'a> {
 pub struct FullyUpdateProjectRoleRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
-    create_update_role_request: Option<CreateUpdateRoleRequest>,
+    create_update_role_request: CreateUpdateRoleRequest,
 }
 
 impl<'a> FullyUpdateProjectRoleRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: i64) -> Self {
-        Self { client, id, create_update_role_request: None }
-    }
-
-    #[must_use]
-    pub fn create_update_role_request(mut self, value: CreateUpdateRoleRequest) -> Self {
-        self.create_update_role_request = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, id: i64, create_update_role_request: CreateUpdateRoleRequest) -> Self {
+        Self { client, id, create_update_role_request }
     }
 
     /// The request as the transport will send it.
@@ -294,12 +283,7 @@ impl<'a> FullyUpdateProjectRoleRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/rest/api/2/role/{}", self.id));
 
-        let body = match serde_json::to_value(&self.create_update_role_request)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.create_update_role_request)?));
 
         Ok(config)
     }

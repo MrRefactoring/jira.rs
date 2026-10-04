@@ -111,28 +111,36 @@ impl<'a> SprintService<'a> {
     }
 
     /// Returns the keys of all properties for the sprint identified by the id. The user who retrieves the property keys is required to have permissions to view the sprint.
-    pub fn get_properties_keys(&self, sprint_id: i64) -> GetPropertiesKeysRequest<'a> {
+    pub fn get_properties_keys(&self, sprint_id: impl Into<String>) -> GetPropertiesKeysRequest<'a> {
         GetPropertiesKeysRequest::new(self.client, sprint_id)
     }
 
     /// Returns the value of the property with a given key from the sprint identified by the provided id. The user who retrieves the property is required to have permissions to view the sprint.
-    pub fn get_property(&self, property_key: impl Into<String>, sprint_id: i64) -> GetPropertyRequest<'a> {
-        GetPropertyRequest::new(self.client, property_key, sprint_id)
+    pub fn get_property(
+        &self,
+        sprint_id: impl Into<String>,
+        property_key: impl Into<String>,
+    ) -> GetPropertyRequest<'a> {
+        GetPropertyRequest::new(self.client, sprint_id, property_key)
     }
 
     /// Sets the value of the specified sprint's property. You can use this resource to store a custom data against the sprint identified by the id. The user who stores the data is required to have permissions to modify the sprint.
     pub fn set_property(
         &self,
+        sprint_id: impl Into<String>,
         property_key: impl Into<String>,
-        sprint_id: i64,
-        body: std::collections::HashMap<String, serde_json::Value>,
+        property_value: std::collections::HashMap<String, serde_json::Value>,
     ) -> SetPropertyRequest<'a> {
-        SetPropertyRequest::new(self.client, property_key, sprint_id, body)
+        SetPropertyRequest::new(self.client, sprint_id, property_key, property_value)
     }
 
     /// Removes the property from the sprint identified by the id. Ths user removing the property is required to have permissions to modify the sprint.
-    pub fn delete_property(&self, property_key: impl Into<String>, sprint_id: i64) -> DeletePropertyRequest<'a> {
-        DeletePropertyRequest::new(self.client, property_key, sprint_id)
+    pub fn delete_property(
+        &self,
+        sprint_id: impl Into<String>,
+        property_key: impl Into<String>,
+    ) -> DeletePropertyRequest<'a> {
+        DeletePropertyRequest::new(self.client, sprint_id, property_key)
     }
 
     /// Swap the position of the sprint with the second sprint.
@@ -598,19 +606,19 @@ impl<'a> MoveIssuesToSprintAndRankRequest<'a> {
 #[derive(Clone)]
 pub struct GetPropertiesKeysRequest<'a> {
     client: &'a crate::core::Client,
-    sprint_id: i64,
+    sprint_id: String,
 }
 
 impl<'a> GetPropertiesKeysRequest<'a> {
-    fn new(client: &'a crate::core::Client, sprint_id: i64) -> Self {
-        Self { client, sprint_id }
+    fn new(client: &'a crate::core::Client, sprint_id: impl Into<String>) -> Self {
+        Self { client, sprint_id: sprint_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/agile/1.0/sprint/{}/properties", self.sprint_id),
+            format!("/rest/agile/1.0/sprint/{}/properties", crate::core::encode_path_segment(&self.sprint_id)),
         );
 
         Ok(config)
@@ -631,13 +639,13 @@ impl<'a> GetPropertiesKeysRequest<'a> {
 #[derive(Clone)]
 pub struct GetPropertyRequest<'a> {
     client: &'a crate::core::Client,
+    sprint_id: String,
     property_key: String,
-    sprint_id: i64,
 }
 
 impl<'a> GetPropertyRequest<'a> {
-    fn new(client: &'a crate::core::Client, property_key: impl Into<String>, sprint_id: i64) -> Self {
-        Self { client, property_key: property_key.into(), sprint_id }
+    fn new(client: &'a crate::core::Client, sprint_id: impl Into<String>, property_key: impl Into<String>) -> Self {
+        Self { client, sprint_id: sprint_id.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -646,7 +654,7 @@ impl<'a> GetPropertyRequest<'a> {
             crate::core::Method::GET,
             format!(
                 "/rest/agile/1.0/sprint/{}/properties/{}",
-                self.sprint_id,
+                crate::core::encode_path_segment(&self.sprint_id),
                 crate::core::encode_path_segment(&self.property_key)
             ),
         );
@@ -669,19 +677,19 @@ impl<'a> GetPropertyRequest<'a> {
 #[derive(Clone)]
 pub struct SetPropertyRequest<'a> {
     client: &'a crate::core::Client,
+    sprint_id: String,
     property_key: String,
-    sprint_id: i64,
-    body: std::collections::HashMap<String, serde_json::Value>,
+    property_value: std::collections::HashMap<String, serde_json::Value>,
 }
 
 impl<'a> SetPropertyRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
+        sprint_id: impl Into<String>,
         property_key: impl Into<String>,
-        sprint_id: i64,
-        body: std::collections::HashMap<String, serde_json::Value>,
+        property_value: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self { client, property_key: property_key.into(), sprint_id, body }
+        Self { client, sprint_id: sprint_id.into(), property_key: property_key.into(), property_value }
     }
 
     /// The request as the transport will send it.
@@ -690,12 +698,12 @@ impl<'a> SetPropertyRequest<'a> {
             crate::core::Method::PUT,
             format!(
                 "/rest/agile/1.0/sprint/{}/properties/{}",
-                self.sprint_id,
+                crate::core::encode_path_segment(&self.sprint_id),
                 crate::core::encode_path_segment(&self.property_key)
             ),
         );
 
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.property_value)?));
 
         Ok(config)
     }
@@ -715,13 +723,13 @@ impl<'a> SetPropertyRequest<'a> {
 #[derive(Clone)]
 pub struct DeletePropertyRequest<'a> {
     client: &'a crate::core::Client,
+    sprint_id: String,
     property_key: String,
-    sprint_id: i64,
 }
 
 impl<'a> DeletePropertyRequest<'a> {
-    fn new(client: &'a crate::core::Client, property_key: impl Into<String>, sprint_id: i64) -> Self {
-        Self { client, property_key: property_key.into(), sprint_id }
+    fn new(client: &'a crate::core::Client, sprint_id: impl Into<String>, property_key: impl Into<String>) -> Self {
+        Self { client, sprint_id: sprint_id.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -730,7 +738,7 @@ impl<'a> DeletePropertyRequest<'a> {
             crate::core::Method::DELETE,
             format!(
                 "/rest/agile/1.0/sprint/{}/properties/{}",
-                self.sprint_id,
+                crate::core::encode_path_segment(&self.sprint_id),
                 crate::core::encode_path_segment(&self.property_key)
             ),
         );
