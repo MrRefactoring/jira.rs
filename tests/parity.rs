@@ -76,8 +76,18 @@ parity!(
     |jira, surface| {
         use futures_util::StreamExt;
         drop(async {
-            let item: surface::Issue = jira.issue_search().search_issues().stream().next().await.unwrap().unwrap();
-            let _ = item.key;
+            let item: surface::Issue = jira
+                .issue_search()
+                .search_issues()
+                .jql("project = X")
+                .fields(["summary"])
+                .expand(surface::SearchIssuesRequestExpand::Other(serde_json::json!("changelog")))
+                .stream()
+                .next()
+                .await
+                .unwrap()
+                .unwrap();
+            let _ = (item.key, item.changelog);
         });
     }
 );
@@ -256,6 +266,7 @@ parity_with_value!(
 );
 
 parity!(project_versions, jira::cloud::CloudClient, jira::server::ServerClient, |jira| {
+    drop(jira.project_versions().get_project_versions("X"));
     drop(jira.project_versions().get_project_versions_paginated("X").stream());
 });
 

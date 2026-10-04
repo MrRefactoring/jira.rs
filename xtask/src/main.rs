@@ -1,6 +1,7 @@
 mod audit;
 mod coverage;
 mod dc_rig;
+mod parity;
 
 use std::path::PathBuf;
 
@@ -46,6 +47,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         "jira-dc" => dc_rig::run(&jira_dc(), &command).await,
         "jsm-dc" => dc_rig::run(&jsm_dc(), &command).await,
         "audit" => audit::run(&workspace_root(), &std::env::args().skip(2).collect::<Vec<_>>()).await,
+        "parity" => parity::run(&workspace_root(), &std::env::args().skip(2).collect::<Vec<_>>()),
         "coverage" => coverage::run(&workspace_root(), &std::env::args().skip(2).collect::<Vec<_>>()).await,
         other => Err(format!(
             "Unknown task \"{other}\". Use `cargo xtask jira-dc <up|status|down>` or `cargo xtask jsm-dc <…>`."
