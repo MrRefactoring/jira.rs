@@ -291,7 +291,7 @@ impl<'a> SearchIssuesRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::List(value.clone())));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {

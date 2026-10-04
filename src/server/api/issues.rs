@@ -1,20 +1,20 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
+use serde::Serialize;
 
-crate::open_enum! {
-    /// The expand param is used to include, hidden by default, parts of response. This can be used to include: renderedFields, names, schema, transitions, operations, editmeta, changelog, versionedRepresentations.
-    pub enum IssuesGetIssueRequestExpand {
-        RenderedFields => "renderedFields",
-        Names => "names",
-        Schema => "schema",
-        Transitions => "transitions",
-        Operations => "operations",
-        Editmeta => "editmeta",
-        Changelog => "changelog",
-        VersionedRepresentations => "versionedRepresentations",
-    }
+/// The expand param is used to include, hidden by default, parts of response. This can be used to include: renderedFields, names, schema, transitions, operations, editmeta, changelog, versionedRepresentations.
+#[derive(Debug, Clone, PartialEq, Serialize)]
+#[serde(untagged)]
+#[allow(clippy::large_enum_variant)]
+pub enum IssuesGetIssueRequestExpand {
+    One(String),
+    Many(Vec<String>),
+    /// A shape the specification does not describe.
+    Other(serde_json::Value),
 }
+
+crate::core::untagged::untagged!(IssuesGetIssueRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// A String of true or false indicating that any subtasks should also be deleted. If the issue has no subtasks this parameter is ignored. If the issue has subtasks and this parameter is missing or false, then the issue will not be deleted and an error will be returned.
@@ -634,9 +634,9 @@ pub struct IssuesGetIssueRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<IssuesGetIssueRequestExpand>,
     issue_id_or_key: String,
-    fields: Option<String>,
+    fields: Option<Vec<String>>,
     update_history: Option<bool>,
-    properties: Option<String>,
+    properties: Option<Vec<String>>,
 }
 
 impl<'a> IssuesGetIssueRequest<'a> {
@@ -653,16 +653,16 @@ impl<'a> IssuesGetIssueRequest<'a> {
 
     /// The expand param is used to include, hidden by default, parts of response. This can be used to include: renderedFields, names, schema, transitions, operations, editmeta, changelog, versionedRepresentations.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<IssuesGetIssueRequestExpand>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: IssuesGetIssueRequestExpand) -> Self {
+        self.expand = Some(value);
 
         self
     }
 
     /// The list of fields to return for the issue. By default, all fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: impl Into<String>) -> Self {
-        self.fields = Some(value.into());
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -677,8 +677,8 @@ impl<'a> IssuesGetIssueRequest<'a> {
 
     /// The list of properties to return for the issue. By default no properties are returned.
     #[must_use]
-    pub fn properties(mut self, value: impl Into<String>) -> Self {
-        self.properties = Some(value.into());
+    pub fn properties(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.properties = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -695,7 +695,7 @@ impl<'a> IssuesGetIssueRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.update_history {
@@ -703,7 +703,7 @@ impl<'a> IssuesGetIssueRequest<'a> {
         }
 
         if let Some(value) = &self.properties {
-            config.query.push(("properties".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("properties".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)

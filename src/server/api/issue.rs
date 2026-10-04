@@ -16,19 +16,6 @@ pub enum IssueGetIssueRequestExpand {
 
 crate::core::untagged::untagged!(IssueGetIssueRequestExpand { One, Many, Other });
 
-/// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum IssueGetIssueRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(IssueGetIssueRequestFields { One, Many, Other });
-
 /// The Issue operations.
 pub struct IssueService<'a> {
     client: &'a crate::core::Client,
@@ -119,7 +106,7 @@ pub struct IssueGetIssueRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<IssueGetIssueRequestExpand>,
     issue_id_or_key: String,
-    fields: Option<IssueGetIssueRequestFields>,
+    fields: Option<Vec<String>>,
     update_history: Option<bool>,
 }
 
@@ -138,8 +125,8 @@ impl<'a> IssueGetIssueRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: IssueGetIssueRequestFields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -164,7 +151,7 @@ impl<'a> IssueGetIssueRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.update_history {

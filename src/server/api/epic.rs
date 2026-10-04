@@ -16,19 +16,6 @@ pub enum GetIssuesWithoutEpicRequestExpand {
 
 crate::core::untagged::untagged!(GetIssuesWithoutEpicRequestExpand { One, Many, Other });
 
-/// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesWithoutEpicRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesWithoutEpicRequestFields { One, Many, Other });
-
 /// A comma-separated list of the parameters to expand.
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
@@ -41,19 +28,6 @@ pub enum GetIssuesForEpicRequestExpand {
 }
 
 crate::core::untagged::untagged!(GetIssuesForEpicRequestExpand { One, Many, Other });
-
-/// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForEpicRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesForEpicRequestFields { One, Many, Other });
 
 /// The Epic operations.
 pub struct EpicService<'a> {
@@ -121,7 +95,7 @@ pub struct GetIssuesWithoutEpicRequest<'a> {
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
-    fields: Option<GetIssuesWithoutEpicRequestFields>,
+    fields: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
@@ -164,8 +138,8 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: GetIssuesWithoutEpicRequestFields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -200,7 +174,7 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {
@@ -358,7 +332,7 @@ pub struct GetIssuesForEpicRequest<'a> {
     max_results: Option<i64>,
     validate_query: Option<bool>,
     epic_id_or_key: String,
-    fields: Option<GetIssuesForEpicRequestFields>,
+    fields: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
@@ -410,8 +384,8 @@ impl<'a> GetIssuesForEpicRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: GetIssuesForEpicRequestFields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -448,7 +422,7 @@ impl<'a> GetIssuesForEpicRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {

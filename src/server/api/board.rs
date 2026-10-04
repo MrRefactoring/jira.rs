@@ -16,19 +16,6 @@ pub enum GetAllBoardsRequestType {
 
 crate::core::untagged::untagged!(GetAllBoardsRequestType { One, Many, Other });
 
-/// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForBacklogRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesForBacklogRequestFields { One, Many, Other });
-
 /// A comma-separated list of the parameters to expand.
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
@@ -42,19 +29,6 @@ pub enum GetIssuesWithoutEpicForBoardRequestExpand {
 
 crate::core::untagged::untagged!(GetIssuesWithoutEpicForBoardRequestExpand { One, Many, Other });
 
-/// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesWithoutEpicForBoardRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesWithoutEpicForBoardRequestFields { One, Many, Other });
-
 /// A comma-separated list of the parameters to expand.
 #[derive(Debug, Clone, PartialEq, Serialize)]
 #[serde(untagged)]
@@ -67,32 +41,6 @@ pub enum GetBoardIssuesForEpicRequestExpand {
 }
 
 crate::core::untagged::untagged!(GetBoardIssuesForEpicRequestExpand { One, Many, Other });
-
-/// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetBoardIssuesForEpicRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetBoardIssuesForEpicRequestFields { One, Many, Other });
-
-/// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForBoardRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesForBoardRequestFields { One, Many, Other });
 
 crate::open_enum! {
     /// Filters results to sprints in specified states. Valid values: future, active, closed. You can define multiple states separated by commas, e.g. state=active,closed
@@ -115,19 +63,6 @@ pub enum GetBoardIssuesForSprintRequestExpand {
 }
 
 crate::core::untagged::untagged!(GetBoardIssuesForSprintRequestExpand { One, Many, Other });
-
-/// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetBoardIssuesForSprintRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetBoardIssuesForSprintRequestFields { One, Many, Other });
 
 /// The Board operations.
 pub struct BoardService<'a> {
@@ -508,7 +443,7 @@ pub struct GetIssuesForBacklogRequest<'a> {
     max_results: Option<i64>,
     validate_query: Option<bool>,
     board_id: i64,
-    fields: Option<GetIssuesForBacklogRequestFields>,
+    fields: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
@@ -560,8 +495,8 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: GetIssuesForBacklogRequestFields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -598,7 +533,7 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {
@@ -780,7 +715,7 @@ pub struct GetIssuesWithoutEpicForBoardRequest<'a> {
     max_results: Option<i64>,
     validate_query: Option<bool>,
     board_id: i64,
-    fields: Option<GetIssuesWithoutEpicForBoardRequestFields>,
+    fields: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
@@ -832,8 +767,8 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: GetIssuesWithoutEpicForBoardRequestFields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -870,7 +805,7 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {
@@ -917,7 +852,7 @@ pub struct GetBoardIssuesForEpicRequest<'a> {
     max_results: Option<i64>,
     validate_query: Option<bool>,
     epic_id: i64,
-    fields: Option<GetBoardIssuesForEpicRequestFields>,
+    fields: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
@@ -970,8 +905,8 @@ impl<'a> GetBoardIssuesForEpicRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: GetBoardIssuesForEpicRequestFields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1008,7 +943,7 @@ impl<'a> GetBoardIssuesForEpicRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {
@@ -1054,7 +989,7 @@ pub struct GetIssuesForBoardRequest<'a> {
     max_results: Option<i64>,
     validate_query: Option<bool>,
     board_id: i64,
-    fields: Option<GetIssuesForBoardRequestFields>,
+    fields: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
@@ -1106,8 +1041,8 @@ impl<'a> GetIssuesForBoardRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: GetIssuesForBoardRequestFields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1144,7 +1079,7 @@ impl<'a> GetIssuesForBoardRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {
@@ -1583,7 +1518,7 @@ pub struct GetBoardIssuesForSprintRequest<'a> {
     max_results: Option<i64>,
     validate_query: Option<bool>,
     sprint_id: i64,
-    fields: Option<GetBoardIssuesForSprintRequestFields>,
+    fields: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
@@ -1636,8 +1571,8 @@ impl<'a> GetBoardIssuesForSprintRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: GetBoardIssuesForSprintRequestFields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1674,7 +1609,7 @@ impl<'a> GetBoardIssuesForSprintRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {

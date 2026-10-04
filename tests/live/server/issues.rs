@@ -185,7 +185,7 @@ async fn moves_the_issue_through_a_transition() {
         .await
         .expect("an issue can be moved through a transition");
 
-    let after = server().issues().get_issue(&key).fields("status").send().await.expect("the moved issue reads back");
+    let after = server().issues().get_issue(&key).fields(["status"]).send().await.expect("the moved issue reads back");
     let status = after
         .fields
         .as_ref()
@@ -522,7 +522,7 @@ async fn links_two_issues_and_unlinks_them() {
         .await
         .expect("two issues can be linked");
 
-    let linked = server().issues().get_issue(&key).fields("issuelinks").send().await.expect("the issue reads back");
+    let linked = server().issues().get_issue(&key).fields(["issuelinks"]).send().await.expect("the issue reads back");
     let links = linked
         .fields
         .as_ref()

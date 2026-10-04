@@ -62,11 +62,22 @@ parity!(projects, jira::cloud::CloudClient, jira::server::ServerClient, |jira| {
 
 parity!(issue_search, jira::cloud::CloudClient, jira::server::ServerClient, |jira| {
     drop(jira.issue_search().search_issues().stream());
-    drop(jira.issue_search().search_issues().jql("project = X"));
+    drop(jira.issue_search().search_issues().jql("project = X").fields(["summary"]));
 });
 
+parity_with_value!(
+    issue_search_expand,
+    jira::cloud::CloudClient,
+    jira::server::ServerClient,
+    jira::cloud::SearchIssuesRequestExpand::Other(serde_json::json!("changelog")),
+    jira::server::SearchIssuesRequestExpand::Other(serde_json::json!("changelog")),
+    |jira, expand| {
+        drop(jira.issue_search().search_issues().jql("project = X").expand(expand));
+    }
+);
+
 parity!(issues, jira::cloud::CloudClient, jira::server::ServerClient, |jira| {
-    drop(jira.issues().get_issue("X-1").update_history(true));
+    drop(jira.issues().get_issue("X-1").update_history(true).fields(["summary"]).properties(["key"]));
 });
 
 parity_with_value!(
@@ -153,4 +164,16 @@ parity_with_value!(
 
 parity!(user_search, jira::cloud::CloudClient, jira::server::ServerClient, |jira| {
     drop(jira.user_search().find_users().stream());
+    drop(jira.user_search().find_assignable_users().stream());
 });
+
+#[test]
+fn server_issue_lists_use_one_comma_separated_query_value() {
+    let client = Client::builder().host("https://example.com").build().unwrap();
+    let jira = jira::server::ServerClient::new(client);
+    let issue = jira.issues().get_issue("X-1").fields(["summary", "status"]).properties(["a", "b"]).config().unwrap();
+    assert!(issue.query.contains(&("fields".to_owned(), jira::core::QueryValue::Scalar("summary,status".to_owned()))));
+    assert!(issue.query.contains(&("properties".to_owned(), jira::core::QueryValue::Scalar("a,b".to_owned()))));
+    let agile = jira.board().get_issues_for_board(7).fields(["summary", "status"]).config().unwrap();
+    assert!(agile.query.contains(&("fields".to_owned(), jira::core::QueryValue::Scalar("summary,status".to_owned()))));
+}
