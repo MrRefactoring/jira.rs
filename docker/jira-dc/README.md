@@ -5,6 +5,9 @@
 and not ours to redistribute — so a fresh checkout has to put one there. In CI it is written from the
 `JIRA_DC_TIMEBOMB_LICENSE` secret.
 
+To run beside another instance using port 8080, set `JIRA_SERVER_BASE_URL=http://localhost:8090`.
+Then run `cargo xtask jira-dc up`; the host and proxy ports will both follow the URL.
+
 ## It has to be a Jira Software licence
 
 Atlassian publishes [three-hour timebomb keys](https://developer.atlassian.com/platform/marketplace/timebomb-licenses-for-testing-server-apps/)
