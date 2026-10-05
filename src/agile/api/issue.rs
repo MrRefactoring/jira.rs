@@ -111,7 +111,7 @@ impl<'a> RankIssuesRequest<'a> {
 pub struct GetIssueRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
+    fields: Option<Vec<String>>,
     expand: Option<GetIssueRequestExpand>,
     update_history: Option<bool>,
 }
@@ -123,11 +123,8 @@ impl<'a> GetIssueRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(
-        mut self,
-        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
-    ) -> Self {
-        self.fields = Some(value.into_iter().collect());
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -156,7 +153,7 @@ impl<'a> GetIssueRequest<'a> {
         );
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.expand {

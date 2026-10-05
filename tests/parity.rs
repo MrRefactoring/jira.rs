@@ -238,11 +238,12 @@ parity_with_value!(
 parity!(board, jira::agile::AgileClient, jira::server::ServerClient, |jira| {
     drop(jira.board().get_all_boards().stream());
     drop(jira.board().get_all_sprints(1).stream());
+    drop(jira.board().get_issues_for_board(1).fields(["summary"]).stream());
     drop(jira.board().get_board_property("7", "key"));
 });
 
 parity!(sprint, jira::agile::AgileClient, jira::server::ServerClient, |jira| {
-    drop(jira.sprint().get_issues_for_sprint(1).stream());
+    drop(jira.sprint().get_issues_for_sprint(1).fields(["summary", "status"]).stream());
     drop(jira.sprint().get_property("7", "key"));
 });
 

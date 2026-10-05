@@ -14,6 +14,23 @@ fn query(request: &Request, name: &str) -> Option<String> {
     request.url.query_pairs().find(|(key, _)| key == name).map(|(_, value)| value.into_owned())
 }
 
+#[tokio::test]
+async fn agile_board_fields_use_one_query_value() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/rest/software/1.0/board/1/issue"))
+        .respond_with(ResponseTemplate::new(200).set_body_json(json!({"issues": [], "isLast": true})))
+        .mount(&server)
+        .await;
+
+    let api = jira::agile::AgileClient::new(client_for(&server));
+    api.board().get_issues_for_board(1).fields(["summary", "status"]).send().await.unwrap();
+    let requests = server.received_requests().await.unwrap();
+    let fields: Vec<_> = requests[0].url.query_pairs().filter(|(name, _)| name == "fields").collect();
+    assert_eq!(fields.len(), 1);
+    assert_eq!(fields[0].1, "summary,status");
+}
+
 macro_rules! suite {
     ($module:ident, $client:expr, $api:ident, $request:expr, $path:literal, $key:literal, [$($expected:expr),+], $body:expr, $first_count:expr, $identity:literal, [$($id:expr),+]) => {
         mod $module {

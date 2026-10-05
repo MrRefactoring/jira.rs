@@ -752,7 +752,7 @@ pub struct GetIssuesForBacklogRequest<'a> {
     reconcile_issues: Option<Vec<i64>>,
     jql: Option<String>,
     validate_query: Option<bool>,
-    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
+    fields: Option<Vec<String>>,
     expand: Option<GetIssuesForBacklogRequestExpand>,
 }
 
@@ -816,11 +816,8 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
     #[must_use]
-    pub fn fields(
-        mut self,
-        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
-    ) -> Self {
-        self.fields = Some(value.into_iter().collect());
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -861,7 +858,7 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.expand {
@@ -1090,7 +1087,7 @@ pub struct GetIssuesWithoutEpicForBoardRequest<'a> {
     reconcile_issues: Option<Vec<i64>>,
     jql: Option<String>,
     validate_query: Option<bool>,
-    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
+    fields: Option<Vec<String>>,
     expand: Option<GetIssuesWithoutEpicForBoardRequestExpand>,
 }
 
@@ -1154,11 +1151,8 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
     #[must_use]
-    pub fn fields(
-        mut self,
-        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
-    ) -> Self {
-        self.fields = Some(value.into_iter().collect());
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1199,7 +1193,7 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.expand {
@@ -1247,7 +1241,7 @@ pub struct GetBoardIssuesForEpicRequest<'a> {
     reconcile_issues: Option<Vec<i64>>,
     jql: Option<String>,
     validate_query: Option<bool>,
-    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
+    fields: Option<Vec<String>>,
     expand: Option<GetBoardIssuesForEpicRequestExpand>,
 }
 
@@ -1312,11 +1306,8 @@ impl<'a> GetBoardIssuesForEpicRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
     #[must_use]
-    pub fn fields(
-        mut self,
-        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
-    ) -> Self {
-        self.fields = Some(value.into_iter().collect());
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1357,7 +1348,7 @@ impl<'a> GetBoardIssuesForEpicRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.expand {
@@ -1513,7 +1504,7 @@ pub struct GetIssuesForBoardRequest<'a> {
     reconcile_issues: Option<Vec<i64>>,
     jql: Option<String>,
     validate_query: Option<bool>,
-    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
+    fields: Option<Vec<String>>,
     expand: Option<GetIssuesForBoardRequestExpand>,
 }
 
@@ -1577,11 +1568,8 @@ impl<'a> GetIssuesForBoardRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
     #[must_use]
-    pub fn fields(
-        mut self,
-        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
-    ) -> Self {
-        self.fields = Some(value.into_iter().collect());
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1622,7 +1610,7 @@ impl<'a> GetIssuesForBoardRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.expand {
@@ -2232,7 +2220,7 @@ pub struct GetBoardIssuesForSprintRequest<'a> {
     reconcile_issues: Option<Vec<i64>>,
     jql: Option<String>,
     validate_query: Option<bool>,
-    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
+    fields: Option<Vec<String>>,
     expand: Option<GetBoardIssuesForSprintRequestExpand>,
 }
 
@@ -2297,11 +2285,8 @@ impl<'a> GetBoardIssuesForSprintRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
     #[must_use]
-    pub fn fields(
-        mut self,
-        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
-    ) -> Self {
-        self.fields = Some(value.into_iter().collect());
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -2342,7 +2327,7 @@ impl<'a> GetBoardIssuesForSprintRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.expand {

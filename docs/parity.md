@@ -7,7 +7,7 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 | Status | Operations |
 |---|---:|
 | identical | 168 |
-| parameters differ | 65 |
+| parameters differ | 59 |
 | platform parameters | 73 |
 | type differs | 54 |
 | stream on one side | 1 |
@@ -51,15 +51,15 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 | `get_all_sprints` | `GET /rest/agile/1.0/board/{…}/sprint` | `GET /rest/agile/1.0/board/{…}/sprint` | type differs | `GetAllSprints` / `Page<Sprint>` |
 | `get_all_versions` | `GET /rest/agile/1.0/board/{…}/version` | `GET /rest/agile/1.0/board/{…}/version` | type differs | `GetAllVersions` / `Page<AgileVersion>` |
 | `get_board` | `GET /rest/agile/1.0/board/{…}` | `GET /rest/agile/1.0/board/{…}` | identical | — |
-| `get_board_issues_for_epic` | `GET /rest/agile/1.0/board/{…}/epic/{…}/issue` | `GET /rest/software/1.0/board/{…}/epic/{…}/issue` | parameters differ, platform parameters, type differs | `fields`: `impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>` / `impl IntoIterator<Item = impl Into<String>>`; Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
-| `get_board_issues_for_sprint` | `GET /rest/agile/1.0/board/{…}/sprint/{…}/issue` | `GET /rest/software/1.0/board/{…}/sprint/{…}/issue` | parameters differ, platform parameters, type differs | `fields`: `impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>` / `impl IntoIterator<Item = impl Into<String>>`; Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
+| `get_board_issues_for_epic` | `GET /rest/agile/1.0/board/{…}/epic/{…}/issue` | `GET /rest/software/1.0/board/{…}/epic/{…}/issue` | platform parameters, type differs | Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
+| `get_board_issues_for_sprint` | `GET /rest/agile/1.0/board/{…}/sprint/{…}/issue` | `GET /rest/software/1.0/board/{…}/sprint/{…}/issue` | platform parameters, type differs | Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
 | `get_board_property` | `GET /rest/agile/1.0/board/{…}/properties/{…}` | `GET /rest/agile/1.0/board/{…}/properties/{…}` | identical | — |
 | `get_board_property_keys` | `GET /rest/agile/1.0/board/{…}/properties` | `GET /rest/agile/1.0/board/{…}/properties` | identical | — |
 | `get_configuration` | `GET /rest/agile/1.0/board/{…}/configuration` | `GET /rest/agile/1.0/board/{…}/configuration` | identical | — |
 | `get_epics` | `GET /rest/agile/1.0/board/{…}/epic` | `GET /rest/agile/1.0/board/{…}/epic` | type differs | `GetEpics` / `Page<Epic>` |
-| `get_issues_for_backlog` | `GET /rest/agile/1.0/board/{…}/backlog` | `GET /rest/software/1.0/board/{…}/backlog` | parameters differ, platform parameters, type differs | `expand`: `GetIssuesForBacklogRequestExpand` / `impl Into<String>`; `fields`: `impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>` / `impl IntoIterator<Item = impl Into<String>>`; Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
-| `get_issues_for_board` | `GET /rest/agile/1.0/board/{…}/issue` | `GET /rest/software/1.0/board/{…}/issue` | parameters differ, platform parameters, type differs | `expand`: `GetIssuesForBoardRequestExpand` / `impl Into<String>`; `fields`: `impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>` / `impl IntoIterator<Item = impl Into<String>>`; Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
-| `get_issues_without_epic_for_board` | `GET /rest/agile/1.0/board/{…}/epic/none/issue` | `GET /rest/software/1.0/board/{…}/epic/none/issue` | parameters differ, platform parameters, type differs | `fields`: `impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>` / `impl IntoIterator<Item = impl Into<String>>`; Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
+| `get_issues_for_backlog` | `GET /rest/agile/1.0/board/{…}/backlog` | `GET /rest/software/1.0/board/{…}/backlog` | parameters differ, platform parameters, type differs | `expand`: `GetIssuesForBacklogRequestExpand` / `impl Into<String>`; Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
+| `get_issues_for_board` | `GET /rest/agile/1.0/board/{…}/issue` | `GET /rest/software/1.0/board/{…}/issue` | parameters differ, platform parameters, type differs | `expand`: `GetIssuesForBoardRequestExpand` / `impl Into<String>`; Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
+| `get_issues_without_epic_for_board` | `GET /rest/agile/1.0/board/{…}/epic/none/issue` | `GET /rest/software/1.0/board/{…}/epic/none/issue` | platform parameters, type differs | Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
 | `get_projects` | `GET /rest/agile/1.0/board/{…}/project` | `GET /rest/agile/1.0/board/{…}/project` | type differs | `GetProjects` / `Page<ProjectJson>` |
 | `set_board_property` | `PUT /rest/agile/1.0/board/{…}/properties/{…}` | `PUT /rest/agile/1.0/board/{…}/properties/{…}` | type differs | `()` / `Option<PropertyKeys>` |
 
@@ -79,8 +79,8 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 | Method | Data Center endpoint | Cloud endpoint | Status | Note |
 |---|---|---|---|---|
 | `get_epic` | `GET /rest/agile/1.0/epic/{…}` | `GET /rest/agile/1.0/epic/{…}` | identical | — |
-| `get_issues_for_epic` | `GET /rest/agile/1.0/epic/{…}/issue` | `GET /rest/software/1.0/epic/{…}/issue` | parameters differ, platform parameters, type differs | `fields`: `impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>` / `impl IntoIterator<Item = impl Into<String>>`; Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
-| `get_issues_without_epic` | `GET /rest/agile/1.0/epic/none/issue` | `GET /rest/software/1.0/epic/none/issue` | parameters differ, platform parameters, type differs | `fields`: `impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>` / `impl IntoIterator<Item = impl Into<String>>`; Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
+| `get_issues_for_epic` | `GET /rest/agile/1.0/epic/{…}/issue` | `GET /rest/software/1.0/epic/{…}/issue` | platform parameters, type differs | Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
+| `get_issues_without_epic` | `GET /rest/agile/1.0/epic/none/issue` | `GET /rest/software/1.0/epic/none/issue` | platform parameters, type differs | Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
 | `move_issues_to_epic` | `POST /rest/agile/1.0/epic/{…}/issue` | `POST /rest/agile/1.0/epic/{…}/issue` | parameters differ, platform parameters | 1 Cloud positional parameters / 2 Data Center; Cloud only: `issues` |
 | `partially_update_epic` | `POST /rest/agile/1.0/epic/{…}` | `POST /rest/agile/1.0/epic/{…}` | identical | — |
 | `rank_epics` | `PUT /rest/agile/1.0/epic/{…}/rank` | `PUT /rest/agile/1.0/epic/{…}/rank` | identical | — |
@@ -132,7 +132,7 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 | Method | Data Center endpoint | Cloud endpoint | Status | Note |
 |---|---|---|---|---|
 | `estimate_issue_for_board` | `PUT /rest/agile/1.0/issue/{…}/estimation` | `PUT /rest/agile/1.0/issue/{…}/estimation` | parameters differ, platform parameters, type differs | 1 Cloud positional parameters / 2 Data Center; Cloud only: `value`; `EstimateIssueForBoard` / `FieldValue` |
-| `get_issue` | `GET /rest/agile/1.0/issue/{…}` | `GET /rest/agile/1.0/issue/{…}` | parameters differ | `expand`: `GetIssueRequestExpand` / `IssueGetIssueRequestExpand`; `fields`: `impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>` / `impl IntoIterator<Item = impl Into<String>>` |
+| `get_issue` | `GET /rest/agile/1.0/issue/{…}` | `GET /rest/agile/1.0/issue/{…}` | parameters differ | `expand`: `GetIssueRequestExpand` / `IssueGetIssueRequestExpand` |
 | `get_issue_estimation_for_board` | `GET /rest/agile/1.0/issue/{…}/estimation` | `GET /rest/agile/1.0/issue/{…}/estimation` | type differs | `GetIssueEstimationForBoard` / `FieldValue` |
 | `rank_issues` | `PUT /rest/agile/1.0/issue/rank` | `PUT /rest/agile/1.0/issue/rank` | type differs | `()` / `Option<PartialSuccess>` |
 
@@ -536,7 +536,7 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 | `create_sprint` | `POST /rest/agile/1.0/sprint` | `POST /rest/agile/1.0/sprint` | parameters differ, platform parameters | `name: impl Into<String>` / `sprint_create: SprintCreate`; Cloud only: `end_date`, `goal`, `origin_board_id`, `start_date` |
 | `delete_property` | `DELETE /rest/agile/1.0/sprint/{…}/properties/{…}` | `DELETE /rest/agile/1.0/sprint/{…}/properties/{…}` | identical | — |
 | `delete_sprint` | `DELETE /rest/agile/1.0/sprint/{…}` | `DELETE /rest/agile/1.0/sprint/{…}` | identical | — |
-| `get_issues_for_sprint` | `GET /rest/agile/1.0/sprint/{…}/issue` | `GET /rest/software/1.0/sprint/{…}/issue` | parameters differ, platform parameters, type differs | `fields`: `impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>` / `impl IntoIterator<Item = impl Into<String>>`; Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
+| `get_issues_for_sprint` | `GET /rest/agile/1.0/sprint/{…}/issue` | `GET /rest/software/1.0/sprint/{…}/issue` | platform parameters, type differs | Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
 | `get_properties_keys` | `GET /rest/agile/1.0/sprint/{…}/properties` | `GET /rest/agile/1.0/sprint/{…}/properties` | identical | — |
 | `get_property` | `GET /rest/agile/1.0/sprint/{…}/properties/{…}` | `GET /rest/agile/1.0/sprint/{…}/properties/{…}` | identical | — |
 | `get_sprint` | `GET /rest/agile/1.0/sprint/{…}` | `GET /rest/agile/1.0/sprint/{…}` | identical | — |

@@ -645,7 +645,7 @@ pub struct GetIssuesForSprintRequest<'a> {
     reconcile_issues: Option<Vec<i64>>,
     jql: Option<String>,
     validate_query: Option<bool>,
-    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
+    fields: Option<Vec<String>>,
     expand: Option<GetIssuesForSprintRequestExpand>,
 }
 
@@ -709,11 +709,8 @@ impl<'a> GetIssuesForSprintRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
     #[must_use]
-    pub fn fields(
-        mut self,
-        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
-    ) -> Self {
-        self.fields = Some(value.into_iter().collect());
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -754,7 +751,7 @@ impl<'a> GetIssuesForSprintRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.expand {
