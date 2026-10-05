@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetCurrentUserRequestExpandValue {
@@ -9,22 +8,6 @@ crate::open_enum! {
         ApplicationRoles => "applicationRoles",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about user in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `groups` Returns all groups, including nested groups, the user belongs to.
-///  *  `applicationRoles` Returns the application roles the user is assigned to.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetCurrentUserRequestExpand {
-    One(GetCurrentUserRequestExpandValue),
-    Many(Vec<GetCurrentUserRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetCurrentUserRequestExpand { One, Many, Other });
 
 /// The Myself operations.
 pub struct MyselfService<'a> {
@@ -308,7 +291,7 @@ impl<'a> GetLocaleRequest<'a> {
 #[derive(Clone)]
 pub struct GetCurrentUserRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetCurrentUserRequestExpand>,
+    expand: Option<Vec<GetCurrentUserRequestExpandValue>>,
 }
 
 impl<'a> GetCurrentUserRequest<'a> {
@@ -321,8 +304,8 @@ impl<'a> GetCurrentUserRequest<'a> {
     ///  *  `groups` Returns all groups, including nested groups, the user belongs to.
     ///  *  `applicationRoles` Returns the application roles the user is assigned to.
     #[must_use]
-    pub fn expand(mut self, value: GetCurrentUserRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetCurrentUserRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -332,7 +315,10 @@ impl<'a> GetCurrentUserRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/myself".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)

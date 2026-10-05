@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetIssueSecurityLevelMembersRequestExpandValue {
@@ -12,25 +11,6 @@ crate::open_enum! {
         User => "user",
     }
 }
-
-/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `all` Returns all expandable information.
-///  *  `field` Returns information about the custom field granted the permission.
-///  *  `group` Returns information about the group that is granted the permission.
-///  *  `projectRole` Returns information about the project role granted the permission.
-///  *  `user` Returns information about the user who is granted the permission.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssueSecurityLevelMembersRequestExpand {
-    One(GetIssueSecurityLevelMembersRequestExpandValue),
-    Many(Vec<GetIssueSecurityLevelMembersRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssueSecurityLevelMembersRequestExpand { One, Many, Other });
 
 /// The IssueSecurityLevel operations.
 pub struct IssueSecurityLevelService<'a> {
@@ -78,7 +58,7 @@ pub struct GetIssueSecurityLevelMembersRequest<'a> {
     start_at: Option<i64>,
     max_results: Option<i64>,
     issue_security_level_id: Option<Vec<String>>,
-    expand: Option<GetIssueSecurityLevelMembersRequestExpand>,
+    expand: Option<Vec<GetIssueSecurityLevelMembersRequestExpandValue>>,
 }
 
 impl<'a> GetIssueSecurityLevelMembersRequest<'a> {
@@ -125,8 +105,11 @@ impl<'a> GetIssueSecurityLevelMembersRequest<'a> {
     ///  *  `projectRole` Returns information about the project role granted the permission.
     ///  *  `user` Returns information about the user who is granted the permission.
     #[must_use]
-    pub fn expand(mut self, value: GetIssueSecurityLevelMembersRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetIssueSecurityLevelMembersRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -151,7 +134,10 @@ impl<'a> GetIssueSecurityLevelMembersRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)

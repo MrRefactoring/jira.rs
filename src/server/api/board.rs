@@ -1,46 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
-
-/// Filters results to boards of the specified type. Valid values: scrum, kanban.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetAllBoardsRequestType {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetAllBoardsRequestType { One, Many, Other });
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesWithoutEpicForBoardRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesWithoutEpicForBoardRequestExpand { One, Many, Other });
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetBoardIssuesForEpicRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetBoardIssuesForEpicRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// Filters results to sprints in specified states. Valid values: future, active, closed. You can define multiple states separated by commas, e.g. state=active,closed
@@ -50,19 +10,6 @@ crate::open_enum! {
         Closed => "closed",
     }
 }
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetBoardIssuesForSprintRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetBoardIssuesForSprintRequestExpand { One, Many, Other });
 
 /// The Board operations.
 pub struct BoardService<'a> {
@@ -221,7 +168,7 @@ pub struct GetAllBoardsRequest<'a> {
     max_results: Option<i64>,
     name: Option<String>,
     project_key_or_id: Option<String>,
-    r#type: Option<GetAllBoardsRequestType>,
+    r#type: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
@@ -256,8 +203,8 @@ impl<'a> GetAllBoardsRequest<'a> {
 
     /// Filters results to boards of the specified type. Valid values: scrum, kanban.
     #[must_use]
-    pub fn r#type(mut self, value: GetAllBoardsRequestType) -> Self {
-        self.r#type = Some(value);
+    pub fn r#type(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.r#type = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -287,7 +234,7 @@ impl<'a> GetAllBoardsRequest<'a> {
         }
 
         if let Some(value) = &self.r#type {
-            config.query.push(("type".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("type".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {
@@ -438,7 +385,7 @@ impl<'a> DeleteBoardRequest<'a> {
 #[derive(Clone)]
 pub struct GetIssuesForBacklogRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<Vec<String>>,
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
@@ -461,10 +408,10 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
         }
     }
 
-    /// This parameter is currently not used.
+    /// This parameter is currently not used. This parameter is a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -517,7 +464,7 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.jql {
@@ -710,7 +657,7 @@ impl<'a> GetEpicsRequest<'a> {
 #[derive(Clone)]
 pub struct GetIssuesWithoutEpicForBoardRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetIssuesWithoutEpicForBoardRequestExpand>,
+    expand: Option<Vec<String>>,
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
@@ -735,8 +682,8 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetIssuesWithoutEpicForBoardRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -789,7 +736,7 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.jql {
@@ -846,7 +793,7 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
 #[derive(Clone)]
 pub struct GetBoardIssuesForEpicRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetBoardIssuesForEpicRequestExpand>,
+    expand: Option<Vec<String>>,
     jql: Option<String>,
     board_id: i64,
     max_results: Option<i64>,
@@ -873,8 +820,8 @@ impl<'a> GetBoardIssuesForEpicRequest<'a> {
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetBoardIssuesForEpicRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -927,7 +874,7 @@ impl<'a> GetBoardIssuesForEpicRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.jql {
@@ -984,7 +931,7 @@ impl<'a> GetBoardIssuesForEpicRequest<'a> {
 #[derive(Clone)]
 pub struct GetIssuesForBoardRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<Vec<String>>,
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
@@ -1007,10 +954,10 @@ impl<'a> GetIssuesForBoardRequest<'a> {
         }
     }
 
-    /// This parameter is currently not used.
+    /// This parameter is currently not used. This parameter is a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1063,7 +1010,7 @@ impl<'a> GetIssuesForBoardRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.jql {
@@ -1513,7 +1460,7 @@ impl<'a> GetAllSprintsRequest<'a> {
 pub struct GetBoardIssuesForSprintRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
-    expand: Option<GetBoardIssuesForSprintRequestExpand>,
+    expand: Option<Vec<String>>,
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
@@ -1539,8 +1486,8 @@ impl<'a> GetBoardIssuesForSprintRequest<'a> {
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetBoardIssuesForSprintRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1593,7 +1540,7 @@ impl<'a> GetBoardIssuesForSprintRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.jql {

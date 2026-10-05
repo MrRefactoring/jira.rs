@@ -145,7 +145,7 @@ impl<'a> ProjectVersionsService<'a> {
 #[derive(Clone)]
 pub struct GetProjectVersionsPaginatedRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<Vec<String>>,
     project_id_or_key: String,
     max_results: Option<i64>,
     order_by: Option<String>,
@@ -164,10 +164,10 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
         }
     }
 
-    /// Parameters to expand
+    /// Parameters to expand This parameter is a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -204,7 +204,7 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.max_results {
@@ -259,7 +259,7 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
 #[derive(Clone)]
 pub struct GetProjectVersionsRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<Vec<String>>,
     project_id_or_key: String,
 }
 
@@ -268,10 +268,10 @@ impl<'a> GetProjectVersionsRequest<'a> {
         Self { client, project_id_or_key: project_id_or_key.into(), expand: None }
     }
 
-    /// Parameters to expand
+    /// Parameters to expand This parameter is a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -284,7 +284,7 @@ impl<'a> GetProjectVersionsRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         Ok(config)
@@ -482,7 +482,7 @@ impl<'a> GetRemoteVersionLinksRequest<'a> {
 #[derive(Clone)]
 pub struct GetVersionRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<Vec<String>>,
     id: String,
 }
 
@@ -491,9 +491,10 @@ impl<'a> GetVersionRequest<'a> {
         Self { client, id: id.into(), expand: None }
     }
 
+    /// This parameter is a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -506,7 +507,7 @@ impl<'a> GetVersionRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         Ok(config)

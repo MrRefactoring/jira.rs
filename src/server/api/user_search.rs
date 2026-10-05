@@ -1,20 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
-
-/// the keys of the projects we are finding assignable users for, comma-separated
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum FindBulkAssignableUsersRequestProjectKeys {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(FindBulkAssignableUsersRequestProjectKeys { One, Many, Other });
 
 /// The UserSearch operations.
 pub struct UserSearchService<'a> {
@@ -29,7 +15,7 @@ impl<'a> UserSearchService<'a> {
     /// Returns a list of users that match the search string and can be assigned issues for all the given projects.
     pub fn find_bulk_assignable_users(
         &self,
-        project_keys: FindBulkAssignableUsersRequestProjectKeys,
+        project_keys: impl IntoIterator<Item = impl Into<String>>,
     ) -> FindBulkAssignableUsersRequest<'a> {
         FindBulkAssignableUsersRequest::new(self.client, project_keys)
     }
@@ -60,14 +46,20 @@ impl<'a> UserSearchService<'a> {
 pub struct FindBulkAssignableUsersRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<i64>,
-    project_keys: FindBulkAssignableUsersRequestProjectKeys,
+    project_keys: Vec<String>,
     username: Option<String>,
     start_at: Option<i64>,
 }
 
 impl<'a> FindBulkAssignableUsersRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_keys: FindBulkAssignableUsersRequestProjectKeys) -> Self {
-        Self { client, project_keys, max_results: None, username: None, start_at: None }
+    fn new(client: &'a crate::core::Client, project_keys: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        Self {
+            client,
+            project_keys: project_keys.into_iter().map(Into::into).collect(),
+            max_results: None,
+            username: None,
+            start_at: None,
+        }
     }
 
     /// The maximum number of users to return (defaults to 50). The maximum allowed value is 100 (The combination of maxResults and startAt is limited to the first 100 results). If you specify a value that is higher than this number, your search results will be truncated. If you send a request with startAt=98 and maxResults=20, it will only return 2 users.
@@ -105,7 +97,7 @@ impl<'a> FindBulkAssignableUsersRequest<'a> {
             config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
-        config.query.push(("projectKeys".to_owned(), crate::core::QueryValue::from_serializable(&self.project_keys)?));
+        config.query.push(("projectKeys".to_owned(), crate::core::QueryValue::Scalar(self.project_keys.join(","))));
 
         if let Some(value) = &self.username {
             config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));

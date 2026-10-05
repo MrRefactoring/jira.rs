@@ -1,98 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
-
-/// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetAllPermissionSchemesRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetAllPermissionSchemesRequestExpand { One, Many, Other });
-
-/// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum CreatePermissionSchemeRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(CreatePermissionSchemeRequestExpand { One, Many, Other });
-
-/// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetPermissionSchemeRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetPermissionSchemeRequestExpand { One, Many, Other });
-
-/// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum UpdatePermissionSchemeRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(UpdatePermissionSchemeRequestExpand { One, Many, Other });
-
-/// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetPermissionSchemeGrantsRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetPermissionSchemeGrantsRequestExpand { One, Many, Other });
-
-/// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum CreatePermissionGrantRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(CreatePermissionGrantRequestExpand { One, Many, Other });
-
-/// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetPermissionSchemeGrantRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetPermissionSchemeGrantRequestExpand { One, Many, Other });
 
 /// The PermissionSchemes operations.
 pub struct PermissionSchemesService<'a> {
@@ -188,7 +96,7 @@ impl<'a> PermissionSchemesService<'a> {
 #[derive(Clone)]
 pub struct GetAllPermissionSchemesRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetAllPermissionSchemesRequestExpand>,
+    expand: Option<Vec<String>>,
 }
 
 impl<'a> GetAllPermissionSchemesRequest<'a> {
@@ -198,8 +106,8 @@ impl<'a> GetAllPermissionSchemesRequest<'a> {
 
     /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
     #[must_use]
-    pub fn expand(mut self, value: GetAllPermissionSchemesRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -210,7 +118,7 @@ impl<'a> GetAllPermissionSchemesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/permissionscheme".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)
@@ -231,7 +139,7 @@ impl<'a> GetAllPermissionSchemesRequest<'a> {
 #[derive(Clone)]
 pub struct CreatePermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<CreatePermissionSchemeRequestExpand>,
+    expand: Option<Vec<String>>,
     body: PermissionScheme,
 }
 
@@ -242,8 +150,8 @@ impl<'a> CreatePermissionSchemeRequest<'a> {
 
     /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
     #[must_use]
-    pub fn expand(mut self, value: CreatePermissionSchemeRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -254,7 +162,7 @@ impl<'a> CreatePermissionSchemeRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/permissionscheme".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -365,7 +273,7 @@ impl<'a> SetSchemeAttributeRequest<'a> {
 #[derive(Clone)]
 pub struct GetPermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetPermissionSchemeRequestExpand>,
+    expand: Option<Vec<String>>,
     scheme_id: i64,
 }
 
@@ -376,8 +284,8 @@ impl<'a> GetPermissionSchemeRequest<'a> {
 
     /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
     #[must_use]
-    pub fn expand(mut self, value: GetPermissionSchemeRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -390,7 +298,7 @@ impl<'a> GetPermissionSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)
@@ -411,7 +319,7 @@ impl<'a> GetPermissionSchemeRequest<'a> {
 #[derive(Clone)]
 pub struct UpdatePermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<UpdatePermissionSchemeRequestExpand>,
+    expand: Option<Vec<String>>,
     scheme_id: i64,
     body: PermissionScheme,
 }
@@ -423,8 +331,8 @@ impl<'a> UpdatePermissionSchemeRequest<'a> {
 
     /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
     #[must_use]
-    pub fn expand(mut self, value: UpdatePermissionSchemeRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -437,7 +345,7 @@ impl<'a> UpdatePermissionSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -493,7 +401,7 @@ impl<'a> DeletePermissionSchemeRequest<'a> {
 #[derive(Clone)]
 pub struct GetPermissionSchemeGrantsRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetPermissionSchemeGrantsRequestExpand>,
+    expand: Option<Vec<String>>,
     scheme_id: i64,
 }
 
@@ -504,8 +412,8 @@ impl<'a> GetPermissionSchemeGrantsRequest<'a> {
 
     /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
     #[must_use]
-    pub fn expand(mut self, value: GetPermissionSchemeGrantsRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -518,7 +426,7 @@ impl<'a> GetPermissionSchemeGrantsRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)
@@ -539,7 +447,7 @@ impl<'a> GetPermissionSchemeGrantsRequest<'a> {
 #[derive(Clone)]
 pub struct CreatePermissionGrantRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<CreatePermissionGrantRequestExpand>,
+    expand: Option<Vec<String>>,
     scheme_id: i64,
     permission_grant: PermissionGrant,
 }
@@ -551,8 +459,8 @@ impl<'a> CreatePermissionGrantRequest<'a> {
 
     /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
     #[must_use]
-    pub fn expand(mut self, value: CreatePermissionGrantRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -565,7 +473,7 @@ impl<'a> CreatePermissionGrantRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.permission_grant)?));
@@ -589,7 +497,7 @@ impl<'a> CreatePermissionGrantRequest<'a> {
 pub struct GetPermissionSchemeGrantRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
-    expand: Option<GetPermissionSchemeGrantRequestExpand>,
+    expand: Option<Vec<String>>,
     permission_id: i64,
 }
 
@@ -600,8 +508,8 @@ impl<'a> GetPermissionSchemeGrantRequest<'a> {
 
     /// Use expand to include full beans in the response. This parameter accepts a comma-separated list of expandable elements. Use 'permissions' to include permissions in the response.
     #[must_use]
-    pub fn expand(mut self, value: GetPermissionSchemeGrantRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -614,7 +522,7 @@ impl<'a> GetPermissionSchemeGrantRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)

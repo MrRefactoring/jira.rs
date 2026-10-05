@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetUserRequestExpandValue {
@@ -9,22 +8,6 @@ crate::open_enum! {
         ApplicationRoles => "applicationRoles",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about users in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `groups` includes all groups and nested groups to which the user belongs.
-///  *  `applicationRoles` includes details of all the applications to which the user has access.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetUserRequestExpand {
-    One(GetUserRequestExpandValue),
-    Many(Vec<GetUserRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetUserRequestExpand { One, Many, Other });
 
 /// The Users operations.
 pub struct UsersService<'a> {
@@ -145,7 +128,7 @@ impl<'a> UsersService<'a> {
 pub struct GetUserRequest<'a> {
     client: &'a crate::core::Client,
     account_id: String,
-    expand: Option<GetUserRequestExpand>,
+    expand: Option<Vec<GetUserRequestExpandValue>>,
 }
 
 impl<'a> GetUserRequest<'a> {
@@ -158,8 +141,8 @@ impl<'a> GetUserRequest<'a> {
     ///  *  `groups` includes all groups and nested groups to which the user belongs.
     ///  *  `applicationRoles` includes details of all the applications to which the user has access.
     #[must_use]
-    pub fn expand(mut self, value: GetUserRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetUserRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -171,7 +154,10 @@ impl<'a> GetUserRequest<'a> {
         config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(self.account_id.clone())));
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)

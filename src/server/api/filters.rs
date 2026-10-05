@@ -3,54 +3,6 @@
 use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum CreateFilterRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(CreateFilterRequestExpand { One, Many, Other });
-
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetFavouriteFiltersRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetFavouriteFiltersRequestExpand { One, Many, Other });
-
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetFilterRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetFilterRequestExpand { One, Many, Other });
-
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum UpdateFilterRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(UpdateFilterRequestExpand { One, Many, Other });
-
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetColumnsRequestColumnRequestBody {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -116,7 +68,7 @@ impl<'a> FiltersService<'a> {
 #[derive(Clone)]
 pub struct CreateFilterRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<CreateFilterRequestExpand>,
+    expand: Option<Vec<String>>,
     filter: Filter,
 }
 
@@ -126,8 +78,8 @@ impl<'a> CreateFilterRequest<'a> {
     }
 
     #[must_use]
-    pub fn expand(mut self, value: CreateFilterRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -137,7 +89,7 @@ impl<'a> CreateFilterRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/filter".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.filter)?));
@@ -160,7 +112,7 @@ impl<'a> CreateFilterRequest<'a> {
 #[derive(Clone)]
 pub struct GetFavouriteFiltersRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetFavouriteFiltersRequestExpand>,
+    expand: Option<Vec<String>>,
 }
 
 impl<'a> GetFavouriteFiltersRequest<'a> {
@@ -169,8 +121,8 @@ impl<'a> GetFavouriteFiltersRequest<'a> {
     }
 
     #[must_use]
-    pub fn expand(mut self, value: GetFavouriteFiltersRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -181,7 +133,7 @@ impl<'a> GetFavouriteFiltersRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/filter/favourite".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)
@@ -202,7 +154,7 @@ impl<'a> GetFavouriteFiltersRequest<'a> {
 #[derive(Clone)]
 pub struct GetFilterRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetFilterRequestExpand>,
+    expand: Option<Vec<String>>,
     id: i64,
 }
 
@@ -212,8 +164,8 @@ impl<'a> GetFilterRequest<'a> {
     }
 
     #[must_use]
-    pub fn expand(mut self, value: GetFilterRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -224,7 +176,7 @@ impl<'a> GetFilterRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/2/filter/{}", self.id));
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)
@@ -245,7 +197,7 @@ impl<'a> GetFilterRequest<'a> {
 #[derive(Clone)]
 pub struct UpdateFilterRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<UpdateFilterRequestExpand>,
+    expand: Option<Vec<String>>,
     id: i64,
     body: Filter,
 }
@@ -256,8 +208,8 @@ impl<'a> UpdateFilterRequest<'a> {
     }
 
     #[must_use]
-    pub fn expand(mut self, value: UpdateFilterRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -268,7 +220,7 @@ impl<'a> UpdateFilterRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/rest/api/2/filter/{}", self.id));
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));

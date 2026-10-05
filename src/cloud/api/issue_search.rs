@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum SearchIssuesRequestExpandValue {
@@ -15,30 +14,6 @@ crate::open_enum! {
         VersionedRepresentations => "versionedRepresentations",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about issues in the response. Note that, unlike the majority of instances where `expand` is specified, `expand` is defined as a comma-delimited string of values. The expand options are:
-///
-///  *  `renderedFields` Returns field values rendered in HTML format.
-///  *  `names` Returns the display name of each field.
-///  *  `schema` Returns the schema describing a field type.
-///  *  `transitions` Returns all possible transitions for the issue.
-///  *  `operations` Returns all possible operations for the issue.
-///  *  `editmeta` Returns information about how each field can be edited.
-///  *  `changelog` Returns a list of recent updates to an issue, sorted by date, starting from the most recent.
-///  *  `versionedRepresentations` Instead of `fields`, returns `versionedRepresentations` a JSON array containing each version of a field's value, with the highest numbered item representing the most recent version.
-///
-/// Examples: `"names,changelog"` Returns the display name of each field as well as a list of recent updates to an issue.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum SearchIssuesRequestExpand {
-    One(SearchIssuesRequestExpandValue),
-    Many(Vec<SearchIssuesRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(SearchIssuesRequestExpand { One, Many, Other });
 
 /// The IssueSearch operations.
 pub struct IssueSearchService<'a> {
@@ -341,7 +316,7 @@ pub struct SearchIssuesRequest<'a> {
     next_page_token: Option<String>,
     max_results: Option<i64>,
     fields: Option<Vec<String>>,
-    expand: Option<SearchIssuesRequestExpand>,
+    expand: Option<Vec<SearchIssuesRequestExpandValue>>,
     properties: Option<Vec<String>>,
     fields_by_keys: Option<bool>,
     fail_fast: Option<bool>,
@@ -435,8 +410,8 @@ impl<'a> SearchIssuesRequest<'a> {
     ///
     /// Examples: `"names,changelog"` Returns the display name of each field as well as a list of recent updates to an issue.
     #[must_use]
-    pub fn expand(mut self, value: SearchIssuesRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<SearchIssuesRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -502,7 +477,10 @@ impl<'a> SearchIssuesRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.properties {

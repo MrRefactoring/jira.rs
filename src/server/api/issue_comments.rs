@@ -3,29 +3,25 @@
 use super::super::models::*;
 
 crate::open_enum! {
-    /// Optional flags: renderedBody (provides body rendered in HTML)
-    pub enum GetCommentsRequestExpand {
+    pub enum GetCommentsRequestExpandValue {
         RenderedBody => "renderedBody",
     }
 }
 
 crate::open_enum! {
-    /// Optional flags: renderedBody (provides body rendered in HTML)
-    pub enum AddCommentRequestExpand {
+    pub enum AddCommentRequestExpandValue {
         RenderedBody => "renderedBody",
     }
 }
 
 crate::open_enum! {
-    /// Optional flags: renderedBody (provides body rendered in HTML)
-    pub enum GetCommentRequestExpand {
+    pub enum GetCommentRequestExpandValue {
         RenderedBody => "renderedBody",
     }
 }
 
 crate::open_enum! {
-    /// Optional flags: renderedBody (provides body rendered in HTML)
-    pub enum UpdateCommentRequestExpand {
+    pub enum UpdateCommentRequestExpandValue {
         RenderedBody => "renderedBody",
     }
 }
@@ -79,7 +75,7 @@ impl<'a> IssueCommentsService<'a> {
 #[derive(Clone)]
 pub struct GetCommentsRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetCommentsRequestExpand>,
+    expand: Option<Vec<GetCommentsRequestExpandValue>>,
     max_results: Option<i64>,
     issue_id_or_key: String,
     order_by: Option<String>,
@@ -98,10 +94,10 @@ impl<'a> GetCommentsRequest<'a> {
         }
     }
 
-    /// Optional flags: renderedBody (provides body rendered in HTML)
+    /// Optional flags: renderedBody (provides body rendered in HTML) This parameter accepts a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<GetCommentsRequestExpand>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetCommentsRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -138,7 +134,10 @@ impl<'a> GetCommentsRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.max_results {
@@ -187,7 +186,7 @@ impl<'a> GetCommentsRequest<'a> {
 #[derive(Clone)]
 pub struct AddCommentRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<AddCommentRequestExpand>,
+    expand: Option<Vec<AddCommentRequestExpandValue>>,
     issue_id_or_key: String,
     comment_input: Comment,
 }
@@ -197,10 +196,10 @@ impl<'a> AddCommentRequest<'a> {
         Self { client, issue_id_or_key: issue_id_or_key.into(), comment_input, expand: None }
     }
 
-    /// Optional flags: renderedBody (provides body rendered in HTML)
+    /// Optional flags: renderedBody (provides body rendered in HTML) This parameter accepts a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<AddCommentRequestExpand>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<AddCommentRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -213,7 +212,10 @@ impl<'a> AddCommentRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.comment_input)?));
@@ -236,7 +238,7 @@ impl<'a> AddCommentRequest<'a> {
 #[derive(Clone)]
 pub struct GetCommentRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetCommentRequestExpand>,
+    expand: Option<Vec<GetCommentRequestExpandValue>>,
     issue_id_or_key: String,
     id: String,
 }
@@ -246,10 +248,10 @@ impl<'a> GetCommentRequest<'a> {
         Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into(), expand: None }
     }
 
-    /// Optional flags: renderedBody (provides body rendered in HTML)
+    /// Optional flags: renderedBody (provides body rendered in HTML) This parameter accepts a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<GetCommentRequestExpand>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetCommentRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -266,7 +268,10 @@ impl<'a> GetCommentRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)
@@ -287,7 +292,7 @@ impl<'a> GetCommentRequest<'a> {
 #[derive(Clone)]
 pub struct UpdateCommentRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<UpdateCommentRequestExpand>,
+    expand: Option<Vec<UpdateCommentRequestExpandValue>>,
     issue_id_or_key: String,
     id: String,
     body: Comment,
@@ -303,10 +308,10 @@ impl<'a> UpdateCommentRequest<'a> {
         Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into(), body, expand: None }
     }
 
-    /// Optional flags: renderedBody (provides body rendered in HTML)
+    /// Optional flags: renderedBody (provides body rendered in HTML) This parameter accepts a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<UpdateCommentRequestExpand>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<UpdateCommentRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -323,7 +328,10 @@ impl<'a> UpdateCommentRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));

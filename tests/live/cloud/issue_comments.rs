@@ -1,6 +1,6 @@
 use jira::cloud::{
-    Comment, CommentInput, CommentInputBody, DocumentType, GetCommentRequestExpand, GetCommentRequestExpandValue,
-    GetCommentsRequestOrderBy, IssueCommentListRequest, PageOfComments,
+    Comment, CommentInput, CommentInputBody, DocumentType, GetCommentRequestExpandValue, GetCommentsRequestOrderBy,
+    IssueCommentListRequest, PageOfComments,
 };
 
 use crate::harness::{
@@ -143,7 +143,7 @@ async fn renders_the_body_as_html_only_when_expand_asks() {
     let rendered = cloud()
         .issue_comments()
         .get_comment(&issue.key, &comment_id)
-        .expand(GetCommentRequestExpand::One(GetCommentRequestExpandValue::RenderedBody))
+        .expand([GetCommentRequestExpandValue::RenderedBody])
         .send()
         .await
         .expect("`expand=renderedBody` is accepted");

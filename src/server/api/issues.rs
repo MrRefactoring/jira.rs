@@ -1,20 +1,19 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
-/// The expand param is used to include, hidden by default, parts of response. This can be used to include: renderedFields, names, schema, transitions, operations, editmeta, changelog, versionedRepresentations.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum IssuesGetIssueRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
+crate::open_enum! {
+    pub enum IssuesGetIssueRequestExpandValue {
+        RenderedFields => "renderedFields",
+        Names => "names",
+        Schema => "schema",
+        Transitions => "transitions",
+        Operations => "operations",
+        Editmeta => "editmeta",
+        Changelog => "changelog",
+        VersionedRepresentations => "versionedRepresentations",
+    }
 }
-
-crate::core::untagged::untagged!(IssuesGetIssueRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// A String of true or false indicating that any subtasks should also be deleted. If the issue has no subtasks this parameter is ignored. If the issue has subtasks and this parameter is missing or false, then the issue will not be deleted and an error will be returned.
@@ -632,7 +631,7 @@ impl<'a> CreateReciprocalRemoteIssueLinkRequest<'a> {
 #[derive(Clone)]
 pub struct IssuesGetIssueRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<IssuesGetIssueRequestExpand>,
+    expand: Option<Vec<IssuesGetIssueRequestExpandValue>>,
     issue_id_or_key: String,
     fields: Option<Vec<String>>,
     update_history: Option<bool>,
@@ -651,10 +650,10 @@ impl<'a> IssuesGetIssueRequest<'a> {
         }
     }
 
-    /// The expand param is used to include, hidden by default, parts of response. This can be used to include: renderedFields, names, schema, transitions, operations, editmeta, changelog, versionedRepresentations.
+    /// The expand param is used to include, hidden by default, parts of response. This can be used to include: renderedFields, names, schema, transitions, operations, editmeta, changelog, versionedRepresentations. This parameter accepts a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: IssuesGetIssueRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<IssuesGetIssueRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -691,7 +690,10 @@ impl<'a> IssuesGetIssueRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.fields {

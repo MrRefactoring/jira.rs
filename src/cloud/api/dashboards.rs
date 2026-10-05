@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     /// The filter applied to the list of dashboards. Valid values are:
@@ -66,28 +65,6 @@ crate::open_enum! {
         IsWritable => "isWritable",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about dashboard in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `description` Returns the description of the dashboard.
-///  *  `owner` Returns the owner of the dashboard.
-///  *  `viewUrl` Returns the URL that is used to view the dashboard.
-///  *  `favourite` Returns `isFavourite`, an indicator of whether the user has set the dashboard as a favorite.
-///  *  `favouritedCount` Returns `popularity`, a count of how many users have set this dashboard as a favorite.
-///  *  `sharePermissions` Returns details of the share permissions defined for the dashboard.
-///  *  `editPermissions` Returns details of the edit permissions defined for the dashboard.
-///  *  `isWritable` Returns whether the current user has permission to edit the dashboard.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetDashboardsPaginatedRequestExpand {
-    One(GetDashboardsPaginatedRequestExpandValue),
-    Many(Vec<GetDashboardsPaginatedRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetDashboardsPaginatedRequestExpand { One, Many, Other });
 
 /// The Dashboards operations.
 pub struct DashboardsService<'a> {
@@ -319,7 +296,7 @@ pub struct GetDashboardsPaginatedRequest<'a> {
     start_at: Option<i64>,
     max_results: Option<i64>,
     status: Option<GetDashboardsPaginatedRequestStatus>,
-    expand: Option<GetDashboardsPaginatedRequestExpand>,
+    expand: Option<Vec<GetDashboardsPaginatedRequestExpandValue>>,
 }
 
 impl<'a> GetDashboardsPaginatedRequest<'a> {
@@ -429,8 +406,11 @@ impl<'a> GetDashboardsPaginatedRequest<'a> {
     ///  *  `editPermissions` Returns details of the edit permissions defined for the dashboard.
     ///  *  `isWritable` Returns whether the current user has permission to edit the dashboard.
     #[must_use]
-    pub fn expand(mut self, value: GetDashboardsPaginatedRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetDashboardsPaginatedRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -477,7 +457,10 @@ impl<'a> GetDashboardsPaginatedRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)

@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetNotificationSchemesRequestExpandValue {
@@ -14,26 +13,6 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `all` Returns all expandable information
-///  *  `field` Returns information about any custom fields assigned to receive an event
-///  *  `group` Returns information about any groups assigned to receive an event
-///  *  `notificationSchemeEvents` Returns a list of event associations. This list is returned for all expandable information
-///  *  `projectRole` Returns information about any project roles assigned to receive an event
-///  *  `user` Returns information about any users assigned to receive an event
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetNotificationSchemesRequestExpand {
-    One(GetNotificationSchemesRequestExpandValue),
-    Many(Vec<GetNotificationSchemesRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetNotificationSchemesRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum GetNotificationSchemeRequestExpandValue {
         All => "all",
@@ -44,26 +23,6 @@ crate::open_enum! {
         User => "user",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `all` Returns all expandable information
-///  *  `field` Returns information about any custom fields assigned to receive an event
-///  *  `group` Returns information about any groups assigned to receive an event
-///  *  `notificationSchemeEvents` Returns a list of event associations. This list is returned for all expandable information
-///  *  `projectRole` Returns information about any project roles assigned to receive an event
-///  *  `user` Returns information about any users assigned to receive an event
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetNotificationSchemeRequestExpand {
-    One(GetNotificationSchemeRequestExpandValue),
-    Many(Vec<GetNotificationSchemeRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetNotificationSchemeRequestExpand { One, Many, Other });
 
 /// The IssueNotificationSchemes operations.
 pub struct IssueNotificationSchemesService<'a> {
@@ -136,7 +95,7 @@ pub struct GetNotificationSchemesRequest<'a> {
     id: Option<Vec<String>>,
     project_id: Option<Vec<String>>,
     only_default: Option<bool>,
-    expand: Option<GetNotificationSchemesRequestExpand>,
+    expand: Option<Vec<GetNotificationSchemesRequestExpandValue>>,
 }
 
 impl<'a> GetNotificationSchemesRequest<'a> {
@@ -193,8 +152,11 @@ impl<'a> GetNotificationSchemesRequest<'a> {
     ///  *  `projectRole` Returns information about any project roles assigned to receive an event
     ///  *  `user` Returns information about any users assigned to receive an event
     #[must_use]
-    pub fn expand(mut self, value: GetNotificationSchemesRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetNotificationSchemesRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -225,7 +187,10 @@ impl<'a> GetNotificationSchemesRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)
@@ -369,7 +334,7 @@ impl<'a> GetNotificationSchemeToProjectMappingsRequest<'a> {
 pub struct GetNotificationSchemeRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
-    expand: Option<GetNotificationSchemeRequestExpand>,
+    expand: Option<Vec<GetNotificationSchemeRequestExpandValue>>,
 }
 
 impl<'a> GetNotificationSchemeRequest<'a> {
@@ -386,8 +351,11 @@ impl<'a> GetNotificationSchemeRequest<'a> {
     ///  *  `projectRole` Returns information about any project roles assigned to receive an event
     ///  *  `user` Returns information about any users assigned to receive an event
     #[must_use]
-    pub fn expand(mut self, value: GetNotificationSchemeRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetNotificationSchemeRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -400,7 +368,10 @@ impl<'a> GetNotificationSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)

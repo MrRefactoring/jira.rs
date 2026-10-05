@@ -1,20 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
-
-/// A comma-separated list of the parameters to expand
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum SearchIssuesRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(SearchIssuesRequestExpand { One, Many, Other });
 
 /// The IssueSearch operations.
 pub struct IssueSearchService<'a> {
@@ -209,7 +195,7 @@ impl<'a> GetIssuePickerResourceRequest<'a> {
 #[derive(Clone)]
 pub struct SearchIssuesRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<SearchIssuesRequestExpand>,
+    expand: Option<Vec<String>>,
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
@@ -224,8 +210,8 @@ impl<'a> SearchIssuesRequest<'a> {
 
     /// A comma-separated list of the parameters to expand
     #[must_use]
-    pub fn expand(mut self, value: SearchIssuesRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -275,7 +261,7 @@ impl<'a> SearchIssuesRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/search".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.jql {

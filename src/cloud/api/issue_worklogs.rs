@@ -1,26 +1,12 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetIssueWorklogRequestExpandValue {
         Properties => "properties",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts`properties`, which returns worklog properties.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssueWorklogRequestExpand {
-    One(GetIssueWorklogRequestExpandValue),
-    Many(Vec<GetIssueWorklogRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssueWorklogRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// Defines how to update the issue's time estimate, the options are:
@@ -43,39 +29,11 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about work logs in the response. This parameter accepts `properties`, which returns worklog properties.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum AddWorklogRequestExpand {
-    One(AddWorklogRequestExpandValue),
-    Many(Vec<AddWorklogRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(AddWorklogRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum GetWorklogRequestExpandValue {
         Properties => "properties",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about work logs in the response. This parameter accepts
-///
-/// `properties`, which returns worklog properties.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetWorklogRequestExpand {
-    One(GetWorklogRequestExpandValue),
-    Many(Vec<GetWorklogRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetWorklogRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// Defines how to update the issue's time estimate, the options are:
@@ -96,19 +54,6 @@ crate::open_enum! {
         Properties => "properties",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties`, which returns worklog properties.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum UpdateWorklogRequestExpand {
-    One(UpdateWorklogRequestExpandValue),
-    Many(Vec<UpdateWorklogRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(UpdateWorklogRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// Defines how to update the issue's time estimate, the options are:
@@ -131,37 +76,11 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetWorklogsForIdsRequestExpand {
-    One(GetWorklogsForIdsRequestExpandValue),
-    Many(Vec<GetWorklogsForIdsRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetWorklogsForIdsRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum GetIdsOfWorklogsModifiedSinceRequestExpandValue {
         Properties => "properties",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIdsOfWorklogsModifiedSinceRequestExpand {
-    One(GetIdsOfWorklogsModifiedSinceRequestExpandValue),
-    Many(Vec<GetIdsOfWorklogsModifiedSinceRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIdsOfWorklogsModifiedSinceRequestExpand { One, Many, Other });
 
 /// The IssueWorklogs operations.
 pub struct IssueWorklogsService<'a> {
@@ -319,7 +238,7 @@ pub struct GetIssueWorklogRequest<'a> {
     max_results: Option<i64>,
     started_after: Option<i64>,
     started_before: Option<i64>,
-    expand: Option<GetIssueWorklogRequestExpand>,
+    expand: Option<Vec<GetIssueWorklogRequestExpandValue>>,
 }
 
 impl<'a> GetIssueWorklogRequest<'a> {
@@ -369,8 +288,8 @@ impl<'a> GetIssueWorklogRequest<'a> {
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts`properties`, which returns worklog properties.
     #[must_use]
-    pub fn expand(mut self, value: GetIssueWorklogRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetIssueWorklogRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -399,7 +318,10 @@ impl<'a> GetIssueWorklogRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)
@@ -450,7 +372,7 @@ pub struct AddWorklogRequest<'a> {
     adjust_estimate: Option<AddWorklogRequestAdjustEstimate>,
     new_estimate: Option<String>,
     reduce_by: Option<String>,
-    expand: Option<AddWorklogRequestExpand>,
+    expand: Option<Vec<AddWorklogRequestExpandValue>>,
     override_editable_flag: Option<bool>,
     worklog_input: WorklogInput,
 }
@@ -509,8 +431,8 @@ impl<'a> AddWorklogRequest<'a> {
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about work logs in the response. This parameter accepts `properties`, which returns worklog properties.
     #[must_use]
-    pub fn expand(mut self, value: AddWorklogRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<AddWorklogRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -547,7 +469,10 @@ impl<'a> AddWorklogRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.override_editable_flag {
@@ -616,7 +541,7 @@ pub struct GetWorklogRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
     id: String,
-    expand: Option<GetWorklogRequestExpand>,
+    expand: Option<Vec<GetWorklogRequestExpandValue>>,
 }
 
 impl<'a> GetWorklogRequest<'a> {
@@ -628,8 +553,8 @@ impl<'a> GetWorklogRequest<'a> {
     ///
     /// `properties`, which returns worklog properties.
     #[must_use]
-    pub fn expand(mut self, value: GetWorklogRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetWorklogRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -646,7 +571,10 @@ impl<'a> GetWorklogRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)
@@ -683,7 +611,7 @@ pub struct UpdateWorklogRequest<'a> {
     notify_users: Option<bool>,
     adjust_estimate: Option<UpdateWorklogRequestAdjustEstimate>,
     new_estimate: Option<String>,
-    expand: Option<UpdateWorklogRequestExpand>,
+    expand: Option<Vec<UpdateWorklogRequestExpandValue>>,
     override_editable_flag: Option<bool>,
     body: WorklogInput,
 }
@@ -738,8 +666,8 @@ impl<'a> UpdateWorklogRequest<'a> {
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties`, which returns worklog properties.
     #[must_use]
-    pub fn expand(mut self, value: UpdateWorklogRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<UpdateWorklogRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -776,7 +704,10 @@ impl<'a> UpdateWorklogRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.override_editable_flag {
@@ -1030,7 +961,7 @@ impl<'a> GetIdsOfWorklogsDeletedSinceRequest<'a> {
 #[derive(Clone)]
 pub struct GetWorklogsForIdsRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetWorklogsForIdsRequestExpand>,
+    expand: Option<Vec<GetWorklogsForIdsRequestExpandValue>>,
     worklog_ids_request: WorklogIdsRequest,
 }
 
@@ -1041,8 +972,8 @@ impl<'a> GetWorklogsForIdsRequest<'a> {
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
     #[must_use]
-    pub fn expand(mut self, value: GetWorklogsForIdsRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetWorklogsForIdsRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1053,7 +984,10 @@ impl<'a> GetWorklogsForIdsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/worklog/list".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         let body = match serde_json::to_value(&self.worklog_ids_request)? {
@@ -1091,7 +1025,7 @@ impl<'a> GetWorklogsForIdsRequest<'a> {
 pub struct GetIdsOfWorklogsModifiedSinceRequest<'a> {
     client: &'a crate::core::Client,
     since: Option<i64>,
-    expand: Option<GetIdsOfWorklogsModifiedSinceRequestExpand>,
+    expand: Option<Vec<GetIdsOfWorklogsModifiedSinceRequestExpandValue>>,
 }
 
 impl<'a> GetIdsOfWorklogsModifiedSinceRequest<'a> {
@@ -1109,8 +1043,11 @@ impl<'a> GetIdsOfWorklogsModifiedSinceRequest<'a> {
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about worklogs in the response. This parameter accepts `properties` that returns the properties of each worklog.
     #[must_use]
-    pub fn expand(mut self, value: GetIdsOfWorklogsModifiedSinceRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetIdsOfWorklogsModifiedSinceRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1125,7 +1062,10 @@ impl<'a> GetIdsOfWorklogsModifiedSinceRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)

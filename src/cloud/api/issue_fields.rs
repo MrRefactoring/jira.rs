@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetFieldsPaginatedRequestType {
@@ -47,27 +46,6 @@ crate::open_enum! {
         SearcherKey => "searcherKey",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `key` returns the key for each field
-///  *  `stableId` returns the stableId for each field
-///  *  `lastUsed` returns the date when the value of the field last changed
-///  *  `screensCount` returns the number of screens related to a field
-///  *  `contextsCount` returns the number of contexts related to a field
-///  *  `isLocked` returns information about whether the field is locked
-///  *  `searcherKey` returns the searcher key for each custom field
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetFieldsPaginatedRequestExpand {
-    One(GetFieldsPaginatedRequestExpandValue),
-    Many(Vec<GetFieldsPaginatedRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetFieldsPaginatedRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     pub enum GetTrashedFieldsPaginatedRequestExpand {
@@ -295,7 +273,7 @@ pub struct GetFieldsPaginatedRequest<'a> {
     id: Option<Vec<String>>,
     query: Option<String>,
     order_by: Option<GetFieldsPaginatedRequestOrderBy>,
-    expand: Option<GetFieldsPaginatedRequestExpand>,
+    expand: Option<Vec<GetFieldsPaginatedRequestExpandValue>>,
     project_ids: Option<Vec<i64>>,
 }
 
@@ -377,8 +355,8 @@ impl<'a> GetFieldsPaginatedRequest<'a> {
     ///  *  `isLocked` returns information about whether the field is locked
     ///  *  `searcherKey` returns the searcher key for each custom field
     #[must_use]
-    pub fn expand(mut self, value: GetFieldsPaginatedRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetFieldsPaginatedRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -421,7 +399,10 @@ impl<'a> GetFieldsPaginatedRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.project_ids {

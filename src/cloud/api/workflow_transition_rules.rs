@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetWorkflowTransitionRuleConfigurationsRequestTypes {
@@ -16,19 +15,6 @@ crate::open_enum! {
         Transition => "transition",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts `transition`, which, for each rule, returns information about the transition the rule is assigned to.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetWorkflowTransitionRuleConfigurationsRequestExpand {
-    One(GetWorkflowTransitionRuleConfigurationsRequestExpandValue),
-    Many(Vec<GetWorkflowTransitionRuleConfigurationsRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetWorkflowTransitionRuleConfigurationsRequestExpand { One, Many, Other });
 
 /// The WorkflowTransitionRules operations.
 pub struct WorkflowTransitionRulesService<'a> {
@@ -121,7 +107,7 @@ pub struct GetWorkflowTransitionRuleConfigurationsRequest<'a> {
     workflow_names: Option<Vec<String>>,
     with_tags: Option<Vec<String>>,
     draft: Option<bool>,
-    expand: Option<GetWorkflowTransitionRuleConfigurationsRequestExpand>,
+    expand: Option<Vec<GetWorkflowTransitionRuleConfigurationsRequestExpandValue>>,
 }
 
 impl<'a> GetWorkflowTransitionRuleConfigurationsRequest<'a> {
@@ -193,8 +179,11 @@ impl<'a> GetWorkflowTransitionRuleConfigurationsRequest<'a> {
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts `transition`, which, for each rule, returns information about the transition the rule is assigned to.
     #[must_use]
-    pub fn expand(mut self, value: GetWorkflowTransitionRuleConfigurationsRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetWorkflowTransitionRuleConfigurationsRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -231,7 +220,10 @@ impl<'a> GetWorkflowTransitionRuleConfigurationsRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)

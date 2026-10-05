@@ -1,6 +1,5 @@
 use jira::cloud::{
-    BulkPermissionsRequest, BulkProjectPermissions, GetMyPermissionsRequestPermissions, PermissionsKeys,
-    UserPermission, UserPermissionType,
+    BulkPermissionsRequest, BulkProjectPermissions, PermissionsKeys, UserPermission, UserPermissionType,
 };
 
 use crate::harness::{TEST_PROJECT_KEY, cloud};
@@ -29,10 +28,7 @@ async fn answers_for_a_named_permission_in_the_scope_of_the_test_project() {
         .permissions()
         .get_my_permissions()
         .project_key(TEST_PROJECT_KEY)
-        .permissions(GetMyPermissionsRequestPermissions::Many(vec![
-            "BROWSE_PROJECTS".to_owned(),
-            "CREATE_ISSUES".to_owned(),
-        ]))
+        .permissions(["BROWSE_PROJECTS".to_owned(), "CREATE_ISSUES".to_owned()])
         .send()
         .await
         .expect("the site reports what the token may do in the test project");
@@ -59,7 +55,7 @@ async fn narrows_to_exactly_the_permissions_asked_for_not_the_whole_catalogue() 
         .permissions()
         .get_my_permissions()
         .project_key(TEST_PROJECT_KEY)
-        .permissions(GetMyPermissionsRequestPermissions::Many(vec!["BROWSE_PROJECTS".to_owned()]))
+        .permissions(["BROWSE_PROJECTS".to_owned()])
         .send()
         .await
         .expect("one permission is a valid request");
@@ -76,7 +72,7 @@ async fn reports_project_permissions_differently_in_and_out_of_project_scope() {
         .permissions()
         .get_my_permissions()
         .project_key(TEST_PROJECT_KEY)
-        .permissions(GetMyPermissionsRequestPermissions::Many(vec!["CREATE_ISSUES".to_owned()]))
+        .permissions(["CREATE_ISSUES".to_owned()])
         .send()
         .await
         .expect("the scoped question is answered");
@@ -84,7 +80,7 @@ async fn reports_project_permissions_differently_in_and_out_of_project_scope() {
     let global = cloud()
         .permissions()
         .get_my_permissions()
-        .permissions(GetMyPermissionsRequestPermissions::Many(vec!["CREATE_ISSUES".to_owned()]))
+        .permissions(["CREATE_ISSUES".to_owned()])
         .send()
         .await
         .expect("the same question is answered without a project");
@@ -106,7 +102,7 @@ async fn rejects_an_unknown_permission_key_rather_than_silently_ignoring_it() {
     let error = cloud()
         .permissions()
         .get_my_permissions()
-        .permissions(GetMyPermissionsRequestPermissions::Many(vec!["NO_SUCH_PERMISSION".to_owned()]))
+        .permissions(["NO_SUCH_PERMISSION".to_owned()])
         .send()
         .await
         .expect_err("a permission that does not exist cannot be answered for");

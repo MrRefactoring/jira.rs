@@ -1,26 +1,12 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetScreenSchemesRequestExpandValue {
         IssueTypeScreenSchemes => "issueTypeScreenSchemes",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) include additional information in the response. This parameter accepts `issueTypeScreenSchemes` that, for each screen schemes, returns information about the issue type screen scheme the screen scheme is assigned to.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetScreenSchemesRequestExpand {
-    One(GetScreenSchemesRequestExpandValue),
-    Many(Vec<GetScreenSchemesRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetScreenSchemesRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
@@ -95,7 +81,7 @@ pub struct GetScreenSchemesRequest<'a> {
     start_at: Option<i64>,
     max_results: Option<i64>,
     id: Option<Vec<i64>>,
-    expand: Option<GetScreenSchemesRequestExpand>,
+    expand: Option<Vec<GetScreenSchemesRequestExpandValue>>,
     query_string: Option<String>,
     order_by: Option<GetScreenSchemesRequestOrderBy>,
 }
@@ -131,8 +117,8 @@ impl<'a> GetScreenSchemesRequest<'a> {
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) include additional information in the response. This parameter accepts `issueTypeScreenSchemes` that, for each screen schemes, returns information about the issue type screen scheme the screen scheme is assigned to.
     #[must_use]
-    pub fn expand(mut self, value: GetScreenSchemesRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetScreenSchemesRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -174,7 +160,10 @@ impl<'a> GetScreenSchemesRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.query_string {

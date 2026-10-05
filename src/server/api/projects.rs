@@ -3,8 +3,7 @@
 use super::super::models::*;
 
 crate::open_enum! {
-    /// Optional information to be expanded in the response: group, user, projectRole or field.
-    pub enum GetNotificationSchemeForProjectRequestExpand {
+    pub enum GetNotificationSchemeForProjectRequestExpandValue {
         Group => "group",
         User => "user",
         ProjectRole => "projectRole",
@@ -157,7 +156,7 @@ impl<'a> ProjectsService<'a> {
 pub struct SearchProjectsRequest<'a> {
     client: &'a crate::core::Client,
     include_archived: Option<bool>,
-    expand: Option<String>,
+    expand: Option<Vec<String>>,
     recent: Option<i64>,
     browse_archive: Option<bool>,
 }
@@ -175,10 +174,10 @@ impl<'a> SearchProjectsRequest<'a> {
         self
     }
 
-    /// Parameters to expand
+    /// Parameters to expand This parameter is a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -208,7 +207,7 @@ impl<'a> SearchProjectsRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.recent {
@@ -289,7 +288,7 @@ impl<'a> CreateProjectRequest<'a> {
 #[derive(Clone)]
 pub struct GetProjectRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<Vec<String>>,
     project_id_or_key: String,
 }
 
@@ -298,10 +297,10 @@ impl<'a> GetProjectRequest<'a> {
         Self { client, project_id_or_key: project_id_or_key.into(), expand: None }
     }
 
-    /// Parameters to expand
+    /// Parameters to expand This parameter is a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -314,7 +313,7 @@ impl<'a> GetProjectRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         Ok(config)
@@ -335,7 +334,7 @@ impl<'a> GetProjectRequest<'a> {
 #[derive(Clone)]
 pub struct UpdateProjectRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<Vec<String>>,
     project_id_or_key: String,
     update_project_details: UpdateProjectDetails,
 }
@@ -349,10 +348,10 @@ impl<'a> UpdateProjectRequest<'a> {
         Self { client, project_id_or_key: project_id_or_key.into(), update_project_details, expand: None }
     }
 
-    /// Parameters to expand
+    /// Parameters to expand This parameter is a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -365,7 +364,7 @@ impl<'a> UpdateProjectRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.update_project_details)?));
@@ -674,7 +673,7 @@ impl<'a> UpdateProjectTypeRequest<'a> {
 #[derive(Clone)]
 pub struct GetNotificationSchemeForProjectRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetNotificationSchemeForProjectRequestExpand>,
+    expand: Option<Vec<GetNotificationSchemeForProjectRequestExpandValue>>,
     project_key_or_id: String,
 }
 
@@ -683,10 +682,13 @@ impl<'a> GetNotificationSchemeForProjectRequest<'a> {
         Self { client, project_key_or_id: project_key_or_id.into(), expand: None }
     }
 
-    /// Optional information to be expanded in the response: group, user, projectRole or field.
+    /// Optional information to be expanded in the response: group, user, projectRole or field. This parameter accepts a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<GetNotificationSchemeForProjectRequestExpand>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetNotificationSchemeForProjectRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -702,7 +704,10 @@ impl<'a> GetNotificationSchemeForProjectRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)

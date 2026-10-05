@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetUiModificationsRequestExpandValue {
@@ -9,22 +8,6 @@ crate::open_enum! {
         Contexts => "contexts",
     }
 }
-
-/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `data` Returns UI modification data.
-///  *  `contexts` Returns UI modification contexts.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetUiModificationsRequestExpand {
-    One(GetUiModificationsRequestExpandValue),
-    Many(Vec<GetUiModificationsRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetUiModificationsRequestExpand { One, Many, Other });
 
 /// The UIModificationsApps operations.
 pub struct UIModificationsAppsService<'a> {
@@ -132,7 +115,7 @@ pub struct GetUiModificationsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
     max_results: Option<i64>,
-    expand: Option<GetUiModificationsRequestExpand>,
+    expand: Option<Vec<GetUiModificationsRequestExpandValue>>,
 }
 
 impl<'a> GetUiModificationsRequest<'a> {
@@ -161,8 +144,8 @@ impl<'a> GetUiModificationsRequest<'a> {
     ///  *  `data` Returns UI modification data.
     ///  *  `contexts` Returns UI modification contexts.
     #[must_use]
-    pub fn expand(mut self, value: GetUiModificationsRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetUiModificationsRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -181,7 +164,10 @@ impl<'a> GetUiModificationsRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)

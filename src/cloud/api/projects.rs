@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     /// The default assignee when creating issues for this project.
@@ -109,19 +108,6 @@ crate::open_enum! {
     }
 }
 
-/// Orders results by the [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes). This parameter accepts a comma-separated list. Valid values are `business`, `service_desk`, and `software`.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum SearchProjectsRequestTypeKey {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(SearchProjectsRequestTypeKey { One, Many, Other });
-
 crate::open_enum! {
     /// Filter results by projects for which the user can:
     ///
@@ -155,26 +141,6 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expanded options include:
-///
-///  *  `description` Returns the project description.
-///  *  `projectKeys` Returns all project keys associated with a project.
-///  *  `lead` Returns information about the project lead.
-///  *  `issueTypes` Returns all issue types associated with the project.
-///  *  `url` Returns the URL associated with the project.
-///  *  `insight` EXPERIMENTAL. Returns the insight details of total issue count and last issue update time for the project.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum SearchProjectsRequestExpand {
-    One(SearchProjectsRequestExpandValue),
-    Many(Vec<SearchProjectsRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(SearchProjectsRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum SearchProjectsRequestStatus {
         Live => "live",
@@ -193,25 +159,6 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that the project description, issue types, and project lead are included in all responses by default. Expand options include:
-///
-///  *  `description` The project description.
-///  *  `issueTypes` The issue types associated with the project.
-///  *  `lead` The project lead.
-///  *  `projectKeys` All project keys associated with the project.
-///  *  `issueTypeHierarchy` The project issue type hierarchy.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetProjectRequestExpand {
-    One(GetProjectRequestExpandValue),
-    Many(Vec<GetProjectRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetProjectRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum UpdateProjectRequestExpandValue {
         Description => "description",
@@ -220,24 +167,6 @@ crate::open_enum! {
         ProjectKeys => "projectKeys",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Note that the project description, issue types, and project lead are included in all responses by default. Expand options include:
-///
-///  *  `description` The project description.
-///  *  `issueTypes` The issue types associated with the project.
-///  *  `lead` The project lead.
-///  *  `projectKeys` All project keys associated with the project.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum UpdateProjectRequestExpand {
-    One(UpdateProjectRequestExpandValue),
-    Many(Vec<UpdateProjectRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(UpdateProjectRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     pub enum GetNotificationSchemeForProjectRequestExpandValue {
@@ -249,26 +178,6 @@ crate::open_enum! {
         User => "user",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `all` Returns all expandable information
-///  *  `field` Returns information about any custom fields assigned to receive an event
-///  *  `group` Returns information about any groups assigned to receive an event
-///  *  `notificationSchemeEvents` Returns a list of event associations. This list is returned for all expandable information
-///  *  `projectRole` Returns information about any project roles assigned to receive an event
-///  *  `user` Returns information about any users assigned to receive an event
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetNotificationSchemeForProjectRequestExpand {
-    One(GetNotificationSchemeForProjectRequestExpandValue),
-    Many(Vec<GetNotificationSchemeForProjectRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetNotificationSchemeForProjectRequestExpand { One, Many, Other });
 
 /// The Projects operations.
 pub struct ProjectsService<'a> {
@@ -674,10 +583,10 @@ pub struct SearchProjectsRequest<'a> {
     id: Option<Vec<i64>>,
     keys: Option<Vec<String>>,
     query: Option<String>,
-    type_key: Option<SearchProjectsRequestTypeKey>,
+    type_key: Option<Vec<String>>,
     category_id: Option<i64>,
     action: Option<SearchProjectsRequestAction>,
-    expand: Option<SearchProjectsRequestExpand>,
+    expand: Option<Vec<SearchProjectsRequestExpandValue>>,
     status: Option<Vec<SearchProjectsRequestStatus>>,
     properties: Option<Vec<StringList>>,
     property_query: Option<String>,
@@ -762,8 +671,8 @@ impl<'a> SearchProjectsRequest<'a> {
 
     /// Orders results by the [project type](https://confluence.atlassian.com/x/GwiiLQ#Jiraapplicationsoverview-Productfeaturesandprojecttypes). This parameter accepts a comma-separated list. Valid values are `business`, `service_desk`, and `software`.
     #[must_use]
-    pub fn type_key(mut self, value: SearchProjectsRequestTypeKey) -> Self {
-        self.type_key = Some(value);
+    pub fn type_key(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.type_key = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -805,8 +714,8 @@ impl<'a> SearchProjectsRequest<'a> {
     ///  *  `url` Returns the URL associated with the project.
     ///  *  `insight` EXPERIMENTAL. Returns the insight details of total issue count and last issue update time for the project.
     #[must_use]
-    pub fn expand(mut self, value: SearchProjectsRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<SearchProjectsRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -869,7 +778,7 @@ impl<'a> SearchProjectsRequest<'a> {
         }
 
         if let Some(value) = &self.type_key {
-            config.query.push(("typeKey".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("typeKey".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.category_id {
@@ -881,7 +790,10 @@ impl<'a> SearchProjectsRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.status {
@@ -935,7 +847,7 @@ impl<'a> SearchProjectsRequest<'a> {
 pub struct GetProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
-    expand: Option<GetProjectRequestExpand>,
+    expand: Option<Vec<GetProjectRequestExpandValue>>,
     properties: Option<Vec<String>>,
 }
 
@@ -952,8 +864,8 @@ impl<'a> GetProjectRequest<'a> {
     ///  *  `projectKeys` All project keys associated with the project.
     ///  *  `issueTypeHierarchy` The project issue type hierarchy.
     #[must_use]
-    pub fn expand(mut self, value: GetProjectRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetProjectRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -974,7 +886,10 @@ impl<'a> GetProjectRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.properties {
@@ -1004,7 +919,7 @@ impl<'a> GetProjectRequest<'a> {
 pub struct UpdateProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
-    expand: Option<UpdateProjectRequestExpand>,
+    expand: Option<Vec<UpdateProjectRequestExpandValue>>,
     update_project_details: UpdateProjectDetails,
 }
 
@@ -1024,8 +939,8 @@ impl<'a> UpdateProjectRequest<'a> {
     ///  *  `lead` The project lead.
     ///  *  `projectKeys` All project keys associated with the project.
     #[must_use]
-    pub fn expand(mut self, value: UpdateProjectRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<UpdateProjectRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1038,7 +953,10 @@ impl<'a> UpdateProjectRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         let body = match serde_json::to_value(&self.update_project_details)? {
@@ -1232,7 +1150,7 @@ impl<'a> GetHierarchyRequest<'a> {
 pub struct GetNotificationSchemeForProjectRequest<'a> {
     client: &'a crate::core::Client,
     project_key_or_id: String,
-    expand: Option<GetNotificationSchemeForProjectRequestExpand>,
+    expand: Option<Vec<GetNotificationSchemeForProjectRequestExpandValue>>,
 }
 
 impl<'a> GetNotificationSchemeForProjectRequest<'a> {
@@ -1249,8 +1167,11 @@ impl<'a> GetNotificationSchemeForProjectRequest<'a> {
     ///  *  `projectRole` Returns information about any project roles assigned to receive an event
     ///  *  `user` Returns information about any users assigned to receive an event
     #[must_use]
-    pub fn expand(mut self, value: GetNotificationSchemeForProjectRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetNotificationSchemeForProjectRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1266,7 +1187,10 @@ impl<'a> GetNotificationSchemeForProjectRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)

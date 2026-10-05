@@ -1,26 +1,12 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetScreensForFieldRequestExpandValue {
         Tab => "tab",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about screens in the response. This parameter accepts `tab` which returns details about the screen tabs the field is used in.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetScreensForFieldRequestExpand {
-    One(GetScreensForFieldRequestExpandValue),
-    Many(Vec<GetScreensForFieldRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetScreensForFieldRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     pub enum GetScreensRequestScope {
@@ -93,7 +79,7 @@ pub struct GetScreensForFieldRequest<'a> {
     field_id: String,
     start_at: Option<i64>,
     max_results: Option<i64>,
-    expand: Option<GetScreensForFieldRequestExpand>,
+    expand: Option<Vec<GetScreensForFieldRequestExpandValue>>,
 }
 
 impl<'a> GetScreensForFieldRequest<'a> {
@@ -119,8 +105,8 @@ impl<'a> GetScreensForFieldRequest<'a> {
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about screens in the response. This parameter accepts `tab` which returns details about the screen tabs the field is used in.
     #[must_use]
-    pub fn expand(mut self, value: GetScreensForFieldRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetScreensForFieldRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -141,7 +127,10 @@ impl<'a> GetScreensForFieldRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)

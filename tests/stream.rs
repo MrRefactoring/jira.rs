@@ -31,6 +31,35 @@ async fn agile_board_fields_use_one_query_value() {
     assert_eq!(fields[0].1, "summary,status");
 }
 
+#[tokio::test]
+async fn issue_expansion_uses_one_comma_separated_query_value_on_both_platforms() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET")).respond_with(ResponseTemplate::new(200).set_body_json(json!({}))).mount(&server).await;
+
+    jira::cloud::CloudClient::new(client_for(&server))
+        .issues()
+        .get_issue("X-1")
+        .expand(["changelog", "names"])
+        .send_raw()
+        .await
+        .unwrap();
+    jira::server::ServerClient::new(client_for(&server))
+        .issues()
+        .get_issue("X-1")
+        .expand(["changelog", "names"])
+        .send_raw()
+        .await
+        .unwrap();
+
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(requests.len(), 2);
+    for request in requests {
+        let expand: Vec<_> = request.url.query_pairs().filter(|(name, _)| name == "expand").collect();
+        assert_eq!(expand.len(), 1);
+        assert_eq!(expand[0].1, "changelog,names");
+    }
+}
+
 macro_rules! suite {
     ($module:ident, $client:expr, $api:ident, $request:expr, $path:literal, $key:literal, [$($expected:expr),+], $body:expr, $first_count:expr, $identity:literal, [$($id:expr),+]) => {
         mod $module {

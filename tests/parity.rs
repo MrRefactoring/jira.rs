@@ -81,7 +81,7 @@ parity!(
                 .search_issues()
                 .jql("project = X")
                 .fields(["summary"])
-                .expand(surface::SearchIssuesRequestExpand::Other(serde_json::json!("changelog")))
+                .expand(["changelog"])
                 .stream()
                 .next()
                 .await
@@ -209,16 +209,16 @@ parity!(issue_search, jira::cloud::CloudClient, jira::server::ServerClient, |jir
     drop(jira.issue_search().search_issues().jql("project = X").fields(["summary"]));
 });
 
-parity_with_value!(
-    issue_search_expand,
-    jira::cloud::CloudClient,
-    jira::server::ServerClient,
-    jira::cloud::SearchIssuesRequestExpand::Other(serde_json::json!("changelog")),
-    jira::server::SearchIssuesRequestExpand::Other(serde_json::json!("changelog")),
-    |jira, expand| {
-        drop(jira.issue_search().search_issues().jql("project = X").expand(expand));
-    }
-);
+parity!(issue_search_expand, jira::cloud::CloudClient, jira::server::ServerClient, |jira| {
+    drop(jira.issue_search().search_issues().jql("project = X").fields(["summary"]).expand(["changelog"]).stream());
+});
+
+parity!(list_expansions, jira::cloud::CloudClient, jira::server::ServerClient, |jira| {
+    drop(jira.issues().get_issue("X-1").expand(["changelog", "names"]));
+    drop(jira.issue_comments().get_comments("X-1").expand(["renderedBody"]));
+    drop(jira.projects().get_project("X").expand(["description"]));
+    drop(jira.project_versions().get_project_versions_paginated("X").expand(["operations"]).stream());
+});
 
 parity!(issues, jira::cloud::CloudClient, jira::server::ServerClient, |jira| {
     drop(jira.issues().get_issue("X-1").update_history(true).fields(["summary"]).properties(["key"]));

@@ -1,33 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesWithoutEpicRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesWithoutEpicRequestExpand { One, Many, Other });
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForEpicRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesForEpicRequestExpand { One, Many, Other });
 
 /// The Epic operations.
 pub struct EpicService<'a> {
@@ -137,7 +110,7 @@ pub struct GetIssuesWithoutEpicRequest<'a> {
     jql: Option<String>,
     validate_query: Option<bool>,
     fields: Option<Vec<String>>,
-    expand: Option<GetIssuesWithoutEpicRequestExpand>,
+    expand: Option<Vec<String>>,
 }
 
 impl<'a> GetIssuesWithoutEpicRequest<'a> {
@@ -207,8 +180,8 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetIssuesWithoutEpicRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -243,7 +216,7 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)
@@ -410,7 +383,7 @@ pub struct GetIssuesForEpicRequest<'a> {
     jql: Option<String>,
     validate_query: Option<bool>,
     fields: Option<Vec<String>>,
-    expand: Option<GetIssuesForEpicRequestExpand>,
+    expand: Option<Vec<String>>,
 }
 
 impl<'a> GetIssuesForEpicRequest<'a> {
@@ -481,8 +454,8 @@ impl<'a> GetIssuesForEpicRequest<'a> {
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetIssuesForEpicRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -519,7 +492,7 @@ impl<'a> GetIssuesForEpicRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)

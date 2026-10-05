@@ -1,20 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForSprintRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesForSprintRequestExpand { One, Many, Other });
 
 /// The Sprint operations.
 pub struct SprintService<'a> {
@@ -417,7 +403,7 @@ impl<'a> DeleteSprintRequest<'a> {
 pub struct GetIssuesForSprintRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,
-    expand: Option<GetIssuesForSprintRequestExpand>,
+    expand: Option<Vec<String>>,
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
@@ -441,8 +427,8 @@ impl<'a> GetIssuesForSprintRequest<'a> {
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetIssuesForSprintRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -495,7 +481,7 @@ impl<'a> GetIssuesForSprintRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.jql {

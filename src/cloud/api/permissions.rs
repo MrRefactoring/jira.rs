@@ -1,20 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
-
-/// A list of permission keys. (Required) This parameter accepts a comma-separated list. To get the list of available permissions, use [Get all permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get).
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetMyPermissionsRequestPermissions {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetMyPermissionsRequestPermissions { One, Many, Other });
 
 /// The Permissions operations.
 pub struct PermissionsService<'a> {
@@ -125,7 +111,7 @@ pub struct GetMyPermissionsRequest<'a> {
     project_id: Option<String>,
     issue_key: Option<String>,
     issue_id: Option<String>,
-    permissions: Option<GetMyPermissionsRequestPermissions>,
+    permissions: Option<Vec<String>>,
     project_uuid: Option<String>,
     project_configuration_uuid: Option<String>,
     comment_id: Option<String>,
@@ -180,8 +166,8 @@ impl<'a> GetMyPermissionsRequest<'a> {
 
     /// A list of permission keys. (Required) This parameter accepts a comma-separated list. To get the list of available permissions, use [Get all permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-permissions/#api-rest-api-3-permissions-get).
     #[must_use]
-    pub fn permissions(mut self, value: GetMyPermissionsRequestPermissions) -> Self {
-        self.permissions = Some(value);
+    pub fn permissions(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.permissions = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -230,7 +216,7 @@ impl<'a> GetMyPermissionsRequest<'a> {
         }
 
         if let Some(value) = &self.permissions {
-            config.query.push(("permissions".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("permissions".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.project_uuid {

@@ -1,20 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
-
-/// A list of project keys (case sensitive). This parameter accepts a comma-separated list.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum FindBulkAssignableUsersRequestProjectKeys {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(FindBulkAssignableUsersRequestProjectKeys { One, Many, Other });
 
 /// The UserSearch operations.
 pub struct UserSearchService<'a> {
@@ -37,7 +23,7 @@ impl<'a> UserSearchService<'a> {
     /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for each project specified in `projectKeys`.
     pub fn find_bulk_assignable_users(
         &self,
-        project_keys: FindBulkAssignableUsersRequestProjectKeys,
+        project_keys: impl IntoIterator<Item = impl Into<String>>,
     ) -> FindBulkAssignableUsersRequest<'a> {
         FindBulkAssignableUsersRequest::new(self.client, project_keys)
     }
@@ -193,14 +179,21 @@ pub struct FindBulkAssignableUsersRequest<'a> {
     client: &'a crate::core::Client,
     query: Option<String>,
     account_id: Option<String>,
-    project_keys: FindBulkAssignableUsersRequestProjectKeys,
+    project_keys: Vec<String>,
     start_at: Option<i64>,
     max_results: Option<i64>,
 }
 
 impl<'a> FindBulkAssignableUsersRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_keys: FindBulkAssignableUsersRequestProjectKeys) -> Self {
-        Self { client, project_keys, query: None, account_id: None, start_at: None, max_results: None }
+    fn new(client: &'a crate::core::Client, project_keys: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        Self {
+            client,
+            project_keys: project_keys.into_iter().map(Into::into).collect(),
+            query: None,
+            account_id: None,
+            start_at: None,
+            max_results: None,
+        }
     }
 
     /// A query string that is matched against user attributes, such as `displayName` and `emailAddress`, to find relevant users. The string can match the prefix of the attribute's value. For example, *query=john* matches a user with a `displayName` of *John Smith* and a user with an `emailAddress` of *johnson@example.com*. Required, unless `accountId` is specified.
@@ -250,7 +243,7 @@ impl<'a> FindBulkAssignableUsersRequest<'a> {
             config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
-        config.query.push(("projectKeys".to_owned(), crate::core::QueryValue::from_serializable(&self.project_keys)?));
+        config.query.push(("projectKeys".to_owned(), crate::core::QueryValue::Scalar(self.project_keys.join(","))));
 
         if let Some(value) = &self.start_at {
             config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));

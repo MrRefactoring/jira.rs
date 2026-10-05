@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum ListWorkflowHistoryRequestExpandValue {
@@ -9,41 +8,11 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `includeIntermediateWorkflows` Includes intermediate workflow versions that are sometimes created during workflow updates or migrations. By default, these are omitted from the response.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum ListWorkflowHistoryRequestExpand {
-    One(ListWorkflowHistoryRequestExpandValue),
-    Many(Vec<ListWorkflowHistoryRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(ListWorkflowHistoryRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum SearchWorkflowsRequestExpandValue {
         ValuesTransitions => "values.transitions",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `values.transitions` Returns the transitions that each workflow is associated with.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum SearchWorkflowsRequestExpand {
-    One(SearchWorkflowsRequestExpandValue),
-    Many(Vec<SearchWorkflowsRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(SearchWorkflowsRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
@@ -853,7 +822,7 @@ impl<'a> ReadWorkflowFromHistoryRequest<'a> {
 #[derive(Clone)]
 pub struct ListWorkflowHistoryRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<ListWorkflowHistoryRequestExpand>,
+    expand: Option<Vec<ListWorkflowHistoryRequestExpandValue>>,
     workflow_history_list_request: WorkflowHistoryListRequest,
 }
 
@@ -866,8 +835,8 @@ impl<'a> ListWorkflowHistoryRequest<'a> {
     ///
     ///  *  `includeIntermediateWorkflows` Includes intermediate workflow versions that are sometimes created during workflow updates or migrations. By default, these are omitted from the response.
     #[must_use]
-    pub fn expand(mut self, value: ListWorkflowHistoryRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<ListWorkflowHistoryRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -878,7 +847,10 @@ impl<'a> ListWorkflowHistoryRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/workflow/history/list".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         let body = match serde_json::to_value(&self.workflow_history_list_request)? {
@@ -2003,7 +1975,7 @@ pub struct SearchWorkflowsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
     max_results: Option<i64>,
-    expand: Option<SearchWorkflowsRequestExpand>,
+    expand: Option<Vec<SearchWorkflowsRequestExpandValue>>,
     query_string: Option<String>,
     order_by: Option<SearchWorkflowsRequestOrderBy>,
     scope: Option<String>,
@@ -2046,8 +2018,8 @@ impl<'a> SearchWorkflowsRequest<'a> {
     ///
     ///  *  `values.transitions` Returns the transitions that each workflow is associated with.
     #[must_use]
-    pub fn expand(mut self, value: SearchWorkflowsRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<SearchWorkflowsRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -2110,7 +2082,10 @@ impl<'a> SearchWorkflowsRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.query_string {

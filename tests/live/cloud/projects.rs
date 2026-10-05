@@ -1,4 +1,4 @@
-use jira::cloud::{GetProjectRequestExpand, GetProjectRequestExpandValue, SearchProjectsRequestOrderBy};
+use jira::cloud::{GetProjectRequestExpandValue, SearchProjectsRequestOrderBy};
 use jira::futures_util::TryStreamExt;
 
 use crate::harness::{TEST_PROJECT_KEY, cloud};
@@ -41,10 +41,7 @@ async fn already_returns_lead_and_description_without_being_asked() {
     let expanded = cloud()
         .projects()
         .get_project(TEST_PROJECT_KEY)
-        .expand(GetProjectRequestExpand::Many(vec![
-            GetProjectRequestExpandValue::Description,
-            GetProjectRequestExpandValue::Lead,
-        ]))
+        .expand([GetProjectRequestExpandValue::Description, GetProjectRequestExpandValue::Lead])
         .send()
         .await
         .expect("the expand parameter is accepted");

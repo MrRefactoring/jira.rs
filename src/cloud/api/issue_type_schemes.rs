@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
@@ -24,22 +23,6 @@ crate::open_enum! {
         IssueTypes => "issueTypes",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `projects` For each issue type schemes, returns information about the projects the issue type scheme is assigned to.
-///  *  `issueTypes` For each issue type schemes, returns information about the issueTypes the issue type scheme have.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetAllIssueTypeSchemesRequestExpand {
-    One(GetAllIssueTypeSchemesRequestExpandValue),
-    Many(Vec<GetAllIssueTypeSchemesRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetAllIssueTypeSchemesRequestExpand { One, Many, Other });
 
 /// The IssueTypeSchemes operations.
 pub struct IssueTypeSchemesService<'a> {
@@ -189,7 +172,7 @@ pub struct GetAllIssueTypeSchemesRequest<'a> {
     max_results: Option<i64>,
     id: Option<Vec<i64>>,
     order_by: Option<GetAllIssueTypeSchemesRequestOrderBy>,
-    expand: Option<GetAllIssueTypeSchemesRequestExpand>,
+    expand: Option<Vec<GetAllIssueTypeSchemesRequestExpandValue>>,
     query_string: Option<String>,
 }
 
@@ -238,8 +221,11 @@ impl<'a> GetAllIssueTypeSchemesRequest<'a> {
     ///  *  `projects` For each issue type schemes, returns information about the projects the issue type scheme is assigned to.
     ///  *  `issueTypes` For each issue type schemes, returns information about the issueTypes the issue type scheme have.
     #[must_use]
-    pub fn expand(mut self, value: GetAllIssueTypeSchemesRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetAllIssueTypeSchemesRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -274,7 +260,10 @@ impl<'a> GetAllIssueTypeSchemesRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.query_string {
