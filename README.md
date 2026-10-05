@@ -172,7 +172,7 @@ async fn print_issue_keys(jira: &CloudClient) -> jira::Result<()> {
 }
 ```
 
-Every paginated listing has `stream` too, including projects, users, filters, dashboards, boards, sprints and queues:
+Every paginated request has `stream`, including projects, users, filters, dashboards, boards, sprints and queues. It follows offsets, bare arrays, page tokens, cursors and page numbers:
 
 ```rust,no_run
 use jira::cloud::CloudClient;
@@ -188,6 +188,59 @@ async fn print_project_keys(jira: &CloudClient) -> jira::Result<()> {
     Ok(())
 }
 ```
+
+## Cloud and Data Center
+
+For an operation shared by Cloud and Data Center, the service accessor, method, positional parameters and model type
+names match. Platform-only operations stay on their platform. Jira Software operations live in `AgileClient` on Cloud
+and in `ServerClient` on Data Center.
+
+Some API differences remain: Cloud uses `account_id` where Data Center uses `username`; Cloud types documented
+`expand` values while Data Center accepts a string when its documentation lists no values. Cloud issue search pages
+by token and Data Center pages by offset; `stream()` follows either scheme. Data Center project search returns every
+visible project in one page, while `get_projects_picker()` calls the picker endpoint.
+
+Enable the `server` feature for the Data Center function. After building the transport with the appropriate credentials, the constructor is the only line that differs.
+
+```rust,no_run
+use jira::{Auth, Client};
+use jira::futures_util::TryStreamExt;
+
+async fn cloud_projects() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::builder()
+        .host("https://your-domain.atlassian.net")
+        .auth(Auth::api_token("you@example.com", "YOUR_API_TOKEN"))
+        .build()?;
+    let jira = jira::cloud::CloudClient::new(client);
+
+    let mut projects = jira.projects().search_projects().stream();
+
+    while let Some(project) = projects.try_next().await? {
+        println!("{}", project.key.unwrap_or_default());
+    }
+
+    Ok(())
+}
+
+async fn data_center_projects() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::builder()
+        .host("https://jira.example.com")
+        .auth(Auth::bearer("YOUR_PAT"))
+        .build()?;
+    let jira = jira::server::ServerClient::new(client);
+
+    let mut projects = jira.projects().search_projects().stream();
+
+    while let Some(project) = projects.try_next().await? {
+        println!("{}", project.key.unwrap_or_default());
+    }
+
+    Ok(())
+}
+```
+
+See the [Cloud and Data Center parity matrix](https://github.com/MrRefactoring/jira.rs/blob/master/docs/parity.md)
+for paired operations and remaining differences.
 
 ## Authentication
 

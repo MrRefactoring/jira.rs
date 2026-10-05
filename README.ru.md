@@ -172,8 +172,8 @@ async fn print_issue_keys(jira: &CloudClient) -> jira::Result<()> {
 }
 ```
 
-`stream` есть у каждого постраничного списка, включая проекты, пользователей, фильтры, дашборды, доски, спринты и
-очереди:
+`stream` есть у каждого постраничного запроса, включая проекты, пользователей, фильтры, дашборды, доски, спринты и
+очереди. Он проходит смещения, массивы, токены, курсоры и номера страниц:
 
 ```rust,no_run
 use jira::cloud::CloudClient;
@@ -189,6 +189,59 @@ async fn print_project_keys(jira: &CloudClient) -> jira::Result<()> {
     Ok(())
 }
 ```
+
+## Cloud и Data Center
+
+Для общей операции в Cloud и Data Center совпадают сервисный аксессор, имя метода, позиционные параметры и имена
+типов моделей. Операции, доступные только на одной платформе, остаются на ней. Операции Jira Software находятся в
+`AgileClient` для Cloud и в `ServerClient` для Data Center.
+
+Различия API сохраняются: Cloud использует `account_id`, а Data Center — `username`; Cloud типизирует
+документированные значения `expand`, а Data Center принимает строку, если его документация не перечисляет значения.
+Поиск задач в Cloud использует токен страницы, а в Data Center — смещение; `stream()` проходит оба варианта. Поиск
+проектов Data Center возвращает все видимые проекты одной страницей, а `get_projects_picker()` вызывает подборщик.
+
+Для функции Data Center включите флаг `server`. После создания транспорта с нужными учётными данными различается только конструктор клиента.
+
+```rust,no_run
+use jira::{Auth, Client};
+use jira::futures_util::TryStreamExt;
+
+async fn cloud_projects() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::builder()
+        .host("https://your-domain.atlassian.net")
+        .auth(Auth::api_token("you@example.com", "YOUR_API_TOKEN"))
+        .build()?;
+    let jira = jira::cloud::CloudClient::new(client);
+
+    let mut projects = jira.projects().search_projects().stream();
+
+    while let Some(project) = projects.try_next().await? {
+        println!("{}", project.key.unwrap_or_default());
+    }
+
+    Ok(())
+}
+
+async fn data_center_projects() -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::builder()
+        .host("https://jira.example.com")
+        .auth(Auth::bearer("YOUR_PAT"))
+        .build()?;
+    let jira = jira::server::ServerClient::new(client);
+
+    let mut projects = jira.projects().search_projects().stream();
+
+    while let Some(project) = projects.try_next().await? {
+        println!("{}", project.key.unwrap_or_default());
+    }
+
+    Ok(())
+}
+```
+
+См. [матрицу соответствия Cloud и Data Center](https://github.com/MrRefactoring/jira.rs/blob/master/docs/parity.md)
+с общими операциями и оставшимися различиями.
 
 ## Аутентификация
 
