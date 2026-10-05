@@ -13,8 +13,8 @@ impl<'a> SprintService<'a> {
     }
 
     /// Creates a future sprint. Sprint name and origin board id are required. Start and end date are optional. Notes: The sprint name is trimmed. Only Jira administrators can create synced sprints.
-    pub fn create_sprint(&self, sprint_create: SprintCreate) -> CreateSprintRequest<'a> {
-        CreateSprintRequest::new(self.client, sprint_create)
+    pub fn create_sprint(&self, name: impl Into<String>) -> CreateSprintRequest<'a> {
+        CreateSprintRequest::new(self.client, name)
     }
 
     /// Sets the Synced flag to false for all sprints in the provided list.
@@ -44,8 +44,8 @@ impl<'a> SprintService<'a> {
     /// - The completeDate field cannot be updated manually.
     /// - Sprint goal can be removed by updating it's value to empty string
     /// - Only Jira administrators can edit dates on sprints that are marked as synced.
-    pub fn partially_update_sprint(&self, sprint_id: i64, sprint: Sprint) -> PartiallyUpdateSprintRequest<'a> {
-        PartiallyUpdateSprintRequest::new(self.client, sprint_id, sprint)
+    pub fn partially_update_sprint(&self, sprint_id: i64) -> PartiallyUpdateSprintRequest<'a> {
+        PartiallyUpdateSprintRequest::new(self.client, sprint_id)
     }
 
     /// Performs a full update of a sprint.
@@ -60,8 +60,13 @@ impl<'a> SprintService<'a> {
     /// - Other changes to state are not allowed.
     /// - The completeDate field cannot be updated manually.
     /// - Only Jira administrators can edit dates on sprints that are marked as synced.
-    pub fn update_sprint(&self, sprint_id: i64, sprint: Sprint) -> UpdateSprintRequest<'a> {
-        UpdateSprintRequest::new(self.client, sprint_id, sprint)
+    pub fn update_sprint(
+        &self,
+        sprint_id: i64,
+        name: impl Into<String>,
+        state: impl Into<String>,
+    ) -> UpdateSprintRequest<'a> {
+        UpdateSprintRequest::new(self.client, sprint_id, name, state)
     }
 
     /// Deletes a sprint. Once a sprint is deleted, all issues in the sprint will be moved to the backlog. To delete a synced sprint, you must unsync it first.
@@ -78,9 +83,9 @@ impl<'a> SprintService<'a> {
     pub fn move_issues_to_sprint_and_rank(
         &self,
         sprint_id: i64,
-        issue_assign_request: IssueAssignRequest,
+        issue_rank_request: IssueAssignRequest,
     ) -> MoveIssuesToSprintAndRankRequest<'a> {
-        MoveIssuesToSprintAndRankRequest::new(self.client, sprint_id, issue_assign_request)
+        MoveIssuesToSprintAndRankRequest::new(self.client, sprint_id, issue_rank_request)
     }
 
     /// Returns the keys of all properties for the sprint identified by the id. The user who retrieves the property keys is required to have permissions to view the sprint.
@@ -117,8 +122,8 @@ impl<'a> SprintService<'a> {
     }
 
     /// Swap the position of the sprint with the second sprint.
-    pub fn swap_sprint(&self, sprint_id: i64, sprint_swap: SprintSwap) -> SwapSprintRequest<'a> {
-        SwapSprintRequest::new(self.client, sprint_id, sprint_swap)
+    pub fn swap_sprint(&self, sprint_id: i64) -> SwapSprintRequest<'a> {
+        SwapSprintRequest::new(self.client, sprint_id)
     }
 }
 
@@ -126,12 +131,87 @@ impl<'a> SprintService<'a> {
 #[derive(Clone)]
 pub struct CreateSprintRequest<'a> {
     client: &'a crate::core::Client,
-    sprint_create: SprintCreate,
+    auto_start_stop: Option<bool>,
+    end_date: Option<String>,
+    goal: Option<String>,
+    incomplete_issues_destination_id: Option<i64>,
+    name: String,
+    origin_board_id: Option<i64>,
+    start_date: Option<String>,
+    synced: Option<bool>,
+    user_profile_time_zone: Option<String>,
 }
 
 impl<'a> CreateSprintRequest<'a> {
-    fn new(client: &'a crate::core::Client, sprint_create: SprintCreate) -> Self {
-        Self { client, sprint_create }
+    fn new(client: &'a crate::core::Client, name: impl Into<String>) -> Self {
+        Self {
+            client,
+            name: name.into(),
+            auto_start_stop: None,
+            end_date: None,
+            goal: None,
+            incomplete_issues_destination_id: None,
+            origin_board_id: None,
+            start_date: None,
+            synced: None,
+            user_profile_time_zone: None,
+        }
+    }
+
+    #[must_use]
+    pub fn auto_start_stop(mut self, value: bool) -> Self {
+        self.auto_start_stop = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn end_date(mut self, value: impl Into<String>) -> Self {
+        self.end_date = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn goal(mut self, value: impl Into<String>) -> Self {
+        self.goal = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn incomplete_issues_destination_id(mut self, value: i64) -> Self {
+        self.incomplete_issues_destination_id = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn origin_board_id(mut self, value: i64) -> Self {
+        self.origin_board_id = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn start_date(mut self, value: impl Into<String>) -> Self {
+        self.start_date = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn synced(mut self, value: bool) -> Self {
+        self.synced = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn user_profile_time_zone(mut self, value: impl Into<String>) -> Self {
+        self.user_profile_time_zone = Some(value.into());
+
+        self
     }
 
     /// The request as the transport will send it.
@@ -139,10 +219,41 @@ impl<'a> CreateSprintRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/agile/1.0/sprint".to_owned());
 
-        let body = match serde_json::to_value(&self.sprint_create)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
+        let mut body = serde_json::Map::new();
+
+        if let Some(value) = &self.auto_start_stop {
+            body.insert("autoStartStop".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.end_date {
+            body.insert("endDate".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.goal {
+            body.insert("goal".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.incomplete_issues_destination_id {
+            body.insert("incompleteIssuesDestinationId".to_owned(), serde_json::to_value(value)?);
+        }
+
+        body.insert("name".to_owned(), serde_json::to_value(&self.name)?);
+
+        if let Some(value) = &self.origin_board_id {
+            body.insert("originBoardId".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.start_date {
+            body.insert("startDate".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.synced {
+            body.insert("synced".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.user_profile_time_zone {
+            body.insert("userProfileTimeZone".to_owned(), serde_json::to_value(value)?);
+        }
 
         config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
 
@@ -277,12 +388,131 @@ impl<'a> GetSprintRequest<'a> {
 pub struct PartiallyUpdateSprintRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,
-    sprint: Sprint,
+    activated_date: Option<String>,
+    auto_start_stop: Option<bool>,
+    complete_date: Option<String>,
+    end_date: Option<String>,
+    goal: Option<String>,
+    id: Option<i64>,
+    incomplete_issues_destination_id: Option<i64>,
+    name: Option<String>,
+    origin_board_id: Option<i64>,
+    self_: Option<String>,
+    start_date: Option<String>,
+    state: Option<String>,
+    synced: Option<bool>,
 }
 
 impl<'a> PartiallyUpdateSprintRequest<'a> {
-    fn new(client: &'a crate::core::Client, sprint_id: i64, sprint: Sprint) -> Self {
-        Self { client, sprint_id, sprint }
+    fn new(client: &'a crate::core::Client, sprint_id: i64) -> Self {
+        Self {
+            client,
+            sprint_id,
+            activated_date: None,
+            auto_start_stop: None,
+            complete_date: None,
+            end_date: None,
+            goal: None,
+            id: None,
+            incomplete_issues_destination_id: None,
+            name: None,
+            origin_board_id: None,
+            self_: None,
+            start_date: None,
+            state: None,
+            synced: None,
+        }
+    }
+
+    #[must_use]
+    pub fn activated_date(mut self, value: impl Into<String>) -> Self {
+        self.activated_date = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn auto_start_stop(mut self, value: bool) -> Self {
+        self.auto_start_stop = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn complete_date(mut self, value: impl Into<String>) -> Self {
+        self.complete_date = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn end_date(mut self, value: impl Into<String>) -> Self {
+        self.end_date = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn goal(mut self, value: impl Into<String>) -> Self {
+        self.goal = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn id(mut self, value: i64) -> Self {
+        self.id = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn incomplete_issues_destination_id(mut self, value: i64) -> Self {
+        self.incomplete_issues_destination_id = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn name(mut self, value: impl Into<String>) -> Self {
+        self.name = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn origin_board_id(mut self, value: i64) -> Self {
+        self.origin_board_id = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn self_(mut self, value: impl Into<String>) -> Self {
+        self.self_ = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn start_date(mut self, value: impl Into<String>) -> Self {
+        self.start_date = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn state(mut self, value: impl Into<String>) -> Self {
+        self.state = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn synced(mut self, value: bool) -> Self {
+        self.synced = Some(value);
+
+        self
     }
 
     /// The request as the transport will send it.
@@ -292,10 +522,59 @@ impl<'a> PartiallyUpdateSprintRequest<'a> {
             format!("/rest/agile/1.0/sprint/{}", self.sprint_id),
         );
 
-        let body = match serde_json::to_value(&self.sprint)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
+        let mut body = serde_json::Map::new();
+
+        if let Some(value) = &self.activated_date {
+            body.insert("activatedDate".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.auto_start_stop {
+            body.insert("autoStartStop".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.complete_date {
+            body.insert("completeDate".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.end_date {
+            body.insert("endDate".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.goal {
+            body.insert("goal".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.id {
+            body.insert("id".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.incomplete_issues_destination_id {
+            body.insert("incompleteIssuesDestinationId".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.name {
+            body.insert("name".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.origin_board_id {
+            body.insert("originBoardId".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.self_ {
+            body.insert("self".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.start_date {
+            body.insert("startDate".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.state {
+            body.insert("state".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.synced {
+            body.insert("synced".to_owned(), serde_json::to_value(value)?);
+        }
 
         config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
 
@@ -329,12 +608,117 @@ impl<'a> PartiallyUpdateSprintRequest<'a> {
 pub struct UpdateSprintRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,
-    sprint: Sprint,
+    activated_date: Option<String>,
+    auto_start_stop: Option<bool>,
+    complete_date: Option<String>,
+    end_date: Option<String>,
+    goal: Option<String>,
+    id: Option<i64>,
+    incomplete_issues_destination_id: Option<i64>,
+    name: String,
+    origin_board_id: Option<i64>,
+    self_: Option<String>,
+    start_date: Option<String>,
+    state: String,
+    synced: Option<bool>,
 }
 
 impl<'a> UpdateSprintRequest<'a> {
-    fn new(client: &'a crate::core::Client, sprint_id: i64, sprint: Sprint) -> Self {
-        Self { client, sprint_id, sprint }
+    fn new(client: &'a crate::core::Client, sprint_id: i64, name: impl Into<String>, state: impl Into<String>) -> Self {
+        Self {
+            client,
+            sprint_id,
+            name: name.into(),
+            state: state.into(),
+            activated_date: None,
+            auto_start_stop: None,
+            complete_date: None,
+            end_date: None,
+            goal: None,
+            id: None,
+            incomplete_issues_destination_id: None,
+            origin_board_id: None,
+            self_: None,
+            start_date: None,
+            synced: None,
+        }
+    }
+
+    #[must_use]
+    pub fn activated_date(mut self, value: impl Into<String>) -> Self {
+        self.activated_date = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn auto_start_stop(mut self, value: bool) -> Self {
+        self.auto_start_stop = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn complete_date(mut self, value: impl Into<String>) -> Self {
+        self.complete_date = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn end_date(mut self, value: impl Into<String>) -> Self {
+        self.end_date = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn goal(mut self, value: impl Into<String>) -> Self {
+        self.goal = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn id(mut self, value: i64) -> Self {
+        self.id = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn incomplete_issues_destination_id(mut self, value: i64) -> Self {
+        self.incomplete_issues_destination_id = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn origin_board_id(mut self, value: i64) -> Self {
+        self.origin_board_id = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn self_(mut self, value: impl Into<String>) -> Self {
+        self.self_ = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn start_date(mut self, value: impl Into<String>) -> Self {
+        self.start_date = Some(value.into());
+
+        self
+    }
+
+    #[must_use]
+    pub fn synced(mut self, value: bool) -> Self {
+        self.synced = Some(value);
+
+        self
     }
 
     /// The request as the transport will send it.
@@ -344,10 +728,55 @@ impl<'a> UpdateSprintRequest<'a> {
             format!("/rest/agile/1.0/sprint/{}", self.sprint_id),
         );
 
-        let body = match serde_json::to_value(&self.sprint)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
+        let mut body = serde_json::Map::new();
+
+        if let Some(value) = &self.activated_date {
+            body.insert("activatedDate".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.auto_start_stop {
+            body.insert("autoStartStop".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.complete_date {
+            body.insert("completeDate".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.end_date {
+            body.insert("endDate".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.goal {
+            body.insert("goal".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.id {
+            body.insert("id".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.incomplete_issues_destination_id {
+            body.insert("incompleteIssuesDestinationId".to_owned(), serde_json::to_value(value)?);
+        }
+
+        body.insert("name".to_owned(), serde_json::to_value(&self.name)?);
+
+        if let Some(value) = &self.origin_board_id {
+            body.insert("originBoardId".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.self_ {
+            body.insert("self".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.start_date {
+            body.insert("startDate".to_owned(), serde_json::to_value(value)?);
+        }
+
+        body.insert("state".to_owned(), serde_json::to_value(&self.state)?);
+
+        if let Some(value) = &self.synced {
+            body.insert("synced".to_owned(), serde_json::to_value(value)?);
+        }
 
         config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
 
@@ -539,12 +968,12 @@ impl<'a> GetIssuesForSprintRequest<'a> {
 pub struct MoveIssuesToSprintAndRankRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,
-    issue_assign_request: IssueAssignRequest,
+    issue_rank_request: IssueAssignRequest,
 }
 
 impl<'a> MoveIssuesToSprintAndRankRequest<'a> {
-    fn new(client: &'a crate::core::Client, sprint_id: i64, issue_assign_request: IssueAssignRequest) -> Self {
-        Self { client, sprint_id, issue_assign_request }
+    fn new(client: &'a crate::core::Client, sprint_id: i64, issue_rank_request: IssueAssignRequest) -> Self {
+        Self { client, sprint_id, issue_rank_request }
     }
 
     /// The request as the transport will send it.
@@ -554,12 +983,7 @@ impl<'a> MoveIssuesToSprintAndRankRequest<'a> {
             format!("/rest/agile/1.0/sprint/{}/issue", self.sprint_id),
         );
 
-        let body = match serde_json::to_value(&self.issue_assign_request)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.issue_rank_request)?));
 
         Ok(config)
     }
@@ -735,12 +1159,27 @@ impl<'a> DeletePropertyRequest<'a> {
 pub struct SwapSprintRequest<'a> {
     client: &'a crate::core::Client,
     sprint_id: i64,
-    sprint_swap: SprintSwap,
+    sprint_to_swap_with: Option<i64>,
+    swap: Option<i64>,
 }
 
 impl<'a> SwapSprintRequest<'a> {
-    fn new(client: &'a crate::core::Client, sprint_id: i64, sprint_swap: SprintSwap) -> Self {
-        Self { client, sprint_id, sprint_swap }
+    fn new(client: &'a crate::core::Client, sprint_id: i64) -> Self {
+        Self { client, sprint_id, sprint_to_swap_with: None, swap: None }
+    }
+
+    #[must_use]
+    pub fn sprint_to_swap_with(mut self, value: i64) -> Self {
+        self.sprint_to_swap_with = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn swap(mut self, value: i64) -> Self {
+        self.swap = Some(value);
+
+        self
     }
 
     /// The request as the transport will send it.
@@ -750,10 +1189,15 @@ impl<'a> SwapSprintRequest<'a> {
             format!("/rest/agile/1.0/sprint/{}/swap", self.sprint_id),
         );
 
-        let body = match serde_json::to_value(&self.sprint_swap)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
+        let mut body = serde_json::Map::new();
+
+        if let Some(value) = &self.sprint_to_swap_with {
+            body.insert("sprintToSwapWith".to_owned(), serde_json::to_value(value)?);
+        }
+
+        if let Some(value) = &self.swap {
+            body.insert("swap".to_owned(), serde_json::to_value(value)?);
+        }
 
         config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
 

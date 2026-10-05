@@ -6,10 +6,10 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 
 | Status | Operations |
 |---|---:|
-| identical | 162 |
+| identical | 165 |
 | values named on one side | 27 |
-| parameters differ | 39 |
-| platform parameters | 73 |
+| parameters differ | 31 |
+| platform parameters | 71 |
 | type differs | 54 |
 | stream on one side | 1 |
 | Paired operations | 297 |
@@ -39,7 +39,7 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 
 | Method | Data Center endpoint | Cloud endpoint | Status | Note |
 |---|---|---|---|---|
-| `move_issues_to_backlog` | `POST /rest/agile/1.0/backlog/issue` | `POST /rest/agile/1.0/backlog/issue` | parameters differ | `issues: impl IntoIterator<Item = impl Into<String>>` / `issue_assign_request: IssueAssignRequest` |
+| `move_issues_to_backlog` | `POST /rest/agile/1.0/backlog/issue` | `POST /rest/agile/1.0/backlog/issue` | identical | — |
 
 ### `board()`
 
@@ -82,10 +82,10 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 | `get_epic` | `GET /rest/agile/1.0/epic/{…}` | `GET /rest/agile/1.0/epic/{…}` | identical | — |
 | `get_issues_for_epic` | `GET /rest/agile/1.0/epic/{…}/issue` | `GET /rest/software/1.0/epic/{…}/issue` | platform parameters, type differs | Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
 | `get_issues_without_epic` | `GET /rest/agile/1.0/epic/none/issue` | `GET /rest/software/1.0/epic/none/issue` | platform parameters, type differs | Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
-| `move_issues_to_epic` | `POST /rest/agile/1.0/epic/{…}/issue` | `POST /rest/agile/1.0/epic/{…}/issue` | parameters differ, platform parameters | 1 Cloud positional parameters / 2 Data Center; Cloud only: `issues` |
+| `move_issues_to_epic` | `POST /rest/agile/1.0/epic/{…}/issue` | `POST /rest/agile/1.0/epic/{…}/issue` | identical | — |
 | `partially_update_epic` | `POST /rest/agile/1.0/epic/{…}` | `POST /rest/agile/1.0/epic/{…}` | identical | — |
 | `rank_epics` | `PUT /rest/agile/1.0/epic/{…}/rank` | `PUT /rest/agile/1.0/epic/{…}/rank` | identical | — |
-| `remove_issues_from_epic` | `POST /rest/agile/1.0/epic/none/issue` | `POST /rest/agile/1.0/epic/none/issue` | parameters differ | `issues: impl IntoIterator<Item = impl Into<String>>` / `issue_assign_request: IssueAssignRequest` |
+| `remove_issues_from_epic` | `POST /rest/agile/1.0/epic/none/issue` | `POST /rest/agile/1.0/epic/none/issue` | identical | — |
 
 ### `filter_sharing()`
 
@@ -132,7 +132,7 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 
 | Method | Data Center endpoint | Cloud endpoint | Status | Note |
 |---|---|---|---|---|
-| `estimate_issue_for_board` | `PUT /rest/agile/1.0/issue/{…}/estimation` | `PUT /rest/agile/1.0/issue/{…}/estimation` | parameters differ, platform parameters, type differs | 1 Cloud positional parameters / 2 Data Center; Cloud only: `value`; `EstimateIssueForBoard` / `FieldValue` |
+| `estimate_issue_for_board` | `PUT /rest/agile/1.0/issue/{…}/estimation` | `PUT /rest/agile/1.0/issue/{…}/estimation` | type differs | `EstimateIssueForBoard` / `FieldValue` |
 | `get_issue` | `GET /rest/agile/1.0/issue/{…}` | `GET /rest/agile/1.0/issue/{…}` | identical | — |
 | `get_issue_estimation_for_board` | `GET /rest/agile/1.0/issue/{…}/estimation` | `GET /rest/agile/1.0/issue/{…}/estimation` | type differs | `GetIssueEstimationForBoard` / `FieldValue` |
 | `rank_issues` | `PUT /rest/agile/1.0/issue/rank` | `PUT /rest/agile/1.0/issue/rank` | type differs | `()` / `Option<PartialSuccess>` |
@@ -534,18 +534,18 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 
 | Method | Data Center endpoint | Cloud endpoint | Status | Note |
 |---|---|---|---|---|
-| `create_sprint` | `POST /rest/agile/1.0/sprint` | `POST /rest/agile/1.0/sprint` | parameters differ, platform parameters | `name: impl Into<String>` / `sprint_create: SprintCreate`; Cloud only: `end_date`, `goal`, `origin_board_id`, `start_date` |
+| `create_sprint` | `POST /rest/agile/1.0/sprint` | `POST /rest/agile/1.0/sprint` | platform parameters | Data Center only: `auto_start_stop`, `incomplete_issues_destination_id`, `synced`, `user_profile_time_zone` |
 | `delete_property` | `DELETE /rest/agile/1.0/sprint/{…}/properties/{…}` | `DELETE /rest/agile/1.0/sprint/{…}/properties/{…}` | identical | — |
 | `delete_sprint` | `DELETE /rest/agile/1.0/sprint/{…}` | `DELETE /rest/agile/1.0/sprint/{…}` | identical | — |
 | `get_issues_for_sprint` | `GET /rest/agile/1.0/sprint/{…}/issue` | `GET /rest/software/1.0/sprint/{…}/issue` | platform parameters, type differs | Cloud only: `next_page_token`, `reconcile_issues`; Data Center only: `start_at`; `SoftwareIssueResults` / `SearchResults` |
 | `get_properties_keys` | `GET /rest/agile/1.0/sprint/{…}/properties` | `GET /rest/agile/1.0/sprint/{…}/properties` | identical | — |
 | `get_property` | `GET /rest/agile/1.0/sprint/{…}/properties/{…}` | `GET /rest/agile/1.0/sprint/{…}/properties/{…}` | identical | — |
 | `get_sprint` | `GET /rest/agile/1.0/sprint/{…}` | `GET /rest/agile/1.0/sprint/{…}` | identical | — |
-| `move_issues_to_sprint_and_rank` | `POST /rest/agile/1.0/sprint/{…}/issue` | `POST /rest/agile/1.0/sprint/{…}/issue` | parameters differ | `issue_rank_request: IssueRankRequest` / `issue_assign_request: IssueAssignRequest` |
-| `partially_update_sprint` | `POST /rest/agile/1.0/sprint/{…}` | `POST /rest/agile/1.0/sprint/{…}` | parameters differ, platform parameters | 1 Cloud positional parameters / 2 Data Center; Cloud only: `complete_date`, `created_date`, `end_date`, `goal`, `id`, `name`, `origin_board_id`, `start_date`, `state` |
+| `move_issues_to_sprint_and_rank` | `POST /rest/agile/1.0/sprint/{…}/issue` | `POST /rest/agile/1.0/sprint/{…}/issue` | parameters differ | `issue_rank_request`: `IssueRankRequest` / `IssueAssignRequest` |
+| `partially_update_sprint` | `POST /rest/agile/1.0/sprint/{…}` | `POST /rest/agile/1.0/sprint/{…}` | platform parameters | Cloud only: `created_date`; Data Center only: `activated_date`, `auto_start_stop`, `incomplete_issues_destination_id`, `self_`, `synced` |
 | `set_property` | `PUT /rest/agile/1.0/sprint/{…}/properties/{…}` | `PUT /rest/agile/1.0/sprint/{…}/properties/{…}` | identical | — |
-| `swap_sprint` | `POST /rest/agile/1.0/sprint/{…}/swap` | `POST /rest/agile/1.0/sprint/{…}/swap` | parameters differ, platform parameters | 1 Cloud positional parameters / 2 Data Center; Cloud only: `sprint_to_swap_with` |
-| `update_sprint` | `PUT /rest/agile/1.0/sprint/{…}` | `PUT /rest/agile/1.0/sprint/{…}` | parameters differ, platform parameters | `name: impl Into<String>` / `sprint: Sprint`; 3 Cloud positional parameters / 2 Data Center; Cloud only: `complete_date`, `created_date`, `end_date`, `goal`, `id`, `origin_board_id`, `start_date` |
+| `swap_sprint` | `POST /rest/agile/1.0/sprint/{…}/swap` | `POST /rest/agile/1.0/sprint/{…}/swap` | platform parameters | Data Center only: `swap` |
+| `update_sprint` | `PUT /rest/agile/1.0/sprint/{…}` | `PUT /rest/agile/1.0/sprint/{…}` | platform parameters | Cloud only: `created_date`; Data Center only: `activated_date`, `auto_start_stop`, `incomplete_issues_destination_id`, `self_`, `synced` |
 
 ### `user_properties()`
 

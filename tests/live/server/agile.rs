@@ -1,6 +1,6 @@
 use jira::server::{
-    BoardCreate, BooleanSetting, EpicRankRequest, EpicUpdate, FieldEdit, IssueAssignRequest, IssueRankRequest,
-    SharePermissionInput, Sprint, SprintCreate, SprintSwap, UnmapSprints,
+    BoardCreate, BooleanSetting, EpicRankRequest, EpicUpdate, IssueAssignRequest, IssueRankRequest,
+    SharePermissionInput, UnmapSprints,
 };
 
 use super::fixtures::{
@@ -125,11 +125,8 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
 
     let sprint = server()
         .sprint()
-        .create_sprint(SprintCreate {
-            name: Some(test_name("spr")),
-            origin_board_id: Some(board_id),
-            ..SprintCreate::default()
-        })
+        .create_sprint(test_name("spr"))
+        .origin_board_id(board_id)
         .send()
         .await
         .expect("a sprint can be created on the board");
@@ -164,12 +161,7 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
         "the board sees the same sprint",
     );
 
-    server()
-        .backlog()
-        .move_issues_to_backlog(IssueAssignRequest { issues: Some(vec![key.clone()]) })
-        .send()
-        .await
-        .expect("and can be sent back to the backlog");
+    server().backlog().move_issues_to_backlog([key.clone()]).send().await.expect("and can be sent back to the backlog");
 
     let after =
         server().sprint().get_issues_for_sprint(sprint_id).send().await.expect("the sprint's issues read again");
@@ -210,7 +202,8 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
 
     server()
         .sprint()
-        .partially_update_sprint(sprint_id, Sprint { name: Some(renamed.clone()), ..Sprint::default() })
+        .partially_update_sprint(sprint_id)
+        .name(renamed.clone())
         .send()
         .await
         .expect("a sprint can be renamed in part");
@@ -221,15 +214,8 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
 
     let replaced = server()
         .sprint()
-        .update_sprint(
-            sprint_id,
-            Sprint {
-                name: Some(renamed),
-                state: Some("future".to_owned()),
-                goal: Some("proving the write path".to_owned()),
-                ..Sprint::default()
-            },
-        )
+        .update_sprint(sprint_id, renamed, "future")
+        .goal("proving the write path")
         .send()
         .await
         .expect("a sprint can be replaced wholesale");
@@ -240,13 +226,7 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
         "the replacement carries the goal it was given",
     );
 
-    touch(
-        server()
-            .sprint()
-            .swap_sprint(sprint_id, SprintSwap { sprint_to_swap_with: Some(sprint_id), ..SprintSwap::default() })
-            .send()
-            .await,
-    );
+    touch(server().sprint().swap_sprint(sprint_id).sprint_to_swap_with(sprint_id).send().await);
     touch(server().sprint().unmap_sprints(UnmapSprints { sprint_ids: Some(vec![sprint_id]) }).send().await);
     touch(server().sprint().unmap_all_sprints().send().await);
 
@@ -268,7 +248,8 @@ async fn moves_an_issue_into_an_epic_and_renames_it() {
 
     server()
         .epic()
-        .move_issues_to_epic(&epic_key, IssueAssignRequest { issues: Some(vec![key.clone()]) })
+        .move_issues_to_epic(&epic_key)
+        .issues([key.clone()])
         .send()
         .await
         .expect("an issue can be moved into an epic");
@@ -298,12 +279,7 @@ async fn moves_an_issue_into_an_epic_and_renames_it() {
         "the board sees the same epic",
     );
 
-    server()
-        .epic()
-        .remove_issues_from_epic(IssueAssignRequest { issues: Some(vec![key]) })
-        .send()
-        .await
-        .expect("and can be taken out again");
+    server().epic().remove_issues_from_epic([key]).send().await.expect("and can be taken out again");
 
     let without = server().epic().get_issues_without_epic().send().await.expect("the epic-less issues read");
 
@@ -361,14 +337,7 @@ async fn ranks_and_estimates_an_issue() {
             .send()
             .await,
     );
-    touch(
-        server()
-            .issue()
-            .estimate_issue_for_board(&key, FieldEdit { value: Some("5".to_owned()) })
-            .board_id(board_id)
-            .send()
-            .await,
-    );
+    touch(server().issue().estimate_issue_for_board(&key).value("5").board_id(board_id).send().await);
 
     let estimate = touch(server().issue().get_issue_estimation_for_board(&key).board_id(board_id).send().await);
 

@@ -39,12 +39,8 @@ impl<'a> IssueService<'a> {
     /// However, internally the field stores and returns the estimation as a number of seconds.
     /// The field used for estimation on the given board can be obtained from [board configuration resource](https://developer.atlassian.com/server/jira/platform/rest/v11003/intro#agile/1.0/board-getConfiguration).
     /// More information about the field are returned by edit meta resource or field resource.
-    pub fn estimate_issue_for_board(
-        &self,
-        issue_id_or_key: impl Into<String>,
-        field_edit: FieldEdit,
-    ) -> EstimateIssueForBoardRequest<'a> {
-        EstimateIssueForBoardRequest::new(self.client, issue_id_or_key, field_edit)
+    pub fn estimate_issue_for_board(&self, issue_id_or_key: impl Into<String>) -> EstimateIssueForBoardRequest<'a> {
+        EstimateIssueForBoardRequest::new(self.client, issue_id_or_key)
     }
 }
 
@@ -218,18 +214,25 @@ pub struct EstimateIssueForBoardRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
     board_id: Option<i64>,
-    field_edit: FieldEdit,
+    value: Option<String>,
 }
 
 impl<'a> EstimateIssueForBoardRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, field_edit: FieldEdit) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), field_edit, board_id: None }
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), board_id: None, value: None }
     }
 
     /// The id of the board required to determine which field is used for estimation.
     #[must_use]
     pub fn board_id(mut self, value: i64) -> Self {
         self.board_id = Some(value);
+
+        self
+    }
+
+    #[must_use]
+    pub fn value(mut self, value: impl Into<String>) -> Self {
+        self.value = Some(value.into());
 
         self
     }
@@ -245,10 +248,11 @@ impl<'a> EstimateIssueForBoardRequest<'a> {
             config.query.push(("boardId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
-        let body = match serde_json::to_value(&self.field_edit)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
+        let mut body = serde_json::Map::new();
+
+        if let Some(value) = &self.value {
+            body.insert("value".to_owned(), serde_json::to_value(value)?);
+        }
 
         config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
 

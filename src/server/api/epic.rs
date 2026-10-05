@@ -18,8 +18,11 @@ impl<'a> EpicService<'a> {
     }
 
     /// Removes issues from epics. The user needs to have the edit issue permission for all issue they want to remove from epics. The maximum number of issues that can be moved in one operation is 50.
-    pub fn remove_issues_from_epic(&self, issue_assign_request: IssueAssignRequest) -> RemoveIssuesFromEpicRequest<'a> {
-        RemoveIssuesFromEpicRequest::new(self.client, issue_assign_request)
+    pub fn remove_issues_from_epic(
+        &self,
+        issues: impl IntoIterator<Item = impl Into<String>>,
+    ) -> RemoveIssuesFromEpicRequest<'a> {
+        RemoveIssuesFromEpicRequest::new(self.client, issues)
     }
 
     /// Returns the epic for a given epic Id. This epic will only be returned if the user has permission to view it.
@@ -42,12 +45,8 @@ impl<'a> EpicService<'a> {
     }
 
     /// Moves issues to an epic, for a given epic id. Issues can be only in a single epic at the same time. That means that already assigned issues to an epic, will not be assigned to the previous epic anymore. The user needs to have the edit issue permission for all issue they want to move and to the epic. The maximum number of issues that can be moved in one operation is 50.
-    pub fn move_issues_to_epic(
-        &self,
-        epic_id_or_key: impl Into<String>,
-        issue_assign_request: IssueAssignRequest,
-    ) -> MoveIssuesToEpicRequest<'a> {
-        MoveIssuesToEpicRequest::new(self.client, epic_id_or_key, issue_assign_request)
+    pub fn move_issues_to_epic(&self, epic_id_or_key: impl Into<String>) -> MoveIssuesToEpicRequest<'a> {
+        MoveIssuesToEpicRequest::new(self.client, epic_id_or_key)
     }
 
     /// Moves (ranks) an epic before or after a given epic. If rankCustomFieldId is not defined, the default rank field will be used.
@@ -188,12 +187,12 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
 #[derive(Clone)]
 pub struct RemoveIssuesFromEpicRequest<'a> {
     client: &'a crate::core::Client,
-    issue_assign_request: IssueAssignRequest,
+    issues: Vec<String>,
 }
 
 impl<'a> RemoveIssuesFromEpicRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_assign_request: IssueAssignRequest) -> Self {
-        Self { client, issue_assign_request }
+    fn new(client: &'a crate::core::Client, issues: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        Self { client, issues: issues.into_iter().map(Into::into).collect() }
     }
 
     /// The request as the transport will send it.
@@ -201,10 +200,9 @@ impl<'a> RemoveIssuesFromEpicRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/agile/1.0/epic/none/issue".to_owned());
 
-        let body = match serde_json::to_value(&self.issue_assign_request)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
+        let mut body = serde_json::Map::new();
+
+        body.insert("issues".to_owned(), serde_json::to_value(&self.issues)?);
 
         config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
 
@@ -437,16 +435,19 @@ impl<'a> GetIssuesForEpicRequest<'a> {
 pub struct MoveIssuesToEpicRequest<'a> {
     client: &'a crate::core::Client,
     epic_id_or_key: String,
-    issue_assign_request: IssueAssignRequest,
+    issues: Option<Vec<String>>,
 }
 
 impl<'a> MoveIssuesToEpicRequest<'a> {
-    fn new(
-        client: &'a crate::core::Client,
-        epic_id_or_key: impl Into<String>,
-        issue_assign_request: IssueAssignRequest,
-    ) -> Self {
-        Self { client, epic_id_or_key: epic_id_or_key.into(), issue_assign_request }
+    fn new(client: &'a crate::core::Client, epic_id_or_key: impl Into<String>) -> Self {
+        Self { client, epic_id_or_key: epic_id_or_key.into(), issues: None }
+    }
+
+    #[must_use]
+    pub fn issues(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.issues = Some(value.into_iter().map(Into::into).collect());
+
+        self
     }
 
     /// The request as the transport will send it.
@@ -456,10 +457,11 @@ impl<'a> MoveIssuesToEpicRequest<'a> {
             format!("/rest/agile/1.0/epic/{}/issue", crate::core::encode_path_segment(&self.epic_id_or_key)),
         );
 
-        let body = match serde_json::to_value(&self.issue_assign_request)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
+        let mut body = serde_json::Map::new();
+
+        if let Some(value) = &self.issues {
+            body.insert("issues".to_owned(), serde_json::to_value(value)?);
+        }
 
         config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
 

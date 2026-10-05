@@ -158,6 +158,42 @@ parity!(
     }
 );
 
+parity!(agile_create_sprint, jira::agile::AgileClient, jira::server::ServerClient, |jira| {
+    drop(jira.sprint().create_sprint("Sprint 1").origin_board_id(7));
+});
+
+parity!(agile_update_sprint, jira::agile::AgileClient, jira::server::ServerClient, |jira| {
+    drop(jira.sprint().update_sprint(1, "Sprint 1", "active"));
+});
+
+parity!(agile_partial_sprint, jira::agile::AgileClient, jira::server::ServerClient, |jira| {
+    drop(jira.sprint().partially_update_sprint(1).name("x"));
+});
+
+parity!(agile_swap_sprint, jira::agile::AgileClient, jira::server::ServerClient, |jira| {
+    drop(jira.sprint().swap_sprint(1).sprint_to_swap_with(2));
+});
+
+parity!(agile_move_to_backlog, jira::agile::AgileClient, jira::server::ServerClient, |jira| {
+    drop(jira.backlog().move_issues_to_backlog(["X-1"]));
+});
+
+parity!(agile_move_to_epic, jira::agile::AgileClient, jira::server::ServerClient, |jira| {
+    drop(jira.epic().move_issues_to_epic("E-1").issues(["X-1"]));
+});
+
+parity!(agile_remove_from_epic, jira::agile::AgileClient, jira::server::ServerClient, |jira| {
+    drop(jira.epic().remove_issues_from_epic(["X-1"]));
+});
+
+parity!(agile_estimate_issue, jira::agile::AgileClient, jira::server::ServerClient, |jira| {
+    drop(jira.issue().estimate_issue_for_board("X-1").value("3"));
+});
+
+parity!(agile_move_to_sprint_and_rank, jira::agile::AgileClient, jira::server::ServerClient, |jira| {
+    drop(jira.sprint().move_issues_to_sprint_and_rank(1, Default::default()));
+});
+
 parity!(
     typed_user,
     jira::cloud::CloudClient,
