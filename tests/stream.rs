@@ -14,6 +14,39 @@ fn query(request: &Request, name: &str) -> Option<String> {
     request.url.query_pairs().find(|(key, _)| key == name).map(|(_, value)| value.into_owned())
 }
 
+#[cfg(feature = "user-provisioning")]
+#[tokio::test]
+async fn scim_users_follow_one_based_offsets() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/scim/directory/directory/Users"))
+        .respond_with(|request: &Request| match query(request, "startIndex").as_deref() {
+            Some("1") => ResponseTemplate::new(200).set_body_json(
+                json!({"totalResults": 3, "startIndex": 1, "itemsPerPage": 2, "Resources": [{"id": "a"}, {"id": "b"}]}),
+            ),
+            Some("3") => ResponseTemplate::new(200).set_body_json(
+                json!({"totalResults": 3, "startIndex": 3, "itemsPerPage": 2, "Resources": [{"id": "c"}]}),
+            ),
+            _ => ResponseTemplate::new(500),
+        })
+        .mount(&server)
+        .await;
+
+    let api = jira::user_provisioning::UserProvisioningClient::new(client_for(&server));
+    let users: Vec<_> = api.users().get_users("directory").stream().try_collect().await.unwrap();
+    assert_eq!(users.iter().map(|user| user.id.as_deref()).collect::<Vec<_>>(), [Some("a"), Some("b"), Some("c")]);
+    assert_eq!(
+        server
+            .received_requests()
+            .await
+            .unwrap()
+            .iter()
+            .map(|request| query(request, "startIndex"))
+            .collect::<Vec<_>>(),
+        [Some("1".to_owned()), Some("3".to_owned())]
+    );
+}
+
 #[cfg(feature = "admin")]
 #[tokio::test]
 async fn admin_users_follow_url_cursors_through_an_empty_page() {

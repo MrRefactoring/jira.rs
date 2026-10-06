@@ -23,10 +23,25 @@ impl<T, P: PartialEq> PageStep<T, P> {
 
 impl<T> PageStep<T, i64> {
     pub(crate) fn offset(items: Vec<T>, start: i64, last: bool, total: Option<i64>, size: Option<i64>) -> Self {
+        Self::offset_from(items, start, last, total, size, 0, None)
+    }
+
+    pub(crate) fn offset_from(
+        items: Vec<T>,
+        start: i64,
+        last: bool,
+        total: Option<i64>,
+        size: Option<i64>,
+        base: i64,
+        stride: Option<i64>,
+    ) -> Self {
         let count = items.len() as i64;
-        let next = start + count;
+        let next = start + stride.filter(|stride| *stride > 0).unwrap_or(count);
         let short = size.is_some_and(|size| count < size);
-        Self::new(items, (count > 0 && !last && total.is_none_or(|total| next < total) && !short).then_some(next))
+        Self::new(
+            items,
+            (count > 0 && !last && total.is_none_or(|total| start + count < total + base) && !short).then_some(next),
+        )
     }
 }
 
@@ -115,6 +130,17 @@ mod tests {
     #[test]
     fn stops_at_total() {
         assert!(PageStep::offset(vec![1u8, 2], 0, false, Some(2), None).next.is_none());
+    }
+
+    #[test]
+    fn one_based_offset_advances_by_page_size_until_past_total() {
+        assert_eq!(PageStep::offset_from(vec![1u8, 2], 1, false, Some(3), None, 1, Some(2)).next, Some(3));
+        assert!(PageStep::offset_from(vec![3u8], 3, false, Some(3), None, 1, Some(2)).next.is_none());
+    }
+
+    #[test]
+    fn one_based_offset_stops_on_empty_page() {
+        assert!(PageStep::offset_from(Vec::<u8>::new(), 1, false, Some(3), None, 1, Some(2)).next.is_none());
     }
 
     #[test]
