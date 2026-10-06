@@ -121,10 +121,8 @@ impl<'a> RequestService<'a> {
     pub fn get_attachments_for_request(
         &self,
         issue_id_or_key: impl Into<String>,
-        start: i64,
-        limit: i64,
     ) -> GetAttachmentsForRequestRequest<'a> {
-        GetAttachmentsForRequestRequest::new(self.client, issue_id_or_key, start, limit)
+        GetAttachmentsForRequestRequest::new(self.client, issue_id_or_key)
     }
 
     /// This method creates a comment on a customer request using one or more attachment files (uploaded using [servicedeskapi/servicedesk/{serviceDeskId}/attachTemporaryFile](https://developer.atlassian.com/cloud/jira/service-desk/rest/api-group-servicedesk/#api-rest-servicedeskapi-servicedesk-servicedeskid-attachtemporaryfile-post)), with the visibility set by `public`. See
@@ -944,13 +942,29 @@ impl<'a> AnswerApprovalRequest<'a> {
 pub struct GetAttachmentsForRequestRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    start: i64,
-    limit: i64,
+    start: Option<i64>,
+    limit: Option<i64>,
 }
 
 impl<'a> GetAttachmentsForRequestRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, start: i64, limit: i64) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), start, limit }
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), start: None, limit: None }
+    }
+
+    /// The starting index of the returned attachment. Base index: 0. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
+    #[must_use]
+    pub fn start(mut self, value: i64) -> Self {
+        self.start = Some(value);
+
+        self
+    }
+
+    /// The maximum number of comments to return per page. Default: 50. See the [Pagination](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro#pagination) section for more details.
+    #[must_use]
+    pub fn limit(mut self, value: i64) -> Self {
+        self.limit = Some(value);
+
+        self
     }
 
     /// The request as the transport will send it.
@@ -963,11 +977,37 @@ impl<'a> GetAttachmentsForRequestRequest<'a> {
             ),
         );
 
-        config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(self.start.to_string())));
+        if let Some(value) = &self.start {
+            config.query.push(("start".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
 
-        config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(self.limit.to_string())));
+        if let Some(value) = &self.limit {
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Attachment>> {
+        let first = self.start.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(
+                items,
+                page.start.unwrap_or(position),
+                page.is_last_page.unwrap_or(false),
+                None,
+                None,
+            ))
+        })
     }
 
     /// Sends the request.

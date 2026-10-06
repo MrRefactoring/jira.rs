@@ -14,6 +14,35 @@ fn query(request: &Request, name: &str) -> Option<String> {
     request.url.query_pairs().find(|(key, _)| key == name).map(|(_, value)| value.into_owned())
 }
 
+#[tokio::test]
+async fn service_desk_request_attachments_follow_page_starts() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/rest/servicedeskapi/request/IT-15/attachment"))
+        .respond_with(|request: &Request| match query(request, "start").as_deref() {
+            Some("2") => ResponseTemplate::new(200).set_body_json(
+                json!({"start": 2, "isLastPage": false, "values": [{"filename": "a.png"}, {"filename": "b.png"}]}),
+            ),
+            Some("4") => ResponseTemplate::new(200)
+                .set_body_json(json!({"start": 4, "isLastPage": true, "values": [{"filename": "c.png"}]})),
+            _ => ResponseTemplate::new(500),
+        })
+        .mount(&server)
+        .await;
+
+    let api = jira::service_desk::ServiceDeskClient::new(client_for(&server));
+    let attachments: Vec<_> =
+        api.request().get_attachments_for_request("IT-15").start(2).limit(2).stream().try_collect().await.unwrap();
+    assert_eq!(
+        attachments.iter().map(|item| item.filename.as_deref()).collect::<Vec<_>>(),
+        [Some("a.png"), Some("b.png"), Some("c.png")]
+    );
+    assert_eq!(
+        server.received_requests().await.unwrap().iter().map(|request| query(request, "start")).collect::<Vec<_>>(),
+        [Some("2".to_owned()), Some("4".to_owned())]
+    );
+}
+
 #[cfg(feature = "user-provisioning")]
 #[tokio::test]
 async fn scim_users_follow_one_based_offsets() {
