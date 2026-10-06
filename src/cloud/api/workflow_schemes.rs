@@ -1084,6 +1084,23 @@ impl<'a> GetProjectUsagesForWorkflowSchemeRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<ProjectUsage>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let page = page.projects.unwrap_or_default();
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), false))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<WorkflowSchemeProjectUsageDTO> {
         self.client.send(&self.config()?).await

@@ -93,6 +93,27 @@ impl<'a> FetchMembersRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
+    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Membership>> {
+        let first = self.membership_fetch_payload.as_ref().and_then(|body| body.after.clone());
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.membership_fetch_payload.get_or_insert_with(Default::default).after = position.clone();
+            let page = request.send().await?;
+            let items = page.results;
+            Ok(crate::core::PageStep::cursor(
+                items,
+                &position,
+                page.page_info.end_cursor.map(Some),
+                !page.page_info.has_next_page,
+            ))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<MembershipPage> {
         self.client.send(&self.config()?).await

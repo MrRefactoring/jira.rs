@@ -275,6 +275,17 @@ parity!(issue_search_expand, jira::cloud::CloudClient, jira::server::ServerClien
     drop(jira.issue_search().search_issues().jql("project = X").fields(["summary"]).expand(["changelog"]).stream());
 });
 
+parity_with_value!(
+    issue_search_post_stream,
+    jira::cloud::CloudClient,
+    jira::server::ServerClient,
+    jira::cloud::models::SearchAndReconcileRequest::default(),
+    jira::server::models::SearchRequest::default(),
+    |jira, body| {
+        drop(jira.issue_search().search_issues_post(body).stream());
+    }
+);
+
 parity!(list_expansions, jira::cloud::CloudClient, jira::server::ServerClient, |jira| {
     drop(jira.issues().get_issue("X-1").expand(["changelog", "names"]));
     drop(jira.issue_comments().get_comments("X-1").expand(["renderedBody"]));

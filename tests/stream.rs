@@ -288,3 +288,123 @@ fn requested_stream_signatures_compile() {
     drop(agile.board().get_all_sprints(1).stream());
     drop(agile.sprint().get_issues_for_sprint(1).stream());
 }
+
+#[tokio::test]
+async fn cloud_post_search_carries_token_in_body() {
+    let server = MockServer::start().await;
+    Mock::given(method("POST"))
+        .and(path("/rest/api/3/search/jql"))
+        .respond_with(
+            |request: &Request| match serde_json::from_slice::<Value>(&request.body).unwrap()["nextPageToken"].as_str()
+            {
+                None => ResponseTemplate::new(200)
+                    .set_body_json(json!({"issues": [{"key": "X-1"}], "nextPageToken": "next", "isLast": false})),
+                Some("next") => {
+                    ResponseTemplate::new(200).set_body_json(json!({"issues": [{"key": "X-2"}], "isLast": true}))
+                }
+                _ => ResponseTemplate::new(500),
+            },
+        )
+        .mount(&server)
+        .await;
+    let api = jira::cloud::CloudClient::new(client_for(&server));
+    let issues: Vec<_> = api
+        .issue_search()
+        .search_issues_post(jira::cloud::models::SearchAndReconcileRequest::default())
+        .stream()
+        .try_collect()
+        .await
+        .unwrap();
+    assert_eq!(issues.iter().map(|issue| issue.key.as_deref()).collect::<Vec<_>>(), [Some("X-1"), Some("X-2")]);
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(requests.len(), 2);
+    assert_eq!(serde_json::from_slice::<Value>(&requests[1].body).unwrap()["nextPageToken"], "next");
+}
+
+#[tokio::test]
+async fn server_post_search_carries_offset_in_body() {
+    let server = MockServer::start().await;
+    Mock::given(method("POST"))
+        .and(path("/rest/api/2/search"))
+        .respond_with(|request: &Request| {
+            match serde_json::from_slice::<Value>(&request.body).unwrap()["startAt"].as_i64() {
+                Some(0) => ResponseTemplate::new(200)
+                    .set_body_json(json!({"startAt": 0, "total": 2, "issues": [{"key": "X-1"}]})),
+                Some(1) => ResponseTemplate::new(200)
+                    .set_body_json(json!({"startAt": 1, "total": 2, "issues": [{"key": "X-2"}]})),
+                _ => ResponseTemplate::new(500),
+            }
+        })
+        .mount(&server)
+        .await;
+    let api = jira::server::ServerClient::new(client_for(&server));
+    let issues: Vec<_> = api
+        .issue_search()
+        .search_issues_post(jira::server::models::SearchRequest::default())
+        .stream()
+        .try_collect()
+        .await
+        .unwrap();
+    assert_eq!(issues.iter().map(|issue| issue.key.as_deref()).collect::<Vec<_>>(), [Some("X-1"), Some("X-2")]);
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(
+        requests
+            .iter()
+            .map(|request| serde_json::from_slice::<Value>(&request.body).unwrap()["startAt"].as_i64())
+            .collect::<Vec<_>>(),
+        [Some(0), Some(1)]
+    );
+}
+
+#[tokio::test]
+async fn status_usage_reads_nested_page_token() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/rest/api/3/statuses/1/projectUsages"))
+        .respond_with(|request: &Request| match query(request, "nextPageToken").as_deref() {
+            None => ResponseTemplate::new(200)
+                .set_body_json(json!({"projects": {"values": [{"id": "1"}], "nextPageToken": "next"}})),
+            Some("next") => ResponseTemplate::new(200).set_body_json(json!({"projects": {"values": [{"id": "2"}]}})),
+            _ => ResponseTemplate::new(500),
+        })
+        .mount(&server)
+        .await;
+    let api = jira::cloud::CloudClient::new(client_for(&server));
+    let items: Vec<_> = api.status().get_project_usages_for_status("1").stream().try_collect().await.unwrap();
+    assert_eq!(items.iter().map(|item| item.id.as_deref()).collect::<Vec<_>>(), [Some("1"), Some("2")]);
+    assert_eq!(
+        server
+            .received_requests()
+            .await
+            .unwrap()
+            .iter()
+            .map(|request| query(request, "nextPageToken"))
+            .collect::<Vec<_>>(),
+        [None, Some("next".to_owned())]
+    );
+}
+
+#[tokio::test]
+async fn teams_members_carry_cursor_in_optional_body() {
+    let server = MockServer::start().await;
+    Mock::given(method("POST"))
+        .and(path("/gateway/api/public/teams/v1/org/o/teams/t/members"))
+        .respond_with(|request: &Request| {
+            match serde_json::from_slice::<Value>(&request.body).unwrap()["after"].as_str() {
+                None => ResponseTemplate::new(200).set_body_json(
+                    json!({"results": [{"accountId": "a"}], "pageInfo": {"endCursor": "next", "hasNextPage": true}}),
+                ),
+                Some("next") => ResponseTemplate::new(200)
+                    .set_body_json(json!({"results": [{"accountId": "b"}], "pageInfo": {"hasNextPage": false}})),
+                _ => ResponseTemplate::new(500),
+            }
+        })
+        .mount(&server)
+        .await;
+    let api = jira::teams::TeamsClient::new(client_for(&server));
+    let members: Vec<_> = api.team_members().fetch_members("o", "t").stream().try_collect().await.unwrap();
+    assert_eq!(members.iter().map(|member| member.account_id.as_str()).collect::<Vec<_>>(), ["a", "b"]);
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(requests.len(), 2);
+    assert_eq!(serde_json::from_slice::<Value>(&requests[1].body).unwrap()["after"], "next");
+}
