@@ -392,7 +392,7 @@ parity!(
 
 parity!(user_search, jira::cloud::CloudClient, jira::server::ServerClient, |jira| {
     drop(jira.user_search().find_users().stream());
-    drop(jira.user_search().find_assignable_users().stream());
+    drop(jira.user_search().find_assignable_users());
 });
 
 #[test]

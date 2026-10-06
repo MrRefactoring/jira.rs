@@ -11,7 +11,7 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 | parameters differ | 25 |
 | platform parameters | 71 |
 | type differs | 51 |
-| stream on one side | 1 |
+| stream on one side | 4 |
 | Paired operations | 297 |
 | Data Center only | 147 |
 | Cloud only | 276 |
@@ -560,11 +560,11 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 
 | Method | Data Center endpoint | Cloud endpoint | Status | Note |
 |---|---|---|---|---|
-| `find_assignable_users` | `GET /rest/api/2/user/assignable/search` | `GET /rest/api/3/user/assignable/search` | platform parameters | Cloud only: `account_id`, `account_type`, `app_type`, `issue_id`, `query`, `recommend`, `session_id`; Data Center only: `username` |
-| `find_bulk_assignable_users` | `GET /rest/api/2/user/assignable/multiProjectSearch` | `GET /rest/api/3/user/assignable/multiProjectSearch` | platform parameters | Cloud only: `account_id`, `query`; Data Center only: `username` |
+| `find_assignable_users` | `GET /rest/api/2/user/assignable/search` | `GET /rest/api/3/user/assignable/search` | platform parameters, stream on one side | Cloud only: `account_id`, `account_type`, `app_type`, `issue_id`, `query`, `recommend`, `session_id`, `start_at`; Data Center only: `username`; stream: Cloud only |
+| `find_bulk_assignable_users` | `GET /rest/api/2/user/assignable/multiProjectSearch` | `GET /rest/api/3/user/assignable/multiProjectSearch` | platform parameters, stream on one side | Cloud only: `account_id`, `query`, `start_at`; Data Center only: `username`; stream: Cloud only |
 | `find_users` | `GET /rest/api/2/user/search` | `GET /rest/api/3/user/search` | platform parameters | Cloud only: `account_id`, `property`, `query`; Data Center only: `include_active`, `include_inactive` |
 | `find_users_for_picker` | `GET /rest/api/2/user/picker` | `GET /rest/api/3/user/picker` | platform parameters | Cloud only: `avatar_size`, `exclude_account_ids`, `exclude_connect_users`; Data Center only: `exclude` |
-| `find_users_with_browse_permission` | `GET /rest/api/2/user/viewissue/search` | `GET /rest/api/3/user/viewissue/search` | platform parameters | Cloud only: `account_id`, `query`; Data Center only: `username` |
+| `find_users_with_browse_permission` | `GET /rest/api/2/user/viewissue/search` | `GET /rest/api/3/user/viewissue/search` | platform parameters, stream on one side | Cloud only: `account_id`, `query`, `start_at`; Data Center only: `username`; stream: Cloud only |
 
 ### `users()`
 
