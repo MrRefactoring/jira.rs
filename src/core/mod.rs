@@ -44,6 +44,7 @@ pub use error::{
 pub use extensible::Extensible;
 pub use mime::mime_type_for;
 pub use multipart::{Attachment, MultipartBody};
+pub(crate) use paging::cursor_from_url;
 pub(crate) use paging::{PageStep, stream_pages};
 pub(crate) use path::encode_path_segment;
 pub use product::{USER_AGENT, VERSION};

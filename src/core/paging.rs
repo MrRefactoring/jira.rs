@@ -30,6 +30,20 @@ impl<T> PageStep<T, i64> {
     }
 }
 
+pub(crate) fn cursor_from_url(next: Option<String>) -> Result<Option<String>> {
+    let Some(next) = next.filter(|next| !next.is_empty()) else {
+        return Ok(None);
+    };
+    let Some((_, query)) = next.split_once('?') else {
+        return Ok(None);
+    };
+    let query = query.split('#').next().unwrap_or_default();
+    Ok(form_urlencoded::parse(query.as_bytes())
+        .find(|(name, _)| name == "cursor")
+        .map(|(_, cursor)| cursor.into_owned())
+        .filter(|cursor| !cursor.is_empty()))
+}
+
 pub(crate) fn stream_pages<'a, R, P, T, F, Fut>(request: R, first: P, fetch: F) -> BoxStream<'a, Result<T>>
 where
     R: Clone + Send + 'a,
@@ -122,5 +136,32 @@ mod tests {
     #[test]
     fn stops_at_last_page() {
         assert!(PageStep::offset(vec![1u8], 0, true, None, None).next.is_none());
+    }
+
+    #[test]
+    fn extracts_cursor_from_absolute_and_relative_urls() {
+        assert_eq!(
+            cursor_from_url(Some("https://api.example.org/v1/users?cursor=next%2Bpage".into())).unwrap(),
+            Some("next+page".into())
+        );
+        assert_eq!(cursor_from_url(Some("/v1/users?limit=2&cursor=second".into())).unwrap(), Some("second".into()));
+        assert_eq!(cursor_from_url(Some("?cursor=third".into())).unwrap(), Some("third".into()));
+    }
+
+    #[test]
+    fn absent_empty_or_missing_cursor_ends_walk() {
+        assert_eq!(cursor_from_url(None).unwrap(), None);
+        assert_eq!(cursor_from_url(Some(String::new())).unwrap(), None);
+        assert_eq!(cursor_from_url(Some("/v1/users".into())).unwrap(), None);
+        assert_eq!(cursor_from_url(Some("/v1/users?cursor=".into())).unwrap(), None);
+        assert_eq!(cursor_from_url(Some("/v1/users?limit=2".into())).unwrap(), None);
+    }
+
+    #[test]
+    fn ignores_fragment_after_query() {
+        assert_eq!(
+            cursor_from_url(Some("/v1/users?cursor=next%2Bpage#section?cursor=wrong".into())).unwrap(),
+            Some("next+page".into())
+        );
     }
 }

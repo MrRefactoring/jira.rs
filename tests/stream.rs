@@ -14,6 +14,30 @@ fn query(request: &Request, name: &str) -> Option<String> {
     request.url.query_pairs().find(|(key, _)| key == name).map(|(_, value)| value.into_owned())
 }
 
+#[cfg(feature = "admin")]
+#[tokio::test]
+async fn admin_users_follow_url_cursors_through_an_empty_page() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/admin/v1/orgs/org/users"))
+        .respond_with(|request: &Request| match query(request, "cursor").as_deref() {
+            None => ResponseTemplate::new(200).set_body_json(json!({"data": [{"account_id": "first", "account_type": "atlassian", "account_status": "active", "name": "First", "picture": "https://example.org/a"}], "links": {"next": "/admin/v1/orgs/org/users?cursor=second"}})),
+            Some("second") => ResponseTemplate::new(200).set_body_json(json!({"data": [{"account_id": "second", "account_type": "atlassian", "account_status": "active", "name": "Second", "picture": "https://example.org/b"}], "links": {"next": "https://api.example.org/admin/v1/orgs/org/users?cursor=third"}})),
+            Some("third") => ResponseTemplate::new(200).set_body_json(json!({"data": [], "links": {}})),
+            _ => ResponseTemplate::new(500),
+        })
+        .mount(&server)
+        .await;
+
+    let admin = jira::admin::AdminClient::new(client_for(&server));
+    let users: Vec<_> = admin.users().get_users("org").stream().try_collect().await.unwrap();
+    assert_eq!(users.len(), 2);
+    assert_eq!(
+        server.received_requests().await.unwrap().iter().map(|request| query(request, "cursor")).collect::<Vec<_>>(),
+        [None, Some("second".to_owned()), Some("third".to_owned())]
+    );
+}
+
 #[tokio::test]
 async fn agile_board_fields_use_one_query_value() {
     let server = MockServer::start().await;
