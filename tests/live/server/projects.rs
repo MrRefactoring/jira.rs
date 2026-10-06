@@ -124,14 +124,14 @@ async fn stores_a_property_on_the_project() {
 
     server()
         .project_properties()
-        .set_project_property("suite", &project.key, property_body())
+        .set_project_property(&project.key, "suite", property_body())
         .send()
         .await
         .expect("a project takes a property of the caller's own");
 
     let property = server()
         .project_properties()
-        .get_project_property("suite", &project.key)
+        .get_project_property(&project.key, "suite")
         .send()
         .await
         .expect("the property reads back");
@@ -140,14 +140,14 @@ async fn stores_a_property_on_the_project() {
 
     server()
         .project_properties()
-        .delete_project_property("suite", &project.key)
+        .delete_project_property(&project.key, "suite")
         .send()
         .await
         .expect("the property can be removed");
 
     let error = server()
         .project_properties()
-        .get_project_property("suite", &project.key)
+        .get_project_property(&project.key, "suite")
         .send()
         .await
         .expect_err("a removed property cannot be read");
@@ -340,7 +340,7 @@ async fn keeps_a_version_moves_it_and_merges_it_away() {
 
     server()
         .project_versions()
-        .merge_versions(&other_id, &id)
+        .merge_versions(&id, &other_id)
         .send()
         .await
         .expect("one version can be merged into another");

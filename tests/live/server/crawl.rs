@@ -313,8 +313,8 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
     server()
         .issue_properties()
         .set_issue_property(
-            PROPERTY_KEY,
             &issue_key,
+            PROPERTY_KEY,
             [("createdBy".to_owned(), json!("the Data Center crawl"))].into_iter().collect(),
         )
         .send()

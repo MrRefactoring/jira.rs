@@ -151,7 +151,7 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
 
     let on_board = server()
         .board()
-        .get_board_issues_for_sprint(sprint_id, board_id)
+        .get_board_issues_for_sprint(board_id, sprint_id)
         .send()
         .await
         .expect("the sprint's issues read through the board");
@@ -269,7 +269,7 @@ async fn moves_an_issue_into_an_epic_and_renames_it() {
     let epic_id = epic.id.clone().expect("a created epic carries an id").parse().expect("an epic id is a number");
     let on_board = server()
         .board()
-        .get_board_issues_for_epic(epic_id, board_id)
+        .get_board_issues_for_epic(board_id, epic_id)
         .send()
         .await
         .expect("the epic's issues read through the board");

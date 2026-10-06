@@ -77,7 +77,7 @@ async fn keeps_an_issue_type() {
 
     server()
         .issue_type_properties()
-        .set_issue_type_property(property_key, &id, [("written".to_owned(), json!(true))].into_iter().collect())
+        .set_issue_type_property(&id, property_key, [("written".to_owned(), json!(true))].into_iter().collect())
         .send()
         .await
         .expect("a property can be hung off an issue type");
@@ -85,12 +85,12 @@ async fn keeps_an_issue_type() {
     tracker.defer(move || {
         let id = for_cleanup.clone();
 
-        async move { server().issue_type_properties().delete_issue_type_property(property_key, id).send().await }
+        async move { server().issue_type_properties().delete_issue_type_property(id, property_key).send().await }
     });
 
     let property = server()
         .issue_type_properties()
-        .get_issue_type_property(property_key, &id)
+        .get_issue_type_property(&id, property_key)
         .send()
         .await
         .expect("the property reads back by key");
@@ -267,7 +267,7 @@ async fn keeps_an_issue_type_scheme_and_its_project_associations() {
         "setting project associations",
     );
     touch(
-        server().issue_type_schemes().remove_project_association(&absent, &scheme_id).send().await,
+        server().issue_type_schemes().remove_project_association(&scheme_id, &absent).send().await,
         "removing one project association",
     );
     touch(
@@ -334,7 +334,7 @@ async fn keeps_a_permission_scheme_and_a_grant_in_it() {
     let grant_id = grant.id.expect("a created grant carries an id");
 
     tracker.defer(move || async move {
-        server().permission_schemes().delete_permission_scheme_entity(grant_id, scheme_id).send().await
+        server().permission_schemes().delete_permission_scheme_entity(scheme_id, grant_id).send().await
     });
 
     let grants = server()
@@ -659,19 +659,19 @@ async fn adds_a_tab_to_a_screen_and_takes_it_away() {
 
     let tab_id = tab.id.expect("a created tab carries an id");
 
-    tracker.defer(move || async move { server().screen_tabs().delete_screen_tab(tab_id, screen_id).send().await });
+    tracker.defer(move || async move { server().screen_tabs().delete_screen_tab(screen_id, tab_id).send().await });
 
     let renamed_to = test_name("tab2");
     let renamed = server()
         .screen_tabs()
-        .rename_screen_tab(tab_id, screen_id, ScreenableTab { name: Some(renamed_to.clone()), id: None })
+        .rename_screen_tab(screen_id, tab_id, ScreenableTab { name: Some(renamed_to.clone()), id: None })
         .send()
         .await
         .expect("the tab can be renamed");
 
     assert_eq!(renamed.name.as_deref(), Some(renamed_to.as_str()), "renaming answers with the new name");
 
-    touch(server().screen_tabs().move_screen_tab(tab_id, screen_id, 0).send().await, "moving the tab to the front");
+    touch(server().screen_tabs().move_screen_tab(screen_id, tab_id, 0).send().await, "moving the tab to the front");
 
     let available = server()
         .screens()
@@ -684,7 +684,7 @@ async fn adds_a_tab_to_a_screen_and_takes_it_away() {
         touch(
             server()
                 .screen_tab_fields()
-                .add_screen_tab_field(tab_id, screen_id, AddField { field_id: Some(field_id.clone()) })
+                .add_screen_tab_field(screen_id, tab_id, AddField { field_id: Some(field_id.clone()) })
                 .send()
                 .await,
             "adding a field to the tab",
@@ -693,8 +693,8 @@ async fn adds_a_tab_to_a_screen_and_takes_it_away() {
             server()
                 .screen_tab_fields()
                 .move_screen_tab_field(
-                    tab_id,
                     screen_id,
+                    tab_id,
                     &field_id,
                     MoveField { position: Some(MoveFieldPosition::First), after: None },
                 )
@@ -707,7 +707,7 @@ async fn adds_a_tab_to_a_screen_and_takes_it_away() {
             "showing the field when it is empty",
         );
         touch(
-            server().screen_tab_fields().remove_screen_tab_field(tab_id, screen_id, &field_id).send().await,
+            server().screen_tab_fields().remove_screen_tab_field(screen_id, tab_id, &field_id).send().await,
             "taking the field off the tab",
         );
     }

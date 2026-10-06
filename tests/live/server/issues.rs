@@ -253,14 +253,14 @@ async fn adds_updates_pins_and_deletes_a_comment() {
 
     server()
         .issue_comment_properties()
-        .set_comment_property("suite", &id, property_body())
+        .set_comment_property(&id, "suite", property_body())
         .send()
         .await
         .expect("a comment takes a property");
 
     let property = server()
         .issue_comment_properties()
-        .get_comment_property("suite", &id)
+        .get_comment_property(&id, "suite")
         .send()
         .await
         .expect("the property reads back");
@@ -269,7 +269,7 @@ async fn adds_updates_pins_and_deletes_a_comment() {
 
     server()
         .issue_comment_properties()
-        .delete_comment_property("suite", &id)
+        .delete_comment_property(&id, "suite")
         .send()
         .await
         .expect("the property can be removed");
@@ -392,13 +392,13 @@ async fn stores_and_removes_a_property() {
 
     server()
         .issue_properties()
-        .set_issue_property("suite", &key, property_body())
+        .set_issue_property(&key, "suite", property_body())
         .send()
         .await
         .expect("an issue takes a property of the caller's own");
 
     let property =
-        server().issue_properties().get_issue_property("suite", &key).send().await.expect("the property reads back");
+        server().issue_properties().get_issue_property(&key, "suite").send().await.expect("the property reads back");
 
     assert_eq!(property.value, Some(property_value()), "the value survives the round trip untouched");
 
@@ -409,11 +409,11 @@ async fn stores_and_removes_a_property() {
         "the key just written is in the listing",
     );
 
-    server().issue_properties().delete_issue_property("suite", &key).send().await.expect("the property can be removed");
+    server().issue_properties().delete_issue_property(&key, "suite").send().await.expect("the property can be removed");
 
     let error = server()
         .issue_properties()
-        .get_issue_property("suite", &key)
+        .get_issue_property(&key, "suite")
         .send()
         .await
         .expect_err("a removed property cannot be read");
@@ -445,14 +445,14 @@ async fn keeps_remote_links_by_id_and_by_global_id() {
 
     server()
         .issue_remote_links()
-        .update_remote_issue_link(&link_id, &key, remote_link("https://example.com/two", "two"))
+        .update_remote_issue_link(&key, &link_id, remote_link("https://example.com/two", "two"))
         .send()
         .await
         .expect("a remote link can be updated");
 
     let read = server()
         .issue_remote_links()
-        .get_remote_issue_link_by_id(&link_id, &key)
+        .get_remote_issue_link_by_id(&key, &link_id)
         .send_raw()
         .await
         .expect("a remote link reads back by id");
@@ -470,7 +470,7 @@ async fn keeps_remote_links_by_id_and_by_global_id() {
 
     server()
         .issue_remote_links()
-        .delete_remote_issue_link_by_id(&link_id, &key)
+        .delete_remote_issue_link_by_id(&key, &link_id)
         .send()
         .await
         .expect("a remote link can be removed by id");
