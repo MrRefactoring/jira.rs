@@ -10,6 +10,7 @@ pub fn deserialize_timestamp<'de, D: Deserializer<'de>>(deserializer: D) -> Resu
     }
 }
 
+core_gate! { required_dates {
 pub fn deserialize_required_timestamp<'de, D: Deserializer<'de>>(deserializer: D) -> Result<String, D::Error> {
     match Value::deserialize(deserializer)? {
         Value::String(text) => Ok(text),
@@ -17,3 +18,4 @@ pub fn deserialize_required_timestamp<'de, D: Deserializer<'de>>(deserializer: D
         other => Err(serde::de::Error::custom(format!("a timestamp is a string or a number, got {other}"))),
     }
 }
+} }

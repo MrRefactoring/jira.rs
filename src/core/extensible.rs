@@ -13,15 +13,18 @@ use serde_json::{Map, Value};
 ///
 /// ```
 /// use jira::Extensible;
+/// # #[cfg(feature = "cloud")]
 /// use jira::cloud::IssueFields;
 /// use serde::{Deserialize, Serialize};
 ///
+/// # #[cfg(feature = "cloud")]
 /// #[derive(Serialize, Deserialize)]
 /// struct Estimation {
 ///     #[serde(rename = "customfield_10016", skip_serializing_if = "Option::is_none")]
 ///     story_points: Option<f64>,
 /// }
 ///
+/// # #[cfg(feature = "cloud")]
 /// # fn example() -> Result<(), serde_json::Error> {
 /// let fields = IssueFields { summary: Some("Rotate the signing key".into()), ..Default::default() }
 ///     .with_custom(Estimation { story_points: Some(5.0) })?;
@@ -32,6 +35,7 @@ use serde_json::{Map, Value};
 /// assert_eq!(serde_json::to_value(&fields)?["customfield_10016"], 5.0);
 /// # Ok(())
 /// # }
+/// # #[cfg(feature = "cloud")]
 /// # example().unwrap();
 /// ```
 ///
