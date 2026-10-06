@@ -14,6 +14,7 @@ version.
 
 ### Changed
 
+- Cloud `Field.schema` is now `Option<JsonType>` instead of `JsonType`.
 - Data Center follows Cloud for shared operations: service accessor, method name, positional parameters, and model type names match where the APIs permit it. Update existing Data Center calls and type references using the tables below.
 
 **Compiles and does something else.** In each row, the bold positional arguments share a Rust type and changed relative order. Some old calls still compile unchanged; others compile again after the accessor or method is renamed using the tables below while their arguments remain in the old order:
@@ -764,6 +765,7 @@ Either path can address the wrong resource. A `404` or an "issue does not exist"
 
 ### Fixed
 
+- Cloud field searches and their streams can read pages containing system fields without `schema`.
 - Data Center user searches return `Vec<User>` instead of one `User`, so list responses deserialize correctly.
 - Paging parameters previously declared as strings are numbers on Data Center, three Cloud requests, and Assets Data Center.
 - The `ChangedWorklogs` stream ends when the response sets `lastPage`.

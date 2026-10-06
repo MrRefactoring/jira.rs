@@ -309,6 +309,35 @@ async fn cloud_changed_worklogs_stop_at_last_page() {
     );
 }
 
+#[tokio::test]
+async fn cloud_field_search_reads_system_fields_without_schema() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/rest/api/3/field/search"))
+        .respond_with(ResponseTemplate::new(200).set_body_json(json!({
+            "startAt": 0,
+            "maxResults": 2,
+            "total": 2,
+            "isLast": true,
+            "values": [
+                {"id": "thumbnail", "name": "Images", "typeDisplayName": "Images", "description": ""},
+                {"id": "customfield_10000", "name": "Approvers", "schema": {"type": "array", "items": "user"}}
+            ]
+        })))
+        .mount(&server)
+        .await;
+
+    let api = jira::cloud::CloudClient::new(client_for(&server));
+    let page = api.issue_fields().get_fields_paginated().send().await.unwrap();
+    assert_eq!(page.values[0].id, "thumbnail");
+    assert!(page.values[0].schema.is_none());
+    assert!(page.values[1].schema.is_some());
+
+    let fields: Vec<_> = api.issue_fields().get_fields_paginated().stream().try_collect().await.unwrap();
+    assert_eq!(fields.iter().map(|field| field.id.as_str()).collect::<Vec<_>>(), ["thumbnail", "customfield_10000"]);
+    assert_eq!(server.received_requests().await.unwrap().len(), 2);
+}
+
 suite!(
     cloud_users,
     jira::cloud::CloudClient::new,
