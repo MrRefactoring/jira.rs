@@ -3,6 +3,32 @@
 use jira::core::Client;
 
 macro_rules! parity {
+    ($name:ident, $left:path, $right:path, $left_module:path, $right_module:path, $member:ident => ($left_value:expr, $right_value:expr), |$jira:ident, $surface:ident| $body:block) => {
+        mod $name {
+            use super::*;
+
+            fn left() {
+                use $left_module as $surface;
+                let client = Client::builder().host("https://example.com").build().unwrap();
+                let $jira = <$left>::new(client);
+                let $member = $left_value;
+                $body
+            }
+
+            fn right() {
+                use $right_module as $surface;
+                let client = Client::builder().host("https://example.com").build().unwrap();
+                let $jira = <$right>::new(client);
+                let $member = $right_value;
+                $body
+            }
+
+            #[test]
+            fn both_compile() {
+                let _ = (left as fn(), right as fn());
+            }
+        }
+    };
     ($name:ident, $left:path, $right:path, $left_module:path, $right_module:path, |$jira:ident, $surface:ident| $body:block) => {
         mod $name {
             use super::*;
@@ -291,14 +317,19 @@ parity!(issue_worklogs, jira::cloud::CloudClient, jira::server::ServerClient, |j
     drop(jira.issue_worklogs().get_issue_worklog("X-1").stream());
 });
 
-parity_with_value!(
+parity!(
     add_worklog,
     jira::cloud::CloudClient,
     jira::server::ServerClient,
-    serde_json::from_value::<jira::cloud::models::WorklogInput>(serde_json::json!({})).unwrap(),
-    serde_json::from_value::<jira::server::models::Worklog>(serde_json::json!({})).unwrap(),
-    |jira, body| {
-        drop(jira.issue_worklogs().add_worklog("X-1", body));
+    jira::cloud,
+    jira::server,
+    comment => (Some(surface::WorklogInputComment::Variant1("work".to_owned())), Some("work".to_owned())),
+    |jira, surface| {
+        drop(jira.issue_worklogs().add_worklog("X-1", surface::WorklogInput {
+            comment,
+            time_spent: Some("1h".to_owned()),
+            ..Default::default()
+        }));
     }
 );
 
@@ -333,14 +364,18 @@ parity!(issue_comments, jira::cloud::CloudClient, jira::server::ServerClient, |j
     drop(jira.issue_comments().get_comments("X-1").stream());
 });
 
-parity_with_value!(
+parity!(
     add_comment,
     jira::cloud::CloudClient,
     jira::server::ServerClient,
-    serde_json::from_value::<jira::cloud::models::CommentInput>(serde_json::json!({})).unwrap(),
-    serde_json::from_value::<jira::server::models::Comment>(serde_json::json!({})).unwrap(),
-    |jira, body| {
-        drop(jira.issue_comments().add_comment("X-1", body));
+    jira::cloud,
+    jira::server,
+    body => (Some(surface::CommentInputBody::Variant1("hello".to_owned())), Some("hello".to_owned())),
+    |jira, surface| {
+        drop(jira.issue_comments().add_comment("X-1", surface::CommentInput {
+            body,
+            ..Default::default()
+        }));
     }
 );
 

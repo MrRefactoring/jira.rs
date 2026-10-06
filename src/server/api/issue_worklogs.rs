@@ -47,7 +47,11 @@ impl<'a> IssueWorklogsService<'a> {
     }
 
     /// Adds a new worklog entry to an issue.
-    pub fn add_worklog(&self, issue_id_or_key: impl Into<String>, worklog_input: Worklog) -> AddWorklogRequest<'a> {
+    pub fn add_worklog(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        worklog_input: WorklogInput,
+    ) -> AddWorklogRequest<'a> {
         AddWorklogRequest::new(self.client, issue_id_or_key, worklog_input)
     }
 
@@ -65,7 +69,7 @@ impl<'a> IssueWorklogsService<'a> {
         &self,
         issue_id_or_key: impl Into<String>,
         id: impl Into<String>,
-        body: Worklog,
+        body: WorklogInput,
     ) -> UpdateWorklogRequest<'a> {
         UpdateWorklogRequest::new(self.client, issue_id_or_key, id, body)
     }
@@ -151,11 +155,11 @@ pub struct AddWorklogRequest<'a> {
     adjust_estimate: Option<AddWorklogRequestAdjustEstimate>,
     reduce_by: Option<String>,
     issue_id_or_key: String,
-    worklog_input: Worklog,
+    worklog_input: WorklogInput,
 }
 
 impl<'a> AddWorklogRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, worklog_input: Worklog) -> Self {
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, worklog_input: WorklogInput) -> Self {
         Self {
             client,
             issue_id_or_key: issue_id_or_key.into(),
@@ -275,7 +279,7 @@ pub struct UpdateWorklogRequest<'a> {
     adjust_estimate: Option<UpdateWorklogRequestAdjustEstimate>,
     issue_id_or_key: String,
     id: String,
-    body: Worklog,
+    body: WorklogInput,
 }
 
 impl<'a> UpdateWorklogRequest<'a> {
@@ -283,7 +287,7 @@ impl<'a> UpdateWorklogRequest<'a> {
         client: &'a crate::core::Client,
         issue_id_or_key: impl Into<String>,
         id: impl Into<String>,
-        body: Worklog,
+        body: WorklogInput,
     ) -> Self {
         Self {
             client,

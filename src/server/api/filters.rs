@@ -1,13 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
-
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetColumnsRequestColumnRequestBody {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub columns: Option<Vec<String>>,
-}
 
 /// The Filters operations.
 pub struct FiltersService<'a> {
@@ -50,11 +43,7 @@ impl<'a> FiltersService<'a> {
     }
 
     /// Sets the default columns for the given filter
-    pub fn set_columns(
-        &self,
-        id: i64,
-        column_request_body: SetColumnsRequestColumnRequestBody,
-    ) -> SetColumnsRequest<'a> {
+    pub fn set_columns(&self, id: i64, column_request_body: ColumnRequestBody) -> SetColumnsRequest<'a> {
         SetColumnsRequest::new(self.client, id, column_request_body)
     }
 
@@ -308,11 +297,11 @@ impl<'a> GetColumnsRequest<'a> {
 pub struct SetColumnsRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
-    column_request_body: SetColumnsRequestColumnRequestBody,
+    column_request_body: ColumnRequestBody,
 }
 
 impl<'a> SetColumnsRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: i64, column_request_body: SetColumnsRequestColumnRequestBody) -> Self {
+    fn new(client: &'a crate::core::Client, id: i64, column_request_body: ColumnRequestBody) -> Self {
         Self { client, id, column_request_body }
     }
 

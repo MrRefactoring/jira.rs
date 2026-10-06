@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
 use jira::server::{
-    Comment, IssueLinkType, IssueRefJson, IssueSubTaskMovePosition, IssueUpdateDetails, IssuesUpdate, LinkIssueRequest,
-    Notification, RemoteIssueLinkRequest, RemoteObject, RemoteReciprocalIssueLinkCreateRequest, SearchRequest, ToJson,
-    Transition, User, Worklog, WorklogIdsRequest,
+    CommentInput, IssueLinkType, IssueRefJson, IssueSubTaskMovePosition, IssueUpdateDetails, IssuesUpdate,
+    LinkIssueRequest, Notification, RemoteIssueLinkRequest, RemoteObject, RemoteReciprocalIssueLinkCreateRequest,
+    SearchRequest, ToJson, Transition, User, WorklogIdsRequest, WorklogInput,
 };
 use serde_json::json;
 
@@ -218,7 +218,7 @@ async fn adds_updates_pins_and_deletes_a_comment() {
 
     let comment = server()
         .issue_comments()
-        .add_comment(&key, Comment { body: Some(body.clone()), ..Comment::default() })
+        .add_comment(&key, CommentInput { body: Some(body.clone()), ..CommentInput::default() })
         .send()
         .await
         .expect("a comment can be added");
@@ -229,7 +229,7 @@ async fn adds_updates_pins_and_deletes_a_comment() {
 
     let updated = server()
         .issue_comments()
-        .update_comment(&key, &id, Comment { body: Some(format!("{body} — edited")), ..Comment::default() })
+        .update_comment(&key, &id, CommentInput { body: Some(format!("{body} — edited")), ..CommentInput::default() })
         .send()
         .await
         .expect("a comment can be edited");
@@ -298,7 +298,11 @@ async fn logs_work_and_edits_it() {
         .issue_worklogs()
         .add_worklog(
             &key,
-            Worklog { time_spent: Some("2h".to_owned()), comment: Some(test_name("worklog")), ..Worklog::default() },
+            WorklogInput {
+                time_spent: Some("2h".to_owned()),
+                comment: Some(test_name("worklog")),
+                ..WorklogInput::default()
+            },
         )
         .send()
         .await
@@ -310,7 +314,7 @@ async fn logs_work_and_edits_it() {
 
     server()
         .issue_worklogs()
-        .update_worklog(&key, &id, Worklog { time_spent: Some("3h".to_owned()), ..Worklog::default() })
+        .update_worklog(&key, &id, WorklogInput { time_spent: Some("3h".to_owned()), ..WorklogInput::default() })
         .send()
         .await
         .expect("a worklog can be edited");

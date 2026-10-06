@@ -1,13 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::{Deserialize, Serialize};
-
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetIssueNavigatorDefaultColumnsRequestColumnRequestBody {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub columns: Option<Vec<String>>,
-}
 
 /// The IssueNavigatorSettings operations.
 pub struct IssueNavigatorSettingsService<'a> {
@@ -27,7 +20,7 @@ impl<'a> IssueNavigatorSettingsService<'a> {
     /// Sets the default system columns for issue navigator. Admin permission will be required.
     pub fn set_issue_navigator_default_columns(
         &self,
-        column_request_body: SetIssueNavigatorDefaultColumnsRequestColumnRequestBody,
+        column_request_body: ColumnRequestBody,
     ) -> SetIssueNavigatorDefaultColumnsRequest<'a> {
         SetIssueNavigatorDefaultColumnsRequest::new(self.client, column_request_body)
     }
@@ -67,14 +60,11 @@ impl<'a> GetIssueNavigatorDefaultColumnsRequest<'a> {
 #[derive(Clone)]
 pub struct SetIssueNavigatorDefaultColumnsRequest<'a> {
     client: &'a crate::core::Client,
-    column_request_body: SetIssueNavigatorDefaultColumnsRequestColumnRequestBody,
+    column_request_body: ColumnRequestBody,
 }
 
 impl<'a> SetIssueNavigatorDefaultColumnsRequest<'a> {
-    fn new(
-        client: &'a crate::core::Client,
-        column_request_body: SetIssueNavigatorDefaultColumnsRequestColumnRequestBody,
-    ) -> Self {
+    fn new(client: &'a crate::core::Client, column_request_body: ColumnRequestBody) -> Self {
         Self { client, column_request_body }
     }
 

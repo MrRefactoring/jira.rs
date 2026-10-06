@@ -42,7 +42,11 @@ impl<'a> IssueCommentsService<'a> {
     }
 
     /// Adds a new comment to an issue.
-    pub fn add_comment(&self, issue_id_or_key: impl Into<String>, comment_input: Comment) -> AddCommentRequest<'a> {
+    pub fn add_comment(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        comment_input: CommentInput,
+    ) -> AddCommentRequest<'a> {
         AddCommentRequest::new(self.client, issue_id_or_key, comment_input)
     }
 
@@ -56,7 +60,7 @@ impl<'a> IssueCommentsService<'a> {
         &self,
         issue_id_or_key: impl Into<String>,
         id: impl Into<String>,
-        body: Comment,
+        body: CommentInput,
     ) -> UpdateCommentRequest<'a> {
         UpdateCommentRequest::new(self.client, issue_id_or_key, id, body)
     }
@@ -188,11 +192,11 @@ pub struct AddCommentRequest<'a> {
     client: &'a crate::core::Client,
     expand: Option<Vec<AddCommentRequestExpandValue>>,
     issue_id_or_key: String,
-    comment_input: Comment,
+    comment_input: CommentInput,
 }
 
 impl<'a> AddCommentRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, comment_input: Comment) -> Self {
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, comment_input: CommentInput) -> Self {
         Self { client, issue_id_or_key: issue_id_or_key.into(), comment_input, expand: None }
     }
 
@@ -295,7 +299,7 @@ pub struct UpdateCommentRequest<'a> {
     expand: Option<Vec<UpdateCommentRequestExpandValue>>,
     issue_id_or_key: String,
     id: String,
-    body: Comment,
+    body: CommentInput,
 }
 
 impl<'a> UpdateCommentRequest<'a> {
@@ -303,7 +307,7 @@ impl<'a> UpdateCommentRequest<'a> {
         client: &'a crate::core::Client,
         issue_id_or_key: impl Into<String>,
         id: impl Into<String>,
-        body: Comment,
+        body: CommentInput,
     ) -> Self {
         Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into(), body, expand: None }
     }

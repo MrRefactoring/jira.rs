@@ -417,9 +417,7 @@ async fn keeps_a_filter_of_its_own() {
         .filters()
         .set_columns(
             id,
-            jira::server::SetColumnsRequestColumnRequestBody {
-                columns: Some(vec!["summary".to_owned(), "status".to_owned()]),
-            },
+            jira::server::ColumnRequestBody { columns: Some(vec!["summary".to_owned(), "status".to_owned()]) },
         )
         .send()
         .await

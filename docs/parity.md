@@ -6,11 +6,11 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 
 | Status | Operations |
 |---|---:|
-| identical | 165 |
+| identical | 171 |
 | values named on one side | 27 |
-| parameters differ | 31 |
+| parameters differ | 25 |
 | platform parameters | 71 |
-| type differs | 54 |
+| type differs | 51 |
 | stream on one side | 1 |
 | Paired operations | 297 |
 | Data Center only | 147 |
@@ -108,7 +108,7 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 | `get_favourite_filters` | `GET /rest/api/2/filter/favourite` | `GET /rest/api/3/filter/favourite` | values named on one side | `expand`: `impl IntoIterator<Item = impl Into<GetFavouriteFiltersRequestExpandValue>>` / `impl IntoIterator<Item = impl Into<String>>` |
 | `get_filter` | `GET /rest/api/2/filter/{…}` | `GET /rest/api/3/filter/{…}` | values named on one side, platform parameters | `expand`: `impl IntoIterator<Item = impl Into<GetFilterRequestExpandValue>>` / `impl IntoIterator<Item = impl Into<String>>`; Cloud only: `override_share_permissions` |
 | `reset_columns` | `DELETE /rest/api/2/filter/{…}/columns` | `DELETE /rest/api/3/filter/{…}/columns` | identical | — |
-| `set_columns` | `PUT /rest/api/2/filter/{…}/columns` | `PUT /rest/api/3/filter/{…}/columns` | parameters differ | `column_request_body`: `ColumnRequestBody` / `SetColumnsRequestColumnRequestBody` |
+| `set_columns` | `PUT /rest/api/2/filter/{…}/columns` | `PUT /rest/api/3/filter/{…}/columns` | identical | — |
 | `update_filter` | `PUT /rest/api/2/filter/{…}` | `PUT /rest/api/3/filter/{…}` | values named on one side, platform parameters | `expand`: `impl IntoIterator<Item = impl Into<UpdateFilterRequestExpandValue>>` / `impl IntoIterator<Item = impl Into<String>>`; Cloud only: `override_share_permissions` |
 
 ### `group_and_user_picker()`
@@ -159,11 +159,11 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 
 | Method | Data Center endpoint | Cloud endpoint | Status | Note |
 |---|---|---|---|---|
-| `add_comment` | `POST /rest/api/2/issue/{…}/comment` | `POST /rest/api/3/issue/{…}/comment` | parameters differ | `comment_input`: `CommentInput` / `Comment` |
+| `add_comment` | `POST /rest/api/2/issue/{…}/comment` | `POST /rest/api/3/issue/{…}/comment` | identical | — |
 | `delete_comment` | `DELETE /rest/api/2/issue/{…}/comment/{…}` | `DELETE /rest/api/3/issue/{…}/comment/{…}` | identical | — |
 | `get_comment` | `GET /rest/api/2/issue/{…}/comment/{…}` | `GET /rest/api/3/issue/{…}/comment/{…}` | identical | — |
 | `get_comments` | `GET /rest/api/2/issue/{…}/comment` | `GET /rest/api/3/issue/{…}/comment` | values named on one side | `order_by`: `impl Into<GetCommentsRequestOrderBy>` / `impl Into<String>` |
-| `update_comment` | `PUT /rest/api/2/issue/{…}/comment/{…}` | `PUT /rest/api/3/issue/{…}/comment/{…}` | parameters differ, platform parameters | `body`: `CommentInput` / `Comment`; Cloud only: `notify_users`, `override_editable_flag` |
+| `update_comment` | `PUT /rest/api/2/issue/{…}/comment/{…}` | `PUT /rest/api/3/issue/{…}/comment/{…}` | platform parameters | Cloud only: `notify_users`, `override_editable_flag` |
 
 ### `issue_custom_field_options()`
 
@@ -201,7 +201,7 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 | Method | Data Center endpoint | Cloud endpoint | Status | Note |
 |---|---|---|---|---|
 | `get_issue_navigator_default_columns` | `GET /rest/api/2/settings/columns` | `GET /rest/api/3/settings/columns` | type differs | `Vec<ColumnItem>` / `Vec<ColumnOptions>` |
-| `set_issue_navigator_default_columns` | `PUT /rest/api/2/settings/columns` | `PUT /rest/api/3/settings/columns` | parameters differ | `column_request_body`: `ColumnRequestBody` / `SetIssueNavigatorDefaultColumnsRequestColumnRequestBody` |
+| `set_issue_navigator_default_columns` | `PUT /rest/api/2/settings/columns` | `PUT /rest/api/3/settings/columns` | identical | — |
 
 ### `issue_notification_schemes()`
 
@@ -312,14 +312,14 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 
 | Method | Data Center endpoint | Cloud endpoint | Status | Note |
 |---|---|---|---|---|
-| `add_worklog` | `POST /rest/api/2/issue/{…}/worklog` | `POST /rest/api/3/issue/{…}/worklog` | parameters differ, platform parameters | `worklog_input`: `WorklogInput` / `Worklog`; Cloud only: `expand`, `notify_users`, `override_editable_flag` |
+| `add_worklog` | `POST /rest/api/2/issue/{…}/worklog` | `POST /rest/api/3/issue/{…}/worklog` | platform parameters | Cloud only: `expand`, `notify_users`, `override_editable_flag` |
 | `delete_worklog` | `DELETE /rest/api/2/issue/{…}/worklog/{…}` | `DELETE /rest/api/3/issue/{…}/worklog/{…}` | platform parameters | Cloud only: `notify_users`, `override_editable_flag` |
 | `get_ids_of_worklogs_deleted_since` | `GET /rest/api/2/worklog/deleted` | `GET /rest/api/3/worklog/deleted` | identical | — |
 | `get_ids_of_worklogs_modified_since` | `GET /rest/api/2/worklog/updated` | `GET /rest/api/3/worklog/updated` | platform parameters | Cloud only: `expand` |
 | `get_issue_worklog` | `GET /rest/api/2/issue/{…}/worklog` | `GET /rest/api/3/issue/{…}/worklog` | platform parameters | Cloud only: `expand`, `max_results`, `start_at`, `started_after`, `started_before` |
 | `get_worklog` | `GET /rest/api/2/issue/{…}/worklog/{…}` | `GET /rest/api/3/issue/{…}/worklog/{…}` | platform parameters | Cloud only: `expand` |
 | `get_worklogs_for_ids` | `POST /rest/api/2/worklog/list` | `POST /rest/api/3/worklog/list` | platform parameters | Cloud only: `expand` |
-| `update_worklog` | `PUT /rest/api/2/issue/{…}/worklog/{…}` | `PUT /rest/api/3/issue/{…}/worklog/{…}` | parameters differ, platform parameters | `body`: `WorklogInput` / `Worklog`; Cloud only: `expand`, `notify_users`, `override_editable_flag` |
+| `update_worklog` | `PUT /rest/api/2/issue/{…}/worklog/{…}` | `PUT /rest/api/3/issue/{…}/worklog/{…}` | platform parameters | Cloud only: `expand`, `notify_users`, `override_editable_flag` |
 
 ### `issues()`
 
@@ -396,11 +396,11 @@ This matrix compares generated operations in Cloud (`CloudClient` and `AgileClie
 
 | Method | Data Center endpoint | Cloud endpoint | Status | Note |
 |---|---|---|---|---|
-| `create_project_category` | `POST /rest/api/2/projectCategory` | `POST /rest/api/3/projectCategory` | type differs | `ProjectCategory` / `ProjectCategoryJson` |
-| `get_all_project_categories` | `GET /rest/api/2/projectCategory` | `GET /rest/api/3/projectCategory` | type differs | `Vec<ProjectCategory>` / `Vec<ProjectCategoryJson>` |
-| `get_project_category_by_id` | `GET /rest/api/2/projectCategory/{…}` | `GET /rest/api/3/projectCategory/{…}` | type differs | `ProjectCategory` / `ProjectCategoryJson` |
+| `create_project_category` | `POST /rest/api/2/projectCategory` | `POST /rest/api/3/projectCategory` | identical | — |
+| `get_all_project_categories` | `GET /rest/api/2/projectCategory` | `GET /rest/api/3/projectCategory` | identical | — |
+| `get_project_category_by_id` | `GET /rest/api/2/projectCategory/{…}` | `GET /rest/api/3/projectCategory/{…}` | identical | — |
 | `remove_project_category` | `DELETE /rest/api/2/projectCategory/{…}` | `DELETE /rest/api/3/projectCategory/{…}` | identical | — |
-| `update_project_category` | `PUT /rest/api/2/projectCategory/{…}` | `PUT /rest/api/3/projectCategory/{…}` | type differs | `UpdatedProjectCategory` / `ProjectCategoryJson` |
+| `update_project_category` | `PUT /rest/api/2/projectCategory/{…}` | `PUT /rest/api/3/projectCategory/{…}` | type differs | `UpdatedProjectCategory` / `ProjectCategory` |
 
 ### `project_components()`
 

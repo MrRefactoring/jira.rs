@@ -82,7 +82,7 @@ async fn sets_the_base_url_and_the_default_columns() {
 
     server()
         .issue_navigator_settings()
-        .set_issue_navigator_default_columns(jira::server::SetIssueNavigatorDefaultColumnsRequestColumnRequestBody {
+        .set_issue_navigator_default_columns(jira::server::ColumnRequestBody {
             columns: Some(vec!["summary".to_owned(), "status".to_owned()]),
         })
         .send()

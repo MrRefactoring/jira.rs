@@ -1,7 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 
-use jira::server::{Comment, Filter, IssueUpdateDetails, ProjectInput, Version, WorkflowScheme};
+use jira::server::{CommentInput, Filter, IssueUpdateDetails, ProjectInput, Version, WorkflowScheme};
 use serde_json::{Value, json};
 
 use super::fixtures::software_licensed;
@@ -302,7 +302,10 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
 
     server()
         .issue_comments()
-        .add_comment(&issue_key, Comment { body: Some("created by the crawl".to_owned()), ..Comment::default() })
+        .add_comment(
+            &issue_key,
+            CommentInput { body: Some("created by the crawl".to_owned()), ..CommentInput::default() },
+        )
         .send()
         .await
         .expect("the issue takes a comment");
