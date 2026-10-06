@@ -38,6 +38,8 @@ jobs:
         run: cargo test --locked --workspace --all-features
       - name: 🔁 Parity matrix
         run: cargo xtask parity --check
+      - name: 🌊 Stream coverage
+        run: cargo xtask streams --check
       - name: 📚 Documentation
         run: cargo doc --locked --all-features --no-deps
         env:

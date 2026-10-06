@@ -172,7 +172,7 @@ async fn print_issue_keys(jira: &CloudClient) -> jira::Result<()> {
 }
 ```
 
-Every paginated request has `stream`, including projects, users, filters, dashboards, boards, sprints and queues. It follows offsets, bare arrays, page tokens, cursors and page numbers:
+`cargo xtask streams --check` requires every request that looks paginated from its setters or response fields to have `stream()` or a reason in `xtask/streams.txt`. It examines response fields through `Option` and one nested model level; unresolved requests fail the check. For example, project search provides a stream:
 
 ```rust,no_run
 use jira::cloud::CloudClient;

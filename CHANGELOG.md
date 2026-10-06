@@ -9,8 +9,9 @@ version.
 
 ### Added
 
-- `stream()` on every paginated request across all surfaces, including offset, `isLast`, bare-array, page-token,
-  cursor and page-number pagination. A caller can consume items without managing the page scheme.
+- `cargo xtask streams --check` requires requests that look paginated from their setters or response fields across all
+  surfaces to have `stream()` or a reason in `xtask/streams.txt`; it follows `Option` and one nested model level,
+  and fails on unresolved requests.
 - [The Cloud and Data Center parity matrix](https://github.com/MrRefactoring/jira.rs/blob/master/docs/parity.md),
   showing paired operations and the differences that remain.
 
