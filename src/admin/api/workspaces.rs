@@ -71,8 +71,9 @@ impl<'a> QueryWorkspacesRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
-    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// The first page uses this request; later pages follow the next cursor under `links`. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<WorkspaceModel>> {
         let first = self.search_workspaces_request_v2.as_ref().and_then(|body| body.cursor.clone());

@@ -245,8 +245,11 @@ impl<'a> FindComponentsForProjectsRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
-    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Component>> {
         let first = self.start_at.unwrap_or(0);
@@ -588,8 +591,11 @@ impl<'a> GetProjectComponentsPaginatedRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
-    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<ComponentWithIssueCount>> {
         let first = self.start_at.unwrap_or(0);

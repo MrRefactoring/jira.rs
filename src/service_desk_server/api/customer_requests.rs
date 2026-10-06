@@ -212,8 +212,9 @@ impl<'a> GetRequestCommentsRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
-    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Comment>> {
         let first = self.start.unwrap_or(0);
@@ -489,8 +490,9 @@ impl<'a> GetMyCustomerRequestsRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
-    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<CustomerRequest>> {
         let first = self.start.unwrap_or(0);
@@ -675,8 +677,9 @@ impl<'a> GetRequestParticipantsRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
-    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<User>> {
         let first = self.start.unwrap_or(0);
@@ -786,8 +789,9 @@ impl<'a> AddRequestParticipantsRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
-    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<User>> {
         let first = self.start.unwrap_or(0);
@@ -895,8 +899,9 @@ impl<'a> RemoveRequestParticipantsRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
-    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<User>> {
         let first = self.start.unwrap_or(0);
@@ -980,8 +985,9 @@ impl<'a> GetSlaInformationRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
-    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<SlaInformation>> {
         let first = self.start.unwrap_or(0);
@@ -1107,8 +1113,9 @@ impl<'a> GetCustomerRequestStatusRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
-    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<CustomerRequestStatus>> {
         let first = self.start.unwrap_or(0);

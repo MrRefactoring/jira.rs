@@ -223,8 +223,10 @@ impl<'a> SearchProjectsRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
-    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// This endpoint answers with everything in one response and offers no way to ask for more. The stream
+    /// makes one request. Data Center has no paginated project search; this is its listing of every project
+    /// the caller can see.
+    /// Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Project>> {
         let first = ();

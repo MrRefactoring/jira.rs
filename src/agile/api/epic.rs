@@ -224,8 +224,9 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
-    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// The first page uses this request; later pages use the next cursor from the answer. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
         let first = self.next_page_token.clone();
@@ -500,8 +501,9 @@ impl<'a> GetIssuesForEpicRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// The first page uses this request; later pages use the next offset, page number, or cursor. The stream ends
-    /// at the last page, at a known total, or when no items or next position remain. Reading it needs `TryStreamExt`,
+    /// The first page uses this request; later pages use the next cursor from the answer. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
         let first = self.next_page_token.clone();
