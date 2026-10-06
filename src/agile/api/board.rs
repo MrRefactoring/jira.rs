@@ -1729,71 +1729,37 @@ impl<'a> GetProjectsRequest<'a> {
 pub struct GetProjectsFullRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
-    start_at: Option<i64>,
-    max_results: Option<i64>,
 }
 
 impl<'a> GetProjectsFullRequest<'a> {
     fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
-        Self { client, board_id, start_at: None, max_results: None }
-    }
-
-    /// The starting index of the returned projects. Base index: 0. See the 'Pagination' section at the top of this page for more details.
-    #[must_use]
-    pub fn start_at(mut self, value: i64) -> Self {
-        self.start_at = Some(value);
-
-        self
-    }
-
-    /// The maximum number of projects to return per page. See the 'Pagination' section at the top of this page for more details.
-    #[must_use]
-    pub fn max_results(mut self, value: i64) -> Self {
-        self.max_results = Some(value);
-
-        self
+        Self { client, board_id }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
+        let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
             format!("/rest/agile/1.0/board/{}/project/full", self.board_id),
         );
-
-        if let Some(value) = &self.start_at {
-            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
-        }
-
-        if let Some(value) = &self.max_results {
-            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
-        }
 
         Ok(config)
     }
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
-    /// a known total, or an empty page.
-    /// The stream also ends without an error at an empty page even if `total` promised more, since the
-    /// listing can change while it is read.
+    /// This endpoint answers with everything in one response and offers no way to ask for more. The stream
+    /// makes one request. Jira Software Cloud declares no paging parameters for this listing. Whether it
+    /// reads `startAt` has not been measured, so the stream is the one request.
     /// Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<ProjectDetails>> {
-        let first = self.start_at.unwrap_or(0);
+        let first = ();
 
-        crate::core::stream_pages(self, first, |mut request, position| async move {
-            request.start_at = Some(position);
+        crate::core::stream_pages(self, first, |request, _position| async move {
             let page = request.send().await?;
             let items = page.values.unwrap_or_default();
-            Ok(crate::core::PageStep::offset(
-                items,
-                page.start_at.unwrap_or(position),
-                page.is_last.unwrap_or(false),
-                page.total,
-                None,
-            ))
+            Ok(crate::core::PageStep::new(items, None))
         })
     }
 

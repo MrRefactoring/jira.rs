@@ -767,7 +767,7 @@ Either path can address the wrong resource. A `404` or an "issue does not exist"
 - Data Center user searches return `Vec<User>` instead of one `User`, so list responses deserialize correctly.
 - Paging parameters previously declared as strings are numbers on Data Center, three Cloud requests, and Assets Data Center.
 - The `ChangedWorklogs` stream ends when the response sets `lastPage`.
-- Jira Software Cloud issue-list `fields` now serializes field names; `get_projects_full` follows its pages, and the Service Management attachment listing exposes its actual paging controls.
+- Jira Software Cloud issue-list `fields` now serializes field names; `get_projects_full` has `stream()` over its one answer, and the Service Management attachment listing exposes its actual paging controls.
 - Data Center project search calls the full project endpoint while `get_projects_picker()` calls the picker endpoint.
 
 Data Center `issue_worklogs().get_issue_worklog()` returns every worklog in one response: on Data Center 11.3.11, `startAt` and `maxResults` are ignored, so its `stream()` makes one request and loses nothing. Data Center `find_assignable_users`, `find_bulk_assignable_users`, and `find_users_with_browse_permission` also ignore `startAt`; they have no `stream()`, and only the first `maxResults` users can be read.

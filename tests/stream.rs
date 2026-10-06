@@ -118,6 +118,29 @@ async fn agile_board_fields_use_one_query_value() {
 }
 
 #[tokio::test]
+async fn agile_full_projects_streams_one_answer_without_paging_query() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/rest/agile/1.0/board/1/project/full"))
+        .respond_with(ResponseTemplate::new(200).set_body_json(json!({
+            "startAt": 0,
+            "maxResults": 1,
+            "total": 2,
+            "isLast": false,
+            "values": [{"id": "1"}]
+        })))
+        .mount(&server)
+        .await;
+
+    let api = jira::agile::AgileClient::new(client_for(&server));
+    let projects: Vec<_> = api.board().get_projects_full(1).stream().try_collect().await.unwrap();
+    assert_eq!(projects.iter().map(|project| project.id.as_deref()).collect::<Vec<_>>(), [Some("1")]);
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(requests.len(), 1);
+    assert!(requests[0].url.query().is_none());
+}
+
+#[tokio::test]
 async fn issue_expansion_uses_one_comma_separated_query_value_on_both_platforms() {
     let server = MockServer::start().await;
     Mock::given(method("GET")).respond_with(ResponseTemplate::new(200).set_body_json(json!({}))).mount(&server).await;

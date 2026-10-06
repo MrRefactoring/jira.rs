@@ -315,6 +315,14 @@ parity!(board, jira::agile::AgileClient, jira::server::ServerClient, |jira| {
     drop(jira.board().get_board_property("7", "key"));
 });
 
+#[test]
+fn agile_full_projects_has_a_single_page_stream() {
+    let client = Client::builder().host("https://example.com").build().unwrap();
+    let jira = jira::agile::AgileClient::new(client);
+    assert!(jira.board().get_projects_full(1).config().unwrap().query.is_empty());
+    drop(jira.board().get_projects_full(1).stream());
+}
+
 parity!(sprint, jira::agile::AgileClient, jira::server::ServerClient, |jira| {
     drop(jira.sprint().get_issues_for_sprint(1).fields(["summary", "status"]).stream());
     drop(jira.sprint().get_property("7", "key"));
