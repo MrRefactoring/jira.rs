@@ -149,7 +149,7 @@ async fn create_estimated_task(jira: &CloudClient) -> jira::Result<()> {
 
 Ключ, который уже есть в структуре, например `summary`, отклоняется. `with` задаёт один ключ.
 
-`stream` проходит поиск по токену страниц до последней страницы:
+Если у запроса есть `stream()`, он проходит его страницы; у Data Center `issue_worklogs().get_issue_worklog()` поток состоит из одного запроса, который возвращает все записи:
 
 ```rust,no_run
 use jira::cloud::CloudClient;
@@ -162,6 +162,7 @@ async fn print_issue_keys(jira: &CloudClient) -> jira::Result<()> {
         .search_issues()
         .jql(field("project").eq("PROJ").order_by_desc("created"))
         .fields(["summary"])
+        .expand(["changelog"])
         .stream();
 
     while let Some(issue) = issues.try_next().await? {
@@ -172,9 +173,7 @@ async fn print_issue_keys(jira: &CloudClient) -> jira::Result<()> {
 }
 ```
 
-`cargo xtask streams --check` требует, чтобы у каждого запроса, который выглядит постраничным по сеттерам или полям ответа,
-был `stream()` либо причина исключения в `xtask/streams.txt`. Проверка учитывает `Option` и один уровень вложенной модели;
-нерешённые случаи приводят к ошибке. Например, поиск проектов предоставляет поток:
+Например, поиск проектов тоже предоставляет поток:
 
 ```rust,no_run
 use jira::cloud::CloudClient;
@@ -193,16 +192,7 @@ async fn print_project_keys(jira: &CloudClient) -> jira::Result<()> {
 
 ## Cloud и Data Center
 
-Для общей операции в Cloud и Data Center совпадают сервисный аксессор, имя метода, позиционные параметры и имена
-типов моделей. Операции, доступные только на одной платформе, остаются на ней. Операции Jira Software находятся в
-`AgileClient` для Cloud и в `ServerClient` для Data Center.
-
-Различия API сохраняются: Cloud использует `account_id`, а Data Center — `username`; Cloud типизирует
-документированные значения `expand`, а Data Center принимает строку, если его документация не перечисляет значения.
-Поиск задач в Cloud использует токен страницы, а в Data Center — смещение; `stream()` проходит оба варианта. Поиск
-проектов Data Center возвращает все видимые проекты одной страницей, а `get_projects_picker()` вызывает подборщик.
-
-Для функции Data Center включите флаг `server`. После создания транспорта с нужными учётными данными различается только конструктор клиента.
+Для общей операции в Cloud и Data Center совпадают сервисный аксессор, имя метода, позиционные параметры и имена типов моделей там, где это допускают API. Операции Jira Software находятся в `AgileClient` для Cloud и в `ServerClient` для Data Center. Для примера ниже включите флаг `server` и создайте транспорт с учётными данными соответствующей платформы.
 
 ```rust,no_run
 use jira::{Auth, Client};
@@ -241,8 +231,7 @@ async fn data_center_projects() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-См. [матрицу соответствия Cloud и Data Center](https://github.com/MrRefactoring/jira.rs/blob/master/docs/parity.md)
-с общими операциями и оставшимися различиями.
+Сохраняются различия: Cloud использует `account_id`, Data Center — `username`; ответы иногда имеют разные модели или обёртки. `projects().create_project()` в Cloud принимает `key`, `lead_account_id` и `name`, а в Data Center — `ProjectInput`. У `workflow_schemes().update_workflow_mapping()` и `workflow_scheme_drafts().update_draft_workflow_mapping()` Cloud принимает имя и отображение типов задач позиционно, а Data Center — `WorkflowMapping`. Некоторые значения параметров перечислены как варианты enum только на одной стороне; вызов со строковыми литералами переносим между платформами. Подробности — в [матрице соответствия Cloud и Data Center](docs/parity.md).
 
 ## Аутентификация
 

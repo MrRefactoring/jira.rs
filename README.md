@@ -149,7 +149,7 @@ async fn create_estimated_task(jira: &CloudClient) -> jira::Result<()> {
 
 A key the struct already has, such as `summary`, is refused. `with` sets a single key.
 
-`stream` follows the search's page token to the last page:
+Where `stream()` is available, it walks the request’s pages; on Data Center, `issue_worklogs().get_issue_worklog()` streams all worklogs from one response:
 
 ```rust,no_run
 use jira::cloud::CloudClient;
@@ -162,6 +162,7 @@ async fn print_issue_keys(jira: &CloudClient) -> jira::Result<()> {
         .search_issues()
         .jql(field("project").eq("PROJ").order_by_desc("created"))
         .fields(["summary"])
+        .expand(["changelog"])
         .stream();
 
     while let Some(issue) = issues.try_next().await? {
@@ -172,7 +173,7 @@ async fn print_issue_keys(jira: &CloudClient) -> jira::Result<()> {
 }
 ```
 
-`cargo xtask streams --check` requires every request that looks paginated from its setters or response fields to have `stream()` or a reason in `xtask/streams.txt`. It examines response fields through `Option` and one nested model level; unresolved requests fail the check. For example, project search provides a stream:
+Project search also provides a stream:
 
 ```rust,no_run
 use jira::cloud::CloudClient;
@@ -191,16 +192,7 @@ async fn print_project_keys(jira: &CloudClient) -> jira::Result<()> {
 
 ## Cloud and Data Center
 
-For an operation shared by Cloud and Data Center, the service accessor, method, positional parameters and model type
-names match. Platform-only operations stay on their platform. Jira Software operations live in `AgileClient` on Cloud
-and in `ServerClient` on Data Center.
-
-Some API differences remain: Cloud uses `account_id` where Data Center uses `username`; Cloud types documented
-`expand` values while Data Center accepts a string when its documentation lists no values. Cloud issue search pages
-by token and Data Center pages by offset; `stream()` follows either scheme. Data Center project search returns every
-visible project in one page, while `get_projects_picker()` calls the picker endpoint.
-
-Enable the `server` feature for the Data Center function. After building the transport with the appropriate credentials, the constructor is the only line that differs.
+For operations shared by Cloud and Data Center, the service accessor, method, positional parameters, and model type names match where the APIs permit it. Jira Software operations live in `AgileClient` on Cloud and `ServerClient` on Data Center. Enable the `server` feature for the Data Center function below and build each transport with the appropriate credentials.
 
 ```rust,no_run
 use jira::{Auth, Client};
@@ -239,8 +231,7 @@ async fn data_center_projects() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-See the [Cloud and Data Center parity matrix](https://github.com/MrRefactoring/jira.rs/blob/master/docs/parity.md)
-for paired operations and remaining differences.
+Differences remain: Cloud identifies users by `account_id`, while Data Center uses `username`; some responses have different models or wrappers. Cloud `projects().create_project()` takes `key`, `lead_account_id`, and `name`, while Data Center takes `ProjectInput`. Cloud `workflow_schemes().update_workflow_mapping()` and `workflow_scheme_drafts().update_draft_workflow_mapping()` take a workflow name and issue-type mapping positionally; Data Center takes `WorkflowMapping`. Some parameter values have named enum variants on only one side; calls with string literals are portable. See the [Cloud and Data Center parity matrix](docs/parity.md) for each difference.
 
 ## Authentication
 
