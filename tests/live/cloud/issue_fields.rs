@@ -1,4 +1,5 @@
 use jira::cloud::GetFieldsPaginatedRequestType;
+use jira::futures_util::TryStreamExt;
 
 use crate::harness::cloud;
 
@@ -90,6 +91,24 @@ async fn pages_the_custom_field_listing_for_an_admin_or_fails_typed() {
     assert_eq!(page.start_at, 0, "an unoffset request starts at the beginning");
     assert!(page.values.len() <= 5, "a page holds no more than it says it does");
     assert!(page.is_last || page.values.len() == 5, "a page that is not the last one is full");
+}
+
+#[tokio::test]
+#[ignore = "live: needs a Jira site"]
+async fn a_stream_walks_every_page_of_the_field_listing() {
+    let page =
+        cloud().issue_fields().get_fields_paginated().max_results(1).send().await.expect("the field listing answers");
+    let fields: Vec<_> = cloud()
+        .issue_fields()
+        .get_fields_paginated()
+        .max_results(5)
+        .stream()
+        .try_collect()
+        .await
+        .expect("every page of the field listing is readable");
+
+    assert_eq!(fields.len() as i64, page.total, "five fields per page, and the stream reaches the last one");
+    assert!(fields.iter().any(|field| field.schema.is_none()), "at least one field arrives without a schema");
 }
 
 #[tokio::test]

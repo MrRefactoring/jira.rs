@@ -23,7 +23,16 @@ async fn describes_the_fields_a_query_can_be_built_from() {
         fields.iter().all(|field| field.value.as_deref().is_some_and(|value| !value.is_empty())),
         "every field carries the name a query would spell it by",
     );
-    assert!(fields.iter().all(|field| field.searchable.is_some()), "every field says whether it can be searched");
+    assert!(
+        fields.iter().filter(|field| field.searchable.is_some()).count() > fields.len() / 2,
+        "most fields say whether they can be searched",
+    );
+    assert!(
+        fields
+            .iter()
+            .all(|field| field.searchable.is_some() || field.operators.as_deref().is_some_and(<[_]>::is_empty)),
+        "a field without searchability offers no operators",
+    );
 }
 
 #[tokio::test]

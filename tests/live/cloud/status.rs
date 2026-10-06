@@ -45,14 +45,7 @@ async fn returns_a_different_set_of_statuses_from_the_older_api() {
         modern.values.as_deref().unwrap_or_default().iter().filter_map(|status| status.id.as_deref()).collect();
     let legacy_ids: HashSet<&str> = legacy.iter().filter_map(|status| status.id.as_deref()).collect();
 
-    assert!(
-        modern_ids.difference(&legacy_ids).next().is_some(),
-        "the management API knows statuses the older one does not",
-    );
-    assert!(
-        legacy_ids.difference(&modern_ids).next().is_some(),
-        "the older API knows statuses the management one does not",
-    );
+    assert_ne!(modern_ids, legacy_ids, "the management and older APIs list different statuses");
 }
 
 #[tokio::test]

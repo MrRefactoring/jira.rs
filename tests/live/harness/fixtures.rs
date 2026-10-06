@@ -1,7 +1,7 @@
 use jira::cloud::{CreatedIssue, Document, IssueFields, IssueTypeDetails, IssueUpdateDetails, Project};
 use serde_json::json;
 
-use super::client::{agile, cloud};
+use super::client::{agile, cloud, ensure_access_role};
 use super::naming::test_name;
 use super::poll::poll_until;
 use super::resources::ResourceTracker;
@@ -29,10 +29,12 @@ pub fn test_issue_fields(summary: String) -> IssueFields {
 }
 
 pub async fn create_test_issue(tracker: &mut ResourceTracker, summary: Option<&str>) -> CreatedIssue {
+    ensure_access_role().await;
     create_issue_with(tracker, test_issue_fields(summary.map_or_else(|| test_name("issue"), ToOwned::to_owned))).await
 }
 
 pub async fn create_issue_with(tracker: &mut ResourceTracker, fields: IssueFields) -> CreatedIssue {
+    ensure_access_role().await;
     let created = cloud()
         .issues()
         .create_issue(IssueUpdateDetails { fields: Some(fields), ..IssueUpdateDetails::default() })
@@ -67,6 +69,7 @@ pub struct TestBoard {
 }
 
 pub async fn create_test_board(tracker: &mut ResourceTracker) -> TestBoard {
+    ensure_access_role().await;
     let filter = cloud()
         .filters()
         .create_filter(jira::cloud::Filter {
@@ -129,6 +132,7 @@ pub async fn create_test_board(tracker: &mut ResourceTracker) -> TestBoard {
 }
 
 pub async fn scrum_board(tracker: &mut ResourceTracker) -> i64 {
+    ensure_access_role().await;
     let boards = agile()
         .board()
         .get_all_boards()

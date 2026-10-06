@@ -1,8 +1,9 @@
 use std::collections::HashMap;
 
-use crate::harness::{TEST_PROJECT_KEY, cloud};
+use crate::harness::{TEST_PROJECT_KEY, cloud, ensure_access_role};
 
 async fn project_roles() -> HashMap<String, String> {
+    ensure_access_role().await;
     cloud().project_roles().get_project_roles(TEST_PROJECT_KEY).send().await.expect("the test project lists its roles")
 }
 
@@ -77,6 +78,7 @@ async fn shows_the_account_holding_the_role_that_grants_it_access_here() {
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn describes_every_role_with_its_actors_in_one_call() {
+    ensure_access_role().await;
     let details = cloud()
         .project_roles()
         .get_project_role_details(TEST_PROJECT_KEY)
@@ -95,6 +97,7 @@ async fn describes_every_role_with_its_actors_in_one_call() {
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn narrows_the_details_to_roles_the_caller_is_actually_in() {
+    ensure_access_role().await;
     let all = cloud()
         .project_roles()
         .get_project_role_details(TEST_PROJECT_KEY)

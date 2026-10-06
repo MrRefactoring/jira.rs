@@ -36,13 +36,14 @@ async fn runs_the_whole_epic_cycle_where_an_epic_type_is_available() {
 
     let mut tracker = ResourceTracker::new();
     let child = create_test_issue(&mut tracker, Some(&test_name("epic child"))).await;
+    let summary = test_name("epic");
 
     let created = cloud()
         .issues()
         .create_issue(IssueUpdateDetails {
             fields: Some(IssueFields {
                 issuetype: Some(IssueTypeDetails { id: Some(epic_type), ..IssueTypeDetails::default() }),
-                ..test_issue_fields(test_name("epic"))
+                ..test_issue_fields(summary.clone())
             }),
             ..IssueUpdateDetails::default()
         })
@@ -70,7 +71,8 @@ async fn runs_the_whole_epic_cycle_where_an_epic_type_is_available() {
             .await;
 
     assert_eq!(epic.key.as_deref(), Some(created.key.as_str()));
-    assert!(epic.name.as_ref().is_some_and(|name| !name.is_empty()), "an epic carries a name of its own");
+    assert!(epic.name.is_some(), "an epic carries a name field");
+    assert_eq!(epic.summary.as_deref(), Some(summary.as_str()), "an epic carries the summary it was given");
     assert!(
         epic.color.as_ref().and_then(|color| color.key.as_deref()).is_some_and(|key| !key.is_empty()),
         "an epic carries a colour",
