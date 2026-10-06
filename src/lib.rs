@@ -1,5 +1,5 @@
 #![cfg_attr(docsrs, feature(doc_cfg))]
-#![doc = include_str!("../README.md")]
+#![cfg_attr(all(feature = "cloud", feature = "agile", feature = "server"), doc = include_str!("../README.md"))]
 
 //! A Rust client for the Atlassian Jira REST APIs.
 //!

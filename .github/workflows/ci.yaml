@@ -36,6 +36,8 @@ jobs:
         run: cargo clippy --locked --all-features --all-targets -- -D warnings
       - name: 🧪 Unit tests
         run: cargo test --locked --workspace --all-features
+      - name: 📖 Default-feature doc tests
+        run: cargo test --locked --doc
       - name: 🔁 Parity matrix
         run: cargo xtask parity --check
       - name: 🌊 Stream coverage
