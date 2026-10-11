@@ -59,6 +59,7 @@ thread_local! {
     static TRIALS: RefCell<Vec<Vec<SchemaDrift>>> = const { RefCell::new(Vec::new()) };
 }
 
+core_gate! { untagged_variants {
 pub(crate) fn trial<T>(attempt: impl FnOnce() -> Option<T>) -> Option<T> {
     TRIALS.with_borrow_mut(|trials| trials.push(Vec::new()));
 
@@ -71,6 +72,7 @@ pub(crate) fn trial<T>(attempt: impl FnOnce() -> Option<T>) -> Option<T> {
 
     outcome
 }
+} }
 
 fn record(entry: SchemaDrift) {
     let Some(entry) = TRIALS.with_borrow_mut(|trials| match trials.last_mut() {

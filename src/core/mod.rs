@@ -5,6 +5,9 @@
 
 #![warn(missing_docs)]
 
+#[macro_use]
+mod gates;
+
 #[cfg(feature = "audit")]
 pub mod audit;
 #[cfg(feature = "coverage")]
@@ -21,39 +24,38 @@ mod mime;
 mod multipart;
 pub mod oauth;
 mod open_enum;
-mod paging;
-mod path;
+core_gate! { page_streams { mod paging; } }
+core_gate! { path_segments { mod path; } }
 mod product;
 mod query;
 mod retry;
 mod tenant_context;
-#[cfg(not(feature = "chrono"))]
-mod timestamp;
-pub(crate) mod untagged;
+core_gate! { optional_dates { #[cfg(not(feature = "chrono"))] mod timestamp; } }
+core_gate! { untagged_variants { pub(crate) mod untagged; } }
 
 pub use auth::{Auth, BoxFuture, OAuth2Config, OAuth2ServerConfig, TokenProvider, TokenRefreshHook};
 pub use body::Body;
 pub use client::{AuthRefresher, Client, ClientBuilder, RequestBuilder, RequestConfig};
 #[cfg(feature = "chrono")]
 pub use datetime::parse as parse_datetime;
-#[cfg(feature = "chrono")]
-pub(crate) use datetime::{deserialize_datetime, serialize_datetime, serialize_datetime_rfc3339};
+core_gate! { optional_dates { #[cfg(feature = "chrono")] pub(crate) use datetime::deserialize_datetime; } }
+core_gate! { jira_datetime_serialization { #[cfg(feature = "chrono")] pub(crate) use datetime::serialize_datetime; } }
+core_gate! { rfc3339_datetime_serialization { #[cfg(feature = "chrono")] pub(crate) use datetime::serialize_datetime_rfc3339; } }
 pub use error::{
     ApiErrorDetails, ApiErrorKind, Error, OAuthErrorDetails, Result, SchemaMismatchIssue, SchemaMismatchReport,
 };
 pub use extensible::Extensible;
 pub use mime::mime_type_for;
 pub use multipart::{Attachment, MultipartBody};
+#[cfg(feature = "admin")]
 pub(crate) use paging::cursor_from_url;
-pub(crate) use paging::{PageStep, stream_pages};
-pub(crate) use path::encode_path_segment;
+core_gate! { page_streams { pub(crate) use paging::{PageStep, stream_pages}; } }
+core_gate! { path_segments { pub(crate) use path::encode_path_segment; } }
 pub use product::{USER_AGENT, VERSION};
 pub use query::QueryValue;
-#[allow(unused_imports)]
-pub(crate) use query::header_value;
 pub use retry::{RetryConfig, RetryOptions, with_retry};
 pub use tenant_context::{TenantContext, get_tenant_context};
-#[cfg(not(feature = "chrono"))]
-pub(crate) use timestamp::{deserialize_required_timestamp, deserialize_timestamp};
+core_gate! { required_dates { #[cfg(not(feature = "chrono"))] pub(crate) use timestamp::deserialize_required_timestamp; } }
+core_gate! { optional_dates { #[cfg(not(feature = "chrono"))] pub(crate) use timestamp::deserialize_timestamp; } }
 
 pub use reqwest::Method;

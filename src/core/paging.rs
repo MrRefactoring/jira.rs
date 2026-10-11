@@ -15,16 +15,21 @@ impl<T, P> PageStep<T, P> {
     }
 }
 
+core_gate! { cursor_pages {
 impl<T, P: PartialEq> PageStep<T, P> {
     pub(crate) fn cursor(items: Vec<T>, requested: &P, next: Option<P>, last: bool) -> Self {
         Self::new(items, next.filter(|position| !last && position != requested))
     }
 }
+} }
 
+core_gate! { offset_from_pages {
 impl<T> PageStep<T, i64> {
-    pub(crate) fn offset(items: Vec<T>, start: i64, last: bool, total: Option<i64>, size: Option<i64>) -> Self {
-        Self::offset_from(items, start, last, total, size, 0, None)
-    }
+    core_gate! { offset_pages {
+        pub(crate) fn offset(items: Vec<T>, start: i64, last: bool, total: Option<i64>, size: Option<i64>) -> Self {
+            Self::offset_from(items, start, last, total, size, 0, None)
+        }
+    } }
 
     pub(crate) fn offset_from(
         items: Vec<T>,
@@ -44,7 +49,9 @@ impl<T> PageStep<T, i64> {
         )
     }
 }
+} }
 
+#[cfg(feature = "admin")]
 pub(crate) fn cursor_from_url(next: Option<String>) -> Result<Option<String>> {
     let Some(next) = next.filter(|next| !next.is_empty()) else {
         return Ok(None);
@@ -83,6 +90,7 @@ where
 mod tests {
     use super::*;
 
+    core_gate! { offset_pages {
     fn pages(all: &'static [u8], size: usize, first: i64) -> BoxStream<'static, Result<u8>> {
         stream_pages((), first, move |(), offset| async move {
             let items = all.iter().skip(offset as usize).take(size).copied().collect();
@@ -131,23 +139,29 @@ mod tests {
     fn stops_at_total() {
         assert!(PageStep::offset(vec![1u8, 2], 0, false, Some(2), None).next.is_none());
     }
+    } }
 
+    #[cfg(feature = "user-provisioning")]
     #[test]
     fn one_based_offset_advances_by_page_size_until_past_total() {
         assert_eq!(PageStep::offset_from(vec![1u8, 2], 1, false, Some(3), None, 1, Some(2)).next, Some(3));
         assert!(PageStep::offset_from(vec![3u8], 3, false, Some(3), None, 1, Some(2)).next.is_none());
     }
 
+    #[cfg(feature = "user-provisioning")]
     #[test]
     fn one_based_offset_stops_on_empty_page() {
         assert!(PageStep::offset_from(Vec::<u8>::new(), 1, false, Some(3), None, 1, Some(2)).next.is_none());
     }
 
+    core_gate! { offset_pages {
     #[test]
     fn stops_at_short_page() {
         assert!(PageStep::offset(vec![1u8], 0, false, None, Some(2)).next.is_none());
     }
+    } }
 
+    core_gate! { cursor_pages {
     #[test]
     fn stops_at_absent_cursor() {
         assert!(PageStep::cursor(vec![1u8], &None::<String>, None, false).next.is_none());
@@ -158,12 +172,16 @@ mod tests {
         let position = Some("same".to_owned());
         assert!(PageStep::cursor(vec![1u8], &position, Some(position.clone()), false).next.is_none());
     }
+    } }
 
+    core_gate! { offset_pages {
     #[test]
     fn stops_at_last_page() {
         assert!(PageStep::offset(vec![1u8], 0, true, None, None).next.is_none());
     }
+    } }
 
+    #[cfg(feature = "admin")]
     #[test]
     fn extracts_cursor_from_absolute_and_relative_urls() {
         assert_eq!(
@@ -174,6 +192,7 @@ mod tests {
         assert_eq!(cursor_from_url(Some("?cursor=third".into())).unwrap(), Some("third".into()));
     }
 
+    #[cfg(feature = "admin")]
     #[test]
     fn absent_empty_or_missing_cursor_ends_walk() {
         assert_eq!(cursor_from_url(None).unwrap(), None);
@@ -183,6 +202,7 @@ mod tests {
         assert_eq!(cursor_from_url(Some("/v1/users?limit=2".into())).unwrap(), None);
     }
 
+    #[cfg(feature = "admin")]
     #[test]
     fn ignores_fragment_after_query() {
         assert_eq!(

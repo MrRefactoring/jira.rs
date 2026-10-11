@@ -24,8 +24,10 @@
 //! rendering of its own:
 //!
 //! ```no_run
+//! # #[cfg(feature = "cloud")]
 //! # use jira::cloud::CloudClient;
 //! # use jira::jql::field;
+//! # #[cfg(feature = "cloud")]
 //! # async fn example(jira: CloudClient) -> jira::Result<()> {
 //! let page = jira
 //!     .issue_search()

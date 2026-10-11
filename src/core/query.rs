@@ -106,11 +106,6 @@ fn render_scalar(value: Value) -> String {
     }
 }
 
-#[allow(dead_code)]
-pub fn header_value<T: serde::Serialize>(value: &T) -> Result<String, serde_json::Error> {
-    Ok(render_scalar(serde_json::to_value(value)?))
-}
-
 pub fn build_url_with_search_params(base_url: &str, params: &[(String, QueryValue)]) -> String {
     let mut serializer = form_urlencoded::Serializer::new(String::new());
     let mut any = false;

@@ -1,5 +1,6 @@
-use chrono::{DateTime, NaiveDate, NaiveDateTime, SecondsFormat, TimeZone, Utc};
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
+core_gate! { rfc3339_datetime_serialization { use chrono::SecondsFormat; } }
+use chrono::{DateTime, NaiveDate, NaiveDateTime, TimeZone, Utc};
+core_gate! { optional_dates { use serde::{Deserialize, Deserializer, Serialize, Serializer}; } }
 use serde_json::Value;
 
 const LAYOUTS: &[&str] = &["%Y-%m-%dT%H:%M:%S%.f%z", "%Y-%m-%dT%H:%M:%S%.f%:z"];
@@ -39,6 +40,7 @@ fn parse_text(text: &str) -> Option<DateTime<Utc>> {
         .map(|naive| Utc.from_utc_datetime(&naive))
 }
 
+core_gate! { optional_dates {
 pub fn deserialize_datetime<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Option<DateTime<Utc>>, D::Error> {
     let Some(value) = Option::<Value>::deserialize(deserializer)? else {
         return Ok(None);
@@ -57,14 +59,18 @@ pub fn deserialize_datetime<'de, D: Deserializer<'de>>(deserializer: D) -> Resul
 
     Ok(parsed)
 }
+} }
 
+core_gate! { jira_datetime_serialization {
 pub fn serialize_datetime<S: Serializer>(value: &Option<DateTime<Utc>>, serializer: S) -> Result<S::Ok, S::Error> {
     match value {
         Some(instant) => instant.format("%Y-%m-%dT%H:%M:%S%.3f%z").to_string().serialize(serializer),
         None => serializer.serialize_none(),
     }
 }
+} }
 
+core_gate! { rfc3339_datetime_serialization {
 pub fn serialize_datetime_rfc3339<S: Serializer>(
     value: &Option<DateTime<Utc>>,
     serializer: S,
@@ -74,6 +80,7 @@ pub fn serialize_datetime_rfc3339<S: Serializer>(
         None => serializer.serialize_none(),
     }
 }
+} }
 
 #[cfg(test)]
 mod tests {
@@ -127,31 +134,35 @@ mod tests {
         assert!(parse(&Value::Bool(true)).is_none());
     }
 
-    #[test]
-    fn writes_back_the_spelling_it_read() {
-        let parsed = at("2024-01-15T10:30:00.000+0000");
-        let written = serde_json::to_value(Wrapper { at: parsed }).expect("an instant is serializable");
+    core_gate! { jira_datetime_serialization {
+        #[test]
+        fn writes_back_the_spelling_it_read() {
+            let parsed = at("2024-01-15T10:30:00.000+0000");
+            let written = serde_json::to_value(Wrapper { at: parsed }).expect("an instant is serializable");
 
-        assert_eq!(written["at"], "2024-01-15T10:30:00.000+0000");
-    }
+            assert_eq!(written["at"], "2024-01-15T10:30:00.000+0000");
+        }
 
-    #[test]
-    fn writes_rfc_3339_for_the_apis_that_read_only_that() {
-        let parsed = at("2026-09-30T09:59:45.487+0000");
-        let written = serde_json::to_value(Rfc3339Wrapper { at: parsed }).expect("an instant is serializable");
+        #[derive(Serialize)]
+        struct Wrapper {
+            #[serde(serialize_with = "serialize_datetime")]
+            at: Option<DateTime<Utc>>,
+        }
+    } }
 
-        assert_eq!(written["at"], "2026-09-30T09:59:45.487Z");
-    }
+    core_gate! { rfc3339_datetime_serialization {
+        #[test]
+        fn writes_rfc_3339_for_the_apis_that_read_only_that() {
+            let parsed = at("2026-09-30T09:59:45.487+0000");
+            let written = serde_json::to_value(Rfc3339Wrapper { at: parsed }).expect("an instant is serializable");
 
-    #[derive(Serialize)]
-    struct Wrapper {
-        #[serde(serialize_with = "serialize_datetime")]
-        at: Option<DateTime<Utc>>,
-    }
+            assert_eq!(written["at"], "2026-09-30T09:59:45.487Z");
+        }
 
-    #[derive(Serialize)]
-    struct Rfc3339Wrapper {
-        #[serde(serialize_with = "serialize_datetime_rfc3339")]
-        at: Option<DateTime<Utc>>,
-    }
+        #[derive(Serialize)]
+        struct Rfc3339Wrapper {
+            #[serde(serialize_with = "serialize_datetime_rfc3339")]
+            at: Option<DateTime<Utc>>,
+        }
+    } }
 }

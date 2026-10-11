@@ -2,12 +2,10 @@
 pub(crate) use super::audit::trial;
 
 #[cfg(not(feature = "audit"))]
-#[allow(dead_code)]
 pub(crate) fn trial<T>(attempt: impl FnOnce() -> Option<T>) -> Option<T> {
     attempt()
 }
 
-#[allow(unused_macros)]
 macro_rules! untagged {
     ($name:ident { $($variant:ident),+ $(,)? }) => {
         impl<'de> ::serde::Deserialize<'de> for $name {
@@ -31,5 +29,4 @@ macro_rules! untagged {
     };
 }
 
-#[allow(unused_imports)]
 pub(crate) use untagged;
