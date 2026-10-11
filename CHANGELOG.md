@@ -5,7 +5,7 @@ All notable changes to this crate are documented here. The format follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html) — before `1.0.0`, a breaking change raises the minor
 version.
 
-## [0.2.0] - Unreleased
+## [0.2.0] - 2026-10-11
 
 ### Added
 
