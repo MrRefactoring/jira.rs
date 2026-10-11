@@ -5,6 +5,13 @@ All notable changes to this crate are documented here. The format follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html) — before `1.0.0`, a breaking change raises the minor
 version.
 
+## [Unreleased]
+
+### Changed
+
+- **Breaking:** Cloud `issues().delete_issue(..).delete_subtasks(..)` takes `bool` instead of `impl Into<DeleteIssueRequestDeleteSubtasks>`; the enum is removed. Pass `true` or `false` instead of a string or enum variant.
+- **Breaking:** Data Center `issues().delete_issue(..).delete_subtasks(..)` takes `bool` instead of `impl Into<DeleteIssueRequestDeleteSubtasks>`; the enum is removed. Pass `true` or `false` instead of a string or enum variant.
+
 ## [0.2.0] - 2026-10-11
 
 ### Added

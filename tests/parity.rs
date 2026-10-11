@@ -2,6 +2,37 @@
 
 use jira::core::Client;
 
+#[tokio::test]
+async fn delete_subtasks_is_a_boolean_sent_as_one_query_value_on_both_platforms() {
+    use wiremock::matchers::{method, path, query_param};
+    use wiremock::{Mock, MockServer, ResponseTemplate};
+
+    let server = MockServer::start().await;
+    for version in [2, 3] {
+        Mock::given(method("DELETE"))
+            .and(path(format!("/rest/api/{version}/issue/TEST-1")))
+            .and(query_param("deleteSubtasks", "true"))
+            .respond_with(ResponseTemplate::new(204))
+            .expect(1)
+            .mount(&server)
+            .await;
+    }
+
+    let client = Client::builder().host(server.uri()).build().unwrap();
+    jira::cloud::CloudClient::new(client.clone())
+        .issues()
+        .delete_issue("TEST-1")
+        .delete_subtasks(true)
+        .send()
+        .await
+        .unwrap();
+    jira::server::ServerClient::new(client).issues().delete_issue("TEST-1").delete_subtasks(true).send().await.unwrap();
+
+    for request in server.received_requests().await.unwrap() {
+        assert_eq!(request.url.query_pairs().collect::<Vec<_>>(), [("deleteSubtasks".into(), "true".into())]);
+    }
+}
+
 macro_rules! parity {
     ($name:ident, $left:path, $right:path, $left_module:path, $right_module:path, $member:ident => ($left_value:expr, $right_value:expr), |$jira:ident, $surface:ident| $body:block) => {
         mod $name {

@@ -15,14 +15,6 @@ crate::open_enum! {
 }
 
 crate::open_enum! {
-    /// Whether the issue's subtasks are deleted when the issue is deleted.
-    pub enum DeleteIssueRequestDeleteSubtasks {
-        True => "true",
-        False => "false",
-    }
-}
-
-crate::open_enum! {
     pub enum GetTransitionsRequestExpandValue {
         TransitionsFields => "transitions.fields",
     }
@@ -1064,7 +1056,7 @@ impl<'a> EditIssueRequest<'a> {
 pub struct DeleteIssueRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    delete_subtasks: Option<DeleteIssueRequestDeleteSubtasks>,
+    delete_subtasks: Option<bool>,
 }
 
 impl<'a> DeleteIssueRequest<'a> {
@@ -1074,8 +1066,8 @@ impl<'a> DeleteIssueRequest<'a> {
 
     /// Whether the issue's subtasks are deleted when the issue is deleted.
     #[must_use]
-    pub fn delete_subtasks(mut self, value: impl Into<DeleteIssueRequestDeleteSubtasks>) -> Self {
-        self.delete_subtasks = Some(value.into());
+    pub fn delete_subtasks(mut self, value: bool) -> Self {
+        self.delete_subtasks = Some(value);
 
         self
     }
@@ -1088,7 +1080,7 @@ impl<'a> DeleteIssueRequest<'a> {
         );
 
         if let Some(value) = &self.delete_subtasks {
-            config.query.push(("deleteSubtasks".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("deleteSubtasks".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)

@@ -126,7 +126,7 @@ pub async fn create_issue(tracker: &mut ResourceTracker, fields: serde_json::Val
     tracker.defer(move || {
         let key = key.clone();
 
-        async move { server().issues().delete_issue(key).delete_subtasks("true").send().await }
+        async move { server().issues().delete_issue(key).delete_subtasks(true).send().await }
     });
 
     created

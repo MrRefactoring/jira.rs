@@ -15,14 +15,6 @@ crate::open_enum! {
     }
 }
 
-crate::open_enum! {
-    /// A String of true or false indicating that any subtasks should also be deleted. If the issue has no subtasks this parameter is ignored. If the issue has subtasks and this parameter is missing or false, then the issue will not be deleted and an error will be returned.
-    pub enum DeleteIssueRequestDeleteSubtasks {
-        True => "true",
-        False => "false",
-    }
-}
-
 /// The Issues operations.
 pub struct IssuesService<'a> {
     client: &'a crate::core::Client,
@@ -785,7 +777,7 @@ impl<'a> EditIssueRequest<'a> {
 #[derive(Clone)]
 pub struct DeleteIssueRequest<'a> {
     client: &'a crate::core::Client,
-    delete_subtasks: Option<DeleteIssueRequestDeleteSubtasks>,
+    delete_subtasks: Option<bool>,
     issue_id_or_key: String,
 }
 
@@ -796,8 +788,8 @@ impl<'a> DeleteIssueRequest<'a> {
 
     /// A String of true or false indicating that any subtasks should also be deleted. If the issue has no subtasks this parameter is ignored. If the issue has subtasks and this parameter is missing or false, then the issue will not be deleted and an error will be returned.
     #[must_use]
-    pub fn delete_subtasks(mut self, value: impl Into<DeleteIssueRequestDeleteSubtasks>) -> Self {
-        self.delete_subtasks = Some(value.into());
+    pub fn delete_subtasks(mut self, value: bool) -> Self {
+        self.delete_subtasks = Some(value);
 
         self
     }
@@ -810,7 +802,7 @@ impl<'a> DeleteIssueRequest<'a> {
         );
 
         if let Some(value) = &self.delete_subtasks {
-            config.query.push(("deleteSubtasks".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("deleteSubtasks".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
