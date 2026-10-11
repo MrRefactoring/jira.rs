@@ -441,6 +441,33 @@ impl<'a> GetUsersRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the one-based offset. The stream ends at the
+    /// last page, a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<ScimUser>> {
+        let first = self.start_index.unwrap_or(1);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_index = Some(position);
+            let page = request.send().await?;
+            let items = page.resources.unwrap_or_default();
+            Ok(crate::core::PageStep::offset_from(
+                items,
+                page.start_index.unwrap_or(position),
+                false,
+                page.total_results,
+                None,
+                1,
+                page.items_per_page,
+            ))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<ScimUserListResponse> {
         self.client.send(&self.config()?).await

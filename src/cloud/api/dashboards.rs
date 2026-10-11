@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     /// The filter applied to the list of dashboards. Valid values are:
@@ -66,28 +65,6 @@ crate::open_enum! {
         IsWritable => "isWritable",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about dashboard in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `description` Returns the description of the dashboard.
-///  *  `owner` Returns the owner of the dashboard.
-///  *  `viewUrl` Returns the URL that is used to view the dashboard.
-///  *  `favourite` Returns `isFavourite`, an indicator of whether the user has set the dashboard as a favorite.
-///  *  `favouritedCount` Returns `popularity`, a count of how many users have set this dashboard as a favorite.
-///  *  `sharePermissions` Returns details of the share permissions defined for the dashboard.
-///  *  `editPermissions` Returns details of the edit permissions defined for the dashboard.
-///  *  `isWritable` Returns whether the current user has permission to edit the dashboard.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetDashboardsPaginatedRequestExpand {
-    One(GetDashboardsPaginatedRequestExpandValue),
-    Many(Vec<GetDashboardsPaginatedRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetDashboardsPaginatedRequestExpand { One, Many, Other });
 
 /// The Dashboards operations.
 pub struct DashboardsService<'a> {
@@ -269,6 +246,25 @@ impl<'a> GetAllDashboardsRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Dashboard>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.dashboards.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(items, page.start_at.unwrap_or(position), false, page.total, None))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<PageOfDashboards> {
         self.client.send(&self.config()?).await
@@ -303,7 +299,7 @@ pub struct GetDashboardsPaginatedRequest<'a> {
     start_at: Option<i64>,
     max_results: Option<i64>,
     status: Option<GetDashboardsPaginatedRequestStatus>,
-    expand: Option<GetDashboardsPaginatedRequestExpand>,
+    expand: Option<Vec<GetDashboardsPaginatedRequestExpandValue>>,
 }
 
 impl<'a> GetDashboardsPaginatedRequest<'a> {
@@ -413,8 +409,11 @@ impl<'a> GetDashboardsPaginatedRequest<'a> {
     ///  *  `editPermissions` Returns details of the edit permissions defined for the dashboard.
     ///  *  `isWritable` Returns whether the current user has permission to edit the dashboard.
     #[must_use]
-    pub fn expand(mut self, value: GetDashboardsPaginatedRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetDashboardsPaginatedRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -461,7 +460,10 @@ impl<'a> GetDashboardsPaginatedRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)
@@ -469,17 +471,20 @@ impl<'a> GetDashboardsPaginatedRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Dashboard>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, Some(page.total), None))
         })
     }
 

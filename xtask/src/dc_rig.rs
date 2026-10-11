@@ -12,6 +12,7 @@ pub struct Rig {
     pub product: &'static str,
     pub compose_dir: PathBuf,
     pub base_url: String,
+    pub port_env: &'static str,
     pub admin_username: &'static str,
     pub admin_password: &'static str,
     pub admin_email: &'static str,
@@ -21,9 +22,29 @@ pub struct Rig {
 
 type Failure = Box<dyn std::error::Error>;
 
-fn compose(rig: &Rig, arguments: &[&str]) -> Result<(), Failure> {
+fn local_port(base_url: &str) -> Result<u16, Failure> {
+    let url = url::Url::parse(base_url)?;
+
+    if !matches!(url.host_str(), Some("localhost" | "127.0.0.1")) {
+        return Err(format!(
+            "{base_url} is not a local instance; up only starts containers for localhost or 127.0.0.1"
+        )
+        .into());
+    }
+
+    url.port_or_known_default().ok_or_else(|| format!("{base_url} has no known default port").into())
+}
+
+fn compose(rig: &Rig, arguments: &[&str], port: Option<u16>) -> Result<(), Failure> {
     let compose_file = rig.compose_dir.join("compose.yaml");
-    let status = Command::new("docker").arg("compose").arg("-f").arg(&compose_file).args(arguments).status()?;
+    let mut command = Command::new("docker");
+    command.arg("compose").arg("-f").arg(&compose_file).args(arguments);
+
+    if let Some(port) = port {
+        command.env(rig.port_env, port.to_string());
+    }
+
+    let status = command.status()?;
 
     if !status.success() {
         return Err(format!("docker compose {} failed", arguments.join(" ")).into());
@@ -319,15 +340,16 @@ pub async fn run(rig: &Rig, command: &str) -> Result<(), Failure> {
 
     match command {
         "down" => {
-            compose(rig, &["down", "--volumes"])?;
+            compose(rig, &["down", "--volumes"], None)?;
             println!("✔ stopped, volumes removed");
         }
         "status" => {
             println!("{} → {}", rig.base_url, read_state(&http, rig).await);
         }
         "up" => {
+            let port = local_port(&rig.base_url)?;
             println!("▸ starting containers");
-            compose(rig, &["up", "-d"])?;
+            compose(rig, &["up", "-d"], Some(port))?;
 
             println!("▸ waiting for {} (a cold start takes minutes)", rig.product);
 
@@ -347,4 +369,26 @@ pub async fn run(rig: &Rig, command: &str) -> Result<(), Failure> {
     }
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::local_port;
+
+    #[test]
+    fn explicit_local_port() {
+        assert_eq!(local_port("http://localhost:8090").unwrap(), 8090);
+        assert_eq!(local_port("http://127.0.0.1:8092").unwrap(), 8092);
+    }
+
+    #[test]
+    fn scheme_default_port() {
+        assert_eq!(local_port("http://localhost").unwrap(), 80);
+        assert_eq!(local_port("https://localhost").unwrap(), 443);
+    }
+
+    #[test]
+    fn non_local_host_is_refused() {
+        assert!(local_port("http://jira.example.com:8090").unwrap_err().to_string().contains("not a local instance"));
+    }
 }

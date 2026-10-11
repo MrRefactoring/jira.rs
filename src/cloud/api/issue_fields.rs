@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetFieldsPaginatedRequestType {
@@ -47,27 +46,6 @@ crate::open_enum! {
         SearcherKey => "searcherKey",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `key` returns the key for each field
-///  *  `stableId` returns the stableId for each field
-///  *  `lastUsed` returns the date when the value of the field last changed
-///  *  `screensCount` returns the number of screens related to a field
-///  *  `contextsCount` returns the number of contexts related to a field
-///  *  `isLocked` returns information about whether the field is locked
-///  *  `searcherKey` returns the searcher key for each custom field
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetFieldsPaginatedRequestExpand {
-    One(GetFieldsPaginatedRequestExpandValue),
-    Many(Vec<GetFieldsPaginatedRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetFieldsPaginatedRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     pub enum GetTrashedFieldsPaginatedRequestExpand {
@@ -133,8 +111,11 @@ impl<'a> IssueFieldsService<'a> {
     /// Creates a custom field.
     ///
     /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-    pub fn create_custom_field(&self, custom_field_definition: CustomFieldDefinition) -> CreateCustomFieldRequest2<'a> {
-        CreateCustomFieldRequest2::new(self.client, custom_field_definition)
+    pub fn create_custom_field(
+        &self,
+        custom_field_definition: CustomFieldDefinition,
+    ) -> IssueFieldsCreateCustomFieldRequest<'a> {
+        IssueFieldsCreateCustomFieldRequest::new(self.client, custom_field_definition)
     }
 
     /// Returns a [paginated](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#pagination) list of fields for Classic Jira projects. The list can include:
@@ -238,12 +219,12 @@ impl<'a> GetFieldsRequest<'a> {
 ///
 /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
 #[derive(Clone)]
-pub struct CreateCustomFieldRequest2<'a> {
+pub struct IssueFieldsCreateCustomFieldRequest<'a> {
     client: &'a crate::core::Client,
     custom_field_definition: CustomFieldDefinition,
 }
 
-impl<'a> CreateCustomFieldRequest2<'a> {
+impl<'a> IssueFieldsCreateCustomFieldRequest<'a> {
     fn new(client: &'a crate::core::Client, custom_field_definition: CustomFieldDefinition) -> Self {
         Self { client, custom_field_definition }
     }
@@ -292,7 +273,7 @@ pub struct GetFieldsPaginatedRequest<'a> {
     id: Option<Vec<String>>,
     query: Option<String>,
     order_by: Option<GetFieldsPaginatedRequestOrderBy>,
-    expand: Option<GetFieldsPaginatedRequestExpand>,
+    expand: Option<Vec<GetFieldsPaginatedRequestExpandValue>>,
     project_ids: Option<Vec<i64>>,
 }
 
@@ -374,8 +355,8 @@ impl<'a> GetFieldsPaginatedRequest<'a> {
     ///  *  `isLocked` returns information about whether the field is locked
     ///  *  `searcherKey` returns the searcher key for each custom field
     #[must_use]
-    pub fn expand(mut self, value: GetFieldsPaginatedRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetFieldsPaginatedRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -418,7 +399,10 @@ impl<'a> GetFieldsPaginatedRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.project_ids {
@@ -430,17 +414,20 @@ impl<'a> GetFieldsPaginatedRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Field>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, Some(page.total), None))
         })
     }
 
@@ -560,17 +547,20 @@ impl<'a> GetTrashedFieldsPaginatedRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Field>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, Some(page.total), None))
         })
     }
 

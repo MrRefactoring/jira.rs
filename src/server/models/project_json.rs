@@ -15,7 +15,7 @@ pub struct ProjectJson {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     #[serde(rename = "projectCategory", default, skip_serializing_if = "Option::is_none")]
-    pub project_category: Option<ProjectCategoryJson>,
+    pub project_category: Option<ProjectCategory>,
     #[serde(rename = "projectTypeKey", default, skip_serializing_if = "Option::is_none")]
     pub project_type_key: Option<String>,
     #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]

@@ -1,4 +1,4 @@
-use jira::cloud::{GetPermissionSchemeRequestExpand, GetPermissionSchemeRequestExpandValue};
+use jira::cloud::GetPermissionSchemeRequestExpandValue;
 
 use crate::harness::{TEST_PROJECT_KEY, cloud};
 
@@ -61,7 +61,7 @@ async fn returns_every_grant_whether_or_not_expand_asks_for_it() {
     let expanded = cloud()
         .permission_schemes()
         .get_permission_scheme(scheme_id)
-        .expand(GetPermissionSchemeRequestExpand::One(GetPermissionSchemeRequestExpandValue::Permissions))
+        .expand([GetPermissionSchemeRequestExpandValue::Permissions])
         .send()
         .await
         .expect("the expand parameter is accepted");

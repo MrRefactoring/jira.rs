@@ -1,20 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
-
-/// A list of project identifiers. This parameter accepts a comma-separated list.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetPoliciesRequestIds {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetPoliciesRequestIds { One, Many, Other });
 
 /// The AppDataPolicies operations.
 pub struct AppDataPoliciesService<'a> {
@@ -70,7 +56,7 @@ impl<'a> GetPolicyRequest<'a> {
 #[derive(Clone)]
 pub struct GetPoliciesRequest<'a> {
     client: &'a crate::core::Client,
-    ids: Option<GetPoliciesRequestIds>,
+    ids: Option<Vec<String>>,
 }
 
 impl<'a> GetPoliciesRequest<'a> {
@@ -80,8 +66,8 @@ impl<'a> GetPoliciesRequest<'a> {
 
     /// A list of project identifiers. This parameter accepts a comma-separated list.
     #[must_use]
-    pub fn ids(mut self, value: GetPoliciesRequestIds) -> Self {
-        self.ids = Some(value);
+    pub fn ids(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.ids = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -92,7 +78,7 @@ impl<'a> GetPoliciesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/data-policy/project".to_owned());
 
         if let Some(value) = &self.ids {
-            config.query.push(("ids".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("ids".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)

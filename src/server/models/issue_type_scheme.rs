@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 #[non_exhaustive]
 pub struct IssueTypeScheme {
     #[serde(rename = "defaultIssueType", default, skip_serializing_if = "Option::is_none")]
-    pub default_issue_type: Option<IssueTypeJson>,
+    pub default_issue_type: Option<IssueTypeDetails>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -15,7 +15,7 @@ pub struct IssueTypeScheme {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     #[serde(rename = "issueTypes", default, skip_serializing_if = "Option::is_none")]
-    pub issue_types: Option<Vec<IssueTypeJson>>,
+    pub issue_types: Option<Vec<IssueTypeDetails>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]

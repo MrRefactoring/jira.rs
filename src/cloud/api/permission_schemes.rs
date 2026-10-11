@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetAllPermissionSchemesRequestExpandValue {
@@ -14,26 +13,6 @@ crate::open_enum! {
     }
 }
 
-/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
-///
-///  *  `all` Returns all expandable information.
-///  *  `field` Returns information about the custom field granted the permission.
-///  *  `group` Returns information about the group that is granted the permission.
-///  *  `permissions` Returns all permission grants for each permission scheme.
-///  *  `projectRole` Returns information about the project role granted the permission.
-///  *  `user` Returns information about the user who is granted the permission.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetAllPermissionSchemesRequestExpand {
-    One(GetAllPermissionSchemesRequestExpandValue),
-    Many(Vec<GetAllPermissionSchemesRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetAllPermissionSchemesRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum CreatePermissionSchemeRequestExpandValue {
         All => "all",
@@ -44,26 +23,6 @@ crate::open_enum! {
         User => "user",
     }
 }
-
-/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
-///
-///  *  `all` Returns all expandable information.
-///  *  `field` Returns information about the custom field granted the permission.
-///  *  `group` Returns information about the group that is granted the permission.
-///  *  `permissions` Returns all permission grants for each permission scheme.
-///  *  `projectRole` Returns information about the project role granted the permission.
-///  *  `user` Returns information about the user who is granted the permission.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum CreatePermissionSchemeRequestExpand {
-    One(CreatePermissionSchemeRequestExpandValue),
-    Many(Vec<CreatePermissionSchemeRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(CreatePermissionSchemeRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     pub enum GetPermissionSchemeRequestExpandValue {
@@ -76,26 +35,6 @@ crate::open_enum! {
     }
 }
 
-/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are included when you specify any value. Expand options include:
-///
-///  *  `all` Returns all expandable information.
-///  *  `field` Returns information about the custom field granted the permission.
-///  *  `group` Returns information about the group that is granted the permission.
-///  *  `permissions` Returns all permission grants for each permission scheme.
-///  *  `projectRole` Returns information about the project role granted the permission.
-///  *  `user` Returns information about the user who is granted the permission.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetPermissionSchemeRequestExpand {
-    One(GetPermissionSchemeRequestExpandValue),
-    Many(Vec<GetPermissionSchemeRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetPermissionSchemeRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum UpdatePermissionSchemeRequestExpandValue {
         All => "all",
@@ -106,26 +45,6 @@ crate::open_enum! {
         User => "user",
     }
 }
-
-/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
-///
-///  *  `all` Returns all expandable information.
-///  *  `field` Returns information about the custom field granted the permission.
-///  *  `group` Returns information about the group that is granted the permission.
-///  *  `permissions` Returns all permission grants for each permission scheme.
-///  *  `projectRole` Returns information about the project role granted the permission.
-///  *  `user` Returns information about the user who is granted the permission.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum UpdatePermissionSchemeRequestExpand {
-    One(UpdatePermissionSchemeRequestExpandValue),
-    Many(Vec<UpdatePermissionSchemeRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(UpdatePermissionSchemeRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     pub enum GetPermissionSchemeGrantsRequestExpandValue {
@@ -138,26 +57,6 @@ crate::open_enum! {
     }
 }
 
-/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
-///
-///  *  `permissions` Returns all permission grants for each permission scheme.
-///  *  `user` Returns information about the user who is granted the permission.
-///  *  `group` Returns information about the group that is granted the permission.
-///  *  `projectRole` Returns information about the project role granted the permission.
-///  *  `field` Returns information about the custom field granted the permission.
-///  *  `all` Returns all expandable information.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetPermissionSchemeGrantsRequestExpand {
-    One(GetPermissionSchemeGrantsRequestExpandValue),
-    Many(Vec<GetPermissionSchemeGrantsRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetPermissionSchemeGrantsRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum CreatePermissionGrantRequestExpandValue {
         Permissions => "permissions",
@@ -169,26 +68,6 @@ crate::open_enum! {
     }
 }
 
-/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
-///
-///  *  `permissions` Returns all permission grants for each permission scheme.
-///  *  `user` Returns information about the user who is granted the permission.
-///  *  `group` Returns information about the group that is granted the permission.
-///  *  `projectRole` Returns information about the project role granted the permission.
-///  *  `field` Returns information about the custom field granted the permission.
-///  *  `all` Returns all expandable information.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum CreatePermissionGrantRequestExpand {
-    One(CreatePermissionGrantRequestExpandValue),
-    Many(Vec<CreatePermissionGrantRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(CreatePermissionGrantRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum GetPermissionSchemeGrantRequestExpandValue {
         All => "all",
@@ -199,26 +78,6 @@ crate::open_enum! {
         User => "user",
     }
 }
-
-/// Use expand to include additional information in the response. This parameter accepts a comma-separated list. Note that permissions are always included when you specify any value. Expand options include:
-///
-///  *  `all` Returns all expandable information.
-///  *  `field` Returns information about the custom field granted the permission.
-///  *  `group` Returns information about the group that is granted the permission.
-///  *  `permissions` Returns all permission grants for each permission scheme.
-///  *  `projectRole` Returns information about the project role granted the permission.
-///  *  `user` Returns information about the user who is granted the permission.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetPermissionSchemeGrantRequestExpand {
-    One(GetPermissionSchemeGrantRequestExpandValue),
-    Many(Vec<GetPermissionSchemeGrantRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetPermissionSchemeGrantRequestExpand { One, Many, Other });
 
 /// The PermissionSchemes operations.
 pub struct PermissionSchemesService<'a> {
@@ -502,7 +361,7 @@ impl<'a> PermissionSchemesService<'a> {
 #[derive(Clone)]
 pub struct GetAllPermissionSchemesRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetAllPermissionSchemesRequestExpand>,
+    expand: Option<Vec<GetAllPermissionSchemesRequestExpandValue>>,
 }
 
 impl<'a> GetAllPermissionSchemesRequest<'a> {
@@ -519,8 +378,11 @@ impl<'a> GetAllPermissionSchemesRequest<'a> {
     ///  *  `projectRole` Returns information about the project role granted the permission.
     ///  *  `user` Returns information about the user who is granted the permission.
     #[must_use]
-    pub fn expand(mut self, value: GetAllPermissionSchemesRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetAllPermissionSchemesRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -531,7 +393,10 @@ impl<'a> GetAllPermissionSchemesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/permissionscheme".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)
@@ -554,7 +419,7 @@ impl<'a> GetAllPermissionSchemesRequest<'a> {
 #[derive(Clone)]
 pub struct CreatePermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<CreatePermissionSchemeRequestExpand>,
+    expand: Option<Vec<CreatePermissionSchemeRequestExpandValue>>,
     body: PermissionScheme,
 }
 
@@ -572,8 +437,11 @@ impl<'a> CreatePermissionSchemeRequest<'a> {
     ///  *  `projectRole` Returns information about the project role granted the permission.
     ///  *  `user` Returns information about the user who is granted the permission.
     #[must_use]
-    pub fn expand(mut self, value: CreatePermissionSchemeRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<CreatePermissionSchemeRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -584,7 +452,10 @@ impl<'a> CreatePermissionSchemeRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/permissionscheme".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -610,7 +481,7 @@ impl<'a> CreatePermissionSchemeRequest<'a> {
 pub struct GetPermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
-    expand: Option<GetPermissionSchemeRequestExpand>,
+    expand: Option<Vec<GetPermissionSchemeRequestExpandValue>>,
 }
 
 impl<'a> GetPermissionSchemeRequest<'a> {
@@ -627,8 +498,8 @@ impl<'a> GetPermissionSchemeRequest<'a> {
     ///  *  `projectRole` Returns information about the project role granted the permission.
     ///  *  `user` Returns information about the user who is granted the permission.
     #[must_use]
-    pub fn expand(mut self, value: GetPermissionSchemeRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetPermissionSchemeRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -641,7 +512,10 @@ impl<'a> GetPermissionSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)
@@ -673,7 +547,7 @@ impl<'a> GetPermissionSchemeRequest<'a> {
 pub struct UpdatePermissionSchemeRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
-    expand: Option<UpdatePermissionSchemeRequestExpand>,
+    expand: Option<Vec<UpdatePermissionSchemeRequestExpandValue>>,
     body: PermissionScheme,
 }
 
@@ -691,8 +565,11 @@ impl<'a> UpdatePermissionSchemeRequest<'a> {
     ///  *  `projectRole` Returns information about the project role granted the permission.
     ///  *  `user` Returns information about the user who is granted the permission.
     #[must_use]
-    pub fn expand(mut self, value: UpdatePermissionSchemeRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<UpdatePermissionSchemeRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -705,7 +582,10 @@ impl<'a> UpdatePermissionSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
@@ -766,7 +646,7 @@ impl<'a> DeletePermissionSchemeRequest<'a> {
 pub struct GetPermissionSchemeGrantsRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
-    expand: Option<GetPermissionSchemeGrantsRequestExpand>,
+    expand: Option<Vec<GetPermissionSchemeGrantsRequestExpandValue>>,
 }
 
 impl<'a> GetPermissionSchemeGrantsRequest<'a> {
@@ -783,8 +663,11 @@ impl<'a> GetPermissionSchemeGrantsRequest<'a> {
     ///  *  `field` Returns information about the custom field granted the permission.
     ///  *  `all` Returns all expandable information.
     #[must_use]
-    pub fn expand(mut self, value: GetPermissionSchemeGrantsRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetPermissionSchemeGrantsRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -797,7 +680,10 @@ impl<'a> GetPermissionSchemeGrantsRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)
@@ -821,7 +707,7 @@ impl<'a> GetPermissionSchemeGrantsRequest<'a> {
 pub struct CreatePermissionGrantRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
-    expand: Option<CreatePermissionGrantRequestExpand>,
+    expand: Option<Vec<CreatePermissionGrantRequestExpandValue>>,
     permission_grant: PermissionGrant,
 }
 
@@ -839,8 +725,11 @@ impl<'a> CreatePermissionGrantRequest<'a> {
     ///  *  `field` Returns information about the custom field granted the permission.
     ///  *  `all` Returns all expandable information.
     #[must_use]
-    pub fn expand(mut self, value: CreatePermissionGrantRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<CreatePermissionGrantRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -853,7 +742,10 @@ impl<'a> CreatePermissionGrantRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         let body = match serde_json::to_value(&self.permission_grant)? {
@@ -885,7 +777,7 @@ pub struct GetPermissionSchemeGrantRequest<'a> {
     client: &'a crate::core::Client,
     scheme_id: i64,
     permission_id: i64,
-    expand: Option<GetPermissionSchemeGrantRequestExpand>,
+    expand: Option<Vec<GetPermissionSchemeGrantRequestExpandValue>>,
 }
 
 impl<'a> GetPermissionSchemeGrantRequest<'a> {
@@ -902,8 +794,11 @@ impl<'a> GetPermissionSchemeGrantRequest<'a> {
     ///  *  `projectRole` Returns information about the project role granted the permission.
     ///  *  `user` Returns information about the user who is granted the permission.
     #[must_use]
-    pub fn expand(mut self, value: GetPermissionSchemeGrantRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetPermissionSchemeGrantRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -916,7 +811,10 @@ impl<'a> GetPermissionSchemeGrantRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)

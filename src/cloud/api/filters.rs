@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum CreateFilterRequestExpandValue {
@@ -10,22 +9,6 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about filter in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `sharedUsers` Returns the users that the filter is shared with. This includes users that can browse projects that the filter is shared with. If you don't specify `sharedUsers`, then the `sharedUsers` object is returned but it doesn't list any users. The list of users returned is limited to 1000, to access additional users append `[start-index:end-index]` to the expand request. For example, to access the next 1000 users, use `?expand=sharedUsers[1001:2000]`.
-///  *  `subscriptions` Returns the users that are subscribed to the filter. If you don't specify `subscriptions`, the `subscriptions` object is returned but it doesn't list any subscriptions. The list of subscriptions returned is limited to 1000, to access additional subscriptions append `[start-index:end-index]` to the expand request. For example, to access the next 1000 subscriptions, use `?expand=subscriptions[1001:2000]`.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum CreateFilterRequestExpand {
-    One(CreateFilterRequestExpandValue),
-    Many(Vec<CreateFilterRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(CreateFilterRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum GetFavouriteFiltersRequestExpandValue {
         SharedUsers => "sharedUsers",
@@ -33,44 +16,12 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about filter in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `sharedUsers` Returns the users that the filter is shared with. This includes users that can browse projects that the filter is shared with. If you don't specify `sharedUsers`, then the `sharedUsers` object is returned but it doesn't list any users. The list of users returned is limited to 1000, to access additional users append `[start-index:end-index]` to the expand request. For example, to access the next 1000 users, use `?expand=sharedUsers[1001:2000]`.
-///  *  `subscriptions` Returns the users that are subscribed to the filter. If you don't specify `subscriptions`, the `subscriptions` object is returned but it doesn't list any subscriptions. The list of subscriptions returned is limited to 1000, to access additional subscriptions append `[start-index:end-index]` to the expand request. For example, to access the next 1000 subscriptions, use `?expand=subscriptions[1001:2000]`.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetFavouriteFiltersRequestExpand {
-    One(GetFavouriteFiltersRequestExpandValue),
-    Many(Vec<GetFavouriteFiltersRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetFavouriteFiltersRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum GetMyFiltersRequestExpandValue {
         SharedUsers => "sharedUsers",
         Subscriptions => "subscriptions",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about filter in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `sharedUsers` Returns the users that the filter is shared with. This includes users that can browse projects that the filter is shared with. If you don't specify `sharedUsers`, then the `sharedUsers` object is returned but it doesn't list any users. The list of users returned is limited to 1000, to access additional users append `[start-index:end-index]` to the expand request. For example, to access the next 1000 users, use `?expand=sharedUsers[1001:2000]`.
-///  *  `subscriptions` Returns the users that are subscribed to the filter. If you don't specify `subscriptions`, the `subscriptions` object is returned but it doesn't list any subscriptions. The list of subscriptions returned is limited to 1000, to access additional subscriptions append `[start-index:end-index]` to the expand request. For example, to access the next 1000 subscriptions, use `?expand=subscriptions[1001:2000]`.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetMyFiltersRequestExpand {
-    One(GetMyFiltersRequestExpandValue),
-    Many(Vec<GetMyFiltersRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetMyFiltersRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
@@ -124,54 +75,12 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about filter in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `description` Returns the description of the filter.
-///  *  `favourite` Returns an indicator of whether the user has set the filter as a favorite.
-///  *  `favouritedCount` Returns a count of how many users have set this filter as a favorite.
-///  *  `jql` Returns the JQL query that the filter uses.
-///  *  `owner` Returns the owner of the filter.
-///  *  `searchUrl` Returns a URL to perform the filter's JQL query.
-///  *  `sharePermissions` Returns the share permissions defined for the filter.
-///  *  `editPermissions` Returns the edit permissions defined for the filter.
-///  *  `isWritable` Returns whether the current user has permission to edit the filter.
-///  *  `approximateLastUsed` \\[Experimental\\] Returns the approximate date and time when the filter was last evaluated.
-///  *  `subscriptions` Returns the users that are subscribed to the filter.
-///  *  `viewUrl` Returns a URL to view the filter.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetFiltersPaginatedRequestExpand {
-    One(GetFiltersPaginatedRequestExpandValue),
-    Many(Vec<GetFiltersPaginatedRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetFiltersPaginatedRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum GetFilterRequestExpandValue {
         SharedUsers => "sharedUsers",
         Subscriptions => "subscriptions",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about filter in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `sharedUsers` Returns the users that the filter is shared with. This includes users that can browse projects that the filter is shared with. If you don't specify `sharedUsers`, then the `sharedUsers` object is returned but it doesn't list any users. The list of users returned is limited to 1000, to access additional users append `[start-index:end-index]` to the expand request. For example, to access the next 1000 users, use `?expand=sharedUsers[1001:2000]`.
-///  *  `subscriptions` Returns the users that are subscribed to the filter. If you don't specify `subscriptions`, the `subscriptions` object is returned but it doesn't list any subscriptions. The list of subscriptions returned is limited to 1000, to access additional subscriptions append `[start-index:end-index]` to the expand request. For example, to access the next 1000 subscriptions, use `?expand=subscriptions[1001:2000]`.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetFilterRequestExpand {
-    One(GetFilterRequestExpandValue),
-    Many(Vec<GetFilterRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetFilterRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     pub enum UpdateFilterRequestExpandValue {
@@ -180,22 +89,6 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about filter in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `sharedUsers` Returns the users that the filter is shared with. This includes users that can browse projects that the filter is shared with. If you don't specify `sharedUsers`, then the `sharedUsers` object is returned but it doesn't list any users. The list of users returned is limited to 1000, to access additional users append `[start-index:end-index]` to the expand request. For example, to access the next 1000 users, use `?expand=sharedUsers[1001:2000]`.
-///  *  `subscriptions` Returns the users that are subscribed to the filter. If you don't specify `subscriptions`, the `subscriptions` object is returned but it doesn't list any subscriptions. The list of subscriptions returned is limited to 1000, to access additional subscriptions append `[start-index:end-index]` to the expand request. For example, to access the next 1000 subscriptions, use `?expand=subscriptions[1001:2000]`.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum UpdateFilterRequestExpand {
-    One(UpdateFilterRequestExpandValue),
-    Many(Vec<UpdateFilterRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(UpdateFilterRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum SetFavouriteForFilterRequestExpandValue {
         SharedUsers => "sharedUsers",
@@ -203,44 +96,12 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about filter in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `sharedUsers` Returns the users that the filter is shared with. This includes users that can browse projects that the filter is shared with. If you don't specify `sharedUsers`, then the `sharedUsers` object is returned but it doesn't list any users. The list of users returned is limited to 1000, to access additional users append `[start-index:end-index]` to the expand request. For example, to access the next 1000 users, use `?expand=sharedUsers[1001:2000]`.
-///  *  `subscriptions` Returns the users that are subscribed to the filter. If you don't specify `subscriptions`, the `subscriptions` object is returned but it doesn't list any subscriptions. The list of subscriptions returned is limited to 1000, to access additional subscriptions append `[start-index:end-index]` to the expand request. For example, to access the next 1000 subscriptions, use `?expand=subscriptions[1001:2000]`.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum SetFavouriteForFilterRequestExpand {
-    One(SetFavouriteForFilterRequestExpandValue),
-    Many(Vec<SetFavouriteForFilterRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(SetFavouriteForFilterRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum DeleteFavouriteForFilterRequestExpandValue {
         SharedUsers => "sharedUsers",
         Subscriptions => "subscriptions",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about filter in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `sharedUsers` Returns the users that the filter is shared with. This includes users that can browse projects that the filter is shared with. If you don't specify `sharedUsers`, then the `sharedUsers` object is returned but it doesn't list any users. The list of users returned is limited to 1000, to access additional users append `[start-index:end-index]` to the expand request. For example, to access the next 1000 users, use `?expand=sharedUsers[1001:2000]`.
-///  *  `subscriptions` Returns the users that are subscribed to the filter. If you don't specify `subscriptions`, the `subscriptions` object is returned but it doesn't list any subscriptions. The list of subscriptions returned is limited to 1000, to access additional subscriptions append `[start-index:end-index]` to the expand request. For example, to access the next 1000 subscriptions, use `?expand=subscriptions[1001:2000]`.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum DeleteFavouriteForFilterRequestExpand {
-    One(DeleteFavouriteForFilterRequestExpandValue),
-    Many(Vec<DeleteFavouriteForFilterRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(DeleteFavouriteForFilterRequestExpand { One, Many, Other });
 
 /// The Filters operations.
 pub struct FiltersService<'a> {
@@ -410,7 +271,7 @@ impl<'a> FiltersService<'a> {
 #[derive(Clone)]
 pub struct CreateFilterRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<CreateFilterRequestExpand>,
+    expand: Option<Vec<CreateFilterRequestExpandValue>>,
     override_share_permissions: Option<bool>,
     filter: Filter,
 }
@@ -425,8 +286,8 @@ impl<'a> CreateFilterRequest<'a> {
     ///  *  `sharedUsers` Returns the users that the filter is shared with. This includes users that can browse projects that the filter is shared with. If you don't specify `sharedUsers`, then the `sharedUsers` object is returned but it doesn't list any users. The list of users returned is limited to 1000, to access additional users append `[start-index:end-index]` to the expand request. For example, to access the next 1000 users, use `?expand=sharedUsers[1001:2000]`.
     ///  *  `subscriptions` Returns the users that are subscribed to the filter. If you don't specify `subscriptions`, the `subscriptions` object is returned but it doesn't list any subscriptions. The list of subscriptions returned is limited to 1000, to access additional subscriptions append `[start-index:end-index]` to the expand request. For example, to access the next 1000 subscriptions, use `?expand=subscriptions[1001:2000]`.
     #[must_use]
-    pub fn expand(mut self, value: CreateFilterRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<CreateFilterRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -444,7 +305,10 @@ impl<'a> CreateFilterRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/filter".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.override_share_permissions {
@@ -490,7 +354,7 @@ impl<'a> CreateFilterRequest<'a> {
 #[derive(Clone)]
 pub struct GetFavouriteFiltersRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetFavouriteFiltersRequestExpand>,
+    expand: Option<Vec<GetFavouriteFiltersRequestExpandValue>>,
 }
 
 impl<'a> GetFavouriteFiltersRequest<'a> {
@@ -503,8 +367,8 @@ impl<'a> GetFavouriteFiltersRequest<'a> {
     ///  *  `sharedUsers` Returns the users that the filter is shared with. This includes users that can browse projects that the filter is shared with. If you don't specify `sharedUsers`, then the `sharedUsers` object is returned but it doesn't list any users. The list of users returned is limited to 1000, to access additional users append `[start-index:end-index]` to the expand request. For example, to access the next 1000 users, use `?expand=sharedUsers[1001:2000]`.
     ///  *  `subscriptions` Returns the users that are subscribed to the filter. If you don't specify `subscriptions`, the `subscriptions` object is returned but it doesn't list any subscriptions. The list of subscriptions returned is limited to 1000, to access additional subscriptions append `[start-index:end-index]` to the expand request. For example, to access the next 1000 subscriptions, use `?expand=subscriptions[1001:2000]`.
     #[must_use]
-    pub fn expand(mut self, value: GetFavouriteFiltersRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetFavouriteFiltersRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -515,7 +379,10 @@ impl<'a> GetFavouriteFiltersRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/filter/favourite".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)
@@ -546,7 +413,7 @@ impl<'a> GetFavouriteFiltersRequest<'a> {
 #[derive(Clone)]
 pub struct GetMyFiltersRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetMyFiltersRequestExpand>,
+    expand: Option<Vec<GetMyFiltersRequestExpandValue>>,
     include_favourites: Option<bool>,
 }
 
@@ -560,8 +427,8 @@ impl<'a> GetMyFiltersRequest<'a> {
     ///  *  `sharedUsers` Returns the users that the filter is shared with. This includes users that can browse projects that the filter is shared with. If you don't specify `sharedUsers`, then the `sharedUsers` object is returned but it doesn't list any users. The list of users returned is limited to 1000, to access additional users append `[start-index:end-index]` to the expand request. For example, to access the next 1000 users, use `?expand=sharedUsers[1001:2000]`.
     ///  *  `subscriptions` Returns the users that are subscribed to the filter. If you don't specify `subscriptions`, the `subscriptions` object is returned but it doesn't list any subscriptions. The list of subscriptions returned is limited to 1000, to access additional subscriptions append `[start-index:end-index]` to the expand request. For example, to access the next 1000 subscriptions, use `?expand=subscriptions[1001:2000]`.
     #[must_use]
-    pub fn expand(mut self, value: GetMyFiltersRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetMyFiltersRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -579,7 +446,10 @@ impl<'a> GetMyFiltersRequest<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/filter/my".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.include_favourites {
@@ -626,7 +496,7 @@ pub struct GetFiltersPaginatedRequest<'a> {
     order_by: Option<GetFiltersPaginatedRequestOrderBy>,
     start_at: Option<i64>,
     max_results: Option<i64>,
-    expand: Option<GetFiltersPaginatedRequestExpand>,
+    expand: Option<Vec<GetFiltersPaginatedRequestExpandValue>>,
     override_share_permissions: Option<bool>,
     is_substring_match: Option<bool>,
 }
@@ -745,8 +615,8 @@ impl<'a> GetFiltersPaginatedRequest<'a> {
     ///  *  `subscriptions` Returns the users that are subscribed to the filter.
     ///  *  `viewUrl` Returns a URL to view the filter.
     #[must_use]
-    pub fn expand(mut self, value: GetFiltersPaginatedRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetFiltersPaginatedRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -809,7 +679,10 @@ impl<'a> GetFiltersPaginatedRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.override_share_permissions {
@@ -827,17 +700,20 @@ impl<'a> GetFiltersPaginatedRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<FilterDetails>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, Some(page.total), None))
         })
     }
 
@@ -867,7 +743,7 @@ impl<'a> GetFiltersPaginatedRequest<'a> {
 pub struct GetFilterRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
-    expand: Option<GetFilterRequestExpand>,
+    expand: Option<Vec<GetFilterRequestExpandValue>>,
     override_share_permissions: Option<bool>,
 }
 
@@ -881,8 +757,8 @@ impl<'a> GetFilterRequest<'a> {
     ///  *  `sharedUsers` Returns the users that the filter is shared with. This includes users that can browse projects that the filter is shared with. If you don't specify `sharedUsers`, then the `sharedUsers` object is returned but it doesn't list any users. The list of users returned is limited to 1000, to access additional users append `[start-index:end-index]` to the expand request. For example, to access the next 1000 users, use `?expand=sharedUsers[1001:2000]`.
     ///  *  `subscriptions` Returns the users that are subscribed to the filter. If you don't specify `subscriptions`, the `subscriptions` object is returned but it doesn't list any subscriptions. The list of subscriptions returned is limited to 1000, to access additional subscriptions append `[start-index:end-index]` to the expand request. For example, to access the next 1000 subscriptions, use `?expand=subscriptions[1001:2000]`.
     #[must_use]
-    pub fn expand(mut self, value: GetFilterRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetFilterRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -901,7 +777,10 @@ impl<'a> GetFilterRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, format!("/rest/api/3/filter/{}", self.id));
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.override_share_permissions {
@@ -931,7 +810,7 @@ impl<'a> GetFilterRequest<'a> {
 pub struct UpdateFilterRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
-    expand: Option<UpdateFilterRequestExpand>,
+    expand: Option<Vec<UpdateFilterRequestExpandValue>>,
     override_share_permissions: Option<bool>,
     body: Filter,
 }
@@ -946,8 +825,8 @@ impl<'a> UpdateFilterRequest<'a> {
     ///  *  `sharedUsers` Returns the users that the filter is shared with. This includes users that can browse projects that the filter is shared with. If you don't specify `sharedUsers`, then the `sharedUsers` object is returned but it doesn't list any users. The list of users returned is limited to 1000, to access additional users append `[start-index:end-index]` to the expand request. For example, to access the next 1000 users, use `?expand=sharedUsers[1001:2000]`.
     ///  *  `subscriptions` Returns the users that are subscribed to the filter. If you don't specify `subscriptions`, the `subscriptions` object is returned but it doesn't list any subscriptions. The list of subscriptions returned is limited to 1000, to access additional subscriptions append `[start-index:end-index]` to the expand request. For example, to access the next 1000 subscriptions, use `?expand=subscriptions[1001:2000]`.
     #[must_use]
-    pub fn expand(mut self, value: UpdateFilterRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<UpdateFilterRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -966,7 +845,10 @@ impl<'a> UpdateFilterRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::PUT, format!("/rest/api/3/filter/{}", self.id));
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.override_share_permissions {
@@ -1174,7 +1056,7 @@ impl<'a> ResetColumnsRequest<'a> {
 pub struct SetFavouriteForFilterRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
-    expand: Option<SetFavouriteForFilterRequestExpand>,
+    expand: Option<Vec<SetFavouriteForFilterRequestExpandValue>>,
 }
 
 impl<'a> SetFavouriteForFilterRequest<'a> {
@@ -1187,8 +1069,11 @@ impl<'a> SetFavouriteForFilterRequest<'a> {
     ///  *  `sharedUsers` Returns the users that the filter is shared with. This includes users that can browse projects that the filter is shared with. If you don't specify `sharedUsers`, then the `sharedUsers` object is returned but it doesn't list any users. The list of users returned is limited to 1000, to access additional users append `[start-index:end-index]` to the expand request. For example, to access the next 1000 users, use `?expand=sharedUsers[1001:2000]`.
     ///  *  `subscriptions` Returns the users that are subscribed to the filter. If you don't specify `subscriptions`, the `subscriptions` object is returned but it doesn't list any subscriptions. The list of subscriptions returned is limited to 1000, to access additional subscriptions append `[start-index:end-index]` to the expand request. For example, to access the next 1000 subscriptions, use `?expand=subscriptions[1001:2000]`.
     #[must_use]
-    pub fn expand(mut self, value: SetFavouriteForFilterRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<SetFavouriteForFilterRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1201,7 +1086,10 @@ impl<'a> SetFavouriteForFilterRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)
@@ -1225,7 +1113,7 @@ impl<'a> SetFavouriteForFilterRequest<'a> {
 pub struct DeleteFavouriteForFilterRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
-    expand: Option<DeleteFavouriteForFilterRequestExpand>,
+    expand: Option<Vec<DeleteFavouriteForFilterRequestExpandValue>>,
 }
 
 impl<'a> DeleteFavouriteForFilterRequest<'a> {
@@ -1238,8 +1126,11 @@ impl<'a> DeleteFavouriteForFilterRequest<'a> {
     ///  *  `sharedUsers` Returns the users that the filter is shared with. This includes users that can browse projects that the filter is shared with. If you don't specify `sharedUsers`, then the `sharedUsers` object is returned but it doesn't list any users. The list of users returned is limited to 1000, to access additional users append `[start-index:end-index]` to the expand request. For example, to access the next 1000 users, use `?expand=sharedUsers[1001:2000]`.
     ///  *  `subscriptions` Returns the users that are subscribed to the filter. If you don't specify `subscriptions`, the `subscriptions` object is returned but it doesn't list any subscriptions. The list of subscriptions returned is limited to 1000, to access additional subscriptions append `[start-index:end-index]` to the expand request. For example, to access the next 1000 subscriptions, use `?expand=subscriptions[1001:2000]`.
     #[must_use]
-    pub fn expand(mut self, value: DeleteFavouriteForFilterRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<DeleteFavouriteForFilterRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1252,7 +1143,10 @@ impl<'a> DeleteFavouriteForFilterRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)

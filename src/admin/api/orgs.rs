@@ -57,6 +57,28 @@ impl<'a> GetOrgsRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages follow the next cursor under `links`. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<OrgModel>> {
+        let first = self.cursor.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.cursor = position.clone();
+            let page = request.send().await?;
+            let items = page.data.unwrap_or_default();
+            Ok(crate::core::PageStep::cursor(
+                items,
+                &position,
+                crate::core::cursor_from_url(page.links.as_ref().and_then(|links| links.next.clone()))?.map(Some),
+                false,
+            ))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<OrgPage> {
         self.client.send(&self.config()?).await

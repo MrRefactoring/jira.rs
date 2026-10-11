@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RestrictJson {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub groups: Option<Vec<GroupJson>>,
+    pub groups: Option<Vec<GroupName>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub permissions: Option<Vec<PermissionJson>>,
 }

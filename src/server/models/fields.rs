@@ -6,11 +6,11 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct Fields {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub issuetype: Option<IssueTypeJson>,
+    pub issuetype: Option<IssueTypeDetails>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub priority: Option<PriorityJson>,
+    pub priority: Option<Priority>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub status: Option<StatusJson>,
+    pub status: Option<StatusDetails>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub summary: Option<String>,
 }

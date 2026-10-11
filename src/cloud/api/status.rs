@@ -423,6 +423,31 @@ impl<'a> SearchStatusesRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<JiraStatus>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(
+                items,
+                page.start_at.unwrap_or(position),
+                page.is_last.unwrap_or(false),
+                page.total,
+                None,
+            ))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<PageOfStatuses> {
         self.client.send(&self.config()?).await
@@ -493,6 +518,24 @@ impl<'a> GetProjectIssueTypeUsagesForStatusRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next cursor from the answer. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<StatusProjectIssueTypeUsage>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let page = page.issue_types.unwrap_or_default();
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), false))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<StatusProjectIssueTypeUsageDTO> {
         self.client.send(&self.config()?).await
@@ -552,6 +595,24 @@ impl<'a> GetProjectUsagesForStatusRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next cursor from the answer. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<StatusProjectUsage>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let page = page.projects.unwrap_or_default();
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), false))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<StatusProjectUsageDTO> {
         self.client.send(&self.config()?).await
@@ -609,6 +670,24 @@ impl<'a> GetWorkflowUsagesForStatusRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next cursor from the answer. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<StatusWorkflowUsageWorkflow>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let page = page.workflows.unwrap_or_default();
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), false))
+        })
     }
 
     /// Sends the request.

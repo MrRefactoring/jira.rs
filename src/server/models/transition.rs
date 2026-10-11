@@ -16,5 +16,5 @@ pub struct Transition {
     #[serde(rename = "opsbarSequence", default, skip_serializing_if = "Option::is_none")]
     pub opsbar_sequence: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub to: Option<StatusJson>,
+    pub to: Option<StatusDetails>,
 }

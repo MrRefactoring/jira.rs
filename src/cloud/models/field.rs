@@ -4,7 +4,7 @@ use super::*;
 use serde::{Deserialize, Serialize};
 
 /// Details of a field.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct Field {
     /// Number of contexts where the field is used.
@@ -31,7 +31,8 @@ pub struct Field {
     /// Number of projects where the field is used.
     #[serde(rename = "projectsCount", default, skip_serializing_if = "Option::is_none")]
     pub projects_count: Option<i64>,
-    pub schema: JsonType,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub schema: Option<JsonType>,
     /// Number of screens where the field is used.
     #[serde(rename = "screensCount", default, skip_serializing_if = "Option::is_none")]
     pub screens_count: Option<i64>,

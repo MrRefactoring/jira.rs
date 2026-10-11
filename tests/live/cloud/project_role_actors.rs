@@ -2,9 +2,10 @@ use std::collections::HashMap;
 
 use jira::cloud::ActorsMap;
 
-use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_readable, cloud, is_not_entitled};
+use crate::harness::{ResourceTracker, TEST_PROJECT_KEY, await_readable, cloud, ensure_access_role, is_not_entitled};
 
 async fn project_roles() -> HashMap<String, String> {
+    ensure_access_role().await;
     cloud().project_roles().get_project_roles(TEST_PROJECT_KEY).send().await.expect("the test project lists its roles")
 }
 

@@ -13,8 +13,8 @@ impl<'a> ProjectComponentsService<'a> {
     }
 
     /// Create a component via POST.
-    pub fn create_component(&self) -> CreateComponentRequest<'a> {
-        CreateComponentRequest::new(self.client)
+    pub fn create_component(&self, project_component: ProjectComponent) -> CreateComponentRequest<'a> {
+        CreateComponentRequest::new(self.client, project_component)
     }
 
     /// Returns paginated list of filtered active components
@@ -28,8 +28,8 @@ impl<'a> ProjectComponentsService<'a> {
     }
 
     /// Modify a component via PUT. Any fields present in the PUT will override existing values. As a convenience, if a field is not present, it is silently ignored.
-    pub fn update_component(&self, id: impl Into<String>) -> UpdateComponentRequest<'a> {
-        UpdateComponentRequest::new(self.client, id)
+    pub fn update_component(&self, id: impl Into<String>, body: ProjectComponent) -> UpdateComponentRequest<'a> {
+        UpdateComponentRequest::new(self.client, id, body)
     }
 
     /// Delete a project component.
@@ -41,43 +41,36 @@ impl<'a> ProjectComponentsService<'a> {
     pub fn get_component_related_issues(&self, id: impl Into<String>) -> GetComponentRelatedIssuesRequest<'a> {
         GetComponentRelatedIssuesRequest::new(self.client, id)
     }
+
+    /// Contains a full representation of the specified project's components.
+    pub fn get_project_components(&self, project_id_or_key: impl Into<String>) -> GetProjectComponentsRequest<'a> {
+        GetProjectComponentsRequest::new(self.client, project_id_or_key)
+    }
 }
 
 /// Create a component via POST.
 #[derive(Clone)]
 pub struct CreateComponentRequest<'a> {
     client: &'a crate::core::Client,
-    component: Option<Component>,
+    project_component: ProjectComponent,
 }
 
 impl<'a> CreateComponentRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, component: None }
-    }
-
-    #[must_use]
-    pub fn component(mut self, value: Component) -> Self {
-        self.component = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, project_component: ProjectComponent) -> Self {
+        Self { client, project_component }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/component".to_owned());
 
-        let body = match serde_json::to_value(&self.component)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.project_component)?));
 
         Ok(config)
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Component> {
+    pub async fn send(self) -> crate::core::Result<ProjectComponent> {
         self.client.send(&self.config()?).await
     }
 
@@ -91,10 +84,10 @@ impl<'a> CreateComponentRequest<'a> {
 #[derive(Clone)]
 pub struct GetPaginatedComponentsRequest<'a> {
     client: &'a crate::core::Client,
-    max_results: Option<String>,
+    max_results: Option<i64>,
     query: Option<String>,
     project_ids: Option<String>,
-    start_at: Option<String>,
+    start_at: Option<i64>,
 }
 
 impl<'a> GetPaginatedComponentsRequest<'a> {
@@ -104,8 +97,8 @@ impl<'a> GetPaginatedComponentsRequest<'a> {
 
     /// the maximum number of components to return
     #[must_use]
-    pub fn max_results(mut self, value: impl Into<String>) -> Self {
-        self.max_results = Some(value.into());
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
 
         self
     }
@@ -128,8 +121,8 @@ impl<'a> GetPaginatedComponentsRequest<'a> {
 
     /// the index of the first components to return
     #[must_use]
-    pub fn start_at(mut self, value: impl Into<String>) -> Self {
-        self.start_at = Some(value.into());
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
 
         self
     }
@@ -140,7 +133,7 @@ impl<'a> GetPaginatedComponentsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/component/page".to_owned());
 
         if let Some(value) = &self.max_results {
-            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.query {
@@ -152,10 +145,38 @@ impl<'a> GetPaginatedComponentsRequest<'a> {
         }
 
         if let Some(value) = &self.start_at {
-            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(
+        self,
+    ) -> futures_util::stream::BoxStream<'a, crate::core::Result<std::collections::HashMap<String, serde_json::Value>>>
+    {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(
+                items,
+                page.start_at.unwrap_or(position),
+                page.is_last.unwrap_or(false),
+                page.total,
+                None,
+            ))
+        })
     }
 
     /// Sends the request.
@@ -192,7 +213,7 @@ impl<'a> GetComponentRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Component> {
+    pub async fn send(self) -> crate::core::Result<ProjectComponent> {
         self.client.send(&self.config()?).await
     }
 
@@ -207,19 +228,12 @@ impl<'a> GetComponentRequest<'a> {
 pub struct UpdateComponentRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
-    body: Option<Component>,
+    body: ProjectComponent,
 }
 
 impl<'a> UpdateComponentRequest<'a> {
-    fn new(client: &'a crate::core::Client, id: impl Into<String>) -> Self {
-        Self { client, id: id.into(), body: None }
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: Component) -> Self {
-        self.body = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, id: impl Into<String>, body: ProjectComponent) -> Self {
+        Self { client, id: id.into(), body }
     }
 
     /// The request as the transport will send it.
@@ -235,7 +249,7 @@ impl<'a> UpdateComponentRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Component> {
+    pub async fn send(self) -> crate::core::Result<ProjectComponent> {
         self.client.send(&self.config()?).await
     }
 
@@ -314,7 +328,40 @@ impl<'a> GetComponentRelatedIssuesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<ComponentIssueCounts> {
+    pub async fn send(self) -> crate::core::Result<ComponentIssuesCount> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Contains a full representation of the specified project's components.
+#[derive(Clone)]
+pub struct GetProjectComponentsRequest<'a> {
+    client: &'a crate::core::Client,
+    project_id_or_key: String,
+}
+
+impl<'a> GetProjectComponentsRequest<'a> {
+    fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
+        Self { client, project_id_or_key: project_id_or_key.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/2/project/{}/components", crate::core::encode_path_segment(&self.project_id_or_key)),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Vec<ProjectComponent>> {
         self.client.send(&self.config()?).await
     }
 

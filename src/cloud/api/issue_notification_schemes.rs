@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetNotificationSchemesRequestExpandValue {
@@ -14,26 +13,6 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `all` Returns all expandable information
-///  *  `field` Returns information about any custom fields assigned to receive an event
-///  *  `group` Returns information about any groups assigned to receive an event
-///  *  `notificationSchemeEvents` Returns a list of event associations. This list is returned for all expandable information
-///  *  `projectRole` Returns information about any project roles assigned to receive an event
-///  *  `user` Returns information about any users assigned to receive an event
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetNotificationSchemesRequestExpand {
-    One(GetNotificationSchemesRequestExpandValue),
-    Many(Vec<GetNotificationSchemesRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetNotificationSchemesRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum GetNotificationSchemeRequestExpandValue {
         All => "all",
@@ -44,26 +23,6 @@ crate::open_enum! {
         User => "user",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `all` Returns all expandable information
-///  *  `field` Returns information about any custom fields assigned to receive an event
-///  *  `group` Returns information about any groups assigned to receive an event
-///  *  `notificationSchemeEvents` Returns a list of event associations. This list is returned for all expandable information
-///  *  `projectRole` Returns information about any project roles assigned to receive an event
-///  *  `user` Returns information about any users assigned to receive an event
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetNotificationSchemeRequestExpand {
-    One(GetNotificationSchemeRequestExpandValue),
-    Many(Vec<GetNotificationSchemeRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetNotificationSchemeRequestExpand { One, Many, Other });
 
 /// The IssueNotificationSchemes operations.
 pub struct IssueNotificationSchemesService<'a> {
@@ -131,12 +90,12 @@ impl<'a> IssueNotificationSchemesService<'a> {
 #[derive(Clone)]
 pub struct GetNotificationSchemesRequest<'a> {
     client: &'a crate::core::Client,
-    start_at: Option<String>,
-    max_results: Option<String>,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
     id: Option<Vec<String>>,
     project_id: Option<Vec<String>>,
     only_default: Option<bool>,
-    expand: Option<GetNotificationSchemesRequestExpand>,
+    expand: Option<Vec<GetNotificationSchemesRequestExpandValue>>,
 }
 
 impl<'a> GetNotificationSchemesRequest<'a> {
@@ -146,16 +105,16 @@ impl<'a> GetNotificationSchemesRequest<'a> {
 
     /// The index of the first item to return in a page of results (page offset).
     #[must_use]
-    pub fn start_at(mut self, value: impl Into<String>) -> Self {
-        self.start_at = Some(value.into());
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
 
         self
     }
 
     /// The maximum number of items to return per page.
     #[must_use]
-    pub fn max_results(mut self, value: impl Into<String>) -> Self {
-        self.max_results = Some(value.into());
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
 
         self
     }
@@ -193,8 +152,11 @@ impl<'a> GetNotificationSchemesRequest<'a> {
     ///  *  `projectRole` Returns information about any project roles assigned to receive an event
     ///  *  `user` Returns information about any users assigned to receive an event
     #[must_use]
-    pub fn expand(mut self, value: GetNotificationSchemesRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetNotificationSchemesRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -205,11 +167,11 @@ impl<'a> GetNotificationSchemesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/notificationscheme".to_owned());
 
         if let Some(value) = &self.start_at {
-            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.id {
@@ -225,10 +187,32 @@ impl<'a> GetNotificationSchemesRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<NotificationScheme>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, Some(page.total), None))
+        })
     }
 
     /// Sends the request.
@@ -248,8 +232,8 @@ impl<'a> GetNotificationSchemesRequest<'a> {
 #[derive(Clone)]
 pub struct GetNotificationSchemeToProjectMappingsRequest<'a> {
     client: &'a crate::core::Client,
-    start_at: Option<String>,
-    max_results: Option<String>,
+    start_at: Option<i64>,
+    max_results: Option<i64>,
     notification_scheme_id: Option<Vec<String>>,
     project_id: Option<Vec<String>>,
 }
@@ -261,16 +245,16 @@ impl<'a> GetNotificationSchemeToProjectMappingsRequest<'a> {
 
     /// The index of the first item to return in a page of results (page offset).
     #[must_use]
-    pub fn start_at(mut self, value: impl Into<String>) -> Self {
-        self.start_at = Some(value.into());
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
 
         self
     }
 
     /// The maximum number of items to return per page.
     #[must_use]
-    pub fn max_results(mut self, value: impl Into<String>) -> Self {
-        self.max_results = Some(value.into());
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
 
         self
     }
@@ -299,11 +283,11 @@ impl<'a> GetNotificationSchemeToProjectMappingsRequest<'a> {
         );
 
         if let Some(value) = &self.start_at {
-            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.notification_scheme_id {
@@ -315,6 +299,27 @@ impl<'a> GetNotificationSchemeToProjectMappingsRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(
+        self,
+    ) -> futures_util::stream::BoxStream<'a, crate::core::Result<NotificationSchemeAndProjectMapping>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, Some(page.total), None))
+        })
     }
 
     /// Sends the request.
@@ -335,7 +340,7 @@ impl<'a> GetNotificationSchemeToProjectMappingsRequest<'a> {
 pub struct GetNotificationSchemeRequest<'a> {
     client: &'a crate::core::Client,
     id: i64,
-    expand: Option<GetNotificationSchemeRequestExpand>,
+    expand: Option<Vec<GetNotificationSchemeRequestExpandValue>>,
 }
 
 impl<'a> GetNotificationSchemeRequest<'a> {
@@ -352,8 +357,11 @@ impl<'a> GetNotificationSchemeRequest<'a> {
     ///  *  `projectRole` Returns information about any project roles assigned to receive an event
     ///  *  `user` Returns information about any users assigned to receive an event
     #[must_use]
-    pub fn expand(mut self, value: GetNotificationSchemeRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetNotificationSchemeRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -366,7 +374,10 @@ impl<'a> GetNotificationSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)

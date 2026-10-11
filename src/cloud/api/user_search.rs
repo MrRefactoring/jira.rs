@@ -1,20 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
-
-/// A list of project keys (case sensitive). This parameter accepts a comma-separated list.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum FindBulkAssignableUsersRequestProjectKeys {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(FindBulkAssignableUsersRequestProjectKeys { One, Many, Other });
 
 /// The UserSearch operations.
 pub struct UserSearchService<'a> {
@@ -37,7 +23,7 @@ impl<'a> UserSearchService<'a> {
     /// **[Permissions](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#permissions) required:** *Browse Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for each project specified in `projectKeys`.
     pub fn find_bulk_assignable_users(
         &self,
-        project_keys: FindBulkAssignableUsersRequestProjectKeys,
+        project_keys: impl IntoIterator<Item = impl Into<String>>,
     ) -> FindBulkAssignableUsersRequest<'a> {
         FindBulkAssignableUsersRequest::new(self.client, project_keys)
     }
@@ -193,14 +179,21 @@ pub struct FindBulkAssignableUsersRequest<'a> {
     client: &'a crate::core::Client,
     query: Option<String>,
     account_id: Option<String>,
-    project_keys: FindBulkAssignableUsersRequestProjectKeys,
+    project_keys: Vec<String>,
     start_at: Option<i64>,
     max_results: Option<i64>,
 }
 
 impl<'a> FindBulkAssignableUsersRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_keys: FindBulkAssignableUsersRequestProjectKeys) -> Self {
-        Self { client, project_keys, query: None, account_id: None, start_at: None, max_results: None }
+    fn new(client: &'a crate::core::Client, project_keys: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        Self {
+            client,
+            project_keys: project_keys.into_iter().map(Into::into).collect(),
+            query: None,
+            account_id: None,
+            start_at: None,
+            max_results: None,
+        }
     }
 
     /// A query string that is matched against user attributes, such as `displayName` and `emailAddress`, to find relevant users. The string can match the prefix of the attribute's value. For example, *query=john* matches a user with a `displayName` of *John Smith* and a user with an `emailAddress` of *johnson@example.com*. Required, unless `accountId` is specified.
@@ -250,7 +243,7 @@ impl<'a> FindBulkAssignableUsersRequest<'a> {
             config.query.push(("accountId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
-        config.query.push(("projectKeys".to_owned(), crate::core::QueryValue::from_serializable(&self.project_keys)?));
+        config.query.push(("projectKeys".to_owned(), crate::core::QueryValue::Scalar(self.project_keys.join(","))));
 
         if let Some(value) = &self.start_at {
             config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
@@ -261,6 +254,23 @@ impl<'a> FindBulkAssignableUsersRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset by the items returned. The stream
+    /// ends at an empty page, or at a short page when a page size was set.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<User>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.clone().send().await?;
+            let items = page;
+            Ok(crate::core::PageStep::offset(items, position, false, None, request.max_results))
+        })
     }
 
     /// Sends the request.
@@ -472,6 +482,23 @@ impl<'a> FindAssignableUsersRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset by the items returned. The stream
+    /// ends at an empty page, or at a short page when a page size was set.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<User>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.clone().send().await?;
+            let items = page;
+            Ok(crate::core::PageStep::offset(items, position, false, None, request.max_results))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<Vec<User>> {
         self.client.send(&self.config()?).await
@@ -606,6 +633,23 @@ impl<'a> FindUsersWithAllPermissionsRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset by the items returned. The stream
+    /// ends at an empty page, or at a short page when a page size was set.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<User>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.clone().send().await?;
+            let items = page;
+            Ok(crate::core::PageStep::offset(items, position, false, None, request.max_results))
+        })
     }
 
     /// Sends the request.
@@ -843,6 +887,23 @@ impl<'a> FindUsersRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset by the items returned. The stream
+    /// ends at an empty page, or at a short page when a page size was set.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<User>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.clone().send().await?;
+            let items = page;
+            Ok(crate::core::PageStep::offset(items, position, false, None, request.max_results))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<Vec<User>> {
         self.client.send(&self.config()?).await
@@ -923,17 +984,20 @@ impl<'a> FindUsersByQueryRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<User>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, Some(page.total), None))
         })
     }
 
@@ -1017,17 +1081,20 @@ impl<'a> FindUserKeysByQueryRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<UserKey>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, Some(page.total), None))
         })
     }
 
@@ -1161,6 +1228,23 @@ impl<'a> FindUsersWithBrowsePermissionRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset by the items returned. The stream
+    /// ends at an empty page, or at a short page when a page size was set.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<User>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.clone().send().await?;
+            let items = page;
+            Ok(crate::core::PageStep::offset(items, position, false, None, request.max_results))
+        })
     }
 
     /// Sends the request.

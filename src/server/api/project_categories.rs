@@ -58,7 +58,7 @@ impl<'a> GetAllProjectCategoriesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<ProjectCategoryJson>> {
+    pub async fn send(self) -> crate::core::Result<Vec<ProjectCategory>> {
         self.client.send(&self.config()?).await
     }
 
@@ -96,7 +96,7 @@ impl<'a> CreateProjectCategoryRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<ProjectCategoryJson> {
+    pub async fn send(self) -> crate::core::Result<ProjectCategory> {
         self.client.send(&self.config()?).await
     }
 
@@ -129,7 +129,7 @@ impl<'a> GetProjectCategoryByIdRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<ProjectCategoryJson> {
+    pub async fn send(self) -> crate::core::Result<ProjectCategory> {
         self.client.send(&self.config()?).await
     }
 
@@ -165,7 +165,7 @@ impl<'a> UpdateProjectCategoryRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<ProjectCategoryJson> {
+    pub async fn send(self) -> crate::core::Result<ProjectCategory> {
         self.client.send(&self.config()?).await
     }
 

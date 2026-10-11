@@ -1,137 +1,15 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
-/// Filters results to boards of the specified type. Valid values: scrum, kanban.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetAllBoardsRequestType {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
+crate::open_enum! {
+    /// Filters results to sprints in specified states. Valid values: future, active, closed. You can define multiple states separated by commas, e.g. state=active,closed
+    pub enum GetAllSprintsRequestState {
+        Future => "future",
+        Active => "active",
+        Closed => "closed",
+    }
 }
-
-crate::core::untagged::untagged!(GetAllBoardsRequestType { One, Many, Other });
-
-/// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForBacklogRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesForBacklogRequestFields { One, Many, Other });
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesWithoutEpicForBoardRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesWithoutEpicForBoardRequestExpand { One, Many, Other });
-
-/// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesWithoutEpicForBoardRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesWithoutEpicForBoardRequestFields { One, Many, Other });
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForBoardEpicRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesForBoardEpicRequestExpand { One, Many, Other });
-
-/// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForBoardEpicRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesForBoardEpicRequestFields { One, Many, Other });
-
-/// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForBoardRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesForBoardRequestFields { One, Many, Other });
-
-/// Filters results to sprints in specified states. Valid values: future, active, closed. You can define multiple states separated by commas, e.g. state=active,closed
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetAllSprintsRequestState {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetAllSprintsRequestState { One, Many, Other });
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForBoardSprintRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesForBoardSprintRequestExpand { One, Many, Other });
-
-/// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForBoardSprintRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesForBoardSprintRequestFields { One, Many, Other });
 
 /// The Board operations.
 pub struct BoardService<'a> {
@@ -191,8 +69,8 @@ impl<'a> BoardService<'a> {
     /// Note, estimates for an issue can be updated by a PUT /rest/api/2/issue/{issueIdOrKey} request, however the fields must be on the screen.
     /// "timeoriginalestimate" field will never be on the screen, so in order to update it "originalEstimate" in "timetracking" field should be updated.
     /// - ranking - Contains information about custom field used for ranking in the given board.
-    pub fn get_board_configuration(&self, board_id: i64) -> GetBoardConfigurationRequest<'a> {
-        GetBoardConfigurationRequest::new(self.client, board_id)
+    pub fn get_configuration(&self, board_id: i64) -> BoardGetConfigurationRequest<'a> {
+        BoardGetConfigurationRequest::new(self.client, board_id)
     }
 
     /// Returns all epics from the board, for the given board Id. This only includes epics that the user has permission to view. Note, if the user does not have permission to view the board, no epics will be returned at all.
@@ -206,8 +84,8 @@ impl<'a> BoardService<'a> {
     }
 
     /// Returns all issues that belong to an epic on the board, for the given epic Id and the board Id.
-    pub fn get_issues_for_board_epic(&self, epic_id: i64, board_id: i64) -> GetIssuesForBoardEpicRequest<'a> {
-        GetIssuesForBoardEpicRequest::new(self.client, epic_id, board_id)
+    pub fn get_board_issues_for_epic(&self, board_id: i64, epic_id: i64) -> GetBoardIssuesForEpicRequest<'a> {
+        GetBoardIssuesForEpicRequest::new(self.client, board_id, epic_id)
     }
 
     /// Returns all issues from a board, for a given board Id. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
@@ -221,32 +99,36 @@ impl<'a> BoardService<'a> {
     }
 
     /// Returns the keys of all properties for the board identified by the id. The user who retrieves the property keys is required to have permissions to view the board.
-    pub fn get_board_property_keys(&self, board_id: i64) -> GetBoardPropertyKeysRequest<'a> {
+    pub fn get_board_property_keys(&self, board_id: impl Into<String>) -> GetBoardPropertyKeysRequest<'a> {
         GetBoardPropertyKeysRequest::new(self.client, board_id)
     }
 
     /// Returns the value of the property with a given key from the board identified by the provided id. The user who retrieves the property is required to have permissions to view the board.
-    pub fn get_board_property(&self, property_key: impl Into<String>, board_id: i64) -> GetBoardPropertyRequest<'a> {
-        GetBoardPropertyRequest::new(self.client, property_key, board_id)
+    pub fn get_board_property(
+        &self,
+        board_id: impl Into<String>,
+        property_key: impl Into<String>,
+    ) -> GetBoardPropertyRequest<'a> {
+        GetBoardPropertyRequest::new(self.client, board_id, property_key)
     }
 
     /// Sets the value of the specified board's property. You can use this resource to store a custom data against the board identified by the id. The user who stores the data is required to have permissions to modify the board.
     pub fn set_board_property(
         &self,
+        board_id: impl Into<String>,
         property_key: impl Into<String>,
-        board_id: i64,
-        body: std::collections::HashMap<String, serde_json::Value>,
+        property_value: std::collections::HashMap<String, serde_json::Value>,
     ) -> SetBoardPropertyRequest<'a> {
-        SetBoardPropertyRequest::new(self.client, property_key, board_id, body)
+        SetBoardPropertyRequest::new(self.client, board_id, property_key, property_value)
     }
 
     /// Removes the property from the board identified by the id. Ths user removing the property is required to have permissions to modify the board.
     pub fn delete_board_property(
         &self,
+        board_id: impl Into<String>,
         property_key: impl Into<String>,
-        board_id: i64,
     ) -> DeleteBoardPropertyRequest<'a> {
-        DeleteBoardPropertyRequest::new(self.client, property_key, board_id)
+        DeleteBoardPropertyRequest::new(self.client, board_id, property_key)
     }
 
     /// Returns the value of the setting for refined velocity chart
@@ -269,8 +151,8 @@ impl<'a> BoardService<'a> {
     }
 
     /// Get all issues you have access to that belong to the sprint from the board. Issue returned from this resource contains additional fields like: sprint, closedSprints, flagged and epic. Issues are returned ordered by rank. JQL order has higher priority than default rank.
-    pub fn get_issues_for_board_sprint(&self, sprint_id: i64, board_id: i64) -> GetIssuesForBoardSprintRequest<'a> {
-        GetIssuesForBoardSprintRequest::new(self.client, sprint_id, board_id)
+    pub fn get_board_issues_for_sprint(&self, board_id: i64, sprint_id: i64) -> GetBoardIssuesForSprintRequest<'a> {
+        GetBoardIssuesForSprintRequest::new(self.client, board_id, sprint_id)
     }
 
     /// Returns all versions from a board, for a given board Id. This only includes versions that the user has permission to view. Note, if the user does not have permission to view the board, no versions will be returned at all. Returned versions are ordered by the name of the project from which they belong and then by sequence defined by user.
@@ -286,7 +168,7 @@ pub struct GetAllBoardsRequest<'a> {
     max_results: Option<i64>,
     name: Option<String>,
     project_key_or_id: Option<String>,
-    r#type: Option<GetAllBoardsRequestType>,
+    r#type: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
@@ -321,8 +203,8 @@ impl<'a> GetAllBoardsRequest<'a> {
 
     /// Filters results to boards of the specified type. Valid values: scrum, kanban.
     #[must_use]
-    pub fn r#type(mut self, value: GetAllBoardsRequestType) -> Self {
-        self.r#type = Some(value);
+    pub fn r#type(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.r#type = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -352,7 +234,7 @@ impl<'a> GetAllBoardsRequest<'a> {
         }
 
         if let Some(value) = &self.r#type {
-            config.query.push(("type".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("type".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {
@@ -364,17 +246,20 @@ impl<'a> GetAllBoardsRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Board>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, page.total, None))
         })
     }
 
@@ -503,12 +388,12 @@ impl<'a> DeleteBoardRequest<'a> {
 #[derive(Clone)]
 pub struct GetIssuesForBacklogRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<Vec<String>>,
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
     board_id: i64,
-    fields: Option<GetIssuesForBacklogRequestFields>,
+    fields: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
@@ -526,10 +411,10 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
         }
     }
 
-    /// This parameter is currently not used.
+    /// This parameter is currently not used. This parameter is a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -560,8 +445,8 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: GetIssuesForBacklogRequestFields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -582,7 +467,7 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.jql {
@@ -598,7 +483,7 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {
@@ -606,6 +491,25 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.issues.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(items, page.start_at.unwrap_or(position), false, page.total, None))
+        })
     }
 
     /// Sends the request.
@@ -636,12 +540,12 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
 /// "timeoriginalestimate" field will never be on the screen, so in order to update it "originalEstimate" in "timetracking" field should be updated.
 /// - ranking - Contains information about custom field used for ranking in the given board.
 #[derive(Clone)]
-pub struct GetBoardConfigurationRequest<'a> {
+pub struct BoardGetConfigurationRequest<'a> {
     client: &'a crate::core::Client,
     board_id: i64,
 }
 
-impl<'a> GetBoardConfigurationRequest<'a> {
+impl<'a> BoardGetConfigurationRequest<'a> {
     fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
         Self { client, board_id }
     }
@@ -657,7 +561,7 @@ impl<'a> GetBoardConfigurationRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<BoardConfig> {
+    pub async fn send(self) -> crate::core::Result<GetConfiguration> {
         self.client.send(&self.config()?).await
     }
 
@@ -730,17 +634,20 @@ impl<'a> GetEpicsRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Epic>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, page.total, None))
         })
     }
 
@@ -759,12 +666,12 @@ impl<'a> GetEpicsRequest<'a> {
 #[derive(Clone)]
 pub struct GetIssuesWithoutEpicForBoardRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetIssuesWithoutEpicForBoardRequestExpand>,
+    expand: Option<Vec<String>>,
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
     board_id: i64,
-    fields: Option<GetIssuesWithoutEpicForBoardRequestFields>,
+    fields: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
@@ -784,8 +691,8 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetIssuesWithoutEpicForBoardRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -816,8 +723,8 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: GetIssuesWithoutEpicForBoardRequestFields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -838,7 +745,7 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.jql {
@@ -854,7 +761,7 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {
@@ -862,6 +769,25 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.issues.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(items, page.start_at.unwrap_or(position), false, page.total, None))
+        })
     }
 
     /// Sends the request.
@@ -877,24 +803,24 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
 
 /// Returns all issues that belong to an epic on the board, for the given epic Id and the board Id.
 #[derive(Clone)]
-pub struct GetIssuesForBoardEpicRequest<'a> {
+pub struct GetBoardIssuesForEpicRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetIssuesForBoardEpicRequestExpand>,
+    expand: Option<Vec<String>>,
     jql: Option<String>,
-    epic_id: i64,
+    board_id: i64,
     max_results: Option<i64>,
     validate_query: Option<bool>,
-    board_id: i64,
-    fields: Option<GetIssuesForBoardEpicRequestFields>,
+    epic_id: i64,
+    fields: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
-impl<'a> GetIssuesForBoardEpicRequest<'a> {
-    fn new(client: &'a crate::core::Client, epic_id: i64, board_id: i64) -> Self {
+impl<'a> GetBoardIssuesForEpicRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64, epic_id: i64) -> Self {
         Self {
             client,
-            epic_id,
             board_id,
+            epic_id,
             expand: None,
             jql: None,
             max_results: None,
@@ -906,8 +832,8 @@ impl<'a> GetIssuesForBoardEpicRequest<'a> {
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetIssuesForBoardEpicRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -938,8 +864,8 @@ impl<'a> GetIssuesForBoardEpicRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: GetIssuesForBoardEpicRequestFields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -960,7 +886,7 @@ impl<'a> GetIssuesForBoardEpicRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.jql {
@@ -976,7 +902,7 @@ impl<'a> GetIssuesForBoardEpicRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {
@@ -984,6 +910,25 @@ impl<'a> GetIssuesForBoardEpicRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.issues.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(items, page.start_at.unwrap_or(position), false, page.total, None))
+        })
     }
 
     /// Sends the request.
@@ -1001,12 +946,12 @@ impl<'a> GetIssuesForBoardEpicRequest<'a> {
 #[derive(Clone)]
 pub struct GetIssuesForBoardRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<Vec<String>>,
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
     board_id: i64,
-    fields: Option<GetIssuesForBoardRequestFields>,
+    fields: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
@@ -1024,10 +969,10 @@ impl<'a> GetIssuesForBoardRequest<'a> {
         }
     }
 
-    /// This parameter is currently not used.
+    /// This parameter is currently not used. This parameter is a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1058,8 +1003,8 @@ impl<'a> GetIssuesForBoardRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: GetIssuesForBoardRequestFields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1080,7 +1025,7 @@ impl<'a> GetIssuesForBoardRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.jql {
@@ -1096,7 +1041,7 @@ impl<'a> GetIssuesForBoardRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {
@@ -1104,6 +1049,25 @@ impl<'a> GetIssuesForBoardRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.issues.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(items, page.start_at.unwrap_or(position), false, page.total, None))
+        })
     }
 
     /// Sends the request.
@@ -1167,17 +1131,20 @@ impl<'a> GetProjectsRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<ProjectJson>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, page.total, None))
         })
     }
 
@@ -1196,26 +1163,26 @@ impl<'a> GetProjectsRequest<'a> {
 #[derive(Clone)]
 pub struct GetBoardPropertyKeysRequest<'a> {
     client: &'a crate::core::Client,
-    board_id: i64,
+    board_id: String,
 }
 
 impl<'a> GetBoardPropertyKeysRequest<'a> {
-    fn new(client: &'a crate::core::Client, board_id: i64) -> Self {
-        Self { client, board_id }
+    fn new(client: &'a crate::core::Client, board_id: impl Into<String>) -> Self {
+        Self { client, board_id: board_id.into() }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let config = crate::core::RequestConfig::new(
             crate::core::Method::GET,
-            format!("/rest/agile/1.0/board/{}/properties", self.board_id),
+            format!("/rest/agile/1.0/board/{}/properties", crate::core::encode_path_segment(&self.board_id)),
         );
 
         Ok(config)
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<EntityPropertiesKeys> {
+    pub async fn send(self) -> crate::core::Result<PropertyKeys> {
         self.client.send(&self.config()?).await
     }
 
@@ -1229,13 +1196,13 @@ impl<'a> GetBoardPropertyKeysRequest<'a> {
 #[derive(Clone)]
 pub struct GetBoardPropertyRequest<'a> {
     client: &'a crate::core::Client,
+    board_id: String,
     property_key: String,
-    board_id: i64,
 }
 
 impl<'a> GetBoardPropertyRequest<'a> {
-    fn new(client: &'a crate::core::Client, property_key: impl Into<String>, board_id: i64) -> Self {
-        Self { client, property_key: property_key.into(), board_id }
+    fn new(client: &'a crate::core::Client, board_id: impl Into<String>, property_key: impl Into<String>) -> Self {
+        Self { client, board_id: board_id.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -1244,7 +1211,7 @@ impl<'a> GetBoardPropertyRequest<'a> {
             crate::core::Method::GET,
             format!(
                 "/rest/agile/1.0/board/{}/properties/{}",
-                self.board_id,
+                crate::core::encode_path_segment(&self.board_id),
                 crate::core::encode_path_segment(&self.property_key)
             ),
         );
@@ -1267,19 +1234,19 @@ impl<'a> GetBoardPropertyRequest<'a> {
 #[derive(Clone)]
 pub struct SetBoardPropertyRequest<'a> {
     client: &'a crate::core::Client,
+    board_id: String,
     property_key: String,
-    board_id: i64,
-    body: std::collections::HashMap<String, serde_json::Value>,
+    property_value: std::collections::HashMap<String, serde_json::Value>,
 }
 
 impl<'a> SetBoardPropertyRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
+        board_id: impl Into<String>,
         property_key: impl Into<String>,
-        board_id: i64,
-        body: std::collections::HashMap<String, serde_json::Value>,
+        property_value: std::collections::HashMap<String, serde_json::Value>,
     ) -> Self {
-        Self { client, property_key: property_key.into(), board_id, body }
+        Self { client, board_id: board_id.into(), property_key: property_key.into(), property_value }
     }
 
     /// The request as the transport will send it.
@@ -1288,18 +1255,18 @@ impl<'a> SetBoardPropertyRequest<'a> {
             crate::core::Method::PUT,
             format!(
                 "/rest/agile/1.0/board/{}/properties/{}",
-                self.board_id,
+                crate::core::encode_path_segment(&self.board_id),
                 crate::core::encode_path_segment(&self.property_key)
             ),
         );
 
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.property_value)?));
 
         Ok(config)
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Option<EntityPropertiesKeys>> {
+    pub async fn send(self) -> crate::core::Result<Option<PropertyKeys>> {
         self.client.send(&self.config()?).await
     }
 
@@ -1313,13 +1280,13 @@ impl<'a> SetBoardPropertyRequest<'a> {
 #[derive(Clone)]
 pub struct DeleteBoardPropertyRequest<'a> {
     client: &'a crate::core::Client,
+    board_id: String,
     property_key: String,
-    board_id: i64,
 }
 
 impl<'a> DeleteBoardPropertyRequest<'a> {
-    fn new(client: &'a crate::core::Client, property_key: impl Into<String>, board_id: i64) -> Self {
-        Self { client, property_key: property_key.into(), board_id }
+    fn new(client: &'a crate::core::Client, board_id: impl Into<String>, property_key: impl Into<String>) -> Self {
+        Self { client, board_id: board_id.into(), property_key: property_key.into() }
     }
 
     /// The request as the transport will send it.
@@ -1328,7 +1295,7 @@ impl<'a> DeleteBoardPropertyRequest<'a> {
             crate::core::Method::DELETE,
             format!(
                 "/rest/agile/1.0/board/{}/properties/{}",
-                self.board_id,
+                crate::core::encode_path_segment(&self.board_id),
                 crate::core::encode_path_segment(&self.property_key)
             ),
         );
@@ -1446,8 +1413,8 @@ impl<'a> GetAllSprintsRequest<'a> {
 
     /// Filters results to sprints in specified states. Valid values: future, active, closed. You can define multiple states separated by commas, e.g. state=active,closed
     #[must_use]
-    pub fn state(mut self, value: GetAllSprintsRequestState) -> Self {
-        self.state = Some(value);
+    pub fn state(mut self, value: impl Into<GetAllSprintsRequestState>) -> Self {
+        self.state = Some(value.into());
 
         self
     }
@@ -1484,17 +1451,20 @@ impl<'a> GetAllSprintsRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Sprint>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, page.total, None))
         })
     }
 
@@ -1511,24 +1481,24 @@ impl<'a> GetAllSprintsRequest<'a> {
 
 /// Get all issues you have access to that belong to the sprint from the board. Issue returned from this resource contains additional fields like: sprint, closedSprints, flagged and epic. Issues are returned ordered by rank. JQL order has higher priority than default rank.
 #[derive(Clone)]
-pub struct GetIssuesForBoardSprintRequest<'a> {
+pub struct GetBoardIssuesForSprintRequest<'a> {
     client: &'a crate::core::Client,
-    sprint_id: i64,
-    expand: Option<GetIssuesForBoardSprintRequestExpand>,
+    board_id: i64,
+    expand: Option<Vec<String>>,
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
-    board_id: i64,
-    fields: Option<GetIssuesForBoardSprintRequestFields>,
+    sprint_id: i64,
+    fields: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
-impl<'a> GetIssuesForBoardSprintRequest<'a> {
-    fn new(client: &'a crate::core::Client, sprint_id: i64, board_id: i64) -> Self {
+impl<'a> GetBoardIssuesForSprintRequest<'a> {
+    fn new(client: &'a crate::core::Client, board_id: i64, sprint_id: i64) -> Self {
         Self {
             client,
-            sprint_id,
             board_id,
+            sprint_id,
             expand: None,
             jql: None,
             max_results: None,
@@ -1540,8 +1510,8 @@ impl<'a> GetIssuesForBoardSprintRequest<'a> {
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetIssuesForBoardSprintRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1572,8 +1542,8 @@ impl<'a> GetIssuesForBoardSprintRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: GetIssuesForBoardSprintRequestFields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1594,7 +1564,7 @@ impl<'a> GetIssuesForBoardSprintRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.jql {
@@ -1610,7 +1580,7 @@ impl<'a> GetIssuesForBoardSprintRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {
@@ -1618,6 +1588,25 @@ impl<'a> GetIssuesForBoardSprintRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.issues.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(items, page.start_at.unwrap_or(position), false, page.total, None))
+        })
     }
 
     /// Sends the request.
@@ -1694,17 +1683,20 @@ impl<'a> GetAllVersionsRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<AgileVersion>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, page.total, None))
         })
     }
 

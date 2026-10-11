@@ -1,33 +1,27 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetAgileIssueRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
+crate::open_enum! {
+    pub enum IssuesGetIssueRequestExpandValue {
+        RenderedFields => "renderedFields",
+        Names => "names",
+        Schema => "schema",
+        Transitions => "transitions",
+        Operations => "operations",
+        Editmeta => "editmeta",
+        Changelog => "changelog",
+        VersionedRepresentations => "versionedRepresentations",
+    }
 }
 
-crate::core::untagged::untagged!(GetAgileIssueRequestExpand { One, Many, Other });
-
-/// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetAgileIssueRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
+crate::open_enum! {
+    /// A String of true or false indicating that any subtasks should also be deleted. If the issue has no subtasks this parameter is ignored. If the issue has subtasks and this parameter is missing or false, then the issue will not be deleted and an error will be returned.
+    pub enum DeleteIssueRequestDeleteSubtasks {
+        True => "true",
+        False => "false",
+    }
 }
-
-crate::core::untagged::untagged!(GetAgileIssueRequestFields { One, Many, Other });
 
 /// The Issues operations.
 pub struct IssuesService<'a> {
@@ -39,41 +33,6 @@ impl<'a> IssuesService<'a> {
         Self { client }
     }
 
-    /// Moves (ranks) issues before or after a given issue. At most 50 issues may be ranked at once. This operation may fail for some issues, although this will be rare. In that case the 207 status code is returned for the whole response and detailed information regarding each issue is available in the response body. If rankCustomFieldId is not defined, the default rank field will be used.
-    pub fn rank_issues(&self, issue_rank_request: IssueRankRequest) -> RankIssuesRequest<'a> {
-        RankIssuesRequest::new(self.client, issue_rank_request)
-    }
-
-    /// Returns a single issue, for a given issue Id or issue key. Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
-    pub fn get_agile_issue(&self, issue_id_or_key: impl Into<String>) -> GetAgileIssueRequest<'a> {
-        GetAgileIssueRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Returns the estimation of the issue and a fieldId of the field that is used for it.
-    /// Original time internally stores and returns the estimation as a number of seconds.
-    /// The field used for estimation on the given board can be obtained from board configuration resource.
-    /// More information about the field are returned by edit meta resource or field resource.
-    pub fn get_issue_estimation_for_board(
-        &self,
-        issue_id_or_key: impl Into<String>,
-    ) -> GetIssueEstimationForBoardRequest<'a> {
-        GetIssueEstimationForBoardRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Updates the estimation of the issue. boardId param is required. This param determines which field will be updated on a issue.
-    /// Note that this resource changes the estimation field of the issue regardless of appearance the field on the screen.
-    /// Original time tracking estimation field accepts estimation in formats like "1w", "2d", "3h", "20m" or number which represent number of minutes.
-    /// However, internally the field stores and returns the estimation as a number of seconds.
-    /// The field used for estimation on the given board can be obtained from [board configuration resource](https://developer.atlassian.com/server/jira/platform/rest/v11003/intro#agile/1.0/board-getConfiguration).
-    /// More information about the field are returned by edit meta resource or field resource.
-    pub fn estimate_issue_for_board(
-        &self,
-        issue_id_or_key: impl Into<String>,
-        field_edit: FieldEdit,
-    ) -> EstimateIssueForBoardRequest<'a> {
-        EstimateIssueForBoardRequest::new(self.client, issue_id_or_key, field_edit)
-    }
-
     /// Creates an issue or a sub-task from a JSON representation.
     /// The fields that can be set on create, in either the fields parameter or the update parameter can be determined using the /rest/api/2/issue/createmeta resource.
     /// If a field is not configured to appear on the create screen, then it will not be in the createmeta, and a field
@@ -83,8 +42,8 @@ impl<'a> IssuesService<'a> {
     /// - you must provide a parent field in the issue create request containing the id or key of the parent issue.
     /// The updateHistory param adds the project that this issue is created in, to the current user's project history, if set to true (by default, the project history is not updated).
     /// You can view the project history in the Jira application, via the Projects dropdown.
-    pub fn create_issue(&self) -> CreateIssueRequest<'a> {
-        CreateIssueRequest::new(self.client)
+    pub fn create_issue(&self, issue_update_details: IssueUpdateDetails) -> CreateIssueRequest<'a> {
+        CreateIssueRequest::new(self.client, issue_update_details)
     }
 
     /// Archives a list of issues.
@@ -94,30 +53,25 @@ impl<'a> IssuesService<'a> {
 
     /// Creates issues or sub-tasks from a JSON representation. Creates many issues in one bulk operation.
     /// Creating a sub-task is similar to creating a regular issue. More details can be found in createIssue section.
-    pub fn create_issues(&self) -> CreateIssuesRequest<'a> {
-        CreateIssuesRequest::new(self.client)
+    pub fn create_issues(&self, issues_update: IssuesUpdate) -> CreateIssuesRequest<'a> {
+        CreateIssuesRequest::new(self.client, issues_update)
     }
 
     /// Returns the metadata for issue types used for creating issues. Data will not be returned if the user does not have permission to create issues in that project.
-    pub fn get_create_issue_meta_project_issue_types(
+    pub fn get_create_issue_meta_issue_types(
         &self,
         project_id_or_key: impl Into<String>,
-    ) -> GetCreateIssueMetaProjectIssueTypesRequest<'a> {
-        GetCreateIssueMetaProjectIssueTypesRequest::new(self.client, project_id_or_key)
+    ) -> GetCreateIssueMetaIssueTypesRequest<'a> {
+        GetCreateIssueMetaIssueTypesRequest::new(self.client, project_id_or_key)
     }
 
     /// Returns the metadata for issue types used for creating issues. Data will not be returned if the user does not have permission to create issues in that project.
-    pub fn get_create_issue_meta_fields(
+    pub fn get_create_issue_meta_issue_type_id(
         &self,
+        project_id_or_key: impl Into<String>,
         issue_type_id: impl Into<String>,
-        project_id_or_key: impl Into<String>,
-    ) -> GetCreateIssueMetaFieldsRequest<'a> {
-        GetCreateIssueMetaFieldsRequest::new(self.client, issue_type_id, project_id_or_key)
-    }
-
-    /// Get issue picker resource
-    pub fn get_issue_picker_resource(&self) -> GetIssuePickerResourceRequest<'a> {
-        GetIssuePickerResourceRequest::new(self.client)
+    ) -> GetCreateIssueMetaIssueTypeIdRequest<'a> {
+        GetCreateIssueMetaIssueTypeIdRequest::new(self.client, project_id_or_key, issue_type_id)
     }
 
     /// Create reciprocal remote issue link from a JSON representation. Jira will create two issue links, source -> target and target -> source.
@@ -170,13 +124,17 @@ impl<'a> IssuesService<'a> {
     /// The greatest number always represents the most recent version. It is recommended that the most recent version is used.
     /// version for these fields which provide a more recent REST representation.
     /// After including versionedRepresentations "fields" field become hidden.
-    pub fn get_issue(&self, issue_id_or_key: impl Into<String>) -> GetIssueRequest<'a> {
-        GetIssueRequest::new(self.client, issue_id_or_key)
+    pub fn get_issue(&self, issue_id_or_key: impl Into<String>) -> IssuesGetIssueRequest<'a> {
+        IssuesGetIssueRequest::new(self.client, issue_id_or_key)
     }
 
     /// Edits an issue from a JSON representation. The issue can either be updated by setting explicit the field value(s) or by using an operation to change the field value.
-    pub fn edit_issue(&self, issue_id_or_key: impl Into<String>) -> EditIssueRequest<'a> {
-        EditIssueRequest::new(self.client, issue_id_or_key)
+    pub fn edit_issue(
+        &self,
+        issue_id_or_key: impl Into<String>,
+        issue_update_details: IssueUpdateDetails,
+    ) -> EditIssueRequest<'a> {
+        EditIssueRequest::new(self.client, issue_id_or_key, issue_update_details)
     }
 
     /// Deletes an issue. If the issue has subtasks you must set the parameter deleteSubtasks=true to delete the issue. You cannot delete an issue without its subtasks also being deleted.
@@ -190,56 +148,8 @@ impl<'a> IssuesService<'a> {
     }
 
     /// Assign an issue to a user.
-    pub fn assign(&self, issue_id_or_key: impl Into<String>) -> AssignRequest<'a> {
-        AssignRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Add one or more attachments to an issue.
-    /// This resource expects a multipart post. The media-type multipart/form-data is defined in RFC 1867. Most client libraries have classes that make dealing with multipart posts simple. For instance, in Java the Apache HTTP Components library provides a MultiPartEntity that makes it simple to submit a multipart POST.
-    /// In order to protect against XSRF attacks, because this method accepts multipart/form-data, it has XSRF protection
-    /// on it. This means you must submit a header of X-Atlassian-Token: no-check with the request, otherwise it will be blocked.
-    /// The name of the multipart/form-data parameter that contains attachments must be file.
-    /// A simple example to upload a file called "myfile.txt" to issue TEST-123:
-    /// curl -D- -u admin:admin -X POST -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt" <http://myhost/rest/api/2/issue/TEST-123/attachments>
-    pub fn add_attachment(
-        &self,
-        issue_id_or_key: impl Into<String>,
-        attachments: impl IntoIterator<Item = crate::core::Attachment>,
-    ) -> AddAttachmentRequest<'a> {
-        AddAttachmentRequest::new(self.client, issue_id_or_key, attachments)
-    }
-
-    /// Returns all comments for an issue. Results can be ordered by the 'created' field which means the date a comment was added.
-    pub fn get_comments(&self, issue_id_or_key: impl Into<String>) -> GetCommentsRequest<'a> {
-        GetCommentsRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Adds a new comment to an issue.
-    pub fn add_comment(&self, issue_id_or_key: impl Into<String>) -> AddCommentRequest<'a> {
-        AddCommentRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Returns a single comment.
-    pub fn get_comment(&self, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> GetCommentRequest<'a> {
-        GetCommentRequest::new(self.client, issue_id_or_key, id)
-    }
-
-    /// Updates an existing comment using its JSON representation.
-    pub fn update_comment(
-        &self,
-        issue_id_or_key: impl Into<String>,
-        id: impl Into<String>,
-    ) -> UpdateCommentRequest<'a> {
-        UpdateCommentRequest::new(self.client, issue_id_or_key, id)
-    }
-
-    /// Deletes an existing comment.
-    pub fn delete_comment(
-        &self,
-        issue_id_or_key: impl Into<String>,
-        id: impl Into<String>,
-    ) -> DeleteCommentRequest<'a> {
-        DeleteCommentRequest::new(self.client, issue_id_or_key, id)
+    pub fn assign_issue(&self, issue_id_or_key: impl Into<String>, user: User) -> AssignIssueRequest<'a> {
+        AssignIssueRequest::new(self.client, issue_id_or_key, user)
     }
 
     /// Pins a comment to the top of the comment list.
@@ -258,95 +168,13 @@ impl<'a> IssuesService<'a> {
     }
 
     /// Sends a notification (email) to the list or recipients defined in the request.
-    pub fn notify(&self, issue_id_or_key: impl Into<String>) -> NotifyRequest<'a> {
-        NotifyRequest::new(self.client, issue_id_or_key)
+    pub fn notify(&self, issue_id_or_key: impl Into<String>, notification: Notification) -> NotifyRequest<'a> {
+        NotifyRequest::new(self.client, issue_id_or_key, notification)
     }
 
     /// Returns all pinned to the issue comments.
     pub fn get_pinned_comments(&self, issue_id_or_key: impl Into<String>) -> GetPinnedCommentsRequest<'a> {
         GetPinnedCommentsRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Returns the keys of all properties for the issue identified by the key or by the id.
-    pub fn get_issue_property_keys(&self, issue_id_or_key: impl Into<String>) -> GetIssuePropertyKeysRequest<'a> {
-        GetIssuePropertyKeysRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Returns the value of the property with a given key from the issue identified by the key or by the id.
-    pub fn get_issue_property(
-        &self,
-        property_key: impl Into<String>,
-        issue_id_or_key: impl Into<String>,
-    ) -> GetIssuePropertyRequest<'a> {
-        GetIssuePropertyRequest::new(self.client, property_key, issue_id_or_key)
-    }
-
-    /// Sets the value of the specified issue's property.
-    pub fn set_issue_property(
-        &self,
-        property_key: impl Into<String>,
-        issue_id_or_key: impl Into<String>,
-        body: std::collections::HashMap<String, serde_json::Value>,
-    ) -> SetIssuePropertyRequest<'a> {
-        SetIssuePropertyRequest::new(self.client, property_key, issue_id_or_key, body)
-    }
-
-    /// Removes the property from the issue identified by the key or by the id.
-    pub fn delete_issue_property(
-        &self,
-        property_key: impl Into<String>,
-        issue_id_or_key: impl Into<String>,
-    ) -> DeleteIssuePropertyRequest<'a> {
-        DeleteIssuePropertyRequest::new(self.client, property_key, issue_id_or_key)
-    }
-
-    /// Get remote issue links for an issue.
-    pub fn get_remote_issue_links(&self, issue_id_or_key: impl Into<String>) -> GetRemoteIssueLinksRequest<'a> {
-        GetRemoteIssueLinksRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Creates or updates a remote issue link from a JSON representation. If a globalId is provided and a remote issue link exists with that globalId, the remote issue link is updated. Otherwise, the remote issue link is created.
-    pub fn create_or_update_remote_issue_link(
-        &self,
-        issue_id_or_key: impl Into<String>,
-    ) -> CreateOrUpdateRemoteIssueLinkRequest<'a> {
-        CreateOrUpdateRemoteIssueLinkRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Delete the remote issue link with the given global id on the issue.
-    pub fn delete_remote_issue_link_by_global_id(
-        &self,
-        issue_id_or_key: impl Into<String>,
-        global_id: impl Into<String>,
-    ) -> DeleteRemoteIssueLinkByGlobalIdRequest<'a> {
-        DeleteRemoteIssueLinkByGlobalIdRequest::new(self.client, issue_id_or_key, global_id)
-    }
-
-    /// Get a remote issue link by its id.
-    pub fn get_remote_issue_link_by_id(
-        &self,
-        link_id: impl Into<String>,
-        issue_id_or_key: impl Into<String>,
-    ) -> GetRemoteIssueLinkByIdRequest<'a> {
-        GetRemoteIssueLinkByIdRequest::new(self.client, link_id, issue_id_or_key)
-    }
-
-    /// Updates a remote issue link from a JSON representation. Any fields not provided are set to null.
-    pub fn update_remote_issue_link(
-        &self,
-        link_id: impl Into<String>,
-        issue_id_or_key: impl Into<String>,
-    ) -> UpdateRemoteIssueLinkRequest<'a> {
-        UpdateRemoteIssueLinkRequest::new(self.client, link_id, issue_id_or_key)
-    }
-
-    /// Delete the remote issue link with the given id on the issue.
-    pub fn delete_remote_issue_link_by_id(
-        &self,
-        link_id: impl Into<String>,
-        issue_id_or_key: impl Into<String>,
-    ) -> DeleteRemoteIssueLinkByIdRequest<'a> {
-        DeleteRemoteIssueLinkByIdRequest::new(self.client, link_id, issue_id_or_key)
     }
 
     /// Restores an archived issue.
@@ -387,293 +215,12 @@ impl<'a> IssuesService<'a> {
     /// If a field is not configured to appear on the transition screen, then it will not be in the transition metadata, and a field validation error will occur if it is submitted.
     /// The updateHistory param adds the issues retrieved by this method to the current user's issue history, if set to true (by default, the issue history does not include issues retrieved via the REST API).
     /// You can view the issue history in the Jira application, via the Issues dropdown or by using the lastViewed JQL field in an issue search.
-    pub fn do_transition(&self, issue_id_or_key: impl Into<String>) -> DoTransitionRequest<'a> {
-        DoTransitionRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// A REST sub-resource representing the voters on the issue.
-    pub fn get_votes(&self, issue_id_or_key: impl Into<String>) -> GetVotesRequest<'a> {
-        GetVotesRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Adds voter (currently logged user) to particular ticket. You need to be logged in to use this method.
-    pub fn add_vote(&self, issue_id_or_key: impl Into<String>) -> AddVoteRequest<'a> {
-        AddVoteRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Remove your vote from an issue.
-    pub fn remove_vote(&self, issue_id_or_key: impl Into<String>) -> RemoveVoteRequest<'a> {
-        RemoveVoteRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Returns the list of watchers for the issue with the given key.
-    pub fn get_issue_watchers(&self, issue_id_or_key: impl Into<String>) -> GetIssueWatchersRequest<'a> {
-        GetIssueWatchersRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Adds a user to an issue's watcher list.
-    pub fn add_watcher(&self, issue_id_or_key: impl Into<String>) -> AddWatcherRequest<'a> {
-        AddWatcherRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Removes a user from an issue's watcher list.
-    pub fn remove_watcher(&self, issue_id_or_key: impl Into<String>) -> RemoveWatcherRequest<'a> {
-        RemoveWatcherRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Returns all work logs for an issue. Work logs won't be returned if the Log work field is hidden for the project.
-    pub fn get_issue_worklog(&self, issue_id_or_key: impl Into<String>) -> GetIssueWorklogRequest<'a> {
-        GetIssueWorklogRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Adds a new worklog entry to an issue.
-    pub fn add_worklog(&self, issue_id_or_key: impl Into<String>) -> AddWorklogRequest<'a> {
-        AddWorklogRequest::new(self.client, issue_id_or_key)
-    }
-
-    /// Returns a specific worklog. The work log won't be returned if the Log work field is hidden for the project.
-    pub fn get_worklog(&self, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> GetWorklogRequest<'a> {
-        GetWorklogRequest::new(self.client, issue_id_or_key, id)
-    }
-
-    /// Updates an existing worklog entry. Note that:
-    /// - Fields possible for editing are: comment, visibility, started, timeSpent and timeSpentSeconds.
-    /// - Either timeSpent or timeSpentSeconds can be set.
-    /// - Fields which are not set will not be updated.
-    /// - For a request to be valid, it has to have at least one field change.
-    pub fn update_worklog(
+    pub fn do_transition(
         &self,
         issue_id_or_key: impl Into<String>,
-        id: impl Into<String>,
-    ) -> UpdateWorklogRequest<'a> {
-        UpdateWorklogRequest::new(self.client, issue_id_or_key, id)
-    }
-
-    /// Deletes an existing worklog entry.
-    pub fn delete_worklog(
-        &self,
-        issue_id_or_key: impl Into<String>,
-        id: impl Into<String>,
-    ) -> DeleteWorklogRequest<'a> {
-        DeleteWorklogRequest::new(self.client, issue_id_or_key, id)
-    }
-}
-
-/// Moves (ranks) issues before or after a given issue. At most 50 issues may be ranked at once. This operation may fail for some issues, although this will be rare. In that case the 207 status code is returned for the whole response and detailed information regarding each issue is available in the response body. If rankCustomFieldId is not defined, the default rank field will be used.
-#[derive(Clone)]
-pub struct RankIssuesRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_rank_request: IssueRankRequest,
-}
-
-impl<'a> RankIssuesRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_rank_request: IssueRankRequest) -> Self {
-        Self { client, issue_rank_request }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::PUT, "/rest/agile/1.0/issue/rank".to_owned());
-
-        let body = match serde_json::to_value(&self.issue_rank_request)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Option<PartialSuccess>> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns a single issue, for a given issue Id or issue key. Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic.
-#[derive(Clone)]
-pub struct GetAgileIssueRequest<'a> {
-    client: &'a crate::core::Client,
-    expand: Option<GetAgileIssueRequestExpand>,
-    issue_id_or_key: String,
-    fields: Option<GetAgileIssueRequestFields>,
-    update_history: Option<bool>,
-}
-
-impl<'a> GetAgileIssueRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), expand: None, fields: None, update_history: None }
-    }
-
-    /// A comma-separated list of the parameters to expand.
-    #[must_use]
-    pub fn expand(mut self, value: GetAgileIssueRequestExpand) -> Self {
-        self.expand = Some(value);
-
-        self
-    }
-
-    /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-    #[must_use]
-    pub fn fields(mut self, value: GetAgileIssueRequestFields) -> Self {
-        self.fields = Some(value);
-
-        self
-    }
-
-    /// A boolean indicating whether the issue retrieved by this method should be added to the current user's issue history.
-    #[must_use]
-    pub fn update_history(mut self, value: bool) -> Self {
-        self.update_history = Some(value);
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/agile/1.0/issue/{}", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
-        }
-
-        if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
-        }
-
-        if let Some(value) = &self.update_history {
-            config.query.push(("updateHistory".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
-        }
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Issue> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns the estimation of the issue and a fieldId of the field that is used for it.
-/// Original time internally stores and returns the estimation as a number of seconds.
-/// The field used for estimation on the given board can be obtained from board configuration resource.
-/// More information about the field are returned by edit meta resource or field resource.
-#[derive(Clone)]
-pub struct GetIssueEstimationForBoardRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_id_or_key: String,
-    board_id: Option<i64>,
-}
-
-impl<'a> GetIssueEstimationForBoardRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), board_id: None }
-    }
-
-    /// The id of the board required to determine which field is used for estimation.
-    #[must_use]
-    pub fn board_id(mut self, value: i64) -> Self {
-        self.board_id = Some(value);
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/agile/1.0/issue/{}/estimation", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        if let Some(value) = &self.board_id {
-            config.query.push(("boardId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
-        }
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<FieldValue> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Updates the estimation of the issue. boardId param is required. This param determines which field will be updated on a issue.
-/// Note that this resource changes the estimation field of the issue regardless of appearance the field on the screen.
-/// Original time tracking estimation field accepts estimation in formats like "1w", "2d", "3h", "20m" or number which represent number of minutes.
-/// However, internally the field stores and returns the estimation as a number of seconds.
-/// The field used for estimation on the given board can be obtained from [board configuration resource](https://developer.atlassian.com/server/jira/platform/rest/v11003/intro#agile/1.0/board-getConfiguration).
-/// More information about the field are returned by edit meta resource or field resource.
-#[derive(Clone)]
-pub struct EstimateIssueForBoardRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_id_or_key: String,
-    board_id: Option<i64>,
-    field_edit: FieldEdit,
-}
-
-impl<'a> EstimateIssueForBoardRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, field_edit: FieldEdit) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), field_edit, board_id: None }
-    }
-
-    /// The id of the board required to determine which field is used for estimation.
-    #[must_use]
-    pub fn board_id(mut self, value: i64) -> Self {
-        self.board_id = Some(value);
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            format!("/rest/agile/1.0/issue/{}/estimation", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        if let Some(value) = &self.board_id {
-            config.query.push(("boardId".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
-        }
-
-        let body = match serde_json::to_value(&self.field_edit)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<FieldValue> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
+        issue_update_details: IssueUpdateDetails,
+    ) -> DoTransitionRequest<'a> {
+        DoTransitionRequest::new(self.client, issue_id_or_key, issue_update_details)
     }
 }
 
@@ -690,24 +237,17 @@ impl<'a> EstimateIssueForBoardRequest<'a> {
 pub struct CreateIssueRequest<'a> {
     client: &'a crate::core::Client,
     update_history: Option<bool>,
-    issue_update: Option<IssueUpdate>,
+    issue_update_details: IssueUpdateDetails,
 }
 
 impl<'a> CreateIssueRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, update_history: None, issue_update: None }
+    fn new(client: &'a crate::core::Client, issue_update_details: IssueUpdateDetails) -> Self {
+        Self { client, issue_update_details, update_history: None }
     }
 
     #[must_use]
     pub fn update_history(mut self, value: bool) -> Self {
         self.update_history = Some(value);
-
-        self
-    }
-
-    #[must_use]
-    pub fn issue_update(mut self, value: IssueUpdate) -> Self {
-        self.issue_update = Some(value);
 
         self
     }
@@ -720,18 +260,13 @@ impl<'a> CreateIssueRequest<'a> {
             config.query.push(("updateHistory".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
-        let body = match serde_json::to_value(&self.issue_update)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.issue_update_details)?));
 
         Ok(config)
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<IssueCreateResponse> {
+    pub async fn send(self) -> crate::core::Result<CreatedIssue> {
         self.client.send(&self.config()?).await
     }
 
@@ -801,19 +336,12 @@ impl<'a> ArchiveIssuesRequest<'a> {
 #[derive(Clone)]
 pub struct CreateIssuesRequest<'a> {
     client: &'a crate::core::Client,
-    issues_update: Option<IssuesUpdate>,
+    issues_update: IssuesUpdate,
 }
 
 impl<'a> CreateIssuesRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, issues_update: None }
-    }
-
-    #[must_use]
-    pub fn issues_update(mut self, value: IssuesUpdate) -> Self {
-        self.issues_update = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, issues_update: IssuesUpdate) -> Self {
+        Self { client, issues_update }
     }
 
     /// The request as the transport will send it.
@@ -821,18 +349,13 @@ impl<'a> CreateIssuesRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/issue/bulk".to_owned());
 
-        let body = match serde_json::to_value(&self.issues_update)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.issues_update)?));
 
         Ok(config)
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<IssuesCreateResponse> {
+    pub async fn send(self) -> crate::core::Result<CreatedIssues> {
         self.client.send(&self.config()?).await
     }
 
@@ -844,30 +367,30 @@ impl<'a> CreateIssuesRequest<'a> {
 
 /// Returns the metadata for issue types used for creating issues. Data will not be returned if the user does not have permission to create issues in that project.
 #[derive(Clone)]
-pub struct GetCreateIssueMetaProjectIssueTypesRequest<'a> {
+pub struct GetCreateIssueMetaIssueTypesRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
-    max_results: Option<String>,
-    start_at: Option<String>,
+    max_results: Option<i64>,
+    start_at: Option<i64>,
 }
 
-impl<'a> GetCreateIssueMetaProjectIssueTypesRequest<'a> {
+impl<'a> GetCreateIssueMetaIssueTypesRequest<'a> {
     fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
         Self { client, project_id_or_key: project_id_or_key.into(), max_results: None, start_at: None }
     }
 
     /// How many results on the page should be included
     #[must_use]
-    pub fn max_results(mut self, value: impl Into<String>) -> Self {
-        self.max_results = Some(value.into());
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
 
         self
     }
 
     /// The page offset
     #[must_use]
-    pub fn start_at(mut self, value: impl Into<String>) -> Self {
-        self.start_at = Some(value.into());
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
 
         self
     }
@@ -883,14 +406,33 @@ impl<'a> GetCreateIssueMetaProjectIssueTypesRequest<'a> {
         );
 
         if let Some(value) = &self.max_results {
-            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.start_at {
-            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<CreateMetaIssueType>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, page.total, None))
+        })
     }
 
     /// Sends the request.
@@ -906,24 +448,24 @@ impl<'a> GetCreateIssueMetaProjectIssueTypesRequest<'a> {
 
 /// Returns the metadata for issue types used for creating issues. Data will not be returned if the user does not have permission to create issues in that project.
 #[derive(Clone)]
-pub struct GetCreateIssueMetaFieldsRequest<'a> {
+pub struct GetCreateIssueMetaIssueTypeIdRequest<'a> {
     client: &'a crate::core::Client,
-    issue_type_id: String,
     project_id_or_key: String,
-    max_results: Option<String>,
-    start_at: Option<String>,
+    issue_type_id: String,
+    max_results: Option<i64>,
+    start_at: Option<i64>,
 }
 
-impl<'a> GetCreateIssueMetaFieldsRequest<'a> {
+impl<'a> GetCreateIssueMetaIssueTypeIdRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
-        issue_type_id: impl Into<String>,
         project_id_or_key: impl Into<String>,
+        issue_type_id: impl Into<String>,
     ) -> Self {
         Self {
             client,
-            issue_type_id: issue_type_id.into(),
             project_id_or_key: project_id_or_key.into(),
+            issue_type_id: issue_type_id.into(),
             max_results: None,
             start_at: None,
         }
@@ -931,16 +473,16 @@ impl<'a> GetCreateIssueMetaFieldsRequest<'a> {
 
     /// How many results on the page should be included
     #[must_use]
-    pub fn max_results(mut self, value: impl Into<String>) -> Self {
-        self.max_results = Some(value.into());
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
 
         self
     }
 
     /// The page offset
     #[must_use]
-    pub fn start_at(mut self, value: impl Into<String>) -> Self {
-        self.start_at = Some(value.into());
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
 
         self
     }
@@ -957,134 +499,37 @@ impl<'a> GetCreateIssueMetaFieldsRequest<'a> {
         );
 
         if let Some(value) = &self.max_results {
-            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.start_at {
-            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<FieldMeta>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, page.total, None))
+        })
     }
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<Page<FieldMeta>> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Get issue picker resource
-#[derive(Clone)]
-pub struct GetIssuePickerResourceRequest<'a> {
-    client: &'a crate::core::Client,
-    current_project_id: Option<String>,
-    query: Option<String>,
-    current_issue_key: Option<String>,
-    show_sub_tasks: Option<String>,
-    current_jql: Option<String>,
-    show_sub_task_parent: Option<String>,
-}
-
-impl<'a> GetIssuePickerResourceRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self {
-            client,
-            current_project_id: None,
-            query: None,
-            current_issue_key: None,
-            show_sub_tasks: None,
-            current_jql: None,
-            show_sub_task_parent: None,
-        }
-    }
-
-    /// the id of the project in context of which the request is executed
-    #[must_use]
-    pub fn current_project_id(mut self, value: impl Into<String>) -> Self {
-        self.current_project_id = Some(value.into());
-
-        self
-    }
-
-    /// the query
-    #[must_use]
-    pub fn query(mut self, value: impl Into<String>) -> Self {
-        self.query = Some(value.into());
-
-        self
-    }
-
-    /// the key of the issue in context of which the request is executed
-    #[must_use]
-    pub fn current_issue_key(mut self, value: impl Into<String>) -> Self {
-        self.current_issue_key = Some(value.into());
-
-        self
-    }
-
-    /// if set to false, subtasks will not be included in the list
-    #[must_use]
-    pub fn show_sub_tasks(mut self, value: impl Into<String>) -> Self {
-        self.show_sub_tasks = Some(value.into());
-
-        self
-    }
-
-    /// the JQL in context of which the request is executed
-    #[must_use]
-    pub fn current_jql(mut self, value: impl Into<String>) -> Self {
-        self.current_jql = Some(value.into());
-
-        self
-    }
-
-    /// if set to false and request is executed in context of a subtask, the parent issue will not be included in the auto-completion result, even if it matches the query
-    #[must_use]
-    pub fn show_sub_task_parent(mut self, value: impl Into<String>) -> Self {
-        self.show_sub_task_parent = Some(value.into());
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config =
-            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/issue/picker".to_owned());
-
-        if let Some(value) = &self.current_project_id {
-            config.query.push(("currentProjectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.query {
-            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.current_issue_key {
-            config.query.push(("currentIssueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.show_sub_tasks {
-            config.query.push(("showSubTasks".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.current_jql {
-            config.query.push(("currentJQL".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.show_sub_task_parent {
-            config.query.push(("showSubTaskParent".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<IssuePickerResult> {
         self.client.send(&self.config()?).await
     }
 
@@ -1190,16 +635,16 @@ impl<'a> CreateReciprocalRemoteIssueLinkRequest<'a> {
 /// version for these fields which provide a more recent REST representation.
 /// After including versionedRepresentations "fields" field become hidden.
 #[derive(Clone)]
-pub struct GetIssueRequest<'a> {
+pub struct IssuesGetIssueRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<Vec<IssuesGetIssueRequestExpandValue>>,
     issue_id_or_key: String,
-    fields: Option<String>,
-    update_history: Option<String>,
-    properties: Option<String>,
+    fields: Option<Vec<String>>,
+    update_history: Option<bool>,
+    properties: Option<Vec<String>>,
 }
 
-impl<'a> GetIssueRequest<'a> {
+impl<'a> IssuesGetIssueRequest<'a> {
     fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
         Self {
             client,
@@ -1211,34 +656,34 @@ impl<'a> GetIssueRequest<'a> {
         }
     }
 
-    /// The expand param is used to include, hidden by default, parts of response. This can be used to include: renderedFields, names, schema, transitions, operations, editmeta, changelog, versionedRepresentations.
+    /// The expand param is used to include, hidden by default, parts of response. This can be used to include: renderedFields, names, schema, transitions, operations, editmeta, changelog, versionedRepresentations. This parameter accepts a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<IssuesGetIssueRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
 
     /// The list of fields to return for the issue. By default, all fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: impl Into<String>) -> Self {
-        self.fields = Some(value.into());
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
 
     /// The updateHistory param adds the issues retrieved by this method to the current user's issue history
     #[must_use]
-    pub fn update_history(mut self, value: impl Into<String>) -> Self {
-        self.update_history = Some(value.into());
+    pub fn update_history(mut self, value: bool) -> Self {
+        self.update_history = Some(value);
 
         self
     }
 
     /// The list of properties to return for the issue. By default no properties are returned.
     #[must_use]
-    pub fn properties(mut self, value: impl Into<String>) -> Self {
-        self.properties = Some(value.into());
+    pub fn properties(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.properties = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1251,19 +696,22 @@ impl<'a> GetIssueRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.update_history {
-            config.query.push(("updateHistory".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("updateHistory".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.properties {
-            config.query.push(("properties".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("properties".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)
@@ -1285,26 +733,23 @@ impl<'a> GetIssueRequest<'a> {
 pub struct EditIssueRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    notify_users: Option<String>,
-    issue_update: Option<IssueUpdate>,
+    notify_users: Option<bool>,
+    issue_update_details: IssueUpdateDetails,
 }
 
 impl<'a> EditIssueRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), notify_users: None, issue_update: None }
+    fn new(
+        client: &'a crate::core::Client,
+        issue_id_or_key: impl Into<String>,
+        issue_update_details: IssueUpdateDetails,
+    ) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), issue_update_details, notify_users: None }
     }
 
     /// Send the email with notification that the issue was updated to users that watch it. Admin or project admin permissions are required to disable the notification.
     #[must_use]
-    pub fn notify_users(mut self, value: impl Into<String>) -> Self {
-        self.notify_users = Some(value.into());
-
-        self
-    }
-
-    #[must_use]
-    pub fn issue_update(mut self, value: IssueUpdate) -> Self {
-        self.issue_update = Some(value);
+    pub fn notify_users(mut self, value: bool) -> Self {
+        self.notify_users = Some(value);
 
         self
     }
@@ -1317,15 +762,10 @@ impl<'a> EditIssueRequest<'a> {
         );
 
         if let Some(value) = &self.notify_users {
-            config.query.push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("notifyUsers".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
-        let body = match serde_json::to_value(&self.issue_update)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.issue_update_details)?));
 
         Ok(config)
     }
@@ -1345,7 +785,7 @@ impl<'a> EditIssueRequest<'a> {
 #[derive(Clone)]
 pub struct DeleteIssueRequest<'a> {
     client: &'a crate::core::Client,
-    delete_subtasks: Option<String>,
+    delete_subtasks: Option<DeleteIssueRequestDeleteSubtasks>,
     issue_id_or_key: String,
 }
 
@@ -1356,7 +796,7 @@ impl<'a> DeleteIssueRequest<'a> {
 
     /// A String of true or false indicating that any subtasks should also be deleted. If the issue has no subtasks this parameter is ignored. If the issue has subtasks and this parameter is missing or false, then the issue will not be deleted and an error will be returned.
     #[must_use]
-    pub fn delete_subtasks(mut self, value: impl Into<String>) -> Self {
+    pub fn delete_subtasks(mut self, value: impl Into<DeleteIssueRequestDeleteSubtasks>) -> Self {
         self.delete_subtasks = Some(value.into());
 
         self
@@ -1370,7 +810,7 @@ impl<'a> DeleteIssueRequest<'a> {
         );
 
         if let Some(value) = &self.delete_subtasks {
-            config.query.push(("deleteSubtasks".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("deleteSubtasks".to_owned(), crate::core::QueryValue::from_serializable(value)?));
         }
 
         Ok(config)
@@ -1435,22 +875,15 @@ impl<'a> ArchiveIssueRequest<'a> {
 
 /// Assign an issue to a user.
 #[derive(Clone)]
-pub struct AssignRequest<'a> {
+pub struct AssignIssueRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    user: Option<User>,
+    user: User,
 }
 
-impl<'a> AssignRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), user: None }
-    }
-
-    #[must_use]
-    pub fn user(mut self, value: User) -> Self {
-        self.user = Some(value);
-
-        self
+impl<'a> AssignIssueRequest<'a> {
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, user: User) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), user }
     }
 
     /// The request as the transport will send it.
@@ -1460,380 +893,7 @@ impl<'a> AssignRequest<'a> {
             format!("/rest/api/2/issue/{}/assignee", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
-        let body = match serde_json::to_value(&self.user)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Add one or more attachments to an issue.
-/// This resource expects a multipart post. The media-type multipart/form-data is defined in RFC 1867. Most client libraries have classes that make dealing with multipart posts simple. For instance, in Java the Apache HTTP Components library provides a MultiPartEntity that makes it simple to submit a multipart POST.
-/// In order to protect against XSRF attacks, because this method accepts multipart/form-data, it has XSRF protection
-/// on it. This means you must submit a header of X-Atlassian-Token: no-check with the request, otherwise it will be blocked.
-/// The name of the multipart/form-data parameter that contains attachments must be file.
-/// A simple example to upload a file called "myfile.txt" to issue TEST-123:
-/// curl -D- -u admin:admin -X POST -H "X-Atlassian-Token: no-check" -F "file=@myfile.txt" <http://myhost/rest/api/2/issue/TEST-123/attachments>
-#[derive(Clone)]
-pub struct AddAttachmentRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_id_or_key: String,
-    attachments: Vec<crate::core::Attachment>,
-    content_type: Option<String>,
-}
-
-impl<'a> AddAttachmentRequest<'a> {
-    fn new(
-        client: &'a crate::core::Client,
-        issue_id_or_key: impl Into<String>,
-        attachments: impl IntoIterator<Item = crate::core::Attachment>,
-    ) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            attachments: attachments.into_iter().collect(),
-            content_type: None,
-        }
-    }
-
-    /// The media type of the bytes being sent, e.g. `image/png`.
-    #[must_use]
-    pub fn content_type(mut self, value: impl Into<String>) -> Self {
-        self.content_type = Some(value.into());
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            format!("/rest/api/2/issue/{}/attachments", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
-
-        config.body =
-            Some(crate::core::Body::Multipart(crate::core::MultipartBody::new("file", self.attachments.clone())));
-
-        config.content_type = self.content_type.clone().or(None);
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<AttachmentJson>> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns all comments for an issue. Results can be ordered by the 'created' field which means the date a comment was added.
-#[derive(Clone)]
-pub struct GetCommentsRequest<'a> {
-    client: &'a crate::core::Client,
-    expand: Option<String>,
-    max_results: Option<String>,
-    issue_id_or_key: String,
-    order_by: Option<String>,
-    start_at: Option<String>,
-}
-
-impl<'a> GetCommentsRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            expand: None,
-            max_results: None,
-            order_by: None,
-            start_at: None,
-        }
-    }
-
-    /// Optional flags: renderedBody (provides body rendered in HTML)
-    #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
-
-        self
-    }
-
-    /// How many results on the page should be included. Defaults to 50.
-    #[must_use]
-    pub fn max_results(mut self, value: impl Into<String>) -> Self {
-        self.max_results = Some(value.into());
-
-        self
-    }
-
-    /// Ordering of the results
-    #[must_use]
-    pub fn order_by(mut self, value: impl Into<String>) -> Self {
-        self.order_by = Some(value.into());
-
-        self
-    }
-
-    /// The page offset, if not specified then defaults to 0
-    #[must_use]
-    pub fn start_at(mut self, value: impl Into<String>) -> Self {
-        self.start_at = Some(value.into());
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/comment", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.max_results {
-            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.order_by {
-            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.start_at {
-            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<CommentsWithPaginationJson> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Adds a new comment to an issue.
-#[derive(Clone)]
-pub struct AddCommentRequest<'a> {
-    client: &'a crate::core::Client,
-    expand: Option<String>,
-    issue_id_or_key: String,
-    comment_json: Option<CommentJson>,
-}
-
-impl<'a> AddCommentRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), expand: None, comment_json: None }
-    }
-
-    /// Optional flags: renderedBody (provides body rendered in HTML)
-    #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
-
-        self
-    }
-
-    #[must_use]
-    pub fn comment_json(mut self, value: CommentJson) -> Self {
-        self.comment_json = Some(value);
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            format!("/rest/api/2/issue/{}/comment", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        let body = match serde_json::to_value(&self.comment_json)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<CommentJson> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns a single comment.
-#[derive(Clone)]
-pub struct GetCommentRequest<'a> {
-    client: &'a crate::core::Client,
-    expand: Option<String>,
-    issue_id_or_key: String,
-    id: String,
-}
-
-impl<'a> GetCommentRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into(), expand: None }
-    }
-
-    /// Optional flags: renderedBody (provides body rendered in HTML)
-    #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!(
-                "/rest/api/2/issue/{}/comment/{}",
-                crate::core::encode_path_segment(&self.issue_id_or_key),
-                crate::core::encode_path_segment(&self.id)
-            ),
-        );
-
-        if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<CommentJson> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Updates an existing comment using its JSON representation.
-#[derive(Clone)]
-pub struct UpdateCommentRequest<'a> {
-    client: &'a crate::core::Client,
-    expand: Option<String>,
-    issue_id_or_key: String,
-    id: String,
-    body: Option<CommentJson>,
-}
-
-impl<'a> UpdateCommentRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into(), expand: None, body: None }
-    }
-
-    /// Optional flags: renderedBody (provides body rendered in HTML)
-    #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
-
-        self
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: CommentJson) -> Self {
-        self.body = Some(value);
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            format!(
-                "/rest/api/2/issue/{}/comment/{}",
-                crate::core::encode_path_segment(&self.issue_id_or_key),
-                crate::core::encode_path_segment(&self.id)
-            ),
-        );
-
-        if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<CommentJson> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Deletes an existing comment.
-#[derive(Clone)]
-pub struct DeleteCommentRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_id_or_key: String,
-    id: String,
-}
-
-impl<'a> DeleteCommentRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!(
-                "/rest/api/2/issue/{}/comment/{}",
-                crate::core::encode_path_segment(&self.issue_id_or_key),
-                crate::core::encode_path_segment(&self.id)
-            ),
-        );
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.user)?));
 
         Ok(config)
     }
@@ -1918,7 +978,7 @@ impl<'a> GetEditIssueMetaRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<EditMeta> {
+    pub async fn send(self) -> crate::core::Result<IssueUpdateMetadata> {
         self.client.send(&self.config()?).await
     }
 
@@ -1933,19 +993,12 @@ impl<'a> GetEditIssueMetaRequest<'a> {
 pub struct NotifyRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    notification_json: Option<NotificationJson>,
+    notification: Notification,
 }
 
 impl<'a> NotifyRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), notification_json: None }
-    }
-
-    #[must_use]
-    pub fn notification_json(mut self, value: NotificationJson) -> Self {
-        self.notification_json = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, notification: Notification) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), notification }
     }
 
     /// The request as the transport will send it.
@@ -1955,12 +1008,7 @@ impl<'a> NotifyRequest<'a> {
             format!("/rest/api/2/issue/{}/notify", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
-        let body = match serde_json::to_value(&self.notification_json)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.notification)?));
 
         Ok(config)
     }
@@ -2001,433 +1049,6 @@ impl<'a> GetPinnedCommentsRequest<'a> {
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<Vec<PinnedCommentJson>> {
         self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns the keys of all properties for the issue identified by the key or by the id.
-#[derive(Clone)]
-pub struct GetIssuePropertyKeysRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_id_or_key: String,
-}
-
-impl<'a> GetIssuePropertyKeysRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/properties", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<EntityPropertiesKeys> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns the value of the property with a given key from the issue identified by the key or by the id.
-#[derive(Clone)]
-pub struct GetIssuePropertyRequest<'a> {
-    client: &'a crate::core::Client,
-    property_key: String,
-    issue_id_or_key: String,
-}
-
-impl<'a> GetIssuePropertyRequest<'a> {
-    fn new(
-        client: &'a crate::core::Client,
-        property_key: impl Into<String>,
-        issue_id_or_key: impl Into<String>,
-    ) -> Self {
-        Self { client, property_key: property_key.into(), issue_id_or_key: issue_id_or_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!(
-                "/rest/api/2/issue/{}/properties/{}",
-                crate::core::encode_path_segment(&self.issue_id_or_key),
-                crate::core::encode_path_segment(&self.property_key)
-            ),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<EntityProperty> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Sets the value of the specified issue's property.
-#[derive(Clone)]
-pub struct SetIssuePropertyRequest<'a> {
-    client: &'a crate::core::Client,
-    property_key: String,
-    issue_id_or_key: String,
-    body: std::collections::HashMap<String, serde_json::Value>,
-}
-
-impl<'a> SetIssuePropertyRequest<'a> {
-    fn new(
-        client: &'a crate::core::Client,
-        property_key: impl Into<String>,
-        issue_id_or_key: impl Into<String>,
-        body: std::collections::HashMap<String, serde_json::Value>,
-    ) -> Self {
-        Self { client, property_key: property_key.into(), issue_id_or_key: issue_id_or_key.into(), body }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            format!(
-                "/rest/api/2/issue/{}/properties/{}",
-                crate::core::encode_path_segment(&self.issue_id_or_key),
-                crate::core::encode_path_segment(&self.property_key)
-            ),
-        );
-
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Removes the property from the issue identified by the key or by the id.
-#[derive(Clone)]
-pub struct DeleteIssuePropertyRequest<'a> {
-    client: &'a crate::core::Client,
-    property_key: String,
-    issue_id_or_key: String,
-}
-
-impl<'a> DeleteIssuePropertyRequest<'a> {
-    fn new(
-        client: &'a crate::core::Client,
-        property_key: impl Into<String>,
-        issue_id_or_key: impl Into<String>,
-    ) -> Self {
-        Self { client, property_key: property_key.into(), issue_id_or_key: issue_id_or_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!(
-                "/rest/api/2/issue/{}/properties/{}",
-                crate::core::encode_path_segment(&self.issue_id_or_key),
-                crate::core::encode_path_segment(&self.property_key)
-            ),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Get remote issue links for an issue.
-#[derive(Clone)]
-pub struct GetRemoteIssueLinksRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_id_or_key: String,
-    global_id: Option<String>,
-}
-
-impl<'a> GetRemoteIssueLinksRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), global_id: None }
-    }
-
-    /// Global id of the remote issue link
-    #[must_use]
-    pub fn global_id(mut self, value: impl Into<String>) -> Self {
-        self.global_id = Some(value.into());
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/remotelink", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        if let Some(value) = &self.global_id {
-            config.query.push(("globalId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<RemoteIssueLink>> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Creates or updates a remote issue link from a JSON representation. If a globalId is provided and a remote issue link exists with that globalId, the remote issue link is updated. Otherwise, the remote issue link is created.
-#[derive(Clone)]
-pub struct CreateOrUpdateRemoteIssueLinkRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_id_or_key: String,
-    remote_issue_link_create_or_update_request: Option<RemoteIssueLinkCreateOrUpdateRequest>,
-}
-
-impl<'a> CreateOrUpdateRemoteIssueLinkRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), remote_issue_link_create_or_update_request: None }
-    }
-
-    #[must_use]
-    pub fn remote_issue_link_create_or_update_request(mut self, value: RemoteIssueLinkCreateOrUpdateRequest) -> Self {
-        self.remote_issue_link_create_or_update_request = Some(value);
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            format!("/rest/api/2/issue/{}/remotelink", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        let body = match serde_json::to_value(&self.remote_issue_link_create_or_update_request)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<RemoteIssueLink> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Delete the remote issue link with the given global id on the issue.
-#[derive(Clone)]
-pub struct DeleteRemoteIssueLinkByGlobalIdRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_id_or_key: String,
-    global_id: String,
-}
-
-impl<'a> DeleteRemoteIssueLinkByGlobalIdRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, global_id: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), global_id: global_id.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!("/rest/api/2/issue/{}/remotelink", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        config.query.push(("globalId".to_owned(), crate::core::QueryValue::Scalar(self.global_id.clone())));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Get a remote issue link by its id.
-#[derive(Clone)]
-pub struct GetRemoteIssueLinkByIdRequest<'a> {
-    client: &'a crate::core::Client,
-    link_id: String,
-    issue_id_or_key: String,
-}
-
-impl<'a> GetRemoteIssueLinkByIdRequest<'a> {
-    fn new(client: &'a crate::core::Client, link_id: impl Into<String>, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, link_id: link_id.into(), issue_id_or_key: issue_id_or_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!(
-                "/rest/api/2/issue/{}/remotelink/{}",
-                crate::core::encode_path_segment(&self.issue_id_or_key),
-                crate::core::encode_path_segment(&self.link_id)
-            ),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<RemoteIssueLink> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Updates a remote issue link from a JSON representation. Any fields not provided are set to null.
-#[derive(Clone)]
-pub struct UpdateRemoteIssueLinkRequest<'a> {
-    client: &'a crate::core::Client,
-    link_id: String,
-    issue_id_or_key: String,
-    remote_issue_link_create_or_update_request: Option<RemoteIssueLinkCreateOrUpdateRequest>,
-}
-
-impl<'a> UpdateRemoteIssueLinkRequest<'a> {
-    fn new(client: &'a crate::core::Client, link_id: impl Into<String>, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            link_id: link_id.into(),
-            issue_id_or_key: issue_id_or_key.into(),
-            remote_issue_link_create_or_update_request: None,
-        }
-    }
-
-    #[must_use]
-    pub fn remote_issue_link_create_or_update_request(mut self, value: RemoteIssueLinkCreateOrUpdateRequest) -> Self {
-        self.remote_issue_link_create_or_update_request = Some(value);
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            format!(
-                "/rest/api/2/issue/{}/remotelink/{}",
-                crate::core::encode_path_segment(&self.issue_id_or_key),
-                crate::core::encode_path_segment(&self.link_id)
-            ),
-        );
-
-        let body = match serde_json::to_value(&self.remote_issue_link_create_or_update_request)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Delete the remote issue link with the given id on the issue.
-#[derive(Clone)]
-pub struct DeleteRemoteIssueLinkByIdRequest<'a> {
-    client: &'a crate::core::Client,
-    link_id: String,
-    issue_id_or_key: String,
-}
-
-impl<'a> DeleteRemoteIssueLinkByIdRequest<'a> {
-    fn new(client: &'a crate::core::Client, link_id: impl Into<String>, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, link_id: link_id.into(), issue_id_or_key: issue_id_or_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!(
-                "/rest/api/2/issue/{}/remotelink/{}",
-                crate::core::encode_path_segment(&self.issue_id_or_key),
-                crate::core::encode_path_segment(&self.link_id)
-            ),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
     }
 
     /// Sends the request and hands back the body unmodelled.
@@ -2632,7 +1253,7 @@ impl<'a> GetTransitionsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<TransitionsMeta> {
+    pub async fn send(self) -> crate::core::Result<Transitions> {
         self.client.send(&self.config()?).await
     }
 
@@ -2652,19 +1273,16 @@ impl<'a> GetTransitionsRequest<'a> {
 pub struct DoTransitionRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    issue_update: Option<IssueUpdate>,
+    issue_update_details: IssueUpdateDetails,
 }
 
 impl<'a> DoTransitionRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), issue_update: None }
-    }
-
-    #[must_use]
-    pub fn issue_update(mut self, value: IssueUpdate) -> Self {
-        self.issue_update = Some(value);
-
-        self
+    fn new(
+        client: &'a crate::core::Client,
+        issue_id_or_key: impl Into<String>,
+        issue_update_details: IssueUpdateDetails,
+    ) -> Self {
+        Self { client, issue_id_or_key: issue_id_or_key.into(), issue_update_details }
     }
 
     /// The request as the transport will send it.
@@ -2674,592 +1292,7 @@ impl<'a> DoTransitionRequest<'a> {
             format!("/rest/api/2/issue/{}/transitions", crate::core::encode_path_segment(&self.issue_id_or_key)),
         );
 
-        let body = match serde_json::to_value(&self.issue_update)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// A REST sub-resource representing the voters on the issue.
-#[derive(Clone)]
-pub struct GetVotesRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_id_or_key: String,
-}
-
-impl<'a> GetVotesRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/votes", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vote> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Adds voter (currently logged user) to particular ticket. You need to be logged in to use this method.
-#[derive(Clone)]
-pub struct AddVoteRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_id_or_key: String,
-}
-
-impl<'a> AddVoteRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            format!("/rest/api/2/issue/{}/votes", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Remove your vote from an issue.
-#[derive(Clone)]
-pub struct RemoveVoteRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_id_or_key: String,
-}
-
-impl<'a> RemoveVoteRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!("/rest/api/2/issue/{}/votes", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns the list of watchers for the issue with the given key.
-#[derive(Clone)]
-pub struct GetIssueWatchersRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_id_or_key: String,
-}
-
-impl<'a> GetIssueWatchersRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/watchers", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Watchers> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Adds a user to an issue's watcher list.
-#[derive(Clone)]
-pub struct AddWatcherRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_id_or_key: String,
-    user_name: Option<String>,
-    body: Option<String>,
-}
-
-impl<'a> AddWatcherRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), user_name: None, body: None }
-    }
-
-    /// The name of the user to add to the watcher list. If no name is specified, the current user is added.
-    #[must_use]
-    pub fn user_name(mut self, value: impl Into<String>) -> Self {
-        self.user_name = Some(value.into());
-
-        self
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: impl Into<String>) -> Self {
-        self.body = Some(value.into());
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            format!("/rest/api/2/issue/{}/watchers", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        if let Some(value) = &self.user_name {
-            config.query.push(("userName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Removes a user from an issue's watcher list.
-#[derive(Clone)]
-pub struct RemoveWatcherRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_id_or_key: String,
-    user_name: Option<String>,
-    username: Option<String>,
-}
-
-impl<'a> RemoveWatcherRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), user_name: None, username: None }
-    }
-
-    /// The name of the user to remove from the watcher list.
-    #[must_use]
-    pub fn user_name(mut self, value: impl Into<String>) -> Self {
-        self.user_name = Some(value.into());
-
-        self
-    }
-
-    #[must_use]
-    pub fn username(mut self, value: impl Into<String>) -> Self {
-        self.username = Some(value.into());
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!("/rest/api/2/issue/{}/watchers", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        if let Some(value) = &self.user_name {
-            config.query.push(("userName".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.username {
-            config.query.push(("username".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns all work logs for an issue. Work logs won't be returned if the Log work field is hidden for the project.
-#[derive(Clone)]
-pub struct GetIssueWorklogRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_id_or_key: String,
-}
-
-impl<'a> GetIssueWorklogRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/issue/{}/worklog", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<WorklogWithPagination> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Adds a new worklog entry to an issue.
-#[derive(Clone)]
-pub struct AddWorklogRequest<'a> {
-    client: &'a crate::core::Client,
-    new_estimate: Option<String>,
-    adjust_estimate: Option<String>,
-    reduce_by: Option<String>,
-    issue_id_or_key: String,
-    worklog: Option<Worklog>,
-}
-
-impl<'a> AddWorklogRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            new_estimate: None,
-            adjust_estimate: None,
-            reduce_by: None,
-            worklog: None,
-        }
-    }
-
-    /// Required when 'new' is selected for adjustEstimate. e.g. "2d"
-    #[must_use]
-    pub fn new_estimate(mut self, value: impl Into<String>) -> Self {
-        self.new_estimate = Some(value.into());
-
-        self
-    }
-
-    /// Allows you to provide specific instructions to update the remaining time estimate of the issue. Valid values are: new, leave, manual, auto
-    #[must_use]
-    pub fn adjust_estimate(mut self, value: impl Into<String>) -> Self {
-        self.adjust_estimate = Some(value.into());
-
-        self
-    }
-
-    /// Required when 'manual' is selected for adjustEstimate. e.g. "2d"
-    #[must_use]
-    pub fn reduce_by(mut self, value: impl Into<String>) -> Self {
-        self.reduce_by = Some(value.into());
-
-        self
-    }
-
-    #[must_use]
-    pub fn worklog(mut self, value: Worklog) -> Self {
-        self.worklog = Some(value);
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            format!("/rest/api/2/issue/{}/worklog", crate::core::encode_path_segment(&self.issue_id_or_key)),
-        );
-
-        if let Some(value) = &self.new_estimate {
-            config.query.push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.adjust_estimate {
-            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.reduce_by {
-            config.query.push(("reduceBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        let body = match serde_json::to_value(&self.worklog)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Worklog> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns a specific worklog. The work log won't be returned if the Log work field is hidden for the project.
-#[derive(Clone)]
-pub struct GetWorklogRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_id_or_key: String,
-    id: String,
-}
-
-impl<'a> GetWorklogRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
-        Self { client, issue_id_or_key: issue_id_or_key.into(), id: id.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!(
-                "/rest/api/2/issue/{}/worklog/{}",
-                crate::core::encode_path_segment(&self.issue_id_or_key),
-                crate::core::encode_path_segment(&self.id)
-            ),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Worklog> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Updates an existing worklog entry. Note that:
-/// - Fields possible for editing are: comment, visibility, started, timeSpent and timeSpentSeconds.
-/// - Either timeSpent or timeSpentSeconds can be set.
-/// - Fields which are not set will not be updated.
-/// - For a request to be valid, it has to have at least one field change.
-#[derive(Clone)]
-pub struct UpdateWorklogRequest<'a> {
-    client: &'a crate::core::Client,
-    new_estimate: Option<String>,
-    adjust_estimate: Option<String>,
-    issue_id_or_key: String,
-    id: String,
-    body: Option<Worklog>,
-}
-
-impl<'a> UpdateWorklogRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            id: id.into(),
-            new_estimate: None,
-            adjust_estimate: None,
-            body: None,
-        }
-    }
-
-    /// required when 'new' is selected for adjustEstimate
-    #[must_use]
-    pub fn new_estimate(mut self, value: impl Into<String>) -> Self {
-        self.new_estimate = Some(value.into());
-
-        self
-    }
-
-    /// allows you to provide specific instructions to update the remaining time estimate of the issue. Valid values are: new, leave, auto
-    #[must_use]
-    pub fn adjust_estimate(mut self, value: impl Into<String>) -> Self {
-        self.adjust_estimate = Some(value.into());
-
-        self
-    }
-
-    #[must_use]
-    pub fn body(mut self, value: Worklog) -> Self {
-        self.body = Some(value);
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            format!(
-                "/rest/api/2/issue/{}/worklog/{}",
-                crate::core::encode_path_segment(&self.issue_id_or_key),
-                crate::core::encode_path_segment(&self.id)
-            ),
-        );
-
-        if let Some(value) = &self.new_estimate {
-            config.query.push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.adjust_estimate {
-            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Worklog> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Deletes an existing worklog entry.
-#[derive(Clone)]
-pub struct DeleteWorklogRequest<'a> {
-    client: &'a crate::core::Client,
-    new_estimate: Option<String>,
-    adjust_estimate: Option<String>,
-    issue_id_or_key: String,
-    id: String,
-    increase_by: Option<String>,
-}
-
-impl<'a> DeleteWorklogRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_id_or_key: impl Into<String>, id: impl Into<String>) -> Self {
-        Self {
-            client,
-            issue_id_or_key: issue_id_or_key.into(),
-            id: id.into(),
-            new_estimate: None,
-            adjust_estimate: None,
-            increase_by: None,
-        }
-    }
-
-    /// Required when 'new' is selected for adjustEstimate. e.g. "2d"
-    #[must_use]
-    pub fn new_estimate(mut self, value: impl Into<String>) -> Self {
-        self.new_estimate = Some(value.into());
-
-        self
-    }
-
-    /// Allows you to provide specific instructions to update the remaining time estimate of the issue. Valid values are: new, leave, manual, auto
-    #[must_use]
-    pub fn adjust_estimate(mut self, value: impl Into<String>) -> Self {
-        self.adjust_estimate = Some(value.into());
-
-        self
-    }
-
-    /// Required when 'manual' is selected for adjustEstimate. e.g. "2d"
-    #[must_use]
-    pub fn increase_by(mut self, value: impl Into<String>) -> Self {
-        self.increase_by = Some(value.into());
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!(
-                "/rest/api/2/issue/{}/worklog/{}",
-                crate::core::encode_path_segment(&self.issue_id_or_key),
-                crate::core::encode_path_segment(&self.id)
-            ),
-        );
-
-        if let Some(value) = &self.new_estimate {
-            config.query.push(("newEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.adjust_estimate {
-            config.query.push(("adjustEstimate".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.increase_by {
-            config.query.push(("increaseBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.issue_update_details)?));
 
         Ok(config)
     }

@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::time::Duration;
 
-use jira::server::{AddGroup, Filter, IssueCreateResponse, IssueUpdate, ProjectInput, UserWrite};
+use jira::server::{AddGroup, CreatedIssue, Filter, IssueUpdateDetails, ProjectInput, UserWrite};
 use serde_json::json;
 use tokio::sync::OnceCell;
 
@@ -106,7 +106,7 @@ async fn create_project(tracker: &mut ResourceTracker, type_key: &str, template_
     TestProject { id: created.id.expect("a created project carries an id"), key }
 }
 
-pub async fn create_issue(tracker: &mut ResourceTracker, fields: serde_json::Value) -> IssueCreateResponse {
+pub async fn create_issue(tracker: &mut ResourceTracker, fields: serde_json::Value) -> CreatedIssue {
     let fields = fields
         .as_object()
         .expect("issue fields are an object")
@@ -116,8 +116,7 @@ pub async fn create_issue(tracker: &mut ResourceTracker, fields: serde_json::Val
 
     let created = server()
         .issues()
-        .create_issue()
-        .issue_update(IssueUpdate { fields: Some(fields), ..IssueUpdate::default() })
+        .create_issue(IssueUpdateDetails { fields: Some(fields), ..IssueUpdateDetails::default() })
         .send()
         .await
         .expect("the project accepts a new issue");
@@ -133,7 +132,7 @@ pub async fn create_issue(tracker: &mut ResourceTracker, fields: serde_json::Val
     created
 }
 
-pub async fn create_task(tracker: &mut ResourceTracker, project_key: &str, label: &str) -> IssueCreateResponse {
+pub async fn create_task(tracker: &mut ResourceTracker, project_key: &str, label: &str) -> CreatedIssue {
     create_issue(
         tracker,
         json!({
@@ -145,7 +144,7 @@ pub async fn create_task(tracker: &mut ResourceTracker, project_key: &str, label
     .await
 }
 
-pub async fn create_epic(tracker: &mut ResourceTracker, project_key: &str, label: &str) -> IssueCreateResponse {
+pub async fn create_epic(tracker: &mut ResourceTracker, project_key: &str, label: &str) -> CreatedIssue {
     let fields = server().issue_fields().get_fields().send().await.expect("the instance lists the fields it has");
     let epic_name = fields
         .iter()
@@ -188,8 +187,7 @@ pub async fn board_of(project_key: &str) -> i64 {
 pub async fn create_test_filter(tracker: &mut ResourceTracker, label: &str, jql: &str) -> Filter {
     let filter = server()
         .filters()
-        .create_filter()
-        .filter(Filter { name: Some(test_name(label)), jql: Some(jql.to_owned()), ..Filter::default() })
+        .create_filter(Filter { name: Some(test_name(label)), jql: Some(jql.to_owned()), ..Filter::default() })
         .send()
         .await
         .expect("the account may create a filter of its own");
@@ -200,7 +198,7 @@ pub async fn create_test_filter(tracker: &mut ResourceTracker, label: &str, jql:
     tracker.defer(move || {
         let id = doomed.clone();
 
-        async move { server().filters().delete_filter(id).send().await }
+        async move { server().filters().delete_filter(id.parse().expect("a filter id is a number")).send().await }
     });
 
     filter
@@ -244,8 +242,7 @@ pub async fn create_test_group(tracker: &mut ResourceTracker) -> String {
 
     server()
         .groups()
-        .create_group()
-        .add_group(AddGroup { name: Some(name.clone()) })
+        .create_group(AddGroup { name: Some(name.clone()) })
         .send()
         .await
         .expect("the administrator may create a group");

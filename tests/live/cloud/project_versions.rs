@@ -2,8 +2,8 @@ use crate::harness::{
     ResourceTracker, TEST_PROJECT_KEY, await_readable, await_refused, cloud, create_test_issue, poll_until, test_name,
 };
 use jira::cloud::{
-    DeleteAndReplaceVersion, GetProjectVersionsPaginatedRequestOrderBy, GetVersionRequestExpand,
-    GetVersionRequestExpandValue, IssueFields, IssueUpdateDetails, Version, VersionMove, VersionMovePosition,
+    DeleteAndReplaceVersion, GetProjectVersionsPaginatedRequestOrderBy, GetVersionRequestExpandValue, IssueFields,
+    IssueUpdateDetails, Version, VersionMove, VersionMovePosition,
 };
 
 #[tokio::test]
@@ -62,7 +62,7 @@ async fn walks_a_version_through_its_lifecycle() {
     let expanded = cloud()
         .project_versions()
         .get_version(&version_id)
-        .expand(GetVersionRequestExpand::One(GetVersionRequestExpandValue::Issuesstatus))
+        .expand([GetVersionRequestExpandValue::Issuesstatus])
         .send()
         .await
         .expect("the expand parameter is accepted");

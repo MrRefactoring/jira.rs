@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     /// Filters results to boards of the specified types. Valid values: scrum, kanban, simple.
@@ -28,71 +27,6 @@ crate::open_enum! {
     }
 }
 
-/// List of fields to expand for each board. Valid values: admins, permissions.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetAllBoardsRequestExpand {
-    One(GetAllBoardsRequestExpandValue),
-    Many(Vec<GetAllBoardsRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetAllBoardsRequestExpand { One, Many, Other });
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForBacklogRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesForBacklogRequestExpand { One, Many, Other });
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesWithoutEpicForBoardRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesWithoutEpicForBoardRequestExpand { One, Many, Other });
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetBoardIssuesForEpicRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetBoardIssuesForEpicRequestExpand { One, Many, Other });
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForBoardRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesForBoardRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     /// Filters results to sprints in specified states. Valid values: future, active, closed. You can define multiple states separated by commas, e.g. state=active,closed
     pub enum GetAllSprintsRequestState {
@@ -101,19 +35,6 @@ crate::open_enum! {
         Closed => "closed",
     }
 }
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetBoardIssuesForSprintRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetBoardIssuesForSprintRequestExpand { One, Many, Other });
 
 /// The Board operations.
 pub struct BoardService<'a> {
@@ -338,7 +259,7 @@ pub struct GetAllBoardsRequest<'a> {
     include_private: Option<bool>,
     negate_location_filtering: Option<bool>,
     order_by: Option<GetAllBoardsRequestOrderBy>,
-    expand: Option<GetAllBoardsRequestExpand>,
+    expand: Option<Vec<GetAllBoardsRequestExpandValue>>,
     project_type_location: Option<Vec<String>>,
     filter_id: Option<i64>,
 }
@@ -443,8 +364,8 @@ impl<'a> GetAllBoardsRequest<'a> {
 
     /// List of fields to expand for each board. Valid values: admins, permissions.
     #[must_use]
-    pub fn expand(mut self, value: GetAllBoardsRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetAllBoardsRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -512,7 +433,10 @@ impl<'a> GetAllBoardsRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.project_type_location {
@@ -528,17 +452,20 @@ impl<'a> GetAllBoardsRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Board>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, Some(page.total), None))
         })
     }
 
@@ -651,17 +578,20 @@ impl<'a> GetBoardByFilterIdRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<BoardFilter>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, Some(page.total), None))
         })
     }
 
@@ -752,8 +682,8 @@ pub struct GetIssuesForBacklogRequest<'a> {
     reconcile_issues: Option<Vec<i64>>,
     jql: Option<String>,
     validate_query: Option<bool>,
-    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
-    expand: Option<GetIssuesForBacklogRequestExpand>,
+    fields: Option<Vec<String>>,
+    expand: Option<Vec<String>>,
 }
 
 impl<'a> GetIssuesForBacklogRequest<'a> {
@@ -816,19 +746,16 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
     #[must_use]
-    pub fn fields(
-        mut self,
-        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
-    ) -> Self {
-        self.fields = Some(value.into_iter().collect());
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetIssuesForBacklogRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -861,14 +788,31 @@ impl<'a> GetIssuesForBacklogRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next cursor from the answer. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let items = page.issues;
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), page.is_last))
+        })
     }
 
     /// Sends the request.
@@ -1031,6 +975,31 @@ impl<'a> GetEpicsRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Epic>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(
+                items,
+                page.start_at.unwrap_or(position),
+                page.is_last.unwrap_or(false),
+                page.total,
+                None,
+            ))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<GetEpics> {
         self.client.send(&self.config()?).await
@@ -1052,8 +1021,8 @@ pub struct GetIssuesWithoutEpicForBoardRequest<'a> {
     reconcile_issues: Option<Vec<i64>>,
     jql: Option<String>,
     validate_query: Option<bool>,
-    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
-    expand: Option<GetIssuesWithoutEpicForBoardRequestExpand>,
+    fields: Option<Vec<String>>,
+    expand: Option<Vec<String>>,
 }
 
 impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
@@ -1116,19 +1085,16 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
     #[must_use]
-    pub fn fields(
-        mut self,
-        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
-    ) -> Self {
-        self.fields = Some(value.into_iter().collect());
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetIssuesWithoutEpicForBoardRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1161,14 +1127,31 @@ impl<'a> GetIssuesWithoutEpicForBoardRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next cursor from the answer. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let items = page.issues;
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), page.is_last))
+        })
     }
 
     /// Sends the request.
@@ -1193,8 +1176,8 @@ pub struct GetBoardIssuesForEpicRequest<'a> {
     reconcile_issues: Option<Vec<i64>>,
     jql: Option<String>,
     validate_query: Option<bool>,
-    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
-    expand: Option<GetBoardIssuesForEpicRequestExpand>,
+    fields: Option<Vec<String>>,
+    expand: Option<Vec<String>>,
 }
 
 impl<'a> GetBoardIssuesForEpicRequest<'a> {
@@ -1258,19 +1241,16 @@ impl<'a> GetBoardIssuesForEpicRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
     #[must_use]
-    pub fn fields(
-        mut self,
-        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
-    ) -> Self {
-        self.fields = Some(value.into_iter().collect());
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetBoardIssuesForEpicRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1303,14 +1283,31 @@ impl<'a> GetBoardIssuesForEpicRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next cursor from the answer. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let items = page.issues;
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), page.is_last))
+        })
     }
 
     /// Sends the request.
@@ -1443,8 +1440,8 @@ pub struct GetIssuesForBoardRequest<'a> {
     reconcile_issues: Option<Vec<i64>>,
     jql: Option<String>,
     validate_query: Option<bool>,
-    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
-    expand: Option<GetIssuesForBoardRequestExpand>,
+    fields: Option<Vec<String>>,
+    expand: Option<Vec<String>>,
 }
 
 impl<'a> GetIssuesForBoardRequest<'a> {
@@ -1507,19 +1504,16 @@ impl<'a> GetIssuesForBoardRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
     #[must_use]
-    pub fn fields(
-        mut self,
-        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
-    ) -> Self {
-        self.fields = Some(value.into_iter().collect());
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetIssuesForBoardRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1552,14 +1546,31 @@ impl<'a> GetIssuesForBoardRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next cursor from the answer. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let items = page.issues;
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), page.is_last))
+        })
     }
 
     /// Sends the request.
@@ -1673,6 +1684,31 @@ impl<'a> GetProjectsRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<ProjectDetails>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(
+                items,
+                page.start_at.unwrap_or(position),
+                page.is_last.unwrap_or(false),
+                page.total,
+                None,
+            ))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<GetProjects> {
         self.client.send(&self.config()?).await
@@ -1708,6 +1744,23 @@ impl<'a> GetProjectsFullRequest<'a> {
         );
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// This endpoint answers with everything in one response and offers no way to ask for more. The stream
+    /// makes one request. Jira Software Cloud declares no paging parameters for this listing. Whether it
+    /// reads `startAt` has not been measured, so the stream is the one request.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<ProjectDetails>> {
+        let first = ();
+
+        crate::core::stream_pages(self, first, |request, _position| async move {
+            let page = request.send().await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::new(items, None))
+        })
     }
 
     /// Sends the request.
@@ -1928,17 +1981,20 @@ impl<'a> GetAllQuickFiltersRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<QuickFilter>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, Some(page.total), None))
         })
     }
 
@@ -2080,6 +2136,31 @@ impl<'a> GetAllSprintsRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Sprint>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(
+                items,
+                page.start_at.unwrap_or(position),
+                page.is_last.unwrap_or(false),
+                page.total,
+                None,
+            ))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<GetAllSprints> {
         self.client.send(&self.config()?).await
@@ -2102,8 +2183,8 @@ pub struct GetBoardIssuesForSprintRequest<'a> {
     reconcile_issues: Option<Vec<i64>>,
     jql: Option<String>,
     validate_query: Option<bool>,
-    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
-    expand: Option<GetBoardIssuesForSprintRequestExpand>,
+    fields: Option<Vec<String>>,
+    expand: Option<Vec<String>>,
 }
 
 impl<'a> GetBoardIssuesForSprintRequest<'a> {
@@ -2167,19 +2248,16 @@ impl<'a> GetBoardIssuesForSprintRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
     #[must_use]
-    pub fn fields(
-        mut self,
-        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
-    ) -> Self {
-        self.fields = Some(value.into_iter().collect());
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetBoardIssuesForSprintRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -2212,14 +2290,31 @@ impl<'a> GetBoardIssuesForSprintRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next cursor from the answer. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let items = page.issues;
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), page.is_last))
+        })
     }
 
     /// Sends the request.
@@ -2292,6 +2387,31 @@ impl<'a> GetAllVersionsRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Version>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(
+                items,
+                page.start_at.unwrap_or(position),
+                page.is_last.unwrap_or(false),
+                page.total,
+                None,
+            ))
+        })
     }
 
     /// Sends the request.

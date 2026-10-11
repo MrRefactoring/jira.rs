@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum ListWorkflowHistoryRequestExpandValue {
@@ -9,41 +8,11 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `includeIntermediateWorkflows` Includes intermediate workflow versions that are sometimes created during workflow updates or migrations. By default, these are omitted from the response.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum ListWorkflowHistoryRequestExpand {
-    One(ListWorkflowHistoryRequestExpandValue),
-    Many(Vec<ListWorkflowHistoryRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(ListWorkflowHistoryRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum SearchWorkflowsRequestExpandValue {
         ValuesTransitions => "values.transitions",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `values.transitions` Returns the transitions that each workflow is associated with.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum SearchWorkflowsRequestExpand {
-    One(SearchWorkflowsRequestExpandValue),
-    Many(Vec<SearchWorkflowsRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(SearchWorkflowsRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
@@ -853,7 +822,7 @@ impl<'a> ReadWorkflowFromHistoryRequest<'a> {
 #[derive(Clone)]
 pub struct ListWorkflowHistoryRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<ListWorkflowHistoryRequestExpand>,
+    expand: Option<Vec<ListWorkflowHistoryRequestExpandValue>>,
     workflow_history_list_request: WorkflowHistoryListRequest,
 }
 
@@ -866,8 +835,8 @@ impl<'a> ListWorkflowHistoryRequest<'a> {
     ///
     ///  *  `includeIntermediateWorkflows` Includes intermediate workflow versions that are sometimes created during workflow updates or migrations. By default, these are omitted from the response.
     #[must_use]
-    pub fn expand(mut self, value: ListWorkflowHistoryRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<ListWorkflowHistoryRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -878,7 +847,10 @@ impl<'a> ListWorkflowHistoryRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/workflow/history/list".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         let body = match serde_json::to_value(&self.workflow_history_list_request)? {
@@ -997,6 +969,24 @@ impl<'a> GetWorkflowProjectIssueTypeUsagesRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next cursor from the answer. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<WorkflowProjectIssueTypeUsage>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let page = page.issue_types.unwrap_or_default();
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), false))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<WorkflowProjectIssueTypeUsageDTO> {
         self.client.send(&self.config()?).await
@@ -1056,6 +1046,24 @@ impl<'a> GetProjectUsagesForWorkflowRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next cursor from the answer. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<ProjectUsage>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let page = page.projects.unwrap_or_default();
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), false))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<WorkflowProjectUsageDTO> {
         self.client.send(&self.config()?).await
@@ -1113,6 +1121,24 @@ impl<'a> GetWorkflowSchemeUsagesForWorkflowRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next cursor from the answer. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<WorkflowSchemeUsage>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let page = page.workflow_schemes.unwrap_or_default();
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), false))
+        })
     }
 
     /// Sends the request.
@@ -2003,7 +2029,7 @@ pub struct SearchWorkflowsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
     max_results: Option<i64>,
-    expand: Option<SearchWorkflowsRequestExpand>,
+    expand: Option<Vec<SearchWorkflowsRequestExpandValue>>,
     query_string: Option<String>,
     order_by: Option<SearchWorkflowsRequestOrderBy>,
     scope: Option<String>,
@@ -2046,8 +2072,8 @@ impl<'a> SearchWorkflowsRequest<'a> {
     ///
     ///  *  `values.transitions` Returns the transitions that each workflow is associated with.
     #[must_use]
-    pub fn expand(mut self, value: SearchWorkflowsRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<SearchWorkflowsRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -2110,7 +2136,10 @@ impl<'a> SearchWorkflowsRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.query_string {
@@ -2134,6 +2163,31 @@ impl<'a> SearchWorkflowsRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<JiraWorkflow>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(
+                items,
+                page.start_at.unwrap_or(position),
+                page.is_last.unwrap_or(false),
+                page.total,
+                None,
+            ))
+        })
     }
 
     /// Sends the request.

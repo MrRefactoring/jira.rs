@@ -116,8 +116,7 @@ async fn moves_the_user_in_and_out_of_a_group() {
 
     server()
         .groups()
-        .add_user_to_group(&group)
-        .update_user_to_group(UpdateUserToGroup { name: Some(name.clone()) })
+        .add_user_to_group(&group, UpdateUserToGroup { name: Some(name.clone()) })
         .send()
         .await
         .expect("a user can be put in a group");
@@ -147,7 +146,12 @@ async fn moves_the_user_in_and_out_of_an_application() {
     let mut tracker = ResourceTracker::new();
     let name = create_test_user(&mut tracker).await;
 
-    let roles = server().application_roles().get_all().send().await.expect("the instance lists its applications");
+    let roles = server()
+        .application_roles()
+        .get_all_application_roles()
+        .send()
+        .await
+        .expect("the instance lists its applications");
     let key = roles
         .first()
         .and_then(|role| role.key.clone())
@@ -166,22 +170,33 @@ async fn stores_a_property_on_the_user() {
     let name = create_test_user(&mut tracker).await;
 
     server()
-        .users()
+        .user_properties()
         .set_user_property("suite", property_body())
         .username(&name)
         .send()
         .await
         .expect("a user takes a property of the caller's own");
 
-    let property =
-        server().users().get_user_property("suite").username(&name).send().await.expect("the property reads back");
+    let property = server()
+        .user_properties()
+        .get_user_property("suite")
+        .username(&name)
+        .send()
+        .await
+        .expect("the property reads back");
 
     assert_eq!(property.value, Some(property_value()), "the value survives the round trip untouched");
 
-    server().users().delete_user_property("suite").username(&name).send().await.expect("the property can be removed");
+    server()
+        .user_properties()
+        .delete_user_property("suite")
+        .username(&name)
+        .send()
+        .await
+        .expect("the property can be removed");
 
     let error = server()
-        .users()
+        .user_properties()
         .get_user_property("suite")
         .username(&name)
         .send()
@@ -201,14 +216,16 @@ async fn sets_and_resets_the_columns_a_user_sees() {
 
     server()
         .users()
-        .set_columns_url_encoded()
-        .username(&name)
-        .columns(["summary", "status"])
+        .set_user_columns(jira::server::SetUserColumnsRequestUserColumnRequestBody {
+            username: Some(name.clone()),
+            columns: Some(vec!["summary".to_owned(), "status".to_owned()]),
+        })
         .send()
         .await
         .expect("the columns a user sees can be set");
 
-    let columns = server().users().default_columns().username(&name).send_raw().await.expect("the columns read back");
+    let columns =
+        server().users().get_user_default_columns().username(&name).send_raw().await.expect("the columns read back");
 
     assert!(columns.as_array().is_some_and(|columns| !columns.is_empty()), "{columns}");
     assert!(columns.to_string().contains("status"), "the columns just set are the columns read back: {columns}");
@@ -362,30 +379,16 @@ async fn reads_and_writes_the_signed_in_account() {
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn keeps_a_preference() {
-    server()
-        .my_preferences()
-        .set_preference()
-        .key(PREFERENCE_KEY)
-        .body("true")
-        .send()
-        .await
-        .expect("a preference can be stored");
+    server().myself().set_preference(PREFERENCE_KEY, "true").send().await.expect("a preference can be stored");
 
-    let preference =
-        server().my_preferences().get_preference().key(PREFERENCE_KEY).send_raw().await.expect("it reads back");
+    let preference = server().myself().get_preference(PREFERENCE_KEY).send_raw().await.expect("it reads back");
 
     assert!(
         preference == json!(true) || preference.as_str() == Some("true"),
         "the preference reads back the way it was written: {preference}",
     );
 
-    server()
-        .my_preferences()
-        .remove_preference()
-        .key(PREFERENCE_KEY)
-        .send()
-        .await
-        .expect("a preference can be removed");
+    server().myself().remove_preference(PREFERENCE_KEY).send().await.expect("a preference can be removed");
 }
 
 #[tokio::test]
@@ -393,17 +396,16 @@ async fn keeps_a_preference() {
 async fn keeps_a_filter_of_its_own() {
     let mut tracker = ResourceTracker::new();
     let filter = create_test_filter(&mut tracker, "user filter", "order by created").await;
-    let id = filter.id.clone().expect("a created filter carries an id");
+    let id: i64 = filter.id.clone().expect("a created filter carries an id").parse().expect("a filter id is a number");
 
     server()
         .filters()
-        .edit_filter(&id)
-        .body(Filter { description: Some("changed by the users suite".to_owned()), ..Filter::default() })
+        .update_filter(id, Filter { description: Some("changed by the users suite".to_owned()), ..Filter::default() })
         .send()
         .await
         .expect("a filter can be changed");
 
-    let read = server().filters().get_filter(&id).send().await.expect("the filter reads back");
+    let read = server().filters().get_filter(id).send().await.expect("the filter reads back");
 
     assert_eq!(
         read.description.as_deref(),
@@ -413,25 +415,26 @@ async fn keeps_a_filter_of_its_own() {
 
     server()
         .filters()
-        .set_columns(&id)
-        .columns(["summary", "status"])
+        .set_columns(
+            id,
+            jira::server::ColumnRequestBody { columns: Some(vec!["summary".to_owned(), "status".to_owned()]) },
+        )
         .send()
         .await
         .expect("a filter carries columns of its own");
 
-    let columns = server().filters().get_filter_columns(&id).send().await.expect("the columns read back");
+    let columns = server().filters().get_columns(id).send().await.expect("the columns read back");
 
     assert!(!columns.is_empty(), "the columns just set are the columns read back");
 
-    server().filters().reset_columns(&id).send().await.expect("and can be reset");
+    server().filters().reset_columns(id).send().await.expect("and can be reset");
 
     let permissions = server()
-        .filters()
-        .add_share_permission(&id)
-        .share_permission_input(SharePermissionInput {
-            r#type: Some("authenticated".to_owned()),
-            ..SharePermissionInput::default()
-        })
+        .filter_sharing()
+        .add_share_permission(
+            id,
+            SharePermissionInput { r#type: Some("authenticated".to_owned()), ..SharePermissionInput::default() },
+        )
         .send()
         .await
         .expect("a filter can be shared with everyone signed in");
@@ -442,8 +445,8 @@ async fn keeps_a_filter_of_its_own() {
         .expect("a share permission is addressable once it exists");
 
     let read = server()
-        .filters()
-        .get_share_permission(permission_id.to_string(), &id)
+        .filter_sharing()
+        .get_share_permission(id, permission_id)
         .send()
         .await
         .expect("a share permission reads back by id");
@@ -451,17 +454,16 @@ async fn keeps_a_filter_of_its_own() {
     assert_eq!(read.id, Some(permission_id), "the permission read back is the one that was added");
 
     server()
-        .filters()
-        .delete_share_permission(&id, permission_id.to_string())
+        .filter_sharing()
+        .delete_share_permission(id, permission_id)
         .send()
         .await
         .expect("a share permission can be withdrawn");
 
     touch(
         server()
-            .filters()
-            .set_default_share_scope()
-            .default_share_scope(DefaultShareScope { scope: Some(DefaultShareScopeScope::Private) })
+            .filter_sharing()
+            .set_default_share_scope(DefaultShareScope { scope: Some(DefaultShareScopeScope::Private) })
             .send()
             .await,
     );

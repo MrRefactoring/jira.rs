@@ -3,19 +3,6 @@
 use super::super::models::*;
 use serde::{Deserialize, Serialize};
 
-/// Comma-separated list of Security Workspace IDs to delete. All data associated with the given workspaces will eventually be removed from Jira. Example: workspaceIds=111-222-333,444-555-666.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum DeleteLinkedWorkspacesRequestWorkspaceIds {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(DeleteLinkedWorkspacesRequestWorkspaceIds { One, Many, Other });
-
 crate::open_enum! {
     /// Indicates the operation being performed by the provider system when sending this data. "NORMAL" - Data received during real-time, user-triggered actions (e.g. user closed or updated a vulnerability). "SCAN" - Data sent through some automated process (e.g. some periodically scheduled repository scan). "BACKFILL" - Data received while backfilling existing data (e.g. pushing historical vulnerabilities when re-connect a workspace). Default is "NORMAL". "NORMAL" traffic has higher priority but tighter rate limits, "SCAN" traffic has medium priority and looser limits, "BACKFILL" has lower priority and much looser limits
     pub enum SubmitVulnerabilitiesRequestOperationType {
@@ -285,7 +272,7 @@ impl<'a> SecurityInformationService<'a> {
     /// e.g. DELETE /bulk?workspaceIds=111-222-333,444-555-666
     pub fn delete_linked_workspaces(
         &self,
-        workspace_ids: DeleteLinkedWorkspacesRequestWorkspaceIds,
+        workspace_ids: impl IntoIterator<Item = impl Into<String>>,
     ) -> DeleteLinkedWorkspacesRequest<'a> {
         DeleteLinkedWorkspacesRequest::new(self.client, workspace_ids)
     }
@@ -399,12 +386,12 @@ impl<'a> SubmitWorkspacesRequest<'a> {
 #[derive(Clone)]
 pub struct DeleteLinkedWorkspacesRequest<'a> {
     client: &'a crate::core::Client,
-    workspace_ids: DeleteLinkedWorkspacesRequestWorkspaceIds,
+    workspace_ids: Vec<String>,
 }
 
 impl<'a> DeleteLinkedWorkspacesRequest<'a> {
-    fn new(client: &'a crate::core::Client, workspace_ids: DeleteLinkedWorkspacesRequestWorkspaceIds) -> Self {
-        Self { client, workspace_ids }
+    fn new(client: &'a crate::core::Client, workspace_ids: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        Self { client, workspace_ids: workspace_ids.into_iter().map(Into::into).collect() }
     }
 
     /// The request as the transport will send it.
@@ -414,9 +401,7 @@ impl<'a> DeleteLinkedWorkspacesRequest<'a> {
             "/rest/security/1.0/linkedWorkspaces/bulk".to_owned(),
         );
 
-        config
-            .query
-            .push(("workspaceIds".to_owned(), crate::core::QueryValue::from_serializable(&self.workspace_ids)?));
+        config.query.push(("workspaceIds".to_owned(), crate::core::QueryValue::Scalar(self.workspace_ids.join(","))));
 
         Ok(config)
     }

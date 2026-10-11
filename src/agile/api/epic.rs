@@ -1,33 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesWithoutEpicRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesWithoutEpicRequestExpand { One, Many, Other });
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForEpicRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesForEpicRequestExpand { One, Many, Other });
 
 /// The Epic operations.
 pub struct EpicService<'a> {
@@ -136,8 +109,8 @@ pub struct GetIssuesWithoutEpicRequest<'a> {
     reconcile_issues: Option<Vec<i64>>,
     jql: Option<String>,
     validate_query: Option<bool>,
-    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
-    expand: Option<GetIssuesWithoutEpicRequestExpand>,
+    fields: Option<Vec<String>>,
+    expand: Option<Vec<String>>,
 }
 
 impl<'a> GetIssuesWithoutEpicRequest<'a> {
@@ -199,19 +172,16 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
     #[must_use]
-    pub fn fields(
-        mut self,
-        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
-    ) -> Self {
-        self.fields = Some(value.into_iter().collect());
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetIssuesWithoutEpicRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -242,14 +212,31 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next cursor from the answer. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let items = page.issues;
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), page.is_last))
+        })
     }
 
     /// Sends the request.
@@ -396,8 +383,8 @@ pub struct GetIssuesForEpicRequest<'a> {
     reconcile_issues: Option<Vec<i64>>,
     jql: Option<String>,
     validate_query: Option<bool>,
-    fields: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
-    expand: Option<GetIssuesForEpicRequestExpand>,
+    fields: Option<Vec<String>>,
+    expand: Option<Vec<String>>,
 }
 
 impl<'a> GetIssuesForEpicRequest<'a> {
@@ -460,19 +447,16 @@ impl<'a> GetIssuesForEpicRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Software project fields are returned.
     #[must_use]
-    pub fn fields(
-        mut self,
-        value: impl IntoIterator<Item = std::collections::HashMap<String, serde_json::Value>>,
-    ) -> Self {
-        self.fields = Some(value.into_iter().collect());
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetIssuesForEpicRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -505,14 +489,31 @@ impl<'a> GetIssuesForEpicRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next cursor from the answer. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let items = page.issues;
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), page.is_last))
+        })
     }
 
     /// Sends the request.

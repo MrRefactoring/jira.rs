@@ -1,33 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
-
-/// A comma-separated list of the parameters to expand
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum SearchRequest2Expand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(SearchRequest2Expand { One, Many, Other });
-
-/// the list of fields to return for each issue
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum SearchRequest2Fields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(SearchRequest2Fields { One, Many, Other });
 
 /// The IssueSearch operations.
 pub struct IssueSearchService<'a> {
@@ -37,6 +10,11 @@ pub struct IssueSearchService<'a> {
 impl<'a> IssueSearchService<'a> {
     pub(crate) fn new(client: &'a crate::core::Client) -> Self {
         Self { client }
+    }
+
+    /// Get issue picker resource
+    pub fn get_issue_picker_resource(&self) -> GetIssuePickerResourceRequest<'a> {
+        GetIssuePickerResourceRequest::new(self.client)
     }
 
     /// Searches for issues using JQL.
@@ -61,18 +39,134 @@ impl<'a> IssueSearchService<'a> {
     /// in to this resources.
     /// For instance, to expand the changelog for all the issues on the search result, it is necessary to
     /// specify changelog as one of the values to expand.
-    pub fn search(&self) -> SearchRequest2<'a> {
-        SearchRequest2::new(self.client)
+    pub fn search_issues(&self) -> SearchIssuesRequest<'a> {
+        SearchIssuesRequest::new(self.client)
     }
 
     /// Performs a search using JQL.
-    pub fn search_using_search_request(&self, search_request: SearchRequest) -> SearchUsingSearchRequestRequest<'a> {
-        SearchUsingSearchRequestRequest::new(self.client, search_request)
+    pub fn search_issues_post(&self, search_and_reconcile_request: SearchRequest) -> SearchIssuesPostRequest<'a> {
+        SearchIssuesPostRequest::new(self.client, search_and_reconcile_request)
     }
 
     /// Available since Jira Data Center 11.3.
     pub fn get_error(&self) -> GetErrorRequest<'a> {
         GetErrorRequest::new(self.client)
+    }
+}
+
+/// Get issue picker resource
+#[derive(Clone)]
+pub struct GetIssuePickerResourceRequest<'a> {
+    client: &'a crate::core::Client,
+    current_project_id: Option<String>,
+    query: Option<String>,
+    current_issue_key: Option<String>,
+    show_sub_tasks: Option<bool>,
+    current_jql: Option<String>,
+    show_sub_task_parent: Option<bool>,
+}
+
+impl<'a> GetIssuePickerResourceRequest<'a> {
+    fn new(client: &'a crate::core::Client) -> Self {
+        Self {
+            client,
+            current_project_id: None,
+            query: None,
+            current_issue_key: None,
+            show_sub_tasks: None,
+            current_jql: None,
+            show_sub_task_parent: None,
+        }
+    }
+
+    /// the id of the project in context of which the request is executed
+    #[must_use]
+    pub fn current_project_id(mut self, value: impl Into<String>) -> Self {
+        self.current_project_id = Some(value.into());
+
+        self
+    }
+
+    /// the query
+    #[must_use]
+    pub fn query(mut self, value: impl Into<String>) -> Self {
+        self.query = Some(value.into());
+
+        self
+    }
+
+    /// the key of the issue in context of which the request is executed
+    #[must_use]
+    pub fn current_issue_key(mut self, value: impl Into<String>) -> Self {
+        self.current_issue_key = Some(value.into());
+
+        self
+    }
+
+    /// if set to false, subtasks will not be included in the list
+    #[must_use]
+    pub fn show_sub_tasks(mut self, value: bool) -> Self {
+        self.show_sub_tasks = Some(value);
+
+        self
+    }
+
+    /// the JQL in context of which the request is executed
+    #[must_use]
+    pub fn current_jql(mut self, value: impl Into<String>) -> Self {
+        self.current_jql = Some(value.into());
+
+        self
+    }
+
+    /// if set to false and request is executed in context of a subtask, the parent issue will not be included in the auto-completion result, even if it matches the query
+    #[must_use]
+    pub fn show_sub_task_parent(mut self, value: bool) -> Self {
+        self.show_sub_task_parent = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config =
+            crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/issue/picker".to_owned());
+
+        if let Some(value) = &self.current_project_id {
+            config.query.push(("currentProjectId".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.query {
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.current_issue_key {
+            config.query.push(("currentIssueKey".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.show_sub_tasks {
+            config.query.push(("showSubTasks".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.current_jql {
+            config.query.push(("currentJQL".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.show_sub_task_parent {
+            config.query.push(("showSubTaskParent".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<IssuePickerSuggestions> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
     }
 }
 
@@ -99,25 +193,25 @@ impl<'a> IssueSearchService<'a> {
 /// For instance, to expand the changelog for all the issues on the search result, it is necessary to
 /// specify changelog as one of the values to expand.
 #[derive(Clone)]
-pub struct SearchRequest2<'a> {
+pub struct SearchIssuesRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<SearchRequest2Expand>,
+    expand: Option<Vec<String>>,
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
-    fields: Option<SearchRequest2Fields>,
+    fields: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
-impl<'a> SearchRequest2<'a> {
+impl<'a> SearchIssuesRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
         Self { client, expand: None, jql: None, max_results: None, validate_query: None, fields: None, start_at: None }
     }
 
     /// A comma-separated list of the parameters to expand
     #[must_use]
-    pub fn expand(mut self, value: SearchRequest2Expand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -148,8 +242,8 @@ impl<'a> SearchRequest2<'a> {
 
     /// the list of fields to return for each issue
     #[must_use]
-    pub fn fields(mut self, value: SearchRequest2Fields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -167,7 +261,7 @@ impl<'a> SearchRequest2<'a> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/search".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.jql {
@@ -183,7 +277,7 @@ impl<'a> SearchRequest2<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {
@@ -191,6 +285,25 @@ impl<'a> SearchRequest2<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.issues.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(items, page.start_at.unwrap_or(position), false, page.total, None))
+        })
     }
 
     /// Sends the request.
@@ -206,28 +319,42 @@ impl<'a> SearchRequest2<'a> {
 
 /// Performs a search using JQL.
 #[derive(Clone)]
-pub struct SearchUsingSearchRequestRequest<'a> {
+pub struct SearchIssuesPostRequest<'a> {
     client: &'a crate::core::Client,
-    search_request: SearchRequest,
+    search_and_reconcile_request: SearchRequest,
 }
 
-impl<'a> SearchUsingSearchRequestRequest<'a> {
-    fn new(client: &'a crate::core::Client, search_request: SearchRequest) -> Self {
-        Self { client, search_request }
+impl<'a> SearchIssuesPostRequest<'a> {
+    fn new(client: &'a crate::core::Client, search_and_reconcile_request: SearchRequest) -> Self {
+        Self { client, search_and_reconcile_request }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/search".to_owned());
 
-        let body = match serde_json::to_value(&self.search_request)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.search_and_reconcile_request)?));
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.search_and_reconcile_request.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.search_and_reconcile_request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.issues.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(items, page.start_at.unwrap_or(position), false, page.total, None))
+        })
     }
 
     /// Sends the request.

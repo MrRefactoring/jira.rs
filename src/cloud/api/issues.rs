@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetIssueRequestExpandValue {
@@ -14,27 +13,6 @@ crate::open_enum! {
         VersionedRepresentations => "versionedRepresentations",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about the issues in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `renderedFields` Returns field values rendered in HTML format.
-///  *  `names` Returns the display name of each field.
-///  *  `schema` Returns the schema describing a field type.
-///  *  `transitions` Returns all possible transitions for the issue.
-///  *  `editmeta` Returns information about how each field can be edited.
-///  *  `changelog` Returns a list of recent updates to an issue, sorted by date, starting from the most recent.
-///  *  `versionedRepresentations` Returns a JSON array for each version of a field's value, with the highest number representing the most recent version. Note: When included in the request, the `fields` parameter is ignored.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssueRequestExpand {
-    One(GetIssueRequestExpandValue),
-    Many(Vec<GetIssueRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssueRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// Whether the issue's subtasks are deleted when the issue is deleted.
@@ -49,19 +27,6 @@ crate::open_enum! {
         TransitionsFields => "transitions.fields",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about transitions in the response. This parameter accepts `transitions.fields`, which returns information about the fields in the transition screen for each transition. Fields hidden from the screen are not returned. Use this information to populate the `fields` and `update` fields in [Transition issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueIdOrKey-transitions-post).
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetTransitionsRequestExpand {
-    One(GetTransitionsRequestExpandValue),
-    Many(Vec<GetTransitionsRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetTransitionsRequestExpand { One, Many, Other });
 
 /// The Issues operations.
 pub struct IssuesService<'a> {
@@ -382,6 +347,23 @@ impl<'a> GetBulkChangelogsRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages use the next cursor from the answer. The stream ends
+    /// at the last page or when no next cursor remains.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<IssueChangeLog>> {
+        let first = self.bulk_changelog_request.next_page_token.clone();
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.bulk_changelog_request.next_page_token = position.clone();
+            let page = request.send().await?;
+            let items = page.issue_change_logs.unwrap_or_default();
+            Ok(crate::core::PageStep::cursor(items, &position, page.next_page_token.map(Some), false))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<BulkChangelogResponse> {
         self.client.send(&self.config()?).await
@@ -627,6 +609,25 @@ impl<'a> GetCreateIssueMetaIssueTypesRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<IssueTypeIssueCreateMetadata>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.issue_types.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(items, page.start_at.unwrap_or(position), false, page.total, None))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<PageOfCreateMetaIssueTypes> {
         self.client.send(&self.config()?).await
@@ -705,6 +706,25 @@ impl<'a> GetCreateIssueMetaIssueTypeIdRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<FieldCreateMetadata>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.fields.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(items, page.start_at.unwrap_or(position), false, page.total, None))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<PageOfCreateMetaIssueTypeWithField> {
         self.client.send(&self.config()?).await
@@ -732,7 +752,7 @@ pub struct GetIssueRequest<'a> {
     issue_id_or_key: String,
     fields: Option<Vec<String>>,
     fields_by_keys: Option<bool>,
-    expand: Option<GetIssueRequestExpand>,
+    expand: Option<Vec<GetIssueRequestExpandValue>>,
     properties: Option<Vec<String>>,
     update_history: Option<bool>,
     fail_fast: Option<bool>,
@@ -792,8 +812,8 @@ impl<'a> GetIssueRequest<'a> {
     ///  *  `changelog` Returns a list of recent updates to an issue, sorted by date, starting from the most recent.
     ///  *  `versionedRepresentations` Returns a JSON array for each version of a field's value, with the highest number representing the most recent version. Note: When included in the request, the `fields` parameter is ignored.
     #[must_use]
-    pub fn expand(mut self, value: GetIssueRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetIssueRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -849,7 +869,10 @@ impl<'a> GetIssueRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.properties {
@@ -1191,17 +1214,20 @@ impl<'a> GetChangeLogsRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Changelog>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, Some(page.total), None))
         })
     }
 
@@ -1424,7 +1450,7 @@ impl<'a> NotifyRequest<'a> {
 pub struct GetTransitionsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    expand: Option<GetTransitionsRequestExpand>,
+    expand: Option<Vec<GetTransitionsRequestExpandValue>>,
     transition_id: Option<String>,
     skip_remote_only_condition: Option<bool>,
     include_unavailable_transitions: Option<bool>,
@@ -1446,8 +1472,8 @@ impl<'a> GetTransitionsRequest<'a> {
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about transitions in the response. This parameter accepts `transitions.fields`, which returns information about the fields in the transition screen for each transition. Fields hidden from the screen are not returned. Use this information to populate the `fields` and `update` fields in [Transition issue](https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/#api-rest-api-3-issue-issueIdOrKey-transitions-post).
     #[must_use]
-    pub fn expand(mut self, value: GetTransitionsRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetTransitionsRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1492,7 +1518,10 @@ impl<'a> GetTransitionsRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.transition_id {

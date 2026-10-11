@@ -16,7 +16,7 @@ pub struct WorkflowScheme {
     #[serde(rename = "issueTypeMappings", default, skip_serializing_if = "Option::is_none")]
     pub issue_type_mappings: Option<std::collections::HashMap<String, String>>,
     #[serde(rename = "issueTypes", default, skip_serializing_if = "Option::is_none")]
-    pub issue_types: Option<std::collections::HashMap<String, IssueTypeJson>>,
+    pub issue_types: Option<std::collections::HashMap<String, IssueTypeDetails>>,
     #[serde(rename = "lastModified", default, skip_serializing_if = "Option::is_none")]
     pub last_modified: Option<String>,
     #[serde(rename = "lastModifiedUser", default, skip_serializing_if = "Option::is_none")]

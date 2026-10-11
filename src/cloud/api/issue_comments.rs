@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     pub enum GetCommentsByIdsRequestExpandValue {
@@ -9,22 +8,6 @@ crate::open_enum! {
         Properties => "properties",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `renderedBody` Returns the comment body rendered in HTML.
-///  *  `properties` Returns the comment's properties.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetCommentsByIdsRequestExpand {
-    One(GetCommentsByIdsRequestExpandValue),
-    Many(Vec<GetCommentsByIdsRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetCommentsByIdsRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field. Accepts *created* to sort comments by their created date.
@@ -41,37 +24,11 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetCommentsRequestExpand {
-    One(GetCommentsRequestExpandValue),
-    Many(Vec<GetCommentsRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetCommentsRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum AddCommentRequestExpandValue {
         RenderedBody => "renderedBody",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum AddCommentRequestExpand {
-    One(AddCommentRequestExpandValue),
-    Many(Vec<AddCommentRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(AddCommentRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     pub enum GetCommentRequestExpandValue {
@@ -79,37 +36,11 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetCommentRequestExpand {
-    One(GetCommentRequestExpandValue),
-    Many(Vec<GetCommentRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetCommentRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum UpdateCommentRequestExpandValue {
         RenderedBody => "renderedBody",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum UpdateCommentRequestExpand {
-    One(UpdateCommentRequestExpandValue),
-    Many(Vec<UpdateCommentRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(UpdateCommentRequestExpand { One, Many, Other });
 
 /// The IssueComments operations.
 pub struct IssueCommentsService<'a> {
@@ -229,7 +160,7 @@ impl<'a> IssueCommentsService<'a> {
 #[derive(Clone)]
 pub struct GetCommentsByIdsRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetCommentsByIdsRequestExpand>,
+    expand: Option<Vec<GetCommentsByIdsRequestExpandValue>>,
     issue_comment_list_request: IssueCommentListRequest,
 }
 
@@ -243,8 +174,8 @@ impl<'a> GetCommentsByIdsRequest<'a> {
     ///  *  `renderedBody` Returns the comment body rendered in HTML.
     ///  *  `properties` Returns the comment's properties.
     #[must_use]
-    pub fn expand(mut self, value: GetCommentsByIdsRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetCommentsByIdsRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -255,7 +186,10 @@ impl<'a> GetCommentsByIdsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/comment/list".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         let body = match serde_json::to_value(&self.issue_comment_list_request)? {
@@ -295,7 +229,7 @@ pub struct GetCommentsRequest<'a> {
     start_at: Option<i64>,
     max_results: Option<i64>,
     order_by: Option<GetCommentsRequestOrderBy>,
-    expand: Option<GetCommentsRequestExpand>,
+    expand: Option<Vec<GetCommentsRequestExpandValue>>,
 }
 
 impl<'a> GetCommentsRequest<'a> {
@@ -336,8 +270,8 @@ impl<'a> GetCommentsRequest<'a> {
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
     #[must_use]
-    pub fn expand(mut self, value: GetCommentsRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetCommentsRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -362,10 +296,32 @@ impl<'a> GetCommentsRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Comment>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.comments.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(items, page.start_at.unwrap_or(position), false, page.total, None))
+        })
     }
 
     /// Sends the request.
@@ -391,7 +347,7 @@ impl<'a> GetCommentsRequest<'a> {
 pub struct AddCommentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
-    expand: Option<AddCommentRequestExpand>,
+    expand: Option<Vec<AddCommentRequestExpandValue>>,
     comment_input: CommentInput,
 }
 
@@ -402,8 +358,8 @@ impl<'a> AddCommentRequest<'a> {
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
     #[must_use]
-    pub fn expand(mut self, value: AddCommentRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<AddCommentRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -416,7 +372,10 @@ impl<'a> AddCommentRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         let body = match serde_json::to_value(&self.comment_input)? {
@@ -479,7 +438,7 @@ pub struct GetCommentRequest<'a> {
     client: &'a crate::core::Client,
     issue_id_or_key: String,
     id: String,
-    expand: Option<GetCommentRequestExpand>,
+    expand: Option<Vec<GetCommentRequestExpandValue>>,
 }
 
 impl<'a> GetCommentRequest<'a> {
@@ -489,8 +448,8 @@ impl<'a> GetCommentRequest<'a> {
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
     #[must_use]
-    pub fn expand(mut self, value: GetCommentRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetCommentRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -507,7 +466,10 @@ impl<'a> GetCommentRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)
@@ -543,7 +505,7 @@ pub struct UpdateCommentRequest<'a> {
     id: String,
     notify_users: Option<bool>,
     override_editable_flag: Option<bool>,
-    expand: Option<UpdateCommentRequestExpand>,
+    expand: Option<Vec<UpdateCommentRequestExpandValue>>,
     body: CommentInput,
 }
 
@@ -583,8 +545,8 @@ impl<'a> UpdateCommentRequest<'a> {
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about comments in the response. This parameter accepts `renderedBody`, which returns the comment body rendered in HTML.
     #[must_use]
-    pub fn expand(mut self, value: UpdateCommentRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<UpdateCommentRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -609,7 +571,10 @@ impl<'a> UpdateCommentRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));

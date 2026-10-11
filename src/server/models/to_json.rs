@@ -8,11 +8,11 @@ pub struct ToJson {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub assignee: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub groups: Option<Vec<GroupJson>>,
+    pub groups: Option<Vec<GroupName>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub reporter: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub users: Option<Vec<UserJson>>,
+    pub users: Option<Vec<UserDetails>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub voters: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]

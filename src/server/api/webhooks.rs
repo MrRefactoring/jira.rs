@@ -127,6 +127,23 @@ impl<'a> GetWebhooksRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset by the items returned. The stream
+    /// ends at an empty page, or at a short page when a page size was set.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Webhook>> {
+        let first = self.start.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start = Some(position);
+            let page = request.clone().send().await?;
+            let items = page;
+            Ok(crate::core::PageStep::offset(items, position, false, None, request.limit))
+        })
+    }
+
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<Vec<Webhook>> {
         self.client.send(&self.config()?).await

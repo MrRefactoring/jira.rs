@@ -2,4 +2,4 @@
 
 use super::*;
 
-pub type PageIssueTypeJson = Page<IssueTypeJson>;
+pub type PageIssueTypeJson = Page<IssueTypeDetails>;

@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RemoteReciprocalIssueLinkCreateRequest {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub source: Option<RemoteIssueLinkCreateOrUpdateRequest>,
+    pub source: Option<RemoteIssueLinkRequest>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub target: Option<RemoteIssueLinkCreateOrUpdateRequest>,
+    pub target: Option<RemoteIssueLinkRequest>,
 }

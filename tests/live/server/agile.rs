@@ -1,6 +1,6 @@
 use jira::server::{
-    BoardCreate, BooleanSetting, EpicRankRequest, EpicUpdate, FieldEdit, IssueAssignRequest, IssueRankRequest,
-    SharePermissionInput, Sprint, SprintCreate, SprintSwap, UnmapSprints,
+    BoardCreate, BooleanSetting, EpicRankRequest, EpicUpdate, IssueAssignRequest, IssueRankRequest,
+    SharePermissionInput, UnmapSprints,
 };
 
 use super::fixtures::{
@@ -21,12 +21,11 @@ async fn creates_a_board_over_a_filter_of_its_own() {
     let filter_id = filter.id.clone().expect("a created filter carries an id");
 
     server()
-        .filters()
-        .add_share_permission(&filter_id)
-        .share_permission_input(SharePermissionInput {
-            r#type: Some("authenticated".to_owned()),
-            ..SharePermissionInput::default()
-        })
+        .filter_sharing()
+        .add_share_permission(
+            filter_id.parse().expect("a filter id is a number"),
+            SharePermissionInput { r#type: Some("authenticated".to_owned()), ..SharePermissionInput::default() },
+        )
         .send()
         .await
         .expect("the filter can be shared with everyone signed in");
@@ -70,8 +69,7 @@ async fn reads_the_board_the_template_made() {
     assert_eq!(board.id, Some(board_id), "the board read back is the one the template made");
     assert!(board.name.is_some_and(|name| !name.is_empty()), "and it is named");
 
-    let configuration =
-        server().board().get_board_configuration(board_id).send().await.expect("the configuration reads");
+    let configuration = server().board().get_configuration(board_id).send().await.expect("the configuration reads");
 
     assert_eq!(configuration.id, Some(board_id), "the configuration belongs to that board");
     assert!(configuration.filter.is_some(), "and it names the filter the board is built on");
@@ -83,17 +81,26 @@ async fn reads_the_board_the_template_made() {
 
     server()
         .board()
-        .set_board_property("suite", board_id, property_body())
+        .set_board_property(board_id.to_string(), "suite", property_body())
         .send_raw()
         .await
         .expect("a board takes a property of the caller's own");
 
-    let property =
-        server().board().get_board_property("suite", board_id).send().await.expect("the property reads back");
+    let property = server()
+        .board()
+        .get_board_property(board_id.to_string(), "suite")
+        .send()
+        .await
+        .expect("the property reads back");
 
     assert_eq!(property.value, Some(property_value()), "the value survives the round trip untouched");
 
-    server().board().delete_board_property("suite", board_id).send().await.expect("the property can be removed");
+    server()
+        .board()
+        .delete_board_property(board_id.to_string(), "suite")
+        .send()
+        .await
+        .expect("the property can be removed");
 
     touch(server().board().set_refined_velocity(board_id, BooleanSetting { value: Some(true) }).send().await);
 
@@ -118,11 +125,8 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
 
     let sprint = server()
         .sprint()
-        .create_sprint(SprintCreate {
-            name: Some(test_name("spr")),
-            origin_board_id: Some(board_id),
-            ..SprintCreate::default()
-        })
+        .create_sprint(test_name("spr"))
+        .origin_board_id(board_id)
         .send()
         .await
         .expect("a sprint can be created on the board");
@@ -133,7 +137,7 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
 
     server()
         .sprint()
-        .move_issues_to_sprint(sprint_id, IssueAssignRequest { issues: Some(vec![key.clone()]) })
+        .move_issues_to_sprint_and_rank(sprint_id, IssueAssignRequest { issues: Some(vec![key.clone()]) })
         .send()
         .await
         .expect("an issue can be moved into a sprint");
@@ -147,7 +151,7 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
 
     let on_board = server()
         .board()
-        .get_issues_for_board_sprint(sprint_id, board_id)
+        .get_board_issues_for_sprint(board_id, sprint_id)
         .send()
         .await
         .expect("the sprint's issues read through the board");
@@ -157,12 +161,7 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
         "the board sees the same sprint",
     );
 
-    server()
-        .backlog()
-        .move_issues_to_backlog(IssueAssignRequest { issues: Some(vec![key.clone()]) })
-        .send()
-        .await
-        .expect("and can be sent back to the backlog");
+    server().backlog().move_issues_to_backlog([key.clone()]).send().await.expect("and can be sent back to the backlog");
 
     let after =
         server().sprint().get_issues_for_sprint(sprint_id).send().await.expect("the sprint's issues read again");
@@ -174,30 +173,37 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
 
     server()
         .sprint()
-        .set_sprint_property("suite", sprint_id, property_body())
+        .set_property(sprint_id.to_string(), "suite", property_body())
         .send()
         .await
         .expect("a sprint takes a property of the caller's own");
 
     let property =
-        server().sprint().get_sprint_property("suite", sprint_id).send().await.expect("the property reads back");
+        server().sprint().get_property(sprint_id.to_string(), "suite").send().await.expect("the property reads back");
 
     assert_eq!(property.value, Some(property_value()), "the value survives the round trip untouched");
 
-    let keys = server().sprint().get_sprint_property_keys(sprint_id).send().await.expect("the property keys read");
+    let keys =
+        server().sprint().get_properties_keys(sprint_id.to_string()).send().await.expect("the property keys read");
 
     assert!(
         keys.keys.iter().flatten().any(|entry| entry.key.as_deref() == Some("suite")),
         "the key just written is in the listing",
     );
 
-    server().sprint().delete_sprint_property("suite", sprint_id).send().await.expect("the property can be removed");
+    server()
+        .sprint()
+        .delete_property(sprint_id.to_string(), "suite")
+        .send()
+        .await
+        .expect("the property can be removed");
 
     let renamed = test_name("spr2");
 
     server()
         .sprint()
-        .partially_update_sprint(sprint_id, Sprint { name: Some(renamed.clone()), ..Sprint::default() })
+        .partially_update_sprint(sprint_id)
+        .name(renamed.clone())
         .send()
         .await
         .expect("a sprint can be renamed in part");
@@ -208,15 +214,8 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
 
     let replaced = server()
         .sprint()
-        .update_sprint(
-            sprint_id,
-            Sprint {
-                name: Some(renamed),
-                state: Some("future".to_owned()),
-                goal: Some("proving the write path".to_owned()),
-                ..Sprint::default()
-            },
-        )
+        .update_sprint(sprint_id, renamed, "future")
+        .goal("proving the write path")
         .send()
         .await
         .expect("a sprint can be replaced wholesale");
@@ -227,13 +226,7 @@ async fn moves_an_issue_through_a_sprint_and_back_to_the_backlog() {
         "the replacement carries the goal it was given",
     );
 
-    touch(
-        server()
-            .sprint()
-            .swap_sprint(sprint_id, SprintSwap { sprint_to_swap_with: Some(sprint_id), ..SprintSwap::default() })
-            .send()
-            .await,
-    );
+    touch(server().sprint().swap_sprint(sprint_id).sprint_to_swap_with(sprint_id).send().await);
     touch(server().sprint().unmap_sprints(UnmapSprints { sprint_ids: Some(vec![sprint_id]) }).send().await);
     touch(server().sprint().unmap_all_sprints().send().await);
 
@@ -255,7 +248,8 @@ async fn moves_an_issue_into_an_epic_and_renames_it() {
 
     server()
         .epic()
-        .move_issues_to_epic(&epic_key, IssueAssignRequest { issues: Some(vec![key.clone()]) })
+        .move_issues_to_epic(&epic_key)
+        .issues([key.clone()])
         .send()
         .await
         .expect("an issue can be moved into an epic");
@@ -275,7 +269,7 @@ async fn moves_an_issue_into_an_epic_and_renames_it() {
     let epic_id = epic.id.clone().expect("a created epic carries an id").parse().expect("an epic id is a number");
     let on_board = server()
         .board()
-        .get_issues_for_board_epic(epic_id, board_id)
+        .get_board_issues_for_epic(board_id, epic_id)
         .send()
         .await
         .expect("the epic's issues read through the board");
@@ -285,12 +279,7 @@ async fn moves_an_issue_into_an_epic_and_renames_it() {
         "the board sees the same epic",
     );
 
-    server()
-        .epic()
-        .remove_issues_from_epic(IssueAssignRequest { issues: Some(vec![key]) })
-        .send()
-        .await
-        .expect("and can be taken out again");
+    server().epic().remove_issues_from_epic([key]).send().await.expect("and can be taken out again");
 
     let without = server().epic().get_issues_without_epic().send().await.expect("the epic-less issues read");
 
@@ -339,7 +328,7 @@ async fn ranks_and_estimates_an_issue() {
 
     touch(
         server()
-            .issues()
+            .issue()
             .rank_issues(IssueRankRequest {
                 issues: Some(vec![key.clone()]),
                 rank_before_issue: Some(other_key),
@@ -348,23 +337,16 @@ async fn ranks_and_estimates_an_issue() {
             .send()
             .await,
     );
-    touch(
-        server()
-            .issues()
-            .estimate_issue_for_board(&key, FieldEdit { value: Some("5".to_owned()) })
-            .board_id(board_id)
-            .send()
-            .await,
-    );
+    touch(server().issue().estimate_issue_for_board(&key).value("5").board_id(board_id).send().await);
 
-    let estimate = touch(server().issues().get_issue_estimation_for_board(&key).board_id(board_id).send().await);
+    let estimate = touch(server().issue().get_issue_estimation_for_board(&key).board_id(board_id).send().await);
 
     assert!(
         estimate.is_none_or(|estimate| estimate.field_id.is_some() || estimate.value.is_some()),
         "an estimate names the field it is held in",
     );
 
-    let agile_issue = server().issues().get_agile_issue(&key).send().await.expect("the agile view of an issue reads");
+    let agile_issue = server().issue().get_issue(&key).send().await.expect("the agile view of an issue reads");
 
     assert_eq!(agile_issue.key.as_deref(), Some(key.as_str()), "the agile surface reads the same issue by key");
 

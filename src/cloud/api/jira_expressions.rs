@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     /// The check to perform:
@@ -21,19 +20,6 @@ crate::open_enum! {
         MetaComplexity => "meta.complexity",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts `meta.complexity` that returns information about the expression complexity. For example, the number of expensive operations used by the expression and how close the expression is to reaching the [complexity limit](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#restrictions). Useful when designing and debugging your expressions.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum EvaluateExpressionRequestExpand {
-    One(EvaluateExpressionRequestExpandValue),
-    Many(Vec<EvaluateExpressionRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(EvaluateExpressionRequestExpand { One, Many, Other });
 
 /// The JiraExpressions operations.
 pub struct JiraExpressionsService<'a> {
@@ -189,7 +175,7 @@ impl<'a> AnalyseExpressionRequest<'a> {
 #[derive(Clone)]
 pub struct EvaluateExpressionRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<EvaluateExpressionRequestExpand>,
+    expand: Option<Vec<EvaluateExpressionRequestExpandValue>>,
     jira_expression_evaluate_request: JiraExpressionEvaluateRequest,
 }
 
@@ -200,8 +186,8 @@ impl<'a> EvaluateExpressionRequest<'a> {
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts `meta.complexity` that returns information about the expression complexity. For example, the number of expensive operations used by the expression and how close the expression is to reaching the [complexity limit](https://developer.atlassian.com/cloud/jira/platform/jira-expressions/#restrictions). Useful when designing and debugging your expressions.
     #[must_use]
-    pub fn expand(mut self, value: EvaluateExpressionRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<EvaluateExpressionRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -212,7 +198,10 @@ impl<'a> EvaluateExpressionRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/3/expression/evaluate".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         let body = match serde_json::to_value(&self.jira_expression_evaluate_request)? {

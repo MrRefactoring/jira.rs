@@ -1,33 +1,15 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
-/// Use expand to include additional information about permission schemes in the response. This parameter accepts a comma-separated list of expandable options. Expand options include: all and field.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetAssignedPermissionSchemeRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
+crate::open_enum! {
+    pub enum GetNotificationSchemeForProjectRequestExpandValue {
+        Group => "group",
+        User => "user",
+        ProjectRole => "projectRole",
+        Field => "field",
+    }
 }
-
-crate::core::untagged::untagged!(GetAssignedPermissionSchemeRequestExpand { One, Many, Other });
-
-/// Use expand to include additional information about permission schemes in the response. This parameter accepts a comma-separated list of expandable options. Expand options include: all and field.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum AssignPermissionSchemeRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(AssignPermissionSchemeRequestExpand { One, Many, Other });
 
 /// The Projects operations.
 pub struct ProjectsService<'a> {
@@ -40,31 +22,13 @@ impl<'a> ProjectsService<'a> {
     }
 
     /// Returns all projects which are visible for the currently logged in user. If no user is logged in, it returns the list of projects that are visible when using anonymous access.
-    pub fn get_all_projects(&self) -> GetAllProjectsRequest<'a> {
-        GetAllProjectsRequest::new(self.client)
+    pub fn search_projects(&self) -> SearchProjectsRequest<'a> {
+        SearchProjectsRequest::new(self.client)
     }
 
     /// Creates a new project
     pub fn create_project(&self, project_input: ProjectInput) -> CreateProjectRequest<'a> {
         CreateProjectRequest::new(self.client, project_input)
-    }
-
-    /// Returns all the project types defined on the Jira instance, not taking into account whether the license to use those project types is valid or not. In case of anonymous checks if they can access at least one project.
-    pub fn get_all_project_types(&self) -> GetAllProjectTypesRequest<'a> {
-        GetAllProjectTypesRequest::new(self.client)
-    }
-
-    /// Returns the project type with the given key. In case of anonymous checks if they can access at least one project.
-    pub fn get_project_type_by_key(&self, project_type_key: impl Into<String>) -> GetProjectTypeByKeyRequest<'a> {
-        GetProjectTypeByKeyRequest::new(self.client, project_type_key)
-    }
-
-    /// Returns the project type with the given key, if it is accessible to the logged in user. This takes into account whether the user is licensed on the Application that defines the project type.
-    pub fn get_accessible_project_type_by_key(
-        &self,
-        project_type_key: impl Into<String>,
-    ) -> GetAccessibleProjectTypeByKeyRequest<'a> {
-        GetAccessibleProjectTypeByKeyRequest::new(self.client, project_type_key)
     }
 
     /// Returns a full representation of a project in JSON format. All project keys associated with the project will only be returned if `expand=projectKeys`.
@@ -76,9 +40,9 @@ impl<'a> ProjectsService<'a> {
     pub fn update_project(
         &self,
         project_id_or_key: impl Into<String>,
-        project_update: ProjectUpdate,
+        update_project_details: UpdateProjectDetails,
     ) -> UpdateProjectRequest<'a> {
-        UpdateProjectRequest::new(self.client, project_id_or_key, project_update)
+        UpdateProjectRequest::new(self.client, project_id_or_key, update_project_details)
     }
 
     /// Deletes a project
@@ -103,15 +67,6 @@ impl<'a> ProjectsService<'a> {
         CreateProjectAvatarFromTemporaryRequest::new(self.client, project_id_or_key, avatar_cropping)
     }
 
-    /// Updates an avatar for a project. This is step 3/3 of changing an avatar for a project.
-    pub fn update_project_avatar(
-        &self,
-        project_id_or_key: impl Into<String>,
-        avatar: Avatar,
-    ) -> UpdateProjectAvatarRequest<'a> {
-        UpdateProjectAvatarRequest::new(self.client, project_id_or_key, avatar)
-    }
-
     /// Creates temporary avatar using multipart. The response is sent back as JSON stored in a textarea. This is because
     /// the client uses remote iframing to submit avatars using multipart. So we must send them a valid HTML page back from
     /// which the client parses the JSON.
@@ -123,96 +78,9 @@ impl<'a> ProjectsService<'a> {
         StoreTemporaryProjectAvatarUsingMultiPartRequest::new(self.client, project_id_or_key, avatar)
     }
 
-    /// Deletes avatar
-    pub fn delete_project_avatar(
-        &self,
-        project_id_or_key: impl Into<String>,
-        id: i64,
-    ) -> DeleteProjectAvatarRequest<'a> {
-        DeleteProjectAvatarRequest::new(self.client, project_id_or_key, id)
-    }
-
-    /// Returns all avatars which are visible for the currently logged in user. The avatars are grouped into system and custom.
-    pub fn get_all_project_avatars(&self, project_id_or_key: impl Into<String>) -> GetAllProjectAvatarsRequest<'a> {
-        GetAllProjectAvatarsRequest::new(self.client, project_id_or_key)
-    }
-
-    /// Contains a full representation of the specified project's components.
-    pub fn get_project_components(&self, project_id_or_key: impl Into<String>) -> GetProjectComponentsRequest<'a> {
-        GetProjectComponentsRequest::new(self.client, project_id_or_key)
-    }
-
-    /// Returns the keys of all properties for the project identified by the key or by the id.
-    pub fn get_project_property_keys(&self, project_id_or_key: impl Into<String>) -> GetProjectPropertyKeysRequest<'a> {
-        GetProjectPropertyKeysRequest::new(self.client, project_id_or_key)
-    }
-
-    /// Returns the value of the property with a given key from the project identified by the key or by the id.
-    pub fn get_project_property(
-        &self,
-        property_key: impl Into<String>,
-        project_id_or_key: impl Into<String>,
-    ) -> GetProjectPropertyRequest<'a> {
-        GetProjectPropertyRequest::new(self.client, property_key, project_id_or_key)
-    }
-
-    /// Sets the value of the specified project's property. You can use this resource to store a custom data against the project identified by the key or by the id. The user who stores the data is required to have permissions to administer the project.
-    pub fn set_project_property(
-        &self,
-        property_key: impl Into<String>,
-        project_id_or_key: impl Into<String>,
-        body: std::collections::HashMap<String, serde_json::Value>,
-    ) -> SetProjectPropertyRequest<'a> {
-        SetProjectPropertyRequest::new(self.client, property_key, project_id_or_key, body)
-    }
-
-    /// Removes the property from the project identified by the key or by the id.
-    pub fn delete_project_property(
-        &self,
-        property_key: impl Into<String>,
-        project_id_or_key: impl Into<String>,
-    ) -> DeleteProjectPropertyRequest<'a> {
-        DeleteProjectPropertyRequest::new(self.client, property_key, project_id_or_key)
-    }
-
     /// Restores an archived project. In case of success restored project should be re-indexed.
     pub fn restore_project(&self, project_id_or_key: impl Into<String>) -> RestoreProjectRequest<'a> {
         RestoreProjectRequest::new(self.client, project_id_or_key)
-    }
-
-    /// Returns all roles in the given project Id or key, with links to full details on each role.
-    pub fn get_project_roles(&self, project_id_or_key: impl Into<String>) -> GetProjectRolesRequest<'a> {
-        GetProjectRolesRequest::new(self.client, project_id_or_key)
-    }
-
-    /// Returns the details for a given project role in a project.
-    pub fn get_project_role(&self, project_id_or_key: impl Into<String>, id: i64) -> GetProjectRoleRequest<'a> {
-        GetProjectRoleRequest::new(self.client, project_id_or_key, id)
-    }
-
-    /// Adds an actor (user or group) to a project role. For user actors, their usernames should be used.
-    pub fn add_actor_users(
-        &self,
-        project_id_or_key: impl Into<String>,
-        id: i64,
-        actors_map: ActorsMap,
-    ) -> AddActorUsersRequest<'a> {
-        AddActorUsersRequest::new(self.client, project_id_or_key, id, actors_map)
-    }
-
-    /// Updates a project role to include the specified actors (users or groups). Can be also used to clear roles to not include any users or groups. For user actors, their usernames should be used.
-    pub fn set_actors(
-        &self,
-        project_id_or_key: impl Into<String>,
-        id: i64,
-        body: ProjectRoleActorsUpdate,
-    ) -> SetActorsRequest<'a> {
-        SetActorsRequest::new(self.client, project_id_or_key, id, body)
-    }
-
-    /// Deletes actors (users or groups) from a project role.
-    pub fn delete_actor(&self, project_id_or_key: impl Into<String>, id: i64) -> DeleteActorRequest<'a> {
-        DeleteActorRequest::new(self.client, project_id_or_key, id)
     }
 
     /// Get all issue types with valid status values for a project
@@ -229,50 +97,12 @@ impl<'a> ProjectsService<'a> {
         UpdateProjectTypeRequest::new(self.client, project_id_or_key, new_project_type_key)
     }
 
-    /// Returns all versions for the specified project. Results are paginated. Results can be ordered by the following fields: sequence, name, startDate, releaseDate.
-    pub fn get_project_versions_paginated(
-        &self,
-        project_id_or_key: impl Into<String>,
-    ) -> GetProjectVersionsPaginatedRequest<'a> {
-        GetProjectVersionsPaginatedRequest::new(self.client, project_id_or_key)
-    }
-
-    /// Contains a full representation of a the specified project's versions.
-    pub fn get_project_versions(&self, project_id_or_key: impl Into<String>) -> GetProjectVersionsRequest<'a> {
-        GetProjectVersionsRequest::new(self.client, project_id_or_key)
-    }
-
-    /// Returns the issue security scheme for project.
-    pub fn get_project_issue_security_scheme(
-        &self,
-        project_key_or_id: impl Into<String>,
-    ) -> GetProjectIssueSecuritySchemeRequest<'a> {
-        GetProjectIssueSecuritySchemeRequest::new(self.client, project_key_or_id)
-    }
-
     /// Gets a notification scheme associated with the project. Follow the documentation of /notificationscheme/{id} resource for all details about returned value.
-    pub fn get_project_notification_scheme(
+    pub fn get_notification_scheme_for_project(
         &self,
         project_key_or_id: impl Into<String>,
-    ) -> GetProjectNotificationSchemeRequest<'a> {
-        GetProjectNotificationSchemeRequest::new(self.client, project_key_or_id)
-    }
-
-    /// Gets a permission scheme assigned with a project
-    pub fn get_assigned_permission_scheme(
-        &self,
-        project_key_or_id: impl Into<String>,
-    ) -> GetAssignedPermissionSchemeRequest<'a> {
-        GetAssignedPermissionSchemeRequest::new(self.client, project_key_or_id)
-    }
-
-    /// Assigns a permission scheme with a project
-    pub fn assign_permission_scheme(
-        &self,
-        project_key_or_id: impl Into<String>,
-        id: Id,
-    ) -> AssignPermissionSchemeRequest<'a> {
-        AssignPermissionSchemeRequest::new(self.client, project_key_or_id, id)
+    ) -> GetNotificationSchemeForProjectRequest<'a> {
+        GetNotificationSchemeForProjectRequest::new(self.client, project_key_or_id)
     }
 
     /// Gets a full representation of a priority scheme in JSON format used by specified project. User must be global administrator or project administrator. All project keys associated with the priority scheme will only be returned if additional query parameter is provided expand=projectKeys.
@@ -295,18 +125,10 @@ impl<'a> ProjectsService<'a> {
     /// Unassigns project from priority scheme. Operation will fail for defualt priority scheme, project is not found or project is not associated with provided priority scheme. All project keys associated with the priority scheme will only be returned if additional query parameter is provided expand=projectKeys.
     pub fn unassign_priority_scheme(
         &self,
+        project_key_or_id: impl Into<String>,
         scheme_id: i64,
-        project_key_or_id: impl Into<String>,
     ) -> UnassignPrioritySchemeRequest<'a> {
-        UnassignPrioritySchemeRequest::new(self.client, scheme_id, project_key_or_id)
-    }
-
-    /// Returns all security levels for the project that the current logged in user has access to. If the user does not have the Set Issue Security permission, the list will be empty.
-    pub fn get_security_levels_for_project(
-        &self,
-        project_key_or_id: impl Into<String>,
-    ) -> GetSecurityLevelsForProjectRequest<'a> {
-        GetSecurityLevelsForProjectRequest::new(self.client, project_key_or_id)
+        UnassignPrioritySchemeRequest::new(self.client, project_key_or_id, scheme_id)
     }
 
     /// Returns the workflow scheme that is associated with requested project.
@@ -324,22 +146,22 @@ impl<'a> ProjectsService<'a> {
     /// more than 100 projects is enforced. The projects are wrapped in a single response object that contains
     /// a header for use in the picker, specifically 'Showing X of Y matching projects' and the total number
     /// of matches for the query.
-    pub fn search_for_projects(&self) -> SearchForProjectsRequest<'a> {
-        SearchForProjectsRequest::new(self.client)
+    pub fn get_projects_picker(&self) -> GetProjectsPickerRequest<'a> {
+        GetProjectsPickerRequest::new(self.client)
     }
 }
 
 /// Returns all projects which are visible for the currently logged in user. If no user is logged in, it returns the list of projects that are visible when using anonymous access.
 #[derive(Clone)]
-pub struct GetAllProjectsRequest<'a> {
+pub struct SearchProjectsRequest<'a> {
     client: &'a crate::core::Client,
     include_archived: Option<bool>,
-    expand: Option<String>,
+    expand: Option<Vec<String>>,
     recent: Option<i64>,
     browse_archive: Option<bool>,
 }
 
-impl<'a> GetAllProjectsRequest<'a> {
+impl<'a> SearchProjectsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
         Self { client, include_archived: None, expand: None, recent: None, browse_archive: None }
     }
@@ -352,10 +174,10 @@ impl<'a> GetAllProjectsRequest<'a> {
         self
     }
 
-    /// Parameters to expand
+    /// Parameters to expand This parameter is a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -385,7 +207,7 @@ impl<'a> GetAllProjectsRequest<'a> {
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         if let Some(value) = &self.recent {
@@ -397,6 +219,23 @@ impl<'a> GetAllProjectsRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// This endpoint answers with everything in one response and offers no way to ask for more. The stream
+    /// makes one request. Data Center has no paginated project search; this is its listing of every project
+    /// the caller can see.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Project>> {
+        let first = ();
+
+        crate::core::stream_pages(self, first, |request, _position| async move {
+            let page = request.send().await?;
+            let items = page;
+            Ok(crate::core::PageStep::new(items, None))
+        })
     }
 
     /// Sends the request.
@@ -437,102 +276,7 @@ impl<'a> CreateProjectRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<ProjectIdentity> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns all the project types defined on the Jira instance, not taking into account whether the license to use those project types is valid or not. In case of anonymous checks if they can access at least one project.
-#[derive(Clone)]
-pub struct GetAllProjectTypesRequest<'a> {
-    client: &'a crate::core::Client,
-}
-
-impl<'a> GetAllProjectTypesRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/project/type".to_owned());
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<ProjectType>> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns the project type with the given key. In case of anonymous checks if they can access at least one project.
-#[derive(Clone)]
-pub struct GetProjectTypeByKeyRequest<'a> {
-    client: &'a crate::core::Client,
-    project_type_key: String,
-}
-
-impl<'a> GetProjectTypeByKeyRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_type_key: impl Into<String>) -> Self {
-        Self { client, project_type_key: project_type_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/project/type/{}", crate::core::encode_path_segment(&self.project_type_key)),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<ProjectType> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns the project type with the given key, if it is accessible to the logged in user. This takes into account whether the user is licensed on the Application that defines the project type.
-#[derive(Clone)]
-pub struct GetAccessibleProjectTypeByKeyRequest<'a> {
-    client: &'a crate::core::Client,
-    project_type_key: String,
-}
-
-impl<'a> GetAccessibleProjectTypeByKeyRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_type_key: impl Into<String>) -> Self {
-        Self { client, project_type_key: project_type_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/project/type/{}/accessible", crate::core::encode_path_segment(&self.project_type_key)),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<ProjectType> {
+    pub async fn send(self) -> crate::core::Result<ProjectIdentifiers> {
         self.client.send(&self.config()?).await
     }
 
@@ -546,7 +290,7 @@ impl<'a> GetAccessibleProjectTypeByKeyRequest<'a> {
 #[derive(Clone)]
 pub struct GetProjectRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<Vec<String>>,
     project_id_or_key: String,
 }
 
@@ -555,10 +299,10 @@ impl<'a> GetProjectRequest<'a> {
         Self { client, project_id_or_key: project_id_or_key.into(), expand: None }
     }
 
-    /// Parameters to expand
+    /// Parameters to expand This parameter is a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -571,7 +315,7 @@ impl<'a> GetProjectRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         Ok(config)
@@ -592,24 +336,24 @@ impl<'a> GetProjectRequest<'a> {
 #[derive(Clone)]
 pub struct UpdateProjectRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<Vec<String>>,
     project_id_or_key: String,
-    project_update: ProjectUpdate,
+    update_project_details: UpdateProjectDetails,
 }
 
 impl<'a> UpdateProjectRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
         project_id_or_key: impl Into<String>,
-        project_update: ProjectUpdate,
+        update_project_details: UpdateProjectDetails,
     ) -> Self {
-        Self { client, project_id_or_key: project_id_or_key.into(), project_update, expand: None }
+        Self { client, project_id_or_key: project_id_or_key.into(), update_project_details, expand: None }
     }
 
-    /// Parameters to expand
+    /// Parameters to expand This parameter is a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -622,15 +366,10 @@ impl<'a> UpdateProjectRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
-        let body = match serde_json::to_value(&self.project_update)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.update_project_details)?));
 
         Ok(config)
     }
@@ -760,47 +499,6 @@ impl<'a> CreateProjectAvatarFromTemporaryRequest<'a> {
     }
 }
 
-/// Updates an avatar for a project. This is step 3/3 of changing an avatar for a project.
-#[derive(Clone)]
-pub struct UpdateProjectAvatarRequest<'a> {
-    client: &'a crate::core::Client,
-    project_id_or_key: String,
-    avatar: Avatar,
-}
-
-impl<'a> UpdateProjectAvatarRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>, avatar: Avatar) -> Self {
-        Self { client, project_id_or_key: project_id_or_key.into(), avatar }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            format!("/rest/api/2/project/{}/avatar", crate::core::encode_path_segment(&self.project_id_or_key)),
-        );
-
-        let body = match serde_json::to_value(&self.avatar)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
 /// Creates temporary avatar using multipart. The response is sent back as JSON stored in a textarea. This is because
 /// the client uses remote iframing to submit avatars using multipart. So we must send them a valid HTML page back from
 /// which the client parses the JSON.
@@ -865,273 +563,6 @@ impl<'a> StoreTemporaryProjectAvatarUsingMultiPartRequest<'a> {
     }
 }
 
-/// Deletes avatar
-#[derive(Clone)]
-pub struct DeleteProjectAvatarRequest<'a> {
-    client: &'a crate::core::Client,
-    project_id_or_key: String,
-    id: i64,
-}
-
-impl<'a> DeleteProjectAvatarRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>, id: i64) -> Self {
-        Self { client, project_id_or_key: project_id_or_key.into(), id }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!(
-                "/rest/api/2/project/{}/avatar/{}",
-                crate::core::encode_path_segment(&self.project_id_or_key),
-                self.id
-            ),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns all avatars which are visible for the currently logged in user. The avatars are grouped into system and custom.
-#[derive(Clone)]
-pub struct GetAllProjectAvatarsRequest<'a> {
-    client: &'a crate::core::Client,
-    project_id_or_key: String,
-}
-
-impl<'a> GetAllProjectAvatarsRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self { client, project_id_or_key: project_id_or_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/avatars", crate::core::encode_path_segment(&self.project_id_or_key)),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<GetAllProjectAvatars> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Contains a full representation of the specified project's components.
-#[derive(Clone)]
-pub struct GetProjectComponentsRequest<'a> {
-    client: &'a crate::core::Client,
-    project_id_or_key: String,
-}
-
-impl<'a> GetProjectComponentsRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self { client, project_id_or_key: project_id_or_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/components", crate::core::encode_path_segment(&self.project_id_or_key)),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<Component>> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns the keys of all properties for the project identified by the key or by the id.
-#[derive(Clone)]
-pub struct GetProjectPropertyKeysRequest<'a> {
-    client: &'a crate::core::Client,
-    project_id_or_key: String,
-}
-
-impl<'a> GetProjectPropertyKeysRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self { client, project_id_or_key: project_id_or_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/properties", crate::core::encode_path_segment(&self.project_id_or_key)),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<EntityPropertiesKeys> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns the value of the property with a given key from the project identified by the key or by the id.
-#[derive(Clone)]
-pub struct GetProjectPropertyRequest<'a> {
-    client: &'a crate::core::Client,
-    property_key: String,
-    project_id_or_key: String,
-}
-
-impl<'a> GetProjectPropertyRequest<'a> {
-    fn new(
-        client: &'a crate::core::Client,
-        property_key: impl Into<String>,
-        project_id_or_key: impl Into<String>,
-    ) -> Self {
-        Self { client, property_key: property_key.into(), project_id_or_key: project_id_or_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!(
-                "/rest/api/2/project/{}/properties/{}",
-                crate::core::encode_path_segment(&self.project_id_or_key),
-                crate::core::encode_path_segment(&self.property_key)
-            ),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<EntityProperty> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Sets the value of the specified project's property. You can use this resource to store a custom data against the project identified by the key or by the id. The user who stores the data is required to have permissions to administer the project.
-#[derive(Clone)]
-pub struct SetProjectPropertyRequest<'a> {
-    client: &'a crate::core::Client,
-    property_key: String,
-    project_id_or_key: String,
-    body: std::collections::HashMap<String, serde_json::Value>,
-}
-
-impl<'a> SetProjectPropertyRequest<'a> {
-    fn new(
-        client: &'a crate::core::Client,
-        property_key: impl Into<String>,
-        project_id_or_key: impl Into<String>,
-        body: std::collections::HashMap<String, serde_json::Value>,
-    ) -> Self {
-        Self { client, property_key: property_key.into(), project_id_or_key: project_id_or_key.into(), body }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            format!(
-                "/rest/api/2/project/{}/properties/{}",
-                crate::core::encode_path_segment(&self.project_id_or_key),
-                crate::core::encode_path_segment(&self.property_key)
-            ),
-        );
-
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Removes the property from the project identified by the key or by the id.
-#[derive(Clone)]
-pub struct DeleteProjectPropertyRequest<'a> {
-    client: &'a crate::core::Client,
-    property_key: String,
-    project_id_or_key: String,
-}
-
-impl<'a> DeleteProjectPropertyRequest<'a> {
-    fn new(
-        client: &'a crate::core::Client,
-        property_key: impl Into<String>,
-        project_id_or_key: impl Into<String>,
-    ) -> Self {
-        Self { client, property_key: property_key.into(), project_id_or_key: project_id_or_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!(
-                "/rest/api/2/project/{}/properties/{}",
-                crate::core::encode_path_segment(&self.project_id_or_key),
-                crate::core::encode_path_segment(&self.property_key)
-            ),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
 /// Restores an archived project. In case of success restored project should be re-indexed.
 #[derive(Clone)]
 pub struct RestoreProjectRequest<'a> {
@@ -1150,238 +581,6 @@ impl<'a> RestoreProjectRequest<'a> {
             crate::core::Method::PUT,
             format!("/rest/api/2/project/{}/restore", crate::core::encode_path_segment(&self.project_id_or_key)),
         );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns all roles in the given project Id or key, with links to full details on each role.
-#[derive(Clone)]
-pub struct GetProjectRolesRequest<'a> {
-    client: &'a crate::core::Client,
-    project_id_or_key: String,
-}
-
-impl<'a> GetProjectRolesRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self { client, project_id_or_key: project_id_or_key.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/role", crate::core::encode_path_segment(&self.project_id_or_key)),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<GetProjectRoles> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns the details for a given project role in a project.
-#[derive(Clone)]
-pub struct GetProjectRoleRequest<'a> {
-    client: &'a crate::core::Client,
-    project_id_or_key: String,
-    id: i64,
-}
-
-impl<'a> GetProjectRoleRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>, id: i64) -> Self {
-        Self { client, project_id_or_key: project_id_or_key.into(), id }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!(
-                "/rest/api/2/project/{}/role/{}",
-                crate::core::encode_path_segment(&self.project_id_or_key),
-                self.id
-            ),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<ProjectRole> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Adds an actor (user or group) to a project role. For user actors, their usernames should be used.
-#[derive(Clone)]
-pub struct AddActorUsersRequest<'a> {
-    client: &'a crate::core::Client,
-    project_id_or_key: String,
-    id: i64,
-    actors_map: ActorsMap,
-}
-
-impl<'a> AddActorUsersRequest<'a> {
-    fn new(
-        client: &'a crate::core::Client,
-        project_id_or_key: impl Into<String>,
-        id: i64,
-        actors_map: ActorsMap,
-    ) -> Self {
-        Self { client, project_id_or_key: project_id_or_key.into(), id, actors_map }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::POST,
-            format!(
-                "/rest/api/2/project/{}/role/{}",
-                crate::core::encode_path_segment(&self.project_id_or_key),
-                self.id
-            ),
-        );
-
-        let body = match serde_json::to_value(&self.actors_map)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<ProjectRole> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Updates a project role to include the specified actors (users or groups). Can be also used to clear roles to not include any users or groups. For user actors, their usernames should be used.
-#[derive(Clone)]
-pub struct SetActorsRequest<'a> {
-    client: &'a crate::core::Client,
-    project_id_or_key: String,
-    id: i64,
-    body: ProjectRoleActorsUpdate,
-}
-
-impl<'a> SetActorsRequest<'a> {
-    fn new(
-        client: &'a crate::core::Client,
-        project_id_or_key: impl Into<String>,
-        id: i64,
-        body: ProjectRoleActorsUpdate,
-    ) -> Self {
-        Self { client, project_id_or_key: project_id_or_key.into(), id, body }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            format!(
-                "/rest/api/2/project/{}/role/{}",
-                crate::core::encode_path_segment(&self.project_id_or_key),
-                self.id
-            ),
-        );
-
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<ProjectRole> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Deletes actors (users or groups) from a project role.
-#[derive(Clone)]
-pub struct DeleteActorRequest<'a> {
-    client: &'a crate::core::Client,
-    project_id_or_key: String,
-    id: i64,
-    user: Option<String>,
-    group: Option<String>,
-}
-
-impl<'a> DeleteActorRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>, id: i64) -> Self {
-        Self { client, project_id_or_key: project_id_or_key.into(), id, user: None, group: None }
-    }
-
-    /// The user name of the user to remove from the project role. Use either user or group, but not both
-    #[must_use]
-    pub fn user(mut self, value: impl Into<String>) -> Self {
-        self.user = Some(value.into());
-
-        self
-    }
-
-    /// The group name to remove from the project role. Use either user or group, but not both
-    #[must_use]
-    pub fn group(mut self, value: impl Into<String>) -> Self {
-        self.group = Some(value.into());
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!(
-                "/rest/api/2/project/{}/role/{}",
-                crate::core::encode_path_segment(&self.project_id_or_key),
-                self.id
-            ),
-        );
-
-        if let Some(value) = &self.user {
-            config.query.push(("user".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.group {
-            config.query.push(("group".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
 
         Ok(config)
     }
@@ -1420,7 +619,7 @@ impl<'a> GetAllStatusesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<IssueTypeWithStatusJson>> {
+    pub async fn send(self) -> crate::core::Result<Vec<IssueTypeWithStatus>> {
         self.client.send(&self.config()?).await
     }
 
@@ -1472,197 +671,26 @@ impl<'a> UpdateProjectTypeRequest<'a> {
     }
 }
 
-/// Returns all versions for the specified project. Results are paginated. Results can be ordered by the following fields: sequence, name, startDate, releaseDate.
-#[derive(Clone)]
-pub struct GetProjectVersionsPaginatedRequest<'a> {
-    client: &'a crate::core::Client,
-    expand: Option<String>,
-    project_id_or_key: String,
-    max_results: Option<i64>,
-    order_by: Option<String>,
-    start_at: Option<i64>,
-}
-
-impl<'a> GetProjectVersionsPaginatedRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self {
-            client,
-            project_id_or_key: project_id_or_key.into(),
-            expand: None,
-            max_results: None,
-            order_by: None,
-            start_at: None,
-        }
-    }
-
-    /// Parameters to expand
-    #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
-
-        self
-    }
-
-    /// How many results on the page should be included. Defaults to 50
-    #[must_use]
-    pub fn max_results(mut self, value: i64) -> Self {
-        self.max_results = Some(value);
-
-        self
-    }
-
-    /// Ordering of the results
-    #[must_use]
-    pub fn order_by(mut self, value: impl Into<String>) -> Self {
-        self.order_by = Some(value.into());
-
-        self
-    }
-
-    /// The page offset, if not specified then defaults to 0
-    #[must_use]
-    pub fn start_at(mut self, value: i64) -> Self {
-        self.start_at = Some(value);
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/version", crate::core::encode_path_segment(&self.project_id_or_key)),
-        );
-
-        if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.max_results {
-            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
-        }
-
-        if let Some(value) = &self.order_by {
-            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        if let Some(value) = &self.start_at {
-            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
-        }
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<PagedResults> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Contains a full representation of a the specified project's versions.
-#[derive(Clone)]
-pub struct GetProjectVersionsRequest<'a> {
-    client: &'a crate::core::Client,
-    expand: Option<String>,
-    project_id_or_key: String,
-}
-
-impl<'a> GetProjectVersionsRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
-        Self { client, project_id_or_key: project_id_or_key.into(), expand: None }
-    }
-
-    /// Parameters to expand
-    #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/versions", crate::core::encode_path_segment(&self.project_id_or_key)),
-        );
-
-        if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
-        }
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<Version>> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns the issue security scheme for project.
-#[derive(Clone)]
-pub struct GetProjectIssueSecuritySchemeRequest<'a> {
-    client: &'a crate::core::Client,
-    project_key_or_id: String,
-}
-
-impl<'a> GetProjectIssueSecuritySchemeRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>) -> Self {
-        Self { client, project_key_or_id: project_key_or_id.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!(
-                "/rest/api/2/project/{}/issuesecuritylevelscheme",
-                crate::core::encode_path_segment(&self.project_key_or_id)
-            ),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<SecuritySchemeJson> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
 /// Gets a notification scheme associated with the project. Follow the documentation of /notificationscheme/{id} resource for all details about returned value.
 #[derive(Clone)]
-pub struct GetProjectNotificationSchemeRequest<'a> {
+pub struct GetNotificationSchemeForProjectRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<Vec<GetNotificationSchemeForProjectRequestExpandValue>>,
     project_key_or_id: String,
 }
 
-impl<'a> GetProjectNotificationSchemeRequest<'a> {
+impl<'a> GetNotificationSchemeForProjectRequest<'a> {
     fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>) -> Self {
         Self { client, project_key_or_id: project_key_or_id.into(), expand: None }
     }
 
-    /// Optional information to be expanded in the response: group, user, projectRole or field.
+    /// Optional information to be expanded in the response: group, user, projectRole or field. This parameter accepts a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetNotificationSchemeForProjectRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -1678,7 +706,10 @@ impl<'a> GetProjectNotificationSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)
@@ -1686,112 +717,6 @@ impl<'a> GetProjectNotificationSchemeRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<NotificationScheme> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Gets a permission scheme assigned with a project
-#[derive(Clone)]
-pub struct GetAssignedPermissionSchemeRequest<'a> {
-    client: &'a crate::core::Client,
-    expand: Option<GetAssignedPermissionSchemeRequestExpand>,
-    project_key_or_id: String,
-}
-
-impl<'a> GetAssignedPermissionSchemeRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>) -> Self {
-        Self { client, project_key_or_id: project_key_or_id.into(), expand: None }
-    }
-
-    /// Use expand to include additional information about permission schemes in the response. This parameter accepts a comma-separated list of expandable options. Expand options include: all and field.
-    #[must_use]
-    pub fn expand(mut self, value: GetAssignedPermissionSchemeRequestExpand) -> Self {
-        self.expand = Some(value);
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!(
-                "/rest/api/2/project/{}/permissionscheme",
-                crate::core::encode_path_segment(&self.project_key_or_id)
-            ),
-        );
-
-        if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
-        }
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<PermissionScheme> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Assigns a permission scheme with a project
-#[derive(Clone)]
-pub struct AssignPermissionSchemeRequest<'a> {
-    client: &'a crate::core::Client,
-    expand: Option<AssignPermissionSchemeRequestExpand>,
-    project_key_or_id: String,
-    id: Id,
-}
-
-impl<'a> AssignPermissionSchemeRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>, id: Id) -> Self {
-        Self { client, project_key_or_id: project_key_or_id.into(), id, expand: None }
-    }
-
-    /// Use expand to include additional information about permission schemes in the response. This parameter accepts a comma-separated list of expandable options. Expand options include: all and field.
-    #[must_use]
-    pub fn expand(mut self, value: AssignPermissionSchemeRequestExpand) -> Self {
-        self.expand = Some(value);
-
-        self
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            format!(
-                "/rest/api/2/project/{}/permissionscheme",
-                crate::core::encode_path_segment(&self.project_key_or_id)
-            ),
-        );
-
-        if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
-        }
-
-        let body = match serde_json::to_value(&self.id)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<PermissionScheme> {
         self.client.send(&self.config()?).await
     }
 
@@ -1879,13 +804,13 @@ impl<'a> AssignPrioritySchemeRequest<'a> {
 #[derive(Clone)]
 pub struct UnassignPrioritySchemeRequest<'a> {
     client: &'a crate::core::Client,
-    scheme_id: i64,
     project_key_or_id: String,
+    scheme_id: i64,
 }
 
 impl<'a> UnassignPrioritySchemeRequest<'a> {
-    fn new(client: &'a crate::core::Client, scheme_id: i64, project_key_or_id: impl Into<String>) -> Self {
-        Self { client, scheme_id, project_key_or_id: project_key_or_id.into() }
+    fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>, scheme_id: i64) -> Self {
+        Self { client, project_key_or_id: project_key_or_id.into(), scheme_id }
     }
 
     /// The request as the transport will send it.
@@ -1904,39 +829,6 @@ impl<'a> UnassignPrioritySchemeRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<PriorityScheme> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns all security levels for the project that the current logged in user has access to. If the user does not have the Set Issue Security permission, the list will be empty.
-#[derive(Clone)]
-pub struct GetSecurityLevelsForProjectRequest<'a> {
-    client: &'a crate::core::Client,
-    project_key_or_id: String,
-}
-
-impl<'a> GetSecurityLevelsForProjectRequest<'a> {
-    fn new(client: &'a crate::core::Client, project_key_or_id: impl Into<String>) -> Self {
-        Self { client, project_key_or_id: project_key_or_id.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/project/{}/securitylevel", crate::core::encode_path_segment(&self.project_key_or_id)),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<SecurityListLevelJson> {
         self.client.send(&self.config()?).await
     }
 
@@ -1987,14 +879,14 @@ impl<'a> GetWorkflowSchemeForProjectRequest<'a> {
 /// a header for use in the picker, specifically 'Showing X of Y matching projects' and the total number
 /// of matches for the query.
 #[derive(Clone)]
-pub struct SearchForProjectsRequest<'a> {
+pub struct GetProjectsPickerRequest<'a> {
     client: &'a crate::core::Client,
     max_results: Option<i64>,
     query: Option<String>,
     allow_empty_query: Option<bool>,
 }
 
-impl<'a> SearchForProjectsRequest<'a> {
+impl<'a> GetProjectsPickerRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
         Self { client, max_results: None, query: None, allow_empty_query: None }
     }

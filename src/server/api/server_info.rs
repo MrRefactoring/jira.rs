@@ -37,7 +37,7 @@ impl<'a> GetServerInfoRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<ServerInfo> {
+    pub async fn send(self) -> crate::core::Result<ServerInformation> {
         self.client.send(&self.config()?).await
     }
 

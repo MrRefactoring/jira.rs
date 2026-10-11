@@ -17,11 +17,6 @@ impl<'a> AvatarsService<'a> {
         GetAllSystemAvatarsRequest::new(self.client, r#type)
     }
 
-    /// Returns a list of all avatars
-    pub fn get_avatars(&self, r#type: impl Into<String>, owning_object_id: impl Into<String>) -> GetAvatarsRequest<'a> {
-        GetAvatarsRequest::new(self.client, r#type, owning_object_id)
-    }
-
     /// Creates avatar from temporary
     pub fn create_avatar_from_temporary(
         &self,
@@ -34,11 +29,11 @@ impl<'a> AvatarsService<'a> {
     /// Deletes avatar
     pub fn delete_avatar(
         &self,
-        id: i64,
         r#type: impl Into<String>,
         owning_object_id: impl Into<String>,
+        id: i64,
     ) -> DeleteAvatarRequest<'a> {
-        DeleteAvatarRequest::new(self.client, id, r#type, owning_object_id)
+        DeleteAvatarRequest::new(self.client, r#type, owning_object_id, id)
     }
 
     /// Creates temporary avatar
@@ -49,6 +44,11 @@ impl<'a> AvatarsService<'a> {
         avatar: impl IntoIterator<Item = crate::core::Attachment>,
     ) -> StoreTemporaryAvatarUsingMultiPartRequest<'a> {
         StoreTemporaryAvatarUsingMultiPartRequest::new(self.client, r#type, owning_object_id, avatar)
+    }
+
+    /// Returns a list of all avatars
+    pub fn get_avatars(&self, r#type: impl Into<String>, entity_id: impl Into<String>) -> GetAvatarsRequest<'a> {
+        GetAvatarsRequest::new(self.client, r#type, entity_id)
     }
 }
 
@@ -76,44 +76,6 @@ impl<'a> GetAllSystemAvatarsRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<Avatar> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns a list of all avatars
-#[derive(Clone)]
-pub struct GetAvatarsRequest<'a> {
-    client: &'a crate::core::Client,
-    r#type: String,
-    owning_object_id: String,
-}
-
-impl<'a> GetAvatarsRequest<'a> {
-    fn new(client: &'a crate::core::Client, r#type: impl Into<String>, owning_object_id: impl Into<String>) -> Self {
-        Self { client, r#type: r#type.into(), owning_object_id: owning_object_id.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!(
-                "/rest/api/2/universal_avatar/type/{}/owner/{}",
-                crate::core::encode_path_segment(&self.r#type),
-                crate::core::encode_path_segment(&self.owning_object_id)
-            ),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<GetAvatars> {
         self.client.send(&self.config()?).await
     }
 
@@ -180,19 +142,19 @@ impl<'a> CreateAvatarFromTemporaryRequest<'a> {
 #[derive(Clone)]
 pub struct DeleteAvatarRequest<'a> {
     client: &'a crate::core::Client,
-    id: i64,
     r#type: String,
     owning_object_id: String,
+    id: i64,
 }
 
 impl<'a> DeleteAvatarRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
-        id: i64,
         r#type: impl Into<String>,
         owning_object_id: impl Into<String>,
+        id: i64,
     ) -> Self {
-        Self { client, id, r#type: r#type.into(), owning_object_id: owning_object_id.into() }
+        Self { client, r#type: r#type.into(), owning_object_id: owning_object_id.into(), id }
     }
 
     /// The request as the transport will send it.
@@ -278,6 +240,44 @@ impl<'a> StoreTemporaryAvatarUsingMultiPartRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<AvatarCropping> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Returns a list of all avatars
+#[derive(Clone)]
+pub struct GetAvatarsRequest<'a> {
+    client: &'a crate::core::Client,
+    r#type: String,
+    entity_id: String,
+}
+
+impl<'a> GetAvatarsRequest<'a> {
+    fn new(client: &'a crate::core::Client, r#type: impl Into<String>, entity_id: impl Into<String>) -> Self {
+        Self { client, r#type: r#type.into(), entity_id: entity_id.into() }
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!(
+                "/rest/api/2/universal_avatar/type/{}/owner/{}",
+                crate::core::encode_path_segment(&self.r#type),
+                crate::core::encode_path_segment(&self.entity_id)
+            ),
+        );
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<GetAvatars> {
         self.client.send(&self.config()?).await
     }
 

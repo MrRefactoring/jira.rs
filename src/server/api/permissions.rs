@@ -13,8 +13,8 @@ impl<'a> PermissionsService<'a> {
     }
 
     /// Returns all permissions in the system and whether the currently logged in user has them. You can optionally provide a specific context to get permissions for (projectKey OR projectId OR issueKey OR issueId)
-    pub fn get_permissions(&self) -> GetPermissionsRequest<'a> {
-        GetPermissionsRequest::new(self.client)
+    pub fn get_my_permissions(&self) -> GetMyPermissionsRequest<'a> {
+        GetMyPermissionsRequest::new(self.client)
     }
 
     /// Returns all permissions that are present in the Jira instance - Global, Project and the global ones added by plugins
@@ -25,7 +25,7 @@ impl<'a> PermissionsService<'a> {
 
 /// Returns all permissions in the system and whether the currently logged in user has them. You can optionally provide a specific context to get permissions for (projectKey OR projectId OR issueKey OR issueId)
 #[derive(Clone)]
-pub struct GetPermissionsRequest<'a> {
+pub struct GetMyPermissionsRequest<'a> {
     client: &'a crate::core::Client,
     issue_id: Option<String>,
     project_key: Option<String>,
@@ -33,7 +33,7 @@ pub struct GetPermissionsRequest<'a> {
     project_id: Option<String>,
 }
 
-impl<'a> GetPermissionsRequest<'a> {
+impl<'a> GetMyPermissionsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
         Self { client, issue_id: None, project_key: None, issue_key: None, project_id: None }
     }
@@ -95,7 +95,7 @@ impl<'a> GetPermissionsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<PermissionsJson> {
+    pub async fn send(self) -> crate::core::Result<Permissions> {
         self.client.send(&self.config()?).await
     }
 
@@ -124,7 +124,7 @@ impl<'a> GetAllPermissionsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<PermissionsJson> {
+    pub async fn send(self) -> crate::core::Result<Permissions> {
         self.client.send(&self.config()?).await
     }
 

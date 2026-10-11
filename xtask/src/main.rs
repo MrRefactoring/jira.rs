@@ -1,6 +1,9 @@
 mod audit;
 mod coverage;
 mod dc_rig;
+mod generated;
+mod parity;
+mod streams;
 
 use std::path::PathBuf;
 
@@ -15,6 +18,7 @@ fn jira_dc() -> Rig {
         product: "Jira Data Center",
         compose_dir: workspace_root().join("docker/jira-dc"),
         base_url: std::env::var("JIRA_SERVER_BASE_URL").unwrap_or_else(|_| "http://localhost:8080".to_owned()),
+        port_env: "JIRA_DC_PORT",
         admin_username: "admin",
         admin_password: "admin123",
         admin_email: "admin@example.invalid",
@@ -28,6 +32,7 @@ fn jsm_dc() -> Rig {
         product: "Jira Service Management Data Center",
         compose_dir: workspace_root().join("docker/jsm-dc"),
         base_url: std::env::var("JSM_SERVER_BASE_URL").unwrap_or_else(|_| "http://localhost:8082".to_owned()),
+        port_env: "JSM_DC_PORT",
         admin_username: "admin",
         admin_password: "admin123",
         admin_email: "admin@example.invalid",
@@ -46,6 +51,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         "jira-dc" => dc_rig::run(&jira_dc(), &command).await,
         "jsm-dc" => dc_rig::run(&jsm_dc(), &command).await,
         "audit" => audit::run(&workspace_root(), &std::env::args().skip(2).collect::<Vec<_>>()).await,
+        "parity" => parity::run(&workspace_root(), &std::env::args().skip(2).collect::<Vec<_>>()),
+        "streams" => streams::run(&workspace_root(), &std::env::args().skip(2).collect::<Vec<_>>()),
         "coverage" => coverage::run(&workspace_root(), &std::env::args().skip(2).collect::<Vec<_>>()).await,
         other => Err(format!(
             "Unknown task \"{other}\". Use `cargo xtask jira-dc <up|status|down>` or `cargo xtask jsm-dc <…>`."

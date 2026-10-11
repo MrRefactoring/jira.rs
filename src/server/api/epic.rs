@@ -1,59 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesWithoutEpicRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesWithoutEpicRequestExpand { One, Many, Other });
-
-/// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesWithoutEpicRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesWithoutEpicRequestFields { One, Many, Other });
-
-/// A comma-separated list of the parameters to expand.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForEpicRequestExpand {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesForEpicRequestExpand { One, Many, Other });
-
-/// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetIssuesForEpicRequestFields {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetIssuesForEpicRequestFields { One, Many, Other });
 
 /// The Epic operations.
 pub struct EpicService<'a> {
@@ -71,8 +18,11 @@ impl<'a> EpicService<'a> {
     }
 
     /// Removes issues from epics. The user needs to have the edit issue permission for all issue they want to remove from epics. The maximum number of issues that can be moved in one operation is 50.
-    pub fn remove_issues_from_epic(&self, issue_assign_request: IssueAssignRequest) -> RemoveIssuesFromEpicRequest<'a> {
-        RemoveIssuesFromEpicRequest::new(self.client, issue_assign_request)
+    pub fn remove_issues_from_epic(
+        &self,
+        issues: impl IntoIterator<Item = impl Into<String>>,
+    ) -> RemoveIssuesFromEpicRequest<'a> {
+        RemoveIssuesFromEpicRequest::new(self.client, issues)
     }
 
     /// Returns the epic for a given epic Id. This epic will only be returned if the user has permission to view it.
@@ -95,12 +45,8 @@ impl<'a> EpicService<'a> {
     }
 
     /// Moves issues to an epic, for a given epic id. Issues can be only in a single epic at the same time. That means that already assigned issues to an epic, will not be assigned to the previous epic anymore. The user needs to have the edit issue permission for all issue they want to move and to the epic. The maximum number of issues that can be moved in one operation is 50.
-    pub fn move_issues_to_epic(
-        &self,
-        epic_id_or_key: impl Into<String>,
-        issue_assign_request: IssueAssignRequest,
-    ) -> MoveIssuesToEpicRequest<'a> {
-        MoveIssuesToEpicRequest::new(self.client, epic_id_or_key, issue_assign_request)
+    pub fn move_issues_to_epic(&self, epic_id_or_key: impl Into<String>) -> MoveIssuesToEpicRequest<'a> {
+        MoveIssuesToEpicRequest::new(self.client, epic_id_or_key)
     }
 
     /// Moves (ranks) an epic before or after a given epic. If rankCustomFieldId is not defined, the default rank field will be used.
@@ -117,11 +63,11 @@ impl<'a> EpicService<'a> {
 #[derive(Clone)]
 pub struct GetIssuesWithoutEpicRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetIssuesWithoutEpicRequestExpand>,
+    expand: Option<Vec<String>>,
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
-    fields: Option<GetIssuesWithoutEpicRequestFields>,
+    fields: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
@@ -132,8 +78,8 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetIssuesWithoutEpicRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -164,8 +110,8 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: GetIssuesWithoutEpicRequestFields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -184,7 +130,7 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/agile/1.0/epic/none/issue".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.jql {
@@ -200,7 +146,7 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {
@@ -208,6 +154,25 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.issues.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(items, page.start_at.unwrap_or(position), false, page.total, None))
+        })
     }
 
     /// Sends the request.
@@ -225,12 +190,12 @@ impl<'a> GetIssuesWithoutEpicRequest<'a> {
 #[derive(Clone)]
 pub struct RemoveIssuesFromEpicRequest<'a> {
     client: &'a crate::core::Client,
-    issue_assign_request: IssueAssignRequest,
+    issues: Vec<String>,
 }
 
 impl<'a> RemoveIssuesFromEpicRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_assign_request: IssueAssignRequest) -> Self {
-        Self { client, issue_assign_request }
+    fn new(client: &'a crate::core::Client, issues: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        Self { client, issues: issues.into_iter().map(Into::into).collect() }
     }
 
     /// The request as the transport will send it.
@@ -238,10 +203,9 @@ impl<'a> RemoveIssuesFromEpicRequest<'a> {
         let mut config =
             crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/agile/1.0/epic/none/issue".to_owned());
 
-        let body = match serde_json::to_value(&self.issue_assign_request)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
+        let mut body = serde_json::Map::new();
+
+        body.insert("issues".to_owned(), serde_json::to_value(&self.issues)?);
 
         config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
 
@@ -337,12 +301,12 @@ impl<'a> PartiallyUpdateEpicRequest<'a> {
 #[derive(Clone)]
 pub struct GetIssuesForEpicRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<GetIssuesForEpicRequestExpand>,
+    expand: Option<Vec<String>>,
     jql: Option<String>,
     max_results: Option<i64>,
     validate_query: Option<bool>,
     epic_id_or_key: String,
-    fields: Option<GetIssuesForEpicRequestFields>,
+    fields: Option<Vec<String>>,
     start_at: Option<i64>,
 }
 
@@ -362,8 +326,8 @@ impl<'a> GetIssuesForEpicRequest<'a> {
 
     /// A comma-separated list of the parameters to expand.
     #[must_use]
-    pub fn expand(mut self, value: GetIssuesForEpicRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -394,8 +358,8 @@ impl<'a> GetIssuesForEpicRequest<'a> {
 
     /// The list of fields to return for each issue. By default, all navigable and Agile fields are returned.
     #[must_use]
-    pub fn fields(mut self, value: GetIssuesForEpicRequestFields) -> Self {
-        self.fields = Some(value);
+    pub fn fields(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.fields = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -416,7 +380,7 @@ impl<'a> GetIssuesForEpicRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.jql {
@@ -432,7 +396,7 @@ impl<'a> GetIssuesForEpicRequest<'a> {
         }
 
         if let Some(value) = &self.fields {
-            config.query.push(("fields".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("fields".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.start_at {
@@ -440,6 +404,25 @@ impl<'a> GetIssuesForEpicRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Issue>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.issues.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(items, page.start_at.unwrap_or(position), false, page.total, None))
+        })
     }
 
     /// Sends the request.
@@ -458,16 +441,19 @@ impl<'a> GetIssuesForEpicRequest<'a> {
 pub struct MoveIssuesToEpicRequest<'a> {
     client: &'a crate::core::Client,
     epic_id_or_key: String,
-    issue_assign_request: IssueAssignRequest,
+    issues: Option<Vec<String>>,
 }
 
 impl<'a> MoveIssuesToEpicRequest<'a> {
-    fn new(
-        client: &'a crate::core::Client,
-        epic_id_or_key: impl Into<String>,
-        issue_assign_request: IssueAssignRequest,
-    ) -> Self {
-        Self { client, epic_id_or_key: epic_id_or_key.into(), issue_assign_request }
+    fn new(client: &'a crate::core::Client, epic_id_or_key: impl Into<String>) -> Self {
+        Self { client, epic_id_or_key: epic_id_or_key.into(), issues: None }
+    }
+
+    #[must_use]
+    pub fn issues(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.issues = Some(value.into_iter().map(Into::into).collect());
+
+        self
     }
 
     /// The request as the transport will send it.
@@ -477,10 +463,11 @@ impl<'a> MoveIssuesToEpicRequest<'a> {
             format!("/rest/agile/1.0/epic/{}/issue", crate::core::encode_path_segment(&self.epic_id_or_key)),
         );
 
-        let body = match serde_json::to_value(&self.issue_assign_request)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
+        let mut body = serde_json::Map::new();
+
+        if let Some(value) = &self.issues {
+            body.insert("issues".to_owned(), serde_json::to_value(value)?);
+        }
 
         config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
 

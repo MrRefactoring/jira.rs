@@ -9,7 +9,7 @@ pub struct Issue {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub changelog: Option<Changelog>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub editmeta: Option<EditMeta>,
+    pub editmeta: Option<IssueUpdateMetadata>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub fields: Option<std::collections::HashMap<String, serde_json::Value>>,
     #[serde(rename = "fieldsToInclude", default, skip_serializing_if = "Option::is_none")]

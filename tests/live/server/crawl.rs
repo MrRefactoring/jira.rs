@@ -1,7 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 
-use jira::server::{CommentJson, Filter, IssueUpdate, ProjectInput, Version, WorkflowScheme};
+use jira::server::{CommentInput, Filter, IssueUpdateDetails, ProjectInput, Version, WorkflowScheme};
 use serde_json::{Value, json};
 
 use super::fixtures::software_licensed;
@@ -274,8 +274,7 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
 
     let issue = server()
         .issues()
-        .create_issue()
-        .issue_update(IssueUpdate {
+        .create_issue(IssueUpdateDetails {
             fields: Some(
                 [
                     ("project".to_owned(), json!({ "key": project_key })),
@@ -286,7 +285,7 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
                 .into_iter()
                 .collect(),
             ),
-            ..IssueUpdate::default()
+            ..IssueUpdateDetails::default()
         })
         .send()
         .await
@@ -302,18 +301,20 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
     });
 
     server()
-        .issues()
-        .add_comment(&issue_key)
-        .comment_json(CommentJson { body: Some("created by the crawl".to_owned()), ..CommentJson::default() })
+        .issue_comments()
+        .add_comment(
+            &issue_key,
+            CommentInput { body: Some("created by the crawl".to_owned()), ..CommentInput::default() },
+        )
         .send()
         .await
         .expect("the issue takes a comment");
 
     server()
-        .issues()
+        .issue_properties()
         .set_issue_property(
-            PROPERTY_KEY,
             &issue_key,
+            PROPERTY_KEY,
             [("createdBy".to_owned(), json!("the Data Center crawl"))].into_iter().collect(),
         )
         .send()
@@ -336,8 +337,7 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
 
     let filter = server()
         .filters()
-        .create_filter()
-        .filter(Filter {
+        .create_filter(Filter {
             name: Some(test_name("filter")),
             jql: Some(format!("project = {project_key}")),
             description: Some("created by the crawl".to_owned()),
@@ -353,12 +353,12 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
     tracker.defer(move || {
         let id = for_cleanup.clone();
 
-        async move { server().filters().delete_filter(id).send().await }
+        async move { server().filters().delete_filter(id.parse().expect("a filter id is a number")).send().await }
     });
 
     let scheme = server()
         .workflow_schemes()
-        .create_scheme(WorkflowScheme {
+        .create_workflow_scheme(WorkflowScheme {
             name: Some(test_name("crawl workflow scheme")),
             description: Some("created by the crawl".to_owned()),
             ..WorkflowScheme::default()
@@ -369,7 +369,9 @@ async fn create_fixture(tracker: &mut ResourceTracker) -> Fixture {
 
     let workflow_scheme_id = scheme.id.expect("a created workflow scheme carries an id");
 
-    tracker.defer(move || async move { server().workflow_schemes().delete_scheme(workflow_scheme_id).send().await });
+    tracker.defer(move || async move {
+        server().workflow_schemes().delete_workflow_scheme(workflow_scheme_id).send().await
+    });
 
     Fixture { project_key, project_id, issue_key, version_id, filter_id, workflow_scheme_id }
 }

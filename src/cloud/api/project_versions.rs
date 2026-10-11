@@ -1,7 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
 
 crate::open_enum! {
     /// [Order](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#ordering) the results by a field:
@@ -30,19 +29,6 @@ crate::open_enum! {
     }
 }
 
-/// A list of status values used to filter the results by version status. This parameter accepts a comma-separated list. The status values are `released`, `unreleased`, and `archived`.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetProjectVersionsPaginatedRequestStatus {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetProjectVersionsPaginatedRequestStatus { One, Many, Other });
-
 crate::open_enum! {
     pub enum GetProjectVersionsPaginatedRequestExpandValue {
         Issuesstatus => "issuesstatus",
@@ -52,42 +38,11 @@ crate::open_enum! {
     }
 }
 
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `issuesstatus` Returns the number of issues in each status category for each version.
-///  *  `operations` Returns actions that can be performed on the specified version.
-///  *  `driver` Returns the Atlassian account ID of the version driver.
-///  *  `approvers` Returns a list containing the approvers for this version.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetProjectVersionsPaginatedRequestExpand {
-    One(GetProjectVersionsPaginatedRequestExpandValue),
-    Many(Vec<GetProjectVersionsPaginatedRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetProjectVersionsPaginatedRequestExpand { One, Many, Other });
-
 crate::open_enum! {
     pub enum GetProjectVersionsRequestExpandValue {
         Operations => "operations",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts `operations`, which returns actions that can be performed on the version.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetProjectVersionsRequestExpand {
-    One(GetProjectVersionsRequestExpandValue),
-    Many(Vec<GetProjectVersionsRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetProjectVersionsRequestExpand { One, Many, Other });
 
 crate::open_enum! {
     pub enum GetVersionRequestExpandValue {
@@ -97,24 +52,6 @@ crate::open_enum! {
         Approvers => "approvers",
     }
 }
-
-/// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information about version in the response. This parameter accepts a comma-separated list. Expand options include:
-///
-///  *  `operations` Returns the list of operations available for this version.
-///  *  `issuesstatus` Returns the count of issues in this version for each of the status categories *to do*, *in progress*, *done*, and *unmapped*. The *unmapped* property represents the number of issues with a status other than *to do*, *in progress*, and *done*.
-///  *  `driver` Returns the Atlassian account ID of the version driver.
-///  *  `approvers` Returns a list containing the Atlassian account IDs of approvers for this version.
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum GetVersionRequestExpand {
-    One(GetVersionRequestExpandValue),
-    Many(Vec<GetVersionRequestExpandValue>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(GetVersionRequestExpand { One, Many, Other });
 
 /// The ProjectVersions operations.
 pub struct ProjectVersionsService<'a> {
@@ -293,8 +230,8 @@ pub struct GetProjectVersionsPaginatedRequest<'a> {
     max_results: Option<i64>,
     order_by: Option<GetProjectVersionsPaginatedRequestOrderBy>,
     query: Option<String>,
-    status: Option<GetProjectVersionsPaginatedRequestStatus>,
-    expand: Option<GetProjectVersionsPaginatedRequestExpand>,
+    status: Option<Vec<String>>,
+    expand: Option<Vec<GetProjectVersionsPaginatedRequestExpandValue>>,
 }
 
 impl<'a> GetProjectVersionsPaginatedRequest<'a> {
@@ -351,8 +288,8 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
 
     /// A list of status values used to filter the results by version status. This parameter accepts a comma-separated list. The status values are `released`, `unreleased`, and `archived`.
     #[must_use]
-    pub fn status(mut self, value: GetProjectVersionsPaginatedRequestStatus) -> Self {
-        self.status = Some(value);
+    pub fn status(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.status = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -364,8 +301,11 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
     ///  *  `driver` Returns the Atlassian account ID of the version driver.
     ///  *  `approvers` Returns a list containing the approvers for this version.
     #[must_use]
-    pub fn expand(mut self, value: GetProjectVersionsPaginatedRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetProjectVersionsPaginatedRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -394,11 +334,14 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
         }
 
         if let Some(value) = &self.status {
-            config.query.push(("status".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("status".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)
@@ -406,17 +349,20 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Version>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, Some(page.total), None))
         })
     }
 
@@ -440,7 +386,7 @@ impl<'a> GetProjectVersionsPaginatedRequest<'a> {
 pub struct GetProjectVersionsRequest<'a> {
     client: &'a crate::core::Client,
     project_id_or_key: String,
-    expand: Option<GetProjectVersionsRequestExpand>,
+    expand: Option<Vec<GetProjectVersionsRequestExpandValue>>,
 }
 
 impl<'a> GetProjectVersionsRequest<'a> {
@@ -450,8 +396,8 @@ impl<'a> GetProjectVersionsRequest<'a> {
 
     /// Use [expand](https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro#expansion) to include additional information in the response. This parameter accepts `operations`, which returns actions that can be performed on the version.
     #[must_use]
-    pub fn expand(mut self, value: GetProjectVersionsRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetProjectVersionsRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -464,7 +410,10 @@ impl<'a> GetProjectVersionsRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)
@@ -531,7 +480,7 @@ impl<'a> CreateVersionRequest<'a> {
 pub struct GetVersionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
-    expand: Option<GetVersionRequestExpand>,
+    expand: Option<Vec<GetVersionRequestExpandValue>>,
 }
 
 impl<'a> GetVersionRequest<'a> {
@@ -546,8 +495,8 @@ impl<'a> GetVersionRequest<'a> {
     ///  *  `driver` Returns the Atlassian account ID of the version driver.
     ///  *  `approvers` Returns a list containing the Atlassian account IDs of approvers for this version.
     #[must_use]
-    pub fn expand(mut self, value: GetVersionRequestExpand) -> Self {
-        self.expand = Some(value);
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<GetVersionRequestExpandValue>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -560,7 +509,10 @@ impl<'a> GetVersionRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)

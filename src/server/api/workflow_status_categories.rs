@@ -69,7 +69,7 @@ impl<'a> GetStatusCategoriesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<StatusCategoryJson>> {
+    pub async fn send(self) -> crate::core::Result<Vec<StatusCategory>> {
         self.client.send(&self.config()?).await
     }
 
@@ -102,7 +102,7 @@ impl<'a> GetStatusCategoryRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<StatusCategoryJson> {
+    pub async fn send(self) -> crate::core::Result<StatusCategory> {
         self.client.send(&self.config()?).await
     }
 

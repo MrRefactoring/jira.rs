@@ -1,0 +1,548 @@
+#![cfg(all(feature = "server", feature = "agile", feature = "cloud", feature = "assets-server"))]
+
+use futures_util::TryStreamExt;
+use jira::core::Client;
+use serde_json::{Value, json};
+use wiremock::matchers::{method, path};
+use wiremock::{Mock, MockServer, Request, ResponseTemplate};
+
+fn client_for(server: &MockServer) -> Client {
+    Client::builder().host(server.uri()).build().unwrap()
+}
+
+fn query(request: &Request, name: &str) -> Option<String> {
+    request.url.query_pairs().find(|(key, _)| key == name).map(|(_, value)| value.into_owned())
+}
+
+#[tokio::test]
+async fn service_desk_request_attachments_follow_page_starts() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/rest/servicedeskapi/request/IT-15/attachment"))
+        .respond_with(|request: &Request| match query(request, "start").as_deref() {
+            Some("2") => ResponseTemplate::new(200).set_body_json(
+                json!({"start": 2, "isLastPage": false, "values": [{"filename": "a.png"}, {"filename": "b.png"}]}),
+            ),
+            Some("4") => ResponseTemplate::new(200)
+                .set_body_json(json!({"start": 4, "isLastPage": true, "values": [{"filename": "c.png"}]})),
+            _ => ResponseTemplate::new(500),
+        })
+        .mount(&server)
+        .await;
+
+    let api = jira::service_desk::ServiceDeskClient::new(client_for(&server));
+    let attachments: Vec<_> =
+        api.request().get_attachments_for_request("IT-15").start(2).limit(2).stream().try_collect().await.unwrap();
+    assert_eq!(
+        attachments.iter().map(|item| item.filename.as_deref()).collect::<Vec<_>>(),
+        [Some("a.png"), Some("b.png"), Some("c.png")]
+    );
+    assert_eq!(
+        server.received_requests().await.unwrap().iter().map(|request| query(request, "start")).collect::<Vec<_>>(),
+        [Some("2".to_owned()), Some("4".to_owned())]
+    );
+}
+
+#[cfg(feature = "user-provisioning")]
+#[tokio::test]
+async fn scim_users_follow_one_based_offsets() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/scim/directory/directory/Users"))
+        .respond_with(|request: &Request| match query(request, "startIndex").as_deref() {
+            Some("1") => ResponseTemplate::new(200).set_body_json(
+                json!({"totalResults": 3, "startIndex": 1, "itemsPerPage": 2, "Resources": [{"id": "a"}, {"id": "b"}]}),
+            ),
+            Some("3") => ResponseTemplate::new(200).set_body_json(
+                json!({"totalResults": 3, "startIndex": 3, "itemsPerPage": 2, "Resources": [{"id": "c"}]}),
+            ),
+            _ => ResponseTemplate::new(500),
+        })
+        .mount(&server)
+        .await;
+
+    let api = jira::user_provisioning::UserProvisioningClient::new(client_for(&server));
+    let users: Vec<_> = api.users().get_users("directory").stream().try_collect().await.unwrap();
+    assert_eq!(users.iter().map(|user| user.id.as_deref()).collect::<Vec<_>>(), [Some("a"), Some("b"), Some("c")]);
+    assert_eq!(
+        server
+            .received_requests()
+            .await
+            .unwrap()
+            .iter()
+            .map(|request| query(request, "startIndex"))
+            .collect::<Vec<_>>(),
+        [Some("1".to_owned()), Some("3".to_owned())]
+    );
+}
+
+#[cfg(feature = "admin")]
+#[tokio::test]
+async fn admin_users_follow_url_cursors_through_an_empty_page() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/admin/v1/orgs/org/users"))
+        .respond_with(|request: &Request| match query(request, "cursor").as_deref() {
+            None => ResponseTemplate::new(200).set_body_json(json!({"data": [{"account_id": "first", "account_type": "atlassian", "account_status": "active", "name": "First", "picture": "https://example.org/a"}], "links": {"next": "/admin/v1/orgs/org/users?cursor=second"}})),
+            Some("second") => ResponseTemplate::new(200).set_body_json(json!({"data": [{"account_id": "second", "account_type": "atlassian", "account_status": "active", "name": "Second", "picture": "https://example.org/b"}], "links": {"next": "https://api.example.org/admin/v1/orgs/org/users?cursor=third"}})),
+            Some("third") => ResponseTemplate::new(200).set_body_json(json!({"data": [], "links": {}})),
+            _ => ResponseTemplate::new(500),
+        })
+        .mount(&server)
+        .await;
+
+    let admin = jira::admin::AdminClient::new(client_for(&server));
+    let users: Vec<_> = admin.users().get_users("org").stream().try_collect().await.unwrap();
+    assert_eq!(users.len(), 2);
+    assert_eq!(
+        server.received_requests().await.unwrap().iter().map(|request| query(request, "cursor")).collect::<Vec<_>>(),
+        [None, Some("second".to_owned()), Some("third".to_owned())]
+    );
+}
+
+#[tokio::test]
+async fn agile_board_fields_use_one_query_value() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/rest/software/1.0/board/1/issue"))
+        .respond_with(ResponseTemplate::new(200).set_body_json(json!({"issues": [], "isLast": true})))
+        .mount(&server)
+        .await;
+
+    let api = jira::agile::AgileClient::new(client_for(&server));
+    api.board().get_issues_for_board(1).fields(["summary", "status"]).send().await.unwrap();
+    let requests = server.received_requests().await.unwrap();
+    let fields: Vec<_> = requests[0].url.query_pairs().filter(|(name, _)| name == "fields").collect();
+    assert_eq!(fields.len(), 1);
+    assert_eq!(fields[0].1, "summary,status");
+}
+
+#[tokio::test]
+async fn agile_full_projects_streams_one_answer_without_paging_query() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/rest/agile/1.0/board/1/project/full"))
+        .respond_with(ResponseTemplate::new(200).set_body_json(json!({
+            "startAt": 0,
+            "maxResults": 1,
+            "total": 2,
+            "isLast": false,
+            "values": [{"id": "1"}]
+        })))
+        .mount(&server)
+        .await;
+
+    let api = jira::agile::AgileClient::new(client_for(&server));
+    let projects: Vec<_> = api.board().get_projects_full(1).stream().try_collect().await.unwrap();
+    assert_eq!(projects.iter().map(|project| project.id.as_deref()).collect::<Vec<_>>(), [Some("1")]);
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(requests.len(), 1);
+    assert!(requests[0].url.query().is_none());
+}
+
+#[tokio::test]
+async fn issue_expansion_uses_one_comma_separated_query_value_on_both_platforms() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET")).respond_with(ResponseTemplate::new(200).set_body_json(json!({}))).mount(&server).await;
+
+    jira::cloud::CloudClient::new(client_for(&server))
+        .issues()
+        .get_issue("X-1")
+        .expand(["changelog", "names"])
+        .send_raw()
+        .await
+        .unwrap();
+    jira::server::ServerClient::new(client_for(&server))
+        .issues()
+        .get_issue("X-1")
+        .expand(["changelog", "names"])
+        .send_raw()
+        .await
+        .unwrap();
+
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(requests.len(), 2);
+    for request in requests {
+        let expand: Vec<_> = request.url.query_pairs().filter(|(name, _)| name == "expand").collect();
+        assert_eq!(expand.len(), 1);
+        assert_eq!(expand[0].1, "changelog,names");
+    }
+}
+
+macro_rules! suite {
+    ($module:ident, $client:expr, $api:ident, $request:expr, $path:literal, $key:literal, [$($expected:expr),+], $body:expr, $first_count:expr, $identity:literal, [$($id:expr),+]) => {
+        mod $module {
+            use super::*;
+
+            fn body(index: usize, empty: bool) -> Value {
+                ($body)(index, empty)
+            }
+
+            async fn mount(server: &MockServer, fail_second: bool, empty: bool) {
+                Mock::given(method("GET"))
+                    .and(path($path))
+                    .respond_with(move |request: &Request| {
+                        let position = query(request, $key);
+                        let positions = [$($expected),+];
+                        let index = positions.iter().position(|candidate| *candidate == position.as_deref()).unwrap_or(99);
+                        if index == 99 || (fail_second && index == 1) {
+                            ResponseTemplate::new(500)
+                        } else {
+                            ResponseTemplate::new(200).set_body_json(body(index, empty))
+                        }
+                    })
+                    .mount(server)
+                    .await;
+            }
+
+            async fn positions(server: &MockServer) -> Vec<Option<String>> {
+                server.received_requests().await.unwrap().iter().map(|request| query(request, $key)).collect()
+            }
+
+            #[tokio::test]
+            async fn walks_pages_in_order() {
+                let server = MockServer::start().await;
+                mount(&server, false, false).await;
+                let client = client_for(&server);
+                let $api = $client(client);
+                let items: Vec<_> = ($request).stream().try_collect().await.unwrap();
+                assert_eq!(items.len(), $first_count + 1);
+                let actual: Vec<Value> = items.iter().map(|item| serde_json::to_value(item).unwrap()[$identity].clone()).collect();
+                assert_eq!(actual, vec![$(json!($id)),+]);
+                let expected = [$($expected.map(str::to_owned)),+];
+                assert_eq!(positions(&server).await, expected);
+            }
+
+            #[tokio::test]
+            async fn empty_result_sends_one_request() {
+                let server = MockServer::start().await;
+                mount(&server, false, true).await;
+                let client = client_for(&server);
+                let $api = $client(client);
+                let items: Vec<_> = ($request).stream().try_collect().await.unwrap();
+                assert!(items.is_empty());
+                assert_eq!(positions(&server).await.len(), 1);
+            }
+
+            #[tokio::test]
+            async fn second_page_failure_ends_stream() {
+                let server = MockServer::start().await;
+                mount(&server, true, false).await;
+                let client = client_for(&server);
+                let $api = $client(client);
+                let mut stream = ($request).stream();
+                for _ in 0..$first_count {
+                    assert!(stream.try_next().await.unwrap().is_some());
+                }
+                assert!(stream.try_next().await.is_err());
+                assert!(stream.try_next().await.unwrap().is_none());
+                assert_eq!(positions(&server).await.len(), 2);
+            }
+
+            #[tokio::test]
+            async fn dropping_after_first_item_sends_no_more() {
+                let server = MockServer::start().await;
+                mount(&server, false, false).await;
+                let client = client_for(&server);
+                let $api = $client(client);
+                let mut stream = ($request).stream();
+                assert!(stream.try_next().await.unwrap().is_some());
+                drop(stream);
+                assert_eq!(positions(&server).await.len(), 1);
+            }
+        }
+    };
+}
+
+suite!(
+    server_search,
+    jira::server::ServerClient::new,
+    api,
+    api.issue_search().search_issues(),
+    "/rest/api/2/search",
+    "startAt",
+    [Some("0"), Some("1")],
+    |index: usize, empty: bool| json!({"startAt": index, "total": if empty {0} else {2}, "issues": if empty {vec![]} else {vec![json!({"key": format!("X-{}", index)})]}}),
+    1,
+    "key",
+    ["X-0", "X-1"]
+);
+
+suite!(
+    board_sprints,
+    jira::server::ServerClient::new,
+    api,
+    api.board().get_all_sprints(1),
+    "/rest/agile/1.0/board/1/sprint",
+    "startAt",
+    [Some("0"), Some("1")],
+    |index: usize, empty: bool| json!({"startAt": index, "maxResults": 1, "isLast": empty || index == 1, "values": if empty {vec![]} else {vec![json!({"id": index + 1, "state": "active"})]}}),
+    1,
+    "id",
+    [1, 2]
+);
+
+#[tokio::test]
+async fn cloud_changed_worklogs_stop_at_last_page() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/rest/api/3/worklog/updated"))
+        .respond_with(|request: &Request| match query(request, "since").as_deref() {
+            Some("10") => ResponseTemplate::new(200)
+                .set_body_json(json!({"values": [{"worklogId": 1}], "until": 20, "lastPage": false})),
+            Some("20") => ResponseTemplate::new(200)
+                .set_body_json(json!({"values": [{"worklogId": 2}], "until": 30, "lastPage": true})),
+            _ => ResponseTemplate::new(500),
+        })
+        .mount(&server)
+        .await;
+
+    let client = client_for(&server);
+    let cloud = jira::cloud::CloudClient::new(client);
+    let items: Vec<_> =
+        cloud.issue_worklogs().get_ids_of_worklogs_modified_since().since(10).stream().try_collect().await.unwrap();
+
+    assert_eq!(items.iter().map(|item| item.worklog_id).collect::<Vec<_>>(), [Some(1), Some(2)]);
+    assert_eq!(
+        server.received_requests().await.unwrap().iter().map(|request| query(request, "since")).collect::<Vec<_>>(),
+        [Some("10".to_owned()), Some("20".to_owned())]
+    );
+}
+
+#[tokio::test]
+async fn cloud_field_search_reads_system_fields_without_schema() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/rest/api/3/field/search"))
+        .respond_with(ResponseTemplate::new(200).set_body_json(json!({
+            "startAt": 0,
+            "maxResults": 2,
+            "total": 2,
+            "isLast": true,
+            "values": [
+                {"id": "thumbnail", "name": "Images", "typeDisplayName": "Images", "description": ""},
+                {"id": "customfield_10000", "name": "Approvers", "schema": {"type": "array", "items": "user"}}
+            ]
+        })))
+        .mount(&server)
+        .await;
+
+    let api = jira::cloud::CloudClient::new(client_for(&server));
+    let page = api.issue_fields().get_fields_paginated().send().await.unwrap();
+    assert_eq!(page.values[0].id, "thumbnail");
+    assert!(page.values[0].schema.is_none());
+    assert!(page.values[1].schema.is_some());
+
+    let fields: Vec<_> = api.issue_fields().get_fields_paginated().stream().try_collect().await.unwrap();
+    assert_eq!(fields.iter().map(|field| field.id.as_str()).collect::<Vec<_>>(), ["thumbnail", "customfield_10000"]);
+    assert_eq!(server.received_requests().await.unwrap().len(), 2);
+}
+
+suite!(
+    cloud_users,
+    jira::cloud::CloudClient::new,
+    api,
+    api.user_search().find_users().max_results(2),
+    "/rest/api/3/user/search",
+    "startAt",
+    [Some("0"), Some("2")],
+    |index: usize, empty: bool| if empty {
+        json!([])
+    } else if index == 0 {
+        json!([{"accountId": "a"}, {"accountId": "b"}])
+    } else {
+        json!([{"accountId": "c"}])
+    },
+    2,
+    "accountId",
+    ["a", "b", "c"]
+);
+
+#[tokio::test]
+async fn server_find_users_walks_two_pages_then_an_empty_page() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/rest/api/2/user/search"))
+        .respond_with(|request: &Request| match query(request, "startAt").as_deref() {
+            Some("0") => ResponseTemplate::new(200).set_body_json(json!([{"name": "a"}, {"name": "b"}])),
+            Some("2") => ResponseTemplate::new(200).set_body_json(json!([{"name": "c"}, {"name": "d"}])),
+            Some("4") => ResponseTemplate::new(200).set_body_json(json!([])),
+            _ => ResponseTemplate::new(500),
+        })
+        .mount(&server)
+        .await;
+
+    let api = jira::server::ServerClient::new(client_for(&server));
+    let users: Vec<_> = api.user_search().find_users().max_results(2).stream().try_collect().await.unwrap();
+
+    assert_eq!(
+        users.iter().map(|user| user.name.as_deref()).collect::<Vec<_>>(),
+        [Some("a"), Some("b"), Some("c"), Some("d")]
+    );
+    assert_eq!(
+        server.received_requests().await.unwrap().iter().map(|request| query(request, "startAt")).collect::<Vec<_>>(),
+        [Some("0".to_owned()), Some("2".to_owned()), Some("4".to_owned())]
+    );
+}
+
+suite!(
+    cloud_search,
+    jira::cloud::CloudClient::new,
+    api,
+    api.issue_search().search_issues(),
+    "/rest/api/3/search/jql",
+    "nextPageToken",
+    [None, Some("next")],
+    |index: usize, empty: bool| json!({"issues": if empty {vec![]} else {vec![json!({"key": format!("X-{}", index)})]}, "nextPageToken": if empty || index == 1 {None} else {Some("next")}}),
+    1,
+    "key",
+    ["X-0", "X-1"]
+);
+
+#[test]
+fn requested_stream_signatures_compile() {
+    let client = Client::builder().host("https://example.invalid").build().unwrap();
+    let server = jira::server::ServerClient::new(client.clone());
+    let cloud = jira::cloud::CloudClient::new(client.clone());
+    let assets_server = jira::assets_server::AssetsServerClient::new(client.clone());
+    let agile = jira::agile::AgileClient::new(client);
+
+    drop(server.issue_search().search_issues().stream());
+    drop(server.sprint().get_issues_for_sprint(1).stream());
+    drop(server.issue_worklogs().get_issue_worklog("X-1").stream());
+    drop(server.users().get_user_list().stream());
+    drop(server.user_search().find_users().stream());
+    drop(server.dashboards().get_all_dashboards().start_at(50).stream());
+    drop(server.issue_comments().get_comments("X-1").max_results(10).stream());
+    drop(server.screens().get_screens().stream());
+    drop(server.groups().get_users_from_group("g").stream());
+    drop(cloud.issue_worklogs().get_issue_worklog("X-1").stream());
+    drop(cloud.issue_comments().get_comments("X-1").stream());
+    drop(cloud.user_search().find_users().stream());
+    drop(cloud.issue_notification_schemes().get_notification_schemes().start_at(0).stream());
+    drop(cloud.issue_priorities().search_priorities().stream());
+    drop(assets_server.aql().find_objects().stream());
+    drop(assets_server.objects().get_archived_objects().stream());
+    drop(agile.board().get_all_sprints(1).stream());
+    drop(agile.sprint().get_issues_for_sprint(1).stream());
+}
+
+#[tokio::test]
+async fn cloud_post_search_carries_token_in_body() {
+    let server = MockServer::start().await;
+    Mock::given(method("POST"))
+        .and(path("/rest/api/3/search/jql"))
+        .respond_with(
+            |request: &Request| match serde_json::from_slice::<Value>(&request.body).unwrap()["nextPageToken"].as_str()
+            {
+                None => ResponseTemplate::new(200)
+                    .set_body_json(json!({"issues": [{"key": "X-1"}], "nextPageToken": "next", "isLast": false})),
+                Some("next") => {
+                    ResponseTemplate::new(200).set_body_json(json!({"issues": [{"key": "X-2"}], "isLast": true}))
+                }
+                _ => ResponseTemplate::new(500),
+            },
+        )
+        .mount(&server)
+        .await;
+    let api = jira::cloud::CloudClient::new(client_for(&server));
+    let issues: Vec<_> = api
+        .issue_search()
+        .search_issues_post(jira::cloud::models::SearchAndReconcileRequest::default())
+        .stream()
+        .try_collect()
+        .await
+        .unwrap();
+    assert_eq!(issues.iter().map(|issue| issue.key.as_deref()).collect::<Vec<_>>(), [Some("X-1"), Some("X-2")]);
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(requests.len(), 2);
+    assert_eq!(serde_json::from_slice::<Value>(&requests[1].body).unwrap()["nextPageToken"], "next");
+}
+
+#[tokio::test]
+async fn server_post_search_carries_offset_in_body() {
+    let server = MockServer::start().await;
+    Mock::given(method("POST"))
+        .and(path("/rest/api/2/search"))
+        .respond_with(|request: &Request| {
+            match serde_json::from_slice::<Value>(&request.body).unwrap()["startAt"].as_i64() {
+                Some(0) => ResponseTemplate::new(200)
+                    .set_body_json(json!({"startAt": 0, "total": 2, "issues": [{"key": "X-1"}]})),
+                Some(1) => ResponseTemplate::new(200)
+                    .set_body_json(json!({"startAt": 1, "total": 2, "issues": [{"key": "X-2"}]})),
+                _ => ResponseTemplate::new(500),
+            }
+        })
+        .mount(&server)
+        .await;
+    let api = jira::server::ServerClient::new(client_for(&server));
+    let issues: Vec<_> = api
+        .issue_search()
+        .search_issues_post(jira::server::models::SearchRequest::default())
+        .stream()
+        .try_collect()
+        .await
+        .unwrap();
+    assert_eq!(issues.iter().map(|issue| issue.key.as_deref()).collect::<Vec<_>>(), [Some("X-1"), Some("X-2")]);
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(
+        requests
+            .iter()
+            .map(|request| serde_json::from_slice::<Value>(&request.body).unwrap()["startAt"].as_i64())
+            .collect::<Vec<_>>(),
+        [Some(0), Some(1)]
+    );
+}
+
+#[tokio::test]
+async fn status_usage_reads_nested_page_token() {
+    let server = MockServer::start().await;
+    Mock::given(method("GET"))
+        .and(path("/rest/api/3/statuses/1/projectUsages"))
+        .respond_with(|request: &Request| match query(request, "nextPageToken").as_deref() {
+            None => ResponseTemplate::new(200)
+                .set_body_json(json!({"projects": {"values": [{"id": "1"}], "nextPageToken": "next"}})),
+            Some("next") => ResponseTemplate::new(200).set_body_json(json!({"projects": {"values": [{"id": "2"}]}})),
+            _ => ResponseTemplate::new(500),
+        })
+        .mount(&server)
+        .await;
+    let api = jira::cloud::CloudClient::new(client_for(&server));
+    let items: Vec<_> = api.status().get_project_usages_for_status("1").stream().try_collect().await.unwrap();
+    assert_eq!(items.iter().map(|item| item.id.as_deref()).collect::<Vec<_>>(), [Some("1"), Some("2")]);
+    assert_eq!(
+        server
+            .received_requests()
+            .await
+            .unwrap()
+            .iter()
+            .map(|request| query(request, "nextPageToken"))
+            .collect::<Vec<_>>(),
+        [None, Some("next".to_owned())]
+    );
+}
+
+#[tokio::test]
+async fn teams_members_carry_cursor_in_optional_body() {
+    let server = MockServer::start().await;
+    Mock::given(method("POST"))
+        .and(path("/gateway/api/public/teams/v1/org/o/teams/t/members"))
+        .respond_with(|request: &Request| {
+            match serde_json::from_slice::<Value>(&request.body).unwrap()["after"].as_str() {
+                None => ResponseTemplate::new(200).set_body_json(
+                    json!({"results": [{"accountId": "a"}], "pageInfo": {"endCursor": "next", "hasNextPage": true}}),
+                ),
+                Some("next") => ResponseTemplate::new(200)
+                    .set_body_json(json!({"results": [{"accountId": "b"}], "pageInfo": {"hasNextPage": false}})),
+                _ => ResponseTemplate::new(500),
+            }
+        })
+        .mount(&server)
+        .await;
+    let api = jira::teams::TeamsClient::new(client_for(&server));
+    let members: Vec<_> = api.team_members().fetch_members("o", "t").stream().try_collect().await.unwrap();
+    assert_eq!(members.iter().map(|member| member.account_id.as_str()).collect::<Vec<_>>(), ["a", "b"]);
+    let requests = server.received_requests().await.unwrap();
+    assert_eq!(requests.len(), 2);
+    assert_eq!(serde_json::from_slice::<Value>(&requests[1].body).unwrap()["after"], "next");
+}

@@ -1,13 +1,11 @@
-use jira::cloud::{
-    AddNotificationsDetails, GetNotificationSchemeRequestExpand, GetNotificationSchemeRequestExpandValue,
-};
+use jira::cloud::{AddNotificationsDetails, GetNotificationSchemeRequestExpandValue};
 
 use crate::harness::cloud;
 
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn pages_the_scheme_listing_or_refuses_typed_without_rights() {
-    let page = match cloud().issue_notification_schemes().get_notification_schemes().max_results("2").send().await {
+    let page = match cloud().issue_notification_schemes().get_notification_schemes().max_results(2).send().await {
         Ok(page) => page,
         Err(error) => {
             assert!(
@@ -46,7 +44,7 @@ async fn returns_the_notification_events_only_when_expanded() {
     let expanded = cloud()
         .issue_notification_schemes()
         .get_notification_scheme(scheme_id)
-        .expand(GetNotificationSchemeRequestExpand::One(GetNotificationSchemeRequestExpandValue::All))
+        .expand([GetNotificationSchemeRequestExpandValue::All])
         .send()
         .await
         .expect("the expand parameter is accepted");
@@ -65,7 +63,7 @@ async fn pairs_each_event_with_the_holders_that_get_notified() {
     let scheme = cloud()
         .issue_notification_schemes()
         .get_notification_scheme(scheme_id)
-        .expand(GetNotificationSchemeRequestExpand::One(GetNotificationSchemeRequestExpandValue::All))
+        .expand([GetNotificationSchemeRequestExpandValue::All])
         .send()
         .await
         .expect("an expanded notification scheme reads back");
@@ -138,7 +136,7 @@ async fn fails_typed_on_the_write_without_ever_aiming_it_at_a_real_scheme() {
 }
 
 async fn first_scheme_id() -> Option<i64> {
-    let page = match cloud().issue_notification_schemes().get_notification_schemes().max_results("5").send().await {
+    let page = match cloud().issue_notification_schemes().get_notification_schemes().max_results(5).send().await {
         Ok(page) => page,
         Err(error) => {
             assert!(

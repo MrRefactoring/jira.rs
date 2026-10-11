@@ -1,4 +1,4 @@
-use jira::cloud::{SearchWorkflowsRequestExpand, SearchWorkflowsRequestExpandValue, WorkflowSearchResponse};
+use jira::cloud::{SearchWorkflowsRequestExpandValue, WorkflowSearchResponse};
 
 use crate::harness::{TEST_PROJECT_KEY, cloud};
 
@@ -25,7 +25,7 @@ async fn returns_transitions_only_when_expand_asks_for_them() {
         .workflows()
         .search_workflows()
         .max_results(1)
-        .expand(SearchWorkflowsRequestExpand::One(SearchWorkflowsRequestExpandValue::ValuesTransitions))
+        .expand([SearchWorkflowsRequestExpandValue::ValuesTransitions])
         .send()
         .await
         .expect("the expand parameter is accepted");
@@ -62,7 +62,7 @@ async fn describes_each_transition_with_a_type() {
         .workflows()
         .search_workflows()
         .max_results(1)
-        .expand(SearchWorkflowsRequestExpand::One(SearchWorkflowsRequestExpandValue::ValuesTransitions))
+        .expand([SearchWorkflowsRequestExpandValue::ValuesTransitions])
         .send()
         .await
         .expect("the expand parameter is accepted");

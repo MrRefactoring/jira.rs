@@ -1,8 +1,9 @@
 use jira::server::{
-    AddField, AssociateProjects, CustomFieldDefinitionJson, DefaultModel, GetWorkflow, IssueLinkTypeJson,
+    AddField, AssociateProjects, CustomFieldDefinitionJson, DefaultModel, GetWorkflow, IssueLinkType,
     IssueLinkTypeOrderUpdateRequest, IssueLinkTypeResetOrderRequest, IssueTypeCreate, IssueTypeCreateType,
-    IssueTypeMapping, IssueTypeSchemeCreateUpdate, IssueTypeUpdate, MoveField, MoveFieldPosition, PermissionGrant,
-    PermissionHolder, PermissionScheme, PrioritySchemeUpdate, ScreenableTab, WorkflowMapping, WorkflowScheme,
+    IssueTypeSchemeCreateUpdate, IssueTypeUpdate, IssueTypeWorkflowMapping, MoveField, MoveFieldPosition,
+    PermissionGrant, PermissionHolder, PermissionScheme, PrioritySchemeUpdate, ScreenableTab, WorkflowMapping,
+    WorkflowScheme,
 };
 use serde_json::json;
 
@@ -75,8 +76,8 @@ async fn keeps_an_issue_type() {
     let for_cleanup = id.clone();
 
     server()
-        .issue_types()
-        .set_issue_type_property(property_key, &id, [("written".to_owned(), json!(true))].into_iter().collect())
+        .issue_type_properties()
+        .set_issue_type_property(&id, property_key, [("written".to_owned(), json!(true))].into_iter().collect())
         .send()
         .await
         .expect("a property can be hung off an issue type");
@@ -84,12 +85,12 @@ async fn keeps_an_issue_type() {
     tracker.defer(move || {
         let id = for_cleanup.clone();
 
-        async move { server().issue_types().delete_issue_type_property(property_key, id).send().await }
+        async move { server().issue_type_properties().delete_issue_type_property(id, property_key).send().await }
     });
 
     let property = server()
-        .issue_types()
-        .get_issue_type_property(property_key, &id)
+        .issue_type_properties()
+        .get_issue_type_property(&id, property_key)
         .send()
         .await
         .expect("the property reads back by key");
@@ -107,11 +108,11 @@ async fn keeps_an_issue_link_type() {
 
     let created = server()
         .issue_link_types()
-        .create_issue_link_type(IssueLinkTypeJson {
+        .create_issue_link_type(IssueLinkType {
             name: Some(test_name("link")),
             inward: Some("is blocked by".to_owned()),
             outward: Some("blocks".to_owned()),
-            ..IssueLinkTypeJson::default()
+            ..IssueLinkType::default()
         })
         .send()
         .await
@@ -130,11 +131,11 @@ async fn keeps_an_issue_link_type() {
         .issue_link_types()
         .update_issue_link_type(
             &id,
-            IssueLinkTypeJson {
+            IssueLinkType {
                 name: Some(test_name("link2")),
                 inward: Some("depends on".to_owned()),
                 outward: Some("is depended on by".to_owned()),
-                ..IssueLinkTypeJson::default()
+                ..IssueLinkType::default()
             },
         )
         .send()
@@ -204,13 +205,19 @@ async fn keeps_an_issue_type_scheme_and_its_project_associations() {
     tracker.defer(move || {
         let scheme_id = for_cleanup.clone();
 
-        async move { server().issue_type_schemes().delete_issue_type_scheme(scheme_id).send().await }
+        async move {
+            server()
+                .issue_type_schemes()
+                .delete_issue_type_scheme(scheme_id.parse().expect("a scheme id is a number"))
+                .send()
+                .await
+        }
     });
 
     server()
         .issue_type_schemes()
         .update_issue_type_scheme(
-            &scheme_id,
+            scheme_id.parse().expect("a scheme id is a number"),
             IssueTypeSchemeCreateUpdate {
                 name: Some(test_name("its2")),
                 issue_type_ids: Some(vec![standard_id.clone()]),
@@ -260,7 +267,7 @@ async fn keeps_an_issue_type_scheme_and_its_project_associations() {
         "setting project associations",
     );
     touch(
-        server().issue_type_schemes().remove_project_association(&absent, &scheme_id).send().await,
+        server().issue_type_schemes().remove_project_association(&scheme_id, &absent).send().await,
         "removing one project association",
     );
     touch(
@@ -278,8 +285,7 @@ async fn keeps_a_permission_scheme_and_a_grant_in_it() {
 
     let created = server()
         .permission_schemes()
-        .create_permission_scheme()
-        .body(PermissionScheme {
+        .create_permission_scheme(PermissionScheme {
             name: Some(test_name("perm")),
             description: Some("created by the suite".to_owned()),
             ..PermissionScheme::default()
@@ -297,12 +303,14 @@ async fn keeps_a_permission_scheme_and_a_grant_in_it() {
 
     let updated = server()
         .permission_schemes()
-        .update_permission_scheme(scheme_id)
-        .body(PermissionScheme {
-            name: Some(test_name("perm2")),
-            description: Some("changed by the suite".to_owned()),
-            ..PermissionScheme::default()
-        })
+        .update_permission_scheme(
+            scheme_id,
+            PermissionScheme {
+                name: Some(test_name("perm2")),
+                description: Some("changed by the suite".to_owned()),
+                ..PermissionScheme::default()
+            },
+        )
         .send()
         .await
         .expect("the scheme can be edited");
@@ -311,12 +319,14 @@ async fn keeps_a_permission_scheme_and_a_grant_in_it() {
 
     let grant = server()
         .permission_schemes()
-        .create_permission_grant(scheme_id)
-        .permission_grant(PermissionGrant {
-            permission: Some("BROWSE_PROJECTS".to_owned()),
-            holder: Some(PermissionHolder { r#type: Some("anyone".to_owned()), ..PermissionHolder::default() }),
-            ..PermissionGrant::default()
-        })
+        .create_permission_grant(
+            scheme_id,
+            PermissionGrant {
+                permission: Some("BROWSE_PROJECTS".to_owned()),
+                holder: Some(PermissionHolder { r#type: Some("anyone".to_owned()), ..PermissionHolder::default() }),
+                ..PermissionGrant::default()
+            },
+        )
         .send()
         .await
         .expect("the scheme accepts a grant");
@@ -324,7 +334,7 @@ async fn keeps_a_permission_scheme_and_a_grant_in_it() {
     let grant_id = grant.id.expect("a created grant carries an id");
 
     tracker.defer(move || async move {
-        server().permission_schemes().delete_permission_scheme_entity(grant_id, scheme_id).send().await
+        server().permission_schemes().delete_permission_scheme_entity(scheme_id, grant_id).send().await
     });
 
     let grants = server()
@@ -429,7 +439,7 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
 
     let created = server()
         .workflow_schemes()
-        .create_scheme(WorkflowScheme {
+        .create_workflow_scheme(WorkflowScheme {
             name: Some(test_name("wf")),
             description: Some("created by the suite".to_owned()),
             ..WorkflowScheme::default()
@@ -440,7 +450,7 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
 
     let scheme_id = created.id.expect("a created workflow scheme carries an id");
 
-    tracker.defer(move || async move { server().workflow_schemes().delete_scheme(scheme_id).send().await });
+    tracker.defer(move || async move { server().workflow_schemes().delete_workflow_scheme(scheme_id).send().await });
 
     let workflows = server().workflows().get_all_workflows().send().await.expect("the instance lists its workflows");
     let workflow = workflows
@@ -464,12 +474,16 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
 
     server()
         .workflow_schemes()
-        .update_default(scheme_id, DefaultModel { workflow: Some(workflow.clone()), update_draft_if_needed: None })
+        .update_default_workflow(
+            scheme_id,
+            DefaultModel { workflow: Some(workflow.clone()), update_draft_if_needed: None },
+        )
         .send()
         .await
         .expect("the scheme takes a default workflow");
 
-    let by_id = server().workflow_schemes().get_by_id(scheme_id).send().await.expect("the scheme reads back by id");
+    let by_id =
+        server().workflow_schemes().get_workflow_scheme(scheme_id).send().await.expect("the scheme reads back by id");
 
     assert_eq!(by_id.id, Some(scheme_id), "the scheme read back is the scheme asked for");
     assert_eq!(by_id.default_workflow.as_deref(), Some(workflow.as_str()), "the default workflow is the one set");
@@ -479,10 +493,10 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
 
     server()
         .workflow_schemes()
-        .set_issue_type(
-            &issue_type,
+        .set_workflow_scheme_issue_type(
             scheme_id,
-            IssueTypeMapping {
+            &issue_type,
+            IssueTypeWorkflowMapping {
                 issue_type: Some(issue_type.clone()),
                 workflow: Some(workflow.clone()),
                 update_draft_if_needed: Some(true),
@@ -494,7 +508,7 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
 
     let mapping = server()
         .workflow_schemes()
-        .get_workflow_scheme_issue_type(&issue_type, scheme_id)
+        .get_workflow_scheme_issue_type(scheme_id, &issue_type)
         .send()
         .await
         .expect("the mapping reads back");
@@ -533,29 +547,35 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
     assert!(matches!(&all, GetWorkflow::Many(_)), "leaving the workflow out lists them all, got {all:?}");
 
     touch(
-        server().workflow_schemes().delete_workflow_scheme_issue_type(&issue_type, scheme_id).send().await,
+        server().workflow_schemes().delete_workflow_scheme_issue_type(scheme_id, &issue_type).send().await,
         "unmapping an issue type",
     );
     touch(
         server().workflow_schemes().delete_workflow_mapping(scheme_id).workflow_name(&workflow).send().await,
         "deleting a workflow mapping",
     );
-    touch(server().workflow_schemes().delete_default(scheme_id).send().await, "clearing the default workflow");
+    touch(server().workflow_schemes().delete_default_workflow(scheme_id).send().await, "clearing the default workflow");
 
-    touch(server().workflow_schemes().create_draft_for_parent(scheme_id).send().await, "creating a draft");
-    touch(server().workflow_schemes().get_draft_by_id(scheme_id).send().await, "reading a draft");
+    touch(
+        server().workflow_scheme_drafts().create_workflow_scheme_draft_from_parent(scheme_id).send().await,
+        "creating a draft",
+    );
+    touch(server().workflow_scheme_drafts().get_workflow_scheme_draft(scheme_id).send().await, "reading a draft");
     touch(
         server()
-            .workflow_schemes()
-            .update_draft(scheme_id, WorkflowScheme { name: Some(test_name("wf3")), ..WorkflowScheme::default() })
+            .workflow_scheme_drafts()
+            .update_workflow_scheme_draft(
+                scheme_id,
+                WorkflowScheme { name: Some(test_name("wf3")), ..WorkflowScheme::default() },
+            )
             .send()
             .await,
         "editing a draft",
     );
     touch(
         server()
-            .workflow_schemes()
-            .update_draft_default(
+            .workflow_scheme_drafts()
+            .update_draft_default_workflow(
                 scheme_id,
                 DefaultModel { workflow: Some(workflow.clone()), update_draft_if_needed: None },
             )
@@ -563,14 +583,17 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
             .await,
         "setting a draft's default workflow",
     );
-    touch(server().workflow_schemes().get_draft_default(scheme_id).send().await, "reading a draft's default workflow");
+    touch(
+        server().workflow_scheme_drafts().get_draft_default_workflow(scheme_id).send().await,
+        "reading a draft's default workflow",
+    );
     touch(
         server()
-            .workflow_schemes()
-            .set_draft_issue_type(
-                &issue_type,
+            .workflow_scheme_drafts()
+            .set_workflow_scheme_draft_issue_type(
                 scheme_id,
-                IssueTypeMapping {
+                &issue_type,
+                IssueTypeWorkflowMapping {
                     issue_type: Some(issue_type.clone()),
                     workflow: Some(workflow.clone()),
                     update_draft_if_needed: None,
@@ -581,12 +604,12 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
         "mapping an issue type in a draft",
     );
     touch(
-        server().workflow_schemes().get_draft_issue_type(&issue_type, scheme_id).send().await,
+        server().workflow_scheme_drafts().get_workflow_scheme_draft_issue_type(scheme_id, &issue_type).send().await,
         "reading a draft's issue type mapping",
     );
     touch(
         server()
-            .workflow_schemes()
+            .workflow_scheme_drafts()
             .update_draft_workflow_mapping(
                 scheme_id,
                 WorkflowMapping { workflow: Some(workflow.clone()), ..WorkflowMapping::default() },
@@ -596,20 +619,25 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
             .await,
         "editing a draft's workflow mapping",
     );
-    touch(server().workflow_schemes().get_draft_workflow(scheme_id).send().await, "reading a draft's mappings");
+    touch(server().workflow_scheme_drafts().get_draft_workflow(scheme_id).send().await, "reading a draft's mappings");
     touch(
-        server().workflow_schemes().delete_draft_issue_type(&issue_type, scheme_id).send().await,
+        server().workflow_scheme_drafts().delete_workflow_scheme_draft_issue_type(scheme_id, &issue_type).send().await,
         "unmapping an issue type in a draft",
     );
     touch(
-        server().workflow_schemes().delete_draft_workflow_mapping(scheme_id).workflow_name(&workflow).send().await,
+        server()
+            .workflow_scheme_drafts()
+            .delete_draft_workflow_mapping(scheme_id)
+            .workflow_name(&workflow)
+            .send()
+            .await,
         "deleting a draft's workflow mapping",
     );
     touch(
-        server().workflow_schemes().delete_draft_default(scheme_id).send().await,
+        server().workflow_scheme_drafts().delete_draft_default_workflow(scheme_id).send().await,
         "clearing a draft's default workflow",
     );
-    touch(server().workflow_schemes().delete_draft_by_id(scheme_id).send().await, "deleting a draft");
+    touch(server().workflow_scheme_drafts().delete_workflow_scheme_draft(scheme_id).send().await, "deleting a draft");
 
     tracker.cleanup().await;
 }
@@ -619,70 +647,74 @@ async fn keeps_a_workflow_scheme_its_draft_and_its_mappings() {
 async fn adds_a_tab_to_a_screen_and_takes_it_away() {
     let mut tracker = ResourceTracker::new();
 
-    let screens = server().screens().get_all_screens().send().await.expect("the instance lists its screens");
+    let screens = server().screens().get_screens().send().await.expect("the instance lists its screens");
     let screen_id = screens.first().and_then(|screen| screen.id).expect("a Jira instance always ships with screens");
 
     let tab = server()
-        .screens()
-        .add_tab(screen_id)
-        .screenable_tab(ScreenableTab { name: Some(test_name("tab")), id: None })
+        .screen_tabs()
+        .add_screen_tab(screen_id, ScreenableTab { name: Some(test_name("tab")), id: None })
         .send()
         .await
         .expect("the screen accepts a new tab");
 
     let tab_id = tab.id.expect("a created tab carries an id");
 
-    tracker.defer(move || async move { server().screens().delete_tab(tab_id, screen_id).send().await });
+    tracker.defer(move || async move { server().screen_tabs().delete_screen_tab(screen_id, tab_id).send().await });
 
     let renamed_to = test_name("tab2");
     let renamed = server()
-        .screens()
-        .rename_tab(tab_id, screen_id)
-        .screenable_tab(ScreenableTab { name: Some(renamed_to.clone()), id: None })
+        .screen_tabs()
+        .rename_screen_tab(screen_id, tab_id, ScreenableTab { name: Some(renamed_to.clone()), id: None })
         .send()
         .await
         .expect("the tab can be renamed");
 
     assert_eq!(renamed.name.as_deref(), Some(renamed_to.as_str()), "renaming answers with the new name");
 
-    touch(server().screens().move_tab(tab_id, screen_id, 0).send().await, "moving the tab to the front");
+    touch(server().screen_tabs().move_screen_tab(screen_id, tab_id, 0).send().await, "moving the tab to the front");
 
-    let available =
-        server().screens().get_fields_to_add(screen_id).send().await.expect("the fields not yet on the screen list");
+    let available = server()
+        .screens()
+        .get_available_screen_fields(screen_id)
+        .send()
+        .await
+        .expect("the fields not yet on the screen list");
 
     if let Some(field_id) = available.first().and_then(|field| field.id.clone()) {
         touch(
             server()
-                .screens()
-                .add_field(tab_id, screen_id)
-                .add_field(AddField { field_id: Some(field_id.clone()) })
+                .screen_tab_fields()
+                .add_screen_tab_field(screen_id, tab_id, AddField { field_id: Some(field_id.clone()) })
                 .send()
                 .await,
             "adding a field to the tab",
         );
         touch(
             server()
-                .screens()
-                .move_field(tab_id, screen_id, &field_id)
-                .move_field(MoveField { position: Some(MoveFieldPosition::First), after: None })
+                .screen_tab_fields()
+                .move_screen_tab_field(
+                    screen_id,
+                    tab_id,
+                    &field_id,
+                    MoveField { position: Some(MoveFieldPosition::First), after: None },
+                )
                 .send()
                 .await,
             "moving a field to the front of the tab",
         );
         touch(
-            server().screens().update_show_when_empty_indicator(tab_id, screen_id, true, &field_id).send().await,
+            server().screens().update_show_when_empty_indicator(screen_id, tab_id, &field_id, true).send().await,
             "showing the field when it is empty",
         );
         touch(
-            server().screens().remove_field(tab_id, screen_id, &field_id).send().await,
+            server().screen_tab_fields().remove_screen_tab_field(screen_id, tab_id, &field_id).send().await,
             "taking the field off the tab",
         );
     }
 
     let custom_field = server()
         .issue_fields()
-        .create_custom_field()
-        .custom_field_definition_json(CustomFieldDefinitionJson {
+        .create_custom_field(CustomFieldDefinitionJson {
             name: Some(test_name("screen field")),
             description: Some("created by the suite".to_owned()),
             r#type: Some("com.atlassian.jira.plugin.system.customfieldtypes:textfield".to_owned()),
@@ -717,8 +749,7 @@ async fn deletes_a_custom_field_in_bulk() {
 
     let created = server()
         .issue_fields()
-        .create_custom_field()
-        .custom_field_definition_json(CustomFieldDefinitionJson {
+        .create_custom_field(CustomFieldDefinitionJson {
             name: Some(test_name("bulk field")),
             description: Some("created by the suite".to_owned()),
             r#type: Some("com.atlassian.jira.plugin.system.customfieldtypes:textfield".to_owned()),

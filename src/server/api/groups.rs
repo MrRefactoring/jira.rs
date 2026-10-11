@@ -13,8 +13,8 @@ impl<'a> GroupsService<'a> {
     }
 
     /// Creates a group by given group parameter
-    pub fn create_group(&self) -> CreateGroupRequest<'a> {
-        CreateGroupRequest::new(self.client)
+    pub fn create_group(&self, add_group: AddGroup) -> CreateGroupRequest<'a> {
+        CreateGroupRequest::new(self.client, add_group)
     }
 
     /// Deletes a group by given group parameter
@@ -28,8 +28,12 @@ impl<'a> GroupsService<'a> {
     }
 
     /// Adds given user to a group
-    pub fn add_user_to_group(&self, groupname: impl Into<String>) -> AddUserToGroupRequest<'a> {
-        AddUserToGroupRequest::new(self.client, groupname)
+    pub fn add_user_to_group(
+        &self,
+        groupname: impl Into<String>,
+        update_user_to_group: UpdateUserToGroup,
+    ) -> AddUserToGroupRequest<'a> {
+        AddUserToGroupRequest::new(self.client, groupname, update_user_to_group)
     }
 
     /// Removes given user from a group
@@ -51,31 +55,19 @@ impl<'a> GroupsService<'a> {
 #[derive(Clone)]
 pub struct CreateGroupRequest<'a> {
     client: &'a crate::core::Client,
-    add_group: Option<AddGroup>,
+    add_group: AddGroup,
 }
 
 impl<'a> CreateGroupRequest<'a> {
-    fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, add_group: None }
-    }
-
-    #[must_use]
-    pub fn add_group(mut self, value: AddGroup) -> Self {
-        self.add_group = Some(value);
-
-        self
+    fn new(client: &'a crate::core::Client, add_group: AddGroup) -> Self {
+        Self { client, add_group }
     }
 
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::POST, "/rest/api/2/group".to_owned());
 
-        let body = match serde_json::to_value(&self.add_group)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.add_group)?));
 
         Ok(config)
     }
@@ -140,10 +132,10 @@ impl<'a> RemoveGroupRequest<'a> {
 #[derive(Clone)]
 pub struct GetUsersFromGroupRequest<'a> {
     client: &'a crate::core::Client,
-    include_inactive_users: Option<String>,
-    max_results: Option<String>,
+    include_inactive_users: Option<bool>,
+    max_results: Option<i64>,
     groupname: String,
-    start_at: Option<String>,
+    start_at: Option<i64>,
 }
 
 impl<'a> GetUsersFromGroupRequest<'a> {
@@ -153,24 +145,24 @@ impl<'a> GetUsersFromGroupRequest<'a> {
 
     /// Include inactive users.
     #[must_use]
-    pub fn include_inactive_users(mut self, value: impl Into<String>) -> Self {
-        self.include_inactive_users = Some(value.into());
+    pub fn include_inactive_users(mut self, value: bool) -> Self {
+        self.include_inactive_users = Some(value);
 
         self
     }
 
     /// The maximum number of users to return.
     #[must_use]
-    pub fn max_results(mut self, value: impl Into<String>) -> Self {
-        self.max_results = Some(value.into());
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
 
         self
     }
 
     /// The index of the first user in group to return.
     #[must_use]
-    pub fn start_at(mut self, value: impl Into<String>) -> Self {
-        self.start_at = Some(value.into());
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
 
         self
     }
@@ -181,20 +173,45 @@ impl<'a> GetUsersFromGroupRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/group/member".to_owned());
 
         if let Some(value) = &self.include_inactive_users {
-            config.query.push(("includeInactiveUsers".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("includeInactiveUsers".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.max_results {
-            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         config.query.push(("groupname".to_owned(), crate::core::QueryValue::Scalar(self.groupname.clone())));
 
         if let Some(value) = &self.start_at {
-            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<UserDetails>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(
+                items,
+                page.start_at.unwrap_or(position),
+                page.is_last.unwrap_or(false),
+                page.total,
+                None,
+            ))
+        })
     }
 
     /// Sends the request.
@@ -213,19 +230,16 @@ impl<'a> GetUsersFromGroupRequest<'a> {
 pub struct AddUserToGroupRequest<'a> {
     client: &'a crate::core::Client,
     groupname: String,
-    update_user_to_group: Option<UpdateUserToGroup>,
+    update_user_to_group: UpdateUserToGroup,
 }
 
 impl<'a> AddUserToGroupRequest<'a> {
-    fn new(client: &'a crate::core::Client, groupname: impl Into<String>) -> Self {
-        Self { client, groupname: groupname.into(), update_user_to_group: None }
-    }
-
-    #[must_use]
-    pub fn update_user_to_group(mut self, value: UpdateUserToGroup) -> Self {
-        self.update_user_to_group = Some(value);
-
-        self
+    fn new(
+        client: &'a crate::core::Client,
+        groupname: impl Into<String>,
+        update_user_to_group: UpdateUserToGroup,
+    ) -> Self {
+        Self { client, groupname: groupname.into(), update_user_to_group }
     }
 
     /// The request as the transport will send it.
@@ -235,12 +249,7 @@ impl<'a> AddUserToGroupRequest<'a> {
 
         config.query.push(("groupname".to_owned(), crate::core::QueryValue::Scalar(self.groupname.clone())));
 
-        let body = match serde_json::to_value(&self.update_user_to_group)? {
-            serde_json::Value::Object(object) => object,
-            _ => serde_json::Map::new(),
-        };
-
-        config.body = Some(crate::core::Body::Json(serde_json::Value::Object(body)));
+        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.update_user_to_group)?));
 
         Ok(config)
     }
@@ -296,7 +305,7 @@ impl<'a> RemoveUserFromGroupRequest<'a> {
 #[derive(Clone)]
 pub struct FindGroupsRequest<'a> {
     client: &'a crate::core::Client,
-    max_results: Option<String>,
+    max_results: Option<i64>,
     query: Option<String>,
     exclude: Option<String>,
     user_name: Option<String>,
@@ -309,8 +318,8 @@ impl<'a> FindGroupsRequest<'a> {
 
     /// Maximum number of results to return
     #[must_use]
-    pub fn max_results(mut self, value: impl Into<String>) -> Self {
-        self.max_results = Some(value.into());
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
 
         self
     }
@@ -345,7 +354,7 @@ impl<'a> FindGroupsRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/groups/picker".to_owned());
 
         if let Some(value) = &self.max_results {
-            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.query {
@@ -364,7 +373,7 @@ impl<'a> FindGroupsRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<GroupSuggestions> {
+    pub async fn send(self) -> crate::core::Result<FoundGroups> {
         self.client.send(&self.config()?).await
     }
 

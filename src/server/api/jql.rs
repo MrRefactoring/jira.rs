@@ -43,7 +43,7 @@ impl<'a> GetAutoCompleteRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<AutoCompleteResponse> {
+    pub async fn send(self) -> crate::core::Result<JQLReferenceData> {
         self.client.send(&self.config()?).await
     }
 
@@ -127,7 +127,7 @@ impl<'a> GetFieldAutoCompleteForQueryStringRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<AutoCompleteResultWrapper> {
+    pub async fn send(self) -> crate::core::Result<AutoCompleteSuggestions> {
         self.client.send(&self.config()?).await
     }
 

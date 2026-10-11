@@ -114,9 +114,9 @@ pub struct GetArchivedObjectsRequest<'a> {
     client: &'a crate::core::Client,
     object_schema_id: Option<String>,
     archived_from_date: Option<String>,
-    offset: Option<String>,
+    offset: Option<i64>,
     object_type_ids: Option<String>,
-    limit: Option<String>,
+    limit: Option<i64>,
     archived_to_date: Option<String>,
     archived_by: Option<String>,
 }
@@ -153,8 +153,8 @@ impl<'a> GetArchivedObjectsRequest<'a> {
 
     /// The offset of the first object to return. Optional.
     #[must_use]
-    pub fn offset(mut self, value: impl Into<String>) -> Self {
-        self.offset = Some(value.into());
+    pub fn offset(mut self, value: i64) -> Self {
+        self.offset = Some(value);
 
         self
     }
@@ -169,8 +169,8 @@ impl<'a> GetArchivedObjectsRequest<'a> {
 
     /// The maximum number of objects to return. Optional.
     #[must_use]
-    pub fn limit(mut self, value: impl Into<String>) -> Self {
-        self.limit = Some(value.into());
+    pub fn limit(mut self, value: i64) -> Self {
+        self.limit = Some(value);
 
         self
     }
@@ -205,7 +205,7 @@ impl<'a> GetArchivedObjectsRequest<'a> {
         }
 
         if let Some(value) = &self.offset {
-            config.query.push(("offset".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("offset".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.object_type_ids {
@@ -213,7 +213,7 @@ impl<'a> GetArchivedObjectsRequest<'a> {
         }
 
         if let Some(value) = &self.limit {
-            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("limit".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
         }
 
         if let Some(value) = &self.archived_to_date {
@@ -225,6 +225,25 @@ impl<'a> GetArchivedObjectsRequest<'a> {
         }
 
         Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<ArchivedObject>> {
+        let first = self.offset.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.offset = Some(position);
+            let page = request.send().await?;
+            let items = page.results.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(items, page.offset.unwrap_or(position), false, page.total, None))
+        })
     }
 
     /// Sends the request.

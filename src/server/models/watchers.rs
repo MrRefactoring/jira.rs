@@ -13,5 +13,5 @@ pub struct Watchers {
     #[serde(rename = "watchCount", default, skip_serializing_if = "Option::is_none")]
     pub watch_count: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub watchers: Option<Vec<UserJson>>,
+    pub watchers: Option<Vec<UserDetails>>,
 }

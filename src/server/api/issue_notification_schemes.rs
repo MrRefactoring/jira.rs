@@ -2,6 +2,24 @@
 
 use super::super::models::*;
 
+crate::open_enum! {
+    pub enum GetNotificationSchemesRequestExpandValue {
+        Group => "group",
+        User => "user",
+        ProjectRole => "projectRole",
+        Field => "field",
+    }
+}
+
+crate::open_enum! {
+    pub enum GetNotificationSchemeRequestExpandValue {
+        Group => "group",
+        User => "user",
+        ProjectRole => "projectRole",
+        Field => "field",
+    }
+}
+
 /// The IssueNotificationSchemes operations.
 pub struct IssueNotificationSchemesService<'a> {
     client: &'a crate::core::Client,
@@ -58,7 +76,7 @@ impl<'a> IssueNotificationSchemesService<'a> {
 #[derive(Clone)]
 pub struct GetNotificationSchemesRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<Vec<GetNotificationSchemesRequestExpandValue>>,
     max_results: Option<i64>,
     start_at: Option<i64>,
 }
@@ -68,10 +86,13 @@ impl<'a> GetNotificationSchemesRequest<'a> {
         Self { client, expand: None, max_results: None, start_at: None }
     }
 
-    /// Optional information to be expanded in the response: group, user, projectRole or field.
+    /// Optional information to be expanded in the response: group, user, projectRole or field. This parameter accepts a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetNotificationSchemesRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -98,7 +119,10 @@ impl<'a> GetNotificationSchemesRequest<'a> {
             crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/2/notificationscheme".to_owned());
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         if let Some(value) = &self.max_results {
@@ -112,8 +136,33 @@ impl<'a> GetNotificationSchemesRequest<'a> {
         Ok(config)
     }
 
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<NotificationScheme>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(
+                items,
+                page.start_at.unwrap_or(position),
+                page.is_last.unwrap_or(false),
+                page.total,
+                None,
+            ))
+        })
+    }
+
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<PagedResults> {
+    pub async fn send(self) -> crate::core::Result<PageOfNotificationSchemes> {
         self.client.send(&self.config()?).await
     }
 
@@ -150,7 +199,7 @@ impl<'a> GetNotificationSchemesRequest<'a> {
 #[derive(Clone)]
 pub struct GetNotificationSchemeRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<Vec<GetNotificationSchemeRequestExpandValue>>,
     id: i64,
 }
 
@@ -159,10 +208,13 @@ impl<'a> GetNotificationSchemeRequest<'a> {
         Self { client, id, expand: None }
     }
 
-    /// Optional information to be expanded in the response: group, user, projectRole or field.
+    /// Optional information to be expanded in the response: group, user, projectRole or field. This parameter accepts a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(
+        mut self,
+        value: impl IntoIterator<Item = impl Into<GetNotificationSchemeRequestExpandValue>>,
+    ) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -175,7 +227,10 @@ impl<'a> GetNotificationSchemeRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push((
+                "expand".to_owned(),
+                crate::core::QueryValue::Scalar(value.iter().map(ToString::to_string).collect::<Vec<_>>().join(",")),
+            ));
         }
 
         Ok(config)

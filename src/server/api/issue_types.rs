@@ -77,42 +77,6 @@ impl<'a> IssueTypesService<'a> {
     ) -> StoreTemporaryIssueTypeAvatarUsingMultiPartRequest<'a> {
         StoreTemporaryIssueTypeAvatarUsingMultiPartRequest::new(self.client, id, avatar)
     }
-
-    /// Returns the keys of all properties for the issue type identified by the id
-    pub fn get_issue_type_property_keys(
-        &self,
-        issue_type_id: impl Into<String>,
-    ) -> GetIssueTypePropertyKeysRequest<'a> {
-        GetIssueTypePropertyKeysRequest::new(self.client, issue_type_id)
-    }
-
-    /// Returns the value of the property with a given key from the issue type identified by the id
-    pub fn get_issue_type_property(
-        &self,
-        property_key: impl Into<String>,
-        issue_type_id: impl Into<String>,
-    ) -> GetIssueTypePropertyRequest<'a> {
-        GetIssueTypePropertyRequest::new(self.client, property_key, issue_type_id)
-    }
-
-    /// Sets the value of the specified issue type's property
-    pub fn set_issue_type_property(
-        &self,
-        property_key: impl Into<String>,
-        issue_type_id: impl Into<String>,
-        body: std::collections::HashMap<String, serde_json::Value>,
-    ) -> SetIssueTypePropertyRequest<'a> {
-        SetIssueTypePropertyRequest::new(self.client, property_key, issue_type_id, body)
-    }
-
-    /// Removes the property from the issue type identified by the id
-    pub fn delete_issue_type_property(
-        &self,
-        property_key: impl Into<String>,
-        issue_type_id: impl Into<String>,
-    ) -> DeleteIssueTypePropertyRequest<'a> {
-        DeleteIssueTypePropertyRequest::new(self.client, property_key, issue_type_id)
-    }
 }
 
 /// Returns a list of all issue types visible to the user
@@ -134,7 +98,7 @@ impl<'a> GetIssueAllTypesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<IssueTypeJson>> {
+    pub async fn send(self) -> crate::core::Result<Vec<IssueTypeDetails>> {
         self.client.send(&self.config()?).await
     }
 
@@ -171,7 +135,7 @@ impl<'a> CreateIssueTypeRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<IssueTypeJson> {
+    pub async fn send(self) -> crate::core::Result<IssueTypeDetails> {
         self.client.send(&self.config()?).await
     }
 
@@ -266,22 +230,25 @@ impl<'a> GetPaginatedIssueTypesRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
-    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<IssueTypeJson>> {
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<IssueTypeDetails>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, page.total, None))
         })
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Page<IssueTypeJson>> {
+    pub async fn send(self) -> crate::core::Result<Page<IssueTypeDetails>> {
         self.client.send(&self.config()?).await
     }
 
@@ -314,7 +281,7 @@ impl<'a> GetIssueTypeRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<IssueTypeJson> {
+    pub async fn send(self) -> crate::core::Result<IssueTypeDetails> {
         self.client.send(&self.config()?).await
     }
 
@@ -355,7 +322,7 @@ impl<'a> UpdateIssueTypeRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<IssueTypeJson> {
+    pub async fn send(self) -> crate::core::Result<IssueTypeDetails> {
         self.client.send(&self.config()?).await
     }
 
@@ -434,7 +401,7 @@ impl<'a> GetAlternativeIssueTypesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Vec<IssueTypeJson>> {
+    pub async fn send(self) -> crate::core::Result<Vec<IssueTypeDetails>> {
         self.client.send(&self.config()?).await
     }
 
@@ -540,161 +507,6 @@ impl<'a> StoreTemporaryIssueTypeAvatarUsingMultiPartRequest<'a> {
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<serde_json::Value> {
         self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns the keys of all properties for the issue type identified by the id
-#[derive(Clone)]
-pub struct GetIssueTypePropertyKeysRequest<'a> {
-    client: &'a crate::core::Client,
-    issue_type_id: String,
-}
-
-impl<'a> GetIssueTypePropertyKeysRequest<'a> {
-    fn new(client: &'a crate::core::Client, issue_type_id: impl Into<String>) -> Self {
-        Self { client, issue_type_id: issue_type_id.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!("/rest/api/2/issuetype/{}/properties", crate::core::encode_path_segment(&self.issue_type_id)),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<EntityPropertiesKeys> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Returns the value of the property with a given key from the issue type identified by the id
-#[derive(Clone)]
-pub struct GetIssueTypePropertyRequest<'a> {
-    client: &'a crate::core::Client,
-    property_key: String,
-    issue_type_id: String,
-}
-
-impl<'a> GetIssueTypePropertyRequest<'a> {
-    fn new(client: &'a crate::core::Client, property_key: impl Into<String>, issue_type_id: impl Into<String>) -> Self {
-        Self { client, property_key: property_key.into(), issue_type_id: issue_type_id.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::GET,
-            format!(
-                "/rest/api/2/issuetype/{}/properties/{}",
-                crate::core::encode_path_segment(&self.issue_type_id),
-                crate::core::encode_path_segment(&self.property_key)
-            ),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<EntityProperty> {
-        self.client.send(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Sets the value of the specified issue type's property
-#[derive(Clone)]
-pub struct SetIssueTypePropertyRequest<'a> {
-    client: &'a crate::core::Client,
-    property_key: String,
-    issue_type_id: String,
-    body: std::collections::HashMap<String, serde_json::Value>,
-}
-
-impl<'a> SetIssueTypePropertyRequest<'a> {
-    fn new(
-        client: &'a crate::core::Client,
-        property_key: impl Into<String>,
-        issue_type_id: impl Into<String>,
-        body: std::collections::HashMap<String, serde_json::Value>,
-    ) -> Self {
-        Self { client, property_key: property_key.into(), issue_type_id: issue_type_id.into(), body }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let mut config = crate::core::RequestConfig::new(
-            crate::core::Method::PUT,
-            format!(
-                "/rest/api/2/issuetype/{}/properties/{}",
-                crate::core::encode_path_segment(&self.issue_type_id),
-                crate::core::encode_path_segment(&self.property_key)
-            ),
-        );
-
-        config.body = Some(crate::core::Body::Json(serde_json::to_value(&self.body)?));
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
-    }
-
-    /// Sends the request and hands back the body unmodelled.
-    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
-        self.client.send_raw(&self.config()?).await
-    }
-}
-
-/// Removes the property from the issue type identified by the id
-#[derive(Clone)]
-pub struct DeleteIssueTypePropertyRequest<'a> {
-    client: &'a crate::core::Client,
-    property_key: String,
-    issue_type_id: String,
-}
-
-impl<'a> DeleteIssueTypePropertyRequest<'a> {
-    fn new(client: &'a crate::core::Client, property_key: impl Into<String>, issue_type_id: impl Into<String>) -> Self {
-        Self { client, property_key: property_key.into(), issue_type_id: issue_type_id.into() }
-    }
-
-    /// The request as the transport will send it.
-    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
-        let config = crate::core::RequestConfig::new(
-            crate::core::Method::DELETE,
-            format!(
-                "/rest/api/2/issuetype/{}/properties/{}",
-                crate::core::encode_path_segment(&self.issue_type_id),
-                crate::core::encode_path_segment(&self.property_key)
-            ),
-        );
-
-        Ok(config)
-    }
-
-    /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
     }
 
     /// Sends the request and hands back the body unmodelled.

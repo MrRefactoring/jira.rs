@@ -4467,7 +4467,7 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/agile/1.0/board/{boardId}/configuration",
-    "operation": "getBoardConfiguration"
+    "operation": "getConfiguration"
   },
   {
     "surface": "server",
@@ -4479,7 +4479,7 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/agile/1.0/board/{boardId}/epic/{epicId}/issue",
-    "operation": "getIssuesForBoardEpic"
+    "operation": "getBoardIssuesForEpic"
   },
   {
     "surface": "server",
@@ -4545,7 +4545,7 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/agile/1.0/board/{boardId}/sprint/{sprintId}/issue",
-    "operation": "getIssuesForBoardSprint"
+    "operation": "getBoardIssuesForSprint"
   },
   {
     "surface": "server",
@@ -4599,7 +4599,7 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/agile/1.0/issue/{issueIdOrKey}",
-    "operation": "getAgileIssue"
+    "operation": "getIssue"
   },
   {
     "surface": "server",
@@ -4659,31 +4659,31 @@
     "surface": "server",
     "method": "POST",
     "path": "/rest/agile/1.0/sprint/{sprintId}/issue",
-    "operation": "moveIssuesToSprint"
+    "operation": "moveIssuesToSprintAndRank"
   },
   {
     "surface": "server",
     "method": "GET",
     "path": "/rest/agile/1.0/sprint/{sprintId}/properties",
-    "operation": "getSprintPropertyKeys"
+    "operation": "getPropertiesKeys"
   },
   {
     "surface": "server",
     "method": "DELETE",
     "path": "/rest/agile/1.0/sprint/{sprintId}/properties/{propertyKey}",
-    "operation": "deleteSprintProperty"
+    "operation": "deleteProperty"
   },
   {
     "surface": "server",
     "method": "GET",
     "path": "/rest/agile/1.0/sprint/{sprintId}/properties/{propertyKey}",
-    "operation": "getSprintProperty"
+    "operation": "getProperty"
   },
   {
     "surface": "server",
     "method": "PUT",
     "path": "/rest/agile/1.0/sprint/{sprintId}/properties/{propertyKey}",
-    "operation": "setSprintProperty"
+    "operation": "setProperty"
   },
   {
     "surface": "server",
@@ -4707,13 +4707,13 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/application-properties",
-    "operation": "getApplicationProperties"
+    "operation": "getApplicationProperty"
   },
   {
     "surface": "server",
     "method": "PUT",
     "path": "/rest/api/2/application-properties/{id}",
-    "operation": "setPropertyViaRestfulTable"
+    "operation": "setApplicationProperty"
   },
   {
     "surface": "server",
@@ -4725,7 +4725,7 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/applicationrole",
-    "operation": "getAll"
+    "operation": "getAllApplicationRoles"
   },
   {
     "surface": "server",
@@ -4923,7 +4923,7 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/dashboard",
-    "operation": "list"
+    "operation": "getAllDashboards"
   },
   {
     "surface": "server",
@@ -5019,7 +5019,7 @@
     "surface": "server",
     "method": "PUT",
     "path": "/rest/api/2/filter/{id}",
-    "operation": "editFilter"
+    "operation": "updateFilter"
   },
   {
     "surface": "server",
@@ -5031,7 +5031,7 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/filter/{id}/columns",
-    "operation": "getFilterColumns"
+    "operation": "getColumns"
   },
   {
     "surface": "server",
@@ -5181,7 +5181,7 @@
     "surface": "server",
     "method": "PUT",
     "path": "/rest/api/2/issue/{issueIdOrKey}/assignee",
-    "operation": "assign"
+    "operation": "assignIssue"
   },
   {
     "surface": "server",
@@ -5421,13 +5421,13 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/issue/createmeta/{projectIdOrKey}/issuetypes",
-    "operation": "getCreateIssueMetaProjectIssueTypes"
+    "operation": "getCreateIssueMetaIssueTypes"
   },
   {
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/issue/createmeta/{projectIdOrKey}/issuetypes/{issueTypeId}",
-    "operation": "getCreateIssueMetaFields"
+    "operation": "getCreateIssueMetaIssueTypeId"
   },
   {
     "surface": "server",
@@ -5606,20 +5606,20 @@
   {
     "surface": "server",
     "method": "DELETE",
-    "path": "/rest/api/2/issuetypescheme/{schemeId}",
+    "path": "/rest/api/2/issuetypescheme/{issueTypeSchemeId}",
     "operation": "deleteIssueTypeScheme"
+  },
+  {
+    "surface": "server",
+    "method": "PUT",
+    "path": "/rest/api/2/issuetypescheme/{issueTypeSchemeId}",
+    "operation": "updateIssueTypeScheme"
   },
   {
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/issuetypescheme/{schemeId}",
     "operation": "getIssueTypeScheme"
-  },
-  {
-    "surface": "server",
-    "method": "PUT",
-    "path": "/rest/api/2/issuetypescheme/{schemeId}",
-    "operation": "updateIssueTypeScheme"
   },
   {
     "surface": "server",
@@ -5721,7 +5721,7 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/mypermissions",
-    "operation": "getPermissions"
+    "operation": "getMyPermissions"
   },
   {
     "surface": "server",
@@ -5799,7 +5799,7 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/permissionscheme",
-    "operation": "getPermissionSchemes"
+    "operation": "getAllPermissionSchemes"
   },
   {
     "surface": "server",
@@ -5913,7 +5913,7 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/project",
-    "operation": "getAllProjects"
+    "operation": "searchProjects"
   },
   {
     "surface": "server",
@@ -6075,7 +6075,7 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/project/{projectKeyOrId}/notificationscheme",
-    "operation": "getProjectNotificationScheme"
+    "operation": "getNotificationSchemeForProject"
   },
   {
     "surface": "server",
@@ -6171,7 +6171,7 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/projects/picker",
-    "operation": "searchForProjects"
+    "operation": "getProjectsPicker"
   },
   {
     "surface": "server",
@@ -6273,7 +6273,7 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/role/{id}",
-    "operation": "getProjectRolesById"
+    "operation": "getProjectRoleById"
   },
   {
     "surface": "server",
@@ -6309,61 +6309,61 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/screens",
-    "operation": "getAllScreens"
+    "operation": "getScreens"
   },
   {
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/screens/{screenId}/availableFields",
-    "operation": "getFieldsToAdd"
+    "operation": "getAvailableScreenFields"
   },
   {
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/screens/{screenId}/tabs",
-    "operation": "getAllTabs"
+    "operation": "getAllScreenTabs"
   },
   {
     "surface": "server",
     "method": "POST",
     "path": "/rest/api/2/screens/{screenId}/tabs",
-    "operation": "addTab"
+    "operation": "addScreenTab"
   },
   {
     "surface": "server",
     "method": "DELETE",
     "path": "/rest/api/2/screens/{screenId}/tabs/{tabId}",
-    "operation": "deleteTab"
+    "operation": "deleteScreenTab"
   },
   {
     "surface": "server",
     "method": "PUT",
     "path": "/rest/api/2/screens/{screenId}/tabs/{tabId}",
-    "operation": "renameTab"
+    "operation": "renameScreenTab"
   },
   {
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/screens/{screenId}/tabs/{tabId}/fields",
-    "operation": "getAllFields"
+    "operation": "getAllScreenTabFields"
   },
   {
     "surface": "server",
     "method": "POST",
     "path": "/rest/api/2/screens/{screenId}/tabs/{tabId}/fields",
-    "operation": "addField"
+    "operation": "addScreenTabField"
   },
   {
     "surface": "server",
     "method": "DELETE",
     "path": "/rest/api/2/screens/{screenId}/tabs/{tabId}/fields/{id}",
-    "operation": "removeField"
+    "operation": "removeScreenTabField"
   },
   {
     "surface": "server",
     "method": "POST",
     "path": "/rest/api/2/screens/{screenId}/tabs/{tabId}/fields/{id}/move",
-    "operation": "moveField"
+    "operation": "moveScreenTabField"
   },
   {
     "surface": "server",
@@ -6375,7 +6375,7 @@
     "surface": "server",
     "method": "POST",
     "path": "/rest/api/2/screens/{screenId}/tabs/{tabId}/move/{pos}",
-    "operation": "moveTab"
+    "operation": "moveScreenTab"
   },
   {
     "surface": "server",
@@ -6387,13 +6387,13 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/search",
-    "operation": "search"
+    "operation": "searchIssues"
   },
   {
     "surface": "server",
     "method": "POST",
     "path": "/rest/api/2/search",
-    "operation": "searchUsingSearchRequest"
+    "operation": "searchIssuesPost"
   },
   {
     "surface": "server",
@@ -6441,7 +6441,7 @@
     "surface": "server",
     "method": "PUT",
     "path": "/rest/api/2/settings/columns",
-    "operation": "setIssueNavigatorDefaultColumnsForm"
+    "operation": "setIssueNavigatorDefaultColumns"
   },
   {
     "surface": "server",
@@ -6494,7 +6494,7 @@
   {
     "surface": "server",
     "method": "GET",
-    "path": "/rest/api/2/universal_avatar/type/{type}/owner/{owningObjectId}",
+    "path": "/rest/api/2/universal_avatar/type/{type}/owner/{entityId}",
     "operation": "getAvatars"
   },
   {
@@ -6657,13 +6657,13 @@
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/user/columns",
-    "operation": "defaultColumns"
+    "operation": "getUserDefaultColumns"
   },
   {
     "surface": "server",
     "method": "PUT",
     "path": "/rest/api/2/user/columns",
-    "operation": "setColumnsUrlEncoded"
+    "operation": "setUserColumns"
   },
   {
     "surface": "server",
@@ -6765,7 +6765,7 @@
     "surface": "server",
     "method": "PUT",
     "path": "/rest/api/2/version/{id}/mergeto/{moveIssuesTo}",
-    "operation": "merge"
+    "operation": "mergeVersions"
   },
   {
     "surface": "server",
@@ -6783,7 +6783,7 @@
     "surface": "server",
     "method": "POST",
     "path": "/rest/api/2/version/{id}/removeAndSwap",
-    "operation": "deleteVersionAndSwap"
+    "operation": "deleteAndReplaceVersion"
   },
   {
     "surface": "server",
@@ -6843,19 +6843,19 @@
     "surface": "server",
     "method": "POST",
     "path": "/rest/api/2/workflowscheme",
-    "operation": "createScheme"
+    "operation": "createWorkflowScheme"
   },
   {
     "surface": "server",
     "method": "DELETE",
     "path": "/rest/api/2/workflowscheme/{id}",
-    "operation": "deleteScheme"
+    "operation": "deleteWorkflowScheme"
   },
   {
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/workflowscheme/{id}",
-    "operation": "getById"
+    "operation": "getWorkflowScheme"
   },
   {
     "surface": "server",
@@ -6867,79 +6867,79 @@
     "surface": "server",
     "method": "POST",
     "path": "/rest/api/2/workflowscheme/{id}/createdraft",
-    "operation": "createDraftForParent"
+    "operation": "createWorkflowSchemeDraftFromParent"
   },
   {
     "surface": "server",
     "method": "DELETE",
     "path": "/rest/api/2/workflowscheme/{id}/default",
-    "operation": "deleteDefault"
+    "operation": "deleteDefaultWorkflow"
   },
   {
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/workflowscheme/{id}/default",
-    "operation": "getDefault"
+    "operation": "getDefaultWorkflow"
   },
   {
     "surface": "server",
     "method": "PUT",
     "path": "/rest/api/2/workflowscheme/{id}/default",
-    "operation": "updateDefault"
+    "operation": "updateDefaultWorkflow"
   },
   {
     "surface": "server",
     "method": "DELETE",
     "path": "/rest/api/2/workflowscheme/{id}/draft",
-    "operation": "deleteDraftById"
+    "operation": "deleteWorkflowSchemeDraft"
   },
   {
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/workflowscheme/{id}/draft",
-    "operation": "getDraftById"
+    "operation": "getWorkflowSchemeDraft"
   },
   {
     "surface": "server",
     "method": "PUT",
     "path": "/rest/api/2/workflowscheme/{id}/draft",
-    "operation": "updateDraft"
+    "operation": "updateWorkflowSchemeDraft"
   },
   {
     "surface": "server",
     "method": "DELETE",
     "path": "/rest/api/2/workflowscheme/{id}/draft/default",
-    "operation": "deleteDraftDefault"
+    "operation": "deleteDraftDefaultWorkflow"
   },
   {
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/workflowscheme/{id}/draft/default",
-    "operation": "getDraftDefault"
+    "operation": "getDraftDefaultWorkflow"
   },
   {
     "surface": "server",
     "method": "PUT",
     "path": "/rest/api/2/workflowscheme/{id}/draft/default",
-    "operation": "updateDraftDefault"
+    "operation": "updateDraftDefaultWorkflow"
   },
   {
     "surface": "server",
     "method": "DELETE",
     "path": "/rest/api/2/workflowscheme/{id}/draft/issuetype/{issueType}",
-    "operation": "deleteDraftIssueType"
+    "operation": "deleteWorkflowSchemeDraftIssueType"
   },
   {
     "surface": "server",
     "method": "GET",
     "path": "/rest/api/2/workflowscheme/{id}/draft/issuetype/{issueType}",
-    "operation": "getDraftIssueType"
+    "operation": "getWorkflowSchemeDraftIssueType"
   },
   {
     "surface": "server",
     "method": "PUT",
     "path": "/rest/api/2/workflowscheme/{id}/draft/issuetype/{issueType}",
-    "operation": "setDraftIssueType"
+    "operation": "setWorkflowSchemeDraftIssueType"
   },
   {
     "surface": "server",
@@ -6975,7 +6975,7 @@
     "surface": "server",
     "method": "PUT",
     "path": "/rest/api/2/workflowscheme/{id}/issuetype/{issueType}",
-    "operation": "setIssueType"
+    "operation": "setWorkflowSchemeIssueType"
   },
   {
     "surface": "server",

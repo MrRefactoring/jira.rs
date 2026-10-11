@@ -1,20 +1,6 @@
 // @generated. Do not edit: change the generator or the specification.
 
 use super::super::models::*;
-use serde::Serialize;
-
-/// A comma-separated list of case-insensitive prefixes; an attribute is included when its name or display name starts with any value
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum FindObjectTypeAttributesRequestQuery {
-    One(String),
-    Many(Vec<String>),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
-}
-
-crate::core::untagged::untagged!(FindObjectTypeAttributesRequestQuery { One, Many, Other });
 
 /// The ObjectTypes operations.
 pub struct ObjectTypesService<'a> {
@@ -178,7 +164,7 @@ pub struct FindObjectTypeAttributesRequest<'a> {
     client: &'a crate::core::Client,
     only_value_editable: Option<bool>,
     order_by_name: Option<bool>,
-    query: Option<FindObjectTypeAttributesRequestQuery>,
+    query: Option<Vec<String>>,
     include_values_exist: Option<bool>,
     exclude_parent_attributes: Option<bool>,
     include_children: Option<bool>,
@@ -217,8 +203,8 @@ impl<'a> FindObjectTypeAttributesRequest<'a> {
 
     /// A comma-separated list of case-insensitive prefixes; an attribute is included when its name or display name starts with any value
     #[must_use]
-    pub fn query(mut self, value: FindObjectTypeAttributesRequestQuery) -> Self {
-        self.query = Some(value);
+    pub fn query(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.query = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -267,7 +253,7 @@ impl<'a> FindObjectTypeAttributesRequest<'a> {
         }
 
         if let Some(value) = &self.query {
-            config.query.push(("query".to_owned(), crate::core::QueryValue::from_serializable(value)?));
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.join(","))));
         }
 
         if let Some(value) = &self.include_values_exist {

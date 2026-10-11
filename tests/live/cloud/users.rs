@@ -1,4 +1,4 @@
-use jira::cloud::{GetUserRequestExpand, GetUserRequestExpandValue, UserAccountType, UserColumnRequestBody};
+use jira::cloud::{GetUserRequestExpandValue, UserAccountType, UserColumnRequestBody};
 
 use crate::harness::{ResourceTracker, await_readable, cloud};
 
@@ -59,7 +59,7 @@ async fn expands_groups_only_when_asked() {
     let expanded = cloud()
         .users()
         .get_user(account_id.as_str())
-        .expand(GetUserRequestExpand::One(GetUserRequestExpandValue::Groups))
+        .expand([GetUserRequestExpandValue::Groups])
         .send()
         .await
         .expect("the groups expansion is accepted");

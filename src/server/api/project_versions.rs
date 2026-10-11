@@ -12,6 +12,19 @@ impl<'a> ProjectVersionsService<'a> {
         Self { client }
     }
 
+    /// Returns all versions for the specified project. Results are paginated. Results can be ordered by the following fields: sequence, name, startDate, releaseDate.
+    pub fn get_project_versions_paginated(
+        &self,
+        project_id_or_key: impl Into<String>,
+    ) -> GetProjectVersionsPaginatedRequest<'a> {
+        GetProjectVersionsPaginatedRequest::new(self.client, project_id_or_key)
+    }
+
+    /// Contains a full representation of a the specified project's versions.
+    pub fn get_project_versions(&self, project_id_or_key: impl Into<String>) -> GetProjectVersionsRequest<'a> {
+        GetProjectVersionsRequest::new(self.client, project_id_or_key)
+    }
+
     /// Retrieve paginated collection of versions matching given query optionally filtered by given project IDs.
     pub fn get_paginated_versions(&self) -> GetPaginatedVersionsRequest<'a> {
         GetPaginatedVersionsRequest::new(self.client)
@@ -38,8 +51,8 @@ impl<'a> ProjectVersionsService<'a> {
     }
 
     /// Merge versions
-    pub fn merge(&self, move_issues_to: impl Into<String>, id: impl Into<String>) -> MergeRequest<'a> {
-        MergeRequest::new(self.client, move_issues_to, id)
+    pub fn merge_versions(&self, id: impl Into<String>, move_issues_to: impl Into<String>) -> MergeVersionsRequest<'a> {
+        MergeVersionsRequest::new(self.client, id, move_issues_to)
     }
 
     /// Modify a version's sequence within a project.
@@ -56,12 +69,12 @@ impl<'a> ProjectVersionsService<'a> {
     }
 
     /// Delete a project version, removed values will be replaced with ones specified by the parameters.
-    pub fn delete_version_and_swap(
+    pub fn delete_and_replace_version(
         &self,
         id: impl Into<String>,
         delete_and_replace_version: DeleteAndReplaceVersion,
-    ) -> DeleteVersionAndSwapRequest<'a> {
-        DeleteVersionAndSwapRequest::new(self.client, id, delete_and_replace_version)
+    ) -> DeleteAndReplaceVersionRequest<'a> {
+        DeleteAndReplaceVersionRequest::new(self.client, id, delete_and_replace_version)
     }
 
     /// Returns the number of unresolved issues for the given version
@@ -125,6 +138,169 @@ impl<'a> ProjectVersionsService<'a> {
         global_id: impl Into<String>,
     ) -> DeleteRemoteVersionLinkRequest<'a> {
         DeleteRemoteVersionLinkRequest::new(self.client, version_id, global_id)
+    }
+}
+
+/// Returns all versions for the specified project. Results are paginated. Results can be ordered by the following fields: sequence, name, startDate, releaseDate.
+#[derive(Clone)]
+pub struct GetProjectVersionsPaginatedRequest<'a> {
+    client: &'a crate::core::Client,
+    expand: Option<Vec<String>>,
+    project_id_or_key: String,
+    max_results: Option<i64>,
+    order_by: Option<String>,
+    start_at: Option<i64>,
+}
+
+impl<'a> GetProjectVersionsPaginatedRequest<'a> {
+    fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
+        Self {
+            client,
+            project_id_or_key: project_id_or_key.into(),
+            expand: None,
+            max_results: None,
+            order_by: None,
+            start_at: None,
+        }
+    }
+
+    /// Parameters to expand This parameter is a comma-separated list.
+    #[must_use]
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
+
+        self
+    }
+
+    /// How many results on the page should be included. Defaults to 50
+    #[must_use]
+    pub fn max_results(mut self, value: i64) -> Self {
+        self.max_results = Some(value);
+
+        self
+    }
+
+    /// Ordering of the results
+    #[must_use]
+    pub fn order_by(mut self, value: impl Into<String>) -> Self {
+        self.order_by = Some(value.into());
+
+        self
+    }
+
+    /// The page offset, if not specified then defaults to 0
+    #[must_use]
+    pub fn start_at(mut self, value: i64) -> Self {
+        self.start_at = Some(value);
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/2/project/{}/version", crate::core::encode_path_segment(&self.project_id_or_key)),
+        );
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
+        }
+
+        if let Some(value) = &self.max_results {
+            config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.order_by {
+            config.query.push(("orderBy".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.start_at {
+            config.query.push(("startAt".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        Ok(config)
+    }
+
+    /// Every item the request matches, one page fetched at a time.
+    ///
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
+    pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Version>> {
+        let first = self.start_at.unwrap_or(0);
+
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values.unwrap_or_default();
+            Ok(crate::core::PageStep::offset(
+                items,
+                page.start_at.unwrap_or(position),
+                page.is_last.unwrap_or(false),
+                page.total,
+                None,
+            ))
+        })
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<PageOfVersions> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
+    }
+}
+
+/// Contains a full representation of a the specified project's versions.
+#[derive(Clone)]
+pub struct GetProjectVersionsRequest<'a> {
+    client: &'a crate::core::Client,
+    expand: Option<Vec<String>>,
+    project_id_or_key: String,
+}
+
+impl<'a> GetProjectVersionsRequest<'a> {
+    fn new(client: &'a crate::core::Client, project_id_or_key: impl Into<String>) -> Self {
+        Self { client, project_id_or_key: project_id_or_key.into(), expand: None }
+    }
+
+    /// Parameters to expand This parameter is a comma-separated list.
+    #[must_use]
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
+
+        self
+    }
+
+    /// The request as the transport will send it.
+    pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
+        let mut config = crate::core::RequestConfig::new(
+            crate::core::Method::GET,
+            format!("/rest/api/2/project/{}/versions", crate::core::encode_path_segment(&self.project_id_or_key)),
+        );
+
+        if let Some(value) = &self.expand {
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
+        }
+
+        Ok(config)
+    }
+
+    /// Sends the request.
+    pub async fn send(self) -> crate::core::Result<Vec<Version>> {
+        self.client.send(&self.config()?).await
+    }
+
+    /// Sends the request and hands back the body unmodelled.
+    pub async fn send_raw(self) -> crate::core::Result<serde_json::Value> {
+        self.client.send_raw(&self.config()?).await
     }
 }
 
@@ -200,17 +376,20 @@ impl<'a> GetPaginatedVersionsRequest<'a> {
 
     /// Every item the request matches, one page fetched at a time.
     ///
-    /// Each page is asked for from where the one before it ended — from the offset already set on the request, or
-    /// from the beginning — and the stream ends at the page that says it is the last, or at an empty one. Reading
-    /// it needs `TryStreamExt` in scope, re-exported as [`crate::futures_util`] so no dependency of your own is
-    /// required.
+    /// The first page uses this request; later pages advance the offset. The stream ends at the last page,
+    /// a known total, or an empty page.
+    /// The stream also ends without an error at an empty page even if `total` promised more, since the
+    /// listing can change while it is read.
+    /// Reading it needs `TryStreamExt`,
+    /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<Version>> {
         let first = self.start_at.unwrap_or(0);
 
-        crate::core::stream_pages(self, first, |mut request, offset| {
-            request.start_at = Some(offset);
-
-            request.send()
+        crate::core::stream_pages(self, first, |mut request, position| async move {
+            request.start_at = Some(position);
+            let page = request.send().await?;
+            let items = page.values;
+            Ok(crate::core::PageStep::offset(items, page.start_at, page.is_last, page.total, None))
         })
     }
 
@@ -309,7 +488,7 @@ impl<'a> GetRemoteVersionLinksRequest<'a> {
 #[derive(Clone)]
 pub struct GetVersionRequest<'a> {
     client: &'a crate::core::Client,
-    expand: Option<String>,
+    expand: Option<Vec<String>>,
     id: String,
 }
 
@@ -318,9 +497,10 @@ impl<'a> GetVersionRequest<'a> {
         Self { client, id: id.into(), expand: None }
     }
 
+    /// This parameter is a comma-separated list.
     #[must_use]
-    pub fn expand(mut self, value: impl Into<String>) -> Self {
-        self.expand = Some(value.into());
+    pub fn expand(mut self, value: impl IntoIterator<Item = impl Into<String>>) -> Self {
+        self.expand = Some(value.into_iter().map(Into::into).collect());
 
         self
     }
@@ -333,7 +513,7 @@ impl<'a> GetVersionRequest<'a> {
         );
 
         if let Some(value) = &self.expand {
-            config.query.push(("expand".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+            config.query.push(("expand".to_owned(), crate::core::QueryValue::List(value.clone())));
         }
 
         Ok(config)
@@ -388,15 +568,15 @@ impl<'a> UpdateVersionRequest<'a> {
 
 /// Merge versions
 #[derive(Clone)]
-pub struct MergeRequest<'a> {
+pub struct MergeVersionsRequest<'a> {
     client: &'a crate::core::Client,
-    move_issues_to: String,
     id: String,
+    move_issues_to: String,
 }
 
-impl<'a> MergeRequest<'a> {
-    fn new(client: &'a crate::core::Client, move_issues_to: impl Into<String>, id: impl Into<String>) -> Self {
-        Self { client, move_issues_to: move_issues_to.into(), id: id.into() }
+impl<'a> MergeVersionsRequest<'a> {
+    fn new(client: &'a crate::core::Client, id: impl Into<String>, move_issues_to: impl Into<String>) -> Self {
+        Self { client, id: id.into(), move_issues_to: move_issues_to.into() }
     }
 
     /// The request as the transport will send it.
@@ -503,13 +683,13 @@ impl<'a> GetVersionRelatedIssuesRequest<'a> {
 
 /// Delete a project version, removed values will be replaced with ones specified by the parameters.
 #[derive(Clone)]
-pub struct DeleteVersionAndSwapRequest<'a> {
+pub struct DeleteAndReplaceVersionRequest<'a> {
     client: &'a crate::core::Client,
     id: String,
     delete_and_replace_version: DeleteAndReplaceVersion,
 }
 
-impl<'a> DeleteVersionAndSwapRequest<'a> {
+impl<'a> DeleteAndReplaceVersionRequest<'a> {
     fn new(
         client: &'a crate::core::Client,
         id: impl Into<String>,
@@ -569,7 +749,7 @@ impl<'a> GetVersionUnresolvedIssuesRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<VersionUnresolvedIssueCounts> {
+    pub async fn send(self) -> crate::core::Result<VersionUnresolvedIssuesCount> {
         self.client.send(&self.config()?).await
     }
 
