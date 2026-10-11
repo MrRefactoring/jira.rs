@@ -1,4 +1,6 @@
-# jira
+<img alt="jira.rs — клиент Jira REST API для Rust" src="https://raw.githubusercontent.com/MrRefactoring/jira.rs/master/docs/logo.svg" width="420"/>
+
+# jira — клиент Jira REST API для Rust
 
 [![crates.io](https://img.shields.io/crates/v/jira.svg?style=flat-square)](https://crates.io/crates/jira)
 [![docs.rs](https://img.shields.io/docsrs/jira?style=flat-square)](https://docs.rs/jira)
@@ -8,7 +10,20 @@
 
 > [English](README.md) · 🌐 **Русский**
 
-Rust-клиент для Atlassian Jira REST API, Rust-версия [jira.js](https://github.com/MrRefactoring/jira.js).
+## О крейте
+
+**jira** — асинхронный Rust-клиент для Atlassian Jira REST API — Jira Cloud и Jira Data Center на своих серверах, —
+Rust-версия [jira.js](https://github.com/MrRefactoring/jira.js). Каждый эндпоинт, параметр и модель типизированы, а у
+постраничных запросов есть `stream()`. Покрывает:
+
+- **[Jira Cloud platform API](https://developer.atlassian.com/cloud/jira/platform/rest/)** - задачи, проекты, поля, workflow
+- **[Jira Agile API](https://developer.atlassian.com/cloud/jira/software/rest/intro/)** - спринты, доски, бэклог
+- **[Jira Service Management API](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro/)** - запросы, очереди, организации
+- **[Assets API](https://developer.atlassian.com/cloud/assets/rest/)** - база данных управления конфигурациями, в Cloud и Data Center
+- **[Teams API](https://developer.atlassian.com/platform/teams/rest/v1/)** - команды и их участники
+- **[Organization APIs](https://developer.atlassian.com/cloud/admin/organization/rest/)** - администрирование, управление пользователями и SCIM
+- **[Jira Data Center API](https://developer.atlassian.com/server/jira/platform/rest/)** - Jira на своих серверах, платформа и Agile в одной поверхности
+- **[Jira Service Management Data Center API](https://developer.atlassian.com/server/jira-servicedesk/rest/)** - запросы, очереди, типы запросов и организации на своих серверах
 
 ## Установка
 

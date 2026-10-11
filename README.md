@@ -1,4 +1,6 @@
-# jira
+<img alt="jira.rs — Jira REST API client for Rust" src="https://raw.githubusercontent.com/MrRefactoring/jira.rs/master/docs/logo.svg" width="420"/>
+
+# jira — Jira REST API client for Rust
 
 [![crates.io](https://img.shields.io/crates/v/jira.svg?style=flat-square)](https://crates.io/crates/jira)
 [![docs.rs](https://img.shields.io/docsrs/jira?style=flat-square)](https://docs.rs/jira)
@@ -8,8 +10,20 @@
 
 > 🌐 **English** · [Русский](https://github.com/MrRefactoring/jira.rs/blob/master/README.ru.md)
 
-A Rust client for the Atlassian Jira REST APIs, built as the Rust counterpart of
-[jira.js](https://github.com/MrRefactoring/jira.js).
+## About
+
+**jira** is an async Rust client for the Atlassian Jira REST APIs — Jira Cloud and self-hosted Jira Data Center — built
+as the Rust counterpart of [jira.js](https://github.com/MrRefactoring/jira.js). Every endpoint, parameter and model is
+typed, and requests that page have a `stream()`. It covers:
+
+- **[Jira Cloud platform API](https://developer.atlassian.com/cloud/jira/platform/rest/)** - issues, projects, fields, workflows
+- **[Jira Agile API](https://developer.atlassian.com/cloud/jira/software/rest/intro/)** - sprints, boards, backlog
+- **[Jira Service Management API](https://developer.atlassian.com/cloud/jira/service-desk/rest/intro/)** - requests, queues, organizations
+- **[Assets API](https://developer.atlassian.com/cloud/assets/rest/)** - the configuration management database, on Cloud and Data Center
+- **[Teams API](https://developer.atlassian.com/platform/teams/rest/v1/)** - teams and their members
+- **[Organization APIs](https://developer.atlassian.com/cloud/admin/organization/rest/)** - administration, user management and SCIM provisioning
+- **[Jira Data Center API](https://developer.atlassian.com/server/jira/platform/rest/)** - self-hosted Jira, platform and Agile in one surface
+- **[Jira Service Management Data Center API](https://developer.atlassian.com/server/jira-servicedesk/rest/)** - self-hosted requests, queues, request types, organizations
 
 ## Installation
 
