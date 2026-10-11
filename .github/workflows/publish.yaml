@@ -82,7 +82,17 @@ jobs:
               );
             }
 
-            const body = match[1].trim();
+            const limit = 125000;
+            const section = match[1].trim();
+            const changelogUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/blob/${tag}/CHANGELOG.md`;
+            const body =
+              section.length <= limit
+                ? section
+                : `${section.replace(/<details>[\s\S]*?<\/details>\n*/g, '').trim()}\n\nThe full tables are in [CHANGELOG.md](${changelogUrl}).`;
+
+            if (body.length > limit) {
+              throw new Error(`The ${version} release notes are ${body.length} characters, over GitHub's ${limit}.`);
+            }
 
             const { data } = await github.rest.repos.createRelease({
               owner: context.repo.owner,
