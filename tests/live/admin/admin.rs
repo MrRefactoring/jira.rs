@@ -1,4 +1,5 @@
 use jira::admin::{AdminClient, MultiDirectoryGroupSearchRequest, MultiDirectoryUserSearchRequest, OrgModelType};
+use std::io::Write;
 
 use crate::harness::{admin_key_client, admin_surface, has_admin_env, org_id};
 
@@ -22,7 +23,11 @@ fn unthrottled<T>(result: jira::Result<T>) -> Option<jira::Result<T>> {
     if let Err(error) = &result
         && error.is_rate_limit()
     {
-        eprintln!("skipped: organization API rate limited (HTTP 429; Retry-After: {:?})", error.retry_after());
+        let _ = writeln!(
+            std::io::stderr().lock(),
+            "skipped: organization API rate limited (HTTP 429; Retry-After: {:?})",
+            error.retry_after()
+        );
         None
     } else {
         Some(result)
