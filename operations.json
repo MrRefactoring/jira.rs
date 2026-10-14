@@ -7352,12 +7352,6 @@
   {
     "surface": "serviceDesk",
     "method": "POST",
-    "path": "/rest/servicedeskapi/request/skip-login-check",
-    "operation": "createCustomerRequestSkippingLoginCheck"
-  },
-  {
-    "surface": "serviceDesk",
-    "method": "POST",
     "path": "/rest/servicedeskapi/request/validate",
     "operation": "validateCustomerRequest"
   },

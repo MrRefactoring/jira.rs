@@ -5,6 +5,34 @@ All notable changes to this crate are documented here. The format follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html) — before `1.0.0`, a breaking change raises the minor
 version.
 
+## [Unreleased]
+
+## [0.3.0] - 2026-10-14
+
+### Added
+
+- Cloud label listings accept the optional `query` and `scope` filters.
+- Cloud models include the `longtext` custom-field default and the policy and bulk agent session schemas from the OpenAPI snapshot fetched on 2026-10-14. The nine new experimental operations remain excluded by the existing generator policy.
+- Administration, Agile and Assets models expose the additional fields described by the current generator snapshot.
+
+### Changed
+
+- **Breaking:** Cloud `issues().delete_issue(..).delete_subtasks(..)` takes `bool` instead of `impl Into<DeleteIssueRequestDeleteSubtasks>`; the enum is removed. Pass `true` or `false` instead of a string or enum variant.
+- **Breaking:** Data Center `issues().delete_issue(..).delete_subtasks(..)` takes `bool` instead of `impl Into<DeleteIssueRequestDeleteSubtasks>`; the enum is removed. Pass `true` or `false` instead of a string or enum variant.
+- **Breaking:** Administration `WorkspaceModel.relationships` takes `WorkspaceModelRelationships` instead of a map of lists; `WorkspaceModelRelationships` is now a struct with typed relationship fields instead of an enum.
+- **Breaking:** Administration `AllowIfContainedRule` has five additional optional fields. Update complete struct literals or use `..Default::default()`.
+- **Breaking:** Cloud `CustomFieldContextDefaultValue` has a `CustomFieldContextDefaultValueLongText` variant. Update exhaustive matches.
+
+### Removed
+
+- **Breaking:** Service Management `request().create_customer_request_skipping_login_check(..)` and `CreateCustomerRequestSkippingLoginCheckRequest` are removed. The operation is absent from the current vendor document and returned HTTP 405 on the Cloud test site on 2026-10-14; the ordinary `create_customer_request(..)` operation remains available.
+
+### Fixed
+
+- Update the locked `rustls` dependency to `0.23.46`, addressing `RUSTSEC-2026-0346` through `RUSTSEC-2026-0349`.
+- Live administration checks report and skip throttled answers, which provide no evidence about access rights.
+- The Agile board projects stream documentation records that Jira Cloud ignored `startAt` and `maxResults` and echoed `startAt: 0, maxResults: 50` when measured on a board with one project.
+
 ## [0.2.0] - 2026-10-11
 
 ### Added
@@ -876,6 +904,7 @@ Data Center `issue_worklogs().get_issue_worklog()` returns every worklog in one 
 - Harold Dost published `0.0.1` of this crate name in 2021. That release shares no code with this one, but it kept
   the name alive.
 
+[0.3.0]: https://github.com/MrRefactoring/jira.rs/releases/tag/v0.3.0
 [0.2.0]: https://github.com/MrRefactoring/jira.rs/releases/tag/v0.2.0
 [0.1.1]: https://github.com/MrRefactoring/jira.rs/releases/tag/v0.1.1
 [0.1.0]: https://github.com/MrRefactoring/jira.rs/releases/tag/v0.1.0

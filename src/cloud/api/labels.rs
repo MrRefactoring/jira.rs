@@ -24,11 +24,13 @@ pub struct GetAllLabelsRequest<'a> {
     client: &'a crate::core::Client,
     start_at: Option<i64>,
     max_results: Option<i64>,
+    query: Option<String>,
+    scope: Option<String>,
 }
 
 impl<'a> GetAllLabelsRequest<'a> {
     fn new(client: &'a crate::core::Client) -> Self {
-        Self { client, start_at: None, max_results: None }
+        Self { client, start_at: None, max_results: None, query: None, scope: None }
     }
 
     /// The index of the first item to return in a page of results (page offset).
@@ -47,6 +49,22 @@ impl<'a> GetAllLabelsRequest<'a> {
         self
     }
 
+    /// Case-insensitive prefix used to filter labels before pagination.
+    #[must_use]
+    pub fn query(mut self, value: impl Into<String>) -> Self {
+        self.query = Some(value.into());
+
+        self
+    }
+
+    /// RECENT\_PROJECTS or ALL\_BROWSEABLE\_PROJECTS. Omitted scope retains the unbounded search. Blank or unrecognised values use ALL\_BROWSEABLE\_PROJECTS.
+    #[must_use]
+    pub fn scope(mut self, value: impl Into<String>) -> Self {
+        self.scope = Some(value.into());
+
+        self
+    }
+
     /// The request as the transport will send it.
     pub fn config(&self) -> crate::core::Result<crate::core::RequestConfig> {
         let mut config = crate::core::RequestConfig::new(crate::core::Method::GET, "/rest/api/3/label".to_owned());
@@ -57,6 +75,14 @@ impl<'a> GetAllLabelsRequest<'a> {
 
         if let Some(value) = &self.max_results {
             config.query.push(("maxResults".to_owned(), crate::core::QueryValue::Scalar(value.to_string())));
+        }
+
+        if let Some(value) = &self.query {
+            config.query.push(("query".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
+        }
+
+        if let Some(value) = &self.scope {
+            config.query.push(("scope".to_owned(), crate::core::QueryValue::Scalar(value.clone())));
         }
 
         Ok(config)

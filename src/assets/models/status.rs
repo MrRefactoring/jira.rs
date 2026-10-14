@@ -20,4 +20,8 @@ pub struct Status {
     pub category: i64,
     #[serde(rename = "objectSchemaId", default, skip_serializing_if = "Option::is_none")]
     pub object_schema_id: Option<String>,
+    #[serde(rename = "globalId", default, skip_serializing_if = "Option::is_none")]
+    pub global_id: Option<String>,
+    #[serde(rename = "workspaceId", default, skip_serializing_if = "Option::is_none")]
+    pub workspace_id: Option<String>,
 }

@@ -42,10 +42,10 @@ pub struct ObjectListResult {
     pub matched_filter_values: Option<Vec<ObjectAttribute>>,
     #[serde(rename = "inheritanceTree", default, skip_serializing_if = "Option::is_none")]
     pub inheritance_tree: Option<ObjectTypeInheritanceTree>,
-    #[serde(rename = "orderAscending", default, skip_serializing_if = "Option::is_none")]
-    pub order_ascending: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub iql: Option<String>,
+    #[serde(rename = "orderAscending", default, skip_serializing_if = "Option::is_none")]
+    pub order_ascending: Option<bool>,
     #[serde(rename = "iqlSearchResult", default, skip_serializing_if = "Option::is_none")]
     pub iql_search_result: Option<bool>,
     #[serde(rename = "pageSize", default, skip_serializing_if = "Option::is_none")]

@@ -80,4 +80,6 @@ pub struct EventActorModel {
     pub app: Option<EventActorModelApp>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub links: Option<LinkSelfModel>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub picture: Option<serde_json::Value>,
 }

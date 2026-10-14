@@ -1749,8 +1749,9 @@ impl<'a> GetProjectsFullRequest<'a> {
     /// Every item the request matches, one page fetched at a time.
     ///
     /// This endpoint answers with everything in one response and offers no way to ask for more. The stream
-    /// makes one request. Jira Software Cloud declares no paging parameters for this listing. Whether it
-    /// reads `startAt` has not been measured, so the stream is the one request.
+    /// makes one request. Measured on Jira Software Cloud on 2026-10-06 with a single project: `startAt`
+    /// and `maxResults` are ignored, and the response always echoes `startAt: 0, maxResults: 50`. The
+    /// stream makes one request.
     /// Reading it needs `TryStreamExt`,
     /// re-exported as [`crate::futures_util`].
     pub fn stream(self) -> futures_util::stream::BoxStream<'a, crate::core::Result<ProjectDetails>> {
