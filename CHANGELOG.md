@@ -29,6 +29,7 @@ version.
 
 ### Fixed
 
+- Update the locked `rustls` dependency to `0.23.46`, addressing `RUSTSEC-2026-0346` through `RUSTSEC-2026-0349`.
 - Live administration checks report and skip throttled answers, which provide no evidence about access rights.
 - The Agile board projects stream documentation records that Jira Cloud ignored `startAt` and `maxResults` and echoed `startAt: 0, maxResults: 50` when measured on a board with one project.
 
