@@ -9,7 +9,6 @@ server issues get_issue — Fetches one issue by key; only its optional expanded
 service_desk request add_request_participants — Adds participants once and returns the resulting participant page; it has no paging control.
 service_desk request create_comment_with_attachment — Creates one comment with attachments; the paginated attachment field is embedded in the result.
 service_desk request create_customer_request — Creates one customer request; paginated status, participant, SLA, comment, or attachment fields are embedded in the result.
-service_desk request create_customer_request_skipping_login_check — Creates one customer request; paginated status, participant, SLA, comment, or attachment fields are embedded in the result.
 service_desk request create_request_comment — Creates one comment; only its embedded attachments are paginated.
 service_desk request get_customer_request_by_id_or_key — Fetches one customer request by ID or key; paginated fields are embedded in that request.
 service_desk request get_request_comment_by_id — Fetches one comment by ID; only its embedded attachments are paginated.

@@ -11,6 +11,13 @@ pub struct EpicColor {
 
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 #[non_exhaustive]
+pub struct EpicIssueColor {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct Epic {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
@@ -26,4 +33,6 @@ pub struct Epic {
     pub color: Option<EpicColor>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub done: Option<bool>,
+    #[serde(rename = "issueColor", default, skip_serializing_if = "Option::is_none")]
+    pub issue_color: Option<EpicIssueColor>,
 }

@@ -61,23 +61,79 @@ pub struct WorkspaceModelAttributes {
     pub unit: Option<String>,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize)]
-#[serde(untagged)]
-#[allow(clippy::large_enum_variant)]
-pub enum WorkspaceModelRelationships {
-    PolicyModelV2(PolicyModelV2),
-    EntitlementModelV2(EntitlementModelV2),
-    FeatureModelV2(FeatureModelV2),
-    /// A shape the specification does not describe.
-    Other(serde_json::Value),
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct WorkspaceModelRelationshipsRelatesFromEntitlementAttributesEntitlementOfferingProductListing {
+    #[serde(rename = "productId", default, skip_serializing_if = "Option::is_none")]
+    pub product_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "iconUrl", default, skip_serializing_if = "Option::is_none")]
+    pub icon_url: Option<String>,
 }
 
-crate::core::untagged::untagged!(WorkspaceModelRelationships {
-    PolicyModelV2,
-    EntitlementModelV2,
-    FeatureModelV2,
-    Other
-});
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct WorkspaceModelRelationshipsRelatesFromEntitlementAttributesEntitlementOffering {
+    #[serde(rename = "productId", default, skip_serializing_if = "Option::is_none")]
+    pub product_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "productListing", default, skip_serializing_if = "Option::is_none")]
+    pub product_listing:
+        Option<WorkspaceModelRelationshipsRelatesFromEntitlementAttributesEntitlementOfferingProductListing>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct WorkspaceModelRelationshipsRelatesFromEntitlementAttributesEntitlement {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub offering: Option<WorkspaceModelRelationshipsRelatesFromEntitlementAttributesEntitlementOffering>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct WorkspaceModelRelationshipsRelatesFromEntitlementAttributes {
+    #[serde(rename = "entitlementId", default, skip_serializing_if = "Option::is_none")]
+    pub entitlement_id: Option<String>,
+    #[serde(rename = "relationshipType", default, skip_serializing_if = "Option::is_none")]
+    pub relationship_type: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub entitlement: Option<WorkspaceModelRelationshipsRelatesFromEntitlementAttributesEntitlement>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct WorkspaceModelRelationshipsRelatesFromEntitlementLinks {
+    #[serde(rename = "self", default, skip_serializing_if = "Option::is_none")]
+    pub self_: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct WorkspaceModelRelationshipsRelatesFromEntitlement {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<WorkspaceModelRelationshipsRelatesFromEntitlementAttributes>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub links: Option<WorkspaceModelRelationshipsRelatesFromEntitlementLinks>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct WorkspaceModelRelationships {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub policy: Option<Vec<PolicyModelV2>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub entitlement: Option<Vec<EntitlementModelV2>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub feature: Option<Vec<FeatureModelV2>>,
+    #[serde(rename = "relatesFromEntitlement", default, skip_serializing_if = "Option::is_none")]
+    pub relates_from_entitlement: Option<Vec<WorkspaceModelRelationshipsRelatesFromEntitlement>>,
+}
 
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 #[non_exhaustive]
@@ -91,7 +147,7 @@ pub struct WorkspaceModel {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub links: Option<LinkSelfModel>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub relationships: Option<std::collections::HashMap<String, Vec<WorkspaceModelRelationships>>>,
+    pub relationships: Option<WorkspaceModelRelationships>,
     #[serde(rename = "appType", default, skip_serializing_if = "Option::is_none")]
     pub app_type: Option<String>,
 }

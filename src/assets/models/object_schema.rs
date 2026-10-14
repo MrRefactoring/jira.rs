@@ -4,6 +4,24 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 #[non_exhaustive]
+pub struct ObjectSchemaCdmDataTypes {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub version: Option<f64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub opinionated: Option<bool>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
+pub struct ObjectSchemaCdmData {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub types: Option<Vec<ObjectSchemaCdmDataTypes>>,
+}
+
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[non_exhaustive]
 pub struct ObjectSchema {
     #[serde(rename = "workspaceId")]
     pub workspace_id: String,
@@ -48,4 +66,10 @@ pub struct ObjectSchema {
     pub object_type_count: i64,
     #[serde(rename = "canManage", default, skip_serializing_if = "Option::is_none")]
     pub can_manage: Option<bool>,
+    #[serde(rename = "atlassianTemplateId", default, skip_serializing_if = "Option::is_none")]
+    pub atlassian_template_id: Option<String>,
+    #[serde(rename = "cdmData", default, skip_serializing_if = "Option::is_none")]
+    pub cdm_data: Option<ObjectSchemaCdmData>,
+    #[serde(rename = "crossSchemaReferencingAllowed", default, skip_serializing_if = "Option::is_none")]
+    pub cross_schema_referencing_allowed: Option<bool>,
 }
