@@ -230,6 +230,8 @@ impl<'a> StoreTemporaryAvatarUsingMultiPartRequest<'a> {
 
         config.headers.push(("X-Atlassian-Token".to_owned(), "no-check".to_owned()));
 
+        config.headers.push(("Accept".to_owned(), "text/html".to_owned()));
+
         config.body =
             Some(crate::core::Body::Multipart(crate::core::MultipartBody::new("avatar", self.avatar.clone())));
 
@@ -240,7 +242,7 @@ impl<'a> StoreTemporaryAvatarUsingMultiPartRequest<'a> {
 
     /// Sends the request.
     pub async fn send(self) -> crate::core::Result<AvatarCropping> {
-        self.client.send(&self.config()?).await
+        self.client.send_avatar_upload(&self.config()?).await
     }
 
     /// Sends the request and hands back the body unmodelled.

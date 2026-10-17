@@ -7,6 +7,10 @@ version.
 
 ## [Unreleased]
 
+### Fixed
+
+- Data Center multipart avatar uploads request HTML, extract the embedded JSON and normalize cropping instructions before deserialization. Upload errors embedded in successful HTTP responses become API errors. The four operations retain their existing return types; `send_raw()` keeps the original response body available.
+
 ## [0.3.0] - 2026-10-14
 
 ### Added

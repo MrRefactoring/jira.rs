@@ -177,6 +177,30 @@ impl Client {
         deserialize_at(&endpoint, &value)
     }
 
+    #[cfg(feature = "server")]
+    pub(crate) async fn send_avatar_upload<T: DeserializeOwned>(&self, config: &RequestConfig) -> Result<T> {
+        let response = self.execute(config).await?;
+        let endpoint = config.endpoint();
+        let value = crate::core::avatar::parse(&response.text(), &endpoint)?;
+
+        if value.get("errorMessages").and_then(Value::as_array).is_some_and(|errors| !errors.is_empty())
+            || value.get("errors").and_then(Value::as_object).is_some_and(|errors| !errors.is_empty())
+        {
+            return Err(create_api_error(
+                "The avatar upload was rejected".to_owned(),
+                response.status,
+                response.status_text,
+                value,
+                None,
+            ));
+        }
+
+        #[cfg(feature = "audit")]
+        record_undocumented_keys::<T>(&endpoint, &value);
+
+        deserialize_at(&endpoint, &value)
+    }
+
     /// Sends the request and hands back the JSON body unmodelled.
     pub async fn send_raw(&self, config: &RequestConfig) -> Result<Value> {
         let response = self.execute(config).await?;

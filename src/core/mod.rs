@@ -14,6 +14,8 @@ pub mod audit;
 pub mod coverage;
 
 mod auth;
+#[cfg(feature = "server")]
+mod avatar;
 mod body;
 mod client;
 #[cfg(feature = "chrono")]
