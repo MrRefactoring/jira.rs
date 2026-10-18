@@ -1,3 +1,4 @@
+mod approvals;
 mod configuration;
 mod content;
 mod desks;
