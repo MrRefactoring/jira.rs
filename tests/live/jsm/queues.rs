@@ -143,4 +143,21 @@ async fn reads_and_writes_the_queue_count_settings() {
         .send()
         .await
         .expect("and the same for the cache");
+
+    let settings = service_desk_server()
+        .queue_settings()
+        .get_queue_settings_on_project(project.project_key.clone())
+        .send()
+        .await
+        .expect("the project reports the queue settings just written");
+
+    assert!(settings.queue_count.include_queue_count);
+    assert!(settings.queue_count.use_cached_queue_count);
+
+    service_desk_server()
+        .queue_settings()
+        .set_should_queues_use_count_cache_globally(false)
+        .send()
+        .await
+        .expect("the global cache setting is restored to its default");
 }
