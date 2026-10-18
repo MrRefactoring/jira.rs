@@ -24,18 +24,19 @@ async fn reports_what_the_application_is() {
 #[ignore = "live: needs `cargo xtask jsm-dc up`"]
 async fn refuses_the_surface_outright_where_it_is_not_licensed() {
     if service_desk_licensed().await {
+        eprintln!("[live] Skipping the unlicensed refusal check: Service Desk is licensed.");
         return;
     }
 
     let error = service_desk_server()
-        .info()
-        .get_info()
+        .service_desks()
+        .get_service_desks()
         .send()
         .await
         .expect_err("an unlicensed instance does not answer this surface");
 
     assert!(
         error.status().is_some_and(|status| (400..500).contains(&status)),
-        "the refusal is typed rather than a parse failure"
+        "the unlicensed listing is refused with a typed client error: {error}"
     );
 }
