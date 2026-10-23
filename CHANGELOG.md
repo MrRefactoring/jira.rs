@@ -13,6 +13,7 @@ version.
 
 ### Fixed
 
+- Update the locked `ctutils` to `0.4.4`, `rustls-webpki` to `0.103.16`, `webpki-root-certs` to `1.0.10`, and `tokio` to `1.53.3`, addressing `RUSTSEC-2026-0382`, `RUSTSEC-2026-0383`, `RUSTSEC-2026-0385`, and `RUSTSEC-2026-0386`.
 - Data Center multipart avatar uploads request HTML, extract the embedded JSON and normalize cropping instructions before deserialization. Upload errors embedded in successful HTTP responses become API errors. The four operations retain their existing return types; `send_raw()` keeps the original response body available.
 - Service Management Data Center queue settings deserialize the JSON response that the vendor document leaves without a schema, instead of discarding it.
 
