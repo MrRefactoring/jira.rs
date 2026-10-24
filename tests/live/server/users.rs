@@ -1,3 +1,6 @@
+use std::panic::AssertUnwindSafe;
+
+use futures_util::FutureExt;
 use jira::server::{
     Avatar, AvatarCropping, DefaultShareScope, DefaultShareScopeScope, Filter, Password, PasswordPolicyCreateUser,
     PasswordPolicyUpdateUser, SharePermissionInput, UpdateUserToGroup, UserAnonymizationRequest,
@@ -6,8 +9,8 @@ use jira::server::{
 use serde_json::json;
 
 use super::fixtures::{
-    admin_username, create_test_filter, create_test_group, create_test_user, property_body, property_value,
-    tiny_avatar, touch,
+    admin_username, avatar_image, avatar_session, create_test_filter, create_test_group, create_test_user,
+    property_body, property_value, touch,
 };
 use crate::harness::{ResourceTracker, server};
 
@@ -303,45 +306,107 @@ async fn ends_the_user_session() {
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn keeps_an_avatar_for_the_user() {
     let mut tracker = ResourceTracker::new();
-    let name = create_test_user(&mut tracker).await;
-
-    let avatars =
-        server().users().get_all_user_avatars().username(&name).send().await.expect("the avatars of a user read");
-    let system = avatars.system.as_ref().expect("a user has system avatars");
-
-    assert!(!system.is_empty(), "every Jira instance ships system avatars for a user");
-
-    let temporary = touch(
-        server().users().store_temporary_user_avatar_using_multi_part([tiny_avatar()]).username(&name).send().await,
-    );
-
-    assert!(temporary.is_none_or(|answer| answer.is_object()), "a temporary avatar answers with an object");
-
-    touch(
-        server()
+    let result = AssertUnwindSafe(async {
+        let name = admin_username();
+        let client = avatar_session().await;
+        let before = client
             .users()
-            .create_user_avatar_from_temporary(AvatarCropping { cropper_width: Some(1), ..AvatarCropping::default() })
+            .get_all_user_avatars()
             .username(&name)
             .send()
-            .await,
-    );
-
-    let id = system.first().and_then(|avatar| avatar.id.clone()).expect("a system avatar is addressed by an id");
-
-    touch(
-        server()
+            .await
+            .expect("the avatars of the signed-in user read");
+        let previous_id = before
+            .system
+            .iter()
+            .flatten()
+            .chain(before.custom.iter().flatten())
+            .find(|avatar| avatar.selected == Some(true) || avatar.is_selected == Some(true))
+            .or_else(|| before.system.as_ref().and_then(|system| system.first()))
+            .and_then(|avatar| avatar.id.clone())
+            .expect("the signed-in user has an avatar to restore");
+        let temporary = client
             .users()
-            .update_user_avatar(Avatar { id: Some(id.clone()), ..Avatar::default() })
+            .store_temporary_user_avatar_using_multi_part([avatar_image()])
             .username(&name)
-            .send_raw()
-            .await,
-    );
+            .send()
+            .await
+            .expect("a temporary user avatar uploads");
+        let cropping: AvatarCropping = serde_json::from_value(temporary).expect("the upload describes its cropping");
+        assert_eq!(cropping.needs_cropping, Some(true), "the fixture requires cropping");
+        let avatar = client
+            .users()
+            .create_user_avatar_from_temporary(cropping)
+            .username(&name)
+            .send()
+            .await
+            .expect("the session retains the temporary user avatar");
+        let id = avatar.id.clone().expect("a created avatar carries an id");
+        let numeric_id = id.parse::<i64>().expect("an avatar id is numeric");
+        let cleanup_client = client.client().clone();
+        let cleanup_name = name.clone();
+        let cleanup_previous_id = previous_id.clone();
+        tracker.defer(move || {
+            let client = jira::server::ServerClient::new(cleanup_client.clone());
+            let name = cleanup_name.clone();
+            let id = cleanup_previous_id.clone();
+            async move {
+                client
+                    .users()
+                    .update_user_avatar(Avatar { id: Some(id), ..Avatar::default() })
+                    .username(&name)
+                    .send()
+                    .await?;
+                client.users().delete_user_avatar(numeric_id).username(name).send().await
+            }
+        });
 
-    if let Ok(id) = id.parse::<i64>() {
-        touch(server().users().delete_user_avatar(id).username(&name).send().await);
-    }
+        client
+            .users()
+            .update_user_avatar(avatar)
+            .username(&name)
+            .send()
+            .await
+            .expect("the user selects the created avatar");
+        let avatars =
+            client.users().get_all_user_avatars().username(&name).send().await.expect("the user's avatars read back");
+        assert!(
+            avatars.custom.unwrap_or_default().iter().any(|avatar| avatar.id.as_ref() == Some(&id)),
+            "the created avatar appears in the user's custom avatars",
+        );
 
+        client
+            .users()
+            .update_user_avatar(Avatar { id: Some(previous_id), ..Avatar::default() })
+            .username(&name)
+            .send()
+            .await
+            .expect("the user returns to its previous avatar");
+        client
+            .users()
+            .delete_user_avatar(numeric_id)
+            .username(&name)
+            .send()
+            .await
+            .expect("the created user avatar can be deleted");
+        let avatars = client
+            .users()
+            .get_all_user_avatars()
+            .username(&name)
+            .send()
+            .await
+            .expect("user avatars read back after deletion");
+        assert!(
+            avatars.custom.unwrap_or_default().iter().all(|avatar| avatar.id.as_ref() != Some(&id)),
+            "the deleted user avatar is absent",
+        );
+    })
+    .catch_unwind()
+    .await;
     tracker.cleanup().await;
+    if let Err(payload) = result {
+        std::panic::resume_unwind(payload);
+    }
 }
 
 #[tokio::test]

@@ -1,19 +1,13 @@
+use std::panic::AssertUnwindSafe;
+
+use futures_util::FutureExt;
 use jira::server::{
-    AppMonitoringRestEntity, AuthParams, AvatarCropping, IpdMonitoringRestEntity, ReadOnlyModeUpdateRequest,
-    SimpleApplicationProperty, TerminologyRequest,
+    AppMonitoringRestEntity, AuthParams, AvatarCropping, IpdMonitoringRestEntity, IssueTypeCreate, IssueTypeCreateType,
+    ReadOnlyModeUpdateRequest, SimpleApplicationProperty, TerminologyRequest,
 };
 
-use super::fixtures::{business_project, create_task, tiny_avatar, touch};
-use crate::harness::{ResourceTracker, require_server_env, server};
-
-fn created_from_temporary<T>(outcome: jira::Result<T>) {
-    if let Err(error) = outcome {
-        assert!(
-            error.is_server() || error.status().is_some_and(|status| (400..500).contains(&status)),
-            "Jira Data Center 10 and 11 answer 500 here whatever they are sent, and the crate reports that as a server error: {error}",
-        );
-    }
-}
+use super::fixtures::{avatar_image, avatar_session, business_project, create_task, touch, verify_avatar};
+use crate::harness::{ResourceTracker, require_server_env, server, test_name};
 
 #[tokio::test]
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
@@ -195,66 +189,79 @@ async fn handles_the_email_templates() {
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn keeps_an_avatar_through_the_universal_endpoints() {
     let mut tracker = ResourceTracker::new();
-    let project = business_project(&mut tracker, "avatar owner").await;
-    let owner = project.id.to_string();
-
-    let issue_types = server().issue_types().get_issue_all_types().send().await.expect("the instance lists its types");
-    let issue_type_id =
-        issue_types.first().and_then(|issue_type| issue_type.id.clone()).expect("a Jira instance has issue types");
-
-    let temporary = touch(
-        server()
+    let result = AssertUnwindSafe(async {
+        let project = business_project(&mut tracker, "avatar owner").await;
+        let owner = project.id.to_string();
+        let client = avatar_session().await;
+        let temporary = client
             .avatars()
-            .store_temporary_avatar_using_multi_part("project", owner.clone(), [tiny_avatar()])
+            .store_temporary_avatar_using_multi_part("project", &owner, [avatar_image()])
             .send()
-            .await,
-    );
-
-    assert!(
-        temporary.is_none_or(|cropping| cropping.url.is_some() || cropping.needs_cropping.is_some()),
-        "a temporary avatar answers with somewhere to crop it",
-    );
-
-    created_from_temporary(server().avatars().create_avatar_from_temporary("project", owner.clone()).send().await);
-
-    let avatars = server().avatars().get_avatars("project", owner.clone()).send().await.expect("a project has avatars");
-
-    assert!(
-        avatars.system.is_some_and(|system| !system.is_empty()),
-        "every Jira instance ships system avatars for a project",
-    );
-
-    touch(server().avatars().delete_avatar("project", owner, 1).send().await);
-
-    touch(
-        server()
-            .issue_types()
-            .store_temporary_issue_type_avatar_using_multi_part(issue_type_id.clone(), [tiny_avatar()])
+            .await
+            .expect("a temporary universal avatar uploads");
+        assert_eq!(temporary.needs_cropping, Some(true), "the fixture requires cropping");
+        let avatar = client
+            .avatars()
+            .create_avatar_from_temporary("project", &owner)
+            .avatar_cropping(temporary)
             .send()
-            .await,
-    );
-    created_from_temporary(
-        server()
-            .issue_types()
-            .create_issue_type_avatar_from_temporary(
-                issue_type_id,
-                AvatarCropping { cropper_width: Some(1), ..AvatarCropping::default() },
-            )
-            .send()
-            .await,
-    );
-    created_from_temporary(
-        server()
-            .projects()
-            .create_project_avatar_from_temporary(
-                project.key,
-                AvatarCropping { cropper_width: Some(1), ..AvatarCropping::default() },
-            )
-            .send()
-            .await,
-    );
-
+            .await
+            .expect("the session retains the temporary universal avatar");
+        verify_avatar(&client, "project", &owner, avatar, &mut tracker).await;
+    })
+    .catch_unwind()
+    .await;
     tracker.cleanup().await;
+    if let Err(payload) = result {
+        std::panic::resume_unwind(payload);
+    }
+}
+
+#[tokio::test]
+#[ignore = "live: needs `cargo xtask jira-dc up`"]
+async fn keeps_an_avatar_through_the_issue_type_endpoints() {
+    let mut tracker = ResourceTracker::new();
+    let result = AssertUnwindSafe(async {
+        let issue_type = server()
+            .issue_types()
+            .create_issue_type(IssueTypeCreate {
+                name: Some(test_name("avatar issue type")),
+                r#type: Some(IssueTypeCreateType::Standard),
+                ..IssueTypeCreate::default()
+            })
+            .send()
+            .await
+            .expect("the avatar test creates its own issue type");
+        let id = issue_type.id.expect("a created issue type carries an id");
+        let doomed = id.clone();
+        tracker.defer(move || {
+            let id = doomed.clone();
+            async move { server().issue_types().delete_issue_type(id).send().await }
+        });
+
+        let client = avatar_session().await;
+        let temporary = client
+            .issue_types()
+            .store_temporary_issue_type_avatar_using_multi_part(&id, [avatar_image()])
+            .send()
+            .await
+            .expect("a temporary issue type avatar uploads");
+        let cropping: AvatarCropping = serde_json::from_value(temporary).expect("the upload describes its cropping");
+        assert_eq!(cropping.needs_cropping, Some(true), "the fixture requires cropping");
+        let avatar = client
+            .issue_types()
+            .create_issue_type_avatar_from_temporary(&id, cropping)
+            .send()
+            .await
+            .expect("the session retains the temporary issue type avatar");
+        verify_avatar(&client, "issuetype", &id, avatar, &mut tracker).await;
+    })
+    .catch_unwind()
+    .await;
+    tracker.cleanup().await;
+    if let Err(payload) = result {
+        std::panic::resume_unwind(payload);
+    }
 }
 
 #[tokio::test]
