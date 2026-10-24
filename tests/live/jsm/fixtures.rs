@@ -88,10 +88,20 @@ pub async fn service_desk_licensed() -> bool {
 
     *LICENSED
         .get_or_init(|| async {
-            match service_desk_server().info().get_info().send().await {
-                Ok(info) => info.is_licensed_for_use == Some(true),
-                Err(_) => false,
+            let licensed = service_desk_server()
+                .info()
+                .get_info()
+                .send()
+                .await
+                .expect("Service Desk reports its license status")
+                .is_licensed_for_use
+                .expect("Service Desk info includes an explicit license flag");
+
+            if !licensed {
+                eprintln!("[live] Skipping licensed Service Desk scenarios: the instance reports no license.");
             }
+
+            licensed
         })
         .await
 }

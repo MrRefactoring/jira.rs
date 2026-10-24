@@ -1,5 +1,7 @@
 // @generated. Do not edit: change the generator or the specification.
 
+use super::super::models::*;
+
 /// The QueueSettings operations.
 pub struct QueueSettingsService<'a> {
     client: &'a crate::core::Client,
@@ -76,8 +78,8 @@ impl<'a> GetQueueSettingsOnProjectRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<()> {
-        self.client.send_empty(&self.config()?).await
+    pub async fn send(self) -> crate::core::Result<QueueSettings> {
+        self.client.send(&self.config()?).await
     }
 
     /// Sends the request and hands back the body unmodelled.

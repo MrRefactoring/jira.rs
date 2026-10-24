@@ -7,6 +7,16 @@ version.
 
 ## [Unreleased]
 
+### Changed
+
+- **Breaking:** Service Management Data Center `queue_settings().get_queue_settings_on_project(..).send()` returns `QueueSettings` instead of `()`. Read `queue_count.include_queue_count` and `queue_count.use_cached_queue_count` as booleans. Callers that explicitly expect unit must discard the returned settings; `send_raw()` remains available for the unmodelled body.
+
+### Fixed
+
+- Update the locked `ctutils` to `0.4.4`, `rustls-webpki` to `0.103.16`, `webpki-root-certs` to `1.0.10`, and `tokio` to `1.53.3`, addressing `RUSTSEC-2026-0382`, `RUSTSEC-2026-0383`, `RUSTSEC-2026-0385`, and `RUSTSEC-2026-0386`.
+- Data Center multipart avatar uploads request HTML, extract the embedded JSON and normalize cropping instructions before deserialization. Upload errors embedded in successful HTTP responses become API errors. The four operations retain their existing return types; `send_raw()` keeps the original response body available.
+- Service Management Data Center queue settings deserialize the JSON response that the vendor document leaves without a schema, instead of discarding it.
+
 ## [0.3.0] - 2026-10-14
 
 ### Added
