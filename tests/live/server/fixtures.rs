@@ -2,7 +2,8 @@ use std::collections::HashMap;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::time::Duration;
 
-use jira::server::{AddGroup, CreatedIssue, Filter, IssueUpdateDetails, ProjectInput, UserWrite};
+use jira::server::{AddGroup, Avatar, CreatedIssue, Filter, IssueUpdateDetails, ProjectInput, ServerClient, UserWrite};
+use reqwest::header::{HeaderMap, HeaderValue};
 use serde_json::json;
 use tokio::sync::OnceCell;
 
@@ -32,13 +33,6 @@ brings these back."
         })
         .await
 }
-
-const TINY_PNG: &[u8] = &[
-    0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00, 0x00, 0x00, 0x0d, 0x49, 0x48, 0x44, 0x52, 0x00, 0x00, 0x00,
-    0x01, 0x00, 0x00, 0x00, 0x01, 0x08, 0x06, 0x00, 0x00, 0x00, 0x1f, 0x15, 0xc4, 0x89, 0x00, 0x00, 0x00, 0x0d, 0x49,
-    0x44, 0x41, 0x54, 0x78, 0xda, 0x63, 0xfc, 0xcf, 0xc0, 0x50, 0x0f, 0x00, 0x04, 0x85, 0x01, 0x80, 0x84, 0xa9, 0x8c,
-    0x21, 0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
-];
 
 pub fn touch<T>(outcome: jira::Result<T>) -> Option<T> {
     match outcome {
@@ -266,6 +260,66 @@ pub fn property_value() -> serde_json::Value {
     json!({ "written": true })
 }
 
-pub fn tiny_avatar() -> jira::Attachment {
-    jira::Attachment::new("avatar.png", TINY_PNG)
+pub fn avatar_image() -> jira::Attachment {
+    jira::Attachment::new("avatar.png", include_bytes!("avatar.png").as_slice())
+}
+
+pub async fn avatar_session() -> ServerClient {
+    let env = require_server_env();
+    let mut headers = HeaderMap::new();
+    headers.insert("X-Atlassian-Token", HeaderValue::from_static("no-check"));
+    let http = reqwest::Client::builder()
+        .cookie_store(true)
+        .default_headers(headers)
+        .timeout(Duration::from_secs(60))
+        .build()
+        .expect("an avatar client stores session cookies");
+
+    http.post(format!("{}/rest/tsv/latest/authenticate", env.host))
+        .json(&json!({ "username": env.username, "password": env.password }))
+        .send()
+        .await
+        .expect("the session endpoint answers")
+        .error_for_status()
+        .expect("the avatar tests authenticate with a persistent session");
+
+    let client = jira::Client::builder()
+        .host(env.host)
+        .http_client(http)
+        .build()
+        .expect("the session describes a usable client");
+    ServerClient::new(client)
+}
+
+pub async fn verify_avatar(
+    client: &ServerClient,
+    kind: &str,
+    owner: &str,
+    avatar: Avatar,
+    tracker: &mut ResourceTracker,
+) {
+    let id = avatar.id.expect("a created avatar carries an id");
+    let numeric_id = id.parse::<i64>().expect("an avatar id is numeric");
+    let cleanup_client = client.client().clone();
+    let cleanup_kind = kind.to_owned();
+    let cleanup_owner = owner.to_owned();
+    tracker.defer(move || {
+        let client = ServerClient::new(cleanup_client.clone());
+        let kind = cleanup_kind.clone();
+        let owner = cleanup_owner.clone();
+        async move { client.avatars().delete_avatar(kind, owner, numeric_id).send().await }
+    });
+
+    let avatars = client.avatars().get_avatars(kind, owner).send().await.expect("the owner's avatars read back");
+    assert!(
+        avatars.custom.unwrap_or_default().iter().any(|avatar| avatar.id.as_ref() == Some(&id)),
+        "the created avatar appears in the owner's custom avatars",
+    );
+
+    client.avatars().delete_avatar(kind, owner, numeric_id).send().await.expect("the created avatar can be deleted");
+    let avatars = client.avatars().get_avatars(kind, owner).send().await.expect("avatars read back after deletion");
+    assert!(
+        avatars.custom.unwrap_or_default().iter().all(|avatar| avatar.id.as_ref() != Some(&id)),
+        "the deleted avatar is absent",
+    );
 }

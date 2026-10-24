@@ -939,7 +939,7 @@ impl<'a> UpdateUserAvatarRequest<'a> {
     }
 
     /// Sends the request.
-    pub async fn send(self) -> crate::core::Result<Avatar> {
+    pub async fn send(self) -> crate::core::Result<Option<Avatar>> {
         self.client.send(&self.config()?).await
     }
 

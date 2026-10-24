@@ -1,9 +1,9 @@
 #![cfg(feature = "server")]
 
 use jira::core::{Attachment, Client, Error, Result};
-use jira::server::ServerClient;
+use jira::server::{Avatar, ServerClient};
 use serde_json::{Value, json};
-use wiremock::matchers::{header, method};
+use wiremock::matchers::{body_json, header, method, path, query_param};
 use wiremock::{Mock, MockServer, ResponseTemplate};
 
 const OPERATIONS: [&str; 4] = ["universal", "project", "issue type", "user"];
@@ -135,4 +135,31 @@ async fn an_http_refusal_is_reported_before_avatar_decoding() {
     let error = upload(&client, "universal").await.unwrap_err();
     let Error::Api { details, .. } = error else { panic!("Expected an API error") };
     assert_eq!(details.status, 400);
+}
+
+#[tokio::test]
+async fn user_avatar_updates_accept_empty_successes_and_preserve_json_avatars() {
+    for (response, expected) in [
+        (ResponseTemplate::new(204), None),
+        (ResponseTemplate::new(200).set_body_json(json!({ "id": "10600" })), Some("10600")),
+    ] {
+        let server = MockServer::start().await;
+        Mock::given(method("PUT"))
+            .and(path("/rest/api/2/user/avatar"))
+            .and(query_param("username", "admin"))
+            .and(body_json(json!({ "id": "10600" })))
+            .respond_with(response)
+            .expect(1)
+            .mount(&server)
+            .await;
+        let client = ServerClient::new(Client::builder().host(server.uri()).build().unwrap());
+        let answer: Option<Avatar> = client
+            .users()
+            .update_user_avatar(Avatar { id: Some("10600".to_owned()), ..Avatar::default() })
+            .username("admin")
+            .send()
+            .await
+            .unwrap();
+        assert_eq!(answer.and_then(|avatar| avatar.id).as_deref(), expected);
+    }
 }

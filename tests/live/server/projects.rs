@@ -1,3 +1,6 @@
+use std::panic::AssertUnwindSafe;
+
+use futures_util::FutureExt;
 use jira::server::{
     ActorInput, ActorsMap, Avatar, AvatarCropping, CreateUpdateRoleRequest, DeleteAndReplaceVersion, Id,
     ProjectCategory, ProjectComponent, ProjectRoleActorsUpdate, RemoteEntityLinkJson, UpdateProjectDetails, Version,
@@ -5,7 +8,9 @@ use jira::server::{
 };
 use serde_json::json;
 
-use super::fixtures::{admin_username, business_project, property_body, property_value, tiny_avatar, touch};
+use super::fixtures::{
+    admin_username, avatar_image, avatar_session, business_project, property_body, property_value, touch,
+};
 use crate::harness::{ResourceTracker, server, test_name};
 
 const VERSION_LINK_GLOBAL_ID: &str = "jrs-version-link";
@@ -444,50 +449,98 @@ async fn archives_and_restores() {
 #[ignore = "live: needs `cargo xtask jira-dc up`"]
 async fn uploads_an_avatar_and_puts_it_back() {
     let mut tracker = ResourceTracker::new();
-    let project = business_project(&mut tracker, "avatar holder").await;
-
-    let temporary = touch(
-        server().projects().store_temporary_project_avatar_using_multi_part(&project.key, [tiny_avatar()]).send().await,
-    );
-
-    if temporary.is_some() {
-        touch(
-            server()
-                .projects()
-                .create_project_avatar_from_temporary(
-                    &project.key,
-                    AvatarCropping { cropper_width: Some(1), ..AvatarCropping::default() },
-                )
-                .send()
-                .await,
-        );
-    }
-
-    let avatars = server()
-        .project_avatars()
-        .get_all_project_avatars(&project.key)
-        .send()
-        .await
-        .expect("the avatars of a project read");
-    let system = avatars.system.as_ref().expect("a project has system avatars");
-
-    assert!(!system.is_empty(), "every Jira instance ships system avatars");
-
-    let id = system.first().and_then(|avatar| avatar.id.clone()).expect("a system avatar is addressed by an id");
-
-    touch(
-        server()
+    let result = AssertUnwindSafe(async {
+        let project = business_project(&mut tracker, "avatar holder").await;
+        let client = avatar_session().await;
+        let before = client
             .project_avatars()
-            .update_project_avatar(&project.key, Avatar { id: Some(id.clone()), ..Avatar::default() })
+            .get_all_project_avatars(&project.key)
             .send()
-            .await,
-    );
+            .await
+            .expect("the avatars of a project read");
+        let system_id = before
+            .system
+            .and_then(|system| system.into_iter().find_map(|avatar| avatar.id))
+            .expect("a project has a system avatar");
+        let temporary = client
+            .projects()
+            .store_temporary_project_avatar_using_multi_part(&project.key, [avatar_image()])
+            .send()
+            .await
+            .expect("a temporary project avatar uploads");
+        let cropping: AvatarCropping = serde_json::from_value(temporary).expect("the upload describes its cropping");
+        assert_eq!(cropping.needs_cropping, Some(true), "the fixture requires cropping");
+        let avatar = client
+            .projects()
+            .create_project_avatar_from_temporary(&project.key, cropping)
+            .send()
+            .await
+            .expect("the session retains the temporary project avatar");
+        let id = avatar.id.clone().expect("a created avatar carries an id");
+        let numeric_id = id.parse::<i64>().expect("an avatar id is numeric");
+        let cleanup_client = client.client().clone();
+        let cleanup_key = project.key.clone();
+        let cleanup_system_id = system_id.clone();
+        tracker.defer(move || {
+            let client = jira::server::ServerClient::new(cleanup_client.clone());
+            let key = cleanup_key.clone();
+            let id = cleanup_system_id.clone();
+            async move {
+                client
+                    .project_avatars()
+                    .update_project_avatar(&key, Avatar { id: Some(id), ..Avatar::default() })
+                    .send()
+                    .await?;
+                client.project_avatars().delete_project_avatar(key, numeric_id).send().await
+            }
+        });
 
-    if let Ok(id) = id.parse::<i64>() {
-        touch(server().project_avatars().delete_project_avatar(&project.key, id).send().await);
-    }
+        client
+            .project_avatars()
+            .update_project_avatar(&project.key, avatar)
+            .send()
+            .await
+            .expect("the project selects the created avatar");
+        let avatars = client
+            .project_avatars()
+            .get_all_project_avatars(&project.key)
+            .send()
+            .await
+            .expect("the project's avatars read back");
+        assert!(
+            avatars.custom.unwrap_or_default().iter().any(|avatar| avatar.id.as_ref() == Some(&id)),
+            "the created avatar appears in the project's custom avatars",
+        );
 
+        client
+            .project_avatars()
+            .update_project_avatar(&project.key, Avatar { id: Some(system_id), ..Avatar::default() })
+            .send()
+            .await
+            .expect("the project returns to a system avatar");
+        client
+            .project_avatars()
+            .delete_project_avatar(&project.key, numeric_id)
+            .send()
+            .await
+            .expect("the created project avatar can be deleted");
+        let avatars = client
+            .project_avatars()
+            .get_all_project_avatars(&project.key)
+            .send()
+            .await
+            .expect("project avatars read back after deletion");
+        assert!(
+            avatars.custom.unwrap_or_default().iter().all(|avatar| avatar.id.as_ref() != Some(&id)),
+            "the deleted project avatar is absent",
+        );
+    })
+    .catch_unwind()
+    .await;
     tracker.cleanup().await;
+    if let Err(payload) = result {
+        std::panic::resume_unwind(payload);
+    }
 }
 
 #[tokio::test]
