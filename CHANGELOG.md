@@ -7,6 +7,8 @@ version.
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-24
+
 ### Changed
 
 - **Breaking:** Service Management Data Center `queue_settings().get_queue_settings_on_project(..).send()` returns `QueueSettings` instead of `()`. Read `queue_count.include_queue_count` and `queue_count.use_cached_queue_count` as booleans. Callers that explicitly expect unit must discard the returned settings; `send_raw()` remains available for the unmodelled body.
@@ -914,6 +916,7 @@ Data Center `issue_worklogs().get_issue_worklog()` returns every worklog in one 
 - Harold Dost published `0.0.1` of this crate name in 2021. That release shares no code with this one, but it kept
   the name alive.
 
+[0.4.0]: https://github.com/MrRefactoring/jira.rs/releases/tag/v0.4.0
 [0.3.0]: https://github.com/MrRefactoring/jira.rs/releases/tag/v0.3.0
 [0.2.0]: https://github.com/MrRefactoring/jira.rs/releases/tag/v0.2.0
 [0.1.1]: https://github.com/MrRefactoring/jira.rs/releases/tag/v0.1.1
