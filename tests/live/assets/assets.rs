@@ -37,6 +37,28 @@ fn assets(workspace: &str) -> AssetsClient {
     )
 }
 
+async fn accessible_workspace_id() -> Option<String> {
+    let workspace = workspace_id().await?;
+    static ACCESSIBLE: tokio::sync::OnceCell<bool> = tokio::sync::OnceCell::const_new();
+    let accessible = ACCESSIBLE
+        .get_or_init(|| async {
+            match assets(&workspace).object_schemas().find_schemas().max_results(1).send().await {
+                Ok(_) => true,
+                Err(error)
+                    if error.status() == Some(403)
+                        && error.body().and_then(|body| body.get("message")).and_then(|message| message.as_str())
+                            == Some("Access to Assets API was denied") =>
+                {
+                    eprintln!("skipped: access to the Assets API is denied (HTTP 403)");
+                    false
+                }
+                Err(error) => panic!("the Assets access check failed: {error}"),
+            }
+        })
+        .await;
+    accessible.then_some(workspace)
+}
+
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_whether_the_site_has_an_assets_workspace() {
@@ -52,7 +74,7 @@ async fn reports_whether_the_site_has_an_assets_workspace() {
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_the_object_schemas_of_the_workspace() {
-    let Some(workspace) = workspace_id().await else { return };
+    let Some(workspace) = accessible_workspace_id().await else { return };
 
     let schemas =
         assets(&workspace).object_schemas().find_schemas().max_results(5).send().await.expect("the workspace answers");
@@ -65,7 +87,7 @@ async fn lists_the_object_schemas_of_the_workspace() {
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_the_global_icons() {
-    let Some(workspace) = workspace_id().await else { return };
+    let Some(workspace) = accessible_workspace_id().await else { return };
 
     let icons = assets(&workspace).icons().find_global_icons().send().await.expect("the workspace lists its icons");
 
@@ -79,7 +101,7 @@ async fn lists_the_global_icons() {
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn lists_the_status_types() {
-    let Some(workspace) = workspace_id().await else { return };
+    let Some(workspace) = accessible_workspace_id().await else { return };
 
     let statuses =
         assets(&workspace).status_types().find_status_types().send().await.expect("the workspace lists its statuses");
@@ -93,7 +115,7 @@ async fn lists_the_status_types() {
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn reports_what_the_tenant_is_using() {
-    let Some(workspace) = workspace_id().await else { return };
+    let Some(workspace) = accessible_workspace_id().await else { return };
 
     let usage = assets(&workspace).usage().get_tenant_usage_info().send().await.expect("the tenant reports its usage");
 
@@ -110,7 +132,7 @@ async fn reports_what_the_tenant_is_using() {
 #[tokio::test]
 #[ignore = "live: needs a Jira site"]
 async fn counts_objects_by_aql() {
-    let Some(workspace) = workspace_id().await else { return };
+    let Some(workspace) = accessible_workspace_id().await else { return };
 
     let count = assets(&workspace)
         .objects()
